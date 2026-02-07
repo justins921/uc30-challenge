@@ -35,6 +35,10 @@ CREATE POLICY "Allow public insert" ON participants
 CREATE POLICY "Allow public update" ON participants
   FOR UPDATE USING (true);
 
+-- Allow anyone to delete (admin can permanently remove users)
+CREATE POLICY "Allow public delete" ON participants
+  FOR DELETE USING (true);
+
 -- Create index for email lookups
 CREATE INDEX IF NOT EXISTS idx_participants_email ON participants (email);
 

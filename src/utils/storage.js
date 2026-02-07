@@ -58,7 +58,7 @@ const supabaseStorage = {
         filters: `?id=eq.${userId}`,
         single: true,
       });
-      return user;
+      return user ? fromDbRow(user) : null;
     } catch {
       return null;
     }
@@ -78,7 +78,7 @@ const supabaseStorage = {
     const data = await supabaseRequest('participants', 'GET', {
       filters: '?order=created_at.asc',
     });
-    return data || [];
+    return data ? data.map(fromDbRow) : [];
   },
 
   async setParticipants() {
