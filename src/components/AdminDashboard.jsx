@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import Header from './Header';
+import { CHALLENGE_DAYS } from '../data/challengeDays';
 
 const ADMIN_TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'participants', label: 'Participants' },
+  { id: 'submissions', label: 'Submissions' },
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onReactivate, onLogout }) {
+export default function AdminDashboard({ user, participants, onRemove, onReactivate, onLogout, cohortStartDate, onSetCohortStartDate }) {
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
 
@@ -48,8 +50,14 @@ export default function AdminDashboard({ user, participants, onRemove, onReactiv
           Challenge Control Center
         </h1>
 
+        {/* Cohort Settings */}
+        <CohortSettings
+          cohortStartDate={cohortStartDate}
+          onSetCohortStartDate={onSetCohortStartDate}
+        />
+
         {/* Top Stats */}
-        <div className="fade-up-delay-1" style={{
+        <div className="fade-up-delay-1 admin-stats-grid" style={{
           display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
           gap: 12, marginBottom: 32,
         }}>
@@ -86,6 +94,9 @@ export default function AdminDashboard({ user, participants, onRemove, onReactiv
             onReactivate={onReactivate}
           />
         )}
+        {tab === 'submissions' && (
+          <SubmissionsTab nonAdmin={nonAdmin} />
+        )}
         {tab === 'social' && (
           <SocialProofTab
             active={active}
@@ -96,6 +107,106 @@ export default function AdminDashboard({ user, participants, onRemove, onReactiv
             retentionRate={retentionRate}
             dayDistribution={dayDistribution}
           />
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Cohort Settings ─────────────────────────────────────────
+function CohortSettings({ cohortStartDate, onSetCohortStartDate }) {
+  const [editing, setEditing] = useState(false);
+  const [dateValue, setDateValue] = useState(cohortStartDate || '');
+
+  const handleSave = () => {
+    if (dateValue) {
+      onSetCohortStartDate(dateValue);
+    }
+    setEditing(false);
+  };
+
+  const handleClear = () => {
+    onSetCohortStartDate(null);
+    setDateValue('');
+    setEditing(false);
+  };
+
+  const formatDate = (d) => {
+    if (!d) return null;
+    return new Date(d + 'T00:00:00').toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+    });
+  };
+
+  const getStatus = () => {
+    if (!cohortStartDate) return null;
+    const now = new Date();
+    const start = new Date(cohortStartDate + 'T00:00:00');
+    const nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+    const diffDays = Math.floor((nowDay - startDay) / (1000 * 60 * 60 * 24));
+    if (diffDays < 0) return { text: `Starts in ${Math.abs(diffDays)} day${Math.abs(diffDays) !== 1 ? 's' : ''}`, color: '#e94560' };
+    if (diffDays < 30) return { text: `Day ${diffDays + 1} of 30`, color: '#48c78e' };
+    return { text: 'Completed', color: '#888' };
+  };
+
+  const status = getStatus();
+
+  return (
+    <div className="card fade-up" style={{ marginBottom: 24, padding: '20px 24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontSize: 20 }}>📅</span>
+          <div>
+            <div style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>
+              Cohort Start Date
+            </div>
+            {cohortStartDate && !editing ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 16, fontWeight: 600 }}>{formatDate(cohortStartDate)}</span>
+                {status && (
+                  <span style={{
+                    fontSize: 12, fontWeight: 600, color: status.color,
+                    background: `${status.color}15`, padding: '3px 10px', borderRadius: 6,
+                  }}>
+                    {status.text}
+                  </span>
+                )}
+              </div>
+            ) : !editing ? (
+              <span style={{ fontSize: 14, color: '#555' }}>No start date set — participants can progress freely</span>
+            ) : null}
+          </div>
+        </div>
+
+        {!editing ? (
+          <button
+            className="btn-secondary"
+            style={{ padding: '8px 16px', fontSize: 13 }}
+            onClick={() => { setDateValue(cohortStartDate || ''); setEditing(true); }}
+          >
+            {cohortStartDate ? 'Change' : 'Set Date'}
+          </button>
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+            <input
+              type="date"
+              value={dateValue}
+              onChange={e => setDateValue(e.target.value)}
+              style={{ padding: '8px 12px', fontSize: 14, width: 'auto', minWidth: 160 }}
+            />
+            <button className="btn-primary" style={{ padding: '8px 16px', fontSize: 13 }} onClick={handleSave}>
+              Save
+            </button>
+            {cohortStartDate && (
+              <button className="btn-danger" style={{ padding: '8px 14px' }} onClick={handleClear}>
+                Clear
+              </button>
+            )}
+            <button className="btn-secondary" style={{ padding: '8px 14px', fontSize: 13 }} onClick={() => setEditing(false)}>
+              Cancel
+            </button>
+          </div>
         )}
       </div>
     </div>
@@ -120,12 +231,12 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate }) {
     <div className="fade-up">
       <div className="card" style={{ marginBottom: 24 }}>
         <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Active Participants by Day</h3>
-        <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 160 }}>
+        <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 160, overflowX: 'auto' }}>
           {Array.from({ length: 30 }, (_, i) => {
             const count = dayDistribution[i + 1] || 0;
             return (
               <div key={i} style={{
-                flex: 1, display: 'flex', flexDirection: 'column',
+                flex: '1 0 auto', minWidth: 16, display: 'flex', flexDirection: 'column',
                 alignItems: 'center', gap: 4,
               }}>
                 <div className="mono" style={{ fontSize: 9, color: '#888' }}>
@@ -169,7 +280,7 @@ function ParticipantsTab({ nonAdmin, onRemove, onReactivate, onSelect }) {
 
   return (
     <div className="fade-up">
-      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
         {['all', 'active', 'removed'].map(f => (
           <button
             key={f}
@@ -397,6 +508,119 @@ function ParticipantDetail({ participant, onBack, onRemove, onReactivate }) {
   );
 }
 
+// ── All Submissions Tab ─────────────────────────────────────
+function SubmissionsTab({ nonAdmin }) {
+  const [selectedDay, setSelectedDay] = useState(0);
+
+  const allSubmissions = [];
+  nonAdmin.forEach(p => {
+    (p.submissions || []).forEach(sub => {
+      allSubmissions.push({
+        ...sub,
+        participantName: p.name,
+        participantEmail: p.email,
+        participantId: p.id,
+      });
+    });
+  });
+
+  allSubmissions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+  const filtered = selectedDay > 0
+    ? allSubmissions.filter(s => s.day === selectedDay)
+    : allSubmissions;
+
+  const dayCounts = {};
+  allSubmissions.forEach(s => {
+    dayCounts[s.day] = (dayCounts[s.day] || 0) + 1;
+  });
+
+  return (
+    <div className="fade-up">
+      <div style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
+          <label style={{ margin: 0, fontSize: 13, color: '#888', textTransform: 'none', letterSpacing: 0 }}>
+            Filter by day:
+          </label>
+          <select
+            value={selectedDay}
+            onChange={e => setSelectedDay(Number(e.target.value))}
+            style={{ width: 'auto', padding: '8px 12px', fontSize: 14, minWidth: 180 }}
+          >
+            <option value={0}>All Days ({allSubmissions.length})</option>
+            {Array.from({ length: 30 }, (_, i) => {
+              const dayNum = i + 1;
+              const count = dayCounts[dayNum] || 0;
+              const dayData = CHALLENGE_DAYS[i];
+              return (
+                <option key={dayNum} value={dayNum}>
+                  Day {dayNum}: {dayData.title} ({count})
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      </div>
+
+      {filtered.length === 0 ? (
+        <div className="card" style={{ textAlign: 'center', padding: 48 }}>
+          <div style={{ fontSize: 48, marginBottom: 12 }}>📭</div>
+          <p style={{ color: '#666' }}>
+            {selectedDay > 0
+              ? `No submissions for Day ${selectedDay} yet.`
+              : 'No submissions from any participants yet.'}
+          </p>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {filtered.map((sub, i) => (
+            <div
+              key={`${sub.participantId}-${sub.day}-${i}`}
+              className="card"
+              style={{ padding: '16px' }}
+            >
+              <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                <div className="mono" style={{
+                  width: 44, height: 44, borderRadius: 10,
+                  background: 'rgba(72,199,142,0.1)', border: '1px solid rgba(72,199,142,0.2)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 16, fontWeight: 700, color: '#48c78e', flexShrink: 0,
+                }}>
+                  {sub.day}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>
+                    <span style={{ fontWeight: 600, fontSize: 14 }}>{sub.participantName}</span>
+                    <span style={{ fontSize: 12, color: '#555' }}>{sub.participantEmail}</span>
+                    <span style={{ fontSize: 11, color: '#444', marginLeft: 'auto', flexShrink: 0 }}>
+                      {new Date(sub.timestamp).toLocaleString()}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 13, color: '#e94560', fontWeight: 600, marginBottom: 4 }}>
+                    {sub.title}
+                  </div>
+                  <p style={{ color: '#999', fontSize: 13, lineHeight: 1.6, wordBreak: 'break-word' }}>
+                    {sub.proof}
+                  </p>
+                  {sub.fileName && (
+                    <div style={{ marginTop: 6, fontSize: 12, color: '#666' }}>📎 {sub.fileName}</div>
+                  )}
+                </div>
+                <div style={{
+                  fontSize: 10, color: '#48c78e', background: 'rgba(72,199,142,0.1)',
+                  padding: '3px 8px', borderRadius: 5, fontWeight: 600, flexShrink: 0,
+                }}>
+                  {sub.status === 'completed' ? 'Verified' : sub.status}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SocialProofTab({ active, nonAdmin, totalOffers, totalAnalyzed, totalAgents, retentionRate, dayDistribution }) {
   return (
     <div className="fade-up">
@@ -408,7 +632,7 @@ function SocialProofTab({ active, nonAdmin, totalOffers, totalAnalyzed, totalAge
         <p style={{ color: '#888', fontSize: 14, marginBottom: 24, lineHeight: 1.6 }}>
           Copy-ready stats for social media and marketing.
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
+        <div className="social-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
           <SocialCard icon="🔥" stat={`${active.length} participants`} text="are currently active in the 30-Day First Deal Challenge" />
           <SocialCard icon="📝" stat={`${totalOffers} offers`} text="have been submitted by our challenge participants" />
           <SocialCard icon="📊" stat={`${totalAnalyzed} properties`} text="have been analyzed through the challenge so far" />
@@ -421,6 +645,7 @@ function SocialProofTab({ active, nonAdmin, totalOffers, totalAnalyzed, totalAge
         <div className="mono" style={{
           fontSize: 13, color: '#bbb', lineHeight: 2,
           background: 'rgba(0,0,0,0.3)', padding: 20, borderRadius: 10,
+          overflowX: 'auto',
         }}>
           <div>📅 Active Participants: <span style={{ color: '#48c78e' }}>{active.length}</span></div>
           <div>📊 Total Properties Analyzed: <span style={{ color: '#533483' }}>{totalAnalyzed}</span></div>

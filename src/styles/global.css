@@ -5,12 +5,18 @@
   padding: 0;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   background: #0a0a0f;
   color: #e8e6e3;
   font-family: 'DM Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* ── Animations ──────────────────────────────────────────── */
@@ -200,6 +206,12 @@ label {
   }
 }
 
+@media (max-width: 640px) {
+  .social-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 @media (max-width: 480px) {
   .card {
     padding: 14px;
@@ -209,5 +221,13 @@ label {
   .btn-primary {
     padding: 12px 20px;
     font-size: 14px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }

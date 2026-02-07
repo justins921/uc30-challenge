@@ -1,6 +1,6 @@
 import { CHALLENGE_DAYS, PHASES } from '../data/challengeDays';
 
-export default function TimelineView({ user, onSelectDay }) {
+export default function TimelineView({ user, onSelectDay, calendarDay }) {
   return (
     <div className="fade-up-delay-2">
       {PHASES.map((phase) => (
@@ -22,7 +22,19 @@ export default function TimelineView({ user, onSelectDay }) {
               const dayData = CHALLENGE_DAYS[d - 1];
               const isComplete = user.completedDays.includes(d);
               const isCurrent = d === user.currentDay;
-              const isLocked = d > user.currentDay;
+
+              // Calendar-based locking: if calendarDay is set, restrict access
+              let isLocked;
+              if (calendarDay !== null) {
+                // A day is accessible if:
+                // - It's a completed day (can review)
+                // - OR it's the user's current day AND the calendar has reached it
+                const isAccessible = isComplete || (isCurrent && d <= calendarDay);
+                isLocked = !isAccessible;
+              } else {
+                // No cohort date: original behavior
+                isLocked = d > user.currentDay;
+              }
 
               return (
                 <div
@@ -32,7 +44,7 @@ export default function TimelineView({ user, onSelectDay }) {
                   style={{
                     cursor: isLocked ? 'not-allowed' : 'pointer',
                     opacity: isLocked ? 0.4 : 1,
-                    borderColor: isCurrent
+                    borderColor: isCurrent && !isLocked
                       ? '#e94560'
                       : isComplete
                       ? 'rgba(72,199,142,0.3)'
@@ -52,11 +64,19 @@ export default function TimelineView({ user, onSelectDay }) {
                   )}
 
                   {/* Current indicator */}
-                  {isCurrent && (
+                  {isCurrent && !isLocked && (
                     <div style={{
                       position: 'absolute', top: 12, right: 12, width: 10, height: 10,
                       borderRadius: '50%', background: '#e94560', animation: 'pulse 2s infinite',
                     }} />
+                  )}
+
+                  {/* Lock indicator for cohort-locked future days */}
+                  {isLocked && !isComplete && calendarDay !== null && d <= 30 && d > calendarDay && (
+                    <div style={{
+                      position: 'absolute', top: 12, right: 12,
+                      fontSize: 12, color: '#555',
+                    }}>🔒</div>
                   )}
 
                   <div className="mono" style={{

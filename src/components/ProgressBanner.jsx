@@ -1,10 +1,15 @@
 import { CHALLENGE_DAYS } from '../data/challengeDays';
 
-export default function ProgressBanner({ user }) {
+export default function ProgressBanner({ user, cohortStartDate, calendarDay }) {
   const completedCount = user.completedDays.length;
   const progress = (completedCount / 30) * 100;
   const isCompleted = user.currentDay > 30;
   const currentDayData = CHALLENGE_DAYS[Math.min(user.currentDay - 1, 29)];
+
+  // In cohort mode, show which cohort day we're on
+  const cohortDayLabel = cohortStartDate && calendarDay !== null && calendarDay >= 1 && calendarDay <= 30
+    ? `Cohort Day ${calendarDay}`
+    : null;
 
   return (
     <div className="fade-up" style={{ marginBottom: 32 }}>
@@ -19,6 +24,11 @@ export default function ProgressBanner({ user }) {
           <p style={{ color: '#888', fontSize: 15 }}>
             {isCompleted ? 'Congratulations on completing the 30-Day Challenge!' : currentDayData?.title}
           </p>
+          {cohortDayLabel && !isCompleted && (
+            <p style={{ color: '#555', fontSize: 13, marginTop: 4 }}>
+              {cohortDayLabel} of 30
+            </p>
+          )}
         </div>
         <div style={{ textAlign: 'right' }}>
           <div className="mono" style={{ fontSize: 36, fontWeight: 700, color: '#e94560' }}>

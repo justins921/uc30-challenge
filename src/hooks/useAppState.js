@@ -7,6 +7,7 @@ export function useAppState() {
   const [participants, setParticipants] = useState([]);
   const [currentView, setCurrentView] = useState('login');
   const [loading, setLoading] = useState(true);
+  const [cohortStartDate, setCohortStartDateState] = useState(null);
 
   // Load from storage on mount
   useEffect(() => {
@@ -14,6 +15,11 @@ export function useAppState() {
       try {
         const storedParticipants = await Promise.resolve(storage.getParticipants());
         setParticipants(storedParticipants || []);
+
+        const cohortSettings = await Promise.resolve(storage.getCohortSettings());
+        if (cohortSettings?.startDate) {
+          setCohortStartDateState(cohortSettings.startDate);
+        }
 
         const storedUser = await Promise.resolve(storage.getUser());
         if (storedUser) {
@@ -210,11 +216,18 @@ export function useAppState() {
     }
   }, [participants, user, persist]);
 
+  const setCohortStartDate = useCallback(async (date) => {
+    const settings = { startDate: date };
+    await Promise.resolve(storage.setCohortSettings(settings));
+    setCohortStartDateState(date);
+  }, []);
+
   return {
     user,
     participants,
     currentView,
     loading,
+    cohortStartDate,
     navigate: setCurrentView,
     login,
     register,
@@ -223,5 +236,6 @@ export function useAppState() {
     removeParticipant,
     reactivateParticipant,
     refreshParticipants,
+    setCohortStartDate,
   };
 }

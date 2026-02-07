@@ -9,12 +9,14 @@ export default function App() {
     participants,
     currentView,
     loading,
+    cohortStartDate,
     login,
     register,
     logout,
     submitDay,
     removeParticipant,
     reactivateParticipant,
+    setCohortStartDate,
   } = useAppState();
 
   if (loading) {
@@ -48,6 +50,8 @@ export default function App() {
         onRemove={removeParticipant}
         onReactivate={reactivateParticipant}
         onLogout={logout}
+        cohortStartDate={cohortStartDate}
+        onSetCohortStartDate={setCohortStartDate}
       />
     );
   }
@@ -58,6 +62,7 @@ export default function App() {
       onLogout={logout}
       onSubmit={submitDay}
       onReactivate={() => reactivateParticipant(user.id)}
+      cohortStartDate={cohortStartDate}
     />
   );
 }

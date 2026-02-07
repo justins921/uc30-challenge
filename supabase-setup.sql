@@ -39,3 +39,21 @@ CREATE INDEX IF NOT EXISTS idx_participants_email ON participants (email);
 
 -- Create index for active participant queries
 CREATE INDEX IF NOT EXISTS idx_participants_active ON participants (is_active);
+
+-- Settings table for cohort configuration
+CREATE TABLE IF NOT EXISTS settings (
+  key TEXT PRIMARY KEY,
+  value JSONB NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read settings" ON settings
+  FOR SELECT USING (true);
+
+CREATE POLICY "Allow public insert settings" ON settings
+  FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Allow public update settings" ON settings
+  FOR UPDATE USING (true);

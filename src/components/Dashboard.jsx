@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './Header';
 import ProgressBanner from './ProgressBanner';
 import TimelineView from './TimelineView';
@@ -12,9 +12,33 @@ const TABS = [
   { id: 'stats', label: 'My Stats' },
 ];
 
-export default function Dashboard({ user, onLogout, onSubmit, onReactivate }) {
+function getCalendarDay(cohortStartDate) {
+  if (!cohortStartDate) return null;
+  const now = new Date();
+  const start = new Date(cohortStartDate + 'T00:00:00');
+  const nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+  const diffMs = nowDay - startDay;
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  return diffDays + 1;
+}
+
+function getTimeLeft(targetDate) {
+  const now = new Date();
+  const diff = targetDate - now;
+  if (diff <= 0) return null;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+  return { days, hours, minutes, seconds };
+}
+
+export default function Dashboard({ user, onLogout, onSubmit, onReactivate, cohortStartDate }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
+
+  const calendarDay = getCalendarDay(cohortStartDate);
 
   // Removed state
   if (!user.isActive) {
@@ -41,6 +65,24 @@ export default function Dashboard({ user, onLogout, onSubmit, onReactivate }) {
     );
   }
 
+  // Cohort hasn't started yet
+  if (cohortStartDate && calendarDay < 1) {
+    return (
+      <div style={{ minHeight: '100vh' }}>
+        <Header
+          user={user}
+          currentTab="timeline"
+          onTabChange={() => {}}
+          tabs={TABS}
+          onLogout={onLogout}
+        />
+        <div style={{ maxWidth: 600, margin: '0 auto', padding: '60px 24px' }}>
+          <CohortCountdown cohortStartDate={cohortStartDate} />
+        </div>
+      </div>
+    );
+  }
+
   const handleTabChange = (newTab) => {
     setTab(newTab);
     setSelectedDay(null);
@@ -56,6 +98,10 @@ export default function Dashboard({ user, onLogout, onSubmit, onReactivate }) {
     setTab('timeline');
   };
 
+  // Determine if user has already completed today's task (cohort mode)
+  const userCompletedToday = cohortStartDate && calendarDay !== null && calendarDay >= 1 && calendarDay <= 30
+    && user.currentDay > calendarDay;
+
   return (
     <div style={{ minHeight: '100vh' }}>
       <Header
@@ -67,7 +113,12 @@ export default function Dashboard({ user, onLogout, onSubmit, onReactivate }) {
       />
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
-        <ProgressBanner user={user} />
+        <ProgressBanner user={user} cohortStartDate={cohortStartDate} calendarDay={calendarDay} />
+
+        {/* Countdown banner if user completed today's task */}
+        {userCompletedToday && (
+          <NextDayCountdown calendarDay={calendarDay} />
+        )}
 
         {/* Quick Stats */}
         <div className="fade-up-delay-1 stats-grid" style={{
@@ -80,7 +131,7 @@ export default function Dashboard({ user, onLogout, onSubmit, onReactivate }) {
 
         {/* Tab Content */}
         {tab === 'timeline' && (
-          <TimelineView user={user} onSelectDay={handleSelectDay} />
+          <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} />
         )}
         {tab === 'day' && selectedDay && (
           <DayView
@@ -103,6 +154,129 @@ function QuickStat({ icon, value, label }) {
       <div style={{ fontSize: 28, marginBottom: 8 }}>{icon}</div>
       <div className="mono" style={{ fontSize: 32, fontWeight: 700, color: '#e94560' }}>{value}</div>
       <div style={{ fontSize: 12, color: '#666', marginTop: 4 }}>{label}</div>
+    </div>
+  );
+}
+
+// ── Countdown: Cohort hasn't started ────────────────────────
+function CohortCountdown({ cohortStartDate }) {
+  const [timeLeft, setTimeLeft] = useState(null);
+
+  useEffect(() => {
+    const target = new Date(cohortStartDate + 'T00:00:00');
+
+    const update = () => {
+      setTimeLeft(getTimeLeft(target));
+    };
+    update();
+    const timer = setInterval(update, 1000);
+    return () => clearInterval(timer);
+  }, [cohortStartDate]);
+
+  const formatDate = new Date(cohortStartDate + 'T00:00:00').toLocaleDateString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+  });
+
+  return (
+    <div className="fade-up" style={{ textAlign: 'center' }}>
+      <div style={{ fontSize: 64, marginBottom: 20 }}>🚀</div>
+      <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>
+        Your Cohort is Starting Soon
+      </h1>
+      <p style={{ color: '#888', fontSize: 15, marginBottom: 32 }}>
+        The 30-Day First Deal Challenge begins on
+      </p>
+      <div style={{ fontSize: 18, fontWeight: 600, color: '#e94560', marginBottom: 32 }}>
+        {formatDate}
+      </div>
+
+      {timeLeft && (
+        <div style={{
+          display: 'flex', justifyContent: 'center', gap: 16, marginBottom: 32,
+          flexWrap: 'wrap',
+        }}>
+          <CountdownUnit value={timeLeft.days} label="Days" />
+          <CountdownUnit value={timeLeft.hours} label="Hours" />
+          <CountdownUnit value={timeLeft.minutes} label="Minutes" />
+          <CountdownUnit value={timeLeft.seconds} label="Seconds" />
+        </div>
+      )}
+
+      <div className="card" style={{ padding: 24, textAlign: 'left', maxWidth: 400, margin: '0 auto' }}>
+        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>While you wait:</h3>
+        <ul style={{ color: '#888', fontSize: 14, lineHeight: 2, listStyle: 'none', padding: 0 }}>
+          <li>✅ Review the challenge overview</li>
+          <li>✅ Set up your deal-finding tools</li>
+          <li>✅ Research your target market</li>
+          <li>✅ Get ready to take action on Day 1</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+// ── Countdown: Next day unlock ──────────────────────────────
+function NextDayCountdown({ calendarDay }) {
+  const [timeLeft, setTimeLeft] = useState(null);
+
+  useEffect(() => {
+    const now = new Date();
+    const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+    const update = () => {
+      setTimeLeft(getTimeLeft(tomorrow));
+    };
+    update();
+    const timer = setInterval(update, 1000);
+    return () => clearInterval(timer);
+  }, [calendarDay]);
+
+  if (calendarDay >= 30) {
+    return null;
+  }
+
+  return (
+    <div className="fade-up" style={{
+      marginBottom: 24, padding: '20px 24px',
+      background: 'linear-gradient(135deg, rgba(72,199,142,0.08), rgba(72,199,142,0.02))',
+      border: '1px solid rgba(72,199,142,0.15)',
+      borderRadius: 16, textAlign: 'center',
+    }}>
+      <div style={{ fontSize: 15, fontWeight: 600, color: '#48c78e', marginBottom: 8 }}>
+        Day {calendarDay} Complete!
+      </div>
+      <div style={{ fontSize: 13, color: '#888', marginBottom: 12 }}>
+        Day {calendarDay + 1} unlocks in
+      </div>
+      {timeLeft && (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
+          <MiniCountdown value={timeLeft.hours} label="hr" />
+          <MiniCountdown value={timeLeft.minutes} label="min" />
+          <MiniCountdown value={timeLeft.seconds} label="sec" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CountdownUnit({ value, label }) {
+  return (
+    <div className="card" style={{ padding: '20px 24px', textAlign: 'center', minWidth: 80 }}>
+      <div className="mono" style={{ fontSize: 36, fontWeight: 700, color: '#e94560' }}>
+        {String(value).padStart(2, '0')}
+      </div>
+      <div style={{ fontSize: 11, color: '#666', marginTop: 4 }}>{label}</div>
+    </div>
+  );
+}
+
+function MiniCountdown({ value, label }) {
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <span className="mono" style={{ fontSize: 22, fontWeight: 700, color: '#48c78e' }}>
+        {String(value).padStart(2, '0')}
+      </span>
+      <span style={{ fontSize: 11, color: '#666', marginLeft: 2 }}>{label}</span>
     </div>
   );
 }

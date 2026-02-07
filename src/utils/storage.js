@@ -115,6 +115,32 @@ const supabaseStorage = {
     });
     return result ? fromDbRow(result) : null;
   },
+
+  async getCohortSettings() {
+    const result = await supabaseRequest('settings', 'GET', {
+      filters: '?key=eq.cohort_settings',
+      single: true,
+    });
+    if (result?.value) return result.value;
+    try {
+      const data = localStorage.getItem('uc30_cohort_settings');
+      return data ? JSON.parse(data) : null;
+    } catch { return null; }
+  },
+
+  async setCohortSettings(settings) {
+    localStorage.setItem('uc30_cohort_settings', JSON.stringify(settings));
+    const body = { value: settings, updated_at: new Date().toISOString() };
+    const result = await supabaseRequest('settings', 'PATCH', {
+      filters: '?key=eq.cohort_settings',
+      body,
+    });
+    if (!result || (Array.isArray(result) && result.length === 0)) {
+      await supabaseRequest('settings', 'POST', {
+        body: { key: 'cohort_settings', ...body },
+      });
+    }
+  },
 };
 
 // ── Database row conversion ──────────────────────────────────────
@@ -196,6 +222,17 @@ const localStorageFallback = {
   },
   findByEmail(email) {
     return this.getParticipants().find(p => p.email === email.toLowerCase()) || null;
+  },
+  getCohortSettings() {
+    try {
+      const data = localStorage.getItem('uc30_cohort_settings');
+      return data ? JSON.parse(data) : null;
+    } catch { return null; }
+  },
+  setCohortSettings(settings) {
+    try {
+      localStorage.setItem('uc30_cohort_settings', JSON.stringify(settings));
+    } catch {}
   },
 };
 
