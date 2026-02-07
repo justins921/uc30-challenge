@@ -20,7 +20,10 @@ export default function App() {
     removeParticipant,
     deleteParticipant,
     reactivateParticipant,
+    toggleAdmin,
     setCohortStartDate,
+    contentOverrides,
+    setContentOverrides,
     navigate,
   } = useAppState();
 
@@ -86,9 +89,12 @@ export default function App() {
         onRemove={removeParticipant}
         onDelete={deleteParticipant}
         onReactivate={reactivateParticipant}
+        onToggleAdmin={toggleAdmin}
         onLogout={logout}
         cohortStartDate={cohortStartDate}
         onSetCohortStartDate={setCohortStartDate}
+        contentOverrides={contentOverrides}
+        onSetContentOverrides={setContentOverrides}
       />
     );
   }
@@ -99,6 +105,7 @@ export default function App() {
       onLogout={logout}
       onSubmit={submitDay}
       cohortStartDate={cohortStartDate}
+      contentOverrides={contentOverrides}
     />
   );
 }

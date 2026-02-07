@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { CHALLENGE_DAYS, CATEGORY_COLORS } from '../data/challengeDays';
+import { CHALLENGE_DAYS, CATEGORY_COLORS, getDayContent } from '../data/challengeDays';
 
-export default function DayView({ day, user, onSubmit, onBack }) {
+export default function DayView({ day, user, onSubmit, onBack, contentOverrides }) {
   const [proofText, setProofText] = useState('');
   const [fileName, setFileName] = useState('');
   const [fileData, setFileData] = useState(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const dayData = CHALLENGE_DAYS[day - 1];
+  const dayData = getDayContent(day, contentOverrides);
   const isComplete = user.completedDays.includes(day);
   const isCurrentOrPast = day <= user.currentDay;
   const existingSubmission = user.submissions.find(s => s.day === day);

@@ -342,6 +342,18 @@ export const PHASES = [
   { label: "Closing", days: [26, 27, 28, 29, 30], color: "#e94560" },
 ];
 
+// Merge defaults with admin overrides
+export function getDayContent(dayNum, overrides = {}) {
+  const defaults = CHALLENGE_DAYS[dayNum - 1];
+  const dayOverride = overrides[dayNum] || {};
+  return {
+    ...defaults,
+    ...dayOverride,
+    // Merge downloads: use override if present, else default
+    downloads: dayOverride.downloads !== undefined ? dayOverride.downloads : (defaults.downloads || []),
+  };
+}
+
 export const CATEGORY_COLORS = {
   foundation: { accent: "#e94560", label: "Foundation" },
   action: { accent: "#0f3460", label: "Action Phase" },

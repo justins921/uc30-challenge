@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import Header from './Header';
-import { CHALLENGE_DAYS } from '../data/challengeDays';
+import { CHALLENGE_DAYS, PHASES, getDayContent } from '../data/challengeDays';
 import { AttachmentLink } from './DayView';
 
 const ADMIN_TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'participants', label: 'Participants' },
   { id: 'submissions', label: 'Submissions' },
+  { id: 'content', label: 'Content' },
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onLogout, cohortStartDate, onSetCohortStartDate }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onLogout, cohortStartDate, onSetCohortStartDate, contentOverrides, onSetContentOverrides }) {
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
 
@@ -85,6 +86,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onRemove={onRemove}
             onDelete={onDelete}
             onReactivate={onReactivate}
+            onToggleAdmin={onToggleAdmin}
             onSelect={setSelectedParticipant}
           />
         )}
@@ -95,10 +97,17 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onRemove={onRemove}
             onDelete={onDelete}
             onReactivate={onReactivate}
+            onToggleAdmin={onToggleAdmin}
           />
         )}
         {tab === 'submissions' && (
           <SubmissionsTab nonAdmin={nonAdmin} />
+        )}
+        {tab === 'content' && (
+          <ContentTab
+            contentOverrides={contentOverrides}
+            onSetContentOverrides={onSetContentOverrides}
+          />
         )}
         {tab === 'social' && (
           <SocialProofTab
@@ -277,7 +286,7 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate }) {
   );
 }
 
-function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onSelect }) {
+function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleAdmin, onSelect }) {
   const [filter, setFilter] = useState('all');
   const filtered = filter === 'all' ? nonAdmin
     : filter === 'active' ? nonAdmin.filter(p => p.isActive)
@@ -349,7 +358,22 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onSelect 
                 <MiniStat label="Analyzed" value={p.metrics?.propertiesAnalyzed || 0} color="#533483" />
                 <MiniStat label="Offers" value={p.metrics?.offersSubmitted || 0} color="#e94560" />
                 <MiniStat label="Submissions" value={p.submissions?.length || 0} color="#888" />
-                <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }} onClick={e => e.stopPropagation()}>
+                <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, flexWrap: 'wrap' }} onClick={e => e.stopPropagation()}>
+                  <button
+                    style={{
+                      background: 'rgba(83,52,131,0.08)', color: '#9b59b6',
+                      border: '1px solid rgba(83,52,131,0.2)', padding: '6px 12px',
+                      borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                      fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+                    }}
+                    onClick={() => {
+                      if (confirm(`Make ${p.name} an admin? They will have full admin access.`)) {
+                        onToggleAdmin(p.id, true);
+                      }
+                    }}
+                  >
+                    Make Admin
+                  </button>
                   {p.isActive ? (
                     <button className="btn-danger" onClick={() => onRemove(p.id)}>Remove</button>
                   ) : (
@@ -381,7 +405,7 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onSelect 
 }
 
 // ── Participant Detail View (with all submissions) ──────────
-function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate }) {
+function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin }) {
   const p = participant;
 
   return (
@@ -426,6 +450,22 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
             </div>
           </div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <button
+              style={{
+                background: 'rgba(83,52,131,0.08)', color: '#9b59b6',
+                border: '1px solid rgba(83,52,131,0.2)', padding: '8px 16px',
+                borderRadius: 8, fontSize: 13, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+              }}
+              onClick={() => {
+                if (confirm(`Make ${p.name} an admin? They will have full admin access.`)) {
+                  onToggleAdmin(p.id, true);
+                  onBack();
+                }
+              }}
+            >
+              Make Admin
+            </button>
             {p.isActive ? (
               <button className="btn-danger" onClick={() => onRemove(p.id)}>Remove from Challenge</button>
             ) : (
@@ -673,6 +713,275 @@ function SubmissionsTab({ nonAdmin }) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+// ── Content Management Tab ──────────────────────────────────
+function ContentTab({ contentOverrides, onSetContentOverrides }) {
+  const [editingDay, setEditingDay] = useState(null);
+
+  if (editingDay) {
+    return (
+      <DayEditor
+        dayNum={editingDay}
+        contentOverrides={contentOverrides}
+        onSave={(dayNum, overrides) => {
+          const updated = { ...contentOverrides, [dayNum]: overrides };
+          onSetContentOverrides(updated);
+          setEditingDay(null);
+        }}
+        onBack={() => setEditingDay(null)}
+      />
+    );
+  }
+
+  return (
+    <div className="fade-up">
+      <div className="card" style={{ marginBottom: 20, padding: '16px 20px' }}>
+        <p style={{ color: '#888', fontSize: 13, margin: 0 }}>
+          Edit the text, videos, and resources for each day. Changes are saved to the database and visible to all users.
+        </p>
+      </div>
+      {PHASES.map(phase => (
+        <div key={phase.label} style={{ marginBottom: 28 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+            <div style={{ width: 10, height: 10, borderRadius: 3, background: phase.color }} />
+            <h3 style={{ fontSize: 15, fontWeight: 700 }}>{phase.label}</h3>
+            <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {phase.days.map(d => {
+              const dayData = getDayContent(d, contentOverrides);
+              const hasOverrides = !!contentOverrides[d];
+              return (
+                <div
+                  key={d}
+                  className="card"
+                  style={{ padding: '14px 18px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14 }}
+                  onClick={() => setEditingDay(d)}
+                >
+                  <div className="mono" style={{
+                    width: 36, height: 36, borderRadius: 8, background: `${phase.color}15`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 13, fontWeight: 700, color: phase.color, flexShrink: 0,
+                  }}>
+                    {d}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{dayData.title}</div>
+                    <div style={{ fontSize: 12, color: '#555', display: 'flex', gap: 10 }}>
+                      {dayData.videoUrl && <span style={{ color: '#48c78e' }}>Video set</span>}
+                      {dayData.downloads?.length > 0 && <span style={{ color: '#533483' }}>{dayData.downloads.length} resource{dayData.downloads.length !== 1 ? 's' : ''}</span>}
+                      {dayData.transcript && <span style={{ color: '#666' }}>Transcript</span>}
+                    </div>
+                  </div>
+                  {hasOverrides && (
+                    <span style={{
+                      fontSize: 10, fontWeight: 600, color: '#48c78e',
+                      background: 'rgba(72,199,142,0.1)', padding: '3px 8px', borderRadius: 4,
+                    }}>Customized</span>
+                  )}
+                  <div style={{ color: '#444', fontSize: 18, flexShrink: 0 }}>›</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function DayEditor({ dayNum, contentOverrides, onSave, onBack }) {
+  const defaults = CHALLENGE_DAYS[dayNum - 1];
+  const existing = contentOverrides[dayNum] || {};
+
+  const [title, setTitle] = useState(existing.title || defaults.title);
+  const [taskDescription, setTaskDescription] = useState(existing.taskDescription || defaults.taskDescription);
+  const [videoUrl, setVideoUrl] = useState(existing.videoUrl || defaults.videoUrl || '');
+  const [transcript, setTranscript] = useState(existing.transcript || defaults.transcript || '');
+  const [downloads, setDownloads] = useState(existing.downloads || defaults.downloads || []);
+  const [newDlName, setNewDlName] = useState('');
+  const [newDlUrl, setNewDlUrl] = useState('');
+
+  const handleSave = () => {
+    const overrides = {};
+    if (title !== defaults.title) overrides.title = title;
+    if (taskDescription !== defaults.taskDescription) overrides.taskDescription = taskDescription;
+    if (videoUrl !== (defaults.videoUrl || '')) overrides.videoUrl = videoUrl || null;
+    if (transcript !== (defaults.transcript || '')) overrides.transcript = transcript || null;
+    if (JSON.stringify(downloads) !== JSON.stringify(defaults.downloads || [])) overrides.downloads = downloads;
+    onSave(dayNum, Object.keys(overrides).length > 0 ? overrides : undefined);
+  };
+
+  const handleReset = () => {
+    const updated = { ...contentOverrides };
+    delete updated[dayNum];
+    onSave(dayNum, undefined);
+  };
+
+  const addDownloadLink = () => {
+    if (!newDlName.trim()) return;
+    setDownloads([...downloads, { name: newDlName.trim(), url: newDlUrl.trim() || '#' }]);
+    setNewDlName('');
+    setNewDlUrl('');
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File must be under 10 MB.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setDownloads([...downloads, { name: file.name, url: reader.result }]);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
+  const removeDownload = (idx) => {
+    setDownloads(downloads.filter((_, i) => i !== idx));
+  };
+
+  const inputStyle = { width: '100%', marginBottom: 0, fontSize: 14 };
+  const labelStyle = { fontSize: 12, color: '#888', fontWeight: 600, marginBottom: 6, display: 'block', textTransform: 'uppercase', letterSpacing: 0.5 };
+
+  return (
+    <div className="scale-in">
+      <button className="btn-secondary" onClick={onBack} style={{ marginBottom: 24, padding: '8px 20px', fontSize: 13 }}>
+        ← Back to Content
+      </button>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+        <div className="mono" style={{ fontSize: 14, color: '#e94560', fontWeight: 700 }}>DAY {dayNum}</div>
+        <h2 style={{ fontSize: 22, fontWeight: 700 }}>Edit Day Content</h2>
+      </div>
+
+      {/* Title */}
+      <div className="card" style={{ marginBottom: 16 }}>
+        <label style={labelStyle}>Day Title</label>
+        <input value={title} onChange={e => setTitle(e.target.value)} style={inputStyle} />
+      </div>
+
+      {/* Task Description */}
+      <div className="card" style={{ marginBottom: 16 }}>
+        <label style={labelStyle}>Task Description</label>
+        <textarea
+          value={taskDescription}
+          onChange={e => setTaskDescription(e.target.value)}
+          rows={4}
+          style={{ ...inputStyle, resize: 'vertical' }}
+        />
+      </div>
+
+      {/* Video URL */}
+      <div className="card" style={{ marginBottom: 16 }}>
+        <label style={labelStyle}>Video Embed URL</label>
+        <input
+          value={videoUrl}
+          onChange={e => setVideoUrl(e.target.value)}
+          placeholder="https://www.youtube.com/embed/... or https://player.vimeo.com/video/..."
+          style={inputStyle}
+        />
+        <p style={{ fontSize: 11, color: '#555', marginTop: 8, marginBottom: 0 }}>
+          Use the embed URL from YouTube or Vimeo (not the regular watch URL).
+        </p>
+        {videoUrl && (
+          <div style={{ marginTop: 12, aspectRatio: '16/9', maxHeight: 200, borderRadius: 8, overflow: 'hidden' }}>
+            <iframe src={videoUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen />
+          </div>
+        )}
+      </div>
+
+      {/* Transcript */}
+      <div className="card" style={{ marginBottom: 16 }}>
+        <label style={labelStyle}>Video Transcript</label>
+        <textarea
+          value={transcript}
+          onChange={e => setTranscript(e.target.value)}
+          rows={4}
+          placeholder="Paste the video transcript here..."
+          style={{ ...inputStyle, resize: 'vertical' }}
+        />
+      </div>
+
+      {/* Downloads / Resources */}
+      <div className="card" style={{ marginBottom: 24 }}>
+        <label style={labelStyle}>Resources & Downloads</label>
+        {downloads.length > 0 && (
+          <div style={{ marginBottom: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {downloads.map((dl, i) => (
+              <div key={i} style={{
+                display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px',
+                background: 'rgba(255,255,255,0.03)', borderRadius: 8,
+                border: '1px solid rgba(255,255,255,0.06)',
+              }}>
+                <span style={{ fontSize: 14 }}>📎</span>
+                <span style={{ flex: 1, fontSize: 13, color: '#ccc' }}>{dl.name}</span>
+                {dl.url && !dl.url.startsWith('data:') && (
+                  <span style={{ fontSize: 11, color: '#555', maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{dl.url}</span>
+                )}
+                {dl.url && dl.url.startsWith('data:') && (
+                  <span style={{ fontSize: 11, color: '#533483' }}>Uploaded file</span>
+                )}
+                <button
+                  onClick={() => removeDownload(i)}
+                  style={{
+                    background: 'none', border: 'none', color: '#e94560',
+                    cursor: 'pointer', fontSize: 16, padding: '0 4px',
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
+          <input
+            value={newDlName}
+            onChange={e => setNewDlName(e.target.value)}
+            placeholder="Resource name"
+            style={{ flex: 1, minWidth: 120, marginBottom: 0, fontSize: 13, padding: '8px 12px' }}
+          />
+          <input
+            value={newDlUrl}
+            onChange={e => setNewDlUrl(e.target.value)}
+            placeholder="URL (optional)"
+            style={{ flex: 1, minWidth: 120, marginBottom: 0, fontSize: 13, padding: '8px 12px' }}
+          />
+          <button className="btn-secondary" onClick={addDownloadLink} style={{ padding: '8px 14px', fontSize: 13 }}>
+            + Add Link
+          </button>
+        </div>
+        <label style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 16px',
+          background: 'rgba(255,255,255,0.04)', border: '1px dashed rgba(255,255,255,0.12)',
+          borderRadius: 8, cursor: 'pointer', fontSize: 13, color: '#888',
+        }}>
+          📤 Upload File
+          <input type="file" style={{ display: 'none' }} onChange={handleFileUpload} />
+        </label>
+      </div>
+
+      {/* Actions */}
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+        <button className="btn-primary" onClick={handleSave} style={{ padding: '12px 28px' }}>
+          Save Changes
+        </button>
+        {contentOverrides[dayNum] && (
+          <button className="btn-secondary" onClick={handleReset} style={{ padding: '12px 20px' }}>
+            Reset to Default
+          </button>
+        )}
+        <button className="btn-secondary" onClick={onBack} style={{ padding: '12px 20px' }}>
+          Cancel
+        </button>
+      </div>
     </div>
   );
 }

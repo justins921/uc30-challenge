@@ -60,7 +60,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, contentOverrides }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -152,7 +152,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate })
 
         {/* Tab Content */}
         {tab === 'timeline' && (
-          <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} />
+          <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} contentOverrides={contentOverrides} />
         )}
         {tab === 'day' && selectedDay && (
           <DayView
@@ -160,6 +160,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate })
             user={user}
             onSubmit={onSubmit}
             onBack={handleBackToTimeline}
+            contentOverrides={contentOverrides}
           />
         )}
         {tab === 'submissions' && <SubmissionsView user={user} />}

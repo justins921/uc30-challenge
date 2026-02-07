@@ -95,6 +95,7 @@ const supabaseStorage = {
     const row = {};
     if (updates.currentDay !== undefined) row.current_day = updates.currentDay;
     if (updates.isActive !== undefined) row.is_active = updates.isActive;
+    if (updates.isAdmin !== undefined) row.is_admin = updates.isAdmin;
     if (updates.completedDays !== undefined) row.completed_days = updates.completedDays;
     if (updates.submissions !== undefined) row.submissions = updates.submissions;
     if (updates.metrics !== undefined) row.metrics = updates.metrics;
@@ -140,6 +141,34 @@ const supabaseStorage = {
       const data = localStorage.getItem('uc30_cohort_settings');
       return data ? JSON.parse(data) : null;
     } catch { return null; }
+  },
+
+  async getContentOverrides() {
+    const result = await supabaseRequest('settings', 'GET', {
+      filters: '?key=eq.content_overrides',
+    });
+    if (Array.isArray(result) && result.length > 0 && result[0].value) {
+      localStorage.setItem('uc30_content_overrides', JSON.stringify(result[0].value));
+      return result[0].value;
+    }
+    try {
+      const data = localStorage.getItem('uc30_content_overrides');
+      return data ? JSON.parse(data) : {};
+    } catch { return {}; }
+  },
+
+  async setContentOverrides(overrides) {
+    localStorage.setItem('uc30_content_overrides', JSON.stringify(overrides));
+    const body = { value: overrides, updated_at: new Date().toISOString() };
+    const result = await supabaseRequest('settings', 'PATCH', {
+      filters: '?key=eq.content_overrides',
+      body,
+    });
+    if (!result || (Array.isArray(result) && result.length === 0)) {
+      await supabaseRequest('settings', 'POST', {
+        body: { key: 'content_overrides', ...body },
+      });
+    }
   },
 
   async setCohortSettings(settings) {
@@ -256,6 +285,17 @@ const localStorageFallback = {
   setCohortSettings(settings) {
     try {
       localStorage.setItem('uc30_cohort_settings', JSON.stringify(settings));
+    } catch {}
+  },
+  getContentOverrides() {
+    try {
+      const data = localStorage.getItem('uc30_content_overrides');
+      return data ? JSON.parse(data) : {};
+    } catch { return {}; }
+  },
+  setContentOverrides(overrides) {
+    try {
+      localStorage.setItem('uc30_content_overrides', JSON.stringify(overrides));
     } catch {}
   },
 };

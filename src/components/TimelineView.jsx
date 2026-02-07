@@ -1,6 +1,6 @@
-import { CHALLENGE_DAYS, PHASES } from '../data/challengeDays';
+import { PHASES, getDayContent } from '../data/challengeDays';
 
-export default function TimelineView({ user, onSelectDay, calendarDay }) {
+export default function TimelineView({ user, onSelectDay, calendarDay, contentOverrides }) {
   return (
     <div className="fade-up-delay-2">
       {PHASES.map((phase) => (
@@ -19,7 +19,7 @@ export default function TimelineView({ user, onSelectDay, calendarDay }) {
             gap: 10,
           }}>
             {phase.days.map(d => {
-              const dayData = CHALLENGE_DAYS[d - 1];
+              const dayData = getDayContent(d, contentOverrides);
               const isComplete = user.completedDays.includes(d);
               const isCurrent = d === user.currentDay;
 

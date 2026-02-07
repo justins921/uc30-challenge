@@ -8,6 +8,7 @@ export function useAppState() {
   const [currentView, setCurrentView] = useState('login');
   const [loading, setLoading] = useState(true);
   const [cohortStartDate, setCohortStartDateState] = useState(null);
+  const [contentOverrides, setContentOverridesState] = useState({});
 
   // Load from storage on mount
   useEffect(() => {
@@ -20,6 +21,9 @@ export function useAppState() {
         if (cohortSettings?.startDate) {
           setCohortStartDateState(cohortSettings.startDate);
         }
+
+        const overrides = await Promise.resolve(storage.getContentOverrides());
+        if (overrides) setContentOverridesState(overrides);
 
         const storedUser = await Promise.resolve(storage.getUser());
         if (storedUser) {
@@ -261,12 +265,32 @@ export function useAppState() {
     setCohortStartDateState(date);
   }, []);
 
+  const toggleAdmin = useCallback(async (participantId, makeAdmin) => {
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(participantId, { isAdmin: makeAdmin });
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === participantId ? { ...p, isAdmin: makeAdmin } : p
+      );
+      setParticipants(updatedParticipants);
+      persist(user, updatedParticipants);
+    }
+  }, [participants, user, persist]);
+
+  const setContentOverrides = useCallback(async (overrides) => {
+    await Promise.resolve(storage.setContentOverrides(overrides));
+    setContentOverridesState(overrides);
+  }, []);
+
   return {
     user,
     participants,
     currentView,
     loading,
     cohortStartDate,
+    contentOverrides,
     navigate: setCurrentView,
     login,
     register,
@@ -276,7 +300,9 @@ export function useAppState() {
     removeParticipant,
     deleteParticipant,
     reactivateParticipant,
+    toggleAdmin,
     refreshParticipants,
     setCohortStartDate,
+    setContentOverrides,
   };
 }
