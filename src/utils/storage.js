@@ -76,7 +76,7 @@ const supabaseStorage = {
 
   async getParticipants() {
     const data = await supabaseRequest('participants', 'GET', {
-      filters: '?order=created_at.asc',
+      filters: '?select=id,name,email,is_admin,current_day,is_active,has_paid,start_date,completed_days,submissions,metrics,removed_at,reactivated_at,created_at&order=created_at.asc',
     });
     return data ? data.map(fromDbRow) : [];
   },
@@ -102,6 +102,7 @@ const supabaseStorage = {
     if (updates.removedAt !== undefined) row.removed_at = updates.removedAt;
     if (updates.reactivatedAt !== undefined) row.reactivated_at = updates.reactivatedAt;
     if (updates.password !== undefined) row.password = updates.password;
+    if (updates.hasPaid !== undefined) row.has_paid = updates.hasPaid;
 
     const result = await supabaseRequest('participants', 'PATCH', {
       filters: `?id=eq.${id}`,
@@ -199,6 +200,7 @@ function toDbRow(user) {
     is_admin: user.isAdmin,
     current_day: user.currentDay,
     is_active: user.isActive,
+    has_paid: user.hasPaid,
     start_date: user.startDate,
     completed_days: user.completedDays,
     submissions: user.submissions,
@@ -216,6 +218,7 @@ function fromDbRow(row) {
     isAdmin: row.is_admin,
     currentDay: row.current_day,
     isActive: row.is_active,
+    hasPaid: row.has_paid || false,
     startDate: row.start_date,
     completedDays: row.completed_days || [],
     submissions: row.submissions || [],
@@ -314,6 +317,7 @@ export function createNewUser(name, email, password) {
     isAdmin: email.toLowerCase() === 'admin@uc30.com',
     currentDay: 1,
     isActive: true,
+    hasPaid: false,
     startDate: new Date().toISOString(),
     completedDays: [],
     submissions: [],

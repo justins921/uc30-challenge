@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS participants (
   completed_days JSONB DEFAULT '[]'::jsonb,
   submissions JSONB DEFAULT '[]'::jsonb,
   metrics JSONB DEFAULT '{"propertiesAnalyzed": 0, "offersSubmitted": 0, "agentsContacted": 0}'::jsonb,
+  has_paid BOOLEAN DEFAULT FALSE,
   removed_at TIMESTAMPTZ,
   reactivated_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -38,6 +39,9 @@ CREATE POLICY "Allow public update" ON participants
 -- Allow anyone to delete (admin can permanently remove users)
 CREATE POLICY "Allow public delete" ON participants
   FOR DELETE USING (true);
+
+-- If you already have the participants table, run this to add the has_paid column:
+-- ALTER TABLE participants ADD COLUMN IF NOT EXISTS has_paid BOOLEAN DEFAULT FALSE;
 
 -- Create index for email lookups
 CREATE INDEX IF NOT EXISTS idx_participants_email ON participants (email);

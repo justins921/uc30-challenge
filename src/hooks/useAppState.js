@@ -1,6 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
 import { storage, createNewUser, isSupabaseEnabled } from '../utils/storage';
 import { CHALLENGE_DAYS } from '../data/challengeDays';
+import { hashPassword } from '../utils/crypto';
+import { subscribeUser } from '../utils/kit';
 
 export function useAppState() {
   const [user, setUser] = useState(null);
@@ -70,8 +72,24 @@ export function useAppState() {
     if (!existing) {
       return { error: 'No account found with that email. Please register first.' };
     }
-    if (existing.password !== password) {
+
+    // Check hashed password first, then fall back to legacy plaintext
+    const hashed = await hashPassword(email, password);
+    if (existing.password !== hashed && existing.password !== password) {
       return { error: 'Incorrect password.' };
+    }
+
+    // Upgrade legacy plaintext password to hashed
+    if (existing.password === password && existing.password !== hashed) {
+      if (isSupabaseEnabled) {
+        await storage.updateParticipant(existing.id, { password: hashed });
+      } else {
+        const updatedParticipants = participants.map(p =>
+          p.id === existing.id ? { ...p, password: hashed } : p
+        );
+        setParticipants(updatedParticipants);
+        storage.setParticipants(updatedParticipants);
+      }
     }
 
     setUser(existing);
@@ -98,7 +116,8 @@ export function useAppState() {
       return { error: 'An account with that email already exists. Please log in.' };
     }
 
-    const newUser = createNewUser(name, email, password);
+    const hashed = await hashPassword(email, password);
+    const newUser = createNewUser(name, email, hashed);
 
     if (isSupabaseEnabled) {
       const saved = await storage.addParticipant(newUser);
@@ -116,6 +135,9 @@ export function useAppState() {
       persist(newUser, newParticipants);
     }
 
+    // Subscribe to Kit email list (fire and forget)
+    subscribeUser(email, name).catch(() => {});
+
     return { success: true };
   }, [participants, persist]);
 
@@ -131,11 +153,12 @@ export function useAppState() {
       return { error: 'No account found with that email.' };
     }
 
+    const hashed = await hashPassword(email, newPassword);
     if (isSupabaseEnabled) {
-      await storage.updateParticipant(existing.id, { password: newPassword });
+      await storage.updateParticipant(existing.id, { password: hashed });
     } else {
       const updatedParticipants = participants.map(p =>
-        p.id === existing.id ? { ...p, password: newPassword } : p
+        p.id === existing.id ? { ...p, password: hashed } : p
       );
       setParticipants(updatedParticipants);
       storage.setParticipants(updatedParticipants);
