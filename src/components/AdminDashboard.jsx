@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Header from './Header';
 import { CHALLENGE_DAYS } from '../data/challengeDays';
+import { AttachmentLink } from './DayView';
 
 const ADMIN_TABS = [
   { id: 'overview', label: 'Overview' },
@@ -545,7 +546,7 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
                     {sub.proof}
                   </p>
                   {sub.fileName && (
-                    <div style={{ marginTop: 6, fontSize: 12, color: '#666' }}>📎 {sub.fileName}</div>
+                    <AttachmentLink fileName={sub.fileName} fileData={sub.fileData} />
                   )}
                 </div>
                 <div style={{
@@ -658,7 +659,7 @@ function SubmissionsTab({ nonAdmin }) {
                     {sub.proof}
                   </p>
                   {sub.fileName && (
-                    <div style={{ marginTop: 6, fontSize: 12, color: '#666' }}>📎 {sub.fileName}</div>
+                    <AttachmentLink fileName={sub.fileName} fileData={sub.fileData} />
                   )}
                 </div>
                 <div style={{

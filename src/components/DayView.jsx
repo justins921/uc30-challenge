@@ -4,6 +4,7 @@ import { CHALLENGE_DAYS, CATEGORY_COLORS } from '../data/challengeDays';
 export default function DayView({ day, user, onSubmit, onBack }) {
   const [proofText, setProofText] = useState('');
   const [fileName, setFileName] = useState('');
+  const [fileData, setFileData] = useState(null);
   const [submitted, setSubmitted] = useState(false);
 
   const dayData = CHALLENGE_DAYS[day - 1];
@@ -13,12 +14,21 @@ export default function DayView({ day, user, onSubmit, onBack }) {
   const cat = CATEGORY_COLORS[dayData.category];
 
   const handleFileSelect = (e) => {
-    if (e.target.files[0]) setFileName(e.target.files[0].name);
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File must be under 10 MB.');
+      return;
+    }
+    setFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = () => setFileData(reader.result);
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = () => {
     if (!proofText.trim() && !fileName) return;
-    onSubmit(day, { text: proofText, fileName });
+    onSubmit(day, { text: proofText, fileName, fileData });
     setSubmitted(true);
   };
 
@@ -188,7 +198,7 @@ function SubmissionComplete({ submission }) {
         <div style={{ fontSize: 12, color: '#666', marginBottom: 6 }}>Your submission:</div>
         <p style={{ color: '#bbb', fontSize: 14 }}>{submission?.proof}</p>
         {submission?.fileName && (
-          <div style={{ marginTop: 8, fontSize: 13, color: '#888' }}>📎 {submission.fileName}</div>
+          <AttachmentLink fileName={submission.fileName} fileData={submission.fileData} />
         )}
         <div style={{ marginTop: 8, fontSize: 12, color: '#555' }}>
           {submission && new Date(submission.timestamp).toLocaleString()}
@@ -246,6 +256,46 @@ function SubmissionForm({ day, proofText, setProofText, fileName, onFileSelect, 
       <button className="btn-primary" onClick={onSubmit} style={{ width: '100%' }}>
         Submit Day {day} ✓
       </button>
+    </div>
+  );
+}
+
+export function AttachmentLink({ fileName, fileData }) {
+  if (!fileName) return null;
+
+  const isImage = /\.(jpg|jpeg|png|gif|webp|svg|bmp)$/i.test(fileName);
+
+  if (!fileData) {
+    return <div style={{ marginTop: 8, fontSize: 13, color: '#666' }}>📎 {fileName}</div>;
+  }
+
+  return (
+    <div style={{ marginTop: 8 }}>
+      <a
+        href={fileData}
+        target="_blank"
+        rel="noopener noreferrer"
+        download={!isImage ? fileName : undefined}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          fontSize: 13, color: '#e94560', textDecoration: 'none',
+          padding: '6px 12px', background: 'rgba(233,69,96,0.08)',
+          border: '1px solid rgba(233,69,96,0.15)', borderRadius: 8,
+          cursor: 'pointer',
+        }}
+      >
+        📎 {fileName} <span style={{ fontSize: 11, color: '#888' }}>↗ Open</span>
+      </a>
+      {isImage && (
+        <img
+          src={fileData}
+          alt={fileName}
+          style={{
+            display: 'block', marginTop: 8, maxWidth: '100%', maxHeight: 300,
+            borderRadius: 8, border: '1px solid rgba(255,255,255,0.08)',
+          }}
+        />
+      )}
     </div>
   );
 }

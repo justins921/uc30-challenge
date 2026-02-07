@@ -1,3 +1,5 @@
+import { AttachmentLink } from './DayView';
+
 export default function SubmissionsView({ user }) {
   if (user.submissions.length === 0) {
     return (
@@ -40,7 +42,7 @@ export default function SubmissionsView({ user }) {
                 {sub.proof}
               </p>
               {sub.fileName && (
-                <div style={{ marginTop: 6, fontSize: 12, color: '#666' }}>📎 {sub.fileName}</div>
+                <AttachmentLink fileName={sub.fileName} fileData={sub.fileData} />
               )}
             </div>
 

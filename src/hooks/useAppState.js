@@ -157,6 +157,7 @@ export function useAppState() {
       timestamp: new Date().toISOString(),
       proof: proof.text || 'File uploaded',
       fileName: proof.fileName || null,
+      fileData: proof.fileData || null,
       status: 'completed',
     };
 
