@@ -15,8 +15,8 @@ export default function TimelineView({ user, onSelectDay }) {
           {/* Day cards */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-            gap: 12,
+            gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+            gap: 10,
           }}>
             {phase.days.map(d => {
               const dayData = CHALLENGE_DAYS[d - 1];

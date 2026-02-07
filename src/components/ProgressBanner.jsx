@@ -13,7 +13,7 @@ export default function ProgressBanner({ user }) {
         marginBottom: 16, flexWrap: 'wrap', gap: 12,
       }}>
         <div>
-          <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 4 }}>
+          <h1 style={{ fontSize: 'clamp(20px, 5vw, 28px)', fontWeight: 700, marginBottom: 4 }}>
             {isCompleted ? '🎉 Challenge Complete!' : `Day ${user.currentDay} of 30`}
           </h1>
           <p style={{ color: '#888', fontSize: 15 }}>

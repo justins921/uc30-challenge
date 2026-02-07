@@ -10,6 +10,7 @@ export default function App() {
     currentView,
     loading,
     login,
+    register,
     logout,
     submitDay,
     removeParticipant,
@@ -36,7 +37,7 @@ export default function App() {
   }
 
   if (currentView === 'login' || !user) {
-    return <LoginScreen onLogin={login} />;
+    return <LoginScreen onLogin={login} onRegister={register} />;
   }
 
   if (currentView === 'admin' && user.isAdmin) {

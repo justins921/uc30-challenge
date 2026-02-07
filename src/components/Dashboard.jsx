@@ -66,12 +66,12 @@ export default function Dashboard({ user, onLogout, onSubmit, onReactivate }) {
         onLogout={onLogout}
       />
 
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '32px 24px' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
         <ProgressBanner user={user} />
 
         {/* Quick Stats */}
-        <div className="fade-up-delay-1" style={{
-          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 32,
+        <div className="fade-up-delay-1 stats-grid" style={{
+          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 32,
         }}>
           <QuickStat icon="📊" value={user.metrics.propertiesAnalyzed} label="Properties Analyzed" />
           <QuickStat icon="📝" value={user.metrics.offersSubmitted} label="Offers Submitted" />

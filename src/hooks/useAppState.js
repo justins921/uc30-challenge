@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { storage, createNewUser } from '../utils/storage';
+import { storage, createNewUser, isSupabaseEnabled } from '../utils/storage';
 import { CHALLENGE_DAYS } from '../data/challengeDays';
 
 export function useAppState() {
@@ -10,45 +10,103 @@ export function useAppState() {
 
   // Load from storage on mount
   useEffect(() => {
-    const storedUser = storage.getUser();
-    const storedParticipants = storage.getParticipants();
-    setParticipants(storedParticipants);
+    (async () => {
+      try {
+        const storedParticipants = await Promise.resolve(storage.getParticipants());
+        setParticipants(storedParticipants || []);
 
-    if (storedUser) {
-      // Refresh user data from participants list (may have been updated by admin)
-      const fresh = storedParticipants.find(p => p.id === storedUser.id);
-      if (fresh) {
-        setUser(fresh);
-        setCurrentView(fresh.isAdmin ? 'admin' : 'dashboard');
-      } else {
-        setUser(storedUser);
-        setCurrentView(storedUser.isAdmin ? 'admin' : 'dashboard');
+        const storedUser = await Promise.resolve(storage.getUser());
+        if (storedUser) {
+          // Refresh from participants list
+          const fresh = (storedParticipants || []).find(p => p.id === storedUser.id);
+          const currentUser = fresh || storedUser;
+          setUser(currentUser);
+          setCurrentView(currentUser.isAdmin ? 'admin' : 'dashboard');
+        }
+      } catch (err) {
+        console.error('Failed to load state:', err);
       }
-    }
-    setLoading(false);
+      setLoading(false);
+    })();
   }, []);
 
-  // Persist whenever state changes
+  // Persist helper (localStorage only — Supabase persists per-operation)
   const persist = useCallback((newUser, newParticipants) => {
     storage.setUser(newUser);
-    storage.setParticipants(newParticipants);
+    if (!isSupabaseEnabled) {
+      storage.setParticipants(newParticipants);
+    }
   }, []);
 
+  // Refresh participants from Supabase
+  const refreshParticipants = useCallback(async () => {
+    if (isSupabaseEnabled) {
+      const fresh = await storage.getParticipants();
+      if (fresh) setParticipants(fresh);
+      return fresh || [];
+    }
+    return participants;
+  }, [participants]);
+
   // ── Auth ─────────────────────────────────────────────
-  const login = useCallback((name, email) => {
-    const existing = participants.find(p => p.email === email.toLowerCase());
-    if (existing) {
-      setUser(existing);
-      setCurrentView(existing.isAdmin ? 'admin' : 'dashboard');
-      persist(existing, participants);
+  const login = useCallback(async (email, password) => {
+    let existing;
+    if (isSupabaseEnabled) {
+      existing = await storage.findByEmail(email);
     } else {
-      const newUser = createNewUser(name, email);
+      existing = participants.find(p => p.email === email.toLowerCase());
+    }
+
+    if (!existing) {
+      return { error: 'No account found with that email. Please register first.' };
+    }
+    if (existing.password !== password) {
+      return { error: 'Incorrect password.' };
+    }
+
+    setUser(existing);
+    setCurrentView(existing.isAdmin ? 'admin' : 'dashboard');
+    storage.setUser(existing);
+
+    if (isSupabaseEnabled) {
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+    }
+
+    return { success: true };
+  }, [participants]);
+
+  const register = useCallback(async (name, email, password) => {
+    let existing;
+    if (isSupabaseEnabled) {
+      existing = await storage.findByEmail(email);
+    } else {
+      existing = participants.find(p => p.email === email.toLowerCase());
+    }
+
+    if (existing) {
+      return { error: 'An account with that email already exists. Please log in.' };
+    }
+
+    const newUser = createNewUser(name, email, password);
+
+    if (isSupabaseEnabled) {
+      const saved = await storage.addParticipant(newUser);
+      if (!saved) return { error: 'Failed to create account. Please try again.' };
+      setUser(saved);
+      storage.setUser(saved);
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+      setCurrentView(saved.isAdmin ? 'admin' : 'dashboard');
+    } else {
       const newParticipants = [...participants, newUser];
       setUser(newUser);
       setParticipants(newParticipants);
       setCurrentView(newUser.isAdmin ? 'admin' : 'dashboard');
       persist(newUser, newParticipants);
     }
+
+    return { success: true };
   }, [participants, persist]);
 
   const logout = useCallback(() => {
@@ -58,7 +116,7 @@ export function useAppState() {
   }, []);
 
   // ── Submissions ──────────────────────────────────────
-  const submitDay = useCallback((dayNum, proof) => {
+  const submitDay = useCallback(async (dayNum, proof) => {
     if (!user) return;
 
     const dayData = CHALLENGE_DAYS[dayNum - 1];
@@ -77,58 +135,78 @@ export function useAppState() {
         (updatedMetrics[dayData.metrics.key] || 0) + dayData.metrics.count;
     }
 
-    const updatedUser = {
-      ...user,
+    const updates = {
       currentDay: Math.min(dayNum + 1, 31),
       completedDays: [...user.completedDays, dayNum],
       submissions: [...user.submissions, submission],
       metrics: updatedMetrics,
     };
 
-    const updatedParticipants = participants.map(p =>
-      p.id === user.id ? updatedUser : p
-    );
+    const updatedUser = { ...user, ...updates };
+
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(user.id, updates);
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === user.id ? updatedUser : p
+      );
+      setParticipants(updatedParticipants);
+      persist(updatedUser, updatedParticipants);
+    }
 
     setUser(updatedUser);
-    setParticipants(updatedParticipants);
-    persist(updatedUser, updatedParticipants);
+    storage.setUser(updatedUser);
   }, [user, participants, persist]);
 
   // ── Admin Actions ────────────────────────────────────
-  const removeParticipant = useCallback((participantId) => {
-    const updatedParticipants = participants.map(p =>
-      p.id === participantId
-        ? { ...p, isActive: false, removedAt: new Date().toISOString() }
-        : p
-    );
-    setParticipants(updatedParticipants);
-    persist(user, updatedParticipants);
+  const removeParticipant = useCallback(async (participantId) => {
+    const updates = { isActive: false, removedAt: new Date().toISOString() };
+
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(participantId, updates);
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === participantId ? { ...p, ...updates } : p
+      );
+      setParticipants(updatedParticipants);
+      persist(user, updatedParticipants);
+    }
   }, [participants, user, persist]);
 
-  const reactivateParticipant = useCallback((participantId) => {
-    const updatedParticipants = participants.map(p =>
-      p.id === participantId
-        ? {
-            ...p,
-            isActive: true,
-            removedAt: null,
-            currentDay: 1,
-            completedDays: [],
-            submissions: [],
-            metrics: { propertiesAnalyzed: 0, offersSubmitted: 0, agentsContacted: 0 },
-          }
-        : p
-    );
+  const reactivateParticipant = useCallback(async (participantId) => {
+    const updates = {
+      isActive: true,
+      removedAt: null,
+      currentDay: 1,
+      completedDays: [],
+      submissions: [],
+      metrics: { propertiesAnalyzed: 0, offersSubmitted: 0, agentsContacted: 0 },
+    };
 
-    setParticipants(updatedParticipants);
-
-    // If reactivating self
-    if (user?.id === participantId) {
-      const reactivated = updatedParticipants.find(p => p.id === participantId);
-      setUser(reactivated);
-      persist(reactivated, updatedParticipants);
+    if (isSupabaseEnabled) {
+      const updated = await storage.updateParticipant(participantId, updates);
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+      if (user?.id === participantId && updated) {
+        setUser(updated);
+        storage.setUser(updated);
+      }
     } else {
-      persist(user, updatedParticipants);
+      const updatedParticipants = participants.map(p =>
+        p.id === participantId ? { ...p, ...updates } : p
+      );
+      setParticipants(updatedParticipants);
+      if (user?.id === participantId) {
+        const reactivated = updatedParticipants.find(p => p.id === participantId);
+        setUser(reactivated);
+        persist(reactivated, updatedParticipants);
+      } else {
+        persist(user, updatedParticipants);
+      }
     }
   }, [participants, user, persist]);
 
@@ -139,9 +217,11 @@ export function useAppState() {
     loading,
     navigate: setCurrentView,
     login,
+    register,
     logout,
     submitDay,
     removeParticipant,
     reactivateParticipant,
+    refreshParticipants,
   };
 }
