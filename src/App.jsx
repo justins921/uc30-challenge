@@ -98,7 +98,6 @@ export default function App() {
       user={user}
       onLogout={logout}
       onSubmit={submitDay}
-      onReactivate={() => reactivateParticipant(user.id)}
       cohortStartDate={cohortStartDate}
     />
   );

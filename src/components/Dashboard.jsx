@@ -60,13 +60,13 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, onReactivate, cohortStartDate }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
 
   const calendarDay = getCalendarDay(cohortStartDate);
 
-  // Removed state
+  // Removed/paused state
   if (!user.isActive) {
     return (
       <div style={{
@@ -78,14 +78,9 @@ export default function Dashboard({ user, onLogout, onSubmit, onReactivate, coho
           <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 12 }}>Challenge Paused</h2>
           <p style={{ color: '#888', lineHeight: 1.7, marginBottom: 24 }}>
             You missed a daily submission and were removed from this run.
-            You can rejoin a future run within your one-year access window.
+            Contact your administrator to be reactivated for a future cohort.
           </p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button className="btn-primary" onClick={onReactivate}>
-              Rejoin Challenge (Reset)
-            </button>
-            <button className="btn-secondary" onClick={onLogout}>Log Out</button>
-          </div>
+          <button className="btn-secondary" onClick={onLogout}>Log Out</button>
         </div>
       </div>
     );

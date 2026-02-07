@@ -126,11 +126,16 @@ const supabaseStorage = {
   },
 
   async getCohortSettings() {
+    // Try Supabase first (don't use single: true to avoid 406 on empty result)
     const result = await supabaseRequest('settings', 'GET', {
       filters: '?key=eq.cohort_settings',
-      single: true,
     });
-    if (result?.value) return result.value;
+    if (Array.isArray(result) && result.length > 0 && result[0].value) {
+      // Also sync to localStorage as backup
+      localStorage.setItem('uc30_cohort_settings', JSON.stringify(result[0].value));
+      return result[0].value;
+    }
+    // Fallback to localStorage
     try {
       const data = localStorage.getItem('uc30_cohort_settings');
       return data ? JSON.parse(data) : null;
@@ -138,12 +143,15 @@ const supabaseStorage = {
   },
 
   async setCohortSettings(settings) {
+    // Always save to localStorage as backup
     localStorage.setItem('uc30_cohort_settings', JSON.stringify(settings));
     const body = { value: settings, updated_at: new Date().toISOString() };
+    // Try PATCH first (update existing)
     const result = await supabaseRequest('settings', 'PATCH', {
       filters: '?key=eq.cohort_settings',
       body,
     });
+    // If no row existed, PATCH returns empty array — create via POST
     if (!result || (Array.isArray(result) && result.length === 0)) {
       await supabaseRequest('settings', 'POST', {
         body: { key: 'cohort_settings', ...body },
