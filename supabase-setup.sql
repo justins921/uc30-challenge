@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS participants (
   submissions JSONB DEFAULT '[]'::jsonb,
   metrics JSONB DEFAULT '{"propertiesAnalyzed": 0, "offersSubmitted": 0, "agentsContacted": 0}'::jsonb,
   removed_at TIMESTAMPTZ,
+  reactivated_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

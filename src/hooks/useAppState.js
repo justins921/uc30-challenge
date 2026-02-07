@@ -115,6 +115,31 @@ export function useAppState() {
     return { success: true };
   }, [participants, persist]);
 
+  const resetPassword = useCallback(async (email, newPassword) => {
+    let existing;
+    if (isSupabaseEnabled) {
+      existing = await storage.findByEmail(email);
+    } else {
+      existing = participants.find(p => p.email === email.toLowerCase());
+    }
+
+    if (!existing) {
+      return { error: 'No account found with that email.' };
+    }
+
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(existing.id, { password: newPassword });
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === existing.id ? { ...p, password: newPassword } : p
+      );
+      setParticipants(updatedParticipants);
+      storage.setParticipants(updatedParticipants);
+    }
+
+    return { success: true };
+  }, [participants]);
+
   const logout = useCallback(() => {
     setUser(null);
     setCurrentView('login');
@@ -187,6 +212,7 @@ export function useAppState() {
     const updates = {
       isActive: true,
       removedAt: null,
+      reactivatedAt: new Date().toISOString(),
       currentDay: 1,
       completedDays: [],
       submissions: [],
@@ -231,6 +257,7 @@ export function useAppState() {
     navigate: setCurrentView,
     login,
     register,
+    resetPassword,
     logout,
     submitDay,
     removeParticipant,

@@ -323,7 +323,16 @@ function ParticipantsTab({ nonAdmin, onRemove, onReactivate, onSelect }) {
                   {p.isActive ? '🟢' : '🔴'}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 600, fontSize: 15 }}>{p.name}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontWeight: 600, fontSize: 15 }}>{p.name}</span>
+                    {p.reactivatedAt && (
+                      <span style={{
+                        fontSize: 10, fontWeight: 600, color: '#f0a500',
+                        background: 'rgba(240,165,0,0.1)', padding: '2px 8px',
+                        borderRadius: 4, flexShrink: 0,
+                      }}>Reactivated</span>
+                    )}
+                  </div>
                   <div style={{ fontSize: 12, color: '#666', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.email}</div>
                 </div>
                 <div style={{ color: '#444', fontSize: 18, flexShrink: 0 }}>›</div>
@@ -382,7 +391,18 @@ function ParticipantDetail({ participant, onBack, onRemove, onReactivate }) {
               <div style={{ fontSize: 12, color: '#555', marginTop: 4 }}>
                 Joined: {new Date(p.startDate).toLocaleDateString()}
                 {p.removedAt && <> · Removed: {new Date(p.removedAt).toLocaleDateString()}</>}
+                {p.reactivatedAt && <> · Reactivated: {new Date(p.reactivatedAt).toLocaleDateString()}</>}
               </div>
+              {p.reactivatedAt && (
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 6,
+                  fontSize: 12, fontWeight: 600, color: '#f0a500',
+                  background: 'rgba(240,165,0,0.1)', border: '1px solid rgba(240,165,0,0.2)',
+                  padding: '4px 12px', borderRadius: 6,
+                }}>
+                  🔄 Reactivated on {new Date(p.reactivatedAt).toLocaleDateString()}
+                </div>
+              )}
             </div>
           </div>
           <div>

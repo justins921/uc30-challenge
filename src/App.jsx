@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react';
 import { useAppState } from './hooks/useAppState';
+import LandingPage from './components/LandingPage';
 import LoginScreen from './components/LoginScreen';
 import Dashboard from './components/Dashboard';
 import AdminDashboard from './components/AdminDashboard';
@@ -12,12 +14,26 @@ export default function App() {
     cohortStartDate,
     login,
     register,
+    resetPassword,
     logout,
     submitDay,
     removeParticipant,
     reactivateParticipant,
     setCohortStartDate,
+    navigate,
   } = useAppState();
+
+  // Check for Stripe success redirect
+  const [authMode, setAuthMode] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('paid') === 'true' || params.get('success') === 'true') {
+      setAuthMode('register');
+      // Clean URL without reload
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
 
   if (loading) {
     return (
@@ -38,8 +54,27 @@ export default function App() {
     );
   }
 
+  // Not logged in
   if (currentView === 'login' || !user) {
-    return <LoginScreen onLogin={login} onRegister={register} />;
+    // If user clicked "Log In" or "Register" from landing, or arrived from Stripe redirect
+    if (authMode) {
+      return (
+        <LoginScreen
+          onLogin={login}
+          onRegister={register}
+          onResetPassword={resetPassword}
+          initialMode={authMode}
+          onBackToLanding={() => setAuthMode(null)}
+        />
+      );
+    }
+
+    // Default: show landing page
+    return (
+      <LandingPage
+        onGoToLogin={(mode) => setAuthMode(mode || 'login')}
+      />
+    );
   }
 
   if (currentView === 'admin' && user.isAdmin) {

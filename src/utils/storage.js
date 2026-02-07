@@ -99,6 +99,8 @@ const supabaseStorage = {
     if (updates.submissions !== undefined) row.submissions = updates.submissions;
     if (updates.metrics !== undefined) row.metrics = updates.metrics;
     if (updates.removedAt !== undefined) row.removed_at = updates.removedAt;
+    if (updates.reactivatedAt !== undefined) row.reactivated_at = updates.reactivatedAt;
+    if (updates.password !== undefined) row.password = updates.password;
 
     const result = await supabaseRequest('participants', 'PATCH', {
       filters: `?id=eq.${id}`,
@@ -175,6 +177,7 @@ function fromDbRow(row) {
     submissions: row.submissions || [],
     metrics: row.metrics || { propertiesAnalyzed: 0, offersSubmitted: 0, agentsContacted: 0 },
     removedAt: row.removed_at,
+    reactivatedAt: row.reactivated_at || null,
   };
 }
 
