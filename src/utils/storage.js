@@ -87,7 +87,7 @@ const supabaseStorage = {
 
   async addParticipant(participant) {
     const row = toDbRow(participant);
-    const result = await supabaseRequest('participants', 'POST', { body: row });
+    const result = await supabaseRequest('participants', 'POST', { body: row, single: true });
     return result ? fromDbRow(result) : null;
   },
 
