@@ -12,15 +12,41 @@ const TABS = [
   { id: 'stats', label: 'My Stats' },
 ];
 
+function getEasternDate() {
+  // Get the current date in Eastern timezone
+  const eastern = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
+  return new Date(eastern);
+}
+
 function getCalendarDay(cohortStartDate) {
   if (!cohortStartDate) return null;
-  const now = new Date();
+  // Days start at midnight Eastern
+  const nowEastern = getEasternDate();
   const start = new Date(cohortStartDate + 'T00:00:00');
-  const nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const nowDay = new Date(nowEastern.getFullYear(), nowEastern.getMonth(), nowEastern.getDate());
   const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
   const diffMs = nowDay - startDay;
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   return diffDays + 1;
+}
+
+function getNextMidnightEastern() {
+  // Calculate the real Date object for the next midnight Eastern
+  const nowEastern = getEasternDate();
+  const tomorrowEastern = new Date(nowEastern.getFullYear(), nowEastern.getMonth(), nowEastern.getDate() + 1);
+  // Difference in ms between "now in Eastern" and "tomorrow midnight Eastern"
+  const msUntilMidnightEastern = tomorrowEastern - nowEastern;
+  // Apply that offset to real Date.now()
+  return new Date(Date.now() + msUntilMidnightEastern);
+}
+
+function getPacificDeadline() {
+  // Get today's date in Pacific timezone, then set to 11:59 PM
+  const pacific = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+  const nowPacific = new Date(pacific);
+  const deadlinePacific = new Date(nowPacific.getFullYear(), nowPacific.getMonth(), nowPacific.getDate(), 23, 59, 0);
+  const msUntilDeadline = deadlinePacific - nowPacific;
+  return new Date(Date.now() + msUntilDeadline);
 }
 
 function getTimeLeft(targetDate) {
@@ -163,9 +189,13 @@ function CohortCountdown({ cohortStartDate }) {
   const [timeLeft, setTimeLeft] = useState(null);
 
   useEffect(() => {
-    const target = new Date(cohortStartDate + 'T00:00:00');
-
     const update = () => {
+      // Calculate time until cohort start date at midnight Eastern
+      const nowEastern = getEasternDate();
+      const start = new Date(cohortStartDate + 'T00:00:00');
+      const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+      const msUntilStart = startDay - nowEastern;
+      const target = new Date(Date.now() + msUntilStart);
       setTimeLeft(getTimeLeft(target));
     };
     update();
@@ -218,13 +248,14 @@ function CohortCountdown({ cohortStartDate }) {
 // ── Countdown: Next day unlock ──────────────────────────────
 function NextDayCountdown({ calendarDay }) {
   const [timeLeft, setTimeLeft] = useState(null);
+  const [deadlineLeft, setDeadlineLeft] = useState(null);
 
   useEffect(() => {
-    const now = new Date();
-    const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-
     const update = () => {
-      setTimeLeft(getTimeLeft(tomorrow));
+      // Next day unlocks at midnight Eastern
+      setTimeLeft(getTimeLeft(getNextMidnightEastern()));
+      // Today's submission deadline is 11:59 PM Pacific
+      setDeadlineLeft(getTimeLeft(getPacificDeadline()));
     };
     update();
     const timer = setInterval(update, 1000);
@@ -246,13 +277,18 @@ function NextDayCountdown({ calendarDay }) {
         Day {calendarDay} Complete!
       </div>
       <div style={{ fontSize: 13, color: '#888', marginBottom: 12 }}>
-        Day {calendarDay + 1} unlocks in
+        Day {calendarDay + 1} unlocks at midnight ET
       </div>
       {timeLeft && (
         <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
           <MiniCountdown value={timeLeft.hours} label="hr" />
           <MiniCountdown value={timeLeft.minutes} label="min" />
           <MiniCountdown value={timeLeft.seconds} label="sec" />
+        </div>
+      )}
+      {deadlineLeft && (
+        <div style={{ marginTop: 12, fontSize: 12, color: '#666' }}>
+          Submission deadline: 11:59 PM PT ({deadlineLeft.hours}h {deadlineLeft.minutes}m remaining)
         </div>
       )}
     </div>

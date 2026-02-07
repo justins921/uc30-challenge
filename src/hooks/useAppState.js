@@ -208,6 +208,18 @@ export function useAppState() {
     }
   }, [participants, user, persist]);
 
+  const deleteParticipant = useCallback(async (participantId) => {
+    if (isSupabaseEnabled) {
+      await storage.deleteParticipant(participantId);
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+    } else {
+      const updatedParticipants = participants.filter(p => p.id !== participantId);
+      setParticipants(updatedParticipants);
+      persist(user, updatedParticipants);
+    }
+  }, [participants, user, persist]);
+
   const reactivateParticipant = useCallback(async (participantId) => {
     const updates = {
       isActive: true,
@@ -261,6 +273,7 @@ export function useAppState() {
     logout,
     submitDay,
     removeParticipant,
+    deleteParticipant,
     reactivateParticipant,
     refreshParticipants,
     setCohortStartDate,

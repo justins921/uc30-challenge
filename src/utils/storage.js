@@ -110,6 +110,13 @@ const supabaseStorage = {
     return result ? fromDbRow(result) : null;
   },
 
+  async deleteParticipant(id) {
+    const result = await supabaseRequest('participants', 'DELETE', {
+      filters: `?id=eq.${id}`,
+    });
+    return result !== null;
+  },
+
   async findByEmail(email) {
     const result = await supabaseRequest('participants', 'GET', {
       filters: `?email=eq.${encodeURIComponent(email.toLowerCase())}`,
@@ -222,6 +229,12 @@ const localStorageFallback = {
     participants.push(participant);
     this.setParticipants(participants);
     return participant;
+  },
+  deleteParticipant(id) {
+    const participants = this.getParticipants();
+    const filtered = participants.filter(p => p.id !== id);
+    this.setParticipants(filtered);
+    return true;
   },
   findByEmail(email) {
     return this.getParticipants().find(p => p.email === email.toLowerCase()) || null;

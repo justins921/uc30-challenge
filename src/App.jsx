@@ -18,6 +18,7 @@ export default function App() {
     logout,
     submitDay,
     removeParticipant,
+    deleteParticipant,
     reactivateParticipant,
     setCohortStartDate,
     navigate,
@@ -83,6 +84,7 @@ export default function App() {
         user={user}
         participants={participants}
         onRemove={removeParticipant}
+        onDelete={deleteParticipant}
         onReactivate={reactivateParticipant}
         onLogout={logout}
         cohortStartDate={cohortStartDate}

@@ -9,7 +9,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onReactivate, onLogout, cohortStartDate, onSetCohortStartDate }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onLogout, cohortStartDate, onSetCohortStartDate }) {
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
 
@@ -82,6 +82,7 @@ export default function AdminDashboard({ user, participants, onRemove, onReactiv
           <ParticipantsTab
             nonAdmin={nonAdmin}
             onRemove={onRemove}
+            onDelete={onDelete}
             onReactivate={onReactivate}
             onSelect={setSelectedParticipant}
           />
@@ -91,6 +92,7 @@ export default function AdminDashboard({ user, participants, onRemove, onReactiv
             participant={selectedParticipant}
             onBack={() => setSelectedParticipant(null)}
             onRemove={onRemove}
+            onDelete={onDelete}
             onReactivate={onReactivate}
           />
         )}
@@ -140,9 +142,11 @@ function CohortSettings({ cohortStartDate, onSetCohortStartDate }) {
 
   const getStatus = () => {
     if (!cohortStartDate) return null;
-    const now = new Date();
+    // Use Eastern timezone for day calculation
+    const eastern = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
+    const nowEastern = new Date(eastern);
     const start = new Date(cohortStartDate + 'T00:00:00');
-    const nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const nowDay = new Date(nowEastern.getFullYear(), nowEastern.getMonth(), nowEastern.getDate());
     const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
     const diffDays = Math.floor((nowDay - startDay) / (1000 * 60 * 60 * 24));
     if (diffDays < 0) return { text: `Starts in ${Math.abs(diffDays)} day${Math.abs(diffDays) !== 1 ? 's' : ''}`, color: '#e94560' };
@@ -272,7 +276,7 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate }) {
   );
 }
 
-function ParticipantsTab({ nonAdmin, onRemove, onReactivate, onSelect }) {
+function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onSelect }) {
   const [filter, setFilter] = useState('all');
   const filtered = filter === 'all' ? nonAdmin
     : filter === 'active' ? nonAdmin.filter(p => p.isActive)
@@ -344,12 +348,27 @@ function ParticipantsTab({ nonAdmin, onRemove, onReactivate, onSelect }) {
                 <MiniStat label="Analyzed" value={p.metrics?.propertiesAnalyzed || 0} color="#533483" />
                 <MiniStat label="Offers" value={p.metrics?.offersSubmitted || 0} color="#e94560" />
                 <MiniStat label="Submissions" value={p.submissions?.length || 0} color="#888" />
-                <div style={{ marginLeft: 'auto' }} onClick={e => e.stopPropagation()}>
+                <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }} onClick={e => e.stopPropagation()}>
                   {p.isActive ? (
                     <button className="btn-danger" onClick={() => onRemove(p.id)}>Remove</button>
                   ) : (
                     <button className="btn-success" onClick={() => onReactivate(p.id)}>Reactivate</button>
                   )}
+                  <button
+                    style={{
+                      background: 'rgba(255,0,0,0.08)', color: '#ff4444',
+                      border: '1px solid rgba(255,0,0,0.2)', padding: '6px 12px',
+                      borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                      fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+                    }}
+                    onClick={() => {
+                      if (confirm(`Permanently delete ${p.name} (${p.email})? This cannot be undone.`)) {
+                        onDelete(p.id);
+                      }
+                    }}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
@@ -361,7 +380,7 @@ function ParticipantsTab({ nonAdmin, onRemove, onReactivate, onSelect }) {
 }
 
 // ── Participant Detail View (with all submissions) ──────────
-function ParticipantDetail({ participant, onBack, onRemove, onReactivate }) {
+function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate }) {
   const p = participant;
 
   return (
@@ -405,12 +424,28 @@ function ParticipantDetail({ participant, onBack, onRemove, onReactivate }) {
               )}
             </div>
           </div>
-          <div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {p.isActive ? (
               <button className="btn-danger" onClick={() => onRemove(p.id)}>Remove from Challenge</button>
             ) : (
               <button className="btn-success" onClick={() => onReactivate(p.id)}>Reactivate</button>
             )}
+            <button
+              style={{
+                background: 'rgba(255,0,0,0.08)', color: '#ff4444',
+                border: '1px solid rgba(255,0,0,0.2)', padding: '8px 16px',
+                borderRadius: 8, fontSize: 13, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+              }}
+              onClick={() => {
+                if (confirm(`Permanently delete ${p.name} (${p.email})? This cannot be undone.`)) {
+                  onDelete(p.id);
+                  onBack();
+                }
+              }}
+            >
+              Delete Permanently
+            </button>
           </div>
         </div>
       </div>

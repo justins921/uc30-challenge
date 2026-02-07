@@ -43,7 +43,7 @@ export default function TimelineView({ user, onSelectDay, calendarDay }) {
                   className="card"
                   style={{
                     cursor: isLocked ? 'not-allowed' : 'pointer',
-                    opacity: isLocked ? 0.4 : 1,
+                    opacity: isLocked ? 0.7 : 1,
                     borderColor: isCurrent && !isLocked
                       ? '#e94560'
                       : isComplete
@@ -51,6 +51,7 @@ export default function TimelineView({ user, onSelectDay, calendarDay }) {
                       : 'rgba(255,255,255,0.06)',
                     position: 'relative',
                     padding: '16px 16px 14px',
+                    overflow: 'hidden',
                   }}
                 >
                   {/* Completed badge */}
@@ -71,8 +72,8 @@ export default function TimelineView({ user, onSelectDay, calendarDay }) {
                     }} />
                   )}
 
-                  {/* Lock indicator for cohort-locked future days */}
-                  {isLocked && !isComplete && calendarDay !== null && d <= 30 && d > calendarDay && (
+                  {/* Lock indicator for locked future days */}
+                  {isLocked && !isComplete && (
                     <div style={{
                       position: 'absolute', top: 12, right: 12,
                       fontSize: 12, color: '#555',
@@ -80,16 +81,22 @@ export default function TimelineView({ user, onSelectDay, calendarDay }) {
                   )}
 
                   <div className="mono" style={{
-                    fontSize: 11, color: phase.color, fontWeight: 700,
+                    fontSize: 11, color: isLocked ? '#333' : phase.color, fontWeight: 700,
                     letterSpacing: 1, marginBottom: 6,
                   }}>
                     DAY {d}
                   </div>
                   <div style={{
                     fontSize: 13, fontWeight: 500, lineHeight: 1.4,
-                    color: isComplete ? '#48c78e' : '#ccc',
+                    color: isComplete ? '#48c78e' : isLocked ? 'transparent' : '#ccc',
+                    background: isLocked ? 'linear-gradient(90deg, #1a1a2e 25%, #16213e 50%, #1a1a2e 75%)' : 'none',
+                    backgroundSize: isLocked ? '200% 100%' : 'auto',
+                    borderRadius: isLocked ? 4 : 0,
+                    userSelect: isLocked ? 'none' : 'auto',
+                    WebkitBackgroundClip: isLocked ? 'text' : 'unset',
+                    backgroundClip: isLocked ? 'text' : 'unset',
                   }}>
-                    {dayData.title}
+                    {isLocked ? '██████████████' : dayData.title}
                   </div>
                 </div>
               );
