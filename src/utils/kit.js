@@ -46,4 +46,60 @@ export async function tagSubscriber(email, tagId) {
   return kitRequest(`tags/${tagId}/subscribe`, { email });
 }
 
+// Cache for tag name → tag ID lookups
+const tagCache = {};
+
+// Find or create a tag by name, then apply it to a subscriber
+async function applyTag(email, tagName) {
+  if (!KIT_ENABLED) return null;
+
+  // Check cache first
+  if (tagCache[tagName]) {
+    return tagSubscriber(email, tagCache[tagName]);
+  }
+
+  // List existing tags and find a match
+  try {
+    const res = await fetch(`https://api.convertkit.com/v3/tags?api_key=${KIT_API_KEY}`);
+    if (res.ok) {
+      const data = await res.json();
+      const existing = (data.tags || []).find(t => t.name === tagName);
+      if (existing) {
+        tagCache[tagName] = existing.id;
+        return tagSubscriber(email, existing.id);
+      }
+    }
+  } catch (err) {
+    console.error('Kit tag lookup failed:', err);
+  }
+
+  // Tag doesn't exist — create it
+  const created = await kitRequest('tags', { tag: { name: tagName } });
+  if (created?.tag?.id) {
+    tagCache[tagName] = created.tag.id;
+    return tagSubscriber(email, created.tag.id);
+  }
+  return null;
+}
+
+// ── Challenge Event Tags ────────────────────────────
+// These create tags in Kit like "UC30 - Day 1 Started", "UC30 - Day 5 Completed", etc.
+// Set up Kit Automations triggered by these tags to send emails.
+
+export function tagDayStarted(email, dayNum) {
+  return applyTag(email, `UC30 - Day ${dayNum} Started`);
+}
+
+export function tagDayCompleted(email, dayNum) {
+  return applyTag(email, `UC30 - Day ${dayNum} Completed`);
+}
+
+export function tagChallengeCompleted(email) {
+  return applyTag(email, 'UC30 - Challenge Completed');
+}
+
+export function tagRemovedFromCohort(email) {
+  return applyTag(email, 'UC30 - Removed From Cohort');
+}
+
 export const isKitEnabled = KIT_ENABLED;

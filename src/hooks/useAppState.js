@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { storage, createNewUser, isSupabaseEnabled } from '../utils/storage';
 import { CHALLENGE_DAYS } from '../data/challengeDays';
 import { hashPassword } from '../utils/crypto';
-import { subscribeUser } from '../utils/kit';
+import { subscribeUser, tagDayStarted, tagDayCompleted, tagChallengeCompleted, tagRemovedFromCohort } from '../utils/kit';
 
 export function useAppState() {
   const [user, setUser] = useState(null);
@@ -135,8 +135,10 @@ export function useAppState() {
       persist(newUser, newParticipants);
     }
 
-    // Subscribe to Kit email list (fire and forget)
-    subscribeUser(email, name).catch(() => {});
+    // Subscribe to Kit email list and tag Day 1 Started (fire and forget)
+    subscribeUser(email, name).then(() => {
+      tagDayStarted(email, 1).catch(() => {});
+    }).catch(() => {});
 
     return { success: true };
   }, [participants, persist]);
@@ -217,11 +219,24 @@ export function useAppState() {
 
     setUser(updatedUser);
     storage.setUser(updatedUser);
+
+    // Tag in Kit (fire and forget)
+    tagDayCompleted(user.email, dayNum).catch(() => {});
+    if (dayNum >= 30) {
+      tagChallengeCompleted(user.email).catch(() => {});
+    }
+    // Tag next day started (if not done with challenge)
+    if (dayNum < 30) {
+      tagDayStarted(user.email, dayNum + 1).catch(() => {});
+    }
   }, [user, participants, persist]);
 
   // ── Admin Actions ────────────────────────────────────
   const removeParticipant = useCallback(async (participantId) => {
     const updates = { isActive: false, removedAt: new Date().toISOString() };
+
+    // Find the participant's email for Kit tagging
+    const removed = participants.find(p => p.id === participantId);
 
     if (isSupabaseEnabled) {
       await storage.updateParticipant(participantId, updates);
@@ -233,6 +248,11 @@ export function useAppState() {
       );
       setParticipants(updatedParticipants);
       persist(user, updatedParticipants);
+    }
+
+    // Tag removed user in Kit (fire and forget)
+    if (removed?.email) {
+      tagRemovedFromCohort(removed.email).catch(() => {});
     }
   }, [participants, user, persist]);
 
