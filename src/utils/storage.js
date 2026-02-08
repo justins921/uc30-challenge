@@ -114,6 +114,7 @@ const supabaseStorage = {
     if (updates.reactivatedAt !== undefined) row.reactivated_at = updates.reactivatedAt;
     if (updates.password !== undefined) row.password = updates.password;
     if (updates.hasPaid !== undefined) row.has_paid = updates.hasPaid;
+    if (updates.accessExpiresAt !== undefined) row.access_expires_at = updates.accessExpiresAt;
 
     const result = await supabaseRequest('participants', 'PATCH', {
       filters: `?id=eq.${id}`,
@@ -183,6 +184,34 @@ const supabaseStorage = {
     }
   },
 
+  async getLiveCalls() {
+    const result = await supabaseRequest('settings', 'GET', {
+      filters: '?key=eq.live_calls',
+    });
+    if (Array.isArray(result) && result.length > 0 && result[0].value) {
+      localStorage.setItem('uc30_live_calls', JSON.stringify(result[0].value));
+      return result[0].value;
+    }
+    try {
+      const data = localStorage.getItem('uc30_live_calls');
+      return data ? JSON.parse(data) : [];
+    } catch { return []; }
+  },
+
+  async setLiveCalls(calls) {
+    localStorage.setItem('uc30_live_calls', JSON.stringify(calls));
+    const body = { value: calls, updated_at: new Date().toISOString() };
+    const result = await supabaseRequest('settings', 'PATCH', {
+      filters: '?key=eq.live_calls',
+      body,
+    });
+    if (!result || (Array.isArray(result) && result.length === 0)) {
+      await supabaseRequest('settings', 'POST', {
+        body: { key: 'live_calls', ...body },
+      });
+    }
+  },
+
   async setCohortSettings(settings) {
     // Always save to localStorage as backup
     localStorage.setItem('uc30_cohort_settings', JSON.stringify(settings));
@@ -219,6 +248,7 @@ function toDbRow(user) {
     submissions: user.submissions,
     metrics: user.metrics,
     removed_at: user.removedAt,
+    access_expires_at: user.accessExpiresAt || null,
   };
 }
 
@@ -241,6 +271,7 @@ function fromDbRow(row) {
     metrics: row.metrics || { propertiesAnalyzed: 0, offersSubmitted: 0, agentsContacted: 0 },
     removedAt: row.removed_at,
     reactivatedAt: row.reactivated_at || null,
+    accessExpiresAt: row.access_expires_at || null,
   };
 }
 
@@ -344,5 +375,6 @@ export function createNewUser(firstName, lastName, email, password) {
       agentsContacted: 0,
     },
     removedAt: null,
+    accessExpiresAt: null,
   };
 }

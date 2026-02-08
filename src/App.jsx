@@ -64,6 +64,31 @@ export default function App() {
     );
   }
 
+  // Check if non-admin user's access has expired
+  const accessExpired = !user.isAdmin && user.accessExpiresAt && new Date(user.accessExpiresAt) < new Date();
+  if (accessExpired) {
+    return (
+      <div style={{
+        minHeight: '100vh', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', padding: 20,
+      }}>
+        <div style={{ maxWidth: 480, textAlign: 'center' }}>
+          <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#e94560', marginBottom: 16 }}>
+            UC30
+          </div>
+          <div className="card" style={{ padding: 36 }}>
+            <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 12 }}>Access Expired</div>
+            <p style={{ color: '#888', fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>
+              Your 1-year access to the UC30 Challenge has ended. If you'd like to rejoin,
+              please contact us to purchase a new pass.
+            </p>
+            <button className="btn-secondary" onClick={logout}>Log Out</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (currentView === 'admin' && user.isAdmin) {
     return (
       <AdminDashboard

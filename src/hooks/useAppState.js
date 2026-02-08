@@ -199,6 +199,13 @@ export function useAppState() {
     const hashed = await hashPassword(email, password);
     const newUser = createNewUser(firstName, lastName, email, hashed);
 
+    // Set 1-year access from cohort start if a cohort is active
+    if (cohortStartDate) {
+      const expiresAt = new Date(cohortStartDate + 'T00:00:00');
+      expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+      newUser.accessExpiresAt = expiresAt.toISOString();
+    }
+
     if (isSupabaseEnabled) {
       const saved = await storage.addParticipant(newUser);
       if (!saved) return { error: 'Failed to create account. Please try again.' };
@@ -221,7 +228,7 @@ export function useAppState() {
     }).catch(() => {});
 
     return { success: true };
-  }, [participants, persist]);
+  }, [participants, persist, cohortStartDate]);
 
   const resetPassword = useCallback(async (email, newPassword) => {
     let existing;
@@ -387,6 +394,26 @@ export function useAppState() {
     const settings = { ...current, startDate: date };
     await Promise.resolve(storage.setCohortSettings(settings));
     setCohortStartDateState(date);
+
+    // Stamp 1-year access expiration for active participants who don't have one yet
+    if (date) {
+      const expiresAt = new Date(date + 'T00:00:00');
+      expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+      const expiresIso = expiresAt.toISOString();
+
+      const currentParticipants = await Promise.resolve(storage.getParticipants()) || [];
+      for (const p of currentParticipants) {
+        if (p.isActive && !p.isAdmin && !p.accessExpiresAt) {
+          if (isSupabaseEnabled) {
+            await storage.updateParticipant(p.id, { accessExpiresAt: expiresIso });
+          }
+        }
+      }
+      if (isSupabaseEnabled) {
+        const fresh = await storage.getParticipants();
+        setParticipants(fresh || []);
+      }
+    }
   }, []);
 
   const setNextCohortDate = useCallback(async (date) => {
