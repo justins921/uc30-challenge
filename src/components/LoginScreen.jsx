@@ -2,7 +2,8 @@ import { useState } from 'react';
 
 export default function LoginScreen({ onLogin, onRegister, onResetPassword, initialMode }) {
   const [mode, setMode] = useState(initialMode || 'login');
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -18,12 +19,13 @@ export default function LoginScreen({ onLogin, onRegister, onResetPassword, init
   };
 
   const handleRegister = async () => {
-    if (!name.trim()) return setError('Please enter your name');
+    if (!firstName.trim()) return setError('Please enter your first name');
+    if (!lastName.trim()) return setError('Please enter your last name');
     if (!email.trim() || !email.includes('@')) return setError('Please enter a valid email');
     if (password.length < 6) return setError('Password must be at least 6 characters');
     if (password !== confirmPassword) return setError('Passwords do not match');
     setError('');
-    const result = await onRegister(name.trim(), email.trim(), password);
+    const result = await onRegister(firstName.trim(), lastName.trim(), email.trim(), password);
     if (result?.error) setError(result.error);
   };
 
@@ -45,7 +47,8 @@ export default function LoginScreen({ onLogin, onRegister, onResetPassword, init
     setMode(newMode);
     setError('');
     setSuccess('');
-    setName('');
+    setFirstName('');
+    setLastName('');
     setEmail('');
     setPassword('');
     setConfirmPassword('');
@@ -124,14 +127,25 @@ export default function LoginScreen({ onLogin, onRegister, onResetPassword, init
         {/* Form */}
         <div className="card" style={{ padding: 36, textAlign: 'left' }}>
           {mode === 'register' && (
-            <div style={{ marginBottom: 20 }}>
-              <label>Full Name</label>
-              <input
-                value={name}
-                onChange={e => setName(e.target.value)}
-                placeholder="Enter your name"
-                onKeyDown={handleKeyDown}
-              />
+            <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
+              <div style={{ flex: 1 }}>
+                <label>First Name</label>
+                <input
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
+                  placeholder="First"
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label>Last Name</label>
+                <input
+                  value={lastName}
+                  onChange={e => setLastName(e.target.value)}
+                  placeholder="Last"
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
             </div>
           )}
 

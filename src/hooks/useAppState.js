@@ -184,7 +184,7 @@ export function useAppState() {
     return { success: true };
   }, [participants]);
 
-  const register = useCallback(async (name, email, password) => {
+  const register = useCallback(async (firstName, lastName, email, password) => {
     let existing;
     if (isSupabaseEnabled) {
       existing = await storage.findByEmail(email);
@@ -197,7 +197,7 @@ export function useAppState() {
     }
 
     const hashed = await hashPassword(email, password);
-    const newUser = createNewUser(name, email, hashed);
+    const newUser = createNewUser(firstName, lastName, email, hashed);
 
     if (isSupabaseEnabled) {
       const saved = await storage.addParticipant(newUser);
@@ -216,7 +216,7 @@ export function useAppState() {
     }
 
     // Subscribe to Kit email list and tag sign up (fire and forget)
-    subscribeUser(email, name).then(() => {
+    subscribeUser(email, firstName).then(() => {
       tagSignUp(email).catch(() => {});
     }).catch(() => {});
 

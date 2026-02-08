@@ -205,7 +205,9 @@ const supabaseStorage = {
 function toDbRow(user) {
   return {
     id: user.id,
-    name: user.name,
+    name: `${user.firstName} ${user.lastName}`.trim(),
+    first_name: user.firstName,
+    last_name: user.lastName,
     email: user.email,
     password: user.password,
     is_admin: user.isAdmin,
@@ -221,9 +223,12 @@ function toDbRow(user) {
 }
 
 function fromDbRow(row) {
+  // Support old rows that only have `name` (no first_name/last_name)
+  const nameParts = (row.name || '').split(' ');
   return {
     id: row.id,
-    name: row.name,
+    firstName: row.first_name || nameParts[0] || '',
+    lastName: row.last_name || nameParts.slice(1).join(' ') || '',
     email: row.email,
     password: row.password,
     isAdmin: row.is_admin,
@@ -319,10 +324,11 @@ export const storage = USE_SUPABASE ? supabaseStorage : localStorageFallback;
 export const isSupabaseEnabled = USE_SUPABASE;
 
 // ── Create new user object ───────────────────────────────────────
-export function createNewUser(name, email, password) {
+export function createNewUser(firstName, lastName, email, password) {
   return {
     id: `user_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-    name,
+    firstName,
+    lastName,
     email: email.toLowerCase(),
     password,
     isAdmin: email.toLowerCase() === 'admin@uc30.com',

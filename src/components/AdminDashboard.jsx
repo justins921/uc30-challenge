@@ -410,7 +410,7 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ fontWeight: 600, fontSize: 15 }}>{p.name}</span>
+                    <span style={{ fontWeight: 600, fontSize: 15 }}>{p.firstName} {p.lastName}</span>
                     {p.reactivatedAt && (
                       <span style={{
                         fontSize: 10, fontWeight: 600, color: '#f0a500',
@@ -439,7 +439,7 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
                       fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
                     }}
                     onClick={() => {
-                      if (confirm(`Make ${p.name} an admin? They will have full admin access.`)) {
+                      if (confirm(`Make ${p.firstName} ${p.lastName} an admin? They will have full admin access.`)) {
                         onToggleAdmin(p.id, true);
                       }
                     }}
@@ -459,7 +459,7 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
                       fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
                     }}
                     onClick={() => {
-                      if (confirm(`Permanently delete ${p.name} (${p.email})? This cannot be undone.`)) {
+                      if (confirm(`Permanently delete ${p.firstName} ${p.lastName} (${p.email})? This cannot be undone.`)) {
                         onDelete(p.id);
                       }
                     }}
@@ -502,7 +502,7 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
               {p.isActive ? '🟢' : '🔴'}
             </div>
             <div>
-              <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 2 }}>{p.name}</h2>
+              <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 2 }}>{p.firstName} {p.lastName}</h2>
               <div style={{ fontSize: 13, color: '#666' }}>{p.email}</div>
               <div style={{ fontSize: 12, color: '#555', marginTop: 4 }}>
                 Joined: {new Date(p.startDate).toLocaleDateString()}
@@ -530,7 +530,7 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
                 fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
               }}
               onClick={() => {
-                if (confirm(`Make ${p.name} an admin? They will have full admin access.`)) {
+                if (confirm(`Make ${p.firstName} ${p.lastName} an admin? They will have full admin access.`)) {
                   onToggleAdmin(p.id, true);
                   onBack();
                 }
@@ -551,7 +551,7 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
                 fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
               }}
               onClick={() => {
-                if (confirm(`Permanently delete ${p.name} (${p.email})? This cannot be undone.`)) {
+                if (confirm(`Permanently delete ${p.firstName} ${p.lastName} (${p.email})? This cannot be undone.`)) {
                   onDelete(p.id);
                   onBack();
                 }
@@ -685,7 +685,7 @@ function SubmissionsTab({ nonAdmin }) {
     (p.submissions || []).forEach(sub => {
       allSubmissions.push({
         ...sub,
-        participantName: p.name,
+        participantName: `${p.firstName} ${p.lastName}`,
         participantEmail: p.email,
         participantId: p.id,
       });

@@ -28,7 +28,7 @@ export default function Header({ user, currentTab, onTabChange, tabs, onLogout, 
             </span>
           ) : (
             <span style={{ color: '#888', fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 120 }}>
-              {user.name}
+              {user.firstName}
             </span>
           )}
         </div>
