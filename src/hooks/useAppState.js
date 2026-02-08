@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { storage, createNewUser, isSupabaseEnabled } from '../utils/storage';
-import { CHALLENGE_DAYS } from '../data/challengeDays';
+import { CHALLENGE_DAYS, POST_30_TASK } from '../data/challengeDays';
 import { hashPassword } from '../utils/crypto';
 import { subscribeUser, tagSignUp, tagDayStarted, tagChallengeCompleted, tagRemovedFromCohort } from '../utils/kit';
 
@@ -278,10 +278,11 @@ export function useAppState() {
   const submitDay = useCallback(async (dayNum, proof) => {
     if (!user) return;
 
-    const dayData = CHALLENGE_DAYS[dayNum - 1];
+    const isPost30 = dayNum > 30;
+    const dayData = isPost30 ? POST_30_TASK : CHALLENGE_DAYS[dayNum - 1];
     const submission = {
       day: dayNum,
-      title: dayData.title,
+      title: isPost30 ? `${dayData.title} (Day ${dayNum})` : dayData.title,
       timestamp: new Date().toISOString(),
       proof: proof.text || 'File uploaded',
       fileName: proof.fileName || null,
@@ -290,13 +291,18 @@ export function useAppState() {
     };
 
     const updatedMetrics = { ...user.metrics };
-    if (dayData.metrics) {
+    if (isPost30 && dayData.multiMetrics) {
+      // Post-30 generic task has multiple metrics
+      for (const m of dayData.multiMetrics) {
+        updatedMetrics[m.key] = (updatedMetrics[m.key] || 0) + m.count;
+      }
+    } else if (dayData.metrics) {
       updatedMetrics[dayData.metrics.key] =
         (updatedMetrics[dayData.metrics.key] || 0) + dayData.metrics.count;
     }
 
     const updates = {
-      currentDay: Math.min(dayNum + 1, 31),
+      currentDay: dayNum + 1,
       completedDays: [...user.completedDays, dayNum],
       submissions: [...user.submissions, submission],
       metrics: updatedMetrics,
@@ -320,12 +326,11 @@ export function useAppState() {
     storage.setUser(updatedUser);
 
     // Tag in Kit (fire and forget)
-    // Tag next day started — Kit automation should delay delivery to 3:01am ET
     if (dayNum < 30) {
       tagDayStarted(user.email, dayNum + 1).catch(() => {});
     }
-    // Challenge completed only if user has submitted at least one offer
-    if (dayNum >= 30 && (updatedMetrics.offersSubmitted || 0) > 0) {
+    // Challenge completed on day 30 only if user has submitted at least one offer
+    if (dayNum === 30 && (updatedMetrics.offersSubmitted || 0) > 0) {
       tagChallengeCompleted(user.email).catch(() => {});
     }
   }, [user, participants, persist]);

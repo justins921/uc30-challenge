@@ -1,22 +1,33 @@
-import { CHALLENGE_DAYS } from '../data/challengeDays';
+import { CHALLENGE_DAYS, POST_30_TASK, getStreak } from '../data/challengeDays';
 
 export default function ShareableStreakCard({ user, calendarDay }) {
-  const streak = user.completedDays.length;
-  const isCompleted = user.currentDay > 30;
-  const progress = Math.round((streak / 30) * 100);
-  const todayTitle = !isCompleted
-    ? CHALLENGE_DAYS[Math.min(user.currentDay - 1, 29)]?.title
-    : 'Challenge Complete!';
+  const totalCompleted = user.completedDays.length;
+  const streak = getStreak(user.completedDays);
+  const challengeComplete = user.completedDays.includes(30);
+  const inContinuation = challengeComplete && user.currentDay > 30;
+  const challengeProgress = Math.min(Math.round((Math.min(totalCompleted, 30) / 30) * 100), 100);
+
+  const todayTitle = inContinuation
+    ? POST_30_TASK.title
+    : CHALLENGE_DAYS[Math.min(user.currentDay - 1, 29)]?.title;
 
   // Dynamic streak label
   const streakFire = streak >= 20 ? '🔥🔥🔥' : streak >= 10 ? '🔥🔥' : streak >= 1 ? '🔥' : '';
+
+  // Colors shift to gold in continuation mode
+  const accentColor = inContinuation ? '#f0a500' : '#e94560';
+  const accentGradient = inContinuation
+    ? 'linear-gradient(135deg, #f0a500, #ffcc00)'
+    : 'linear-gradient(135deg, #e94560, #ff6b81)';
 
   return (
     <div className="fade-up-delay-1" style={{ marginBottom: 24 }}>
       {/* The shareable card itself */}
       <div style={{
-        background: 'linear-gradient(160deg, #12121a 0%, #0f0f18 40%, #1a0f1f 100%)',
-        border: '1px solid rgba(233, 69, 96, 0.15)',
+        background: inContinuation
+          ? 'linear-gradient(160deg, #12121a 0%, #0f0f18 40%, #1a150f 100%)'
+          : 'linear-gradient(160deg, #12121a 0%, #0f0f18 40%, #1a0f1f 100%)',
+        border: `1px solid ${inContinuation ? 'rgba(240,165,0,0.15)' : 'rgba(233,69,96,0.15)'}`,
         borderRadius: 20,
         padding: '28px 24px 24px',
         position: 'relative',
@@ -26,7 +37,9 @@ export default function ShareableStreakCard({ user, calendarDay }) {
         <div style={{
           position: 'absolute', top: -60, right: -60,
           width: 160, height: 160,
-          background: 'radial-gradient(circle, rgba(233,69,96,0.12) 0%, transparent 70%)',
+          background: inContinuation
+            ? 'radial-gradient(circle, rgba(240,165,0,0.12) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(233,69,96,0.12) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
         <div style={{
@@ -43,7 +56,7 @@ export default function ShareableStreakCard({ user, calendarDay }) {
         }}>
           <div>
             <div style={{
-              fontSize: 11, fontWeight: 700, letterSpacing: 2, color: '#e94560',
+              fontSize: 11, fontWeight: 700, letterSpacing: 2, color: accentColor,
               textTransform: 'uppercase', marginBottom: 4,
             }}>
               UC30 Challenge
@@ -53,11 +66,13 @@ export default function ShareableStreakCard({ user, calendarDay }) {
             </div>
           </div>
           <div style={{
-            background: 'rgba(233,69,96,0.1)', border: '1px solid rgba(233,69,96,0.2)',
+            background: `${accentColor}18`, border: `1px solid ${accentColor}33`,
             borderRadius: 10, padding: '6px 12px', fontSize: 12, fontWeight: 600,
-            color: '#e94560',
+            color: accentColor,
           }}>
-            {isCompleted ? 'Complete!' : `Day ${streak} of 30`}
+            {inContinuation
+              ? `Day ${totalCompleted}`
+              : challengeComplete ? 'Complete!' : `Day ${totalCompleted} of 30`}
           </div>
         </div>
 
@@ -68,7 +83,7 @@ export default function ShareableStreakCard({ user, calendarDay }) {
           </div>
           <div className="mono" style={{
             fontSize: 72, fontWeight: 700, lineHeight: 1,
-            background: 'linear-gradient(135deg, #e94560, #ff6b81)',
+            background: accentGradient,
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
           }}>
@@ -78,7 +93,7 @@ export default function ShareableStreakCard({ user, calendarDay }) {
             fontSize: 14, fontWeight: 600, color: '#888', marginTop: 4,
             letterSpacing: 0.5,
           }}>
-            {streak === 1 ? 'Day Streak' : 'Day Streak'}
+            Day Streak
           </div>
         </div>
 
@@ -89,17 +104,25 @@ export default function ShareableStreakCard({ user, calendarDay }) {
             marginBottom: 6,
           }}>
             <div style={{ fontSize: 12, color: '#555' }}>{todayTitle}</div>
-            <div className="mono" style={{ fontSize: 12, color: '#e94560', fontWeight: 600 }}>
-              {progress}%
-            </div>
+            {inContinuation ? (
+              <div className="mono" style={{ fontSize: 12, color: '#f0a500', fontWeight: 600 }}>
+                +{totalCompleted - 30} beyond
+              </div>
+            ) : (
+              <div className="mono" style={{ fontSize: 12, color: '#e94560', fontWeight: 600 }}>
+                {challengeProgress}%
+              </div>
+            )}
           </div>
           <div style={{
             height: 6, background: 'rgba(255,255,255,0.06)',
             borderRadius: 3, overflow: 'hidden',
           }}>
             <div style={{
-              height: '100%', width: `${progress}%`,
-              background: 'linear-gradient(90deg, #e94560, #ff6b81)',
+              height: '100%', width: inContinuation ? '100%' : `${challengeProgress}%`,
+              background: inContinuation
+                ? 'linear-gradient(90deg, #f0a500, #e94560)'
+                : 'linear-gradient(90deg, #e94560, #ff6b81)',
               borderRadius: 3, transition: 'width 0.8s ease',
             }} />
           </div>
@@ -118,7 +141,7 @@ export default function ShareableStreakCard({ user, calendarDay }) {
           <StatBox
             value={user.metrics.offersSubmitted}
             label="Offers Submitted"
-            color="#e94560"
+            color={accentColor}
           />
           <StatBox
             value={user.metrics.agentsContacted}
@@ -149,6 +172,32 @@ export default function ShareableStreakCard({ user, calendarDay }) {
           })}
         </div>
 
+        {/* Continuation streak indicator (only shown post-30) */}
+        {inContinuation && totalCompleted > 30 && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 6, marginBottom: 16,
+            position: 'relative',
+          }}>
+            <div style={{ fontSize: 10, color: '#555', whiteSpace: 'nowrap' }}>Beyond:</div>
+            <div style={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+              {Array.from({ length: Math.min(totalCompleted - 30, 30) }, (_, i) => (
+                <div
+                  key={i}
+                  style={{
+                    width: 8, height: 8, borderRadius: 2,
+                    background: '#f0a500',
+                  }}
+                />
+              ))}
+              {totalCompleted - 30 > 30 && (
+                <div style={{ fontSize: 10, color: '#f0a500', marginLeft: 4 }}>
+                  +{totalCompleted - 60}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Footer branding */}
         <div style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -156,7 +205,7 @@ export default function ShareableStreakCard({ user, calendarDay }) {
           position: 'relative',
         }}>
           <div style={{ fontSize: 11, color: '#444', letterSpacing: 0.5 }}>
-            30-Day First Deal Challenge
+            {inContinuation ? 'UC30 — Still Going!' : '30-Day First Deal Challenge'}
           </div>
           <div style={{
             fontSize: 10, color: '#333', fontFamily: "'Space Mono', monospace",

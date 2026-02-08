@@ -127,7 +127,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
   };
 
   // Determine if user has already completed today's task (cohort mode)
-  const userCompletedToday = cohortStartDate && calendarDay !== null && calendarDay >= 1 && calendarDay <= 30
+  const userCompletedToday = cohortStartDate && calendarDay !== null && calendarDay >= 1
     && user.currentDay > calendarDay;
 
   return (
@@ -317,22 +317,22 @@ function NextDayCountdown({ calendarDay }) {
     return () => clearInterval(timer);
   }, [calendarDay]);
 
-  if (calendarDay >= 30) {
-    return null;
-  }
+  const isPost30 = calendarDay > 30;
 
   return (
     <div className="fade-up" style={{
       marginBottom: 24, padding: '20px 24px',
-      background: 'linear-gradient(135deg, rgba(72,199,142,0.08), rgba(72,199,142,0.02))',
-      border: '1px solid rgba(72,199,142,0.15)',
+      background: isPost30
+        ? 'linear-gradient(135deg, rgba(240,165,0,0.08), rgba(240,165,0,0.02))'
+        : 'linear-gradient(135deg, rgba(72,199,142,0.08), rgba(72,199,142,0.02))',
+      border: `1px solid ${isPost30 ? 'rgba(240,165,0,0.15)' : 'rgba(72,199,142,0.15)'}`,
       borderRadius: 16, textAlign: 'center',
     }}>
-      <div style={{ fontSize: 15, fontWeight: 600, color: '#48c78e', marginBottom: 8 }}>
-        Day {calendarDay} Complete!
+      <div style={{ fontSize: 15, fontWeight: 600, color: isPost30 ? '#f0a500' : '#48c78e', marginBottom: 8 }}>
+        {isPost30 ? 'Today\'s Task Complete!' : `Day ${calendarDay} Complete!`}
       </div>
       <div style={{ fontSize: 13, color: '#888', marginBottom: 12 }}>
-        Day {calendarDay + 1} unlocks at midnight ET
+        {isPost30 ? 'Next daily task available at midnight ET' : `Day ${calendarDay + 1} unlocks at midnight ET`}
       </div>
       {timeLeft && (
         <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
@@ -341,7 +341,7 @@ function NextDayCountdown({ calendarDay }) {
           <MiniCountdown value={timeLeft.seconds} label="sec" />
         </div>
       )}
-      {deadlineLeft && (
+      {deadlineLeft && !isPost30 && (
         <div style={{ marginTop: 12, fontSize: 12, color: '#666' }}>
           Submission deadline: 11:59 PM PT ({deadlineLeft.hours}h {deadlineLeft.minutes}m remaining)
         </div>

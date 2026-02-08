@@ -1,7 +1,10 @@
-import { getPhases, getDayContent } from '../data/challengeDays';
+import { getPhases, getDayContent, POST_30_TASK, getStreak } from '../data/challengeDays';
 
 export default function TimelineView({ user, onSelectDay, calendarDay, contentOverrides, customPhases }) {
   const phases = getPhases(customPhases);
+  const challengeComplete = user.completedDays.includes(30);
+  const inContinuation = challengeComplete && user.currentDay > 30;
+
   return (
     <div className="fade-up-delay-2">
       {phases.map((phase) => (
@@ -27,13 +30,9 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
               // Calendar-based locking: if calendarDay is set, restrict access
               let isLocked;
               if (calendarDay !== null) {
-                // A day is accessible if:
-                // - It's a completed day (can review)
-                // - OR it's the user's current day AND the calendar has reached it
                 const isAccessible = isComplete || (isCurrent && d <= calendarDay);
                 isLocked = !isAccessible;
               } else {
-                // No cohort date: original behavior
                 isLocked = d > user.currentDay;
               }
 
@@ -55,7 +54,6 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
                     overflow: 'hidden',
                   }}
                 >
-                  {/* Completed badge */}
                   {isComplete && (
                     <div style={{
                       position: 'absolute', top: 12, right: 12, width: 22, height: 22,
@@ -65,7 +63,6 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
                     }}>✓</div>
                   )}
 
-                  {/* Current indicator */}
                   {isCurrent && !isLocked && (
                     <div style={{
                       position: 'absolute', top: 12, right: 12, width: 10, height: 10,
@@ -73,7 +70,6 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
                     }} />
                   )}
 
-                  {/* Lock indicator for locked future days */}
                   {isLocked && !isComplete && (
                     <div style={{
                       position: 'absolute', top: 12, right: 12,
@@ -105,6 +101,103 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
           </div>
         </div>
       ))}
+
+      {/* Post-30 Continuation Section */}
+      {inContinuation && (
+        <ContinuationSection
+          user={user}
+          calendarDay={calendarDay}
+          onSelectDay={onSelectDay}
+        />
+      )}
+    </div>
+  );
+}
+
+function ContinuationSection({ user, calendarDay, onSelectDay }) {
+  const streak = getStreak(user.completedDays);
+  const todayDay = calendarDay || user.currentDay;
+  const todayComplete = user.completedDays.includes(todayDay);
+
+  return (
+    <div style={{ marginBottom: 36 }}>
+      {/* Phase header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+        <div style={{ width: 12, height: 12, borderRadius: 3, background: '#f0a500' }} />
+        <h3 style={{ fontSize: 16, fontWeight: 700, letterSpacing: 1 }}>Beyond Day 30</h3>
+        <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        <div className="mono" style={{ fontSize: 12, color: '#f0a500', fontWeight: 600 }}>
+          {streak} day streak
+        </div>
+      </div>
+
+      {/* Continuation banner */}
+      <div
+        className="card"
+        style={{
+          borderColor: todayComplete ? 'rgba(72,199,142,0.3)' : 'rgba(240,165,0,0.3)',
+          padding: '20px 24px', cursor: 'pointer', marginBottom: 12,
+          background: todayComplete
+            ? 'rgba(72,199,142,0.04)'
+            : 'linear-gradient(135deg, rgba(240,165,0,0.06), rgba(233,69,96,0.03))',
+        }}
+        onClick={() => !todayComplete && onSelectDay(todayDay)}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+          <div>
+            <div className="mono" style={{
+              fontSize: 11, color: '#f0a500', fontWeight: 700,
+              letterSpacing: 1, marginBottom: 6,
+            }}>
+              DAY {todayDay} {todayComplete ? '' : '— TODAY'}
+            </div>
+            <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>
+              {POST_30_TASK.title}
+            </div>
+            <div style={{ fontSize: 13, color: '#888' }}>
+              {todayComplete
+                ? 'Completed! Come back tomorrow to keep your streak going.'
+                : 'Complete your daily tasks to extend your streak'}
+            </div>
+          </div>
+          <div style={{ textAlign: 'center', flexShrink: 0 }}>
+            {todayComplete ? (
+              <div style={{
+                width: 40, height: 40, borderRadius: '50%', background: '#48c78e',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 18, color: 'white',
+              }}>✓</div>
+            ) : (
+              <div style={{
+                width: 40, height: 40, borderRadius: '50%',
+                background: 'rgba(240,165,0,0.15)', border: '2px solid rgba(240,165,0,0.3)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 14, animation: 'pulse 2s infinite',
+              }}>→</div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Recent continuation history (last 7 days) */}
+      {user.completedDays.filter(d => d > 30).length > 0 && (
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8 }}>
+          {user.completedDays.filter(d => d > 30).slice(-7).map(d => (
+            <div
+              key={d}
+              onClick={() => onSelectDay(d)}
+              className="card"
+              style={{
+                padding: '8px 12px', cursor: 'pointer', borderColor: 'rgba(72,199,142,0.2)',
+                display: 'flex', alignItems: 'center', gap: 6,
+              }}
+            >
+              <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#48c78e', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8, color: 'white' }}>✓</div>
+              <span className="mono" style={{ fontSize: 11, color: '#888' }}>Day {d}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

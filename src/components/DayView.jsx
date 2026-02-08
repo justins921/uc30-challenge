@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent } from '../data/challengeDays';
+import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum } from '../data/challengeDays';
 
 export default function DayView({ day, user, onSubmit, onBack, contentOverrides, customPhases }) {
   const [proofText, setProofText] = useState('');
@@ -7,12 +7,15 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
   const [fileData, setFileData] = useState(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const dayData = getDayContent(day, contentOverrides);
+  const isPost30 = day > 30;
+  const dayData = isPost30 ? getDayDataForNum(day) : getDayContent(day, contentOverrides);
   const isComplete = user.completedDays.includes(day);
   const isCurrentOrPast = day <= user.currentDay;
   const existingSubmission = user.submissions.find(s => s.day === day);
   const dayColors = customPhases ? getCategoryColors(getPhases(customPhases)) : null;
-  const cat = (dayColors && dayColors[day]) || CATEGORY_COLORS[dayData.category] || { accent: '#888', label: '' };
+  const cat = isPost30
+    ? { accent: '#f0a500', label: 'Continuing' }
+    : (dayColors && dayColors[day]) || CATEGORY_COLORS[dayData.category] || { accent: '#888', label: '' };
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
@@ -49,7 +52,7 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
             {cat.label}
           </span>
           <span style={{ color: '#333' }}>•</span>
-          <span className="mono" style={{ fontSize: 11, color: '#555' }}>DAY {day}/30</span>
+          <span className="mono" style={{ fontSize: 11, color: '#555' }}>{isPost30 ? `DAY ${day}` : `DAY ${day}/30`}</span>
         </div>
         <h1 style={{ fontSize: 32, fontWeight: 700, lineHeight: 1.2, marginBottom: 4 }}>
           {dayData.title}
@@ -65,8 +68,8 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
         )}
       </div>
 
-      {/* Video Player */}
-      <div className="card" style={{ marginBottom: 24, padding: 0, overflow: 'hidden' }}>
+      {/* Video Player (not shown for post-30 continuation days) */}
+      {!isPost30 && <div className="card" style={{ marginBottom: 24, padding: 0, overflow: 'hidden' }}>
         {dayData.videoUrl ? (
           <div style={{ aspectRatio: '16/9' }}>
             <iframe
@@ -92,7 +95,7 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
             <div style={{ fontSize: 11, color: '#555' }}>Chandler: Add video URL to challengeDays.js</div>
           </div>
         )}
-      </div>
+      </div>}
 
       {/* Downloads (if any) */}
       {dayData.downloads && dayData.downloads.length > 0 && (
@@ -129,8 +132,20 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
           }}>📋</div>
           <h3 style={{ fontSize: 16, fontWeight: 700 }}>Today's Task</h3>
         </div>
-        <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15 }}>{dayData.taskDescription}</p>
-        {dayData.metrics && (
+        <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.taskDescription}</p>
+        {dayData.multiMetrics ? (
+          <div style={{
+            marginTop: 16, padding: '12px 16px', background: 'rgba(240,165,0,0.06)',
+            borderRadius: 10, border: '1px solid rgba(240,165,0,0.1)',
+          }}>
+            <div style={{ fontSize: 13, color: '#f0a500', marginBottom: 4 }}>📈 Daily targets:</div>
+            {dayData.multiMetrics.map((m, i) => (
+              <div key={i} style={{ fontSize: 13, color: '#f0a500', marginLeft: 8 }}>
+                <strong>+{m.count}</strong> {m.label}
+              </div>
+            ))}
+          </div>
+        ) : dayData.metrics && (
           <div style={{
             marginTop: 16, padding: '12px 16px', background: 'rgba(233,69,96,0.06)',
             borderRadius: 10, border: '1px solid rgba(233,69,96,0.1)',
@@ -174,10 +189,14 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
       {!isComplete && isCurrentOrPast && !submitted && (
         <div style={{
           marginTop: 20, padding: '14px 20px',
-          background: 'rgba(233,69,96,0.06)', border: '1px solid rgba(233,69,96,0.1)',
-          borderRadius: 12, fontSize: 13, color: '#e94560', textAlign: 'center',
+          background: isPost30 ? 'rgba(240,165,0,0.06)' : 'rgba(233,69,96,0.06)',
+          border: `1px solid ${isPost30 ? 'rgba(240,165,0,0.1)' : 'rgba(233,69,96,0.1)'}`,
+          borderRadius: 12, fontSize: 13,
+          color: isPost30 ? '#f0a500' : '#e94560', textAlign: 'center',
         }}>
-          ⏰ Submit before 11:59 PM Pacific or you will be removed from this run
+          {isPost30
+            ? '🔥 Submit today to keep your streak alive!'
+            : '⏰ Submit before 11:59 PM Pacific or you will be removed from this run'}
         </div>
       )}
     </div>
@@ -217,7 +236,9 @@ function SubmissionSuccess({ day }) {
         Submission Received!
       </h3>
       <p style={{ color: '#888', fontSize: 14 }}>
-        Day {day} is now complete. {day < 30 ? `You've unlocked Day ${day + 1}.` : 'You did it! 🎉'}
+        Day {day} is now complete. {day > 30
+          ? 'Streak extended! Come back tomorrow to keep it going.'
+          : day < 30 ? `You've unlocked Day ${day + 1}.` : 'You did it! 🎉 Keep going to build your streak!'}
       </p>
     </div>
   );
