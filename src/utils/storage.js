@@ -87,7 +87,7 @@ const supabaseStorage = {
 
   async getParticipants() {
     const data = await supabaseRequest('participants', 'GET', {
-      filters: '?select=id,name,email,is_admin,current_day,is_active,has_paid,start_date,completed_days,submissions,metrics,removed_at,reactivated_at,created_at&order=created_at.asc',
+      filters: '?order=created_at.asc',
     });
     return data ? data.map(fromDbRow) : [];
   },
