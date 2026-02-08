@@ -11,7 +11,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onLogout, cohortStartDate, onSetCohortStartDate, contentOverrides, onSetContentOverrides }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides }) {
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
 
@@ -55,7 +55,9 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
         {/* Cohort Settings */}
         <CohortSettings
           cohortStartDate={cohortStartDate}
+          nextCohortDate={nextCohortDate}
           onSetCohortStartDate={onSetCohortStartDate}
+          onSetNextCohortDate={onSetNextCohortDate}
         />
 
         {/* Top Stats */}
@@ -126,9 +128,11 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
 }
 
 // ── Cohort Settings ─────────────────────────────────────────
-function CohortSettings({ cohortStartDate, onSetCohortStartDate }) {
+function CohortSettings({ cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate }) {
   const [editing, setEditing] = useState(false);
   const [dateValue, setDateValue] = useState(cohortStartDate || '');
+  const [editingNext, setEditingNext] = useState(false);
+  const [nextDateValue, setNextDateValue] = useState(nextCohortDate || '');
 
   const handleSave = () => {
     if (dateValue) {
@@ -143,6 +147,19 @@ function CohortSettings({ cohortStartDate, onSetCohortStartDate }) {
     setEditing(false);
   };
 
+  const handleSaveNext = () => {
+    if (nextDateValue) {
+      onSetNextCohortDate(nextDateValue);
+    }
+    setEditingNext(false);
+  };
+
+  const handleClearNext = () => {
+    onSetNextCohortDate(null);
+    setNextDateValue('');
+    setEditingNext(false);
+  };
+
   const formatDate = (d) => {
     if (!d) return null;
     return new Date(d + 'T00:00:00').toLocaleDateString('en-US', {
@@ -152,7 +169,6 @@ function CohortSettings({ cohortStartDate, onSetCohortStartDate }) {
 
   const getStatus = () => {
     if (!cohortStartDate) return null;
-    // Use Eastern timezone for day calculation
     const eastern = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
     const nowEastern = new Date(eastern);
     const start = new Date(cohortStartDate + 'T00:00:00');
@@ -168,6 +184,7 @@ function CohortSettings({ cohortStartDate, onSetCohortStartDate }) {
 
   return (
     <div className="card fade-up" style={{ marginBottom: 24, padding: '20px 24px' }}>
+      {/* Current Cohort Start Date */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ fontSize: 20 }}>📅</span>
@@ -218,6 +235,61 @@ function CohortSettings({ cohortStartDate, onSetCohortStartDate }) {
               </button>
             )}
             <button className="btn-secondary" style={{ padding: '8px 14px', fontSize: 13 }} onClick={() => setEditing(false)}>
+              Cancel
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Next Cohort Date */}
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 16, paddingTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontSize: 20 }}>🔜</span>
+          <div>
+            <div style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>
+              Next Cohort Date
+            </div>
+            {nextCohortDate && !editingNext ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 16, fontWeight: 600 }}>{formatDate(nextCohortDate)}</span>
+                <span style={{
+                  fontSize: 12, fontWeight: 600, color: '#f0a500',
+                  background: 'rgba(240,165,0,0.1)', padding: '3px 10px', borderRadius: 6,
+                }}>
+                  Shown to removed users
+                </span>
+              </div>
+            ) : !editingNext ? (
+              <span style={{ fontSize: 14, color: '#555' }}>Not set — removed users won't see a next cohort date</span>
+            ) : null}
+          </div>
+        </div>
+
+        {!editingNext ? (
+          <button
+            className="btn-secondary"
+            style={{ padding: '8px 16px', fontSize: 13 }}
+            onClick={() => { setNextDateValue(nextCohortDate || ''); setEditingNext(true); }}
+          >
+            {nextCohortDate ? 'Change' : 'Set Date'}
+          </button>
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+            <input
+              type="date"
+              value={nextDateValue}
+              onChange={e => setNextDateValue(e.target.value)}
+              style={{ padding: '8px 12px', fontSize: 14, width: 'auto', minWidth: 160 }}
+            />
+            <button className="btn-primary" style={{ padding: '8px 16px', fontSize: 13 }} onClick={handleSaveNext}>
+              Save
+            </button>
+            {nextCohortDate && (
+              <button className="btn-danger" style={{ padding: '8px 14px' }} onClick={handleClearNext}>
+                Clear
+              </button>
+            )}
+            <button className="btn-secondary" style={{ padding: '8px 14px', fontSize: 13 }} onClick={() => setEditingNext(false)}>
               Cancel
             </button>
           </div>

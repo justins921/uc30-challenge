@@ -10,6 +10,7 @@ export function useAppState() {
   const [currentView, setCurrentView] = useState('login');
   const [loading, setLoading] = useState(true);
   const [cohortStartDate, setCohortStartDateState] = useState(null);
+  const [nextCohortDate, setNextCohortDateState] = useState(null);
   const [contentOverrides, setContentOverridesState] = useState({});
 
   // Load from storage on mount
@@ -22,6 +23,9 @@ export function useAppState() {
         const cohortSettings = await Promise.resolve(storage.getCohortSettings());
         if (cohortSettings?.startDate) {
           setCohortStartDateState(cohortSettings.startDate);
+        }
+        if (cohortSettings?.nextCohortDate) {
+          setNextCohortDateState(cohortSettings.nextCohortDate);
         }
 
         const overrides = await Promise.resolve(storage.getContentOverrides());
@@ -317,9 +321,17 @@ export function useAppState() {
   }, [participants, user, persist]);
 
   const setCohortStartDate = useCallback(async (date) => {
-    const settings = { startDate: date };
+    const current = await Promise.resolve(storage.getCohortSettings()) || {};
+    const settings = { ...current, startDate: date };
     await Promise.resolve(storage.setCohortSettings(settings));
     setCohortStartDateState(date);
+  }, []);
+
+  const setNextCohortDate = useCallback(async (date) => {
+    const current = await Promise.resolve(storage.getCohortSettings()) || {};
+    const settings = { ...current, nextCohortDate: date };
+    await Promise.resolve(storage.setCohortSettings(settings));
+    setNextCohortDateState(date);
   }, []);
 
   const toggleAdmin = useCallback(async (participantId, makeAdmin) => {
@@ -409,6 +421,7 @@ export function useAppState() {
     currentView,
     loading,
     cohortStartDate,
+    nextCohortDate,
     contentOverrides,
     navigate: setCurrentView,
     login,
@@ -422,6 +435,7 @@ export function useAppState() {
     toggleAdmin,
     refreshParticipants,
     setCohortStartDate,
+    setNextCohortDate,
     setContentOverrides,
   };
 }

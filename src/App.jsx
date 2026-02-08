@@ -12,6 +12,7 @@ export default function App() {
     currentView,
     loading,
     cohortStartDate,
+    nextCohortDate,
     login,
     register,
     resetPassword,
@@ -22,6 +23,7 @@ export default function App() {
     reactivateParticipant,
     toggleAdmin,
     setCohortStartDate,
+    setNextCohortDate,
     contentOverrides,
     setContentOverrides,
     navigate,
@@ -92,7 +94,9 @@ export default function App() {
         onToggleAdmin={toggleAdmin}
         onLogout={logout}
         cohortStartDate={cohortStartDate}
+        nextCohortDate={nextCohortDate}
         onSetCohortStartDate={setCohortStartDate}
+        onSetNextCohortDate={setNextCohortDate}
         contentOverrides={contentOverrides}
         onSetContentOverrides={setContentOverrides}
       />
@@ -105,6 +109,7 @@ export default function App() {
       onLogout={logout}
       onSubmit={submitDay}
       cohortStartDate={cohortStartDate}
+      nextCohortDate={nextCohortDate}
       contentOverrides={contentOverrides}
     />
   );

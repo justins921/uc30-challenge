@@ -60,7 +60,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, contentOverrides }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -78,8 +78,14 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, c
           <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 12 }}>Challenge Paused</h2>
           <p style={{ color: '#888', lineHeight: 1.7, marginBottom: 24 }}>
             You missed a daily submission and were removed from this run.
-            Contact your administrator to be reactivated for a future cohort.
           </p>
+          {nextCohortDate ? (
+            <NextCohortCountdown nextCohortDate={nextCohortDate} />
+          ) : (
+            <p style={{ color: '#666', fontSize: 14, marginBottom: 24 }}>
+              Contact your administrator for information about the next cohort.
+            </p>
+          )}
           <button className="btn-secondary" onClick={onLogout}>Log Out</button>
         </div>
       </div>
@@ -309,6 +315,81 @@ function MiniCountdown({ value, label }) {
         {String(value).padStart(2, '0')}
       </span>
       <span style={{ fontSize: 11, color: '#666', marginLeft: 2 }}>{label}</span>
+    </div>
+  );
+}
+
+// ── Countdown: Next cohort for removed users ────────────────
+function NextCohortCountdown({ nextCohortDate }) {
+  const [timeLeft, setTimeLeft] = useState(null);
+
+  useEffect(() => {
+    const update = () => {
+      const nowEastern = getEasternDate();
+      const start = new Date(nextCohortDate + 'T00:00:00');
+      const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+      const msUntilStart = startDay - nowEastern;
+      const target = new Date(Date.now() + msUntilStart);
+      setTimeLeft(getTimeLeft(target));
+    };
+    update();
+    const timer = setInterval(update, 1000);
+    return () => clearInterval(timer);
+  }, [nextCohortDate]);
+
+  const formatDate = new Date(nextCohortDate + 'T00:00:00').toLocaleDateString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+  });
+
+  return (
+    <div style={{ marginBottom: 24 }}>
+      <div style={{
+        padding: '24px 20px', borderRadius: 16,
+        background: 'linear-gradient(135deg, rgba(233,69,96,0.06), rgba(240,165,0,0.06))',
+        border: '1px solid rgba(240,165,0,0.15)',
+      }}>
+        <div style={{ fontSize: 14, fontWeight: 600, color: '#f0a500', marginBottom: 8 }}>
+          Next Cohort Starts
+        </div>
+        <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 16 }}>
+          {formatDate}
+        </div>
+
+        {timeLeft ? (
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
+            {timeLeft.days > 0 && (
+              <div style={{ textAlign: 'center' }}>
+                <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#f0a500' }}>
+                  {String(timeLeft.days).padStart(2, '0')}
+                </div>
+                <div style={{ fontSize: 10, color: '#666' }}>Days</div>
+              </div>
+            )}
+            <div style={{ textAlign: 'center' }}>
+              <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#f0a500' }}>
+                {String(timeLeft.hours).padStart(2, '0')}
+              </div>
+              <div style={{ fontSize: 10, color: '#666' }}>Hours</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#f0a500' }}>
+                {String(timeLeft.minutes).padStart(2, '0')}
+              </div>
+              <div style={{ fontSize: 10, color: '#666' }}>Min</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#f0a500' }}>
+                {String(timeLeft.seconds).padStart(2, '0')}
+              </div>
+              <div style={{ fontSize: 10, color: '#666' }}>Sec</div>
+            </div>
+          </div>
+        ) : (
+          <div style={{ fontSize: 15, fontWeight: 600, color: '#48c78e' }}>
+            The next cohort is starting now!
+          </div>
+        )}
+      </div>
     </div>
   );
 }
