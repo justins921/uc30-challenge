@@ -41,25 +41,6 @@ export default function App() {
     }
   }, []);
 
-  if (loading) {
-    return (
-      <div style={{
-        minHeight: '100vh', background: '#0a0a0f',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div className="mono" style={{
-            fontSize: 48, fontWeight: 700, color: '#e94560',
-            animation: 'pulse 1.5s infinite',
-          }}>
-            UC30
-          </div>
-          <div style={{ color: '#666', marginTop: 12, fontSize: 14 }}>Loading challenge...</div>
-        </div>
-      </div>
-    );
-  }
-
   // Not logged in
   if (currentView === 'login' || !user) {
     // If user clicked "Log In" or "Register" from landing, or arrived from Stripe redirect
