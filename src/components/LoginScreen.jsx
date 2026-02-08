@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function LoginScreen({ onLogin, onRegister, initialMode }) {
+export default function LoginScreen({ onLogin, onRegister, onRequestReset, onConfirmReset, initialMode }) {
   const [mode, setMode] = useState(initialMode || 'login');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -9,6 +9,11 @@ export default function LoginScreen({ onLogin, onRegister, initialMode }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  // Reset flow state
+  const [resetStep, setResetStep] = useState(1); // 1 = enter email, 2 = enter code + new pw
+  const [resetCode, setResetCode] = useState('');
+  const [resetEmail, setResetEmail] = useState('');
 
   const handleLogin = async () => {
     if (!email.trim() || !email.includes('@')) return setError('Please enter a valid email');
@@ -29,6 +34,43 @@ export default function LoginScreen({ onLogin, onRegister, initialMode }) {
     if (result?.error) setError(result.error);
   };
 
+  const handleRequestReset = async () => {
+    const emailToReset = resetEmail || email;
+    if (!emailToReset.trim() || !emailToReset.includes('@')) return setError('Please enter a valid email');
+    setError('');
+    const result = await onRequestReset(emailToReset.trim());
+    if (result?.error) {
+      setError(result.error);
+    } else {
+      setResetEmail(emailToReset.trim());
+      setResetStep(2);
+      if (result?.kitEnabled) {
+        setSuccess('Check your email for a 6-digit reset code.');
+      } else {
+        setSuccess('A reset code has been generated. Contact your administrator for the code, or check your email.');
+      }
+    }
+  };
+
+  const handleConfirmReset = async () => {
+    if (!resetCode.trim()) return setError('Please enter the reset code');
+    if (password.length < 6) return setError('New password must be at least 6 characters');
+    if (password !== confirmPassword) return setError('Passwords do not match');
+    setError('');
+    const result = await onConfirmReset(resetEmail, resetCode.trim(), password);
+    if (result?.error) {
+      setError(result.error);
+    } else {
+      setSuccess('Password reset! You can now log in.');
+      setResetStep(1);
+      setResetCode('');
+      setResetEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      setTimeout(() => switchMode('login'), 1500);
+    }
+  };
+
   const switchMode = (newMode) => {
     setMode(newMode);
     setError('');
@@ -38,12 +80,16 @@ export default function LoginScreen({ onLogin, onRegister, initialMode }) {
     setEmail('');
     setPassword('');
     setConfirmPassword('');
+    setResetStep(1);
+    setResetCode('');
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       if (mode === 'login') handleLogin();
       else if (mode === 'register') handleRegister();
+      else if (mode === 'reset' && resetStep === 1) handleRequestReset();
+      else if (mode === 'reset' && resetStep === 2) handleConfirmReset();
     }
   };
 
@@ -104,72 +150,135 @@ export default function LoginScreen({ onLogin, onRegister, initialMode }) {
 
         {/* Form */}
         <div className="card" style={{ padding: 36, textAlign: 'left' }}>
-          {mode === 'register' && (
-            <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
-              <div style={{ flex: 1 }}>
-                <label>First Name</label>
+          {mode === 'reset' ? (
+            <>
+              <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Reset Password</h3>
+              <p style={{ fontSize: 13, color: '#666', marginBottom: 20 }}>
+                {resetStep === 1
+                  ? 'Enter your email and we\'ll send you a reset code.'
+                  : 'Enter the 6-digit code and your new password.'}
+              </p>
+
+              {resetStep === 1 && (
+                <div style={{ marginBottom: 20 }}>
+                  <label>Email Address</label>
+                  <input
+                    type="email"
+                    value={resetEmail || email}
+                    onChange={e => setResetEmail(e.target.value)}
+                    placeholder="you@email.com"
+                    onKeyDown={handleKeyDown}
+                  />
+                </div>
+              )}
+
+              {resetStep === 2 && (
+                <>
+                  <div style={{ marginBottom: 20 }}>
+                    <label>Reset Code</label>
+                    <input
+                      value={resetCode}
+                      onChange={e => setResetCode(e.target.value)}
+                      placeholder="6-digit code"
+                      maxLength={6}
+                      onKeyDown={handleKeyDown}
+                      style={{ letterSpacing: 4, fontSize: 18, textAlign: 'center' }}
+                    />
+                  </div>
+                  <div style={{ marginBottom: 20 }}>
+                    <label>New Password</label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      placeholder="At least 6 characters"
+                      onKeyDown={handleKeyDown}
+                    />
+                  </div>
+                  <div style={{ marginBottom: 20 }}>
+                    <label>Confirm Password</label>
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={e => setConfirmPassword(e.target.value)}
+                      placeholder="Confirm new password"
+                      onKeyDown={handleKeyDown}
+                    />
+                  </div>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              {mode === 'register' && (
+                <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
+                  <div style={{ flex: 1 }}>
+                    <label>First Name</label>
+                    <input
+                      value={firstName}
+                      onChange={e => setFirstName(e.target.value)}
+                      placeholder="First"
+                      onKeyDown={handleKeyDown}
+                    />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label>Last Name</label>
+                    <input
+                      value={lastName}
+                      onChange={e => setLastName(e.target.value)}
+                      placeholder="Last"
+                      onKeyDown={handleKeyDown}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div style={{ marginBottom: 20 }}>
+                <label>Email Address</label>
                 <input
-                  value={firstName}
-                  onChange={e => setFirstName(e.target.value)}
-                  placeholder="First"
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="you@email.com"
                   onKeyDown={handleKeyDown}
                 />
               </div>
-              <div style={{ flex: 1 }}>
-                <label>Last Name</label>
+
+              <div style={{ marginBottom: mode === 'register' ? 20 : 4 }}>
+                <label>Password</label>
                 <input
-                  value={lastName}
-                  onChange={e => setLastName(e.target.value)}
-                  placeholder="Last"
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder={mode === 'register' ? 'At least 6 characters' : 'Enter your password'}
                   onKeyDown={handleKeyDown}
                 />
               </div>
-            </div>
-          )}
 
-          <div style={{ marginBottom: 20 }}>
-            <label>Email Address</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="you@email.com"
-              onKeyDown={handleKeyDown}
-            />
-          </div>
+              {mode === 'login' && (
+                <div style={{ marginBottom: 20, textAlign: 'right' }}>
+                  <span
+                    onClick={() => switchMode('reset')}
+                    style={{ fontSize: 12, color: '#e94560', cursor: 'pointer' }}
+                  >
+                    Forgot password?
+                  </span>
+                </div>
+              )}
 
-          {mode !== 'reset' && (
-            <div style={{ marginBottom: mode === 'register' ? 20 : 4 }}>
-              <label>Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder={mode === 'register' ? 'At least 6 characters' : 'Enter your password'}
-                onKeyDown={handleKeyDown}
-              />
-            </div>
-          )}
-
-          {mode === 'login' && (
-            <div style={{ marginBottom: 20, textAlign: 'right' }}>
-              <span style={{ fontSize: 12, color: '#666' }}>
-                Forgot password? Contact your administrator
-              </span>
-            </div>
-          )}
-
-          {mode === 'register' && (
-            <div style={{ marginBottom: 24 }}>
-              <label>Confirm Password</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
-                placeholder="Confirm your password"
-                onKeyDown={handleKeyDown}
-              />
-            </div>
+              {mode === 'register' && (
+                <div style={{ marginBottom: 24 }}>
+                  <label>Confirm Password</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={e => setConfirmPassword(e.target.value)}
+                    placeholder="Confirm your password"
+                    onKeyDown={handleKeyDown}
+                  />
+                </div>
+              )}
+            </>
           )}
 
           {error && (
@@ -190,19 +299,31 @@ export default function LoginScreen({ onLogin, onRegister, initialMode }) {
             </div>
           )}
 
-          <button
-            className="btn-primary"
-            style={{ width: '100%' }}
-            onClick={mode === 'login' ? handleLogin : handleRegister}
-          >
-            {mode === 'login' ? 'Log In \u2192' : 'Create Account \u2192'}
-          </button>
+          {mode === 'reset' ? (
+            <button
+              className="btn-primary"
+              style={{ width: '100%' }}
+              onClick={resetStep === 1 ? handleRequestReset : handleConfirmReset}
+            >
+              {resetStep === 1 ? 'Send Reset Code' : 'Reset Password'}
+            </button>
+          ) : (
+            <button
+              className="btn-primary"
+              style={{ width: '100%' }}
+              onClick={mode === 'login' ? handleLogin : handleRegister}
+            >
+              {mode === 'login' ? 'Log In \u2192' : 'Create Account \u2192'}
+            </button>
+          )}
 
           <div style={{ marginTop: 16, fontSize: 13, color: '#555', textAlign: 'center' }}>
             {mode === 'login' ? (
               <>Don't have an account? <span onClick={() => switchMode('register')} style={{ color: '#e94560', cursor: 'pointer' }}>Register</span></>
-            ) : (
+            ) : mode === 'register' ? (
               <>Already have an account? <span onClick={() => switchMode('login')} style={{ color: '#e94560', cursor: 'pointer' }}>Log in</span></>
+            ) : (
+              <span onClick={() => switchMode('login')} style={{ color: '#e94560', cursor: 'pointer' }}>Back to Log In</span>
             )}
           </div>
         </div>

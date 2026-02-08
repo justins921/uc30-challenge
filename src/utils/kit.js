@@ -102,4 +102,17 @@ export function tagRemovedFromCohort(email) {
   return applyTag(email, 'UC30 Removed from Cohort');
 }
 
+// Send a password reset code via Kit (updates subscriber custom field + applies tag)
+// Requires a Kit automation: when "UC30 - Password Reset" tag is added, send email with {{ subscriber.reset_code }}
+export async function sendPasswordResetCode(email, code) {
+  if (!KIT_ENABLED) return null;
+  // Update subscriber with reset code custom field
+  await kitRequest(`forms/${KIT_FORM_ID}/subscribe`, {
+    email,
+    fields: { reset_code: code },
+  });
+  // Apply tag to trigger automation email
+  return applyTag(email, 'UC30 - Password Reset');
+}
+
 export const isKitEnabled = KIT_ENABLED;

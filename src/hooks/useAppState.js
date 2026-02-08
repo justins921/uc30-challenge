@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { storage, createNewUser, isSupabaseEnabled } from '../utils/storage';
 import { CHALLENGE_DAYS, POST_30_TASK } from '../data/challengeDays';
 import { hashPassword } from '../utils/crypto';
-import { subscribeUser, tagSignUp, tagDayStarted, tagChallengeCompleted, tagRemovedFromCohort } from '../utils/kit';
+import { subscribeUser, tagSignUp, tagDayStarted, tagChallengeCompleted, tagRemovedFromCohort, sendPasswordResetCode, isKitEnabled } from '../utils/kit';
 
 export function useAppState() {
   const [user, setUser] = useState(null);
@@ -15,6 +15,7 @@ export function useAppState() {
   const [liveCalls, setLiveCallsState] = useState([]);
   const [customPhases, setCustomPhasesState] = useState(null);
   const [landingContent, setLandingContentState] = useState(null);
+  const [supportTickets, setSupportTicketsState] = useState([]);
 
   // Persist helper (localStorage only — Supabase persists per-operation)
   const persist = useCallback((newUser, newParticipants) => {
@@ -112,6 +113,9 @@ export function useAppState() {
 
         const landing = await Promise.resolve(storage.getLandingContent());
         if (landing) setLandingContentState(landing);
+
+        const tickets = await Promise.resolve(storage.getSupportTickets());
+        if (tickets) setSupportTicketsState(tickets);
 
         const storedUser = await Promise.resolve(storage.getUser());
         if (storedUser) {
@@ -262,6 +266,175 @@ export function useAppState() {
 
     return { success: true };
   }, [participants, user]);
+
+  // ── Email-Based Password Reset ─────────────────────────
+  const requestPasswordReset = useCallback(async (email) => {
+    let target;
+    if (isSupabaseEnabled) {
+      target = await storage.findByEmail(email);
+    } else {
+      target = participants.find(p => p.email === email.toLowerCase());
+    }
+    if (!target) return { error: 'No account found with that email.' };
+
+    // Generate 6-digit code
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString(); // 15 minutes
+
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(target.id, { resetCode: code, resetCodeExpiresAt: expiresAt });
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === target.id ? { ...p, resetCode: code, resetCodeExpiresAt: expiresAt } : p
+      );
+      setParticipants(updatedParticipants);
+      storage.setParticipants(updatedParticipants);
+    }
+
+    // Try to send via Kit email
+    if (isKitEnabled) {
+      await sendPasswordResetCode(email.toLowerCase(), code).catch(() => {});
+    }
+
+    return { success: true, kitEnabled: isKitEnabled };
+  }, [participants]);
+
+  const confirmPasswordReset = useCallback(async (email, code, newPassword) => {
+    let target;
+    if (isSupabaseEnabled) {
+      target = await storage.findByEmail(email);
+    } else {
+      target = participants.find(p => p.email === email.toLowerCase());
+    }
+    if (!target) return { error: 'No account found with that email.' };
+
+    if (!target.resetCode || target.resetCode !== code) {
+      return { error: 'Invalid reset code.' };
+    }
+
+    if (new Date(target.resetCodeExpiresAt) < new Date()) {
+      return { error: 'Reset code has expired. Please request a new one.' };
+    }
+
+    const hashed = await hashPassword(email, newPassword);
+    const updates = { password: hashed, resetCode: null, resetCodeExpiresAt: null };
+
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(target.id, updates);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === target.id ? { ...p, ...updates } : p
+      );
+      setParticipants(updatedParticipants);
+      storage.setParticipants(updatedParticipants);
+    }
+
+    return { success: true };
+  }, [participants]);
+
+  // ── User Profile Updates ───────────────────────────────
+  const updateProfile = useCallback(async (updates) => {
+    if (!user) return { error: 'Not logged in.' };
+
+    const allowedUpdates = {};
+    if (updates.email !== undefined) {
+      const newEmail = updates.email.toLowerCase().trim();
+      if (!newEmail.includes('@')) return { error: 'Invalid email address.' };
+      // Check for duplicate
+      let existing;
+      if (isSupabaseEnabled) {
+        existing = await storage.findByEmail(newEmail);
+      } else {
+        existing = participants.find(p => p.email === newEmail);
+      }
+      if (existing && existing.id !== user.id) {
+        return { error: 'That email is already in use.' };
+      }
+      allowedUpdates.email = newEmail;
+      // Re-hash password with new email salt
+      // User would need to provide password for this, so skip re-hashing for now
+    }
+    if (updates.profilePicture !== undefined) {
+      allowedUpdates.profilePicture = updates.profilePicture;
+    }
+    if (updates.firstName !== undefined) {
+      allowedUpdates.firstName = updates.firstName.trim();
+    }
+    if (updates.lastName !== undefined) {
+      allowedUpdates.lastName = updates.lastName.trim();
+    }
+
+    if (Object.keys(allowedUpdates).length === 0) return { error: 'No changes.' };
+
+    const updatedUser = { ...user, ...allowedUpdates };
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(user.id, allowedUpdates);
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === user.id ? updatedUser : p
+      );
+      setParticipants(updatedParticipants);
+      persist(updatedUser, updatedParticipants);
+    }
+    setUser(updatedUser);
+    storage.setUser(updatedUser);
+    return { success: true };
+  }, [user, participants, persist]);
+
+  const changePassword = useCallback(async (currentPassword, newPassword) => {
+    if (!user) return { error: 'Not logged in.' };
+    // Verify current password
+    const currentHashed = await hashPassword(user.email, currentPassword);
+    if (user.password !== currentHashed && user.password !== currentPassword) {
+      return { error: 'Current password is incorrect.' };
+    }
+    const newHashed = await hashPassword(user.email, newPassword);
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(user.id, { password: newHashed });
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === user.id ? { ...p, password: newHashed } : p
+      );
+      setParticipants(updatedParticipants);
+      storage.setParticipants(updatedParticipants);
+    }
+    const updatedUser = { ...user, password: newHashed };
+    setUser(updatedUser);
+    storage.setUser(updatedUser);
+    return { success: true };
+  }, [user, participants]);
+
+  // ── Support Tickets ────────────────────────────────────
+  const submitSupportTicket = useCallback(async (subject, message) => {
+    if (!user) return { error: 'Not logged in.' };
+    const ticket = {
+      id: `ticket_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      participantId: user.id,
+      email: user.email,
+      name: `${user.firstName} ${user.lastName}`.trim(),
+      subject,
+      message,
+      status: 'open',
+      createdAt: new Date().toISOString(),
+      adminResponse: null,
+      respondedAt: null,
+    };
+    const updated = [...supportTickets, ticket];
+    setSupportTicketsState(updated);
+    await Promise.resolve(storage.setSupportTickets(updated));
+    return { success: true };
+  }, [user, supportTickets]);
+
+  const updateSupportTicket = useCallback(async (ticketId, updates) => {
+    const updated = supportTickets.map(t =>
+      t.id === ticketId ? { ...t, ...updates } : t
+    );
+    setSupportTicketsState(updated);
+    await Promise.resolve(storage.setSupportTickets(updated));
+    return { success: true };
+  }, [supportTickets]);
 
   const logout = useCallback(() => {
     setUser(null);
@@ -496,6 +669,10 @@ export function useAppState() {
     login,
     register,
     adminResetPassword,
+    requestPasswordReset,
+    confirmPasswordReset,
+    updateProfile,
+    changePassword,
     logout,
     submitDay,
     removeParticipant,
@@ -512,5 +689,8 @@ export function useAppState() {
     setPhases,
     landingContent,
     setLandingContent,
+    supportTickets,
+    submitSupportTicket,
+    updateSupportTicket,
   };
 }

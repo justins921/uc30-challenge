@@ -6,11 +6,13 @@ import TimelineView from './TimelineView';
 import DayView from './DayView';
 import SubmissionsView from './SubmissionsView';
 import StatsView from './StatsView';
+import UserProfile from './UserProfile';
 
 const TABS = [
   { id: 'timeline', label: 'Timeline' },
   { id: 'submissions', label: 'My Submissions' },
   { id: 'stats', label: 'My Stats' },
+  { id: 'profile', label: 'Profile' },
 ];
 
 function getEasternDate() {
@@ -61,7 +63,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -179,6 +181,15 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         )}
         {tab === 'submissions' && <SubmissionsView user={user} />}
         {tab === 'stats' && <StatsView user={user} />}
+        {tab === 'profile' && (
+          <UserProfile
+            user={user}
+            onUpdateProfile={onUpdateProfile}
+            onChangePassword={onChangePassword}
+            onSubmitTicket={onSubmitTicket}
+            onBack={() => handleTabChange('timeline')}
+          />
+        )}
       </div>
     </div>
   );

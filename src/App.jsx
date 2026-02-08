@@ -16,6 +16,10 @@ export default function App() {
     login,
     register,
     adminResetPassword,
+    requestPasswordReset,
+    confirmPasswordReset,
+    updateProfile,
+    changePassword,
     logout,
     submitDay,
     removeParticipant,
@@ -32,6 +36,9 @@ export default function App() {
     setPhases,
     landingContent,
     setLandingContent,
+    supportTickets,
+    submitSupportTicket,
+    updateSupportTicket,
     navigate,
   } = useAppState();
 
@@ -55,6 +62,8 @@ export default function App() {
         <LoginScreen
           onLogin={login}
           onRegister={register}
+          onRequestReset={requestPasswordReset}
+          onConfirmReset={confirmPasswordReset}
           initialMode={authMode}
           onBackToLanding={() => setAuthMode(null)}
         />
@@ -118,6 +127,8 @@ export default function App() {
         onSetPhases={setPhases}
         landingContent={landingContent}
         onSetLandingContent={setLandingContent}
+        supportTickets={supportTickets}
+        onUpdateTicket={updateSupportTicket}
       />
     );
   }
@@ -132,6 +143,9 @@ export default function App() {
       contentOverrides={contentOverrides}
       liveCalls={liveCalls}
       customPhases={customPhases}
+      onUpdateProfile={updateProfile}
+      onChangePassword={changePassword}
+      onSubmitTicket={submitSupportTicket}
     />
   );
 }

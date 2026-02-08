@@ -10,10 +10,11 @@ const ADMIN_TABS = [
   { id: 'submissions', label: 'Submissions' },
   { id: 'content', label: 'Content' },
   { id: 'landing', label: 'Landing Page' },
+  { id: 'support', label: 'Support' },
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, supportTickets, onUpdateTicket }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -126,6 +127,9 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             landingContent={landingContent}
             onSave={onSetLandingContent}
           />
+        )}
+        {tab === 'support' && (
+          <SupportTab tickets={supportTickets || []} onUpdateTicket={onUpdateTicket} />
         )}
         {tab === 'social' && (
           <SocialProofTab
@@ -1834,6 +1838,224 @@ function MiniStat({ label, value, color }) {
     }}>
       <div className="mono" style={{ fontSize: 14, fontWeight: 700, color }}>{value}</div>
       <div style={{ fontSize: 9, color: '#555', marginTop: 1 }}>{label}</div>
+    </div>
+  );
+}
+
+// ── Support Tickets Tab ──────────────────────────────────
+function SupportTab({ tickets, onUpdateTicket }) {
+  const [filter, setFilter] = useState('all');
+  const [expandedId, setExpandedId] = useState(null);
+  const [responseText, setResponseText] = useState('');
+
+  const filtered = filter === 'all' ? tickets
+    : tickets.filter(t => t.status === filter);
+
+  const sorted = [...filtered].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  const openCount = tickets.filter(t => t.status === 'open').length;
+
+  const handleRespond = async (ticketId) => {
+    if (!responseText.trim()) return;
+    await onUpdateTicket(ticketId, {
+      adminResponse: responseText.trim(),
+      respondedAt: new Date().toISOString(),
+      status: 'responded',
+    });
+    setResponseText('');
+  };
+
+  const handleClose = async (ticketId) => {
+    await onUpdateTicket(ticketId, { status: 'closed' });
+  };
+
+  const handleReopen = async (ticketId) => {
+    await onUpdateTicket(ticketId, { status: 'open', adminResponse: null, respondedAt: null });
+  };
+
+  const statusColors = {
+    open: { bg: 'rgba(233,69,96,0.1)', border: 'rgba(233,69,96,0.2)', color: '#e94560' },
+    responded: { bg: 'rgba(72,199,142,0.1)', border: 'rgba(72,199,142,0.2)', color: '#48c78e' },
+    closed: { bg: 'rgba(255,255,255,0.04)', border: 'rgba(255,255,255,0.08)', color: '#666' },
+  };
+
+  return (
+    <div className="fade-up">
+      {/* Header with count */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <h3 style={{ fontSize: 18, fontWeight: 700 }}>Support Requests</h3>
+          {openCount > 0 && (
+            <span style={{
+              background: '#e94560', color: '#fff', fontSize: 11, fontWeight: 700,
+              padding: '2px 8px', borderRadius: 10, minWidth: 20, textAlign: 'center',
+            }}>
+              {openCount}
+            </span>
+          )}
+        </div>
+        <div style={{ display: 'flex', gap: 6 }}>
+          {['all', 'open', 'responded', 'closed'].map(f => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              style={{
+                background: filter === f ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.04)',
+                color: filter === f ? '#e94560' : '#888',
+                border: filter === f ? '1px solid rgba(233,69,96,0.3)' : '1px solid rgba(255,255,255,0.06)',
+                padding: '6px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", fontWeight: 500, textTransform: 'capitalize',
+              }}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {sorted.length === 0 ? (
+        <div className="card" style={{ padding: 48, textAlign: 'center' }}>
+          <div style={{ fontSize: 32, marginBottom: 12 }}>📭</div>
+          <div style={{ color: '#666' }}>No support requests{filter !== 'all' ? ` with status "${filter}"` : ''}</div>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {sorted.map(ticket => {
+            const sc = statusColors[ticket.status] || statusColors.open;
+            const isExpanded = expandedId === ticket.id;
+            return (
+              <div
+                key={ticket.id}
+                className="card"
+                style={{ padding: 0, overflow: 'hidden' }}
+              >
+                {/* Ticket header */}
+                <div
+                  onClick={() => setExpandedId(isExpanded ? null : ticket.id)}
+                  style={{
+                    padding: '16px 20px', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+                  }}
+                >
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
+                      <span style={{
+                        background: sc.bg, border: `1px solid ${sc.border}`, color: sc.color,
+                        fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 6,
+                        textTransform: 'uppercase', letterSpacing: 0.5,
+                      }}>
+                        {ticket.status}
+                      </span>
+                      <span style={{ fontSize: 14, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {ticket.subject}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 12, color: '#666' }}>
+                      {ticket.name} ({ticket.email}) &middot; {new Date(ticket.createdAt).toLocaleDateString()}
+                    </div>
+                  </div>
+                  <div style={{ color: '#444', fontSize: 18, flexShrink: 0, transform: isExpanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }}>
+                    ›
+                  </div>
+                </div>
+
+                {/* Expanded content */}
+                {isExpanded && (
+                  <div style={{ padding: '0 20px 20px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                    {/* User's message */}
+                    <div style={{ marginTop: 16, marginBottom: 16 }}>
+                      <div style={{ fontSize: 11, color: '#555', fontWeight: 600, letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 6 }}>
+                        Message
+                      </div>
+                      <div style={{
+                        background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                        borderRadius: 8, padding: '12px 16px', fontSize: 14, color: '#ccc', lineHeight: 1.6,
+                        whiteSpace: 'pre-wrap',
+                      }}>
+                        {ticket.message}
+                      </div>
+                    </div>
+
+                    {/* Admin response */}
+                    {ticket.adminResponse && (
+                      <div style={{ marginBottom: 16 }}>
+                        <div style={{ fontSize: 11, color: '#555', fontWeight: 600, letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 6 }}>
+                          Admin Response &middot; {ticket.respondedAt ? new Date(ticket.respondedAt).toLocaleDateString() : ''}
+                        </div>
+                        <div style={{
+                          background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.15)',
+                          borderRadius: 8, padding: '12px 16px', fontSize: 14, color: '#ccc', lineHeight: 1.6,
+                          whiteSpace: 'pre-wrap',
+                        }}>
+                          {ticket.adminResponse}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Respond form (only for open tickets) */}
+                    {ticket.status === 'open' && (
+                      <div>
+                        <textarea
+                          value={expandedId === ticket.id ? responseText : ''}
+                          onChange={e => setResponseText(e.target.value)}
+                          placeholder="Write your response..."
+                          rows={3}
+                          style={{
+                            width: '100%', padding: '10px 14px', fontSize: 14, borderRadius: 8,
+                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                            color: '#eee', resize: 'vertical', fontFamily: "'DM Sans', sans-serif",
+                            marginBottom: 10, boxSizing: 'border-box',
+                          }}
+                        />
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <button
+                            className="btn-primary"
+                            style={{ padding: '8px 20px', fontSize: 13 }}
+                            onClick={() => handleRespond(ticket.id)}
+                          >
+                            Send Response
+                          </button>
+                          <button
+                            className="btn-secondary"
+                            style={{ padding: '8px 16px', fontSize: 13 }}
+                            onClick={() => handleClose(ticket.id)}
+                          >
+                            Close Without Response
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Actions for responded/closed tickets */}
+                    {ticket.status === 'responded' && (
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button
+                          className="btn-secondary"
+                          style={{ padding: '8px 16px', fontSize: 13 }}
+                          onClick={() => handleClose(ticket.id)}
+                        >
+                          Close Ticket
+                        </button>
+                      </div>
+                    )}
+                    {ticket.status === 'closed' && (
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button
+                          className="btn-secondary"
+                          style={{ padding: '8px 16px', fontSize: 13 }}
+                          onClick={() => handleReopen(ticket.id)}
+                        >
+                          Reopen Ticket
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

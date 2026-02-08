@@ -104,6 +104,9 @@ const supabaseStorage = {
 
   async updateParticipant(id, updates) {
     const row = {};
+    if (updates.email !== undefined) row.email = updates.email;
+    if (updates.firstName !== undefined) row.first_name = updates.firstName;
+    if (updates.lastName !== undefined) row.last_name = updates.lastName;
     if (updates.currentDay !== undefined) row.current_day = updates.currentDay;
     if (updates.isActive !== undefined) row.is_active = updates.isActive;
     if (updates.isAdmin !== undefined) row.is_admin = updates.isAdmin;
@@ -115,6 +118,9 @@ const supabaseStorage = {
     if (updates.password !== undefined) row.password = updates.password;
     if (updates.hasPaid !== undefined) row.has_paid = updates.hasPaid;
     if (updates.accessExpiresAt !== undefined) row.access_expires_at = updates.accessExpiresAt;
+    if (updates.profilePicture !== undefined) row.profile_picture = updates.profilePicture;
+    if (updates.resetCode !== undefined) row.reset_code = updates.resetCode;
+    if (updates.resetCodeExpiresAt !== undefined) row.reset_code_expires_at = updates.resetCodeExpiresAt;
 
     const result = await supabaseRequest('participants', 'PATCH', {
       filters: `?id=eq.${id}`,
@@ -268,6 +274,34 @@ const supabaseStorage = {
     }
   },
 
+  async getSupportTickets() {
+    const result = await supabaseRequest('settings', 'GET', {
+      filters: '?key=eq.support_tickets',
+    });
+    if (Array.isArray(result) && result.length > 0 && result[0].value) {
+      localStorage.setItem('uc30_support_tickets', JSON.stringify(result[0].value));
+      return result[0].value;
+    }
+    try {
+      const data = localStorage.getItem('uc30_support_tickets');
+      return data ? JSON.parse(data) : [];
+    } catch { return []; }
+  },
+
+  async setSupportTickets(tickets) {
+    localStorage.setItem('uc30_support_tickets', JSON.stringify(tickets));
+    const body = { value: tickets, updated_at: new Date().toISOString() };
+    const result = await supabaseRequest('settings', 'PATCH', {
+      filters: '?key=eq.support_tickets',
+      body,
+    });
+    if (!result || (Array.isArray(result) && result.length === 0)) {
+      await supabaseRequest('settings', 'POST', {
+        body: { key: 'support_tickets', ...body },
+      });
+    }
+  },
+
   async setCohortSettings(settings) {
     // Always save to localStorage as backup
     localStorage.setItem('uc30_cohort_settings', JSON.stringify(settings));
@@ -305,6 +339,7 @@ function toDbRow(user) {
     metrics: user.metrics,
     removed_at: user.removedAt,
     access_expires_at: user.accessExpiresAt || null,
+    profile_picture: user.profilePicture || null,
   };
 }
 
@@ -328,6 +363,9 @@ function fromDbRow(row) {
     removedAt: row.removed_at,
     reactivatedAt: row.reactivated_at || null,
     accessExpiresAt: row.access_expires_at || null,
+    profilePicture: row.profile_picture || null,
+    resetCode: row.reset_code || null,
+    resetCodeExpiresAt: row.reset_code_expires_at || null,
   };
 }
 
@@ -437,6 +475,17 @@ const localStorageFallback = {
       localStorage.setItem('uc30_landing_content', JSON.stringify(content));
     } catch {}
   },
+  getSupportTickets() {
+    try {
+      const data = localStorage.getItem('uc30_support_tickets');
+      return data ? JSON.parse(data) : [];
+    } catch { return []; }
+  },
+  setSupportTickets(tickets) {
+    try {
+      localStorage.setItem('uc30_support_tickets', JSON.stringify(tickets));
+    } catch {}
+  },
 };
 
 // ── Export the right storage based on config ─────────────────────
@@ -465,5 +514,6 @@ export function createNewUser(firstName, lastName, email, password) {
     },
     removedAt: null,
     accessExpiresAt: null,
+    profilePicture: null,
   };
 }

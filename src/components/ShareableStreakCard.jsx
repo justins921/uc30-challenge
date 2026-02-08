@@ -7,12 +7,14 @@ export default function ShareableStreakCard({ user, calendarDay }) {
   const inContinuation = challengeComplete && user.currentDay > 30;
   const challengeProgress = Math.min(Math.round((Math.min(totalCompleted, 30) / 30) * 100), 100);
 
-  const todayTitle = inContinuation
-    ? POST_30_TASK.title
-    : CHALLENGE_DAYS[Math.min(user.currentDay - 1, 29)]?.title;
+  // Current day data for the title
+  const currentDayNum = user.currentDay;
+  const dayData = inContinuation
+    ? POST_30_TASK
+    : CHALLENGE_DAYS[Math.min(currentDayNum - 1, 29)];
+  const dayTitle = dayData?.title || 'Challenge Day';
 
-  // Dynamic streak label
-  const streakFire = streak >= 20 ? '🔥🔥🔥' : streak >= 10 ? '🔥🔥' : streak >= 1 ? '🔥' : '';
+  const streakFire = streak >= 20 ? '\u{1F525}\u{1F525}\u{1F525}' : streak >= 10 ? '\u{1F525}\u{1F525}' : streak >= 1 ? '\u{1F525}' : '';
 
   // Colors shift to gold in continuation mode
   const accentColor = inContinuation ? '#f0a500' : '#e94560';
@@ -49,10 +51,10 @@ export default function ShareableStreakCard({ user, calendarDay }) {
           pointerEvents: 'none',
         }} />
 
-        {/* Header: UC30 branding + day */}
+        {/* Header: UC30 branding + day badge */}
         <div style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
-          marginBottom: 20, position: 'relative',
+          marginBottom: 24, position: 'relative',
         }}>
           <div>
             <div style={{
@@ -77,7 +79,7 @@ export default function ShareableStreakCard({ user, calendarDay }) {
         </div>
 
         {/* Big Streak Number */}
-        <div style={{ textAlign: 'center', marginBottom: 20, position: 'relative' }}>
+        <div style={{ textAlign: 'center', marginBottom: 8, position: 'relative' }}>
           <div style={{ fontSize: 16, marginBottom: 4 }}>
             {streakFire}
           </div>
@@ -97,13 +99,31 @@ export default function ShareableStreakCard({ user, calendarDay }) {
           </div>
         </div>
 
+        {/* Today's Focus — Day Title */}
+        <div style={{
+          textAlign: 'center', marginBottom: 20, padding: '14px 16px',
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.06)',
+          borderRadius: 12, position: 'relative',
+        }}>
+          <div style={{
+            fontSize: 10, fontWeight: 600, color: '#555', letterSpacing: 1,
+            textTransform: 'uppercase', marginBottom: 6,
+          }}>
+            {inContinuation ? 'Daily Focus' : `Day ${currentDayNum} Focus`}
+          </div>
+          <div style={{ fontSize: 15, fontWeight: 600, color: '#ccc', lineHeight: 1.4 }}>
+            {dayTitle}
+          </div>
+        </div>
+
         {/* Progress bar */}
         <div style={{ marginBottom: 20, position: 'relative' }}>
           <div style={{
             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
             marginBottom: 6,
           }}>
-            <div style={{ fontSize: 12, color: '#555' }}>{todayTitle}</div>
+            <div style={{ fontSize: 12, color: '#555' }}>Progress</div>
             {inContinuation ? (
               <div className="mono" style={{ fontSize: 12, color: '#f0a500', fontWeight: 600 }}>
                 +{totalCompleted - 30} beyond
@@ -133,70 +153,10 @@ export default function ShareableStreakCard({ user, calendarDay }) {
           display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10,
           marginBottom: 16, position: 'relative',
         }}>
-          <StatBox
-            value={user.metrics.propertiesAnalyzed}
-            label="Properties Analyzed"
-            color="#533483"
-          />
-          <StatBox
-            value={user.metrics.offersSubmitted}
-            label="Offers Submitted"
-            color={accentColor}
-          />
-          <StatBox
-            value={user.metrics.agentsContacted}
-            label="Agents Contacted"
-            color="#0f3460"
-          />
+          <StatBox value={user.metrics.propertiesAnalyzed} label="Analyzed" color="#533483" />
+          <StatBox value={user.metrics.offersSubmitted} label="Offers" color={accentColor} />
+          <StatBox value={user.metrics.agentsContacted} label="Agents" color="#0f3460" />
         </div>
-
-        {/* 30-day mini grid */}
-        <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(15, 1fr)', gap: 3,
-          marginBottom: 16, position: 'relative',
-        }}>
-          {Array.from({ length: 30 }, (_, i) => {
-            const dayNum = i + 1;
-            const done = user.completedDays.includes(dayNum);
-            const isCurrent = dayNum === user.currentDay;
-            return (
-              <div
-                key={i}
-                style={{
-                  aspectRatio: '1', borderRadius: 3,
-                  background: done ? '#48c78e' : isCurrent ? 'rgba(233,69,96,0.5)' : 'rgba(255,255,255,0.04)',
-                  border: isCurrent ? '1px solid #e94560' : 'none',
-                }}
-              />
-            );
-          })}
-        </div>
-
-        {/* Continuation streak indicator (only shown post-30) */}
-        {inContinuation && totalCompleted > 30 && (
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 6, marginBottom: 16,
-            position: 'relative',
-          }}>
-            <div style={{ fontSize: 10, color: '#555', whiteSpace: 'nowrap' }}>Beyond:</div>
-            <div style={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-              {Array.from({ length: Math.min(totalCompleted - 30, 30) }, (_, i) => (
-                <div
-                  key={i}
-                  style={{
-                    width: 8, height: 8, borderRadius: 2,
-                    background: '#f0a500',
-                  }}
-                />
-              ))}
-              {totalCompleted - 30 > 30 && (
-                <div style={{ fontSize: 10, color: '#f0a500', marginLeft: 4 }}>
-                  +{totalCompleted - 60}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
 
         {/* Footer branding */}
         <div style={{
@@ -205,7 +165,7 @@ export default function ShareableStreakCard({ user, calendarDay }) {
           position: 'relative',
         }}>
           <div style={{ fontSize: 11, color: '#444', letterSpacing: 0.5 }}>
-            {inContinuation ? 'UC30 — Still Going!' : '30-Day First Deal Challenge'}
+            {inContinuation ? 'UC30 \u2014 Still Going!' : '30-Day First Deal Challenge'}
           </div>
           <div style={{
             fontSize: 10, color: '#333', fontFamily: "'Space Mono', monospace",
