@@ -182,7 +182,9 @@ export function useAppState() {
           participant = { ...participant, authId: authData.user.id };
         }
         if (!participant) {
-          return { error: 'No challenge account found. Please register first.' };
+          // Auth user exists but no participant row — likely orphaned from failed registration.
+          // Tell user to register (register handles the "already registered" auth case).
+          return { error: 'Your account setup is incomplete. Please use Register to complete it.' };
         }
         setUser(participant);
         setCurrentView(participant.isAdmin ? 'admin' : 'dashboard');
@@ -276,12 +278,29 @@ export function useAppState() {
         },
       });
 
+      let authUserId = authData?.user?.id;
+
       if (authError) {
-        return { error: authError.message };
+        // If auth user already exists (orphaned from a previous failed registration),
+        // try signing in and create the missing participant row
+        const isAlreadyRegistered = authError.message?.toLowerCase().includes('already registered')
+          || authError.message?.toLowerCase().includes('already been registered');
+        if (isAlreadyRegistered) {
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+            email: email.trim().toLowerCase(),
+            password,
+          });
+          if (signInError) {
+            return { error: 'An auth account exists but the password doesn\'t match. Try logging in or reset your password.' };
+          }
+          authUserId = signInData?.user?.id;
+        } else {
+          return { error: authError.message };
+        }
       }
 
       // Create participant row linked to auth user
-      const newUser = createNewUser(firstName, lastName, email, authData.user?.id);
+      const newUser = createNewUser(firstName, lastName, email, authUserId);
 
       if (cohortStartDate) {
         const expiresAt = new Date(cohortStartDate + 'T00:00:00');
