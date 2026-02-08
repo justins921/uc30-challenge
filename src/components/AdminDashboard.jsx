@@ -11,7 +11,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls }) {
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
 
@@ -59,6 +59,9 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
           onSetCohortStartDate={onSetCohortStartDate}
           onSetNextCohortDate={onSetNextCohortDate}
         />
+
+        {/* Live Calls */}
+        <LiveCallsManager calls={liveCalls || []} onSave={onSetLiveCalls} />
 
         {/* Top Stats */}
         <div className="fade-up-delay-1 admin-stats-grid" style={{
@@ -295,6 +298,174 @@ function CohortSettings({ cohortStartDate, nextCohortDate, onSetCohortStartDate,
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+// ── Live Calls Manager ─────────────────────────────────────
+function LiveCallsManager({ calls, onSave }) {
+  const [adding, setAdding] = useState(false);
+  const [title, setTitle] = useState('');
+  const [dateTime, setDateTime] = useState('');
+  const [link, setLink] = useState('');
+
+  const handleAdd = () => {
+    if (!dateTime || !link.trim()) return;
+    const newCall = {
+      id: `call_${Date.now()}`,
+      title: title.trim() || 'Weekly Live Call',
+      dateTime,
+      link: link.trim(),
+    };
+    onSave([...calls, newCall]);
+    setTitle('');
+    setDateTime('');
+    setLink('');
+    setAdding(false);
+  };
+
+  const handleRemove = (id) => {
+    onSave(calls.filter(c => c.id !== id));
+  };
+
+  const upcoming = calls
+    .filter(c => new Date(c.dateTime) > new Date())
+    .sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
+  const past = calls
+    .filter(c => new Date(c.dateTime) <= new Date())
+    .sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
+
+  const formatCallDate = (dt) => {
+    const d = new Date(dt);
+    return d.toLocaleString('en-US', {
+      weekday: 'short', month: 'short', day: 'numeric',
+      hour: 'numeric', minute: '2-digit', timeZoneName: 'short',
+    });
+  };
+
+  return (
+    <div className="card fade-up" style={{ marginBottom: 24, padding: '20px 24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: upcoming.length > 0 || adding ? 16 : 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontSize: 20 }}>📹</span>
+          <div>
+            <div style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>
+              Live Calls
+            </div>
+            <span style={{ fontSize: 14, color: '#888' }}>
+              {upcoming.length > 0 ? `${upcoming.length} upcoming` : 'No upcoming calls'}
+            </span>
+          </div>
+        </div>
+        {!adding && (
+          <button
+            className="btn-secondary"
+            style={{ padding: '8px 16px', fontSize: 13 }}
+            onClick={() => setAdding(true)}
+          >
+            Add Call
+          </button>
+        )}
+      </div>
+
+      {adding && (
+        <div style={{
+          background: 'rgba(255,255,255,0.03)', borderRadius: 10, padding: 16, marginBottom: 16,
+          border: '1px solid rgba(255,255,255,0.06)',
+        }}>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
+            <div style={{ flex: 1, minWidth: 150 }}>
+              <label style={{ fontSize: 12 }}>Title (optional)</label>
+              <input
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                placeholder="Weekly Live Call"
+                style={{ fontSize: 13 }}
+              />
+            </div>
+            <div style={{ flex: 1, minWidth: 200 }}>
+              <label style={{ fontSize: 12 }}>Date & Time</label>
+              <input
+                type="datetime-local"
+                value={dateTime}
+                onChange={e => setDateTime(e.target.value)}
+                style={{ fontSize: 13 }}
+              />
+            </div>
+          </div>
+          <div style={{ marginBottom: 12 }}>
+            <label style={{ fontSize: 12 }}>Meeting Link</label>
+            <input
+              value={link}
+              onChange={e => setLink(e.target.value)}
+              placeholder="https://zoom.us/j/... or Google Meet link"
+              style={{ fontSize: 13 }}
+            />
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn-primary" style={{ padding: '8px 16px', fontSize: 13 }} onClick={handleAdd}>
+              Save Call
+            </button>
+            <button className="btn-secondary" style={{ padding: '8px 14px', fontSize: 13 }} onClick={() => setAdding(false)}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {upcoming.map(call => (
+        <div key={call.id} style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)',
+        }}>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 600 }}>{call.title}</div>
+            <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>{formatCallDate(call.dateTime)}</div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <a href={call.link} target="_blank" rel="noopener noreferrer"
+              style={{ fontSize: 12, color: '#e94560', textDecoration: 'none' }}>
+              Link
+            </a>
+            <button
+              onClick={() => handleRemove(call.id)}
+              style={{
+                background: 'rgba(233,69,96,0.1)', color: '#e94560', border: 'none',
+                padding: '4px 10px', borderRadius: 6, fontSize: 11, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif",
+              }}
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      ))}
+
+      {past.length > 0 && (
+        <div style={{ marginTop: 12 }}>
+          <div style={{ fontSize: 11, color: '#555', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>Past</div>
+          {past.slice(0, 3).map(call => (
+            <div key={call.id} style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '6px 0', opacity: 0.5,
+            }}>
+              <div>
+                <span style={{ fontSize: 13 }}>{call.title}</span>
+                <span style={{ fontSize: 11, color: '#666', marginLeft: 8 }}>{formatCallDate(call.dateTime)}</span>
+              </div>
+              <button
+                onClick={() => handleRemove(call.id)}
+                style={{
+                  background: 'none', color: '#666', border: 'none',
+                  fontSize: 11, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -26,6 +26,8 @@ export default function App() {
     setNextCohortDate,
     contentOverrides,
     setContentOverrides,
+    liveCalls,
+    setLiveCalls,
     navigate,
   } = useAppState();
 
@@ -105,6 +107,8 @@ export default function App() {
         onSetNextCohortDate={setNextCohortDate}
         contentOverrides={contentOverrides}
         onSetContentOverrides={setContentOverrides}
+        liveCalls={liveCalls}
+        onSetLiveCalls={setLiveCalls}
       />
     );
   }
@@ -117,6 +121,7 @@ export default function App() {
       cohortStartDate={cohortStartDate}
       nextCohortDate={nextCohortDate}
       contentOverrides={contentOverrides}
+      liveCalls={liveCalls}
     />
   );
 }

@@ -60,7 +60,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -147,6 +147,9 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           <NextDayCountdown calendarDay={calendarDay} />
         )}
 
+        {/* Upcoming Live Call */}
+        <UpcomingCallBanner calls={liveCalls} />
+
         {/* Quick Stats */}
         <div className="fade-up-delay-1 stats-grid" style={{
           display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 32,
@@ -182,6 +185,51 @@ function QuickStat({ icon, value, label }) {
       <div style={{ fontSize: 28, marginBottom: 8 }}>{icon}</div>
       <div className="mono" style={{ fontSize: 32, fontWeight: 700, color: '#e94560' }}>{value}</div>
       <div style={{ fontSize: 12, color: '#666', marginTop: 4 }}>{label}</div>
+    </div>
+  );
+}
+
+// ── Upcoming Live Call Banner ────────────────────────────────
+function UpcomingCallBanner({ calls }) {
+  const upcoming = (calls || [])
+    .filter(c => new Date(c.dateTime) > new Date())
+    .sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
+
+  if (upcoming.length === 0) return null;
+
+  const next = upcoming[0];
+  const callDate = new Date(next.dateTime);
+  const formatted = callDate.toLocaleString('en-US', {
+    weekday: 'short', month: 'short', day: 'numeric',
+    hour: 'numeric', minute: '2-digit', timeZoneName: 'short',
+  });
+
+  return (
+    <div className="fade-up-delay-1" style={{
+      background: 'rgba(83,52,131,0.12)', border: '1px solid rgba(83,52,131,0.25)',
+      borderRadius: 12, padding: '14px 20px', marginBottom: 20,
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      flexWrap: 'wrap', gap: 12,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{ fontSize: 18 }}>📹</span>
+        <div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: '#c9a0ff' }}>{next.title}</div>
+          <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>{formatted}</div>
+        </div>
+      </div>
+      <a
+        href={next.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          background: 'rgba(83,52,131,0.3)', color: '#c9a0ff', border: '1px solid rgba(83,52,131,0.4)',
+          padding: '8px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+          textDecoration: 'none', fontFamily: "'DM Sans', sans-serif",
+        }}
+      >
+        Join Call
+      </a>
     </div>
   );
 }

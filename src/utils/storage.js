@@ -348,6 +348,17 @@ const localStorageFallback = {
       localStorage.setItem('uc30_content_overrides', JSON.stringify(overrides));
     } catch {}
   },
+  getLiveCalls() {
+    try {
+      const data = localStorage.getItem('uc30_live_calls');
+      return data ? JSON.parse(data) : [];
+    } catch { return []; }
+  },
+  setLiveCalls(calls) {
+    try {
+      localStorage.setItem('uc30_live_calls', JSON.stringify(calls));
+    } catch {}
+  },
 };
 
 // ── Export the right storage based on config ─────────────────────

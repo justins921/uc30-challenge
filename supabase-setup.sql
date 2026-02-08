@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS participants (
   submissions JSONB DEFAULT '[]'::jsonb,
   metrics JSONB DEFAULT '{"propertiesAnalyzed": 0, "offersSubmitted": 0, "agentsContacted": 0}'::jsonb,
   has_paid BOOLEAN DEFAULT FALSE,
+  access_expires_at TIMESTAMPTZ,
   removed_at TIMESTAMPTZ,
   reactivated_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -47,6 +48,7 @@ CREATE POLICY "Allow public delete" ON participants
 -- ALTER TABLE participants ADD COLUMN IF NOT EXISTS first_name TEXT NOT NULL DEFAULT '';
 -- ALTER TABLE participants ADD COLUMN IF NOT EXISTS last_name TEXT NOT NULL DEFAULT '';
 -- UPDATE participants SET first_name = split_part(name, ' ', 1), last_name = substr(name, length(split_part(name, ' ', 1)) + 2) WHERE first_name = '' AND name IS NOT NULL;
+-- ALTER TABLE participants ADD COLUMN IF NOT EXISTS access_expires_at TIMESTAMPTZ;
 
 -- Create index for email lookups
 CREATE INDEX IF NOT EXISTS idx_participants_email ON participants (email);

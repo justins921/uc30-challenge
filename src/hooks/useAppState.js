@@ -12,6 +12,7 @@ export function useAppState() {
   const [cohortStartDate, setCohortStartDateState] = useState(null);
   const [nextCohortDate, setNextCohortDateState] = useState(null);
   const [contentOverrides, setContentOverridesState] = useState({});
+  const [liveCalls, setLiveCallsState] = useState([]);
 
   // Persist helper (localStorage only — Supabase persists per-operation)
   const persist = useCallback((newUser, newParticipants) => {
@@ -100,6 +101,9 @@ export function useAppState() {
 
         const overrides = await Promise.resolve(storage.getContentOverrides());
         if (overrides) setContentOverridesState(overrides);
+
+        const calls = await Promise.resolve(storage.getLiveCalls());
+        if (calls) setLiveCallsState(calls);
 
         const storedUser = await Promise.resolve(storage.getUser());
         if (storedUser) {
@@ -442,6 +446,11 @@ export function useAppState() {
     setContentOverridesState(overrides);
   }, []);
 
+  const setLiveCalls = useCallback(async (calls) => {
+    await Promise.resolve(storage.setLiveCalls(calls));
+    setLiveCallsState(calls);
+  }, []);
+
   return {
     user,
     participants,
@@ -464,5 +473,7 @@ export function useAppState() {
     setCohortStartDate,
     setNextCohortDate,
     setContentOverrides,
+    liveCalls,
+    setLiveCalls,
   };
 }
