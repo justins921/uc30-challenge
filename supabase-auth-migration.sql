@@ -43,10 +43,14 @@ DROP POLICY IF EXISTS "Allow public insert" ON participants;
 DROP POLICY IF EXISTS "Allow public update" ON participants;
 DROP POLICY IF EXISTS "Allow public delete" ON participants;
 
--- Users can read their own data; admins can read everyone
+-- Users can read their own data; admins can read everyone.
+-- Also allows matching by email for account linking (e.g. email user signs in via Google).
+DROP POLICY IF EXISTS "Users read own or admin reads all" ON participants;
 CREATE POLICY "Users read own or admin reads all" ON participants
   FOR SELECT USING (
-    auth_id = auth.uid() OR public.is_admin()
+    auth_id = auth.uid()
+    OR public.is_admin()
+    OR lower(email) = lower(auth.jwt() ->> 'email')
   );
 
 -- Authenticated users can insert a row (session may not link auth_id immediately after signUp)
@@ -55,10 +59,14 @@ CREATE POLICY "Authenticated users can insert" ON participants
     auth.uid() IS NOT NULL
   );
 
--- Users can update their own data; admins can update anyone
+-- Users can update their own data; admins can update anyone.
+-- Also allows email-based matching for account linking.
+DROP POLICY IF EXISTS "Users update own or admin updates all" ON participants;
 CREATE POLICY "Users update own or admin updates all" ON participants
   FOR UPDATE USING (
-    auth_id = auth.uid() OR public.is_admin()
+    auth_id = auth.uid()
+    OR public.is_admin()
+    OR lower(email) = lower(auth.jwt() ->> 'email')
   );
 
 -- Only admins can delete participants

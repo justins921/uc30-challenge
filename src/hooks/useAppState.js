@@ -81,6 +81,42 @@ export function useAppState() {
   // ── Load initial state + listen for Supabase auth events ──
   useEffect(() => {
     let authListener;
+    let oauthHandled = false;
+
+    // Helper: ensure a participant row exists for an authenticated OAuth/social user.
+    // Creates a new participant or links an existing one by email.
+    const ensureParticipant = async (authUser) => {
+      if (!authUser?.email) return null;
+
+      // Look up existing participant by email
+      let participant = await storage.findByEmail(authUser.email);
+
+      if (participant) {
+        // Link to this auth user if not linked or linked to a different auth user
+        if (participant.authId !== authUser.id) {
+          await storage.updateParticipant(participant.id, { authId: authUser.id });
+          participant = { ...participant, authId: authUser.id };
+        }
+        return participant;
+      }
+
+      // No participant found — create one from OAuth metadata
+      const meta = authUser.user_metadata || {};
+      const fullName = meta.full_name || meta.name || '';
+      const nameParts = fullName.split(' ');
+      const firstName = meta.first_name || nameParts[0] || authUser.email?.split('@')[0] || 'User';
+      const lastName = meta.last_name || nameParts.slice(1).join(' ') || '';
+
+      const newUser = createNewUser(firstName, lastName, authUser.email, authUser.id);
+      const saved = await storage.addParticipant(newUser);
+      if (saved && !saved.__error) {
+        subscribeUser(authUser.email, firstName).then(() => {
+          tagSignUp(authUser.email).catch(() => {});
+        }).catch(() => {});
+        return saved;
+      }
+      return null;
+    };
 
     (async () => {
       try {
@@ -112,6 +148,20 @@ export function useAppState() {
           const currentUser = fresh || storedUser;
           setUser(currentUser);
           setCurrentView(currentUser.isAdmin ? 'admin' : 'dashboard');
+        } else if (supabase) {
+          // No participant found by auth_id — check if there's an active session
+          // (e.g. returning from OAuth redirect, or existing user using a new provider)
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user) {
+            const participant = await ensureParticipant(session.user);
+            if (participant) {
+              oauthHandled = true;
+              setUser(participant);
+              setCurrentView(participant.isAdmin ? 'admin' : 'dashboard');
+              const allParticipants = await storage.getParticipants();
+              setParticipants(allParticipants || []);
+            }
+          }
         }
 
         if (cohortSettings?.startDate && storedParticipants?.length > 0) {
@@ -123,7 +173,7 @@ export function useAppState() {
       setLoading(false);
     })();
 
-    // Listen for Supabase auth events (password recovery, OAuth sign-in, sign out)
+    // Listen for Supabase auth events (password recovery, sign out)
     if (supabase) {
       const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
         if (event === 'PASSWORD_RECOVERY') {
@@ -134,40 +184,15 @@ export function useAppState() {
           setCurrentView('login');
           setPasswordRecovery(false);
         }
-        // Handle OAuth sign-in: auto-create participant if needed
-        if (event === 'SIGNED_IN' && session?.user) {
+        // Handle OAuth sign-in (backup — primary handling is in the initial load above)
+        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user && !oauthHandled) {
           const authUser = session.user;
           const provider = authUser.app_metadata?.provider;
-          // Only auto-create for OAuth providers (not email/password)
           if (provider && provider !== 'email') {
             try {
-              // Check if participant already exists by email
-              let participant = await storage.findByEmail(authUser.email);
-
-              if (participant && !participant.authId) {
-                // Link existing legacy participant to OAuth user
-                await storage.updateParticipant(participant.id, { authId: authUser.id });
-                participant = { ...participant, authId: authUser.id };
-              } else if (!participant) {
-                // Create new participant from OAuth user metadata
-                const meta = authUser.user_metadata || {};
-                const fullName = meta.full_name || meta.name || '';
-                const nameParts = fullName.split(' ');
-                const firstName = meta.first_name || nameParts[0] || authUser.email?.split('@')[0] || 'User';
-                const lastName = meta.last_name || nameParts.slice(1).join(' ') || '';
-
-                const newUser = createNewUser(firstName, lastName, authUser.email, authUser.id);
-                const saved = await storage.addParticipant(newUser);
-                if (saved && !saved.__error) {
-                  participant = saved;
-                  // Kit email (fire and forget)
-                  subscribeUser(authUser.email, firstName).then(() => {
-                    tagSignUp(authUser.email).catch(() => {});
-                  }).catch(() => {});
-                }
-              }
-
+              const participant = await ensureParticipant(authUser);
               if (participant) {
+                oauthHandled = true;
                 setUser(participant);
                 setCurrentView(participant.isAdmin ? 'admin' : 'dashboard');
                 const allParticipants = await storage.getParticipants();
@@ -220,8 +245,8 @@ export function useAppState() {
       if (!authError && authData?.user) {
         // Supabase Auth success — look up participant
         let participant = await storage.findByEmail(email);
-        if (participant && !participant.authId) {
-          // Link legacy participant to new Supabase auth user
+        if (participant && participant.authId !== authData.user.id) {
+          // Link/re-link participant to this auth user (covers legacy + provider switch)
           await storage.updateParticipant(participant.id, { authId: authData.user.id });
           participant = { ...participant, authId: authData.user.id };
         }
