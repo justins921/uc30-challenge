@@ -373,11 +373,23 @@ export function useAppState() {
   }, [participants, user, persist]);
 
   const reactivateParticipant = useCallback(async (participantId) => {
+    // Calculate current calendar day so reactivated user isn't immediately auto-removed
+    let startDay = 1;
+    if (cohortStartDate) {
+      const pacific = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+      const nowPacific = new Date(pacific);
+      const nowPacificDay = new Date(nowPacific.getFullYear(), nowPacific.getMonth(), nowPacific.getDate());
+      const start = new Date(cohortStartDate + 'T00:00:00');
+      const startDateDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+      const calDay = Math.floor((nowPacificDay - startDateDay) / (1000 * 60 * 60 * 24)) + 1;
+      if (calDay >= 1) startDay = calDay;
+    }
+
     const updates = {
       isActive: true,
       removedAt: null,
       reactivatedAt: new Date().toISOString(),
-      currentDay: 1,
+      currentDay: startDay,
       completedDays: [],
       submissions: [],
       metrics: { propertiesAnalyzed: 0, offersSubmitted: 0, agentsContacted: 0 },
@@ -404,7 +416,7 @@ export function useAppState() {
         persist(user, updatedParticipants);
       }
     }
-  }, [participants, user, persist]);
+  }, [participants, user, persist, cohortStartDate]);
 
   const setCohortStartDate = useCallback(async (date) => {
     const current = await Promise.resolve(storage.getCohortSettings()) || {};
