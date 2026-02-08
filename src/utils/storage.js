@@ -240,6 +240,34 @@ const supabaseStorage = {
     }
   },
 
+  async getLandingContent() {
+    const result = await supabaseRequest('settings', 'GET', {
+      filters: '?key=eq.landing_content',
+    });
+    if (Array.isArray(result) && result.length > 0 && result[0].value) {
+      localStorage.setItem('uc30_landing_content', JSON.stringify(result[0].value));
+      return result[0].value;
+    }
+    try {
+      const data = localStorage.getItem('uc30_landing_content');
+      return data ? JSON.parse(data) : null;
+    } catch { return null; }
+  },
+
+  async setLandingContent(content) {
+    localStorage.setItem('uc30_landing_content', JSON.stringify(content));
+    const body = { value: content, updated_at: new Date().toISOString() };
+    const result = await supabaseRequest('settings', 'PATCH', {
+      filters: '?key=eq.landing_content',
+      body,
+    });
+    if (!result || (Array.isArray(result) && result.length === 0)) {
+      await supabaseRequest('settings', 'POST', {
+        body: { key: 'landing_content', ...body },
+      });
+    }
+  },
+
   async setCohortSettings(settings) {
     // Always save to localStorage as backup
     localStorage.setItem('uc30_cohort_settings', JSON.stringify(settings));
@@ -396,6 +424,17 @@ const localStorageFallback = {
   setPhases(phases) {
     try {
       localStorage.setItem('uc30_phases', JSON.stringify(phases));
+    } catch {}
+  },
+  getLandingContent() {
+    try {
+      const data = localStorage.getItem('uc30_landing_content');
+      return data ? JSON.parse(data) : null;
+    } catch { return null; }
+  },
+  setLandingContent(content) {
+    try {
+      localStorage.setItem('uc30_landing_content', JSON.stringify(content));
     } catch {}
   },
 };

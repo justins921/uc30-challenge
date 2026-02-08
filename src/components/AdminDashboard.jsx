@@ -2,16 +2,18 @@ import { useState } from 'react';
 import Header from './Header';
 import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent } from '../data/challengeDays';
 import { AttachmentLink } from './DayView';
+import { LANDING_DEFAULTS } from './LandingPage';
 
 const ADMIN_TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'participants', label: 'Participants' },
   { id: 'submissions', label: 'Submissions' },
   { id: 'content', label: 'Content' },
+  { id: 'landing', label: 'Landing Page' },
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -115,6 +117,12 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onSetContentOverrides={onSetContentOverrides}
             phases={phases}
             onSetPhases={onSetPhases}
+          />
+        )}
+        {tab === 'landing' && (
+          <LandingPageEditor
+            landingContent={landingContent}
+            onSave={onSetLandingContent}
           />
         )}
         {tab === 'social' && (
@@ -1404,6 +1412,318 @@ function DayEditor({ dayNum, contentOverrides, onSave, onBack }) {
         )}
         <button className="btn-secondary" onClick={onBack} style={{ padding: '12px 20px' }}>
           Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Landing Page Editor ─────────────────────────────────────
+function LandingPageEditor({ landingContent, onSave }) {
+  const merged = { ...LANDING_DEFAULTS, ...landingContent };
+  const [draft, setDraft] = useState({
+    badge: merged.badge,
+    headline: merged.headline,
+    headlineAccent: merged.headlineAccent,
+    headlineSuffix: merged.headlineSuffix,
+    subtext: merged.subtext,
+    ctaButton: merged.ctaButton,
+    finalHeadline: merged.finalHeadline,
+    finalSubtext: merged.finalSubtext,
+    stats: merged.stats.map(s => ({ ...s })),
+    steps: merged.steps.map(s => ({ ...s })),
+    features: merged.features.map(f => ({ ...f })),
+    phases: merged.phases.map(p => ({ ...p, items: [...p.items] })),
+  });
+  const [saved, setSaved] = useState(false);
+
+  const update = (field, value) => setDraft(d => ({ ...d, [field]: value }));
+
+  const updateStat = (idx, field, value) => {
+    const stats = [...draft.stats];
+    stats[idx] = { ...stats[idx], [field]: value };
+    setDraft(d => ({ ...d, stats }));
+  };
+
+  const updateStep = (idx, field, value) => {
+    const steps = [...draft.steps];
+    steps[idx] = { ...steps[idx], [field]: value };
+    setDraft(d => ({ ...d, steps }));
+  };
+
+  const updateFeature = (idx, field, value) => {
+    const features = [...draft.features];
+    features[idx] = { ...features[idx], [field]: value };
+    setDraft(d => ({ ...d, features }));
+  };
+
+  const updatePhase = (idx, field, value) => {
+    const phases = [...draft.phases];
+    phases[idx] = { ...phases[idx], [field]: value };
+    setDraft(d => ({ ...d, phases }));
+  };
+
+  const updatePhaseItem = (phaseIdx, itemIdx, value) => {
+    const phases = [...draft.phases];
+    const items = [...phases[phaseIdx].items];
+    items[itemIdx] = value;
+    phases[phaseIdx] = { ...phases[phaseIdx], items };
+    setDraft(d => ({ ...d, phases }));
+  };
+
+  const addPhaseItem = (phaseIdx) => {
+    const phases = [...draft.phases];
+    phases[phaseIdx] = { ...phases[phaseIdx], items: [...phases[phaseIdx].items, ''] };
+    setDraft(d => ({ ...d, phases }));
+  };
+
+  const removePhaseItem = (phaseIdx, itemIdx) => {
+    const phases = [...draft.phases];
+    phases[phaseIdx] = { ...phases[phaseIdx], items: phases[phaseIdx].items.filter((_, i) => i !== itemIdx) };
+    setDraft(d => ({ ...d, phases }));
+  };
+
+  const handleSave = () => {
+    // Only save fields that differ from defaults
+    const overrides = {};
+    for (const key of ['badge', 'headline', 'headlineAccent', 'headlineSuffix', 'subtext', 'ctaButton', 'finalHeadline', 'finalSubtext']) {
+      if (draft[key] !== LANDING_DEFAULTS[key]) overrides[key] = draft[key];
+    }
+    if (JSON.stringify(draft.stats) !== JSON.stringify(LANDING_DEFAULTS.stats)) overrides.stats = draft.stats;
+    if (JSON.stringify(draft.steps) !== JSON.stringify(LANDING_DEFAULTS.steps)) overrides.steps = draft.steps;
+    if (JSON.stringify(draft.features) !== JSON.stringify(LANDING_DEFAULTS.features)) overrides.features = draft.features;
+    if (JSON.stringify(draft.phases) !== JSON.stringify(LANDING_DEFAULTS.phases)) overrides.phases = draft.phases;
+
+    onSave(Object.keys(overrides).length > 0 ? overrides : null);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  const handleReset = () => {
+    setDraft({
+      badge: LANDING_DEFAULTS.badge,
+      headline: LANDING_DEFAULTS.headline,
+      headlineAccent: LANDING_DEFAULTS.headlineAccent,
+      headlineSuffix: LANDING_DEFAULTS.headlineSuffix,
+      subtext: LANDING_DEFAULTS.subtext,
+      ctaButton: LANDING_DEFAULTS.ctaButton,
+      finalHeadline: LANDING_DEFAULTS.finalHeadline,
+      finalSubtext: LANDING_DEFAULTS.finalSubtext,
+      stats: LANDING_DEFAULTS.stats.map(s => ({ ...s })),
+      steps: LANDING_DEFAULTS.steps.map(s => ({ ...s })),
+      features: LANDING_DEFAULTS.features.map(f => ({ ...f })),
+      phases: LANDING_DEFAULTS.phases.map(p => ({ ...p, items: [...p.items] })),
+    });
+    onSave(null);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  const labelStyle = { fontSize: 12, color: '#888', fontWeight: 600, marginBottom: 6, display: 'block', textTransform: 'uppercase', letterSpacing: 0.5 };
+  const inputStyle = { width: '100%', marginBottom: 0, fontSize: 14 };
+
+  return (
+    <div className="fade-up">
+      <div className="card" style={{ padding: '16px 20px', marginBottom: 20 }}>
+        <p style={{ color: '#888', fontSize: 13, margin: 0 }}>
+          Customize the public landing page text, stats, and sections. Changes are live immediately after saving.
+        </p>
+      </div>
+
+      {/* Hero Section */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 700 }}>Hero Section</h3>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        </div>
+        <div className="card" style={{ padding: 20 }}>
+          <div style={{ marginBottom: 16 }}>
+            <label style={labelStyle}>Badge Text</label>
+            <input value={draft.badge} onChange={e => update('badge', e.target.value)} style={inputStyle} />
+          </div>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
+            <div style={{ flex: 1, minWidth: 150 }}>
+              <label style={labelStyle}>Headline</label>
+              <input value={draft.headline} onChange={e => update('headline', e.target.value)} style={inputStyle} />
+            </div>
+            <div style={{ flex: 1, minWidth: 150 }}>
+              <label style={labelStyle}>Headline Accent (colored)</label>
+              <input value={draft.headlineAccent} onChange={e => update('headlineAccent', e.target.value)} style={inputStyle} />
+            </div>
+            <div style={{ flex: 1, minWidth: 150 }}>
+              <label style={labelStyle}>Headline Suffix</label>
+              <input value={draft.headlineSuffix} onChange={e => update('headlineSuffix', e.target.value)} style={inputStyle} />
+            </div>
+          </div>
+          <div style={{ marginBottom: 16 }}>
+            <label style={labelStyle}>Subtext</label>
+            <textarea value={draft.subtext} onChange={e => update('subtext', e.target.value)} rows={3} style={{ ...inputStyle, resize: 'vertical' }} />
+          </div>
+          <div>
+            <label style={labelStyle}>CTA Button Text</label>
+            <input value={draft.ctaButton} onChange={e => update('ctaButton', e.target.value)} style={inputStyle} />
+          </div>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 700 }}>Social Proof Stats</h3>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+          {draft.stats.map((stat, i) => (
+            <div key={i} className="card" style={{ padding: 16 }}>
+              <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+                <div style={{ flex: '0 0 60px' }}>
+                  <label style={{ ...labelStyle, marginBottom: 4 }}>Value</label>
+                  <input value={stat.value} onChange={e => updateStat(i, 'value', e.target.value)} style={{ ...inputStyle, fontSize: 13 }} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={{ ...labelStyle, marginBottom: 4 }}>Label</label>
+                  <input value={stat.label} onChange={e => updateStat(i, 'label', e.target.value)} style={{ ...inputStyle, fontSize: 13 }} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* How It Works Steps */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 700 }}>How It Works Steps</h3>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {draft.steps.map((step, i) => (
+            <div key={i} className="card" style={{ padding: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                <div className="mono" style={{ fontSize: 14, color: 'rgba(233,69,96,0.4)', fontWeight: 700 }}>
+                  {String(i + 1).padStart(2, '0')}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={{ ...labelStyle, marginBottom: 4 }}>Title</label>
+                  <input value={step.title} onChange={e => updateStep(i, 'title', e.target.value)} style={{ ...inputStyle, fontSize: 13 }} />
+                </div>
+              </div>
+              <label style={{ ...labelStyle, marginBottom: 4 }}>Description</label>
+              <textarea value={step.description} onChange={e => updateStep(i, 'description', e.target.value)} rows={2} style={{ ...inputStyle, fontSize: 13, resize: 'vertical' }} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* What's Included Features */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 700 }}>What's Included</h3>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {draft.features.map((feat, i) => (
+            <div key={i} className="card" style={{ padding: 16 }}>
+              <div style={{ display: 'flex', gap: 10, marginBottom: 8 }}>
+                <div style={{ flex: '0 0 60px' }}>
+                  <label style={{ ...labelStyle, marginBottom: 4 }}>Icon</label>
+                  <input value={feat.icon} onChange={e => updateFeature(i, 'icon', e.target.value)} style={{ ...inputStyle, fontSize: 13, textAlign: 'center' }} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={{ ...labelStyle, marginBottom: 4 }}>Title</label>
+                  <input value={feat.title} onChange={e => updateFeature(i, 'title', e.target.value)} style={{ ...inputStyle, fontSize: 13 }} />
+                </div>
+              </div>
+              <label style={{ ...labelStyle, marginBottom: 4 }}>Description</label>
+              <textarea value={feat.text} onChange={e => updateFeature(i, 'text', e.target.value)} rows={2} style={{ ...inputStyle, fontSize: 13, resize: 'vertical' }} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 30-Day Journey Phases */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 700 }}>30-Day Journey Phases</h3>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {draft.phases.map((phase, pi) => (
+            <div key={pi} className="card" style={{ padding: 20, borderLeftWidth: 3, borderLeftColor: phase.color }}>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
+                <div style={{ flex: 1, minWidth: 150 }}>
+                  <label style={{ ...labelStyle, marginBottom: 4 }}>Phase Title</label>
+                  <input value={phase.phase} onChange={e => updatePhase(pi, 'phase', e.target.value)} style={{ ...inputStyle, fontSize: 13 }} />
+                </div>
+                <div style={{ flex: '0 0 120px' }}>
+                  <label style={{ ...labelStyle, marginBottom: 4 }}>Days Label</label>
+                  <input value={phase.days} onChange={e => updatePhase(pi, 'days', e.target.value)} style={{ ...inputStyle, fontSize: 13 }} />
+                </div>
+                <div style={{ flex: '0 0 80px' }}>
+                  <label style={{ ...labelStyle, marginBottom: 4 }}>Color</label>
+                  <input type="color" value={phase.color} onChange={e => updatePhase(pi, 'color', e.target.value)} style={{ width: '100%', height: 36, padding: 2, cursor: 'pointer' }} />
+                </div>
+              </div>
+              <label style={{ ...labelStyle, marginBottom: 4 }}>Items</label>
+              {phase.items.map((item, ii) => (
+                <div key={ii} style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
+                  <span style={{ color: '#555', fontSize: 12 }}>→</span>
+                  <input value={item} onChange={e => updatePhaseItem(pi, ii, e.target.value)} style={{ ...inputStyle, fontSize: 13 }} />
+                  <button
+                    onClick={() => removePhaseItem(pi, ii)}
+                    style={{ background: 'none', border: 'none', color: '#e94560', cursor: 'pointer', fontSize: 16, padding: '0 4px', flexShrink: 0 }}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={() => addPhaseItem(pi)}
+                style={{
+                  background: 'rgba(255,255,255,0.04)', color: '#888', border: '1px dashed rgba(255,255,255,0.1)',
+                  padding: '4px 12px', borderRadius: 6, fontSize: 12, cursor: 'pointer',
+                  fontFamily: "'DM Sans', sans-serif", marginTop: 4,
+                }}
+              >
+                + Add Item
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Final CTA */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 700 }}>Final CTA Section</h3>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        </div>
+        <div className="card" style={{ padding: 20 }}>
+          <div style={{ marginBottom: 16 }}>
+            <label style={labelStyle}>Headline</label>
+            <input value={draft.finalHeadline} onChange={e => update('finalHeadline', e.target.value)} style={inputStyle} />
+          </div>
+          <div>
+            <label style={labelStyle}>Subtext</label>
+            <textarea value={draft.finalSubtext} onChange={e => update('finalSubtext', e.target.value)} rows={2} style={{ ...inputStyle, resize: 'vertical' }} />
+          </div>
+        </div>
+      </div>
+
+      {/* Save / Reset */}
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 40 }}>
+        <button className="btn-primary" style={{ padding: '12px 28px' }} onClick={handleSave}>
+          {saved ? 'Saved!' : 'Save Landing Page'}
+        </button>
+        <button
+          onClick={handleReset}
+          style={{
+            background: 'rgba(255,255,255,0.04)', color: '#888', border: '1px solid rgba(255,255,255,0.1)',
+            padding: '12px 20px', borderRadius: 8, fontSize: 14, cursor: 'pointer',
+            fontFamily: "'DM Sans', sans-serif",
+          }}
+        >
+          Reset to Defaults
         </button>
       </div>
     </div>

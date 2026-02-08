@@ -14,6 +14,7 @@ export function useAppState() {
   const [contentOverrides, setContentOverridesState] = useState({});
   const [liveCalls, setLiveCallsState] = useState([]);
   const [customPhases, setCustomPhasesState] = useState(null);
+  const [landingContent, setLandingContentState] = useState(null);
 
   // Persist helper (localStorage only — Supabase persists per-operation)
   const persist = useCallback((newUser, newParticipants) => {
@@ -108,6 +109,9 @@ export function useAppState() {
 
         const phases = await Promise.resolve(storage.getPhases());
         if (phases) setCustomPhasesState(phases);
+
+        const landing = await Promise.resolve(storage.getLandingContent());
+        if (landing) setLandingContentState(landing);
 
         const storedUser = await Promise.resolve(storage.getUser());
         if (storedUser) {
@@ -460,6 +464,11 @@ export function useAppState() {
     setCustomPhasesState(phases);
   }, []);
 
+  const setLandingContent = useCallback(async (content) => {
+    await Promise.resolve(storage.setLandingContent(content));
+    setLandingContentState(content);
+  }, []);
+
   return {
     user,
     participants,
@@ -486,5 +495,7 @@ export function useAppState() {
     setLiveCalls,
     customPhases,
     setPhases,
+    landingContent,
+    setLandingContent,
   };
 }

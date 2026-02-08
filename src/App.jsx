@@ -30,6 +30,8 @@ export default function App() {
     setLiveCalls,
     customPhases,
     setPhases,
+    landingContent,
+    setLandingContent,
     navigate,
   } = useAppState();
 
@@ -64,6 +66,7 @@ export default function App() {
     return (
       <LandingPage
         onGoToLogin={(mode) => setAuthMode(mode || 'login')}
+        landingContent={landingContent}
       />
     );
   }
@@ -113,6 +116,8 @@ export default function App() {
         onSetLiveCalls={setLiveCalls}
         customPhases={customPhases}
         onSetPhases={setPhases}
+        landingContent={landingContent}
+        onSetLandingContent={setLandingContent}
       />
     );
   }

@@ -1,11 +1,51 @@
 const STRIPE_LINK = import.meta.env.VITE_STRIPE_PAYMENT_LINK || '';
 
-export default function LandingPage({ onGoToLogin }) {
+const DEFAULTS = {
+  badge: '30-Day Challenge',
+  headline: 'Close Your First',
+  headlineAccent: ' Real Estate Deal',
+  headlineSuffix: ' in 30 Days',
+  subtext: 'A structured, daily action plan that takes you from zero to your first deal. Video lessons, daily tasks, accountability, and a community pushing you forward.',
+  ctaButton: 'Join the Challenge →',
+  stats: [
+    { value: '30', label: 'Daily Lessons' },
+    { value: '1', label: 'Clear Goal' },
+    { value: '24/7', label: 'Community Access' },
+    { value: '100%', label: 'Action-Based' },
+  ],
+  steps: [
+    { title: 'Sign Up & Pay', description: 'Secure your spot in the next cohort. Once payment is confirmed, you\'ll get immediate access to your dashboard.' },
+    { title: 'Follow the Daily Plan', description: 'Each day unlocks a new video lesson and action task. Watch, learn, then go execute. No fluff, just action.' },
+    { title: 'Submit Your Proof', description: 'Complete each day\'s task and submit your proof before midnight. Miss a day and you\'re out — that\'s the accountability.' },
+    { title: 'Close Your Deal', description: 'By day 30, you\'ll have analyzed properties, contacted agents, submitted offers, and be on your way to closing.' },
+  ],
+  features: [
+    { icon: '🎬', title: '30 Video Lessons', text: 'Daily instructional videos walking you through every step of finding and closing your first deal.' },
+    { icon: '📋', title: 'Daily Action Tasks', text: 'No theory paralysis. Every day has one clear task you must complete to stay in the challenge.' },
+    { icon: '📊', title: 'Progress Dashboard', text: 'Track your properties analyzed, offers submitted, and agents contacted in real-time.' },
+    { icon: '⏰', title: 'Accountability System', text: 'Daily deadlines with automatic removal. Skin in the game keeps you moving.' },
+    { icon: '📥', title: 'Templates & Resources', text: 'Scripts, spreadsheets, and templates you can use immediately in your deal-finding process.' },
+    { icon: '🔄', title: '1-Year Re-run Access', text: 'Life happens. If you fall off, you can rejoin a future cohort within your one-year access window.' },
+  ],
+  phases: [
+    { color: '#e94560', phase: 'Phase 1: Foundation', days: 'Days 1–10', items: ['Set up your deal-finding systems', 'Learn to analyze properties', 'Build your criteria and target markets'] },
+    { color: '#533483', phase: 'Phase 2: Execution', days: 'Days 11–20', items: ['Start contacting agents and sellers', 'Submit your first offers', 'Negotiate and follow up systematically'] },
+    { color: '#0f3460', phase: 'Phase 3: Closing', days: 'Days 21–30', items: ['Advanced deal structuring', 'Due diligence and inspections', 'Close your first deal'] },
+  ],
+  finalHeadline: 'Ready to Get Your First Deal?',
+  finalSubtext: 'Stop watching from the sidelines. Join the next cohort and take action every single day for 30 days.',
+};
+
+export { DEFAULTS as LANDING_DEFAULTS };
+
+export default function LandingPage({ onGoToLogin, landingContent }) {
+  // Merge custom content over defaults
+  const c = { ...DEFAULTS, ...landingContent };
+
   const handleGetStarted = () => {
     if (STRIPE_LINK) {
       window.location.href = STRIPE_LINK;
     } else {
-      // No Stripe configured — go straight to register
       onGoToLogin('register');
     }
   };
@@ -50,25 +90,24 @@ export default function LandingPage({ onGoToLogin }) {
           background: 'rgba(233,69,96,0.1)', border: '1px solid rgba(233,69,96,0.2)',
           fontSize: 13, color: '#e94560', fontWeight: 600, marginBottom: 24,
         }}>
-          30-Day Challenge
+          {c.badge}
         </div>
         <h1 style={{
           fontSize: 'clamp(32px, 6vw, 56px)', fontWeight: 700, lineHeight: 1.15,
           marginBottom: 20,
         }}>
-          Close Your First
-          <span style={{ color: '#e94560' }}> Real Estate Deal</span> in 30 Days
+          {c.headline}
+          <span style={{ color: '#e94560' }}>{c.headlineAccent}</span>{c.headlineSuffix}
         </h1>
         <p style={{
           fontSize: 'clamp(16px, 2.5vw, 20px)', color: '#888', lineHeight: 1.7,
           maxWidth: 600, margin: '0 auto 40px',
         }}>
-          A structured, daily action plan that takes you from zero to your first deal.
-          Video lessons, daily tasks, accountability, and a community pushing you forward.
+          {c.subtext}
         </p>
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
           <button className="btn-primary" style={{ padding: '16px 40px', fontSize: 17 }} onClick={handleGetStarted}>
-            Join the Challenge →
+            {c.ctaButton}
           </button>
           <button
             className="btn-secondary"
@@ -90,10 +129,9 @@ export default function LandingPage({ onGoToLogin }) {
           padding: '24px 0', borderTop: '1px solid rgba(255,255,255,0.06)',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}>
-          <ProofStat value="30" label="Daily Lessons" />
-          <ProofStat value="1" label="Clear Goal" />
-          <ProofStat value="24/7" label="Community Access" />
-          <ProofStat value="100%" label="Action-Based" />
+          {c.stats.map((s, i) => (
+            <ProofStat key={i} value={s.value} label={s.label} />
+          ))}
         </div>
       </section>
 
@@ -106,26 +144,9 @@ export default function LandingPage({ onGoToLogin }) {
           How It Works
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 20 }}>
-          <StepCard
-            number="01"
-            title="Sign Up & Pay"
-            description="Secure your spot in the next cohort. Once payment is confirmed, you'll get immediate access to your dashboard."
-          />
-          <StepCard
-            number="02"
-            title="Follow the Daily Plan"
-            description="Each day unlocks a new video lesson and action task. Watch, learn, then go execute. No fluff, just action."
-          />
-          <StepCard
-            number="03"
-            title="Submit Your Proof"
-            description="Complete each day's task and submit your proof before midnight. Miss a day and you're out — that's the accountability."
-          />
-          <StepCard
-            number="04"
-            title="Close Your Deal"
-            description="By day 30, you'll have analyzed properties, contacted agents, submitted offers, and be on your way to closing."
-          />
+          {c.steps.map((step, i) => (
+            <StepCard key={i} number={String(i + 1).padStart(2, '0')} title={step.title} description={step.description} />
+          ))}
         </div>
       </section>
 
@@ -138,16 +159,13 @@ export default function LandingPage({ onGoToLogin }) {
           What's Included
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
-          <FeatureCard icon="🎬" title="30 Video Lessons" text="Daily instructional videos walking you through every step of finding and closing your first deal." />
-          <FeatureCard icon="📋" title="Daily Action Tasks" text="No theory paralysis. Every day has one clear task you must complete to stay in the challenge." />
-          <FeatureCard icon="📊" title="Progress Dashboard" text="Track your properties analyzed, offers submitted, and agents contacted in real-time." />
-          <FeatureCard icon="⏰" title="Accountability System" text="Daily deadlines with automatic removal. Skin in the game keeps you moving." />
-          <FeatureCard icon="📥" title="Templates & Resources" text="Scripts, spreadsheets, and templates you can use immediately in your deal-finding process." />
-          <FeatureCard icon="🔄" title="1-Year Re-run Access" text="Life happens. If you fall off, you can rejoin a future cohort within your one-year access window." />
+          {c.features.map((f, i) => (
+            <FeatureCard key={i} icon={f.icon} title={f.title} text={f.text} />
+          ))}
         </div>
       </section>
 
-      {/* The 3 Phases */}
+      {/* The Phases */}
       <section style={{
         maxWidth: 800, margin: '0 auto', padding: '0 24px 80px',
         position: 'relative', zIndex: 1,
@@ -156,24 +174,9 @@ export default function LandingPage({ onGoToLogin }) {
           Your 30-Day Journey
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <PhaseCard
-            color="#e94560"
-            phase="Phase 1: Foundation"
-            days="Days 1–10"
-            items={['Set up your deal-finding systems', 'Learn to analyze properties', 'Build your criteria and target markets']}
-          />
-          <PhaseCard
-            color="#533483"
-            phase="Phase 2: Execution"
-            days="Days 11–20"
-            items={['Start contacting agents and sellers', 'Submit your first offers', 'Negotiate and follow up systematically']}
-          />
-          <PhaseCard
-            color="#0f3460"
-            phase="Phase 3: Closing"
-            days="Days 21–30"
-            items={['Advanced deal structuring', 'Due diligence and inspections', 'Close your first deal']}
-          />
+          {c.phases.map((p, i) => (
+            <PhaseCard key={i} color={p.color} phase={p.phase} days={p.days} items={p.items} />
+          ))}
         </div>
       </section>
 
@@ -188,13 +191,13 @@ export default function LandingPage({ onGoToLogin }) {
           borderColor: 'rgba(233,69,96,0.15)',
         }}>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 700, marginBottom: 12 }}>
-            Ready to Get Your First Deal?
+            {c.finalHeadline}
           </h2>
           <p style={{ color: '#888', fontSize: 16, marginBottom: 32, lineHeight: 1.7 }}>
-            Stop watching from the sidelines. Join the next cohort and take action every single day for 30 days.
+            {c.finalSubtext}
           </p>
           <button className="btn-primary" style={{ padding: '16px 48px', fontSize: 17 }} onClick={handleGetStarted}>
-            Join the Challenge →
+            {c.ctaButton}
           </button>
           {!STRIPE_LINK && (
             <p style={{ color: '#555', fontSize: 12, marginTop: 16 }}>
