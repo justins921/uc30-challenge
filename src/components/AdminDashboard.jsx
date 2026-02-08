@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Header from './Header';
-import { CHALLENGE_DAYS, PHASES, getDayContent } from '../data/challengeDays';
+import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent } from '../data/challengeDays';
 import { AttachmentLink } from './DayView';
 
 const ADMIN_TABS = [
@@ -11,7 +11,8 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases }) {
+  const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
 
@@ -112,6 +113,8 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
           <ContentTab
             contentOverrides={contentOverrides}
             onSetContentOverrides={onSetContentOverrides}
+            phases={phases}
+            onSetPhases={onSetPhases}
           />
         )}
         {tab === 'social' && (
@@ -961,8 +964,9 @@ function SubmissionsTab({ nonAdmin }) {
 }
 
 // ── Content Management Tab ──────────────────────────────────
-function ContentTab({ contentOverrides, onSetContentOverrides }) {
+function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhases }) {
   const [editingDay, setEditingDay] = useState(null);
+  const [editingPhases, setEditingPhases] = useState(false);
 
   if (editingDay) {
     return (
@@ -979,14 +983,34 @@ function ContentTab({ contentOverrides, onSetContentOverrides }) {
     );
   }
 
+  if (editingPhases) {
+    return (
+      <PhaseEditor
+        phases={phases}
+        onSave={(updated) => {
+          onSetPhases(updated);
+          setEditingPhases(false);
+        }}
+        onBack={() => setEditingPhases(false)}
+      />
+    );
+  }
+
   return (
     <div className="fade-up">
-      <div className="card" style={{ marginBottom: 20, padding: '16px 20px' }}>
+      <div className="card" style={{ marginBottom: 20, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <p style={{ color: '#888', fontSize: 13, margin: 0 }}>
           Edit the text, videos, and resources for each day. Changes are saved to the database and visible to all users.
         </p>
+        <button
+          className="btn-secondary"
+          style={{ padding: '8px 16px', fontSize: 12, whiteSpace: 'nowrap', marginLeft: 16 }}
+          onClick={() => setEditingPhases(true)}
+        >
+          Edit Phases
+        </button>
       </div>
-      {PHASES.map(phase => (
+      {phases.map(phase => (
         <div key={phase.label} style={{ marginBottom: 28 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
             <div style={{ width: 10, height: 10, borderRadius: 3, background: phase.color }} />
@@ -1032,6 +1056,163 @@ function ContentTab({ contentOverrides, onSetContentOverrides }) {
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+// ── Phase Editor ──────────────────────────────────────────
+const PHASE_COLORS = ['#e94560', '#0f3460', '#533483', '#48c78e', '#f0a500', '#888'];
+
+function PhaseEditor({ phases, onSave, onBack }) {
+  const [draft, setDraft] = useState(phases.map(p => ({ ...p, days: [...p.days] })));
+
+  const updatePhase = (idx, field, value) => {
+    const updated = [...draft];
+    updated[idx] = { ...updated[idx], [field]: value };
+    setDraft(updated);
+  };
+
+  const addPhase = () => {
+    // Find days not assigned to any phase
+    const assigned = new Set(draft.flatMap(p => p.days));
+    const unassigned = [];
+    for (let d = 1; d <= 30; d++) {
+      if (!assigned.has(d)) unassigned.push(d);
+    }
+    setDraft([...draft, { label: '', days: unassigned, color: PHASE_COLORS[draft.length % PHASE_COLORS.length] }]);
+  };
+
+  const removePhase = (idx) => {
+    setDraft(draft.filter((_, i) => i !== idx));
+  };
+
+  const parseDays = (str) => {
+    // Parse "1-5, 8, 10-12" format
+    const days = [];
+    for (const part of str.split(',')) {
+      const trimmed = part.trim();
+      if (trimmed.includes('-')) {
+        const [a, b] = trimmed.split('-').map(Number);
+        if (a && b) for (let d = a; d <= b; d++) days.push(d);
+      } else {
+        const n = Number(trimmed);
+        if (n) days.push(n);
+      }
+    }
+    return days.filter(d => d >= 1 && d <= 30);
+  };
+
+  const formatDays = (days) => {
+    if (days.length === 0) return '';
+    const sorted = [...days].sort((a, b) => a - b);
+    const ranges = [];
+    let start = sorted[0], end = sorted[0];
+    for (let i = 1; i < sorted.length; i++) {
+      if (sorted[i] === end + 1) {
+        end = sorted[i];
+      } else {
+        ranges.push(start === end ? `${start}` : `${start}-${end}`);
+        start = end = sorted[i];
+      }
+    }
+    ranges.push(start === end ? `${start}` : `${start}-${end}`);
+    return ranges.join(', ');
+  };
+
+  const handleSave = () => {
+    const valid = draft.filter(p => p.label.trim() && p.days.length > 0);
+    if (valid.length === 0) return;
+    onSave(valid.map(p => ({ label: p.label.trim(), days: p.days, color: p.color })));
+  };
+
+  const handleReset = () => {
+    onSave(null); // null = use defaults
+    onBack();
+  };
+
+  return (
+    <div className="fade-up">
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+        <button className="btn-secondary" style={{ padding: '6px 14px', fontSize: 13 }} onClick={onBack}>
+          ← Back
+        </button>
+        <h2 style={{ fontSize: 20, fontWeight: 700, margin: 0 }}>Edit Phases</h2>
+      </div>
+
+      <div className="card" style={{ padding: '16px 20px', marginBottom: 20 }}>
+        <p style={{ color: '#888', fontSize: 13, margin: 0 }}>
+          Define the sections of your challenge and which days belong to each. Use ranges like "1-5" or individual days like "1, 3, 7".
+        </p>
+      </div>
+
+      {draft.map((phase, idx) => (
+        <div key={idx} className="card" style={{ padding: 20, marginBottom: 12 }}>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minWidth: 150 }}>
+              <label style={{ fontSize: 12 }}>Phase Name</label>
+              <input
+                value={phase.label}
+                onChange={e => updatePhase(idx, 'label', e.target.value)}
+                placeholder="e.g. Foundation"
+                style={{ fontSize: 14 }}
+              />
+            </div>
+            <div style={{ flex: 1, minWidth: 150 }}>
+              <label style={{ fontSize: 12 }}>Days</label>
+              <input
+                value={formatDays(phase.days)}
+                onChange={e => updatePhase(idx, 'days', parseDays(e.target.value))}
+                placeholder="e.g. 1-5 or 1, 2, 3"
+                style={{ fontSize: 14 }}
+              />
+            </div>
+            <div style={{ minWidth: 100 }}>
+              <label style={{ fontSize: 12 }}>Color</label>
+              <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                {PHASE_COLORS.map(c => (
+                  <div
+                    key={c}
+                    onClick={() => updatePhase(idx, 'color', c)}
+                    style={{
+                      width: 24, height: 24, borderRadius: 6, background: c, cursor: 'pointer',
+                      border: phase.color === c ? '2px solid white' : '2px solid transparent',
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+            <button
+              onClick={() => removePhase(idx)}
+              style={{
+                background: 'rgba(233,69,96,0.1)', color: '#e94560', border: 'none',
+                padding: '6px 12px', borderRadius: 6, fontSize: 12, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", marginTop: 22,
+              }}
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      ))}
+
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 16 }}>
+        <button className="btn-secondary" style={{ padding: '10px 20px', fontSize: 13 }} onClick={addPhase}>
+          + Add Phase
+        </button>
+        <button className="btn-primary" style={{ padding: '10px 20px', fontSize: 13 }} onClick={handleSave}>
+          Save Phases
+        </button>
+        <button
+          onClick={handleReset}
+          style={{
+            background: 'rgba(255,255,255,0.04)', color: '#888', border: '1px solid rgba(255,255,255,0.1)',
+            padding: '10px 20px', borderRadius: 8, fontSize: 13, cursor: 'pointer',
+            fontFamily: "'DM Sans', sans-serif",
+          }}
+        >
+          Reset to Defaults
+        </button>
+      </div>
     </div>
   );
 }

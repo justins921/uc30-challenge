@@ -212,6 +212,34 @@ const supabaseStorage = {
     }
   },
 
+  async getPhases() {
+    const result = await supabaseRequest('settings', 'GET', {
+      filters: '?key=eq.phases',
+    });
+    if (Array.isArray(result) && result.length > 0 && result[0].value) {
+      localStorage.setItem('uc30_phases', JSON.stringify(result[0].value));
+      return result[0].value;
+    }
+    try {
+      const data = localStorage.getItem('uc30_phases');
+      return data ? JSON.parse(data) : null;
+    } catch { return null; }
+  },
+
+  async setPhases(phases) {
+    localStorage.setItem('uc30_phases', JSON.stringify(phases));
+    const body = { value: phases, updated_at: new Date().toISOString() };
+    const result = await supabaseRequest('settings', 'PATCH', {
+      filters: '?key=eq.phases',
+      body,
+    });
+    if (!result || (Array.isArray(result) && result.length === 0)) {
+      await supabaseRequest('settings', 'POST', {
+        body: { key: 'phases', ...body },
+      });
+    }
+  },
+
   async setCohortSettings(settings) {
     // Always save to localStorage as backup
     localStorage.setItem('uc30_cohort_settings', JSON.stringify(settings));
@@ -357,6 +385,17 @@ const localStorageFallback = {
   setLiveCalls(calls) {
     try {
       localStorage.setItem('uc30_live_calls', JSON.stringify(calls));
+    } catch {}
+  },
+  getPhases() {
+    try {
+      const data = localStorage.getItem('uc30_phases');
+      return data ? JSON.parse(data) : null;
+    } catch { return null; }
+  },
+  setPhases(phases) {
+    try {
+      localStorage.setItem('uc30_phases', JSON.stringify(phases));
     } catch {}
   },
 };

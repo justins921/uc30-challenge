@@ -28,6 +28,8 @@ export default function App() {
     setContentOverrides,
     liveCalls,
     setLiveCalls,
+    customPhases,
+    setPhases,
     navigate,
   } = useAppState();
 
@@ -109,6 +111,8 @@ export default function App() {
         onSetContentOverrides={setContentOverrides}
         liveCalls={liveCalls}
         onSetLiveCalls={setLiveCalls}
+        customPhases={customPhases}
+        onSetPhases={setPhases}
       />
     );
   }
@@ -122,6 +126,7 @@ export default function App() {
       nextCohortDate={nextCohortDate}
       contentOverrides={contentOverrides}
       liveCalls={liveCalls}
+      customPhases={customPhases}
     />
   );
 }

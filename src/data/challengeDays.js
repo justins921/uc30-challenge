@@ -335,12 +335,31 @@ export const CHALLENGE_DAYS = [
   },
 ];
 
-export const PHASES = [
+export const DEFAULT_PHASES = [
   { label: "Foundation", days: [1, 2, 3, 4, 5], color: "#e94560" },
   { label: "Action Phase", days: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15], color: "#0f3460" },
   { label: "Momentum", days: [16, 17, 18, 19, 20, 21, 22, 23, 24, 25], color: "#533483" },
   { label: "Closing", days: [26, 27, 28, 29, 30], color: "#e94560" },
 ];
+
+// Kept for backward compatibility
+export const PHASES = DEFAULT_PHASES;
+
+// Resolve phases: use custom if provided, fall back to defaults
+export function getPhases(customPhases) {
+  return (customPhases && customPhases.length > 0) ? customPhases : DEFAULT_PHASES;
+}
+
+// Build category color map from phases (for DayView badge coloring)
+export function getCategoryColors(phases) {
+  const colors = {};
+  for (const phase of phases) {
+    for (const d of phase.days) {
+      colors[d] = { accent: phase.color, label: phase.label };
+    }
+  }
+  return colors;
+}
 
 // Merge defaults with admin overrides
 export function getDayContent(dayNum, overrides = {}) {

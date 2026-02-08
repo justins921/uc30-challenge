@@ -1,9 +1,10 @@
-import { PHASES, getDayContent } from '../data/challengeDays';
+import { getPhases, getDayContent } from '../data/challengeDays';
 
-export default function TimelineView({ user, onSelectDay, calendarDay, contentOverrides }) {
+export default function TimelineView({ user, onSelectDay, calendarDay, contentOverrides, customPhases }) {
+  const phases = getPhases(customPhases);
   return (
     <div className="fade-up-delay-2">
-      {PHASES.map((phase) => (
+      {phases.map((phase) => (
         <div key={phase.label} style={{ marginBottom: 36 }}>
           {/* Phase header */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>

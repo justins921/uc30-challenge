@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { CHALLENGE_DAYS, CATEGORY_COLORS, getDayContent } from '../data/challengeDays';
+import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent } from '../data/challengeDays';
 
-export default function DayView({ day, user, onSubmit, onBack, contentOverrides }) {
+export default function DayView({ day, user, onSubmit, onBack, contentOverrides, customPhases }) {
   const [proofText, setProofText] = useState('');
   const [fileName, setFileName] = useState('');
   const [fileData, setFileData] = useState(null);
@@ -11,7 +11,8 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides 
   const isComplete = user.completedDays.includes(day);
   const isCurrentOrPast = day <= user.currentDay;
   const existingSubmission = user.submissions.find(s => s.day === day);
-  const cat = CATEGORY_COLORS[dayData.category];
+  const dayColors = customPhases ? getCategoryColors(getPhases(customPhases)) : null;
+  const cat = (dayColors && dayColors[day]) || CATEGORY_COLORS[dayData.category] || { accent: '#888', label: '' };
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
