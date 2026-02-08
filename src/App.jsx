@@ -146,6 +146,7 @@ export default function App() {
       onUpdateProfile={updateProfile}
       onChangePassword={changePassword}
       onSubmitTicket={submitSupportTicket}
+      supportTickets={supportTickets}
     />
   );
 }

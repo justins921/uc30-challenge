@@ -24,7 +24,7 @@ function resizeImage(file, maxSize = 150) {
   });
 }
 
-export default function UserProfile({ user, onUpdateProfile, onChangePassword, onSubmitTicket, onBack }) {
+export default function UserProfile({ user, onUpdateProfile, onChangePassword, onSubmitTicket, supportTickets, onBack }) {
   // Profile state
   const [email, setEmail] = useState(user.email);
   const [firstName, setFirstName] = useState(user.firstName);
@@ -242,9 +242,15 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
         </button>
       </div>
 
-      {/* Support Request */}
+      {/* Support Section */}
+      <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16 }}>Support</h3>
+
+      {/* Previous Tickets */}
+      <MyTickets tickets={supportTickets} userId={user.id} />
+
+      {/* New Support Request */}
       <div className="card" style={{ padding: 24, marginBottom: 20 }}>
-        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Need Help?</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>New Request</h3>
         <p style={{ fontSize: 13, color: '#666', marginBottom: 16, lineHeight: 1.5 }}>
           Submit a support request and an admin will get back to you.
         </p>
@@ -278,6 +284,83 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
         >
           {submittingTicket ? 'Submitting...' : 'Submit Request'}
         </button>
+      </div>
+    </div>
+  );
+}
+
+function MyTickets({ tickets, userId }) {
+  const myTickets = (tickets || [])
+    .filter(t => t.participantId === userId)
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  if (myTickets.length === 0) return null;
+
+  const statusStyles = {
+    open: { bg: 'rgba(233,69,96,0.1)', border: 'rgba(233,69,96,0.2)', color: '#e94560', label: 'Awaiting Response' },
+    responded: { bg: 'rgba(72,199,142,0.1)', border: 'rgba(72,199,142,0.2)', color: '#48c78e', label: 'Responded' },
+    closed: { bg: 'rgba(255,255,255,0.04)', border: 'rgba(255,255,255,0.08)', color: '#666', label: 'Closed' },
+  };
+
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {myTickets.map(ticket => {
+          const s = statusStyles[ticket.status] || statusStyles.open;
+          return (
+            <div key={ticket.id} className="card" style={{ padding: 20 }}>
+              {/* Header */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
+                <div style={{ fontSize: 15, fontWeight: 600 }}>{ticket.subject}</div>
+                <span style={{
+                  background: s.bg, border: `1px solid ${s.border}`, color: s.color,
+                  fontSize: 10, fontWeight: 600, padding: '3px 10px', borderRadius: 6,
+                  textTransform: 'uppercase', letterSpacing: 0.5,
+                }}>
+                  {s.label}
+                </span>
+              </div>
+
+              {/* Date */}
+              <div style={{ fontSize: 11, color: '#555', marginBottom: 10 }}>
+                Submitted {new Date(ticket.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              </div>
+
+              {/* User's message */}
+              <div style={{
+                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#aaa', lineHeight: 1.6,
+                whiteSpace: 'pre-wrap', marginBottom: ticket.adminResponse ? 12 : 0,
+              }}>
+                {ticket.message}
+              </div>
+
+              {/* Admin response */}
+              {ticket.adminResponse && (
+                <div style={{ marginTop: 4 }}>
+                  <div style={{ fontSize: 11, color: '#48c78e', fontWeight: 600, marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Admin Response
+                    {ticket.respondedAt && (
+                      <span style={{ fontWeight: 400, color: '#555' }}>
+                        &middot; {new Date(ticket.respondedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </span>
+                    )}
+                  </div>
+                  <div style={{
+                    background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.12)',
+                    borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#ccc', lineHeight: 1.6,
+                    whiteSpace: 'pre-wrap',
+                  }}>
+                    {ticket.adminResponse}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

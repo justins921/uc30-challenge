@@ -62,7 +62,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, supportTickets }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -152,15 +152,6 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         {/* Upcoming Live Call */}
         <UpcomingCallBanner calls={liveCalls} />
 
-        {/* Quick Stats */}
-        <div className="fade-up-delay-1 stats-grid" style={{
-          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 32,
-        }}>
-          <QuickStat icon="📊" value={user.metrics.propertiesAnalyzed} label="Properties Analyzed" />
-          <QuickStat icon="📝" value={user.metrics.offersSubmitted} label="Offers Submitted" />
-          <QuickStat icon="🤝" value={user.metrics.agentsContacted} label="Agents Contacted" />
-        </div>
-
         {/* Tab Content */}
         {tab === 'timeline' && (
           <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} contentOverrides={contentOverrides} customPhases={customPhases} />
@@ -183,20 +174,11 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             onUpdateProfile={onUpdateProfile}
             onChangePassword={onChangePassword}
             onSubmitTicket={onSubmitTicket}
+            supportTickets={supportTickets}
             onBack={() => handleTabChange('timeline')}
           />
         )}
       </div>
-    </div>
-  );
-}
-
-function QuickStat({ icon, value, label }) {
-  return (
-    <div className="card" style={{ textAlign: 'center', padding: 20 }}>
-      <div style={{ fontSize: 28, marginBottom: 8 }}>{icon}</div>
-      <div className="mono" style={{ fontSize: 32, fontWeight: 700, color: '#e94560' }}>{value}</div>
-      <div style={{ fontSize: 12, color: '#666', marginTop: 4 }}>{label}</div>
     </div>
   );
 }
