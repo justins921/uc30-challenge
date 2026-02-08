@@ -13,6 +13,76 @@ export function useAppState() {
   const [nextCohortDate, setNextCohortDateState] = useState(null);
   const [contentOverrides, setContentOverridesState] = useState({});
 
+  // Persist helper (localStorage only — Supabase persists per-operation)
+  const persist = useCallback((newUser, newParticipants) => {
+    storage.setUser(newUser);
+    if (!isSupabaseEnabled) {
+      storage.setParticipants(newParticipants);
+    }
+  }, []);
+
+  // ── Auto-removal for missed days ──────────────────────
+  // Checks all active participants and removes anyone who missed their Pacific deadline.
+  // Runs on load and every 5 minutes.
+  const autoRemoveMissed = useCallback(async (currentParticipants, startDate) => {
+    if (!startDate) return; // No cohort mode — no auto-removal
+
+    // Get current date in Pacific time (deadline timezone)
+    const pacific = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+    const nowPacific = new Date(pacific);
+    const nowPacificDay = new Date(nowPacific.getFullYear(), nowPacific.getMonth(), nowPacific.getDate());
+
+    const start = new Date(startDate + 'T00:00:00');
+    const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+
+    // Pacific calendar day: which challenge day is it based on Pacific time?
+    const pacificDayNum = Math.floor((nowPacificDay - startDay) / (1000 * 60 * 60 * 24)) + 1;
+
+    // If cohort hasn't started yet, no removals
+    if (pacificDayNum < 2) return; // Need at least Day 2 for Day 1's deadline to have passed
+
+    const removals = [];
+    for (const p of currentParticipants) {
+      // Skip admins, already-removed users, and users who finished the challenge
+      if (p.isAdmin || !p.isActive || p.currentDay > 30) continue;
+
+      // If user's currentDay is behind the Pacific calendar day, they missed a deadline
+      // e.g., Pacific is Day 3, user is still on Day 1 → missed Day 1 and Day 2 deadlines
+      if (p.currentDay < pacificDayNum) {
+        removals.push(p);
+      }
+    }
+
+    for (const p of removals) {
+      const updates = { isActive: false, removedAt: new Date().toISOString() };
+      if (isSupabaseEnabled) {
+        await storage.updateParticipant(p.id, updates);
+      }
+      // Tag in Kit
+      tagRemovedFromCohort(p.email).catch(() => {});
+    }
+
+    if (removals.length > 0 && isSupabaseEnabled) {
+      const fresh = await storage.getParticipants();
+      setParticipants(fresh || []);
+      // If current user was removed, update their state
+      const currentUser = user;
+      if (currentUser && removals.find(r => r.id === currentUser.id)) {
+        const updatedUser = { ...currentUser, isActive: false, removedAt: new Date().toISOString() };
+        setUser(updatedUser);
+        storage.setUser(updatedUser);
+      }
+    } else if (removals.length > 0) {
+      // localStorage mode
+      const updatedParticipants = currentParticipants.map(p => {
+        const removed = removals.find(r => r.id === p.id);
+        return removed ? { ...p, isActive: false, removedAt: new Date().toISOString() } : p;
+      });
+      setParticipants(updatedParticipants);
+      persist(user, updatedParticipants);
+    }
+  }, [user, persist]);
+
   // Load from storage on mount
   useEffect(() => {
     (async () => {
@@ -59,14 +129,6 @@ export function useAppState() {
     }, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, [cohortStartDate, participants, autoRemoveMissed]);
-
-  // Persist helper (localStorage only — Supabase persists per-operation)
-  const persist = useCallback((newUser, newParticipants) => {
-    storage.setUser(newUser);
-    if (!isSupabaseEnabled) {
-      storage.setParticipants(newParticipants);
-    }
-  }, []);
 
   // Refresh participants from Supabase
   const refreshParticipants = useCallback(async () => {
@@ -352,68 +414,6 @@ export function useAppState() {
     await Promise.resolve(storage.setContentOverrides(overrides));
     setContentOverridesState(overrides);
   }, []);
-
-  // ── Auto-removal for missed days ──────────────────────
-  // Checks all active participants and removes anyone who missed their Pacific deadline.
-  // Runs on load and every 5 minutes.
-  const autoRemoveMissed = useCallback(async (currentParticipants, startDate) => {
-    if (!startDate) return; // No cohort mode — no auto-removal
-
-    // Get current date in Pacific time (deadline timezone)
-    const pacific = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
-    const nowPacific = new Date(pacific);
-    const nowPacificDay = new Date(nowPacific.getFullYear(), nowPacific.getMonth(), nowPacific.getDate());
-
-    const start = new Date(startDate + 'T00:00:00');
-    const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-
-    // Pacific calendar day: which challenge day is it based on Pacific time?
-    const pacificDayNum = Math.floor((nowPacificDay - startDay) / (1000 * 60 * 60 * 24)) + 1;
-
-    // If cohort hasn't started yet, no removals
-    if (pacificDayNum < 2) return; // Need at least Day 2 for Day 1's deadline to have passed
-
-    const removals = [];
-    for (const p of currentParticipants) {
-      // Skip admins, already-removed users, and users who finished the challenge
-      if (p.isAdmin || !p.isActive || p.currentDay > 30) continue;
-
-      // If user's currentDay is behind the Pacific calendar day, they missed a deadline
-      // e.g., Pacific is Day 3, user is still on Day 1 → missed Day 1 and Day 2 deadlines
-      if (p.currentDay < pacificDayNum) {
-        removals.push(p);
-      }
-    }
-
-    for (const p of removals) {
-      const updates = { isActive: false, removedAt: new Date().toISOString() };
-      if (isSupabaseEnabled) {
-        await storage.updateParticipant(p.id, updates);
-      }
-      // Tag in Kit
-      tagRemovedFromCohort(p.email).catch(() => {});
-    }
-
-    if (removals.length > 0 && isSupabaseEnabled) {
-      const fresh = await storage.getParticipants();
-      setParticipants(fresh || []);
-      // If current user was removed, update their state
-      const currentUser = user;
-      if (currentUser && removals.find(r => r.id === currentUser.id)) {
-        const updatedUser = { ...currentUser, isActive: false, removedAt: new Date().toISOString() };
-        setUser(updatedUser);
-        storage.setUser(updatedUser);
-      }
-    } else if (removals.length > 0) {
-      // localStorage mode
-      const updatedParticipants = currentParticipants.map(p => {
-        const removed = removals.find(r => r.id === p.id);
-        return removed ? { ...p, isActive: false, removedAt: new Date().toISOString() } : p;
-      });
-      setParticipants(updatedParticipants);
-      persist(user, updatedParticipants);
-    }
-  }, [user, persist]);
 
   return {
     user,
