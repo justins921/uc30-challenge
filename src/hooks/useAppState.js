@@ -1,8 +1,9 @@
 import { useState, useCallback, useEffect } from 'react';
 import { storage, createNewUser, isSupabaseEnabled } from '../utils/storage';
+import { supabase } from '../utils/supabaseClient';
 import { CHALLENGE_DAYS, POST_30_TASK } from '../data/challengeDays';
 import { hashPassword } from '../utils/crypto';
-import { subscribeUser, tagSignUp, tagDayStarted, tagChallengeCompleted, tagRemovedFromCohort, sendPasswordResetCode, isKitEnabled } from '../utils/kit';
+import { subscribeUser, tagSignUp, tagDayStarted, tagChallengeCompleted, tagRemovedFromCohort } from '../utils/kit';
 
 export function useAppState() {
   const [user, setUser] = useState(null);
@@ -16,6 +17,8 @@ export function useAppState() {
   const [customPhases, setCustomPhasesState] = useState(null);
   const [landingContent, setLandingContentState] = useState(null);
   const [supportTickets, setSupportTicketsState] = useState([]);
+  // Password recovery mode (triggered by Supabase auth event)
+  const [passwordRecovery, setPasswordRecovery] = useState(false);
 
   // Persist helper (localStorage only — Supabase persists per-operation)
   const persist = useCallback((newUser, newParticipants) => {
@@ -26,12 +29,9 @@ export function useAppState() {
   }, []);
 
   // ── Auto-removal for missed days ──────────────────────
-  // Checks all active participants and removes anyone who missed their Pacific deadline.
-  // Runs on load and every 5 minutes.
   const autoRemoveMissed = useCallback(async (currentParticipants, startDate) => {
-    if (!startDate) return; // No cohort mode — no auto-removal
+    if (!startDate) return;
 
-    // Get current date in Pacific time (deadline timezone)
     const pacific = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
     const nowPacific = new Date(pacific);
     const nowPacificDay = new Date(nowPacific.getFullYear(), nowPacific.getMonth(), nowPacific.getDate());
@@ -39,19 +39,13 @@ export function useAppState() {
     const start = new Date(startDate + 'T00:00:00');
     const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
 
-    // Pacific calendar day: which challenge day is it based on Pacific time?
     const pacificDayNum = Math.floor((nowPacificDay - startDay) / (1000 * 60 * 60 * 24)) + 1;
 
-    // If cohort hasn't started yet, no removals
-    if (pacificDayNum < 2) return; // Need at least Day 2 for Day 1's deadline to have passed
+    if (pacificDayNum < 2) return;
 
     const removals = [];
     for (const p of currentParticipants) {
-      // Skip admins, already-removed users, and users who finished the challenge
       if (p.isAdmin || !p.isActive || p.currentDay > 30) continue;
-
-      // If user's currentDay is behind the Pacific calendar day, they missed a deadline
-      // e.g., Pacific is Day 3, user is still on Day 1 → missed Day 1 and Day 2 deadlines
       if (p.currentDay < pacificDayNum) {
         removals.push(p);
       }
@@ -62,14 +56,12 @@ export function useAppState() {
       if (isSupabaseEnabled) {
         await storage.updateParticipant(p.id, updates);
       }
-      // Tag in Kit
       tagRemovedFromCohort(p.email).catch(() => {});
     }
 
     if (removals.length > 0 && isSupabaseEnabled) {
       const fresh = await storage.getParticipants();
       setParticipants(fresh || []);
-      // If current user was removed, update their state
       const currentUser = user;
       if (currentUser && removals.find(r => r.id === currentUser.id)) {
         const updatedUser = { ...currentUser, isActive: false, removedAt: new Date().toISOString() };
@@ -77,7 +69,6 @@ export function useAppState() {
         storage.setUser(updatedUser);
       }
     } else if (removals.length > 0) {
-      // localStorage mode
       const updatedParticipants = currentParticipants.map(p => {
         const removed = removals.find(r => r.id === p.id);
         return removed ? { ...p, isActive: false, removedAt: new Date().toISOString() } : p;
@@ -87,20 +78,18 @@ export function useAppState() {
     }
   }, [user, persist]);
 
-  // Load from storage on mount
+  // ── Load initial state + listen for Supabase auth events ──
   useEffect(() => {
+    let authListener;
+
     (async () => {
       try {
         const storedParticipants = await Promise.resolve(storage.getParticipants());
         setParticipants(storedParticipants || []);
 
         const cohortSettings = await Promise.resolve(storage.getCohortSettings());
-        if (cohortSettings?.startDate) {
-          setCohortStartDateState(cohortSettings.startDate);
-        }
-        if (cohortSettings?.nextCohortDate) {
-          setNextCohortDateState(cohortSettings.nextCohortDate);
-        }
+        if (cohortSettings?.startDate) setCohortStartDateState(cohortSettings.startDate);
+        if (cohortSettings?.nextCohortDate) setNextCohortDateState(cohortSettings.nextCohortDate);
 
         const overrides = await Promise.resolve(storage.getContentOverrides());
         if (overrides) setContentOverridesState(overrides);
@@ -119,14 +108,12 @@ export function useAppState() {
 
         const storedUser = await Promise.resolve(storage.getUser());
         if (storedUser) {
-          // Refresh from participants list
           const fresh = (storedParticipants || []).find(p => p.id === storedUser.id);
           const currentUser = fresh || storedUser;
           setUser(currentUser);
           setCurrentView(currentUser.isAdmin ? 'admin' : 'dashboard');
         }
 
-        // Auto-remove participants who missed their deadline
         if (cohortSettings?.startDate && storedParticipants?.length > 0) {
           autoRemoveMissed(storedParticipants, cohortSettings.startDate);
         }
@@ -135,6 +122,25 @@ export function useAppState() {
       }
       setLoading(false);
     })();
+
+    // Listen for Supabase auth events (password recovery, sign out, etc.)
+    if (supabase) {
+      const { data } = supabase.auth.onAuthStateChange((event) => {
+        if (event === 'PASSWORD_RECOVERY') {
+          setPasswordRecovery(true);
+        }
+        if (event === 'SIGNED_OUT') {
+          setUser(null);
+          setCurrentView('login');
+          setPasswordRecovery(false);
+        }
+      });
+      authListener = data?.subscription;
+    }
+
+    return () => {
+      authListener?.unsubscribe();
+    };
   }, []);
 
   // Periodic auto-removal check (every 5 minutes)
@@ -156,89 +162,170 @@ export function useAppState() {
     return participants;
   }, [participants]);
 
-  // ── Auth ─────────────────────────────────────────────
+  // ── Auth (Supabase Auth with legacy migration) ──────────────────
+
   const login = useCallback(async (email, password) => {
-    let existing;
-    if (isSupabaseEnabled) {
-      existing = await storage.findByEmail(email);
-    } else {
-      existing = participants.find(p => p.email === email.toLowerCase());
+    // --- Supabase Auth path ---
+    if (isSupabaseEnabled && supabase) {
+      // Try Supabase Auth first
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: email.trim().toLowerCase(),
+        password,
+      });
+
+      if (!authError && authData?.user) {
+        // Supabase Auth success — look up participant
+        let participant = await storage.findByEmail(email);
+        if (participant && !participant.authId) {
+          // Link legacy participant to new Supabase auth user
+          await storage.updateParticipant(participant.id, { authId: authData.user.id });
+          participant = { ...participant, authId: authData.user.id };
+        }
+        if (!participant) {
+          return { error: 'No challenge account found. Please register first.' };
+        }
+        setUser(participant);
+        setCurrentView(participant.isAdmin ? 'admin' : 'dashboard');
+        const allParticipants = await storage.getParticipants();
+        setParticipants(allParticipants || []);
+        return { success: true };
+      }
+
+      // If Supabase Auth fails, try legacy migration path
+      const existing = await storage.findByEmail(email);
+      if (!existing) {
+        return { error: 'No account found with that email. Please register first.' };
+      }
+
+      // Check legacy password (SHA-256 hash or plaintext)
+      const hashed = await hashPassword(email, password);
+      if (existing.password !== hashed && existing.password !== password) {
+        return { error: 'Incorrect password.' };
+      }
+
+      // Legacy password matched — create Supabase Auth account for migration
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email: email.trim().toLowerCase(),
+        password,
+      });
+
+      if (signUpError) {
+        // If sign-up fails (e.g. email already in auth but wrong password),
+        // still allow login via legacy for now
+        console.warn('Legacy migration sign-up failed:', signUpError.message);
+        setUser(existing);
+        setCurrentView(existing.isAdmin ? 'admin' : 'dashboard');
+        const allParticipants = await storage.getParticipants();
+        setParticipants(allParticipants || []);
+        return { success: true };
+      }
+
+      // Link the auth user to the participant
+      if (signUpData?.user) {
+        await storage.updateParticipant(existing.id, {
+          authId: signUpData.user.id,
+          password: null, // clear legacy password
+        });
+      }
+
+      setUser({ ...existing, authId: signUpData?.user?.id || null });
+      setCurrentView(existing.isAdmin ? 'admin' : 'dashboard');
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+      return { success: true };
     }
 
+    // --- localStorage fallback ---
+    const existing = participants.find(p => p.email === email.toLowerCase());
     if (!existing) {
       return { error: 'No account found with that email. Please register first.' };
     }
-
-    // Check hashed password first, then fall back to legacy plaintext
     const hashed = await hashPassword(email, password);
     if (existing.password !== hashed && existing.password !== password) {
       return { error: 'Incorrect password.' };
     }
-
-    // Upgrade legacy plaintext password to hashed
+    // Upgrade legacy plaintext
     if (existing.password === password && existing.password !== hashed) {
-      if (isSupabaseEnabled) {
-        await storage.updateParticipant(existing.id, { password: hashed });
-      } else {
-        const updatedParticipants = participants.map(p =>
-          p.id === existing.id ? { ...p, password: hashed } : p
-        );
-        setParticipants(updatedParticipants);
-        storage.setParticipants(updatedParticipants);
-      }
+      const updatedParticipants = participants.map(p =>
+        p.id === existing.id ? { ...p, password: hashed } : p
+      );
+      setParticipants(updatedParticipants);
+      storage.setParticipants(updatedParticipants);
     }
-
     setUser(existing);
     setCurrentView(existing.isAdmin ? 'admin' : 'dashboard');
     storage.setUser(existing);
-
-    if (isSupabaseEnabled) {
-      const allParticipants = await storage.getParticipants();
-      setParticipants(allParticipants || []);
-    }
-
     return { success: true };
   }, [participants]);
 
   const register = useCallback(async (firstName, lastName, email, password) => {
-    let existing;
-    if (isSupabaseEnabled) {
-      existing = await storage.findByEmail(email);
-    } else {
-      existing = participants.find(p => p.email === email.toLowerCase());
+    // --- Supabase Auth path ---
+    if (isSupabaseEnabled && supabase) {
+      // Check for existing participant
+      const existing = await storage.findByEmail(email);
+      if (existing) {
+        return { error: 'An account with that email already exists. Please log in.' };
+      }
+
+      // Create Supabase Auth user (handles bcrypt hashing)
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: email.trim().toLowerCase(),
+        password,
+        options: {
+          data: { first_name: firstName, last_name: lastName },
+        },
+      });
+
+      if (authError) {
+        return { error: authError.message };
+      }
+
+      // Create participant row linked to auth user
+      const newUser = createNewUser(firstName, lastName, email, authData.user?.id);
+
+      if (cohortStartDate) {
+        const expiresAt = new Date(cohortStartDate + 'T00:00:00');
+        expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+        newUser.accessExpiresAt = expiresAt.toISOString();
+      }
+
+      const saved = await storage.addParticipant(newUser);
+      if (!saved) return { error: 'Failed to create account. Please try again.' };
+
+      setUser(saved);
+      setCurrentView(saved.isAdmin ? 'admin' : 'dashboard');
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+
+      // Kit email (fire and forget)
+      subscribeUser(email, firstName).then(() => {
+        tagSignUp(email).catch(() => {});
+      }).catch(() => {});
+
+      return { success: true };
     }
 
+    // --- localStorage fallback ---
+    const existing = participants.find(p => p.email === email.toLowerCase());
     if (existing) {
       return { error: 'An account with that email already exists. Please log in.' };
     }
-
     const hashed = await hashPassword(email, password);
-    const newUser = createNewUser(firstName, lastName, email, hashed);
+    const newUser = createNewUser(firstName, lastName, email, null);
+    newUser.password = hashed;
 
-    // Set 1-year access from cohort start if a cohort is active
     if (cohortStartDate) {
       const expiresAt = new Date(cohortStartDate + 'T00:00:00');
       expiresAt.setFullYear(expiresAt.getFullYear() + 1);
       newUser.accessExpiresAt = expiresAt.toISOString();
     }
 
-    if (isSupabaseEnabled) {
-      const saved = await storage.addParticipant(newUser);
-      if (!saved) return { error: 'Failed to create account. Please try again.' };
-      setUser(saved);
-      storage.setUser(saved);
-      const allParticipants = await storage.getParticipants();
-      setParticipants(allParticipants || []);
-      setCurrentView(saved.isAdmin ? 'admin' : 'dashboard');
-    } else {
-      const newParticipants = [...participants, newUser];
-      setUser(newUser);
-      setParticipants(newParticipants);
-      setCurrentView(newUser.isAdmin ? 'admin' : 'dashboard');
-      persist(newUser, newParticipants);
-    }
+    const newParticipants = [...participants, newUser];
+    setUser(newUser);
+    setParticipants(newParticipants);
+    setCurrentView(newUser.isAdmin ? 'admin' : 'dashboard');
+    persist(newUser, newParticipants);
 
-    // Subscribe to Kit email list and tag sign up (fire and forget)
     subscribeUser(email, firstName).then(() => {
       tagSignUp(email).catch(() => {});
     }).catch(() => {});
@@ -246,91 +333,55 @@ export function useAppState() {
     return { success: true };
   }, [participants, persist, cohortStartDate]);
 
-  // Admin-only password reset (no self-service to prevent email guessing attacks)
+  // ── Password Reset (Supabase native email) ─────────────────
+  const requestPasswordReset = useCallback(async (email) => {
+    if (isSupabaseEnabled && supabase) {
+      const { error } = await supabase.auth.resetPasswordForEmail(
+        email.trim().toLowerCase(),
+        { redirectTo: `${window.location.origin}?recovery=true` },
+      );
+      if (error) return { error: error.message };
+      return { success: true };
+    }
+    // localStorage: no real email sending — just note it
+    const target = participants.find(p => p.email === email.toLowerCase());
+    if (!target) return { error: 'No account found with that email.' };
+    return { success: true, note: 'In dev mode, password reset emails are not sent.' };
+  }, [participants]);
+
+  // Called after user clicks the reset link and lands on the app
+  const confirmPasswordReset = useCallback(async (newPassword) => {
+    if (isSupabaseEnabled && supabase) {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) return { error: error.message };
+      setPasswordRecovery(false);
+      return { success: true };
+    }
+    return { error: 'Password reset is only available with Supabase configured.' };
+  }, []);
+
+  // Admin-only password reset (no self-service)
   const adminResetPassword = useCallback(async (participantId, newPassword) => {
     if (!user?.isAdmin) return { error: 'Only admins can reset passwords.' };
 
     const target = participants.find(p => p.id === participantId);
     if (!target) return { error: 'Participant not found.' };
 
-    const hashed = await hashPassword(target.email, newPassword);
+    // If Supabase Auth, use admin API (requires service_role key on server-side)
+    // For now, just update the legacy password column as fallback
     if (isSupabaseEnabled) {
+      const hashed = await hashPassword(target.email, newPassword);
       await storage.updateParticipant(participantId, { password: hashed });
     } else {
+      const hashed = await hashPassword(target.email, newPassword);
       const updatedParticipants = participants.map(p =>
         p.id === participantId ? { ...p, password: hashed } : p
       );
       setParticipants(updatedParticipants);
       storage.setParticipants(updatedParticipants);
     }
-
     return { success: true };
   }, [participants, user]);
-
-  // ── Email-Based Password Reset ─────────────────────────
-  const requestPasswordReset = useCallback(async (email) => {
-    let target;
-    if (isSupabaseEnabled) {
-      target = await storage.findByEmail(email);
-    } else {
-      target = participants.find(p => p.email === email.toLowerCase());
-    }
-    if (!target) return { error: 'No account found with that email.' };
-
-    // Generate 6-digit code
-    const code = String(Math.floor(100000 + Math.random() * 900000));
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString(); // 15 minutes
-
-    if (isSupabaseEnabled) {
-      await storage.updateParticipant(target.id, { resetCode: code, resetCodeExpiresAt: expiresAt });
-    } else {
-      const updatedParticipants = participants.map(p =>
-        p.id === target.id ? { ...p, resetCode: code, resetCodeExpiresAt: expiresAt } : p
-      );
-      setParticipants(updatedParticipants);
-      storage.setParticipants(updatedParticipants);
-    }
-
-    // Try to send via Kit email
-    if (isKitEnabled) {
-      await sendPasswordResetCode(email.toLowerCase(), code).catch(() => {});
-    }
-
-    return { success: true, kitEnabled: isKitEnabled };
-  }, [participants]);
-
-  const confirmPasswordReset = useCallback(async (email, code, newPassword) => {
-    let target;
-    if (isSupabaseEnabled) {
-      target = await storage.findByEmail(email);
-    } else {
-      target = participants.find(p => p.email === email.toLowerCase());
-    }
-    if (!target) return { error: 'No account found with that email.' };
-
-    if (!target.resetCode || target.resetCode !== code) {
-      return { error: 'Invalid reset code.' };
-    }
-
-    if (new Date(target.resetCodeExpiresAt) < new Date()) {
-      return { error: 'Reset code has expired. Please request a new one.' };
-    }
-
-    const hashed = await hashPassword(email, newPassword);
-    const updates = { password: hashed, resetCode: null, resetCodeExpiresAt: null };
-
-    if (isSupabaseEnabled) {
-      await storage.updateParticipant(target.id, updates);
-    } else {
-      const updatedParticipants = participants.map(p =>
-        p.id === target.id ? { ...p, ...updates } : p
-      );
-      setParticipants(updatedParticipants);
-      storage.setParticipants(updatedParticipants);
-    }
-
-    return { success: true };
-  }, [participants]);
 
   // ── User Profile Updates ───────────────────────────────
   const updateProfile = useCallback(async (updates) => {
@@ -351,8 +402,11 @@ export function useAppState() {
         return { error: 'That email is already in use.' };
       }
       allowedUpdates.email = newEmail;
-      // Re-hash password with new email salt
-      // User would need to provide password for this, so skip re-hashing for now
+      // Also update Supabase Auth email
+      if (supabase) {
+        const { error } = await supabase.auth.updateUser({ email: newEmail });
+        if (error) return { error: error.message };
+      }
     }
     if (updates.profilePicture !== undefined) {
       allowedUpdates.profilePicture = updates.profilePicture;
@@ -385,21 +439,33 @@ export function useAppState() {
 
   const changePassword = useCallback(async (currentPassword, newPassword) => {
     if (!user) return { error: 'Not logged in.' };
-    // Verify current password
+
+    // Supabase Auth: update password directly (session already validates identity)
+    if (isSupabaseEnabled && supabase) {
+      // Verify current password by attempting sign-in
+      const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword,
+      });
+      if (verifyError) {
+        return { error: 'Current password is incorrect.' };
+      }
+      const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+      if (updateError) return { error: updateError.message };
+      return { success: true };
+    }
+
+    // localStorage fallback
     const currentHashed = await hashPassword(user.email, currentPassword);
     if (user.password !== currentHashed && user.password !== currentPassword) {
       return { error: 'Current password is incorrect.' };
     }
     const newHashed = await hashPassword(user.email, newPassword);
-    if (isSupabaseEnabled) {
-      await storage.updateParticipant(user.id, { password: newHashed });
-    } else {
-      const updatedParticipants = participants.map(p =>
-        p.id === user.id ? { ...p, password: newHashed } : p
-      );
-      setParticipants(updatedParticipants);
-      storage.setParticipants(updatedParticipants);
-    }
+    const updatedParticipants = participants.map(p =>
+      p.id === user.id ? { ...p, password: newHashed } : p
+    );
+    setParticipants(updatedParticipants);
+    storage.setParticipants(updatedParticipants);
     const updatedUser = { ...user, password: newHashed };
     setUser(updatedUser);
     storage.setUser(updatedUser);
@@ -451,13 +517,11 @@ export function useAppState() {
       if (t.id !== ticketId) return t;
       const messages = [...(t.messages || []), msg];
       const updates = { messages };
-      // Also update legacy fields for admin responses
       if (isAdmin) {
         updates.adminResponse = text;
         updates.respondedAt = msg.createdAt;
         updates.status = 'responded';
       } else {
-        // User reply reopens if it was responded/closed
         if (t.status === 'responded' || t.status === 'closed') {
           updates.status = 'open';
         }
@@ -478,7 +542,10 @@ export function useAppState() {
     return { success: true };
   }, [supportTickets]);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
     setUser(null);
     setCurrentView('login');
     storage.setUser(null);
@@ -502,7 +569,6 @@ export function useAppState() {
 
     const updatedMetrics = { ...user.metrics };
     if (isPost30 && dayData.multiMetrics) {
-      // Post-30 generic task has multiple metrics
       for (const m of dayData.multiMetrics) {
         updatedMetrics[m.key] = (updatedMetrics[m.key] || 0) + m.count;
       }
@@ -535,11 +601,9 @@ export function useAppState() {
     setUser(updatedUser);
     storage.setUser(updatedUser);
 
-    // Tag in Kit (fire and forget)
     if (dayNum < 30) {
       tagDayStarted(user.email, dayNum + 1).catch(() => {});
     }
-    // Challenge completed on day 30 only if user has submitted at least one offer
     if (dayNum === 30 && (updatedMetrics.offersSubmitted || 0) > 0) {
       tagChallengeCompleted(user.email).catch(() => {});
     }
@@ -548,8 +612,6 @@ export function useAppState() {
   // ── Admin Actions ────────────────────────────────────
   const removeParticipant = useCallback(async (participantId) => {
     const updates = { isActive: false, removedAt: new Date().toISOString() };
-
-    // Find the participant's email for Kit tagging
     const removed = participants.find(p => p.id === participantId);
 
     if (isSupabaseEnabled) {
@@ -564,7 +626,6 @@ export function useAppState() {
       persist(user, updatedParticipants);
     }
 
-    // Tag removed user in Kit (fire and forget)
     if (removed?.email) {
       tagRemovedFromCohort(removed.email).catch(() => {});
     }
@@ -583,7 +644,6 @@ export function useAppState() {
   }, [participants, user, persist]);
 
   const reactivateParticipant = useCallback(async (participantId) => {
-    // Calculate current calendar day so reactivated user isn't immediately auto-removed
     let calDay = 1;
     if (cohortStartDate) {
       const pacific = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
@@ -595,7 +655,6 @@ export function useAppState() {
       if (computed >= 1) calDay = computed;
     }
 
-    // Preserve existing progress — use whichever currentDay is further along
     const existing = participants.find(p => p.id === participantId);
     const currentDay = existing
       ? Math.max(existing.currentDay || 1, calDay)
@@ -637,7 +696,6 @@ export function useAppState() {
     await Promise.resolve(storage.setCohortSettings(settings));
     setCohortStartDateState(date);
 
-    // Stamp 1-year access expiration for active participants who don't have one yet
     if (date) {
       const expiresAt = new Date(date + 'T00:00:00');
       expiresAt.setFullYear(expiresAt.getFullYear() + 1);
@@ -707,6 +765,7 @@ export function useAppState() {
     cohortStartDate,
     nextCohortDate,
     contentOverrides,
+    passwordRecovery,
     navigate: setCurrentView,
     login,
     register,

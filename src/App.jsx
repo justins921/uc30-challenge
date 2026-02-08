@@ -20,6 +20,7 @@ export default function App() {
     confirmPasswordReset,
     updateProfile,
     changePassword,
+    passwordRecovery,
     logout,
     submitDay,
     removeParticipant,
@@ -50,7 +51,11 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('paid') === 'true' || params.get('success') === 'true') {
       setAuthMode('register');
-      // Clean URL without reload
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+    // If returning from a password reset link, show login screen
+    if (params.get('recovery') === 'true') {
+      setAuthMode('login');
       window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
@@ -66,6 +71,7 @@ export default function App() {
           onRequestReset={requestPasswordReset}
           onConfirmReset={confirmPasswordReset}
           initialMode={authMode}
+          passwordRecovery={passwordRecovery}
           onBackToLanding={() => setAuthMode(null)}
         />
       );

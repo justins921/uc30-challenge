@@ -1,94 +1,51 @@
 // ── Storage Layer ────────────────────────────────────────────────────
-// Uses Supabase for persistent, multi-user data storage.
+// Uses Supabase SDK for persistent, multi-user data storage with
+// Row Level Security backed by Supabase Auth (JWT sessions).
 // Falls back to localStorage if Supabase is not configured.
 //
 // To set up Supabase:
 // 1. Create a free account at supabase.com
 // 2. Create a new project
-// 3. Run the SQL in supabase-setup.sql (in project root)
-// 4. Copy your project URL and anon key into .env
+// 3. Run the SQL in supabase-setup.sql (base schema)
+// 4. Run the SQL in supabase-auth-migration.sql (auth + RLS)
+// 5. Copy your project URL and anon key into .env
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-const USE_SUPABASE = SUPABASE_URL && SUPABASE_KEY;
+import { supabase } from './supabaseClient';
 
-// ── Simple Supabase client (no SDK needed) ───────────────────────
-async function supabaseRequest(table, method, options = {}) {
-  const { filters = '', body = null, single = false } = options;
-  const url = `${SUPABASE_URL}/rest/v1/${table}${filters}`;
+const USE_SUPABASE = !!supabase;
 
-  const headers = {
-    'apikey': SUPABASE_KEY,
-    'Authorization': `Bearer ${SUPABASE_KEY}`,
-    'Content-Type': 'application/json',
-    'Prefer': method === 'POST' ? 'return=representation' : 'return=representation',
-  };
-
-  if (single) {
-    headers['Accept'] = 'application/vnd.pgrst.object+json';
-  }
-
-  const fetchOptions = { method, headers };
-  if (body) fetchOptions.body = JSON.stringify(body);
-
-  try {
-    // Add 8-second timeout to prevent hanging requests
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
-    fetchOptions.signal = controller.signal;
-
-    const res = await fetch(url, fetchOptions);
-    clearTimeout(timeoutId);
-
-    if (!res.ok) {
-      const err = await res.text();
-      console.error('Supabase error:', err);
-      return null;
-    }
-    if (res.status === 204) return true;
-    return await res.json();
-  } catch (err) {
-    if (err.name === 'AbortError') {
-      console.error('Supabase request timed out:', table, method);
-    } else {
-      console.error('Supabase request failed:', err);
-    }
-    return null;
-  }
-}
-
-// ── Supabase Storage Implementation ──────────────────────────────
+// ── Supabase Storage Implementation (SDK) ───────────────────────
 const supabaseStorage = {
+  // Session is managed by the SDK — getUser looks up participant by auth_id
   async getUser() {
-    // User session is kept in localStorage even with Supabase
     try {
-      const data = localStorage.getItem('uc30_current_user_id');
-      if (!data) return null;
-      const userId = JSON.parse(data);
-      const user = await supabaseRequest('participants', 'GET', {
-        filters: `?id=eq.${userId}`,
-        single: true,
-      });
-      return user ? fromDbRow(user) : null;
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return null;
+
+      const { data, error } = await supabase
+        .from('participants')
+        .select('*')
+        .eq('auth_id', session.user.id)
+        .maybeSingle();
+
+      if (error) { console.error('getUser error:', error); return null; }
+      return data ? fromDbRow(data) : null;
     } catch {
       return null;
     }
   },
 
-  setUser(user) {
-    try {
-      if (user) {
-        localStorage.setItem('uc30_current_user_id', JSON.stringify(user.id));
-      } else {
-        localStorage.removeItem('uc30_current_user_id');
-      }
-    } catch {}
+  setUser() {
+    // No-op: session persistence is handled by the Supabase SDK.
   },
 
   async getParticipants() {
-    const data = await supabaseRequest('participants', 'GET', {
-      filters: '?order=created_at.asc',
-    });
+    const { data, error } = await supabase
+      .from('participants')
+      .select('*')
+      .order('created_at', { ascending: true });
+
+    if (error) { console.error('getParticipants error:', error); return []; }
     return data ? data.map(fromDbRow) : [];
   },
 
@@ -98,237 +55,132 @@ const supabaseStorage = {
 
   async addParticipant(participant) {
     const row = toDbRow(participant);
-    const result = await supabaseRequest('participants', 'POST', { body: row, single: true });
-    return result ? fromDbRow(result) : null;
+    const { data, error } = await supabase
+      .from('participants')
+      .insert(row)
+      .select()
+      .single();
+
+    if (error) { console.error('addParticipant error:', error); return null; }
+    return data ? fromDbRow(data) : null;
   },
 
   async updateParticipant(id, updates) {
-    const row = {};
-    if (updates.email !== undefined) row.email = updates.email;
-    if (updates.firstName !== undefined) row.first_name = updates.firstName;
-    if (updates.lastName !== undefined) row.last_name = updates.lastName;
-    if (updates.currentDay !== undefined) row.current_day = updates.currentDay;
-    if (updates.isActive !== undefined) row.is_active = updates.isActive;
-    if (updates.isAdmin !== undefined) row.is_admin = updates.isAdmin;
-    if (updates.completedDays !== undefined) row.completed_days = updates.completedDays;
-    if (updates.submissions !== undefined) row.submissions = updates.submissions;
-    if (updates.metrics !== undefined) row.metrics = updates.metrics;
-    if (updates.removedAt !== undefined) row.removed_at = updates.removedAt;
-    if (updates.reactivatedAt !== undefined) row.reactivated_at = updates.reactivatedAt;
-    if (updates.password !== undefined) row.password = updates.password;
-    if (updates.hasPaid !== undefined) row.has_paid = updates.hasPaid;
-    if (updates.accessExpiresAt !== undefined) row.access_expires_at = updates.accessExpiresAt;
-    if (updates.profilePicture !== undefined) row.profile_picture = updates.profilePicture;
-    if (updates.resetCode !== undefined) row.reset_code = updates.resetCode;
-    if (updates.resetCodeExpiresAt !== undefined) row.reset_code_expires_at = updates.resetCodeExpiresAt;
+    const row = toDbUpdateRow(updates);
+    if (Object.keys(row).length === 0) return null;
 
-    const result = await supabaseRequest('participants', 'PATCH', {
-      filters: `?id=eq.${id}`,
-      body: row,
-      single: true,
-    });
-    return result ? fromDbRow(result) : null;
+    const { data, error } = await supabase
+      .from('participants')
+      .update(row)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) { console.error('updateParticipant error:', error); return null; }
+    return data ? fromDbRow(data) : null;
   },
 
   async deleteParticipant(id) {
-    const result = await supabaseRequest('participants', 'DELETE', {
-      filters: `?id=eq.${id}`,
-    });
-    return result !== null;
+    const { error } = await supabase
+      .from('participants')
+      .delete()
+      .eq('id', id);
+
+    if (error) { console.error('deleteParticipant error:', error); return false; }
+    return true;
   },
 
   async findByEmail(email) {
-    const result = await supabaseRequest('participants', 'GET', {
-      filters: `?email=eq.${encodeURIComponent(email.toLowerCase())}`,
-      single: true,
-    });
-    return result ? fromDbRow(result) : null;
+    const { data, error } = await supabase
+      .from('participants')
+      .select('*')
+      .eq('email', email.toLowerCase())
+      .maybeSingle();
+
+    if (error) { console.error('findByEmail error:', error); return null; }
+    return data ? fromDbRow(data) : null;
+  },
+
+  // ── Settings helpers ────────────────────────────────────────
+
+  async _getSetting(key) {
+    const { data, error } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', key)
+      .maybeSingle();
+
+    if (error) { console.error(`getSetting(${key}) error:`, error); return null; }
+    return data?.value ?? null;
+  },
+
+  async _setSetting(key, value) {
+    // Also persist to localStorage as backup
+    try { localStorage.setItem(`uc30_${key}`, JSON.stringify(value)); } catch {}
+
+    const body = { value, updated_at: new Date().toISOString() };
+
+    // Try upsert
+    const { error } = await supabase
+      .from('settings')
+      .upsert({ key, ...body }, { onConflict: 'key' });
+
+    if (error) console.error(`setSetting(${key}) error:`, error);
   },
 
   async getCohortSettings() {
-    // Try Supabase first (don't use single: true to avoid 406 on empty result)
-    const result = await supabaseRequest('settings', 'GET', {
-      filters: '?key=eq.cohort_settings',
-    });
-    if (Array.isArray(result) && result.length > 0 && result[0].value) {
-      // Also sync to localStorage as backup
-      localStorage.setItem('uc30_cohort_settings', JSON.stringify(result[0].value));
-      return result[0].value;
-    }
-    // Fallback to localStorage
-    try {
-      const data = localStorage.getItem('uc30_cohort_settings');
-      return data ? JSON.parse(data) : null;
-    } catch { return null; }
+    const val = await this._getSetting('cohort_settings');
+    if (val) { try { localStorage.setItem('uc30_cohort_settings', JSON.stringify(val)); } catch {} }
+    return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_cohort_settings')); } catch { return null; } })();
   },
+  async setCohortSettings(settings) { await this._setSetting('cohort_settings', settings); },
 
   async getContentOverrides() {
-    const result = await supabaseRequest('settings', 'GET', {
-      filters: '?key=eq.content_overrides',
-    });
-    if (Array.isArray(result) && result.length > 0 && result[0].value) {
-      localStorage.setItem('uc30_content_overrides', JSON.stringify(result[0].value));
-      return result[0].value;
-    }
-    try {
-      const data = localStorage.getItem('uc30_content_overrides');
-      return data ? JSON.parse(data) : {};
-    } catch { return {}; }
+    const val = await this._getSetting('content_overrides');
+    if (val) { try { localStorage.setItem('uc30_content_overrides', JSON.stringify(val)); } catch {} }
+    return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_content_overrides')) || {}; } catch { return {}; } })();
   },
-
-  async setContentOverrides(overrides) {
-    localStorage.setItem('uc30_content_overrides', JSON.stringify(overrides));
-    const body = { value: overrides, updated_at: new Date().toISOString() };
-    const result = await supabaseRequest('settings', 'PATCH', {
-      filters: '?key=eq.content_overrides',
-      body,
-    });
-    if (!result || (Array.isArray(result) && result.length === 0)) {
-      await supabaseRequest('settings', 'POST', {
-        body: { key: 'content_overrides', ...body },
-      });
-    }
-  },
+  async setContentOverrides(overrides) { await this._setSetting('content_overrides', overrides); },
 
   async getLiveCalls() {
-    const result = await supabaseRequest('settings', 'GET', {
-      filters: '?key=eq.live_calls',
-    });
-    if (Array.isArray(result) && result.length > 0 && result[0].value) {
-      localStorage.setItem('uc30_live_calls', JSON.stringify(result[0].value));
-      return result[0].value;
-    }
-    try {
-      const data = localStorage.getItem('uc30_live_calls');
-      return data ? JSON.parse(data) : [];
-    } catch { return []; }
+    const val = await this._getSetting('live_calls');
+    if (val) { try { localStorage.setItem('uc30_live_calls', JSON.stringify(val)); } catch {} }
+    return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_live_calls')) || []; } catch { return []; } })();
   },
-
-  async setLiveCalls(calls) {
-    localStorage.setItem('uc30_live_calls', JSON.stringify(calls));
-    const body = { value: calls, updated_at: new Date().toISOString() };
-    const result = await supabaseRequest('settings', 'PATCH', {
-      filters: '?key=eq.live_calls',
-      body,
-    });
-    if (!result || (Array.isArray(result) && result.length === 0)) {
-      await supabaseRequest('settings', 'POST', {
-        body: { key: 'live_calls', ...body },
-      });
-    }
-  },
+  async setLiveCalls(calls) { await this._setSetting('live_calls', calls); },
 
   async getPhases() {
-    const result = await supabaseRequest('settings', 'GET', {
-      filters: '?key=eq.phases',
-    });
-    if (Array.isArray(result) && result.length > 0 && result[0].value) {
-      localStorage.setItem('uc30_phases', JSON.stringify(result[0].value));
-      return result[0].value;
-    }
-    try {
-      const data = localStorage.getItem('uc30_phases');
-      return data ? JSON.parse(data) : null;
-    } catch { return null; }
+    const val = await this._getSetting('phases');
+    if (val) { try { localStorage.setItem('uc30_phases', JSON.stringify(val)); } catch {} }
+    return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_phases')); } catch { return null; } })();
   },
-
-  async setPhases(phases) {
-    localStorage.setItem('uc30_phases', JSON.stringify(phases));
-    const body = { value: phases, updated_at: new Date().toISOString() };
-    const result = await supabaseRequest('settings', 'PATCH', {
-      filters: '?key=eq.phases',
-      body,
-    });
-    if (!result || (Array.isArray(result) && result.length === 0)) {
-      await supabaseRequest('settings', 'POST', {
-        body: { key: 'phases', ...body },
-      });
-    }
-  },
+  async setPhases(phases) { await this._setSetting('phases', phases); },
 
   async getLandingContent() {
-    const result = await supabaseRequest('settings', 'GET', {
-      filters: '?key=eq.landing_content',
-    });
-    if (Array.isArray(result) && result.length > 0 && result[0].value) {
-      localStorage.setItem('uc30_landing_content', JSON.stringify(result[0].value));
-      return result[0].value;
-    }
-    try {
-      const data = localStorage.getItem('uc30_landing_content');
-      return data ? JSON.parse(data) : null;
-    } catch { return null; }
+    const val = await this._getSetting('landing_content');
+    if (val) { try { localStorage.setItem('uc30_landing_content', JSON.stringify(val)); } catch {} }
+    return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_landing_content')); } catch { return null; } })();
   },
-
-  async setLandingContent(content) {
-    localStorage.setItem('uc30_landing_content', JSON.stringify(content));
-    const body = { value: content, updated_at: new Date().toISOString() };
-    const result = await supabaseRequest('settings', 'PATCH', {
-      filters: '?key=eq.landing_content',
-      body,
-    });
-    if (!result || (Array.isArray(result) && result.length === 0)) {
-      await supabaseRequest('settings', 'POST', {
-        body: { key: 'landing_content', ...body },
-      });
-    }
-  },
+  async setLandingContent(content) { await this._setSetting('landing_content', content); },
 
   async getSupportTickets() {
-    const result = await supabaseRequest('settings', 'GET', {
-      filters: '?key=eq.support_tickets',
-    });
-    if (Array.isArray(result) && result.length > 0 && result[0].value) {
-      localStorage.setItem('uc30_support_tickets', JSON.stringify(result[0].value));
-      return result[0].value;
-    }
-    try {
-      const data = localStorage.getItem('uc30_support_tickets');
-      return data ? JSON.parse(data) : [];
-    } catch { return []; }
+    const val = await this._getSetting('support_tickets');
+    if (val) { try { localStorage.setItem('uc30_support_tickets', JSON.stringify(val)); } catch {} }
+    return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_support_tickets')) || []; } catch { return []; } })();
   },
-
-  async setSupportTickets(tickets) {
-    localStorage.setItem('uc30_support_tickets', JSON.stringify(tickets));
-    const body = { value: tickets, updated_at: new Date().toISOString() };
-    const result = await supabaseRequest('settings', 'PATCH', {
-      filters: '?key=eq.support_tickets',
-      body,
-    });
-    if (!result || (Array.isArray(result) && result.length === 0)) {
-      await supabaseRequest('settings', 'POST', {
-        body: { key: 'support_tickets', ...body },
-      });
-    }
-  },
-
-  async setCohortSettings(settings) {
-    // Always save to localStorage as backup
-    localStorage.setItem('uc30_cohort_settings', JSON.stringify(settings));
-    const body = { value: settings, updated_at: new Date().toISOString() };
-    // Try PATCH first (update existing)
-    const result = await supabaseRequest('settings', 'PATCH', {
-      filters: '?key=eq.cohort_settings',
-      body,
-    });
-    // If no row existed, PATCH returns empty array — create via POST
-    if (!result || (Array.isArray(result) && result.length === 0)) {
-      await supabaseRequest('settings', 'POST', {
-        body: { key: 'cohort_settings', ...body },
-      });
-    }
-  },
+  async setSupportTickets(tickets) { await this._setSetting('support_tickets', tickets); },
 };
 
 // ── Database row conversion ──────────────────────────────────────
 function toDbRow(user) {
   return {
     id: user.id,
+    auth_id: user.authId || null,
     name: `${user.firstName} ${user.lastName}`.trim(),
     first_name: user.firstName,
     last_name: user.lastName,
     email: user.email,
-    password: user.password,
+    password: user.password || null,
     is_admin: user.isAdmin,
     current_day: user.currentDay,
     is_active: user.isActive,
@@ -343,11 +195,32 @@ function toDbRow(user) {
   };
 }
 
+function toDbUpdateRow(updates) {
+  const row = {};
+  if (updates.authId !== undefined) row.auth_id = updates.authId;
+  if (updates.email !== undefined) row.email = updates.email;
+  if (updates.firstName !== undefined) row.first_name = updates.firstName;
+  if (updates.lastName !== undefined) row.last_name = updates.lastName;
+  if (updates.currentDay !== undefined) row.current_day = updates.currentDay;
+  if (updates.isActive !== undefined) row.is_active = updates.isActive;
+  if (updates.isAdmin !== undefined) row.is_admin = updates.isAdmin;
+  if (updates.completedDays !== undefined) row.completed_days = updates.completedDays;
+  if (updates.submissions !== undefined) row.submissions = updates.submissions;
+  if (updates.metrics !== undefined) row.metrics = updates.metrics;
+  if (updates.removedAt !== undefined) row.removed_at = updates.removedAt;
+  if (updates.reactivatedAt !== undefined) row.reactivated_at = updates.reactivatedAt;
+  if (updates.password !== undefined) row.password = updates.password;
+  if (updates.hasPaid !== undefined) row.has_paid = updates.hasPaid;
+  if (updates.accessExpiresAt !== undefined) row.access_expires_at = updates.accessExpiresAt;
+  if (updates.profilePicture !== undefined) row.profile_picture = updates.profilePicture;
+  return row;
+}
+
 function fromDbRow(row) {
-  // Support old rows that only have `name` (no first_name/last_name)
   const nameParts = (row.name || '').split(' ');
   return {
     id: row.id,
+    authId: row.auth_id || null,
     firstName: row.first_name || nameParts[0] || '',
     lastName: row.last_name || nameParts.slice(1).join(' ') || '',
     email: row.email,
@@ -364,8 +237,6 @@ function fromDbRow(row) {
     reactivatedAt: row.reactivated_at || null,
     accessExpiresAt: row.access_expires_at || null,
     profilePicture: row.profile_picture || null,
-    resetCode: row.reset_code || null,
-    resetCodeExpiresAt: row.reset_code_expires_at || null,
   };
 }
 
@@ -421,70 +292,40 @@ const localStorageFallback = {
     return this.getParticipants().find(p => p.email === email.toLowerCase()) || null;
   },
   getCohortSettings() {
-    try {
-      const data = localStorage.getItem('uc30_cohort_settings');
-      return data ? JSON.parse(data) : null;
-    } catch { return null; }
+    try { return JSON.parse(localStorage.getItem('uc30_cohort_settings')); } catch { return null; }
   },
   setCohortSettings(settings) {
-    try {
-      localStorage.setItem('uc30_cohort_settings', JSON.stringify(settings));
-    } catch {}
+    try { localStorage.setItem('uc30_cohort_settings', JSON.stringify(settings)); } catch {}
   },
   getContentOverrides() {
-    try {
-      const data = localStorage.getItem('uc30_content_overrides');
-      return data ? JSON.parse(data) : {};
-    } catch { return {}; }
+    try { return JSON.parse(localStorage.getItem('uc30_content_overrides')) || {}; } catch { return {}; }
   },
   setContentOverrides(overrides) {
-    try {
-      localStorage.setItem('uc30_content_overrides', JSON.stringify(overrides));
-    } catch {}
+    try { localStorage.setItem('uc30_content_overrides', JSON.stringify(overrides)); } catch {}
   },
   getLiveCalls() {
-    try {
-      const data = localStorage.getItem('uc30_live_calls');
-      return data ? JSON.parse(data) : [];
-    } catch { return []; }
+    try { return JSON.parse(localStorage.getItem('uc30_live_calls')) || []; } catch { return []; }
   },
   setLiveCalls(calls) {
-    try {
-      localStorage.setItem('uc30_live_calls', JSON.stringify(calls));
-    } catch {}
+    try { localStorage.setItem('uc30_live_calls', JSON.stringify(calls)); } catch {}
   },
   getPhases() {
-    try {
-      const data = localStorage.getItem('uc30_phases');
-      return data ? JSON.parse(data) : null;
-    } catch { return null; }
+    try { return JSON.parse(localStorage.getItem('uc30_phases')); } catch { return null; }
   },
   setPhases(phases) {
-    try {
-      localStorage.setItem('uc30_phases', JSON.stringify(phases));
-    } catch {}
+    try { localStorage.setItem('uc30_phases', JSON.stringify(phases)); } catch {}
   },
   getLandingContent() {
-    try {
-      const data = localStorage.getItem('uc30_landing_content');
-      return data ? JSON.parse(data) : null;
-    } catch { return null; }
+    try { return JSON.parse(localStorage.getItem('uc30_landing_content')); } catch { return null; }
   },
   setLandingContent(content) {
-    try {
-      localStorage.setItem('uc30_landing_content', JSON.stringify(content));
-    } catch {}
+    try { localStorage.setItem('uc30_landing_content', JSON.stringify(content)); } catch {}
   },
   getSupportTickets() {
-    try {
-      const data = localStorage.getItem('uc30_support_tickets');
-      return data ? JSON.parse(data) : [];
-    } catch { return []; }
+    try { return JSON.parse(localStorage.getItem('uc30_support_tickets')) || []; } catch { return []; }
   },
   setSupportTickets(tickets) {
-    try {
-      localStorage.setItem('uc30_support_tickets', JSON.stringify(tickets));
-    } catch {}
+    try { localStorage.setItem('uc30_support_tickets', JSON.stringify(tickets)); } catch {}
   },
 };
 
@@ -493,13 +334,14 @@ export const storage = USE_SUPABASE ? supabaseStorage : localStorageFallback;
 export const isSupabaseEnabled = USE_SUPABASE;
 
 // ── Create new user object ───────────────────────────────────────
-export function createNewUser(firstName, lastName, email, password) {
+export function createNewUser(firstName, lastName, email, authId) {
   return {
     id: `user_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    authId: authId || null,
     firstName,
     lastName,
     email: email.toLowerCase(),
-    password,
+    password: null,
     isAdmin: email.toLowerCase() === 'admin@uc30.com',
     currentDay: 1,
     isActive: true,
