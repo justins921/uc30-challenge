@@ -86,12 +86,12 @@ async function applyTag(email, tagName) {
 // These create tags in Kit like "UC30 - Day 1 Started", "UC30 - Day 5 Completed", etc.
 // Set up Kit Automations triggered by these tags to send emails.
 
-export function tagDayStarted(email, dayNum) {
-  return applyTag(email, `UC30 - Day ${dayNum} Started`);
+export function tagSignUp(email) {
+  return applyTag(email, 'UC30 - Sign up');
 }
 
-export function tagDayCompleted(email, dayNum) {
-  return applyTag(email, `UC30 - Day ${dayNum} Completed`);
+export function tagDayStarted(email, dayNum) {
+  return applyTag(email, `UC30 Day ${dayNum} Started`);
 }
 
 export function tagChallengeCompleted(email) {
@@ -99,7 +99,7 @@ export function tagChallengeCompleted(email) {
 }
 
 export function tagRemovedFromCohort(email) {
-  return applyTag(email, 'UC30 - Removed From Cohort');
+  return applyTag(email, 'UC30 Removed from Cohort');
 }
 
 export const isKitEnabled = KIT_ENABLED;

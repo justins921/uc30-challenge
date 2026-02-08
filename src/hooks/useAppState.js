@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { storage, createNewUser, isSupabaseEnabled } from '../utils/storage';
 import { CHALLENGE_DAYS } from '../data/challengeDays';
 import { hashPassword } from '../utils/crypto';
-import { subscribeUser, tagDayStarted, tagDayCompleted, tagChallengeCompleted, tagRemovedFromCohort } from '../utils/kit';
+import { subscribeUser, tagSignUp, tagDayStarted, tagChallengeCompleted, tagRemovedFromCohort } from '../utils/kit';
 
 export function useAppState() {
   const [user, setUser] = useState(null);
@@ -35,12 +35,26 @@ export function useAppState() {
           setUser(currentUser);
           setCurrentView(currentUser.isAdmin ? 'admin' : 'dashboard');
         }
+
+        // Auto-remove participants who missed their deadline
+        if (cohortSettings?.startDate && storedParticipants?.length > 0) {
+          autoRemoveMissed(storedParticipants, cohortSettings.startDate);
+        }
       } catch (err) {
         console.error('Failed to load state:', err);
       }
       setLoading(false);
     })();
   }, []);
+
+  // Periodic auto-removal check (every 5 minutes)
+  useEffect(() => {
+    if (!cohortStartDate || participants.length === 0) return;
+    const interval = setInterval(() => {
+      autoRemoveMissed(participants, cohortStartDate);
+    }, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [cohortStartDate, participants, autoRemoveMissed]);
 
   // Persist helper (localStorage only — Supabase persists per-operation)
   const persist = useCallback((newUser, newParticipants) => {
@@ -135,9 +149,9 @@ export function useAppState() {
       persist(newUser, newParticipants);
     }
 
-    // Subscribe to Kit email list and tag Day 1 Started (fire and forget)
+    // Subscribe to Kit email list and tag sign up (fire and forget)
     subscribeUser(email, name).then(() => {
-      tagDayStarted(email, 1).catch(() => {});
+      tagSignUp(email).catch(() => {});
     }).catch(() => {});
 
     return { success: true };
@@ -221,13 +235,13 @@ export function useAppState() {
     storage.setUser(updatedUser);
 
     // Tag in Kit (fire and forget)
-    tagDayCompleted(user.email, dayNum).catch(() => {});
-    if (dayNum >= 30) {
-      tagChallengeCompleted(user.email).catch(() => {});
-    }
-    // Tag next day started (if not done with challenge)
+    // Tag next day started — Kit automation should delay delivery to 3:01am ET
     if (dayNum < 30) {
       tagDayStarted(user.email, dayNum + 1).catch(() => {});
+    }
+    // Challenge completed only if user has submitted at least one offer
+    if (dayNum >= 30 && (updatedMetrics.offersSubmitted || 0) > 0) {
+      tagChallengeCompleted(user.email).catch(() => {});
     }
   }, [user, participants, persist]);
 
@@ -326,6 +340,68 @@ export function useAppState() {
     await Promise.resolve(storage.setContentOverrides(overrides));
     setContentOverridesState(overrides);
   }, []);
+
+  // ── Auto-removal for missed days ──────────────────────
+  // Checks all active participants and removes anyone who missed their Pacific deadline.
+  // Runs on load and every 5 minutes.
+  const autoRemoveMissed = useCallback(async (currentParticipants, startDate) => {
+    if (!startDate) return; // No cohort mode — no auto-removal
+
+    // Get current date in Pacific time (deadline timezone)
+    const pacific = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+    const nowPacific = new Date(pacific);
+    const nowPacificDay = new Date(nowPacific.getFullYear(), nowPacific.getMonth(), nowPacific.getDate());
+
+    const start = new Date(startDate + 'T00:00:00');
+    const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+
+    // Pacific calendar day: which challenge day is it based on Pacific time?
+    const pacificDayNum = Math.floor((nowPacificDay - startDay) / (1000 * 60 * 60 * 24)) + 1;
+
+    // If cohort hasn't started yet, no removals
+    if (pacificDayNum < 2) return; // Need at least Day 2 for Day 1's deadline to have passed
+
+    const removals = [];
+    for (const p of currentParticipants) {
+      // Skip admins, already-removed users, and users who finished the challenge
+      if (p.isAdmin || !p.isActive || p.currentDay > 30) continue;
+
+      // If user's currentDay is behind the Pacific calendar day, they missed a deadline
+      // e.g., Pacific is Day 3, user is still on Day 1 → missed Day 1 and Day 2 deadlines
+      if (p.currentDay < pacificDayNum) {
+        removals.push(p);
+      }
+    }
+
+    for (const p of removals) {
+      const updates = { isActive: false, removedAt: new Date().toISOString() };
+      if (isSupabaseEnabled) {
+        await storage.updateParticipant(p.id, updates);
+      }
+      // Tag in Kit
+      tagRemovedFromCohort(p.email).catch(() => {});
+    }
+
+    if (removals.length > 0 && isSupabaseEnabled) {
+      const fresh = await storage.getParticipants();
+      setParticipants(fresh || []);
+      // If current user was removed, update their state
+      const currentUser = user;
+      if (currentUser && removals.find(r => r.id === currentUser.id)) {
+        const updatedUser = { ...currentUser, isActive: false, removedAt: new Date().toISOString() };
+        setUser(updatedUser);
+        storage.setUser(updatedUser);
+      }
+    } else if (removals.length > 0) {
+      // localStorage mode
+      const updatedParticipants = currentParticipants.map(p => {
+        const removed = removals.find(r => r.id === p.id);
+        return removed ? { ...p, isActive: false, removedAt: new Date().toISOString() } : p;
+      });
+      setParticipants(updatedParticipants);
+      persist(user, updatedParticipants);
+    }
+  }, [user, persist]);
 
   return {
     user,
