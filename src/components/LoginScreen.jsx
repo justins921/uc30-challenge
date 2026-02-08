@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function LoginScreen({ onLogin, onRegister, onResetPassword, initialMode }) {
+export default function LoginScreen({ onLogin, onRegister, initialMode }) {
   const [mode, setMode] = useState(initialMode || 'login');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -29,20 +29,6 @@ export default function LoginScreen({ onLogin, onRegister, onResetPassword, init
     if (result?.error) setError(result.error);
   };
 
-  const handleResetPassword = async () => {
-    if (!email.trim() || !email.includes('@')) return setError('Please enter your email address');
-    if (password.length < 6) return setError('New password must be at least 6 characters');
-    if (password !== confirmPassword) return setError('Passwords do not match');
-    setError('');
-    setSuccess('');
-    const result = await onResetPassword(email.trim(), password);
-    if (result?.error) setError(result.error);
-    if (result?.success) {
-      setSuccess('Password updated. You can now log in.');
-      setTimeout(() => switchMode('login'), 2000);
-    }
-  };
-
   const switchMode = (newMode) => {
     setMode(newMode);
     setError('');
@@ -58,7 +44,6 @@ export default function LoginScreen({ onLogin, onRegister, onResetPassword, init
     if (e.key === 'Enter') {
       if (mode === 'login') handleLogin();
       else if (mode === 'register') handleRegister();
-      else if (mode === 'reset') handleResetPassword();
     }
   };
 
@@ -86,43 +71,36 @@ export default function LoginScreen({ onLogin, onRegister, onResetPassword, init
         <div style={{ width: 40, height: 2, background: '#e94560', margin: '0 auto 32px' }} />
 
         {/* Mode Toggle */}
-        {mode !== 'reset' ? (
-          <div style={{
-            display: 'flex', background: 'rgba(255,255,255,0.04)',
-            borderRadius: 12, padding: 4, marginBottom: 24,
-            border: '1px solid rgba(255,255,255,0.06)',
-          }}>
-            <button
-              onClick={() => switchMode('login')}
-              style={{
-                flex: 1, padding: '10px 0', borderRadius: 8, border: 'none',
-                background: mode === 'login' ? 'rgba(233,69,96,0.15)' : 'transparent',
-                color: mode === 'login' ? '#e94560' : '#666',
-                fontSize: 14, fontWeight: 600, cursor: 'pointer',
-                fontFamily: "'DM Sans', sans-serif", transition: 'all 0.2s',
-              }}
-            >
-              Log In
-            </button>
-            <button
-              onClick={() => switchMode('register')}
-              style={{
-                flex: 1, padding: '10px 0', borderRadius: 8, border: 'none',
-                background: mode === 'register' ? 'rgba(233,69,96,0.15)' : 'transparent',
-                color: mode === 'register' ? '#e94560' : '#666',
-                fontSize: 14, fontWeight: 600, cursor: 'pointer',
-                fontFamily: "'DM Sans', sans-serif", transition: 'all 0.2s',
-              }}
-            >
-              Register
-            </button>
-          </div>
-        ) : (
-          <div style={{ marginBottom: 24 }}>
-            <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Reset Password</h2>
-            <p style={{ fontSize: 13, color: '#666' }}>Enter your email and choose a new password</p>
-          </div>
-        )}
+        <div style={{
+          display: 'flex', background: 'rgba(255,255,255,0.04)',
+          borderRadius: 12, padding: 4, marginBottom: 24,
+          border: '1px solid rgba(255,255,255,0.06)',
+        }}>
+          <button
+            onClick={() => switchMode('login')}
+            style={{
+              flex: 1, padding: '10px 0', borderRadius: 8, border: 'none',
+              background: mode === 'login' ? 'rgba(233,69,96,0.15)' : 'transparent',
+              color: mode === 'login' ? '#e94560' : '#666',
+              fontSize: 14, fontWeight: 600, cursor: 'pointer',
+              fontFamily: "'DM Sans', sans-serif", transition: 'all 0.2s',
+            }}
+          >
+            Log In
+          </button>
+          <button
+            onClick={() => switchMode('register')}
+            style={{
+              flex: 1, padding: '10px 0', borderRadius: 8, border: 'none',
+              background: mode === 'register' ? 'rgba(233,69,96,0.15)' : 'transparent',
+              color: mode === 'register' ? '#e94560' : '#666',
+              fontSize: 14, fontWeight: 600, cursor: 'pointer',
+              fontFamily: "'DM Sans', sans-serif", transition: 'all 0.2s',
+            }}
+          >
+            Register
+          </button>
+        </div>
 
         {/* Form */}
         <div className="card" style={{ padding: 36, textAlign: 'left' }}>
@@ -175,38 +153,10 @@ export default function LoginScreen({ onLogin, onRegister, onResetPassword, init
 
           {mode === 'login' && (
             <div style={{ marginBottom: 20, textAlign: 'right' }}>
-              <span
-                onClick={() => switchMode('reset')}
-                style={{ fontSize: 12, color: '#e94560', cursor: 'pointer' }}
-              >
-                Forgot password?
+              <span style={{ fontSize: 12, color: '#666' }}>
+                Forgot password? Contact your administrator
               </span>
             </div>
-          )}
-
-          {mode === 'reset' && (
-            <>
-              <div style={{ marginBottom: 20 }}>
-                <label>New Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder="At least 6 characters"
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
-              <div style={{ marginBottom: 24 }}>
-                <label>Confirm New Password</label>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={e => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm new password"
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
-            </>
           )}
 
           {mode === 'register' && (
@@ -243,18 +193,16 @@ export default function LoginScreen({ onLogin, onRegister, onResetPassword, init
           <button
             className="btn-primary"
             style={{ width: '100%' }}
-            onClick={mode === 'login' ? handleLogin : mode === 'register' ? handleRegister : handleResetPassword}
+            onClick={mode === 'login' ? handleLogin : handleRegister}
           >
-            {mode === 'login' ? 'Log In \u2192' : mode === 'register' ? 'Create Account \u2192' : 'Reset Password \u2192'}
+            {mode === 'login' ? 'Log In \u2192' : 'Create Account \u2192'}
           </button>
 
           <div style={{ marginTop: 16, fontSize: 13, color: '#555', textAlign: 'center' }}>
             {mode === 'login' ? (
               <>Don't have an account? <span onClick={() => switchMode('register')} style={{ color: '#e94560', cursor: 'pointer' }}>Register</span></>
-            ) : mode === 'register' ? (
-              <>Already have an account? <span onClick={() => switchMode('login')} style={{ color: '#e94560', cursor: 'pointer' }}>Log in</span></>
             ) : (
-              <span onClick={() => switchMode('login')} style={{ color: '#e94560', cursor: 'pointer' }}>← Back to Log In</span>
+              <>Already have an account? <span onClick={() => switchMode('login')} style={{ color: '#e94560', cursor: 'pointer' }}>Log in</span></>
             )}
           </div>
         </div>

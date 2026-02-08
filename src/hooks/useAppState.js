@@ -242,31 +242,26 @@ export function useAppState() {
     return { success: true };
   }, [participants, persist, cohortStartDate]);
 
-  const resetPassword = useCallback(async (email, newPassword) => {
-    let existing;
-    if (isSupabaseEnabled) {
-      existing = await storage.findByEmail(email);
-    } else {
-      existing = participants.find(p => p.email === email.toLowerCase());
-    }
+  // Admin-only password reset (no self-service to prevent email guessing attacks)
+  const adminResetPassword = useCallback(async (participantId, newPassword) => {
+    if (!user?.isAdmin) return { error: 'Only admins can reset passwords.' };
 
-    if (!existing) {
-      return { error: 'No account found with that email.' };
-    }
+    const target = participants.find(p => p.id === participantId);
+    if (!target) return { error: 'Participant not found.' };
 
-    const hashed = await hashPassword(email, newPassword);
+    const hashed = await hashPassword(target.email, newPassword);
     if (isSupabaseEnabled) {
-      await storage.updateParticipant(existing.id, { password: hashed });
+      await storage.updateParticipant(participantId, { password: hashed });
     } else {
       const updatedParticipants = participants.map(p =>
-        p.id === existing.id ? { ...p, password: hashed } : p
+        p.id === participantId ? { ...p, password: hashed } : p
       );
       setParticipants(updatedParticipants);
       storage.setParticipants(updatedParticipants);
     }
 
     return { success: true };
-  }, [participants]);
+  }, [participants, user]);
 
   const logout = useCallback(() => {
     setUser(null);
@@ -374,25 +369,28 @@ export function useAppState() {
 
   const reactivateParticipant = useCallback(async (participantId) => {
     // Calculate current calendar day so reactivated user isn't immediately auto-removed
-    let startDay = 1;
+    let calDay = 1;
     if (cohortStartDate) {
       const pacific = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
       const nowPacific = new Date(pacific);
       const nowPacificDay = new Date(nowPacific.getFullYear(), nowPacific.getMonth(), nowPacific.getDate());
       const start = new Date(cohortStartDate + 'T00:00:00');
       const startDateDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-      const calDay = Math.floor((nowPacificDay - startDateDay) / (1000 * 60 * 60 * 24)) + 1;
-      if (calDay >= 1) startDay = calDay;
+      const computed = Math.floor((nowPacificDay - startDateDay) / (1000 * 60 * 60 * 24)) + 1;
+      if (computed >= 1) calDay = computed;
     }
+
+    // Preserve existing progress — use whichever currentDay is further along
+    const existing = participants.find(p => p.id === participantId);
+    const currentDay = existing
+      ? Math.max(existing.currentDay || 1, calDay)
+      : calDay;
 
     const updates = {
       isActive: true,
       removedAt: null,
       reactivatedAt: new Date().toISOString(),
-      currentDay: startDay,
-      completedDays: [],
-      submissions: [],
-      metrics: { propertiesAnalyzed: 0, offersSubmitted: 0, agentsContacted: 0 },
+      currentDay,
     };
 
     if (isSupabaseEnabled) {
@@ -497,7 +495,7 @@ export function useAppState() {
     navigate: setCurrentView,
     login,
     register,
-    resetPassword,
+    adminResetPassword,
     logout,
     submitDay,
     removeParticipant,

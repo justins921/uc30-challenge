@@ -13,7 +13,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -95,6 +95,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onDelete={onDelete}
             onReactivate={onReactivate}
             onToggleAdmin={onToggleAdmin}
+            onResetPassword={onResetPassword}
             onSelect={setSelectedParticipant}
           />
         )}
@@ -106,6 +107,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onDelete={onDelete}
             onReactivate={onReactivate}
             onToggleAdmin={onToggleAdmin}
+            onResetPassword={onResetPassword}
           />
         )}
         {tab === 'submissions' && (
@@ -540,7 +542,7 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate }) {
   );
 }
 
-function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleAdmin, onSelect }) {
+function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onSelect }) {
   const [filter, setFilter] = useState('all');
   const filtered = filter === 'all' ? nonAdmin
     : filter === 'active' ? nonAdmin.filter(p => p.isActive)
@@ -615,6 +617,24 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
                 <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, flexWrap: 'wrap' }} onClick={e => e.stopPropagation()}>
                   <button
                     style={{
+                      background: 'rgba(59,130,246,0.08)', color: '#3b82f6',
+                      border: '1px solid rgba(59,130,246,0.2)', padding: '6px 12px',
+                      borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                      fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+                    }}
+                    onClick={() => {
+                      const newPw = prompt(`Enter new password for ${p.firstName} ${p.lastName}:`);
+                      if (newPw && newPw.length >= 6) {
+                        onResetPassword(p.id, newPw);
+                      } else if (newPw) {
+                        alert('Password must be at least 6 characters.');
+                      }
+                    }}
+                  >
+                    Reset Password
+                  </button>
+                  <button
+                    style={{
                       background: 'rgba(83,52,131,0.08)', color: '#9b59b6',
                       border: '1px solid rgba(83,52,131,0.2)', padding: '6px 12px',
                       borderRadius: 8, fontSize: 12, cursor: 'pointer',
@@ -659,7 +679,7 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
 }
 
 // ── Participant Detail View (with all submissions) ──────────
-function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin }) {
+function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword }) {
   const p = participant;
 
   return (
@@ -704,6 +724,24 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
             </div>
           </div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <button
+              style={{
+                background: 'rgba(59,130,246,0.08)', color: '#3b82f6',
+                border: '1px solid rgba(59,130,246,0.2)', padding: '8px 16px',
+                borderRadius: 8, fontSize: 13, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+              }}
+              onClick={() => {
+                const newPw = prompt(`Enter new password for ${p.firstName} ${p.lastName}:`);
+                if (newPw && newPw.length >= 6) {
+                  onResetPassword(p.id, newPw);
+                } else if (newPw) {
+                  alert('Password must be at least 6 characters.');
+                }
+              }}
+            >
+              Reset Password
+            </button>
             <button
               style={{
                 background: 'rgba(83,52,131,0.08)', color: '#9b59b6',

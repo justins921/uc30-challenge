@@ -15,7 +15,7 @@ export default function App() {
     nextCohortDate,
     login,
     register,
-    resetPassword,
+    adminResetPassword,
     logout,
     submitDay,
     removeParticipant,
@@ -55,7 +55,6 @@ export default function App() {
         <LoginScreen
           onLogin={login}
           onRegister={register}
-          onResetPassword={resetPassword}
           initialMode={authMode}
           onBackToLanding={() => setAuthMode(null)}
         />
@@ -105,6 +104,7 @@ export default function App() {
         onDelete={deleteParticipant}
         onReactivate={reactivateParticipant}
         onToggleAdmin={toggleAdmin}
+        onResetPassword={adminResetPassword}
         onLogout={logout}
         cohortStartDate={cohortStartDate}
         nextCohortDate={nextCohortDate}
