@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Header from './Header';
 import ProgressBanner from './ProgressBanner';
-import ShareableStreakCard from './ShareableStreakCard';
 import TimelineView from './TimelineView';
 import DayView from './DayView';
 import SubmissionsView from './SubmissionsView';
@@ -144,9 +143,6 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
         <ProgressBanner user={user} cohortStartDate={cohortStartDate} calendarDay={calendarDay} />
-
-        {/* Shareable streak card for Instagram */}
-        <ShareableStreakCard user={user} calendarDay={calendarDay} />
 
         {/* Countdown banner if user completed today's task */}
         {userCompletedToday && (

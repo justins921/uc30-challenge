@@ -1,4 +1,5 @@
 import { CHALLENGE_DAYS } from '../data/challengeDays';
+import ShareableStreakCard from './ShareableStreakCard';
 
 export default function StatsView({ user }) {
   const completionRate = user.completedDays.length > 0
@@ -8,6 +9,9 @@ export default function StatsView({ user }) {
   return (
     <div className="fade-up">
       <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 24 }}>My Challenge Stats</h2>
+
+      {/* Shareable streak card with share button */}
+      <ShareableStreakCard user={user} />
 
       {/* Big Numbers */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 32 }}>
