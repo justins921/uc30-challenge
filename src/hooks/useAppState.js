@@ -407,8 +407,16 @@ export function useAppState() {
   }, [user, participants]);
 
   // ── Support Tickets ────────────────────────────────────
-  const submitSupportTicket = useCallback(async (subject, message) => {
+  const submitSupportTicket = useCallback(async (subject, message, attachment) => {
     if (!user) return { error: 'Not logged in.' };
+    const firstMessage = {
+      id: `msg_${Date.now()}`,
+      from: 'user',
+      name: `${user.firstName} ${user.lastName}`.trim(),
+      text: message,
+      attachment: attachment || null,
+      createdAt: new Date().toISOString(),
+    };
     const ticket = {
       id: `ticket_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       participantId: user.id,
@@ -420,8 +428,42 @@ export function useAppState() {
       createdAt: new Date().toISOString(),
       adminResponse: null,
       respondedAt: null,
+      messages: [firstMessage],
     };
     const updated = [...supportTickets, ticket];
+    setSupportTicketsState(updated);
+    await Promise.resolve(storage.setSupportTickets(updated));
+    return { success: true };
+  }, [user, supportTickets]);
+
+  const replyToTicket = useCallback(async (ticketId, text, attachment) => {
+    if (!user) return { error: 'Not logged in.' };
+    const isAdmin = user.isAdmin;
+    const msg = {
+      id: `msg_${Date.now()}`,
+      from: isAdmin ? 'admin' : 'user',
+      name: isAdmin ? 'Admin' : `${user.firstName} ${user.lastName}`.trim(),
+      text,
+      attachment: attachment || null,
+      createdAt: new Date().toISOString(),
+    };
+    const updated = supportTickets.map(t => {
+      if (t.id !== ticketId) return t;
+      const messages = [...(t.messages || []), msg];
+      const updates = { messages };
+      // Also update legacy fields for admin responses
+      if (isAdmin) {
+        updates.adminResponse = text;
+        updates.respondedAt = msg.createdAt;
+        updates.status = 'responded';
+      } else {
+        // User reply reopens if it was responded/closed
+        if (t.status === 'responded' || t.status === 'closed') {
+          updates.status = 'open';
+        }
+      }
+      return { ...t, ...updates };
+    });
     setSupportTicketsState(updated);
     await Promise.resolve(storage.setSupportTickets(updated));
     return { success: true };
@@ -691,6 +733,7 @@ export function useAppState() {
     setLandingContent,
     supportTickets,
     submitSupportTicket,
+    replyToTicket,
     updateSupportTicket,
   };
 }

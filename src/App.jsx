@@ -38,6 +38,7 @@ export default function App() {
     setLandingContent,
     supportTickets,
     submitSupportTicket,
+    replyToTicket,
     updateSupportTicket,
     navigate,
   } = useAppState();
@@ -129,6 +130,7 @@ export default function App() {
         onSetLandingContent={setLandingContent}
         supportTickets={supportTickets}
         onUpdateTicket={updateSupportTicket}
+        onReplyToTicket={replyToTicket}
       />
     );
   }
@@ -146,6 +148,8 @@ export default function App() {
       onUpdateProfile={updateProfile}
       onChangePassword={changePassword}
       onSubmitTicket={submitSupportTicket}
+      onReplyToTicket={replyToTicket}
+      onUpdateTicket={updateSupportTicket}
       supportTickets={supportTickets}
     />
   );

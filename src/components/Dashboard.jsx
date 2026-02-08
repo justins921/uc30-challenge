@@ -62,7 +62,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, supportTickets }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -144,13 +144,15 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
         <ProgressBanner user={user} cohortStartDate={cohortStartDate} calendarDay={calendarDay} />
 
-        {/* Countdown banner if user completed today's task */}
-        {userCompletedToday && (
-          <NextDayCountdown calendarDay={calendarDay} />
+        {/* Countdown + Live Call — only on Timeline/Day views */}
+        {(tab === 'timeline' || tab === 'day') && (
+          <>
+            {userCompletedToday && (
+              <NextDayCountdown calendarDay={calendarDay} />
+            )}
+            <UpcomingCallBanner calls={liveCalls} />
+          </>
         )}
-
-        {/* Upcoming Live Call */}
-        <UpcomingCallBanner calls={liveCalls} />
 
         {/* Tab Content */}
         {tab === 'timeline' && (
@@ -174,6 +176,8 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             onUpdateProfile={onUpdateProfile}
             onChangePassword={onChangePassword}
             onSubmitTicket={onSubmitTicket}
+            onReplyToTicket={onReplyToTicket}
+            onUpdateTicket={onUpdateTicket}
             supportTickets={supportTickets}
             onBack={() => handleTabChange('timeline')}
           />

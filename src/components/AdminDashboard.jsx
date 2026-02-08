@@ -14,7 +14,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, supportTickets, onUpdateTicket }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, supportTickets, onUpdateTicket, onReplyToTicket }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -129,7 +129,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
           />
         )}
         {tab === 'support' && (
-          <SupportTab tickets={supportTickets || []} onUpdateTicket={onUpdateTicket} />
+          <SupportTab tickets={supportTickets || []} onUpdateTicket={onUpdateTicket} onReplyToTicket={onReplyToTicket} />
         )}
         {tab === 'social' && (
           <SocialProofTab
@@ -1843,7 +1843,7 @@ function MiniStat({ label, value, color }) {
 }
 
 // ── Support Tickets Tab ──────────────────────────────────
-function SupportTab({ tickets, onUpdateTicket }) {
+function SupportTab({ tickets, onUpdateTicket, onReplyToTicket }) {
   const [filter, setFilter] = useState('all');
   const [expandedId, setExpandedId] = useState(null);
   const [responseText, setResponseText] = useState('');
@@ -1857,11 +1857,7 @@ function SupportTab({ tickets, onUpdateTicket }) {
 
   const handleRespond = async (ticketId) => {
     if (!responseText.trim()) return;
-    await onUpdateTicket(ticketId, {
-      adminResponse: responseText.trim(),
-      respondedAt: new Date().toISOString(),
-      status: 'responded',
-    });
+    await onReplyToTicket(ticketId, responseText.trim());
     setResponseText('');
   };
 
@@ -1870,7 +1866,7 @@ function SupportTab({ tickets, onUpdateTicket }) {
   };
 
   const handleReopen = async (ticketId) => {
-    await onUpdateTicket(ticketId, { status: 'open', adminResponse: null, respondedAt: null });
+    await onUpdateTicket(ticketId, { status: 'open' });
   };
 
   const statusColors = {
@@ -1882,7 +1878,7 @@ function SupportTab({ tickets, onUpdateTicket }) {
   return (
     <div className="fade-up">
       {/* Header with count */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <h3 style={{ fontSize: 18, fontWeight: 700 }}>Support Requests</h3>
           {openCount > 0 && (
@@ -1915,7 +1911,6 @@ function SupportTab({ tickets, onUpdateTicket }) {
 
       {sorted.length === 0 ? (
         <div className="card" style={{ padding: 48, textAlign: 'center' }}>
-          <div style={{ fontSize: 32, marginBottom: 12 }}>📭</div>
           <div style={{ color: '#666' }}>No support requests{filter !== 'all' ? ` with status "${filter}"` : ''}</div>
         </div>
       ) : (
@@ -1923,6 +1918,17 @@ function SupportTab({ tickets, onUpdateTicket }) {
           {sorted.map(ticket => {
             const sc = statusColors[ticket.status] || statusColors.open;
             const isExpanded = expandedId === ticket.id;
+
+            // Build messages list with backward compat
+            const messages = ticket.messages && ticket.messages.length > 0
+              ? ticket.messages
+              : [
+                  { id: 'orig', from: 'user', name: ticket.name, text: ticket.message, createdAt: ticket.createdAt },
+                  ...(ticket.adminResponse ? [{
+                    id: 'admin_resp', from: 'admin', name: 'Admin', text: ticket.adminResponse, createdAt: ticket.respondedAt || ticket.createdAt,
+                  }] : []),
+                ];
+
             return (
               <div
                 key={ticket.id}
@@ -1931,7 +1937,7 @@ function SupportTab({ tickets, onUpdateTicket }) {
               >
                 {/* Ticket header */}
                 <div
-                  onClick={() => setExpandedId(isExpanded ? null : ticket.id)}
+                  onClick={() => { setExpandedId(isExpanded ? null : ticket.id); setResponseText(''); }}
                   style={{
                     padding: '16px 20px', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
@@ -1952,6 +1958,7 @@ function SupportTab({ tickets, onUpdateTicket }) {
                     </div>
                     <div style={{ fontSize: 12, color: '#666' }}>
                       {ticket.name} ({ticket.email}) &middot; {new Date(ticket.createdAt).toLocaleDateString()}
+                      {messages.length > 1 && <span> &middot; {messages.length} messages</span>}
                     </div>
                   </div>
                   <div style={{ color: '#444', fontSize: 18, flexShrink: 0, transform: isExpanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }}>
@@ -1962,41 +1969,57 @@ function SupportTab({ tickets, onUpdateTicket }) {
                 {/* Expanded content */}
                 {isExpanded && (
                   <div style={{ padding: '0 20px 20px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                    {/* User's message */}
-                    <div style={{ marginTop: 16, marginBottom: 16 }}>
-                      <div style={{ fontSize: 11, color: '#555', fontWeight: 600, letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 6 }}>
-                        Message
-                      </div>
-                      <div style={{
-                        background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-                        borderRadius: 8, padding: '12px 16px', fontSize: 14, color: '#ccc', lineHeight: 1.6,
-                        whiteSpace: 'pre-wrap',
-                      }}>
-                        {ticket.message}
-                      </div>
+                    {/* Threaded messages */}
+                    <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
+                      {messages.map((msg, i) => {
+                        const isAdmin = msg.from === 'admin';
+                        return (
+                          <div key={msg.id || i}>
+                            <div style={{ fontSize: 10, color: isAdmin ? '#48c78e' : '#888', fontWeight: 600, marginBottom: 3 }}>
+                              {isAdmin ? (msg.name || 'Admin') : (msg.name || ticket.name || 'User')}
+                              <span style={{ fontWeight: 400, color: '#555', marginLeft: 6 }}>
+                                {new Date(msg.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                {' '}
+                                {new Date(msg.createdAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                              </span>
+                            </div>
+                            <div style={{
+                              background: isAdmin ? 'rgba(72,199,142,0.06)' : 'rgba(255,255,255,0.03)',
+                              border: `1px solid ${isAdmin ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.06)'}`,
+                              borderRadius: 8, padding: '12px 16px', fontSize: 14, color: '#ccc', lineHeight: 1.6,
+                              whiteSpace: 'pre-wrap',
+                            }}>
+                              {msg.text}
+                              {msg.attachment && (
+                                <div style={{ marginTop: 8 }}>
+                                  {msg.attachment.type?.startsWith('image/') ? (
+                                    <img
+                                      src={msg.attachment.data}
+                                      alt={msg.attachment.name}
+                                      style={{ maxWidth: '100%', maxHeight: 200, borderRadius: 6 }}
+                                    />
+                                  ) : (
+                                    <a
+                                      href={msg.attachment.data}
+                                      download={msg.attachment.name}
+                                      style={{ color: '#e94560', fontSize: 12, textDecoration: 'underline' }}
+                                    >
+                                      {msg.attachment.name}
+                                    </a>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
 
-                    {/* Admin response */}
-                    {ticket.adminResponse && (
-                      <div style={{ marginBottom: 16 }}>
-                        <div style={{ fontSize: 11, color: '#555', fontWeight: 600, letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 6 }}>
-                          Admin Response &middot; {ticket.respondedAt ? new Date(ticket.respondedAt).toLocaleDateString() : ''}
-                        </div>
-                        <div style={{
-                          background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.15)',
-                          borderRadius: 8, padding: '12px 16px', fontSize: 14, color: '#ccc', lineHeight: 1.6,
-                          whiteSpace: 'pre-wrap',
-                        }}>
-                          {ticket.adminResponse}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Respond form (only for open tickets) */}
-                    {ticket.status === 'open' && (
+                    {/* Respond form (for open or responded tickets) */}
+                    {ticket.status !== 'closed' && (
                       <div>
                         <textarea
-                          value={expandedId === ticket.id ? responseText : ''}
+                          value={responseText}
                           onChange={e => setResponseText(e.target.value)}
                           placeholder="Write your response..."
                           rows={3}
@@ -2012,6 +2035,7 @@ function SupportTab({ tickets, onUpdateTicket }) {
                             className="btn-primary"
                             style={{ padding: '8px 20px', fontSize: 13 }}
                             onClick={() => handleRespond(ticket.id)}
+                            disabled={!responseText.trim()}
                           >
                             Send Response
                           </button>
@@ -2020,24 +2044,13 @@ function SupportTab({ tickets, onUpdateTicket }) {
                             style={{ padding: '8px 16px', fontSize: 13 }}
                             onClick={() => handleClose(ticket.id)}
                           >
-                            Close Without Response
+                            Close Ticket
                           </button>
                         </div>
                       </div>
                     )}
 
-                    {/* Actions for responded/closed tickets */}
-                    {ticket.status === 'responded' && (
-                      <div style={{ display: 'flex', gap: 8 }}>
-                        <button
-                          className="btn-secondary"
-                          style={{ padding: '8px 16px', fontSize: 13 }}
-                          onClick={() => handleClose(ticket.id)}
-                        >
-                          Close Ticket
-                        </button>
-                      </div>
-                    )}
+                    {/* Reopen for closed tickets */}
                     {ticket.status === 'closed' && (
                       <div style={{ display: 'flex', gap: 8 }}>
                         <button

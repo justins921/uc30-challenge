@@ -24,7 +24,7 @@ function resizeImage(file, maxSize = 150) {
   });
 }
 
-export default function UserProfile({ user, onUpdateProfile, onChangePassword, onSubmitTicket, supportTickets, onBack }) {
+export default function UserProfile({ user, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, onBack }) {
   // Profile state
   const [email, setEmail] = useState(user.email);
   const [firstName, setFirstName] = useState(user.firstName);
@@ -42,10 +42,12 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
   // Support state
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+  const [ticketAttachment, setTicketAttachment] = useState(null);
   const [ticketMsg, setTicketMsg] = useState(null);
   const [submittingTicket, setSubmittingTicket] = useState(false);
 
   const fileRef = useRef(null);
+  const ticketFileRef = useRef(null);
 
   const initials = `${(user.firstName || '?')[0]}${(user.lastName || '?')[0]}`.toUpperCase();
 
@@ -108,18 +110,38 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
     setSavingPw(false);
   };
 
+  const handleAttachFile = async (file) => {
+    if (!file) return null;
+    if (file.size > 2 * 1024 * 1024) {
+      setTicketMsg({ type: 'error', text: 'File must be under 2 MB.' });
+      return null;
+    }
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve({ name: file.name, type: file.type, data: reader.result });
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleSubmitTicket = async () => {
     setTicketMsg(null);
     if (!subject.trim()) return setTicketMsg({ type: 'error', text: 'Please enter a subject.' });
     if (!message.trim()) return setTicketMsg({ type: 'error', text: 'Please describe your issue.' });
     setSubmittingTicket(true);
-    const result = await onSubmitTicket(subject.trim(), message.trim());
+    let att = null;
+    if (ticketAttachment) {
+      att = await handleAttachFile(ticketAttachment);
+    }
+    const result = await onSubmitTicket(subject.trim(), message.trim(), att);
     if (result?.error) {
       setTicketMsg({ type: 'error', text: result.error });
     } else {
       setTicketMsg({ type: 'success', text: 'Support request submitted! An admin will review it shortly.' });
       setSubject('');
       setMessage('');
+      setTicketAttachment(null);
+      if (ticketFileRef.current) ticketFileRef.current.value = '';
     }
     setSubmittingTicket(false);
   };
@@ -246,7 +268,13 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
       <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16 }}>Support</h3>
 
       {/* Previous Tickets */}
-      <MyTickets tickets={supportTickets} userId={user.id} />
+      <MyTickets
+        tickets={supportTickets}
+        userId={user.id}
+        onReplyToTicket={onReplyToTicket}
+        onUpdateTicket={onUpdateTicket}
+        onAttachFile={handleAttachFile}
+      />
 
       {/* New Support Request */}
       <div className="card" style={{ padding: 24, marginBottom: 20 }}>
@@ -273,6 +301,20 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
             }}
           />
         </div>
+        <div style={{ marginBottom: 16 }}>
+          <label>Attachment (optional, max 2 MB)</label>
+          <input
+            ref={ticketFileRef}
+            type="file"
+            onChange={e => setTicketAttachment(e.target.files?.[0] || null)}
+            style={{ fontSize: 13, color: '#aaa', marginTop: 4 }}
+          />
+          {ticketAttachment && (
+            <div style={{ fontSize: 12, color: '#888', marginTop: 4 }}>
+              Selected: {ticketAttachment.name}
+            </div>
+          )}
+        </div>
         {ticketMsg && (
           <Msg type={ticketMsg.type} text={ticketMsg.text} />
         )}
@@ -289,79 +331,207 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
   );
 }
 
-function MyTickets({ tickets, userId }) {
+function MyTickets({ tickets, userId, onReplyToTicket, onUpdateTicket, onAttachFile }) {
   const myTickets = (tickets || [])
     .filter(t => t.participantId === userId)
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   if (myTickets.length === 0) return null;
 
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {myTickets.map(ticket => (
+          <TicketThread
+            key={ticket.id}
+            ticket={ticket}
+            onReply={onReplyToTicket}
+            onClose={onUpdateTicket}
+            onAttachFile={onAttachFile}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TicketThread({ ticket, onReply, onClose, onAttachFile }) {
+  const [replyText, setReplyText] = useState('');
+  const [replyFile, setReplyFile] = useState(null);
+  const [sending, setSending] = useState(false);
+  const [expanded, setExpanded] = useState(ticket.status !== 'closed');
+  const replyFileRef = useRef(null);
+
   const statusStyles = {
     open: { bg: 'rgba(233,69,96,0.1)', border: 'rgba(233,69,96,0.2)', color: '#e94560', label: 'Awaiting Response' },
     responded: { bg: 'rgba(72,199,142,0.1)', border: 'rgba(72,199,142,0.2)', color: '#48c78e', label: 'Responded' },
     closed: { bg: 'rgba(255,255,255,0.04)', border: 'rgba(255,255,255,0.08)', color: '#666', label: 'Closed' },
   };
+  const s = statusStyles[ticket.status] || statusStyles.open;
+
+  // Build messages list with backward compat
+  const messages = ticket.messages && ticket.messages.length > 0
+    ? ticket.messages
+    : [
+        { id: 'orig', from: 'user', text: ticket.message, createdAt: ticket.createdAt },
+        ...(ticket.adminResponse ? [{
+          id: 'admin_resp', from: 'admin', name: 'Admin', text: ticket.adminResponse, createdAt: ticket.respondedAt || ticket.createdAt,
+        }] : []),
+      ];
+
+  const handleSendReply = async () => {
+    if (!replyText.trim()) return;
+    setSending(true);
+    let att = null;
+    if (replyFile) {
+      att = await onAttachFile(replyFile);
+    }
+    await onReply(ticket.id, replyText.trim(), att);
+    setReplyText('');
+    setReplyFile(null);
+    if (replyFileRef.current) replyFileRef.current.value = '';
+    setSending(false);
+  };
+
+  const handleClose = async () => {
+    await onClose(ticket.id, { status: 'closed' });
+  };
 
   return (
-    <div style={{ marginBottom: 20 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        {myTickets.map(ticket => {
-          const s = statusStyles[ticket.status] || statusStyles.open;
-          return (
-            <div key={ticket.id} className="card" style={{ padding: 20 }}>
-              {/* Header */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
-                <div style={{ fontSize: 15, fontWeight: 600 }}>{ticket.subject}</div>
-                <span style={{
-                  background: s.bg, border: `1px solid ${s.border}`, color: s.color,
-                  fontSize: 10, fontWeight: 600, padding: '3px 10px', borderRadius: 6,
-                  textTransform: 'uppercase', letterSpacing: 0.5,
+    <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+      {/* Header - clickable */}
+      <div
+        onClick={() => setExpanded(!expanded)}
+        style={{
+          padding: '16px 20px', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+        }}
+      >
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+            <span style={{
+              background: s.bg, border: `1px solid ${s.border}`, color: s.color,
+              fontSize: 10, fontWeight: 600, padding: '3px 10px', borderRadius: 6,
+              textTransform: 'uppercase', letterSpacing: 0.5,
+            }}>
+              {s.label}
+            </span>
+            <span style={{ fontSize: 15, fontWeight: 600 }}>{ticket.subject}</span>
+          </div>
+          <div style={{ fontSize: 11, color: '#555', marginTop: 4 }}>
+            {new Date(ticket.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            {messages.length > 1 && <span> &middot; {messages.length} messages</span>}
+          </div>
+        </div>
+        <div style={{ color: '#444', fontSize: 18, flexShrink: 0, transform: expanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }}>
+          ›
+        </div>
+      </div>
+
+      {/* Expanded thread */}
+      {expanded && (
+        <div style={{ padding: '0 20px 20px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+          {/* Messages */}
+          <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {messages.map((msg, i) => {
+              const isAdmin = msg.from === 'admin';
+              return (
+                <div key={msg.id || i} style={{
+                  display: 'flex', flexDirection: 'column',
+                  alignItems: isAdmin ? 'flex-start' : 'flex-end',
                 }}>
-                  {s.label}
-                </span>
-              </div>
-
-              {/* Date */}
-              <div style={{ fontSize: 11, color: '#555', marginBottom: 10 }}>
-                Submitted {new Date(ticket.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-              </div>
-
-              {/* User's message */}
-              <div style={{
-                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-                borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#aaa', lineHeight: 1.6,
-                whiteSpace: 'pre-wrap', marginBottom: ticket.adminResponse ? 12 : 0,
-              }}>
-                {ticket.message}
-              </div>
-
-              {/* Admin response */}
-              {ticket.adminResponse && (
-                <div style={{ marginTop: 4 }}>
-                  <div style={{ fontSize: 11, color: '#48c78e', fontWeight: 600, marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Admin Response
-                    {ticket.respondedAt && (
-                      <span style={{ fontWeight: 400, color: '#555' }}>
-                        &middot; {new Date(ticket.respondedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                      </span>
-                    )}
+                  <div style={{ fontSize: 10, color: '#555', marginBottom: 3, fontWeight: 600 }}>
+                    {isAdmin ? (msg.name || 'Admin') : 'You'}
+                    <span style={{ fontWeight: 400, marginLeft: 6 }}>
+                      {new Date(msg.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      {' '}
+                      {new Date(msg.createdAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                    </span>
                   </div>
                   <div style={{
-                    background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.12)',
-                    borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#ccc', lineHeight: 1.6,
-                    whiteSpace: 'pre-wrap',
+                    background: isAdmin ? 'rgba(72,199,142,0.06)' : 'rgba(255,255,255,0.03)',
+                    border: `1px solid ${isAdmin ? 'rgba(72,199,142,0.12)' : 'rgba(255,255,255,0.06)'}`,
+                    borderRadius: 10, padding: '10px 14px', fontSize: 13,
+                    color: '#ccc', lineHeight: 1.6, whiteSpace: 'pre-wrap',
+                    maxWidth: '85%',
                   }}>
-                    {ticket.adminResponse}
+                    {msg.text}
+                    {msg.attachment && (
+                      <div style={{ marginTop: 8 }}>
+                        {msg.attachment.type?.startsWith('image/') ? (
+                          <img
+                            src={msg.attachment.data}
+                            alt={msg.attachment.name}
+                            style={{ maxWidth: '100%', maxHeight: 200, borderRadius: 6 }}
+                          />
+                        ) : (
+                          <a
+                            href={msg.attachment.data}
+                            download={msg.attachment.name}
+                            style={{ color: '#e94560', fontSize: 12, textDecoration: 'underline' }}
+                          >
+                            {msg.attachment.name}
+                          </a>
+                        )}
+                      </div>
+                    )}
                   </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Reply form or close button */}
+          {ticket.status !== 'closed' ? (
+            <div style={{ marginTop: 16 }}>
+              <textarea
+                value={replyText}
+                onChange={e => setReplyText(e.target.value)}
+                placeholder="Write a reply..."
+                rows={2}
+                style={{
+                  width: '100%', padding: '10px 14px', fontSize: 13, borderRadius: 8,
+                  border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                  color: '#eee', resize: 'vertical', fontFamily: "'DM Sans', sans-serif",
+                  marginBottom: 8, boxSizing: 'border-box',
+                }}
+              />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <input
+                  ref={replyFileRef}
+                  type="file"
+                  onChange={e => setReplyFile(e.target.files?.[0] || null)}
+                  style={{ fontSize: 12, color: '#888', flex: 1, minWidth: 120 }}
+                />
+                <button
+                  className="btn-primary"
+                  style={{ padding: '8px 18px', fontSize: 13 }}
+                  onClick={handleSendReply}
+                  disabled={sending || !replyText.trim()}
+                >
+                  {sending ? 'Sending...' : 'Reply'}
+                </button>
+                <button
+                  className="btn-secondary"
+                  style={{ padding: '8px 16px', fontSize: 13 }}
+                  onClick={handleClose}
+                >
+                  Close Ticket
+                </button>
+              </div>
+              {replyFile && (
+                <div style={{ fontSize: 11, color: '#666', marginTop: 4 }}>
+                  Attached: {replyFile.name}
                 </div>
               )}
             </div>
-          );
-        })}
-      </div>
+          ) : (
+            <div style={{ marginTop: 12, fontSize: 12, color: '#555', fontStyle: 'italic' }}>
+              This ticket has been closed.
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
