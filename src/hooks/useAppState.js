@@ -123,9 +123,9 @@ export function useAppState() {
       setLoading(false);
     })();
 
-    // Listen for Supabase auth events (password recovery, sign out, etc.)
+    // Listen for Supabase auth events (password recovery, OAuth sign-in, sign out)
     if (supabase) {
-      const { data } = supabase.auth.onAuthStateChange((event) => {
+      const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
         if (event === 'PASSWORD_RECOVERY') {
           setPasswordRecovery(true);
         }
@@ -133,6 +133,50 @@ export function useAppState() {
           setUser(null);
           setCurrentView('login');
           setPasswordRecovery(false);
+        }
+        // Handle OAuth sign-in: auto-create participant if needed
+        if (event === 'SIGNED_IN' && session?.user) {
+          const authUser = session.user;
+          const provider = authUser.app_metadata?.provider;
+          // Only auto-create for OAuth providers (not email/password)
+          if (provider && provider !== 'email') {
+            try {
+              // Check if participant already exists by email
+              let participant = await storage.findByEmail(authUser.email);
+
+              if (participant && !participant.authId) {
+                // Link existing legacy participant to OAuth user
+                await storage.updateParticipant(participant.id, { authId: authUser.id });
+                participant = { ...participant, authId: authUser.id };
+              } else if (!participant) {
+                // Create new participant from OAuth user metadata
+                const meta = authUser.user_metadata || {};
+                const fullName = meta.full_name || meta.name || '';
+                const nameParts = fullName.split(' ');
+                const firstName = meta.first_name || nameParts[0] || authUser.email?.split('@')[0] || 'User';
+                const lastName = meta.last_name || nameParts.slice(1).join(' ') || '';
+
+                const newUser = createNewUser(firstName, lastName, authUser.email, authUser.id);
+                const saved = await storage.addParticipant(newUser);
+                if (saved && !saved.__error) {
+                  participant = saved;
+                  // Kit email (fire and forget)
+                  subscribeUser(authUser.email, firstName).then(() => {
+                    tagSignUp(authUser.email).catch(() => {});
+                  }).catch(() => {});
+                }
+              }
+
+              if (participant) {
+                setUser(participant);
+                setCurrentView(participant.isAdmin ? 'admin' : 'dashboard');
+                const allParticipants = await storage.getParticipants();
+                setParticipants(allParticipants || []);
+              }
+            } catch (err) {
+              console.error('OAuth participant setup error:', err);
+            }
+          }
         }
       });
       authListener = data?.subscription;
@@ -310,6 +354,7 @@ export function useAppState() {
 
       const saved = await storage.addParticipant(newUser);
       if (!saved) return { error: 'Failed to create account. Please try again.' };
+      if (saved.__error) return { error: `Failed to create account: ${saved.__error}` };
 
       setUser(saved);
       setCurrentView(saved.isAdmin ? 'admin' : 'dashboard');
@@ -351,6 +396,25 @@ export function useAppState() {
 
     return { success: true };
   }, [participants, persist, cohortStartDate]);
+
+  // ── OAuth Login (Google / Apple) ─────────────────────────────
+  const loginWithOAuth = useCallback(async (provider) => {
+    if (!isSupabaseEnabled || !supabase) {
+      return { error: 'Social login requires Supabase to be configured.' };
+    }
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: window.location.origin,
+      },
+    });
+    if (error) return { error: error.message };
+    // The page will redirect to the OAuth provider — onAuthStateChange handles the return
+    return { success: true };
+  }, []);
+
+  const loginWithGoogle = useCallback(() => loginWithOAuth('google'), [loginWithOAuth]);
+  const loginWithApple = useCallback(() => loginWithOAuth('apple'), [loginWithOAuth]);
 
   // ── Password Reset (Supabase native email) ─────────────────
   const requestPasswordReset = useCallback(async (email) => {
@@ -788,6 +852,8 @@ export function useAppState() {
     navigate: setCurrentView,
     login,
     register,
+    loginWithGoogle,
+    loginWithApple,
     adminResetPassword,
     requestPasswordReset,
     confirmPasswordReset,

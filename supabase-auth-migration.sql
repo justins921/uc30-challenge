@@ -18,6 +18,9 @@
 ALTER TABLE participants ADD COLUMN IF NOT EXISTS auth_id UUID;
 CREATE UNIQUE INDEX IF NOT EXISTS idx_participants_auth_id ON participants (auth_id);
 
+-- Allow password column to be NULL (Supabase Auth handles passwords now)
+ALTER TABLE participants ALTER COLUMN password DROP NOT NULL;
+
 -- ─────────────────────────────────────────────────────────────────
 -- 2. Helper function: check if current user is an admin
 --    Uses SECURITY DEFINER to bypass RLS for the check itself.
@@ -46,10 +49,10 @@ CREATE POLICY "Users read own or admin reads all" ON participants
     auth_id = auth.uid() OR public.is_admin()
   );
 
--- Authenticated users can insert their own row
-CREATE POLICY "Authenticated insert own row" ON participants
+-- Authenticated users can insert a row (session may not link auth_id immediately after signUp)
+CREATE POLICY "Authenticated users can insert" ON participants
   FOR INSERT WITH CHECK (
-    auth_id = auth.uid()
+    auth.uid() IS NOT NULL
   );
 
 -- Users can update their own data; admins can update anyone

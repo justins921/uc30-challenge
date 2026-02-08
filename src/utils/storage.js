@@ -61,7 +61,10 @@ const supabaseStorage = {
       .select()
       .single();
 
-    if (error) { console.error('addParticipant error:', error); return null; }
+    if (error) {
+      console.error('addParticipant error:', error);
+      return { __error: error.message || 'Database insert failed' };
+    }
     return data ? fromDbRow(data) : null;
   },
 

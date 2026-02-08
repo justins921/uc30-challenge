@@ -15,6 +15,8 @@ export default function App() {
     nextCohortDate,
     login,
     register,
+    loginWithGoogle,
+    loginWithApple,
     adminResetPassword,
     requestPasswordReset,
     confirmPasswordReset,
@@ -68,6 +70,8 @@ export default function App() {
         <LoginScreen
           onLogin={login}
           onRegister={register}
+          onLoginWithGoogle={loginWithGoogle}
+          onLoginWithApple={loginWithApple}
           onRequestReset={requestPasswordReset}
           onConfirmReset={confirmPasswordReset}
           initialMode={authMode}

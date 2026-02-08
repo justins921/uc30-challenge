@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function LoginScreen({ onLogin, onRegister, onRequestReset, onConfirmReset, initialMode, passwordRecovery }) {
+export default function LoginScreen({ onLogin, onRegister, onLoginWithGoogle, onLoginWithApple, onRequestReset, onConfirmReset, initialMode, passwordRecovery, onBackToLanding }) {
   const [mode, setMode] = useState(initialMode || 'login');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -284,6 +284,70 @@ export default function LoginScreen({ onLogin, onRegister, onRequestReset, onCon
                 >
                   {mode === 'login' ? 'Log In \u2192' : 'Create Account \u2192'}
                 </button>
+              )}
+
+              {/* Social login buttons (shown on login and register, not reset) */}
+              {mode !== 'reset' && (onLoginWithGoogle || onLoginWithApple) && (
+                <>
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: 12,
+                    margin: '20px 0 16px',
+                  }}>
+                    <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.1)' }} />
+                    <span style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: 1 }}>or</span>
+                    <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.1)' }} />
+                  </div>
+
+                  {onLoginWithGoogle && (
+                    <button
+                      onClick={onLoginWithGoogle}
+                      style={{
+                        width: '100%', padding: '11px 0', borderRadius: 8,
+                        border: '1px solid rgba(255,255,255,0.12)',
+                        background: 'rgba(255,255,255,0.04)',
+                        color: '#ccc', fontSize: 14, fontWeight: 600,
+                        cursor: 'pointer', display: 'flex', alignItems: 'center',
+                        justifyContent: 'center', gap: 10,
+                        fontFamily: "'DM Sans', sans-serif",
+                        transition: 'all 0.2s',
+                        marginBottom: 10,
+                      }}
+                      onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+                      onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.04)'}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 18 18">
+                        <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+                        <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/>
+                        <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+                        <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+                      </svg>
+                      Continue with Google
+                    </button>
+                  )}
+
+                  {onLoginWithApple && (
+                    <button
+                      onClick={onLoginWithApple}
+                      style={{
+                        width: '100%', padding: '11px 0', borderRadius: 8,
+                        border: '1px solid rgba(255,255,255,0.12)',
+                        background: 'rgba(255,255,255,0.04)',
+                        color: '#ccc', fontSize: 14, fontWeight: 600,
+                        cursor: 'pointer', display: 'flex', alignItems: 'center',
+                        justifyContent: 'center', gap: 10,
+                        fontFamily: "'DM Sans', sans-serif",
+                        transition: 'all 0.2s',
+                      }}
+                      onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+                      onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.04)'}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="#fff">
+                        <path d="M13.71 4.66c-.76.9-2 1.6-3.21 1.49-.15-1.22.45-2.52 1.15-3.32.76-.88 2.1-1.53 3.18-1.57.13 1.26-.37 2.51-1.12 3.4zm1.1 1.74c-1.78-.1-3.29 1.01-4.14 1.01-.85 0-2.14-.96-3.54-.93-1.82.03-3.51 1.06-4.44 2.7-1.9 3.28-.49 8.15 1.35 10.82.9 1.32 1.98 2.78 3.4 2.73 1.36-.06 1.87-.88 3.51-.88 1.64 0 2.1.88 3.53.85 1.47-.03 2.4-1.33 3.3-2.66.68-.98 1.18-1.97 1.44-2.53-3.22-1.25-3.75-5.9-.56-7.68-.93-1.16-2.3-1.83-3.54-1.83-.2 0-.21.01-.31.04z"/>
+                      </svg>
+                      Continue with Apple
+                    </button>
+                  )}
+                </>
               )}
 
               <div style={{ marginTop: 16, fontSize: 13, color: '#555', textAlign: 'center' }}>
