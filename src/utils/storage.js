@@ -32,7 +32,14 @@ async function supabaseRequest(table, method, options = {}) {
   if (body) fetchOptions.body = JSON.stringify(body);
 
   try {
+    // Add 8-second timeout to prevent hanging requests
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    fetchOptions.signal = controller.signal;
+
     const res = await fetch(url, fetchOptions);
+    clearTimeout(timeoutId);
+
     if (!res.ok) {
       const err = await res.text();
       console.error('Supabase error:', err);
@@ -41,7 +48,11 @@ async function supabaseRequest(table, method, options = {}) {
     if (res.status === 204) return true;
     return await res.json();
   } catch (err) {
-    console.error('Supabase request failed:', err);
+    if (err.name === 'AbortError') {
+      console.error('Supabase request timed out:', table, method);
+    } else {
+      console.error('Supabase request failed:', err);
+    }
     return null;
   }
 }
