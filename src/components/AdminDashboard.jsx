@@ -5,6 +5,54 @@ import { AttachmentLink } from './DayView';
 import { LANDING_DEFAULTS } from './LandingPage';
 import Footer from './Footer';
 
+function getSocialUrl(platform, handle) {
+  const clean = handle.replace(/^@/, '').trim();
+  if (!clean) return null;
+  switch (platform) {
+    case 'instagram': return `https://instagram.com/${clean}`;
+    case 'tiktok': return `https://tiktok.com/@${clean}`;
+    case 'twitter': return `https://x.com/${clean}`;
+    case 'facebook': return `https://facebook.com/${clean}`;
+    case 'youtube': return `https://youtube.com/@${clean}`;
+    default: return null;
+  }
+}
+
+const PLATFORM_LABELS = { instagram: 'IG', tiktok: 'TikTok', twitter: '𝕏', facebook: 'FB', youtube: 'YT' };
+
+function SocialHandleLinks({ socialHandles }) {
+  if (!socialHandles || Object.keys(socialHandles).length === 0) return null;
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
+      {Object.entries(socialHandles).map(([platform, handle]) => {
+        if (!handle) return null;
+        const url = getSocialUrl(platform, handle);
+        const label = PLATFORM_LABELS[platform] || platform;
+        return url ? (
+          <a
+            key={platform}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: 11, padding: '3px 8px', borderRadius: 5,
+              background: 'rgba(233,69,96,0.08)', border: '1px solid rgba(233,69,96,0.2)',
+              color: '#e94560', textDecoration: 'none', fontWeight: 600,
+              fontFamily: "'DM Sans', sans-serif",
+            }}
+          >
+            {label}: {handle}
+          </a>
+        ) : (
+          <span key={platform} style={{ fontSize: 11, color: '#888' }}>
+            {label}: {handle}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 const ADMIN_TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'participants', label: 'Participants' },
@@ -883,20 +931,23 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
                     <AttachmentLink fileName={sub.fileName} fileData={sub.fileData} />
                   )}
                   {sub.socialMediaPosted && (
-                    <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <button
-                        onClick={() => onVerifySubmissionSocial(p.id, sub.day, !sub.socialMediaVerified)}
-                        style={{
-                          display: 'inline-flex', alignItems: 'center', gap: 6,
-                          fontSize: 12, padding: '4px 12px', borderRadius: 6, cursor: 'pointer',
-                          border: `1px solid ${sub.socialMediaVerified ? 'rgba(72,199,142,0.3)' : 'rgba(240,165,0,0.3)'}`,
-                          background: sub.socialMediaVerified ? 'rgba(72,199,142,0.1)' : 'rgba(240,165,0,0.08)',
-                          color: sub.socialMediaVerified ? '#48c78e' : '#f0a500',
-                          fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
-                        }}
-                      >
-                        {sub.socialMediaVerified ? '✓ Social Verified' : '⏳ Verify Social Post'}
-                      </button>
+                    <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                        <button
+                          onClick={() => onVerifySubmissionSocial(p.id, sub.day, !sub.socialMediaVerified)}
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 6,
+                            fontSize: 12, padding: '4px 12px', borderRadius: 6, cursor: 'pointer',
+                            border: `1px solid ${sub.socialMediaVerified ? 'rgba(72,199,142,0.3)' : 'rgba(240,165,0,0.3)'}`,
+                            background: sub.socialMediaVerified ? 'rgba(72,199,142,0.1)' : 'rgba(240,165,0,0.08)',
+                            color: sub.socialMediaVerified ? '#48c78e' : '#f0a500',
+                            fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
+                          }}
+                        >
+                          {sub.socialMediaVerified ? '✓ Social Verified' : '⏳ Verify Social Post'}
+                        </button>
+                        <SocialHandleLinks socialHandles={p.socialHandles} />
+                      </div>
                     </div>
                   )}
                 </div>
@@ -927,6 +978,7 @@ function SubmissionsTab({ nonAdmin, onVerifySubmissionSocial }) {
         participantName: `${p.firstName} ${p.lastName}`,
         participantEmail: p.email,
         participantId: p.id,
+        participantSocialHandles: p.socialHandles || {},
       });
     });
   });
@@ -1013,20 +1065,23 @@ function SubmissionsTab({ nonAdmin, onVerifySubmissionSocial }) {
                     <AttachmentLink fileName={sub.fileName} fileData={sub.fileData} />
                   )}
                   {sub.socialMediaPosted && (
-                    <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <button
-                        onClick={() => onVerifySubmissionSocial(sub.participantId, sub.day, !sub.socialMediaVerified)}
-                        style={{
-                          display: 'inline-flex', alignItems: 'center', gap: 6,
-                          fontSize: 12, padding: '4px 12px', borderRadius: 6, cursor: 'pointer',
-                          border: `1px solid ${sub.socialMediaVerified ? 'rgba(72,199,142,0.3)' : 'rgba(240,165,0,0.3)'}`,
-                          background: sub.socialMediaVerified ? 'rgba(72,199,142,0.1)' : 'rgba(240,165,0,0.08)',
-                          color: sub.socialMediaVerified ? '#48c78e' : '#f0a500',
-                          fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
-                        }}
-                      >
-                        {sub.socialMediaVerified ? '✓ Social Verified' : '⏳ Verify Social Post'}
-                      </button>
+                    <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                        <button
+                          onClick={() => onVerifySubmissionSocial(sub.participantId, sub.day, !sub.socialMediaVerified)}
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 6,
+                            fontSize: 12, padding: '4px 12px', borderRadius: 6, cursor: 'pointer',
+                            border: `1px solid ${sub.socialMediaVerified ? 'rgba(72,199,142,0.3)' : 'rgba(240,165,0,0.3)'}`,
+                            background: sub.socialMediaVerified ? 'rgba(72,199,142,0.1)' : 'rgba(240,165,0,0.08)',
+                            color: sub.socialMediaVerified ? '#48c78e' : '#f0a500',
+                            fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
+                          }}
+                        >
+                          {sub.socialMediaVerified ? '✓ Social Verified' : '⏳ Verify Social Post'}
+                        </button>
+                        <SocialHandleLinks socialHandles={sub.participantSocialHandles} />
+                      </div>
                     </div>
                   )}
                 </div>
