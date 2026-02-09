@@ -95,29 +95,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
     );
   }
 
-  // Cohort hasn't started yet — show getting started + countdown
-  if (cohortStartDate && calendarDay < 1) {
-    return (
-      <div style={{ minHeight: '100vh' }}>
-        <Header
-          user={user}
-          currentTab="timeline"
-          onTabChange={() => {}}
-          tabs={TABS}
-          onLogout={onLogout}
-        />
-        <div style={{ maxWidth: 600, margin: '0 auto', padding: '60px 24px' }}>
-          {cohortStats && cohortStats.total > 0 && (
-            <CohortStatsBanner active={cohortStats.active} total={cohortStats.total} />
-          )}
-          {!user.gettingStartedCompleted && (
-            <GettingStartedSection user={user} onComplete={onCompleteGettingStarted} contentOverrides={contentOverrides} />
-          )}
-          <CohortCountdown cohortStartDate={cohortStartDate} />
-        </div>
-      </div>
-    );
-  }
+  const cohortActive = cohortStartDate && calendarDay !== null && calendarDay >= 1;
 
   const handleTabChange = (newTab) => {
     setTab(newTab);
@@ -154,8 +132,13 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         )}
         <ProgressBanner user={user} cohortStartDate={cohortStartDate} calendarDay={calendarDay} />
 
-        {/* Countdown + Live Call — only on Timeline/Day views */}
-        {(tab === 'timeline' || tab === 'day') && (
+        {/* Cohort countdown when pre-cohort */}
+        {cohortStartDate && !cohortActive && (tab === 'timeline' || tab === 'day') && (
+          <CohortCountdown cohortStartDate={cohortStartDate} />
+        )}
+
+        {/* Countdown + Live Call — only on Timeline/Day views when cohort is active */}
+        {cohortActive && (tab === 'timeline' || tab === 'day') && (
           <>
             {userCompletedToday && (
               <NextDayCountdown calendarDay={calendarDay} />
@@ -166,14 +149,17 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
 
         {/* Tab Content */}
         {tab === 'timeline' && (
-          <>
-            {!user.gettingStartedCompleted && (
-              <GettingStartedSection user={user} onComplete={onCompleteGettingStarted} contentOverrides={contentOverrides} />
-            )}
-            <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} contentOverrides={contentOverrides} customPhases={customPhases} />
-          </>
+          <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} contentOverrides={contentOverrides} customPhases={customPhases} cohortStartDate={cohortStartDate} />
         )}
-        {tab === 'day' && selectedDay && (
+        {tab === 'day' && selectedDay === 'getting_started' && (
+          <div style={{ maxWidth: 720, margin: '0 auto' }}>
+            <button className="btn-secondary" onClick={handleBackToTimeline} style={{ marginBottom: 24, padding: '8px 20px', fontSize: 13 }}>
+              ← Back to Timeline
+            </button>
+            <GettingStartedSection user={user} onComplete={async (...args) => { await onCompleteGettingStarted(...args); handleBackToTimeline(); }} contentOverrides={contentOverrides} />
+          </div>
+        )}
+        {tab === 'day' && selectedDay && selectedDay !== 'getting_started' && (
           <DayView
             day={selectedDay}
             user={user}

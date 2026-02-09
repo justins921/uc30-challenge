@@ -1,12 +1,72 @@
-import { getPhases, getDayContent, POST_30_TASK, getStreak } from '../data/challengeDays';
+import { getPhases, getDayContent, getGettingStartedContent, POST_30_TASK, getStreak } from '../data/challengeDays';
 
-export default function TimelineView({ user, onSelectDay, calendarDay, contentOverrides, customPhases }) {
+export default function TimelineView({ user, onSelectDay, calendarDay, contentOverrides, customPhases, cohortStartDate }) {
   const phases = getPhases(customPhases);
   const challengeComplete = user.completedDays.includes(30);
   const inContinuation = challengeComplete && user.currentDay > 30;
+  const gsContent = getGettingStartedContent(contentOverrides);
+
+  // Days 1+ are locked if cohort hasn't started yet (or no date set)
+  const cohortActive = cohortStartDate && calendarDay !== null && calendarDay >= 1;
 
   return (
     <div className="fade-up-delay-2">
+      {/* Getting Started Phase */}
+      <div style={{ marginBottom: 36 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+          <div style={{ width: 12, height: 12, borderRadius: 3, background: '#e94560' }} />
+          <h3 style={{ fontSize: 16, fontWeight: 700, letterSpacing: 1 }}>Getting Started</h3>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        </div>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+          gap: 10,
+        }}>
+          <div
+            onClick={() => !user.gettingStartedCompleted && onSelectDay('getting_started')}
+            className="card"
+            style={{
+              cursor: user.gettingStartedCompleted ? 'default' : 'pointer',
+              opacity: 1,
+              borderColor: user.gettingStartedCompleted
+                ? 'rgba(72,199,142,0.3)'
+                : '#e94560',
+              position: 'relative',
+              padding: '16px 16px 14px',
+              overflow: 'hidden',
+            }}
+          >
+            {user.gettingStartedCompleted && (
+              <div style={{
+                position: 'absolute', top: 12, right: 12, width: 22, height: 22,
+                borderRadius: '50%', background: '#48c78e',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 12, color: 'white',
+              }}>✓</div>
+            )}
+            {!user.gettingStartedCompleted && (
+              <div style={{
+                position: 'absolute', top: 12, right: 12, width: 10, height: 10,
+                borderRadius: '50%', background: '#e94560', animation: 'pulse 2s infinite',
+              }} />
+            )}
+            <div className="mono" style={{
+              fontSize: 11, color: '#e94560', fontWeight: 700,
+              letterSpacing: 1, marginBottom: 6,
+            }}>
+              INTRO
+            </div>
+            <div style={{
+              fontSize: 13, fontWeight: 500, lineHeight: 1.4,
+              color: user.gettingStartedCompleted ? '#48c78e' : '#ccc',
+            }}>
+              {gsContent.title}
+            </div>
+          </div>
+        </div>
+      </div>
+
       {phases.map((phase) => (
         <div key={phase.label} style={{ marginBottom: 36 }}>
           {/* Phase header */}
@@ -27,9 +87,11 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
               const isComplete = user.completedDays.includes(d);
               const isCurrent = d === user.currentDay;
 
-              // Calendar-based locking: if calendarDay is set, restrict access
+              // Lock all days if cohort hasn't started; otherwise calendar-based locking
               let isLocked;
-              if (calendarDay !== null) {
+              if (!cohortActive) {
+                isLocked = true;
+              } else if (calendarDay !== null) {
                 const isAccessible = isComplete || (isCurrent && d <= calendarDay);
                 isLocked = !isAccessible;
               } else {
