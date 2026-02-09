@@ -57,6 +57,7 @@ const ADMIN_TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'participants', label: 'Participants' },
   { id: 'submissions', label: 'Submissions' },
+  { id: 'community', label: 'Community' },
   { id: 'content', label: 'Content' },
   { id: 'support', label: 'Support' },
   { id: 'social', label: 'Social Proof' },
@@ -135,7 +136,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             nonAdmin={nonAdmin}
             dayDistribution={dayDistribution}
             retentionRate={retentionRate}
-            communityPostCount={(communityPosts || []).filter(p => !p.isDeleted).length}
+            communityPosts={communityPosts || []}
           />
         )}
         {tab === 'participants' && !selectedParticipant && (
@@ -165,6 +166,17 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
         )}
         {tab === 'submissions' && (
           <SubmissionsTab nonAdmin={nonAdmin} onVerifySubmissionSocial={onVerifySubmissionSocial} />
+        )}
+        {tab === 'community' && (
+          <AdminCommunityTab
+            posts={communityPosts || []}
+            participants={nonAdmin}
+            onDeletePost={onDeleteCommunityPost}
+            onDeleteComment={onDeleteCommunityComment}
+            onPinPost={onPinCommunityPost}
+            onWarnUser={onWarnCommunityUser}
+            onBanUser={onBanCommunityUser}
+          />
         )}
         {tab === 'content' && (
           <ContentTab
@@ -547,11 +559,275 @@ function AdminStat({ label, value, color }) {
   );
 }
 
-function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communityPostCount }) {
+// ── Admin Community Moderation Tab ────────────────────────
+function AdminCommunityTab({ posts, participants, onDeletePost, onDeleteComment, onPinPost, onWarnUser, onBanUser }) {
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [warnTarget, setWarnTarget] = useState(null);
+  const [warnMessage, setWarnMessage] = useState('');
+  const [filter, setFilter] = useState('all'); // 'all' | 'reported' | 'deleted'
+
+  const sorted = [...(posts || [])].sort((a, b) => {
+    if (a.isPinned && !b.isPinned) return -1;
+    if (!a.isPinned && b.isPinned) return 1;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+
+  const filtered = filter === 'deleted'
+    ? sorted.filter(p => p.isDeleted)
+    : filter === 'active'
+    ? sorted.filter(p => !p.isDeleted)
+    : sorted;
+
+  const getAuthor = (authorId) => participants.find(p => p.id === authorId);
+
+  function timeAgo(dateStr) {
+    const seconds = Math.floor((new Date() - new Date(dateStr)) / 1000);
+    if (seconds < 60) return 'just now';
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+  }
+
+  // Detail view for a single post
+  if (selectedPost) {
+    const post = posts.find(p => p.id === selectedPost) || {};
+    const author = getAuthor(post.authorId);
+    const comments = (post.comments || []);
+    return (
+      <div className="fade-up">
+        <button
+          className="btn-secondary"
+          onClick={() => setSelectedPost(null)}
+          style={{ marginBottom: 16, padding: '8px 16px', fontSize: 13 }}
+        >
+          ← Back to Posts
+        </button>
+
+        <div className="card" style={{
+          padding: 20, marginBottom: 16,
+          borderLeft: post.isPinned ? '3px solid #e94560' : undefined,
+          opacity: post.isDeleted ? 0.5 : 1,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
+            {post.isPinned && <span style={{ fontSize: 10, fontWeight: 700, color: '#e94560', background: 'rgba(233,69,96,0.1)', padding: '2px 6px', borderRadius: 4, textTransform: 'uppercase' }}>Pinned</span>}
+            {post.isDeleted && <span style={{ fontSize: 10, fontWeight: 700, color: '#ff5050', background: 'rgba(255,80,80,0.1)', padding: '2px 6px', borderRadius: 4, textTransform: 'uppercase' }}>Deleted</span>}
+            <span style={{ fontWeight: 600, fontSize: 14 }}>{post.authorName}</span>
+            <span style={{ fontSize: 11, color: '#555' }}>{post.createdAt ? timeAgo(post.createdAt) : ''}</span>
+            {post.dayTag != null && (
+              <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 4, background: 'rgba(72,199,142,0.1)', color: '#48c78e', fontWeight: 600 }}>
+                {post.dayTag === 'getting_started' ? 'Getting Started' : `Day ${post.dayTag}`}
+              </span>
+            )}
+          </div>
+          <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 6 }}>{post.title}</h3>
+          {post.body && <p style={{ color: '#ccc', fontSize: 13, lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>{post.body}</p>}
+
+          {/* Admin actions */}
+          <div style={{ display: 'flex', gap: 8, marginTop: 16, paddingTop: 12, borderTop: '1px solid rgba(255,255,255,0.06)', flexWrap: 'wrap' }}>
+            {!post.isDeleted && (
+              <>
+                <button
+                  onClick={() => onPinPost(post.id, !post.isPinned)}
+                  style={{ fontSize: 11, padding: '4px 10px', borderRadius: 5, cursor: 'pointer', border: '1px solid rgba(233,69,96,0.2)', background: 'rgba(233,69,96,0.06)', color: '#e94560', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}
+                >
+                  {post.isPinned ? 'Unpin' : 'Pin'}
+                </button>
+                <button
+                  onClick={() => { if (confirm('Delete this post?')) { onDeletePost(post.id); setSelectedPost(null); } }}
+                  style={{ fontSize: 11, padding: '4px 10px', borderRadius: 5, cursor: 'pointer', border: '1px solid rgba(255,80,80,0.2)', background: 'rgba(255,80,80,0.06)', color: '#ff5050', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}
+                >
+                  Delete Post
+                </button>
+              </>
+            )}
+            {author && (
+              <>
+                <button
+                  onClick={() => { setWarnTarget(post.authorId); setWarnMessage(''); }}
+                  style={{ fontSize: 11, padding: '4px 10px', borderRadius: 5, cursor: 'pointer', border: '1px solid rgba(240,165,0,0.2)', background: 'rgba(240,165,0,0.06)', color: '#f0a500', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}
+                >
+                  Warn Author
+                </button>
+                <button
+                  onClick={() => { if (confirm(`${author.communityBanned ? 'Unban' : 'Ban'} ${post.authorName} from community?`)) onBanUser(post.authorId, !author.communityBanned); }}
+                  style={{ fontSize: 11, padding: '4px 10px', borderRadius: 5, cursor: 'pointer', border: `1px solid ${author.communityBanned ? 'rgba(72,199,142,0.2)' : 'rgba(255,80,80,0.2)'}`, background: author.communityBanned ? 'rgba(72,199,142,0.06)' : 'rgba(255,80,80,0.06)', color: author.communityBanned ? '#48c78e' : '#ff5050', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}
+                >
+                  {author.communityBanned ? 'Unban Author' : 'Ban Author'}
+                </button>
+              </>
+            )}
+          </div>
+          {warnTarget === post.authorId && (
+            <div style={{ display: 'flex', gap: 8, marginTop: 8, alignItems: 'flex-end' }}>
+              <input type="text" placeholder="Warning message..." value={warnMessage} onChange={e => setWarnMessage(e.target.value)} style={{ flex: 1, fontSize: 13, padding: '8px 12px' }} />
+              <button className="btn-primary" disabled={!warnMessage.trim()} onClick={async () => { await onWarnUser(post.authorId, warnMessage.trim()); setWarnTarget(null); setWarnMessage(''); }} style={{ padding: '8px 14px', fontSize: 12, opacity: !warnMessage.trim() ? 0.5 : 1 }}>Send</button>
+              <button className="btn-secondary" onClick={() => setWarnTarget(null)} style={{ padding: '8px 14px', fontSize: 12 }}>Cancel</button>
+            </div>
+          )}
+        </div>
+
+        {/* Comments */}
+        <h4 style={{ fontSize: 13, color: '#888', marginBottom: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+          Comments ({comments.length})
+        </h4>
+        {comments.length === 0 ? (
+          <div className="card" style={{ padding: 24, textAlign: 'center' }}>
+            <p style={{ color: '#666', fontSize: 13 }}>No comments on this post.</p>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {comments.map(c => (
+              <div key={c.id} className="card" style={{ padding: '10px 14px', opacity: c.isDeleted ? 0.5 : 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                  <span style={{ fontWeight: 600, fontSize: 12 }}>{c.isDeleted ? '' : c.authorName}</span>
+                  <span style={{ fontSize: 10, color: '#555' }}>{c.createdAt ? timeAgo(c.createdAt) : ''}</span>
+                  {c.isDeleted && <span style={{ fontSize: 10, color: '#ff5050', fontStyle: 'italic' }}>[Deleted]</span>}
+                </div>
+                <p style={{ fontSize: 13, color: c.isDeleted ? '#555' : '#ccc', lineHeight: 1.5, fontStyle: c.isDeleted ? 'italic' : 'normal' }}>
+                  {c.isDeleted ? '[Removed by moderator]' : c.text}
+                </p>
+                {!c.isDeleted && (
+                  <button
+                    onClick={() => onDeleteComment(post.id, c.id)}
+                    style={{ fontSize: 10, padding: '2px 8px', borderRadius: 4, cursor: 'pointer', border: '1px solid rgba(255,80,80,0.2)', background: 'transparent', color: '#ff5050', fontWeight: 600, marginTop: 4, fontFamily: "'DM Sans', sans-serif" }}
+                  >
+                    Delete Comment
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // List view
+  return (
+    <div className="fade-up">
+      {/* Filter bar */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+        {[
+          { value: 'all', label: `All (${sorted.length})` },
+          { value: 'active', label: `Active (${sorted.filter(p => !p.isDeleted).length})` },
+          { value: 'deleted', label: `Deleted (${sorted.filter(p => p.isDeleted).length})` },
+        ].map(f => (
+          <button
+            key={f.value}
+            onClick={() => setFilter(f.value)}
+            style={{
+              fontSize: 12, padding: '6px 14px', borderRadius: 6, cursor: 'pointer',
+              border: `1px solid ${filter === f.value ? 'rgba(233,69,96,0.4)' : 'rgba(255,255,255,0.08)'}`,
+              background: filter === f.value ? 'rgba(233,69,96,0.1)' : 'transparent',
+              color: filter === f.value ? '#e94560' : '#888',
+              fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
+            }}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Banned users summary */}
+      {participants.filter(p => p.communityBanned).length > 0 && (
+        <div className="card" style={{ padding: '10px 16px', marginBottom: 16, background: 'rgba(255,80,80,0.04)', border: '1px solid rgba(255,80,80,0.15)' }}>
+          <span style={{ fontSize: 12, color: '#ff5050', fontWeight: 600 }}>
+            {participants.filter(p => p.communityBanned).length} banned user{participants.filter(p => p.communityBanned).length !== 1 ? 's' : ''}:
+          </span>
+          <span style={{ fontSize: 12, color: '#888', marginLeft: 8 }}>
+            {participants.filter(p => p.communityBanned).map(p => `${p.firstName} ${p.lastName}`).join(', ')}
+          </span>
+        </div>
+      )}
+
+      {filtered.length === 0 ? (
+        <div className="card" style={{ textAlign: 'center', padding: 48 }}>
+          <div style={{ fontSize: 48, marginBottom: 12 }}>💬</div>
+          <p style={{ color: '#666' }}>No community posts yet.</p>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {filtered.map(post => {
+            const commentCount = (post.comments || []).filter(c => !c.isDeleted).length;
+            const author = getAuthor(post.authorId);
+            return (
+              <div
+                key={post.id}
+                className="card"
+                onClick={() => setSelectedPost(post.id)}
+                style={{
+                  padding: '14px 18px', cursor: 'pointer',
+                  borderLeft: post.isPinned ? '3px solid #e94560' : undefined,
+                  opacity: post.isDeleted ? 0.5 : 1,
+                  transition: 'border-color 0.15s',
+                }}
+                onMouseOver={e => e.currentTarget.style.borderColor = 'rgba(233,69,96,0.3)'}
+                onMouseOut={e => e.currentTarget.style.borderColor = ''}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
+                  {post.isPinned && <span style={{ fontSize: 9, fontWeight: 700, color: '#e94560', background: 'rgba(233,69,96,0.1)', padding: '1px 5px', borderRadius: 3, textTransform: 'uppercase' }}>Pinned</span>}
+                  {post.isDeleted && <span style={{ fontSize: 9, fontWeight: 700, color: '#ff5050', background: 'rgba(255,80,80,0.1)', padding: '1px 5px', borderRadius: 3, textTransform: 'uppercase' }}>Deleted</span>}
+                  {author?.communityBanned && <span style={{ fontSize: 9, fontWeight: 700, color: '#ff5050', background: 'rgba(255,80,80,0.1)', padding: '1px 5px', borderRadius: 3, textTransform: 'uppercase' }}>Banned</span>}
+                  <span style={{ fontWeight: 600, fontSize: 13 }}>{post.authorName}</span>
+                  <span style={{ fontSize: 11, color: '#555' }}>{post.createdAt ? timeAgo(post.createdAt) : ''}</span>
+                  {post.dayTag != null && (
+                    <span style={{ fontSize: 9, padding: '1px 6px', borderRadius: 3, background: 'rgba(72,199,142,0.1)', color: '#48c78e', fontWeight: 600 }}>
+                      {post.dayTag === 'getting_started' ? 'GS' : `Day ${post.dayTag}`}
+                    </span>
+                  )}
+                  <span style={{ fontSize: 11, color: '#666', marginLeft: 'auto' }}>
+                    {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
+                  </span>
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 600 }}>{post.title}</div>
+                {post.body && (
+                  <p style={{ color: '#888', fontSize: 12, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{post.body}</p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communityPosts }) {
   const maxCount = Math.max(...Object.values(dayDistribution), 1);
+
+  // Community stats
+  const livePosts = communityPosts.filter(p => !p.isDeleted);
+  const totalComments = livePosts.reduce((s, p) => s + (p.comments || []).filter(c => !c.isDeleted).length, 0);
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayPosts = livePosts.filter(p => p.createdAt?.startsWith(todayStr)).length;
+  const todayComments = livePosts.reduce((s, p) =>
+    s + (p.comments || []).filter(c => !c.isDeleted && c.createdAt?.startsWith(todayStr)).length, 0
+  );
 
   return (
     <div className="fade-up">
+      {/* Today's Activity Summary */}
+      <div className="card" style={{ marginBottom: 24 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Today's Activity</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12 }}>
+          <div style={{ textAlign: 'center', padding: 12, borderRadius: 10, background: 'rgba(233,69,96,0.06)' }}>
+            <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#e94560' }}>{todayPosts}</div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>New Posts</div>
+          </div>
+          <div style={{ textAlign: 'center', padding: 12, borderRadius: 10, background: 'rgba(83,52,131,0.06)' }}>
+            <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#533483' }}>{todayComments}</div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>New Comments</div>
+          </div>
+          <div style={{ textAlign: 'center', padding: 12, borderRadius: 10, background: 'rgba(72,199,142,0.06)' }}>
+            <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#48c78e' }}>{todayPosts + todayComments}</div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>Total Engagement</div>
+          </div>
+        </div>
+      </div>
+
       <div className="card" style={{ marginBottom: 24 }}>
         <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Active Participants by Day</h3>
         <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 160, overflowX: 'auto' }}>
@@ -594,12 +870,18 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communi
         </div>
         <div className="card">
           <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Community</h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-            <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#533483' }}>
-              {communityPostCount}
+          <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+            <div>
+              <div className="mono" style={{ fontSize: 36, fontWeight: 700, color: '#533483' }}>{livePosts.length}</div>
+              <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>Posts</div>
             </div>
-            <div style={{ color: '#888', fontSize: 14, lineHeight: 1.6 }}>
-              posts from participants
+            <div>
+              <div className="mono" style={{ fontSize: 36, fontWeight: 700, color: '#e94560' }}>{totalComments}</div>
+              <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>Comments</div>
+            </div>
+            <div>
+              <div className="mono" style={{ fontSize: 36, fontWeight: 700, color: '#48c78e' }}>{livePosts.length + totalComments}</div>
+              <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>Total</div>
             </div>
           </div>
         </div>
