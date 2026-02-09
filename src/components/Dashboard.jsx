@@ -128,7 +128,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
       />
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
-        {cohortStats && cohortStats.total > 0 && (
+        {cohortActive && cohortStats && cohortStats.total > 0 && (
           <CohortStatsBanner active={cohortStats.active} total={cohortStats.total} />
         )}
         {cohortActive && (
