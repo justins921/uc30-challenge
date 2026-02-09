@@ -48,7 +48,15 @@ export default function Header({ user, currentTab, onTabChange, tabs, onLogout, 
                 fontFamily: "'DM Sans', sans-serif", fontWeight: 500, transition: 'all 0.2s',
               }}
             >
-              {tab.label}
+              <span style={{ position: 'relative' }}>
+                {tab.label}
+                {tab.hasNotification && (
+                  <span style={{
+                    position: 'absolute', top: -2, right: -8,
+                    width: 7, height: 7, borderRadius: '50%', background: '#e94560',
+                  }} />
+                )}
+              </span>
             </button>
           ))}
           <button
@@ -94,7 +102,15 @@ export default function Header({ user, currentTab, onTabChange, tabs, onLogout, 
                 width: '100%',
               }}
             >
-              {tab.label}
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                {tab.label}
+                {tab.hasNotification && (
+                  <span style={{
+                    position: 'absolute', top: -2, right: -8,
+                    width: 7, height: 7, borderRadius: '50%', background: '#e94560',
+                  }} />
+                )}
+              </span>
             </button>
           ))}
           <button

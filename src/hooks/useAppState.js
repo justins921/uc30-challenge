@@ -1123,10 +1123,10 @@ export function useAppState() {
     cohortStartDate,
     nextCohortDate,
     contentOverrides,
-    cohortStats: (() => {
-      const na = participants.filter(p => !p.isAdmin);
-      return { active: na.filter(p => p.isActive).length, total: na.length };
-    })(),
+    cohortStats: {
+      active: participants.filter(p => p.isActive).length,
+      total: participants.length,
+    },
     passwordRecovery,
     authError,
     navigate: setCurrentView,

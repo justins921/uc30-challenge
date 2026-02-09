@@ -100,7 +100,23 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
 
   const cohortActive = cohortStartDate && calendarDay !== null && calendarDay >= 1;
 
+  // Community notification: show dot when there are posts/comments newer than last visit
+  const [communityLastSeen, setCommunityLastSeen] = useState(() => {
+    try { return localStorage.getItem('uc30_community_last_seen') || ''; } catch { return ''; }
+  });
+
+  const hasCommunityNotification = cohortActive && (communityPosts || []).some(p => {
+    if (p.isDeleted) return false;
+    if (p.createdAt > communityLastSeen) return true;
+    return (p.comments || []).some(c => !c.isDeleted && c.createdAt > communityLastSeen);
+  });
+
   const handleTabChange = (newTab) => {
+    if (newTab === 'community') {
+      const now = new Date().toISOString();
+      setCommunityLastSeen(now);
+      try { localStorage.setItem('uc30_community_last_seen', now); } catch {}
+    }
     setTab(newTab);
     setSelectedDay(null);
   };
@@ -125,7 +141,10 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         user={user}
         currentTab={tab === 'day' ? 'timeline' : tab}
         onTabChange={handleTabChange}
-        tabs={cohortActive ? TABS : TABS.filter(t => t.id !== 'community')}
+        tabs={(cohortActive ? TABS : TABS.filter(t => t.id !== 'community')).map(t =>
+          t.id === 'community' && hasCommunityNotification && tab !== 'community'
+            ? { ...t, hasNotification: true } : t
+        )}
         onLogout={onLogout}
       />
 
@@ -133,7 +152,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         {cohortActive && cohortStats && cohortStats.total > 0 && (
           <CohortStatsBanner active={cohortStats.active} total={cohortStats.total} />
         )}
-        {cohortActive && (
+        {cohortActive && (tab === 'timeline' || tab === 'day') && (
           <ProgressBanner user={user} cohortStartDate={cohortStartDate} calendarDay={calendarDay} />
         )}
 

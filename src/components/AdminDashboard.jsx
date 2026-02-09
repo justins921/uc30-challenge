@@ -84,6 +84,21 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
 
   const retentionRate = nonAdmin.length > 0 ? Math.round((active.length / nonAdmin.length) * 100) : 0;
 
+  // Notification dots
+  const hasOpenTickets = (supportTickets || []).some(t => t.status === 'open');
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const hasCommunityActivity = (communityPosts || []).some(p => {
+    if (p.isDeleted) return false;
+    if (p.createdAt?.startsWith(todayStr)) return true;
+    return (p.comments || []).some(c => !c.isDeleted && c.createdAt?.startsWith(todayStr));
+  });
+
+  const adminTabs = ADMIN_TABS.map(t => {
+    if (t.id === 'support' && hasOpenTickets && tab !== 'support') return { ...t, hasNotification: true };
+    if (t.id === 'community' && hasCommunityActivity && tab !== 'community') return { ...t, hasNotification: true };
+    return t;
+  });
+
   const handleTabChange = (newTab) => {
     setTab(newTab);
     setSelectedParticipant(null);
@@ -95,7 +110,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
         user={user}
         currentTab={tab}
         onTabChange={handleTabChange}
-        tabs={ADMIN_TABS}
+        tabs={adminTabs}
         onLogout={onLogout}
         isAdmin
       />
