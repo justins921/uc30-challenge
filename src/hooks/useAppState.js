@@ -86,7 +86,7 @@ export function useAppState() {
     // Helper: ensure a participant row exists for an authenticated OAuth/social user.
     // Creates a new participant or links an existing one by email.
     const ensureParticipant = async (authUser) => {
-      if (!authUser?.email) return null;
+      if (!authUser?.email) { console.warn('ensureParticipant: no email on auth user'); return null; }
 
       // Look up existing participant by email
       let participant = await storage.findByEmail(authUser.email);
@@ -94,6 +94,7 @@ export function useAppState() {
       if (participant) {
         // Link to this auth user if not linked or linked to a different auth user
         if (participant.authId !== authUser.id) {
+          console.log('ensureParticipant: linking existing participant to auth user', authUser.id);
           await storage.updateParticipant(participant.id, { authId: authUser.id });
           participant = { ...participant, authId: authUser.id };
         }
@@ -107,6 +108,7 @@ export function useAppState() {
       const firstName = meta.first_name || nameParts[0] || authUser.email?.split('@')[0] || 'User';
       const lastName = meta.last_name || nameParts.slice(1).join(' ') || '';
 
+      console.log('ensureParticipant: creating new participant for', authUser.email);
       const newUser = createNewUser(firstName, lastName, authUser.email, authUser.id);
       const saved = await storage.addParticipant(newUser);
       if (saved && !saved.__error) {
@@ -115,6 +117,7 @@ export function useAppState() {
         }).catch(() => {});
         return saved;
       }
+      console.error('ensureParticipant: addParticipant failed', saved?.__error || 'returned null');
       return null;
     };
 

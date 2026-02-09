@@ -62,6 +62,21 @@ export default function App() {
     }
   }, []);
 
+  // Show loading screen during initial load (prevents flash of landing page after OAuth redirect)
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', padding: 20,
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#e94560' }}>UC30</div>
+          <div style={{ color: '#666', marginTop: 8, fontSize: 13 }}>Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
   // Not logged in
   if (currentView === 'login' || !user) {
     // If user clicked "Log In" or "Register" from landing, or arrived from Stripe redirect

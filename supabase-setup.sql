@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS participants (
   access_expires_at TIMESTAMPTZ,
   removed_at TIMESTAMPTZ,
   reactivated_at TIMESTAMPTZ,
+  profile_picture TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
