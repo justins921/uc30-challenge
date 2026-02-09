@@ -10,7 +10,6 @@ const ADMIN_TABS = [
   { id: 'participants', label: 'Participants' },
   { id: 'submissions', label: 'Submissions' },
   { id: 'content', label: 'Content' },
-  { id: 'landing', label: 'Landing Page' },
   { id: 'support', label: 'Support' },
   { id: 'social', label: 'Social Proof' },
 ];
@@ -122,12 +121,8 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onSetContentOverrides={onSetContentOverrides}
             phases={phases}
             onSetPhases={onSetPhases}
-          />
-        )}
-        {tab === 'landing' && (
-          <LandingPageEditor
             landingContent={landingContent}
-            onSave={onSetLandingContent}
+            onSetLandingContent={onSetLandingContent}
           />
         )}
         {tab === 'support' && (
@@ -1051,9 +1046,21 @@ function SubmissionsTab({ nonAdmin, onVerifySubmissionSocial }) {
 }
 
 // ── Content Management Tab ──────────────────────────────────
-function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhases }) {
+function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent }) {
   const [editingDay, setEditingDay] = useState(null);
   const [editingPhases, setEditingPhases] = useState(false);
+  const [editingLanding, setEditingLanding] = useState(false);
+
+  if (editingLanding) {
+    return (
+      <div className="scale-in">
+        <button className="btn-secondary" onClick={() => setEditingLanding(false)} style={{ marginBottom: 24, padding: '8px 20px', fontSize: 13 }}>
+          ← Back to Content
+        </button>
+        <LandingPageEditor landingContent={landingContent} onSave={onSetLandingContent} />
+      </div>
+    );
+  }
 
   if (editingDay) {
     return (
@@ -1186,6 +1193,41 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
           </div>
         </div>
       ))}
+
+      {/* Landing Page */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+          <div style={{ width: 10, height: 10, borderRadius: 3, background: '#533483' }} />
+          <h3 style={{ fontSize: 15, fontWeight: 700 }}>Landing Page</h3>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        </div>
+        <div
+          className="card"
+          style={{ padding: '14px 18px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14 }}
+          onClick={() => setEditingLanding(true)}
+        >
+          <div className="mono" style={{
+            width: 36, height: 36, borderRadius: 8, background: 'rgba(83,52,131,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 16, flexShrink: 0,
+          }}>
+            LP
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>Public Landing Page</div>
+            <div style={{ fontSize: 12, color: '#555' }}>
+              Hero text, stats, features, and call-to-action sections
+            </div>
+          </div>
+          {landingContent && (
+            <span style={{
+              fontSize: 10, fontWeight: 600, color: '#48c78e',
+              background: 'rgba(72,199,142,0.1)', padding: '3px 8px', borderRadius: 4,
+            }}>Customized</span>
+          )}
+          <div style={{ color: '#444', fontSize: 18, flexShrink: 0 }}>›</div>
+        </div>
+      </div>
     </div>
   );
 }
