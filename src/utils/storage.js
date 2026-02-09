@@ -55,11 +55,38 @@ const supabaseStorage = {
 
   async addParticipant(participant) {
     const row = toDbRow(participant);
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from('participants')
       .insert(row)
       .select()
       .single();
+
+    // If insert fails (e.g. unknown column), retry with minimal columns
+    if (error) {
+      console.error('addParticipant attempt 1 failed:', error.message);
+      const minimalRow = {
+        id: row.id,
+        auth_id: row.auth_id,
+        name: row.name,
+        first_name: row.first_name,
+        last_name: row.last_name,
+        email: row.email,
+        is_admin: row.is_admin,
+        current_day: row.current_day,
+        is_active: row.is_active,
+        has_paid: row.has_paid,
+        completed_days: row.completed_days,
+        submissions: row.submissions,
+        metrics: row.metrics,
+      };
+      const retry = await supabase
+        .from('participants')
+        .insert(minimalRow)
+        .select()
+        .single();
+      data = retry.data;
+      error = retry.error;
+    }
 
     if (error) {
       console.error('addParticipant error:', error);

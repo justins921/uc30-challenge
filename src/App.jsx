@@ -23,6 +23,7 @@ export default function App() {
     updateProfile,
     changePassword,
     passwordRecovery,
+    authError,
     logout,
     submitDay,
     removeParticipant,
@@ -79,8 +80,9 @@ export default function App() {
 
   // Not logged in
   if (currentView === 'login' || !user) {
-    // If user clicked "Log In" or "Register" from landing, or arrived from Stripe redirect
-    if (authMode) {
+    // If user clicked "Log In"/"Register" from landing, arrived from Stripe redirect,
+    // or returned from a failed OAuth redirect (authError)
+    if (authMode || authError) {
       return (
         <LoginScreen
           onLogin={login}
@@ -89,9 +91,10 @@ export default function App() {
           onLoginWithApple={loginWithApple}
           onRequestReset={requestPasswordReset}
           onConfirmReset={confirmPasswordReset}
-          initialMode={authMode}
+          initialMode={authMode || 'login'}
           passwordRecovery={passwordRecovery}
           onBackToLanding={() => setAuthMode(null)}
+          authError={authError}
         />
       );
     }

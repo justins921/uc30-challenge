@@ -19,6 +19,8 @@ export function useAppState() {
   const [supportTickets, setSupportTicketsState] = useState([]);
   // Password recovery mode (triggered by Supabase auth event)
   const [passwordRecovery, setPasswordRecovery] = useState(false);
+  // Auth error (shown on login screen after failed OAuth redirect)
+  const [authError, setAuthError] = useState(null);
 
   // Persist helper (localStorage only — Supabase persists per-operation)
   const persist = useCallback((newUser, newParticipants) => {
@@ -163,6 +165,9 @@ export function useAppState() {
               setCurrentView(participant.isAdmin ? 'admin' : 'dashboard');
               const allParticipants = await storage.getParticipants();
               setParticipants(allParticipants || []);
+            } else {
+              // OAuth session exists but participant creation failed — show error
+              setAuthError('Account setup failed after sign-in. Check browser console for details, or try registering with email and password.');
             }
           }
         }
@@ -200,9 +205,12 @@ export function useAppState() {
                 setCurrentView(participant.isAdmin ? 'admin' : 'dashboard');
                 const allParticipants = await storage.getParticipants();
                 setParticipants(allParticipants || []);
+              } else {
+                setAuthError('Account setup failed after sign-in. Check browser console for details.');
               }
             } catch (err) {
               console.error('OAuth participant setup error:', err);
+              setAuthError(`Sign-in error: ${err.message}`);
             }
           }
         }
@@ -877,6 +885,7 @@ export function useAppState() {
     nextCohortDate,
     contentOverrides,
     passwordRecovery,
+    authError,
     navigate: setCurrentView,
     login,
     register,

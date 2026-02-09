@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
-export default function LoginScreen({ onLogin, onRegister, onLoginWithGoogle, onLoginWithApple, onRequestReset, onConfirmReset, initialMode, passwordRecovery, onBackToLanding }) {
+export default function LoginScreen({ onLogin, onRegister, onLoginWithGoogle, onLoginWithApple, onRequestReset, onConfirmReset, initialMode, passwordRecovery, onBackToLanding, authError }) {
   const [mode, setMode] = useState(initialMode || 'login');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(authError || '');
   const [success, setSuccess] = useState('');
   const [resetSent, setResetSent] = useState(false);
 
