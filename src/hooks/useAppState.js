@@ -18,6 +18,7 @@ export function useAppState() {
   const [landingContent, setLandingContentState] = useState(null);
   const [supportTickets, setSupportTicketsState] = useState([]);
   const [cohortStats, setCohortStatsState] = useState({ active: 0, total: 0 });
+  const [communityPosts, setCommunityPostsState] = useState([]);
   // Password recovery mode (triggered by Supabase auth event)
   const [passwordRecovery, setPasswordRecovery] = useState(false);
   // Auth error (shown on login screen after failed OAuth redirect)
@@ -155,6 +156,9 @@ export function useAppState() {
 
       const stats = await Promise.resolve(storage.getCohortStats());
       if (stats) setCohortStatsState(stats);
+
+      const posts = await Promise.resolve(storage.getCommunityPosts());
+      if (posts) setCommunityPostsState(posts);
 
       return { storedParticipants, cohortSettings };
     };
@@ -972,6 +976,149 @@ export function useAppState() {
     setLandingContentState(content);
   }, []);
 
+  // ── Community Board ─────────────────────────────────────
+  const createCommunityPost = useCallback(async (title, body, dayTag) => {
+    if (!user) return { error: 'Not logged in.' };
+    if (user.communityBanned) return { error: 'You have been banned from the community.' };
+    const post = {
+      id: `post_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      authorId: user.id,
+      authorName: `${user.firstName} ${user.lastName}`.trim(),
+      authorAvatar: user.profilePicture || null,
+      cohortDate: cohortStartDate || null,
+      dayTag: dayTag || null,
+      title,
+      body,
+      createdAt: new Date().toISOString(),
+      comments: [],
+      isDeleted: false,
+      isPinned: false,
+    };
+    const updated = [...communityPosts, post];
+    setCommunityPostsState(updated);
+    await Promise.resolve(storage.setCommunityPosts(updated));
+    return { success: true, post };
+  }, [user, communityPosts, cohortStartDate]);
+
+  const commentOnPost = useCallback(async (postId, text) => {
+    if (!user) return { error: 'Not logged in.' };
+    if (user.communityBanned) return { error: 'You have been banned from the community.' };
+    const comment = {
+      id: `cmt_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      authorId: user.id,
+      authorName: `${user.firstName} ${user.lastName}`.trim(),
+      authorAvatar: user.profilePicture || null,
+      text,
+      createdAt: new Date().toISOString(),
+      isDeleted: false,
+    };
+    const updated = communityPosts.map(p =>
+      p.id === postId ? { ...p, comments: [...(p.comments || []), comment] } : p
+    );
+    setCommunityPostsState(updated);
+    await Promise.resolve(storage.setCommunityPosts(updated));
+    return { success: true };
+  }, [user, communityPosts]);
+
+  const deleteCommunityPost = useCallback(async (postId) => {
+    if (!user?.isAdmin) return { error: 'Only admins can delete posts.' };
+    const updated = communityPosts.map(p =>
+      p.id === postId ? { ...p, isDeleted: true } : p
+    );
+    setCommunityPostsState(updated);
+    await Promise.resolve(storage.setCommunityPosts(updated));
+    return { success: true };
+  }, [user, communityPosts]);
+
+  const deleteCommunityComment = useCallback(async (postId, commentId) => {
+    if (!user?.isAdmin) return { error: 'Only admins can delete comments.' };
+    const updated = communityPosts.map(p => {
+      if (p.id !== postId) return p;
+      return { ...p, comments: (p.comments || []).map(c =>
+        c.id === commentId ? { ...c, isDeleted: true } : c
+      )};
+    });
+    setCommunityPostsState(updated);
+    await Promise.resolve(storage.setCommunityPosts(updated));
+    return { success: true };
+  }, [user, communityPosts]);
+
+  const pinCommunityPost = useCallback(async (postId, pinned) => {
+    if (!user?.isAdmin) return { error: 'Only admins can pin posts.' };
+    const updated = communityPosts.map(p =>
+      p.id === postId ? { ...p, isPinned: pinned } : p
+    );
+    setCommunityPostsState(updated);
+    await Promise.resolve(storage.setCommunityPosts(updated));
+    return { success: true };
+  }, [user, communityPosts]);
+
+  const warnCommunityUser = useCallback(async (participantId, message) => {
+    if (!user?.isAdmin) return { error: 'Only admins can warn users.' };
+    const target = participants.find(p => p.id === participantId);
+    if (!target) return { error: 'Participant not found.' };
+    const warnings = [...(target.communityWarnings || []), { message, createdAt: new Date().toISOString(), dismissed: false }];
+    const updates = { communityWarnings: warnings };
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(participantId, updates);
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === participantId ? { ...p, ...updates } : p
+      );
+      setParticipants(updatedParticipants);
+      persist(user, updatedParticipants);
+    }
+    return { success: true };
+  }, [user, participants, persist]);
+
+  const banCommunityUser = useCallback(async (participantId, banned) => {
+    if (!user?.isAdmin) return { error: 'Only admins can ban users.' };
+    const updates = { communityBanned: banned };
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(participantId, updates);
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === participantId ? { ...p, ...updates } : p
+      );
+      setParticipants(updatedParticipants);
+      persist(user, updatedParticipants);
+    }
+    return { success: true };
+  }, [user, participants, persist]);
+
+  const dismissCommunityWarning = useCallback(async (warningIndex) => {
+    if (!user) return;
+    const warnings = [...(user.communityWarnings || [])];
+    if (warnings[warningIndex]) warnings[warningIndex] = { ...warnings[warningIndex], dismissed: true };
+    const updates = { communityWarnings: warnings };
+    const updatedUser = { ...user, ...updates };
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(user.id, updates);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === user.id ? updatedUser : p
+      );
+      setParticipants(updatedParticipants);
+      persist(updatedUser, updatedParticipants);
+    }
+    setUser(updatedUser);
+    storage.setUser(updatedUser);
+  }, [user, participants, persist]);
+
+  // Refresh community posts every 30 seconds
+  useEffect(() => {
+    if (!user || currentView === 'login') return;
+    const interval = setInterval(async () => {
+      const fresh = await Promise.resolve(storage.getCommunityPosts());
+      if (fresh) setCommunityPostsState(fresh);
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [user, currentView]);
+
   return {
     user,
     participants,
@@ -1015,5 +1162,14 @@ export function useAppState() {
     updateSupportTicket,
     completeGettingStarted,
     verifySubmissionSocial,
+    communityPosts,
+    createCommunityPost,
+    commentOnPost,
+    deleteCommunityPost,
+    deleteCommunityComment,
+    pinCommunityPost,
+    warnCommunityUser,
+    banCommunityUser,
+    dismissCommunityWarning,
   };
 }

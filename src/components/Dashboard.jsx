@@ -7,10 +7,12 @@ import SubmissionsView from './SubmissionsView';
 import StatsView from './StatsView';
 import UserProfile from './UserProfile';
 import { getGettingStartedContent } from '../data/challengeDays';
+import CommunityBoard from './CommunityBoard';
 import Footer from './Footer';
 
 const TABS = [
   { id: 'timeline', label: 'Timeline' },
+  { id: 'community', label: 'Community' },
   { id: 'submissions', label: 'My Submissions' },
   { id: 'stats', label: 'My Stats' },
   { id: 'profile', label: 'Profile' },
@@ -64,7 +66,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -123,7 +125,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         user={user}
         currentTab={tab === 'day' ? 'timeline' : tab}
         onTabChange={handleTabChange}
-        tabs={TABS}
+        tabs={cohortActive ? TABS : TABS.filter(t => t.id !== 'community')}
         onLogout={onLogout}
       />
 
@@ -170,6 +172,19 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             onBack={handleBackToTimeline}
             contentOverrides={contentOverrides}
             customPhases={customPhases}
+          />
+        )}
+        {tab === 'community' && (
+          <CommunityBoard
+            user={user}
+            posts={communityPosts}
+            cohortStartDate={cohortStartDate}
+            onCreatePost={onCreateCommunityPost}
+            onComment={onCommentOnPost}
+            onDeletePost={onDeleteCommunityPost}
+            onDeleteComment={onDeleteCommunityComment}
+            onPin={onPinCommunityPost}
+            onDismissWarning={onDismissCommunityWarning}
           />
         )}
         {tab === 'submissions' && <SubmissionsView user={user} />}

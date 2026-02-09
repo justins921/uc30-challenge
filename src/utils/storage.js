@@ -209,6 +209,13 @@ const supabaseStorage = {
     return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_support_tickets')) || []; } catch { return []; } })();
   },
   async setSupportTickets(tickets) { await this._setSetting('support_tickets', tickets); },
+
+  async getCommunityPosts() {
+    const val = await this._getSetting('community_posts');
+    if (val) { try { localStorage.setItem('uc30_community_posts', JSON.stringify(val)); } catch {} }
+    return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_community_posts')) || []; } catch { return []; } })();
+  },
+  async setCommunityPosts(posts) { await this._setSetting('community_posts', posts); },
 };
 
 // ── Database row conversion ──────────────────────────────────────
@@ -236,6 +243,8 @@ function toDbRow(user) {
   if (user.profilePicture) row.profile_picture = user.profilePicture;
   if (user.socialHandles && Object.keys(user.socialHandles).length > 0) row.social_handles = user.socialHandles;
   if (user.gettingStartedCompleted) row.getting_started_completed = true;
+  if (user.communityBanned) row.community_banned = true;
+  if (user.communityWarnings?.length > 0) row.community_warnings = user.communityWarnings;
   return row;
 }
 
@@ -259,6 +268,8 @@ function toDbUpdateRow(updates) {
   if (updates.profilePicture !== undefined) row.profile_picture = updates.profilePicture;
   if (updates.socialHandles !== undefined) row.social_handles = updates.socialHandles;
   if (updates.gettingStartedCompleted !== undefined) row.getting_started_completed = updates.gettingStartedCompleted;
+  if (updates.communityBanned !== undefined) row.community_banned = updates.communityBanned;
+  if (updates.communityWarnings !== undefined) row.community_warnings = updates.communityWarnings;
   return row;
 }
 
@@ -285,6 +296,8 @@ function fromDbRow(row) {
     profilePicture: row.profile_picture || null,
     socialHandles: row.social_handles || {},
     gettingStartedCompleted: row.getting_started_completed || false,
+    communityBanned: row.community_banned || false,
+    communityWarnings: row.community_warnings || [],
   };
 }
 
@@ -380,6 +393,12 @@ const localStorageFallback = {
   setSupportTickets(tickets) {
     try { localStorage.setItem('uc30_support_tickets', JSON.stringify(tickets)); } catch {}
   },
+  getCommunityPosts() {
+    try { return JSON.parse(localStorage.getItem('uc30_community_posts')) || []; } catch { return []; }
+  },
+  setCommunityPosts(posts) {
+    try { localStorage.setItem('uc30_community_posts', JSON.stringify(posts)); } catch {}
+  },
 };
 
 // ── Export the right storage based on config ─────────────────────
@@ -412,5 +431,7 @@ export function createNewUser(firstName, lastName, email, authId) {
     profilePicture: null,
     socialHandles: {},
     gettingStartedCompleted: false,
+    communityBanned: false,
+    communityWarnings: [],
   };
 }

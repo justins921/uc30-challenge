@@ -62,7 +62,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -135,6 +135,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             nonAdmin={nonAdmin}
             dayDistribution={dayDistribution}
             retentionRate={retentionRate}
+            communityPostCount={(communityPosts || []).filter(p => !p.isDeleted).length}
           />
         )}
         {tab === 'participants' && !selectedParticipant && (
@@ -158,6 +159,8 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onToggleAdmin={onToggleAdmin}
             onResetPassword={onResetPassword}
             onVerifySubmissionSocial={onVerifySubmissionSocial}
+            onWarnCommunityUser={onWarnCommunityUser}
+            onBanCommunityUser={onBanCommunityUser}
           />
         )}
         {tab === 'submissions' && (
@@ -544,7 +547,7 @@ function AdminStat({ label, value, color }) {
   );
 }
 
-function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate }) {
+function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communityPostCount }) {
   const maxCount = Math.max(...Object.values(dayDistribution), 1);
 
   return (
@@ -577,14 +580,27 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate }) {
         </div>
       </div>
 
-      <div className="card">
-        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Retention Rate</h3>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-          <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#48c78e' }}>
-            {retentionRate}%
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        <div className="card">
+          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Retention Rate</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#48c78e' }}>
+              {retentionRate}%
+            </div>
+            <div style={{ color: '#888', fontSize: 14, lineHeight: 1.6 }}>
+              {active.length} of {nonAdmin.length} participants still active
+            </div>
           </div>
-          <div style={{ color: '#888', fontSize: 14, lineHeight: 1.6 }}>
-            {active.length} of {nonAdmin.length} participants still active
+        </div>
+        <div className="card">
+          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Community</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#533483' }}>
+              {communityPostCount}
+            </div>
+            <div style={{ color: '#888', fontSize: 14, lineHeight: 1.6 }}>
+              posts from participants
+            </div>
           </div>
         </div>
       </div>
@@ -729,7 +745,9 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
 }
 
 // ── Participant Detail View (with all submissions) ──────────
-function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onVerifySubmissionSocial }) {
+function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onVerifySubmissionSocial, onWarnCommunityUser, onBanCommunityUser }) {
+  const [showWarnInput, setShowWarnInput] = useState(false);
+  const [warnMessage, setWarnMessage] = useState('');
   const p = participant;
 
   return (
@@ -829,6 +847,72 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
             >
               Delete Permanently
             </button>
+          </div>
+
+          {/* Community Moderation */}
+          <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ fontSize: 12, color: '#888', fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Community</div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+              {p.communityBanned && (
+                <span style={{ fontSize: 11, color: '#ff5050', fontWeight: 600 }}>Banned from community</span>
+              )}
+              <button
+                style={{
+                  background: p.communityBanned ? 'rgba(72,199,142,0.08)' : 'rgba(255,80,80,0.08)',
+                  color: p.communityBanned ? '#48c78e' : '#ff5050',
+                  border: `1px solid ${p.communityBanned ? 'rgba(72,199,142,0.2)' : 'rgba(255,80,80,0.2)'}`,
+                  padding: '6px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                  fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+                }}
+                onClick={() => {
+                  const action = p.communityBanned ? 'unban' : 'ban';
+                  if (confirm(`${action === 'ban' ? 'Ban' : 'Unban'} ${p.firstName} from the community?`)) {
+                    onBanCommunityUser(p.id, !p.communityBanned);
+                  }
+                }}
+              >
+                {p.communityBanned ? 'Unban from Community' : 'Ban from Community'}
+              </button>
+              <button
+                style={{
+                  background: 'rgba(240,165,0,0.08)', color: '#f0a500',
+                  border: '1px solid rgba(240,165,0,0.2)', padding: '6px 14px',
+                  borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                  fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+                }}
+                onClick={() => setShowWarnInput(!showWarnInput)}
+              >
+                Warn User
+              </button>
+              {(p.communityWarnings || []).length > 0 && (
+                <span style={{ fontSize: 11, color: '#f0a500' }}>
+                  {p.communityWarnings.length} warning{p.communityWarnings.length !== 1 ? 's' : ''} issued
+                </span>
+              )}
+            </div>
+            {showWarnInput && (
+              <div style={{ display: 'flex', gap: 8, marginTop: 8, alignItems: 'flex-end' }}>
+                <input
+                  type="text"
+                  placeholder="Warning message..."
+                  value={warnMessage}
+                  onChange={e => setWarnMessage(e.target.value)}
+                  style={{ flex: 1, fontSize: 13, padding: '8px 12px' }}
+                />
+                <button
+                  className="btn-primary"
+                  disabled={!warnMessage.trim()}
+                  onClick={async () => {
+                    await onWarnCommunityUser(p.id, warnMessage.trim());
+                    setWarnMessage('');
+                    setShowWarnInput(false);
+                  }}
+                  style={{ padding: '8px 16px', fontSize: 12, opacity: !warnMessage.trim() ? 0.5 : 1 }}
+                >
+                  Send Warning
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

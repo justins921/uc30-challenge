@@ -47,6 +47,15 @@ export default function App() {
     completeGettingStarted,
     verifySubmissionSocial,
     cohortStats,
+    communityPosts,
+    createCommunityPost,
+    commentOnPost,
+    deleteCommunityPost,
+    deleteCommunityComment,
+    pinCommunityPost,
+    warnCommunityUser,
+    banCommunityUser,
+    dismissCommunityWarning,
     navigate,
   } = useAppState();
 
@@ -164,6 +173,12 @@ export default function App() {
         onUpdateTicket={updateSupportTicket}
         onReplyToTicket={replyToTicket}
         onVerifySubmissionSocial={verifySubmissionSocial}
+        communityPosts={communityPosts}
+        onDeleteCommunityPost={deleteCommunityPost}
+        onDeleteCommunityComment={deleteCommunityComment}
+        onPinCommunityPost={pinCommunityPost}
+        onWarnCommunityUser={warnCommunityUser}
+        onBanCommunityUser={banCommunityUser}
       />
     );
   }
@@ -186,6 +201,13 @@ export default function App() {
       supportTickets={supportTickets}
       cohortStats={cohortStats}
       onCompleteGettingStarted={completeGettingStarted}
+      communityPosts={communityPosts}
+      onCreateCommunityPost={createCommunityPost}
+      onCommentOnPost={commentOnPost}
+      onDeleteCommunityPost={deleteCommunityPost}
+      onDeleteCommunityComment={deleteCommunityComment}
+      onPinCommunityPost={pinCommunityPost}
+      onDismissCommunityWarning={dismissCommunityWarning}
     />
   );
 }
