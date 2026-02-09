@@ -399,8 +399,7 @@ function CohortStatsBanner({ active, total }) {
         boxShadow: '0 0 6px rgba(72,199,142,0.5)',
       }} />
       <span style={{ fontSize: 14, color: '#ccc' }}>
-        <strong style={{ color: '#e94560' }}>{active}</strong> of{' '}
-        <strong>{total}</strong> participants still active
+        You are 1 of <strong style={{ color: '#e94560' }}>{active}</strong> participants still active
       </span>
     </div>
   );

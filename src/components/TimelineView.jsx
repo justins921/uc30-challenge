@@ -87,9 +87,9 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
               const isComplete = user.completedDays.includes(d);
               const isCurrent = d === user.currentDay;
 
-              // Lock all days if cohort hasn't started; otherwise calendar-based locking
+              // Lock all days if cohort hasn't started or Getting Started not done
               let isLocked;
-              if (!cohortActive) {
+              if (!cohortActive || !user.gettingStartedCompleted) {
                 isLocked = true;
               } else if (calendarDay !== null) {
                 const isAccessible = isComplete || (isCurrent && d <= calendarDay);

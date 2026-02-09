@@ -17,7 +17,6 @@ export function useAppState() {
   const [customPhases, setCustomPhasesState] = useState(null);
   const [landingContent, setLandingContentState] = useState(null);
   const [supportTickets, setSupportTicketsState] = useState([]);
-  const [cohortStats, setCohortStatsState] = useState({ active: 0, total: 0 });
   const [communityPosts, setCommunityPostsState] = useState([]);
   // Password recovery mode (triggered by Supabase auth event)
   const [passwordRecovery, setPasswordRecovery] = useState(false);
@@ -153,9 +152,6 @@ export function useAppState() {
 
       const tickets = await Promise.resolve(storage.getSupportTickets());
       if (tickets) setSupportTicketsState(tickets);
-
-      const stats = await Promise.resolve(storage.getCohortStats());
-      if (stats) setCohortStatsState(stats);
 
       const posts = await Promise.resolve(storage.getCommunityPosts());
       if (posts) setCommunityPostsState(posts);
@@ -1127,7 +1123,10 @@ export function useAppState() {
     cohortStartDate,
     nextCohortDate,
     contentOverrides,
-    cohortStats,
+    cohortStats: (() => {
+      const na = participants.filter(p => !p.isAdmin);
+      return { active: na.filter(p => p.isActive).length, total: na.length };
+    })(),
     passwordRecovery,
     authError,
     navigate: setCurrentView,
