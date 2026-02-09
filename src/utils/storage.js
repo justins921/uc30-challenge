@@ -176,7 +176,7 @@ const supabaseStorage = {
 
 // ── Database row conversion ──────────────────────────────────────
 function toDbRow(user) {
-  return {
+  const row = {
     id: user.id,
     auth_id: user.authId || null,
     name: `${user.firstName} ${user.lastName}`.trim(),
@@ -194,8 +194,10 @@ function toDbRow(user) {
     metrics: user.metrics,
     removed_at: user.removedAt,
     access_expires_at: user.accessExpiresAt || null,
-    profile_picture: user.profilePicture || null,
   };
+  // Only include profile_picture if it has a value (column may not exist yet)
+  if (user.profilePicture) row.profile_picture = user.profilePicture;
+  return row;
 }
 
 function toDbUpdateRow(updates) {
