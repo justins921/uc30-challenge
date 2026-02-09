@@ -3,6 +3,7 @@ import Header from './Header';
 import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent } from '../data/challengeDays';
 import { AttachmentLink } from './DayView';
 import { LANDING_DEFAULTS } from './LandingPage';
+import Footer from './Footer';
 
 const ADMIN_TABS = [
   { id: 'overview', label: 'Overview' },
@@ -144,6 +145,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
           />
         )}
       </div>
+      <Footer />
     </div>
   );
 }

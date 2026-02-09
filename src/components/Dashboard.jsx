@@ -7,6 +7,7 @@ import SubmissionsView from './SubmissionsView';
 import StatsView from './StatsView';
 import UserProfile from './UserProfile';
 import { getGettingStartedContent } from '../data/challengeDays';
+import Footer from './Footer';
 
 const TABS = [
   { id: 'timeline', label: 'Timeline' },
@@ -130,7 +131,9 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         {cohortStats && cohortStats.total > 0 && (
           <CohortStatsBanner active={cohortStats.active} total={cohortStats.total} />
         )}
-        <ProgressBanner user={user} cohortStartDate={cohortStartDate} calendarDay={calendarDay} />
+        {cohortActive && (
+          <ProgressBanner user={user} cohortStartDate={cohortStartDate} calendarDay={calendarDay} />
+        )}
 
         {/* Cohort countdown when pre-cohort */}
         {cohortStartDate && !cohortActive && (tab === 'timeline' || tab === 'day') && (
@@ -184,6 +187,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           />
         )}
       </div>
+      <Footer />
     </div>
   );
 }

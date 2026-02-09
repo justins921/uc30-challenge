@@ -15,6 +15,7 @@ export default function Header({ user, currentTab, onTabChange, tabs, onLogout, 
     }}>
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        maxWidth: 1100, margin: '0 auto',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span className="mono" style={{ fontSize: 20, fontWeight: 700, color: '#e94560' }}>UC30</span>
@@ -78,6 +79,7 @@ export default function Header({ user, currentTab, onTabChange, tabs, onLogout, 
           paddingTop: 12, marginTop: 12,
           borderTop: '1px solid rgba(255,255,255,0.06)',
           display: 'none', flexDirection: 'column', gap: 6,
+          maxWidth: 1100, margin: '0 auto',
         }}>
           {tabs.map(tab => (
             <button
