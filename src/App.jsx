@@ -87,8 +87,9 @@ export default function App() {
         <LoginScreen
           onLogin={login}
           onRegister={register}
-          onLoginWithGoogle={loginWithGoogle}
-          onLoginWithApple={loginWithApple}
+          // Google/Apple OAuth disabled for now — re-enable when ready
+          // onLoginWithGoogle={loginWithGoogle}
+          // onLoginWithApple={loginWithApple}
           onRequestReset={requestPasswordReset}
           onConfirmReset={confirmPasswordReset}
           initialMode={authMode || 'login'}
