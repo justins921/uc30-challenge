@@ -6,6 +6,7 @@ import DayView from './DayView';
 import SubmissionsView from './SubmissionsView';
 import StatsView from './StatsView';
 import UserProfile from './UserProfile';
+import { getGettingStartedContent } from '../data/challengeDays';
 
 const TABS = [
   { id: 'timeline', label: 'Timeline' },
@@ -110,7 +111,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             <CohortStatsBanner active={cohortStats.active} total={cohortStats.total} />
           )}
           {!user.gettingStartedCompleted && (
-            <GettingStartedSection user={user} onComplete={onCompleteGettingStarted} />
+            <GettingStartedSection user={user} onComplete={onCompleteGettingStarted} contentOverrides={contentOverrides} />
           )}
           <CohortCountdown cohortStartDate={cohortStartDate} />
         </div>
@@ -167,7 +168,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         {tab === 'timeline' && (
           <>
             {!user.gettingStartedCompleted && (
-              <GettingStartedSection user={user} onComplete={onCompleteGettingStarted} />
+              <GettingStartedSection user={user} onComplete={onCompleteGettingStarted} contentOverrides={contentOverrides} />
             )}
             <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} contentOverrides={contentOverrides} customPhases={customPhases} />
           </>
@@ -400,23 +401,128 @@ function CohortStatsBanner({ active, total }) {
   );
 }
 
+// ── Social Platforms Config ───────────────────────────────
+const SOCIAL_PLATFORMS = [
+  { value: 'instagram', label: 'Instagram', placeholder: '@yourusername' },
+  { value: 'tiktok', label: 'TikTok', placeholder: '@yourusername' },
+  { value: 'twitter', label: 'X (Twitter)', placeholder: '@yourusername' },
+  { value: 'facebook', label: 'Facebook', placeholder: 'Profile URL or name' },
+  { value: 'youtube', label: 'YouTube', placeholder: 'Channel URL or name' },
+];
+
+function SocialHandlesInput({ handles, onChange }) {
+  const usedPlatforms = handles.map(h => h.platform);
+  const availablePlatforms = SOCIAL_PLATFORMS.filter(p => !usedPlatforms.includes(p.value));
+
+  const updateHandle = (index, field, value) => {
+    const updated = handles.map((h, i) => i === index ? { ...h, [field]: value } : h);
+    onChange(updated);
+  };
+
+  const addHandle = () => {
+    if (availablePlatforms.length === 0) return;
+    onChange([...handles, { platform: availablePlatforms[0].value, handle: '' }]);
+  };
+
+  const removeHandle = (index) => {
+    onChange(handles.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {handles.map((h, i) => {
+        const platformInfo = SOCIAL_PLATFORMS.find(p => p.value === h.platform);
+        return (
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <select
+              value={h.platform}
+              onChange={e => updateHandle(i, 'platform', e.target.value)}
+              style={{ width: 140, fontSize: 13, padding: '8px 10px' }}
+            >
+              {SOCIAL_PLATFORMS
+                .filter(p => p.value === h.platform || !usedPlatforms.includes(p.value))
+                .map(p => (
+                  <option key={p.value} value={p.value}>{p.label}</option>
+                ))}
+            </select>
+            <input
+              value={h.handle}
+              onChange={e => updateHandle(i, 'handle', e.target.value)}
+              placeholder={platformInfo?.placeholder || '@yourusername'}
+              style={{ flex: 1 }}
+            />
+            {handles.length > 1 && (
+              <button
+                onClick={() => removeHandle(i)}
+                style={{
+                  background: 'none', border: 'none', color: '#e94560',
+                  cursor: 'pointer', fontSize: 18, padding: '0 6px',
+                  fontFamily: "'DM Sans', sans-serif",
+                }}
+              >×</button>
+            )}
+          </div>
+        );
+      })}
+      {availablePlatforms.length > 0 && (
+        <button
+          onClick={addHandle}
+          style={{
+            alignSelf: 'flex-start', background: 'rgba(255,255,255,0.06)',
+            border: '1px dashed rgba(255,255,255,0.15)', borderRadius: 8,
+            padding: '8px 16px', cursor: 'pointer', fontSize: 13, color: '#888',
+            fontFamily: "'DM Sans', sans-serif",
+          }}
+        >
+          + Add another platform
+        </button>
+      )}
+    </div>
+  );
+}
+
+// Convert stored socialHandles object → array for SocialHandlesInput
+function socialHandlesToArray(obj) {
+  const entries = Object.entries(obj || {}).filter(([, v]) => v);
+  if (entries.length > 0) return entries.map(([platform, handle]) => ({ platform, handle }));
+  return [{ platform: 'instagram', handle: '' }];
+}
+
+// Convert array → object for storage
+function socialHandlesToObject(arr) {
+  const obj = {};
+  arr.forEach(h => { if (h.handle.trim()) obj[h.platform] = h.handle.trim(); });
+  return obj;
+}
+
 // ── Getting Started Section ──────────────────────────────
-function GettingStartedSection({ user, onComplete }) {
-  const [instagram, setInstagram] = useState(user.socialHandles?.instagram || '');
-  const [tiktok, setTiktok] = useState(user.socialHandles?.tiktok || '');
-  const [twitter, setTwitter] = useState(user.socialHandles?.twitter || '');
-  const [facebook, setFacebook] = useState(user.socialHandles?.facebook || '');
-  const [youtube, setYoutube] = useState(user.socialHandles?.youtube || '');
+function GettingStartedSection({ user, onComplete, contentOverrides }) {
+  const content = getGettingStartedContent(contentOverrides);
+  const [handles, setHandles] = useState(() => socialHandlesToArray(user.socialHandles));
+  const [proofText, setProofText] = useState('');
+  const [fileName, setFileName] = useState('');
+  const [fileData, setFileData] = useState(null);
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
 
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) { alert('File must be under 10 MB.'); return; }
+    setFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = () => setFileData(reader.result);
+    reader.readAsDataURL(file);
+  };
+
+  const hasValidHandle = handles.some(h => h.handle.trim().length > 0);
+
   const handleComplete = async () => {
-    // Require at least one social handle
-    const handles = { instagram: instagram.trim(), tiktok: tiktok.trim(), twitter: twitter.trim(), facebook: facebook.trim(), youtube: youtube.trim() };
-    const hasAny = Object.values(handles).some(v => v.length > 0);
-    if (!hasAny) return;
+    if (!hasValidHandle) return;
     setSaving(true);
-    await onComplete(handles);
+    const socialHandles = socialHandlesToObject(handles);
+    const proof = (proofText.trim() || fileName) ? { text: proofText, fileName, fileData } : null;
+    await onComplete(socialHandles, proof);
     setDone(true);
     setSaving(false);
   };
@@ -432,57 +538,157 @@ function GettingStartedSection({ user, onComplete }) {
   }
 
   return (
-    <div className="card fade-up" style={{ padding: 28, marginBottom: 24, borderColor: 'rgba(233,69,96,0.25)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+    <div className="fade-up" style={{ marginBottom: 24 }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
         <div style={{
           width: 32, height: 32, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16,
         }}>🚀</div>
         <div>
-          <h3 style={{ fontSize: 17, fontWeight: 700 }}>Getting Started</h3>
+          <h3 style={{ fontSize: 17, fontWeight: 700 }}>{content.title}</h3>
           <div style={{ fontSize: 12, color: '#e94560', fontWeight: 600 }}>Required before Day 1</div>
         </div>
       </div>
 
-      <p style={{ color: '#bbb', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
-        Welcome to the UC30 Challenge! Before Day 1 begins, add your social media handles below.
-        You'll be posting daily about your progress — this builds accountability and helps you find deals.
-      </p>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
-        <SocialInput label="Instagram" value={instagram} onChange={setInstagram} placeholder="@yourusername" />
-        <SocialInput label="TikTok" value={tiktok} onChange={setTiktok} placeholder="@yourusername" />
-        <SocialInput label="X (Twitter)" value={twitter} onChange={setTwitter} placeholder="@yourusername" />
-        <SocialInput label="Facebook" value={facebook} onChange={setFacebook} placeholder="Profile URL or name" />
-        <SocialInput label="YouTube" value={youtube} onChange={setYoutube} placeholder="Channel URL or name" />
+      {/* Video */}
+      <div className="card" style={{ marginBottom: 20, padding: 0, overflow: 'hidden' }}>
+        {content.videoUrl ? (
+          <div style={{ aspectRatio: '16/9' }}>
+            <iframe
+              src={content.videoUrl}
+              style={{ width: '100%', height: '100%', border: 'none' }}
+              allow="accelerometer; autoplay; encrypted-media; gyroscope"
+              allowFullScreen
+            />
+          </div>
+        ) : (
+          <div style={{
+            background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
+            aspectRatio: '16/9', display: 'flex', alignItems: 'center',
+            justifyContent: 'center', flexDirection: 'column', gap: 12,
+          }}>
+            <div style={{
+              width: 72, height: 72, borderRadius: '50%',
+              background: 'rgba(233,69,96,0.2)', border: '2px solid rgba(233,69,96,0.4)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28,
+            }}>▶</div>
+            <div style={{ fontSize: 13, color: '#888' }}>Getting Started Video</div>
+            <div style={{ fontSize: 11, color: '#555' }}>Admin: Add video URL in Content tab</div>
+          </div>
+        )}
       </div>
 
-      <p style={{ fontSize: 12, color: '#666', marginBottom: 16 }}>
-        Enter at least one handle to continue. You can update these later in your Profile.
-      </p>
+      {/* Downloads */}
+      {content.downloads && content.downloads.length > 0 && (
+        <div className="card" style={{ marginBottom: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <span style={{ fontSize: 16 }}>📥</span>
+            <h3 style={{ fontSize: 15, fontWeight: 700 }}>Resources</h3>
+          </div>
+          {content.downloads.map((dl, i) => (
+            <a
+              key={i}
+              href={dl.url}
+              target="_blank"
+              rel="noopener"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px',
+                background: 'rgba(255,255,255,0.03)', borderRadius: 8,
+                color: '#e94560', textDecoration: 'none', fontSize: 14,
+                marginBottom: i < content.downloads.length - 1 ? 8 : 0,
+              }}
+            >
+              📎 {dl.name}
+            </a>
+          ))}
+        </div>
+      )}
 
+      {/* Task Description */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+          }}>📋</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>What to Do</h3>
+        </div>
+        <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{content.taskDescription}</p>
+      </div>
+
+      {/* Transcript */}
+      {content.transcript && (
+        <details className="card" style={{ marginBottom: 20, cursor: 'pointer' }}>
+          <summary style={{ fontWeight: 600, fontSize: 15, marginBottom: 8 }}>
+            📝 Video Transcript
+          </summary>
+          <div style={{ color: '#888', fontSize: 14, lineHeight: 1.8, marginTop: 12 }}>
+            {content.transcript}
+          </div>
+        </details>
+      )}
+
+      {/* Social Media Handles */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: 8, background: 'rgba(83,52,131,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+          }}>📱</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Your Social Media</h3>
+        </div>
+        <p style={{ fontSize: 13, color: '#888', marginBottom: 16 }}>
+          Add at least one handle. You can update these later in your Profile.
+        </p>
+        <SocialHandlesInput handles={handles} onChange={setHandles} />
+      </div>
+
+      {/* Proof Submission (optional) */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+          }}>📤</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Submit Your Proof</h3>
+        </div>
+        <p style={{ color: '#888', fontSize: 13, marginBottom: 16 }}>
+          Optionally describe what you did or upload a screenshot.
+        </p>
+        <textarea
+          value={proofText}
+          onChange={e => setProofText(e.target.value)}
+          placeholder="Describe what you did, paste links, or leave blank..."
+          style={{ marginBottom: 12 }}
+        />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <label style={{
+            display: 'flex', alignItems: 'center', gap: 8, padding: '10px 18px',
+            background: 'rgba(255,255,255,0.06)', border: '1px dashed rgba(255,255,255,0.15)',
+            borderRadius: 10, cursor: 'pointer', fontSize: 14, color: '#888',
+          }}>
+            📎 {fileName || 'Attach File'}
+            <input type="file" style={{ display: 'none' }} onChange={handleFileSelect} />
+          </label>
+          {fileName && <span style={{ fontSize: 13, color: '#48c78e' }}>✓ {fileName}</span>}
+        </div>
+      </div>
+
+      {/* Submit */}
       <button
         className="btn-primary"
-        style={{ width: '100%' }}
+        style={{ width: '100%', padding: '14px 24px', fontSize: 16 }}
         onClick={handleComplete}
-        disabled={saving || ![instagram, tiktok, twitter, facebook, youtube].some(v => v.trim())}
+        disabled={saving || !hasValidHandle}
       >
         {saving ? 'Saving...' : 'Complete Getting Started →'}
       </button>
-    </div>
-  );
-}
-
-function SocialInput({ label, value, onChange, placeholder }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-      <div style={{ width: 90, fontSize: 13, fontWeight: 600, color: '#888', flexShrink: 0 }}>{label}</div>
-      <input
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        placeholder={placeholder}
-        style={{ flex: 1 }}
-      />
+      {!hasValidHandle && (
+        <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 8 }}>
+          Enter at least one social media handle to continue
+        </p>
+      )}
     </div>
   );
 }

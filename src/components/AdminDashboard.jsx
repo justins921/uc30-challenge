@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Header from './Header';
-import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent } from '../data/challengeDays';
+import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent } from '../data/challengeDays';
 import { AttachmentLink } from './DayView';
 import { LANDING_DEFAULTS } from './LandingPage';
 
@@ -1095,6 +1095,49 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
           Edit Phases
         </button>
       </div>
+      {/* Getting Started */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+          <div style={{ width: 10, height: 10, borderRadius: 3, background: '#e94560' }} />
+          <h3 style={{ fontSize: 15, fontWeight: 700 }}>Getting Started</h3>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        </div>
+        <div
+          className="card"
+          style={{ padding: '14px 18px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14 }}
+          onClick={() => setEditingDay('getting_started')}
+        >
+          <div className="mono" style={{
+            width: 36, height: 36, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 16, flexShrink: 0,
+          }}>
+            GS
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>
+              {getGettingStartedContent(contentOverrides).title}
+            </div>
+            <div style={{ fontSize: 12, color: '#555', display: 'flex', gap: 10 }}>
+              {getGettingStartedContent(contentOverrides).videoUrl && <span style={{ color: '#48c78e' }}>Video set</span>}
+              {getGettingStartedContent(contentOverrides).downloads?.length > 0 && (
+                <span style={{ color: '#533483' }}>
+                  {getGettingStartedContent(contentOverrides).downloads.length} resource{getGettingStartedContent(contentOverrides).downloads.length !== 1 ? 's' : ''}
+                </span>
+              )}
+              {getGettingStartedContent(contentOverrides).transcript && <span style={{ color: '#666' }}>Transcript</span>}
+            </div>
+          </div>
+          {contentOverrides['getting_started'] && (
+            <span style={{
+              fontSize: 10, fontWeight: 600, color: '#48c78e',
+              background: 'rgba(72,199,142,0.1)', padding: '3px 8px', borderRadius: 4,
+            }}>Customized</span>
+          )}
+          <div style={{ color: '#444', fontSize: 18, flexShrink: 0 }}>›</div>
+        </div>
+      </div>
+
       {phases.map(phase => (
         <div key={phase.label} style={{ marginBottom: 28 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
@@ -1303,7 +1346,8 @@ function PhaseEditor({ phases, onSave, onBack }) {
 }
 
 function DayEditor({ dayNum, contentOverrides, onSave, onBack }) {
-  const defaults = CHALLENGE_DAYS[dayNum - 1];
+  const isGettingStarted = dayNum === 'getting_started';
+  const defaults = isGettingStarted ? GETTING_STARTED_DEFAULT : CHALLENGE_DAYS[dayNum - 1];
   const existing = contentOverrides[dayNum] || {};
 
   const [title, setTitle] = useState(existing.title || defaults.title);
@@ -1366,13 +1410,13 @@ function DayEditor({ dayNum, contentOverrides, onSave, onBack }) {
       </button>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-        <div className="mono" style={{ fontSize: 14, color: '#e94560', fontWeight: 700 }}>DAY {dayNum}</div>
-        <h2 style={{ fontSize: 22, fontWeight: 700 }}>Edit Day Content</h2>
+        <div className="mono" style={{ fontSize: 14, color: '#e94560', fontWeight: 700 }}>{isGettingStarted ? 'INTRO' : `DAY ${dayNum}`}</div>
+        <h2 style={{ fontSize: 22, fontWeight: 700 }}>{isGettingStarted ? 'Edit Getting Started' : 'Edit Day Content'}</h2>
       </div>
 
       {/* Title */}
       <div className="card" style={{ marginBottom: 16 }}>
-        <label style={labelStyle}>Day Title</label>
+        <label style={labelStyle}>{isGettingStarted ? 'Section Title' : 'Day Title'}</label>
         <input value={title} onChange={e => setTitle(e.target.value)} style={inputStyle} />
       </div>
 

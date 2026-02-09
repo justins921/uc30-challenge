@@ -702,9 +702,22 @@ export function useAppState() {
   }, [supportTickets]);
 
   // ── Getting Started ──────────────────────────────────
-  const completeGettingStarted = useCallback(async (socialHandles) => {
+  const completeGettingStarted = useCallback(async (socialHandles, proof) => {
     if (!user) return { error: 'Not logged in.' };
     const updates = { gettingStartedCompleted: true, socialHandles: socialHandles || {} };
+    // Store proof as a Getting Started submission if provided
+    if (proof && (proof.text || proof.fileName)) {
+      const gsSubmission = {
+        day: 'getting_started',
+        title: 'Getting Started',
+        timestamp: new Date().toISOString(),
+        proof: proof.text || 'Completed',
+        fileName: proof.fileName || null,
+        fileData: proof.fileData || null,
+        status: 'completed',
+      };
+      updates.submissions = [...(user.submissions || []), gsSubmission];
+    }
     const updatedUser = { ...user, ...updates };
     if (isSupabaseEnabled) {
       await storage.updateParticipant(user.id, updates);

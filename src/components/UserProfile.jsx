@@ -32,8 +32,12 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
   const [profileMsg, setProfileMsg] = useState(null);
   const [savingProfile, setSavingProfile] = useState(false);
 
-  // Social media handles
-  const [socialHandles, setSocialHandles] = useState(user.socialHandles || {});
+  // Social media handles (array of {platform, handle})
+  const [socialHandles, setSocialHandles] = useState(() => {
+    const entries = Object.entries(user.socialHandles || {}).filter(([, v]) => v);
+    if (entries.length > 0) return entries.map(([platform, handle]) => ({ platform, handle }));
+    return [{ platform: 'instagram', handle: '' }];
+  });
   const [socialMsg, setSocialMsg] = useState(null);
   const [savingSocial, setSavingSocial] = useState(false);
 
@@ -100,7 +104,9 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
   const handleSaveSocial = async () => {
     setSavingSocial(true);
     setSocialMsg(null);
-    const result = await onUpdateProfile({ socialHandles });
+    const obj = {};
+    socialHandles.forEach(h => { if (h.handle.trim()) obj[h.platform] = h.handle.trim(); });
+    const result = await onUpdateProfile({ socialHandles: obj });
     if (result?.error) {
       setSocialMsg({ type: 'error', text: result.error });
     } else {
@@ -259,22 +265,7 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
         <p style={{ fontSize: 13, color: '#666', marginBottom: 16, lineHeight: 1.5 }}>
           Add your social media handles so admins can verify your daily posts.
         </p>
-        {[
-          { key: 'instagram', label: 'Instagram', placeholder: '@yourusername' },
-          { key: 'tiktok', label: 'TikTok', placeholder: '@yourusername' },
-          { key: 'twitter', label: 'X / Twitter', placeholder: '@yourusername' },
-          { key: 'facebook', label: 'Facebook', placeholder: 'Your name or profile URL' },
-          { key: 'youtube', label: 'YouTube', placeholder: 'Channel name or URL' },
-        ].map(({ key, label, placeholder }) => (
-          <div key={key} style={{ marginBottom: 12 }}>
-            <label>{label}</label>
-            <input
-              value={socialHandles[key] || ''}
-              onChange={e => setSocialHandles(prev => ({ ...prev, [key]: e.target.value }))}
-              placeholder={placeholder}
-            />
-          </div>
-        ))}
+        <ProfileSocialHandles handles={socialHandles} onChange={setSocialHandles} />
         {socialMsg && <Msg type={socialMsg.type} text={socialMsg.text} />}
         <button
           className="btn-primary"
@@ -581,6 +572,84 @@ function TicketThread({ ticket, onReply, onClose, onAttachFile }) {
             </div>
           )}
         </div>
+      )}
+    </div>
+  );
+}
+
+const SOCIAL_PLATFORMS = [
+  { value: 'instagram', label: 'Instagram', placeholder: '@yourusername' },
+  { value: 'tiktok', label: 'TikTok', placeholder: '@yourusername' },
+  { value: 'twitter', label: 'X (Twitter)', placeholder: '@yourusername' },
+  { value: 'facebook', label: 'Facebook', placeholder: 'Profile URL or name' },
+  { value: 'youtube', label: 'YouTube', placeholder: 'Channel URL or name' },
+];
+
+function ProfileSocialHandles({ handles, onChange }) {
+  const usedPlatforms = handles.map(h => h.platform);
+  const availablePlatforms = SOCIAL_PLATFORMS.filter(p => !usedPlatforms.includes(p.value));
+
+  const updateHandle = (index, field, value) => {
+    onChange(handles.map((h, i) => i === index ? { ...h, [field]: value } : h));
+  };
+
+  const addHandle = () => {
+    if (availablePlatforms.length === 0) return;
+    onChange([...handles, { platform: availablePlatforms[0].value, handle: '' }]);
+  };
+
+  const removeHandle = (index) => {
+    onChange(handles.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
+      {handles.map((h, i) => {
+        const platformInfo = SOCIAL_PLATFORMS.find(p => p.value === h.platform);
+        return (
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <select
+              value={h.platform}
+              onChange={e => updateHandle(i, 'platform', e.target.value)}
+              style={{ width: 140, fontSize: 13, padding: '8px 10px' }}
+            >
+              {SOCIAL_PLATFORMS
+                .filter(p => p.value === h.platform || !usedPlatforms.includes(p.value))
+                .map(p => (
+                  <option key={p.value} value={p.value}>{p.label}</option>
+                ))}
+            </select>
+            <input
+              value={h.handle}
+              onChange={e => updateHandle(i, 'handle', e.target.value)}
+              placeholder={platformInfo?.placeholder || '@yourusername'}
+              style={{ flex: 1 }}
+            />
+            {handles.length > 1 && (
+              <button
+                onClick={() => removeHandle(i)}
+                style={{
+                  background: 'none', border: 'none', color: '#e94560',
+                  cursor: 'pointer', fontSize: 18, padding: '0 6px',
+                  fontFamily: "'DM Sans', sans-serif",
+                }}
+              >×</button>
+            )}
+          </div>
+        );
+      })}
+      {availablePlatforms.length > 0 && (
+        <button
+          onClick={addHandle}
+          style={{
+            alignSelf: 'flex-start', background: 'rgba(255,255,255,0.06)',
+            border: '1px dashed rgba(255,255,255,0.15)', borderRadius: 8,
+            padding: '8px 16px', cursor: 'pointer', fontSize: 13, color: '#888',
+            fontFamily: "'DM Sans', sans-serif",
+          }}
+        >
+          + Add another platform
+        </button>
       )}
     </div>
   );

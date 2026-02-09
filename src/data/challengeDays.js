@@ -381,6 +381,27 @@ export const CATEGORY_COLORS = {
   continuation: { accent: "#f0a500", label: "Continuing" },
 };
 
+// ── Getting Started (pre-Day-1 section) ─────────────────────
+export const GETTING_STARTED_DEFAULT = {
+  title: "Getting Started",
+  taskDescription: "Welcome to the UC30 Challenge! Before Day 1 begins, watch the intro video, review the resources below, and add your social media handles.\n\nYou'll be posting daily about your progress — this builds accountability and helps you find deals.",
+  category: "foundation",
+  proofType: "screenshot",
+  metrics: null,
+  videoUrl: null,
+  transcript: null,
+  downloads: [],
+};
+
+export function getGettingStartedContent(overrides = {}) {
+  const override = overrides['getting_started'] || {};
+  return {
+    ...GETTING_STARTED_DEFAULT,
+    ...override,
+    downloads: override.downloads !== undefined ? override.downloads : (GETTING_STARTED_DEFAULT.downloads || []),
+  };
+}
+
 // ── Post-Day-30 Continuation ────────────────────────────────
 // Generic repeating daily task for users who completed the 30-day challenge
 export const POST_30_TASK = {
