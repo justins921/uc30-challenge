@@ -187,8 +187,8 @@ export function useAppState() {
           setCurrentView('login');
           setPasswordRecovery(false);
         }
-        // Handle OAuth sign-in from redirect
-        if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user && !oauthHandled) {
+        // Handle OAuth sign-in from redirect (INITIAL_SESSION for PKCE flow, SIGNED_IN as backup)
+        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION' || event === 'TOKEN_REFRESHED') && session?.user && !oauthHandled) {
           const authUser = session.user;
           const provider = authUser.app_metadata?.provider;
           if (provider && provider !== 'email') {
