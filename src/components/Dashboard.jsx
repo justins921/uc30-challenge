@@ -62,7 +62,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -94,7 +94,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
     );
   }
 
-  // Cohort hasn't started yet
+  // Cohort hasn't started yet — show getting started + countdown
   if (cohortStartDate && calendarDay < 1) {
     return (
       <div style={{ minHeight: '100vh' }}>
@@ -106,6 +106,12 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           onLogout={onLogout}
         />
         <div style={{ maxWidth: 600, margin: '0 auto', padding: '60px 24px' }}>
+          {cohortStats && cohortStats.total > 0 && (
+            <CohortStatsBanner active={cohortStats.active} total={cohortStats.total} />
+          )}
+          {!user.gettingStartedCompleted && (
+            <GettingStartedSection user={user} onComplete={onCompleteGettingStarted} />
+          )}
           <CohortCountdown cohortStartDate={cohortStartDate} />
         </div>
       </div>
@@ -142,6 +148,9 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
       />
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
+        {cohortStats && cohortStats.total > 0 && (
+          <CohortStatsBanner active={cohortStats.active} total={cohortStats.total} />
+        )}
         <ProgressBanner user={user} cohortStartDate={cohortStartDate} calendarDay={calendarDay} />
 
         {/* Countdown + Live Call — only on Timeline/Day views */}
@@ -156,7 +165,12 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
 
         {/* Tab Content */}
         {tab === 'timeline' && (
-          <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} contentOverrides={contentOverrides} customPhases={customPhases} />
+          <>
+            {!user.gettingStartedCompleted && (
+              <GettingStartedSection user={user} onComplete={onCompleteGettingStarted} />
+            )}
+            <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} contentOverrides={contentOverrides} customPhases={customPhases} />
+          </>
         )}
         {tab === 'day' && selectedDay && (
           <DayView
@@ -361,6 +375,114 @@ function MiniCountdown({ value, label }) {
         {String(value).padStart(2, '0')}
       </span>
       <span style={{ fontSize: 11, color: '#666', marginLeft: 2 }}>{label}</span>
+    </div>
+  );
+}
+
+// ── Active Participant Counter ────────────────────────────
+function CohortStatsBanner({ active, total }) {
+  return (
+    <div className="fade-up" style={{
+      display: 'flex', alignItems: 'center', gap: 12,
+      padding: '12px 20px', marginBottom: 16,
+      background: 'rgba(233,69,96,0.06)', border: '1px solid rgba(233,69,96,0.12)',
+      borderRadius: 12,
+    }}>
+      <div style={{
+        width: 10, height: 10, borderRadius: '50%', background: '#48c78e',
+        boxShadow: '0 0 6px rgba(72,199,142,0.5)',
+      }} />
+      <span style={{ fontSize: 14, color: '#ccc' }}>
+        <strong style={{ color: '#e94560' }}>{active}</strong> of{' '}
+        <strong>{total}</strong> participants still active
+      </span>
+    </div>
+  );
+}
+
+// ── Getting Started Section ──────────────────────────────
+function GettingStartedSection({ user, onComplete }) {
+  const [instagram, setInstagram] = useState(user.socialHandles?.instagram || '');
+  const [tiktok, setTiktok] = useState(user.socialHandles?.tiktok || '');
+  const [twitter, setTwitter] = useState(user.socialHandles?.twitter || '');
+  const [facebook, setFacebook] = useState(user.socialHandles?.facebook || '');
+  const [youtube, setYoutube] = useState(user.socialHandles?.youtube || '');
+  const [saving, setSaving] = useState(false);
+  const [done, setDone] = useState(false);
+
+  const handleComplete = async () => {
+    // Require at least one social handle
+    const handles = { instagram: instagram.trim(), tiktok: tiktok.trim(), twitter: twitter.trim(), facebook: facebook.trim(), youtube: youtube.trim() };
+    const hasAny = Object.values(handles).some(v => v.length > 0);
+    if (!hasAny) return;
+    setSaving(true);
+    await onComplete(handles);
+    setDone(true);
+    setSaving(false);
+  };
+
+  if (done) {
+    return (
+      <div className="card scale-in" style={{ padding: 32, textAlign: 'center', marginBottom: 24, borderColor: 'rgba(72,199,142,0.3)' }}>
+        <div style={{ fontSize: 40, marginBottom: 12 }}>✅</div>
+        <h3 style={{ fontSize: 18, fontWeight: 700, color: '#48c78e' }}>Getting Started Complete!</h3>
+        <p style={{ color: '#888', fontSize: 14, marginTop: 8 }}>You're all set. Day 1 is now unlocked.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="card fade-up" style={{ padding: 28, marginBottom: 24, borderColor: 'rgba(233,69,96,0.25)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+        <div style={{
+          width: 32, height: 32, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16,
+        }}>🚀</div>
+        <div>
+          <h3 style={{ fontSize: 17, fontWeight: 700 }}>Getting Started</h3>
+          <div style={{ fontSize: 12, color: '#e94560', fontWeight: 600 }}>Required before Day 1</div>
+        </div>
+      </div>
+
+      <p style={{ color: '#bbb', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
+        Welcome to the UC30 Challenge! Before Day 1 begins, add your social media handles below.
+        You'll be posting daily about your progress — this builds accountability and helps you find deals.
+      </p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
+        <SocialInput label="Instagram" value={instagram} onChange={setInstagram} placeholder="@yourusername" />
+        <SocialInput label="TikTok" value={tiktok} onChange={setTiktok} placeholder="@yourusername" />
+        <SocialInput label="X (Twitter)" value={twitter} onChange={setTwitter} placeholder="@yourusername" />
+        <SocialInput label="Facebook" value={facebook} onChange={setFacebook} placeholder="Profile URL or name" />
+        <SocialInput label="YouTube" value={youtube} onChange={setYoutube} placeholder="Channel URL or name" />
+      </div>
+
+      <p style={{ fontSize: 12, color: '#666', marginBottom: 16 }}>
+        Enter at least one handle to continue. You can update these later in your Profile.
+      </p>
+
+      <button
+        className="btn-primary"
+        style={{ width: '100%' }}
+        onClick={handleComplete}
+        disabled={saving || ![instagram, tiktok, twitter, facebook, youtube].some(v => v.trim())}
+      >
+        {saving ? 'Saving...' : 'Complete Getting Started →'}
+      </button>
+    </div>
+  );
+}
+
+function SocialInput({ label, value, onChange, placeholder }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div style={{ width: 90, fontSize: 13, fontWeight: 600, color: '#888', flexShrink: 0 }}>{label}</div>
+      <input
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        placeholder={placeholder}
+        style={{ flex: 1 }}
+      />
     </div>
   );
 }

@@ -17,6 +17,7 @@ export function useAppState() {
   const [customPhases, setCustomPhasesState] = useState(null);
   const [landingContent, setLandingContentState] = useState(null);
   const [supportTickets, setSupportTicketsState] = useState([]);
+  const [cohortStats, setCohortStatsState] = useState({ active: 0, total: 0 });
   // Password recovery mode (triggered by Supabase auth event)
   const [passwordRecovery, setPasswordRecovery] = useState(false);
   // Auth error (shown on login screen after failed OAuth redirect)
@@ -151,6 +152,9 @@ export function useAppState() {
 
       const tickets = await Promise.resolve(storage.getSupportTickets());
       if (tickets) setSupportTicketsState(tickets);
+
+      const stats = await Promise.resolve(storage.getCohortStats());
+      if (stats) setCohortStatsState(stats);
 
       return { storedParticipants, cohortSettings };
     };
@@ -697,6 +701,47 @@ export function useAppState() {
     return { success: true };
   }, [supportTickets]);
 
+  // ── Getting Started ──────────────────────────────────
+  const completeGettingStarted = useCallback(async (socialHandles) => {
+    if (!user) return { error: 'Not logged in.' };
+    const updates = { gettingStartedCompleted: true, socialHandles: socialHandles || {} };
+    const updatedUser = { ...user, ...updates };
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(user.id, updates);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === user.id ? updatedUser : p
+      );
+      setParticipants(updatedParticipants);
+      persist(updatedUser, updatedParticipants);
+    }
+    setUser(updatedUser);
+    storage.setUser(updatedUser);
+    return { success: true };
+  }, [user, participants, persist]);
+
+  // ── Admin: Verify social media post ────────────────
+  const verifySubmissionSocial = useCallback(async (participantId, dayNum, verified) => {
+    if (!user?.isAdmin) return { error: 'Only admins can verify.' };
+    const target = participants.find(p => p.id === participantId);
+    if (!target) return { error: 'Participant not found.' };
+    const updatedSubmissions = (target.submissions || []).map(s =>
+      s.day === dayNum ? { ...s, socialMediaVerified: verified } : s
+    );
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(participantId, { submissions: updatedSubmissions });
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === participantId ? { ...p, submissions: updatedSubmissions } : p
+      );
+      setParticipants(updatedParticipants);
+      persist(user, updatedParticipants);
+    }
+    return { success: true };
+  }, [user, participants, persist]);
+
   const logout = useCallback(async () => {
     if (supabase) {
       await supabase.auth.signOut();
@@ -719,6 +764,8 @@ export function useAppState() {
       proof: proof.text || 'File uploaded',
       fileName: proof.fileName || null,
       fileData: proof.fileData || null,
+      socialMediaPosted: proof.socialMediaPosted || false,
+      socialMediaVerified: false,
       status: 'completed',
     };
 
@@ -920,6 +967,7 @@ export function useAppState() {
     cohortStartDate,
     nextCohortDate,
     contentOverrides,
+    cohortStats,
     passwordRecovery,
     authError,
     navigate: setCurrentView,
@@ -952,5 +1000,7 @@ export function useAppState() {
     submitSupportTicket,
     replyToTicket,
     updateSupportTicket,
+    completeGettingStarted,
+    verifySubmissionSocial,
   };
 }

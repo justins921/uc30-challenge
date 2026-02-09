@@ -193,6 +193,16 @@ const supabaseStorage = {
   },
   async setLandingContent(content) { await this._setSetting('landing_content', content); },
 
+  async getCohortStats() {
+    try {
+      const { data, error } = await supabase.rpc('get_cohort_stats');
+      if (!error && data) return data;
+    } catch {}
+    // Fallback: read from settings if RPC not available
+    const val = await this._getSetting('cohort_stats');
+    return val || { active: 0, total: 0 };
+  },
+
   async getSupportTickets() {
     const val = await this._getSetting('support_tickets');
     if (val) { try { localStorage.setItem('uc30_support_tickets', JSON.stringify(val)); } catch {} }
@@ -224,6 +234,8 @@ function toDbRow(user) {
   };
   // Only include profile_picture if it has a value (column may not exist yet)
   if (user.profilePicture) row.profile_picture = user.profilePicture;
+  if (user.socialHandles && Object.keys(user.socialHandles).length > 0) row.social_handles = user.socialHandles;
+  if (user.gettingStartedCompleted) row.getting_started_completed = true;
   return row;
 }
 
@@ -245,6 +257,8 @@ function toDbUpdateRow(updates) {
   if (updates.hasPaid !== undefined) row.has_paid = updates.hasPaid;
   if (updates.accessExpiresAt !== undefined) row.access_expires_at = updates.accessExpiresAt;
   if (updates.profilePicture !== undefined) row.profile_picture = updates.profilePicture;
+  if (updates.socialHandles !== undefined) row.social_handles = updates.socialHandles;
+  if (updates.gettingStartedCompleted !== undefined) row.getting_started_completed = updates.gettingStartedCompleted;
   return row;
 }
 
@@ -269,6 +283,8 @@ function fromDbRow(row) {
     reactivatedAt: row.reactivated_at || null,
     accessExpiresAt: row.access_expires_at || null,
     profilePicture: row.profile_picture || null,
+    socialHandles: row.social_handles || {},
+    gettingStartedCompleted: row.getting_started_completed || false,
   };
 }
 
@@ -353,6 +369,11 @@ const localStorageFallback = {
   setLandingContent(content) {
     try { localStorage.setItem('uc30_landing_content', JSON.stringify(content)); } catch {}
   },
+  getCohortStats() {
+    const participants = this.getParticipants();
+    const nonAdmin = participants.filter(p => !p.isAdmin);
+    return { active: nonAdmin.filter(p => p.isActive).length, total: nonAdmin.length };
+  },
   getSupportTickets() {
     try { return JSON.parse(localStorage.getItem('uc30_support_tickets')) || []; } catch { return []; }
   },
@@ -389,5 +410,7 @@ export function createNewUser(firstName, lastName, email, authId) {
     removedAt: null,
     accessExpiresAt: null,
     profilePicture: null,
+    socialHandles: {},
+    gettingStartedCompleted: false,
   };
 }

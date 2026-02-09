@@ -14,7 +14,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, supportTickets, onUpdateTicket, onReplyToTicket }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -109,10 +109,11 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onReactivate={onReactivate}
             onToggleAdmin={onToggleAdmin}
             onResetPassword={onResetPassword}
+            onVerifySubmissionSocial={onVerifySubmissionSocial}
           />
         )}
         {tab === 'submissions' && (
-          <SubmissionsTab nonAdmin={nonAdmin} />
+          <SubmissionsTab nonAdmin={nonAdmin} onVerifySubmissionSocial={onVerifySubmissionSocial} />
         )}
         {tab === 'content' && (
           <ContentTab
@@ -683,7 +684,7 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
 }
 
 // ── Participant Detail View (with all submissions) ──────────
-function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword }) {
+function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onVerifySubmissionSocial }) {
   const p = participant;
 
   return (
@@ -884,6 +885,23 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
                   {sub.fileName && (
                     <AttachmentLink fileName={sub.fileName} fileData={sub.fileData} />
                   )}
+                  {sub.socialMediaPosted && (
+                    <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <button
+                        onClick={() => onVerifySubmissionSocial(p.id, sub.day, !sub.socialMediaVerified)}
+                        style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 6,
+                          fontSize: 12, padding: '4px 12px', borderRadius: 6, cursor: 'pointer',
+                          border: `1px solid ${sub.socialMediaVerified ? 'rgba(72,199,142,0.3)' : 'rgba(240,165,0,0.3)'}`,
+                          background: sub.socialMediaVerified ? 'rgba(72,199,142,0.1)' : 'rgba(240,165,0,0.08)',
+                          color: sub.socialMediaVerified ? '#48c78e' : '#f0a500',
+                          fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
+                        }}
+                      >
+                        {sub.socialMediaVerified ? '✓ Social Verified' : '⏳ Verify Social Post'}
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div style={{
                   fontSize: 10, color: '#48c78e', background: 'rgba(72,199,142,0.1)',
@@ -901,7 +919,7 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
 }
 
 // ── All Submissions Tab ─────────────────────────────────────
-function SubmissionsTab({ nonAdmin }) {
+function SubmissionsTab({ nonAdmin, onVerifySubmissionSocial }) {
   const [selectedDay, setSelectedDay] = useState(0);
 
   const allSubmissions = [];
@@ -996,6 +1014,23 @@ function SubmissionsTab({ nonAdmin }) {
                   </p>
                   {sub.fileName && (
                     <AttachmentLink fileName={sub.fileName} fileData={sub.fileData} />
+                  )}
+                  {sub.socialMediaPosted && (
+                    <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <button
+                        onClick={() => onVerifySubmissionSocial(sub.participantId, sub.day, !sub.socialMediaVerified)}
+                        style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 6,
+                          fontSize: 12, padding: '4px 12px', borderRadius: 6, cursor: 'pointer',
+                          border: `1px solid ${sub.socialMediaVerified ? 'rgba(72,199,142,0.3)' : 'rgba(240,165,0,0.3)'}`,
+                          background: sub.socialMediaVerified ? 'rgba(72,199,142,0.1)' : 'rgba(240,165,0,0.08)',
+                          color: sub.socialMediaVerified ? '#48c78e' : '#f0a500',
+                          fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
+                        }}
+                      >
+                        {sub.socialMediaVerified ? '✓ Social Verified' : '⏳ Verify Social Post'}
+                      </button>
+                    </div>
                   )}
                 </div>
                 <div style={{

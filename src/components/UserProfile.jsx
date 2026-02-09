@@ -32,6 +32,11 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
   const [profileMsg, setProfileMsg] = useState(null);
   const [savingProfile, setSavingProfile] = useState(false);
 
+  // Social media handles
+  const [socialHandles, setSocialHandles] = useState(user.socialHandles || {});
+  const [socialMsg, setSocialMsg] = useState(null);
+  const [savingSocial, setSavingSocial] = useState(false);
+
   // Password state
   const [currentPw, setCurrentPw] = useState('');
   const [newPw, setNewPw] = useState('');
@@ -90,6 +95,18 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
     } catch {
       setProfileMsg({ type: 'error', text: 'Failed to process image.' });
     }
+  };
+
+  const handleSaveSocial = async () => {
+    setSavingSocial(true);
+    setSocialMsg(null);
+    const result = await onUpdateProfile({ socialHandles });
+    if (result?.error) {
+      setSocialMsg({ type: 'error', text: result.error });
+    } else {
+      setSocialMsg({ type: 'success', text: 'Social media handles updated!' });
+    }
+    setSavingSocial(false);
   };
 
   const handleChangePassword = async () => {
@@ -233,6 +250,39 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
           disabled={savingProfile}
         >
           {savingProfile ? 'Saving...' : 'Save Changes'}
+        </button>
+      </div>
+
+      {/* Social Media Handles */}
+      <div className="card" style={{ padding: 24, marginBottom: 20 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Social Media</h3>
+        <p style={{ fontSize: 13, color: '#666', marginBottom: 16, lineHeight: 1.5 }}>
+          Add your social media handles so admins can verify your daily posts.
+        </p>
+        {[
+          { key: 'instagram', label: 'Instagram', placeholder: '@yourusername' },
+          { key: 'tiktok', label: 'TikTok', placeholder: '@yourusername' },
+          { key: 'twitter', label: 'X / Twitter', placeholder: '@yourusername' },
+          { key: 'facebook', label: 'Facebook', placeholder: 'Your name or profile URL' },
+          { key: 'youtube', label: 'YouTube', placeholder: 'Channel name or URL' },
+        ].map(({ key, label, placeholder }) => (
+          <div key={key} style={{ marginBottom: 12 }}>
+            <label>{label}</label>
+            <input
+              value={socialHandles[key] || ''}
+              onChange={e => setSocialHandles(prev => ({ ...prev, [key]: e.target.value }))}
+              placeholder={placeholder}
+            />
+          </div>
+        ))}
+        {socialMsg && <Msg type={socialMsg.type} text={socialMsg.text} />}
+        <button
+          className="btn-primary"
+          style={{ padding: '10px 24px' }}
+          onClick={handleSaveSocial}
+          disabled={savingSocial}
+        >
+          {savingSocial ? 'Saving...' : 'Save Social Handles'}
         </button>
       </div>
 

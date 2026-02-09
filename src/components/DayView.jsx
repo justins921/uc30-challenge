@@ -5,6 +5,7 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
   const [proofText, setProofText] = useState('');
   const [fileName, setFileName] = useState('');
   const [fileData, setFileData] = useState(null);
+  const [socialMediaPosted, setSocialMediaPosted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const isPost30 = day > 30;
@@ -32,7 +33,7 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
 
   const handleSubmit = () => {
     if (!proofText.trim() && !fileName) return;
-    onSubmit(day, { text: proofText, fileName, fileData });
+    onSubmit(day, { text: proofText, fileName, fileData, socialMediaPosted });
     setSubmitted(true);
   };
 
@@ -182,6 +183,8 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
           fileName={fileName}
           onFileSelect={handleFileSelect}
           onSubmit={handleSubmit}
+          socialMediaPosted={socialMediaPosted}
+          setSocialMediaPosted={setSocialMediaPosted}
         />
       ) : null}
 
@@ -220,6 +223,19 @@ function SubmissionComplete({ submission }) {
         {submission?.fileName && (
           <AttachmentLink fileName={submission.fileName} fileData={submission.fileData} />
         )}
+        {submission?.socialMediaPosted && (
+          <div style={{
+            marginTop: 10, display: 'inline-flex', alignItems: 'center', gap: 6,
+            fontSize: 12, padding: '4px 10px', borderRadius: 6,
+            background: submission.socialMediaVerified
+              ? 'rgba(72,199,142,0.1)' : 'rgba(240,165,0,0.08)',
+            border: `1px solid ${submission.socialMediaVerified
+              ? 'rgba(72,199,142,0.2)' : 'rgba(240,165,0,0.15)'}`,
+            color: submission.socialMediaVerified ? '#48c78e' : '#f0a500',
+          }}>
+            {submission.socialMediaVerified ? '✓ Social post verified' : '⏳ Social post pending verification'}
+          </div>
+        )}
         <div style={{ marginTop: 8, fontSize: 12, color: '#555' }}>
           {submission && new Date(submission.timestamp).toLocaleString()}
         </div>
@@ -244,7 +260,7 @@ function SubmissionSuccess({ day }) {
   );
 }
 
-function SubmissionForm({ day, proofText, setProofText, fileName, onFileSelect, onSubmit }) {
+function SubmissionForm({ day, proofText, setProofText, fileName, onFileSelect, onSubmit, socialMediaPosted, setSocialMediaPosted }) {
   return (
     <div className="card">
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
@@ -264,7 +280,7 @@ function SubmissionForm({ day, proofText, setProofText, fileName, onFileSelect, 
         placeholder="Describe your completed task, paste links, or summarize your results..."
         style={{ marginBottom: 12 }}
       />
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
         <label style={{
           display: 'flex', alignItems: 'center', gap: 8, padding: '10px 18px',
           background: 'rgba(255,255,255,0.06)', border: '1px dashed rgba(255,255,255,0.15)',
@@ -275,6 +291,33 @@ function SubmissionForm({ day, proofText, setProofText, fileName, onFileSelect, 
         </label>
         {fileName && <span style={{ fontSize: 13, color: '#48c78e' }}>✓ {fileName}</span>}
       </div>
+
+      {/* Social Media Posting Checkbox */}
+      <label
+        style={{
+          display: 'flex', alignItems: 'flex-start', gap: 10, padding: '12px 16px',
+          background: socialMediaPosted ? 'rgba(72,199,142,0.06)' : 'rgba(255,255,255,0.03)',
+          border: `1px solid ${socialMediaPosted ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.08)'}`,
+          borderRadius: 10, cursor: 'pointer', marginBottom: 20,
+          transition: 'all 0.2s',
+        }}
+      >
+        <input
+          type="checkbox"
+          checked={socialMediaPosted}
+          onChange={e => setSocialMediaPosted(e.target.checked)}
+          style={{ marginTop: 2, accentColor: '#48c78e', width: 16, height: 16, cursor: 'pointer' }}
+        />
+        <div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: socialMediaPosted ? '#48c78e' : '#ccc' }}>
+            I posted about today's task on social media
+          </div>
+          <div style={{ fontSize: 12, color: '#666', marginTop: 2 }}>
+            Share your progress to stay accountable and inspire others
+          </div>
+        </div>
+      </label>
+
       <button className="btn-primary" onClick={onSubmit} style={{ width: '100%' }}>
         Submit Day {day} ✓
       </button>

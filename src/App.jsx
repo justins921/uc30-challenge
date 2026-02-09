@@ -44,6 +44,9 @@ export default function App() {
     submitSupportTicket,
     replyToTicket,
     updateSupportTicket,
+    completeGettingStarted,
+    verifySubmissionSocial,
+    cohortStats,
     navigate,
   } = useAppState();
 
@@ -160,6 +163,7 @@ export default function App() {
         supportTickets={supportTickets}
         onUpdateTicket={updateSupportTicket}
         onReplyToTicket={replyToTicket}
+        onVerifySubmissionSocial={verifySubmissionSocial}
       />
     );
   }
@@ -180,6 +184,8 @@ export default function App() {
       onReplyToTicket={replyToTicket}
       onUpdateTicket={updateSupportTicket}
       supportTickets={supportTickets}
+      cohortStats={cohortStats}
+      onCompleteGettingStarted={completeGettingStarted}
     />
   );
 }
