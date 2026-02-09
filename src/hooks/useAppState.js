@@ -85,6 +85,11 @@ export function useAppState() {
     let authListener;
     let oauthHandled = false;
 
+    // Detect if we're returning from an OAuth redirect (URL contains auth hash params)
+    const isOAuthRedirect = window.location.hash?.includes('access_token')
+      || window.location.hash?.includes('error_description')
+      || new URLSearchParams(window.location.search).has('code');
+
     // Helper: ensure a participant row exists for an authenticated OAuth/social user.
     // Creates a new participant or links an existing one by email.
     const ensureParticipant = async (authUser) => {
@@ -123,29 +128,80 @@ export function useAppState() {
       return null;
     };
 
+    // Helper: load all app settings (cohort, content, tickets, etc.)
+    const loadSettings = async () => {
+      const storedParticipants = await Promise.resolve(storage.getParticipants());
+      setParticipants(storedParticipants || []);
+
+      const cohortSettings = await Promise.resolve(storage.getCohortSettings());
+      if (cohortSettings?.startDate) setCohortStartDateState(cohortSettings.startDate);
+      if (cohortSettings?.nextCohortDate) setNextCohortDateState(cohortSettings.nextCohortDate);
+
+      const overrides = await Promise.resolve(storage.getContentOverrides());
+      if (overrides) setContentOverridesState(overrides);
+
+      const calls = await Promise.resolve(storage.getLiveCalls());
+      if (calls) setLiveCallsState(calls);
+
+      const phases = await Promise.resolve(storage.getPhases());
+      if (phases) setCustomPhasesState(phases);
+
+      const landing = await Promise.resolve(storage.getLandingContent());
+      if (landing) setLandingContentState(landing);
+
+      const tickets = await Promise.resolve(storage.getSupportTickets());
+      if (tickets) setSupportTicketsState(tickets);
+
+      return { storedParticipants, cohortSettings };
+    };
+
+    // Helper: handle a resolved OAuth/session user
+    const handleAuthUser = async (authUser) => {
+      if (oauthHandled) return;
+      try {
+        const participant = await ensureParticipant(authUser);
+        if (participant) {
+          oauthHandled = true;
+          setUser(participant);
+          setCurrentView(participant.isAdmin ? 'admin' : 'dashboard');
+          const allParticipants = await storage.getParticipants();
+          setParticipants(allParticipants || []);
+        } else {
+          setAuthError('Account setup failed after sign-in. Please try registering with email and password.');
+        }
+      } catch (err) {
+        console.error('OAuth participant setup error:', err);
+        setAuthError(`Sign-in error: ${err.message}`);
+      }
+      setLoading(false);
+    };
+
+    // Listen for Supabase auth events FIRST (before async init) to catch OAuth redirects
+    if (supabase) {
+      const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'PASSWORD_RECOVERY') {
+          setPasswordRecovery(true);
+        }
+        if (event === 'SIGNED_OUT') {
+          setUser(null);
+          setCurrentView('login');
+          setPasswordRecovery(false);
+        }
+        // Handle OAuth sign-in from redirect
+        if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user && !oauthHandled) {
+          const authUser = session.user;
+          const provider = authUser.app_metadata?.provider;
+          if (provider && provider !== 'email') {
+            await handleAuthUser(authUser);
+          }
+        }
+      });
+      authListener = data?.subscription;
+    }
+
     (async () => {
       try {
-        const storedParticipants = await Promise.resolve(storage.getParticipants());
-        setParticipants(storedParticipants || []);
-
-        const cohortSettings = await Promise.resolve(storage.getCohortSettings());
-        if (cohortSettings?.startDate) setCohortStartDateState(cohortSettings.startDate);
-        if (cohortSettings?.nextCohortDate) setNextCohortDateState(cohortSettings.nextCohortDate);
-
-        const overrides = await Promise.resolve(storage.getContentOverrides());
-        if (overrides) setContentOverridesState(overrides);
-
-        const calls = await Promise.resolve(storage.getLiveCalls());
-        if (calls) setLiveCallsState(calls);
-
-        const phases = await Promise.resolve(storage.getPhases());
-        if (phases) setCustomPhasesState(phases);
-
-        const landing = await Promise.resolve(storage.getLandingContent());
-        if (landing) setLandingContentState(landing);
-
-        const tickets = await Promise.resolve(storage.getSupportTickets());
-        if (tickets) setSupportTicketsState(tickets);
+        const { storedParticipants, cohortSettings } = await loadSettings();
 
         const storedUser = await Promise.resolve(storage.getUser());
         if (storedUser) {
@@ -158,17 +214,19 @@ export function useAppState() {
           // (e.g. returning from OAuth redirect, or existing user using a new provider)
           const { data: { session } } = await supabase.auth.getSession();
           if (session?.user) {
-            const participant = await ensureParticipant(session.user);
-            if (participant) {
-              oauthHandled = true;
-              setUser(participant);
-              setCurrentView(participant.isAdmin ? 'admin' : 'dashboard');
-              const allParticipants = await storage.getParticipants();
-              setParticipants(allParticipants || []);
+            const provider = session.user.app_metadata?.provider;
+            if (provider && provider !== 'email') {
+              // OAuth user — ensureParticipant
+              await handleAuthUser(session.user);
             } else {
-              // OAuth session exists but participant creation failed — show error
-              setAuthError('Account setup failed after sign-in. Check browser console for details, or try registering with email and password.');
+              // Email user with session but no participant — incomplete registration
+              setAuthError('Your account setup is incomplete. Please use Register to complete it.');
             }
+          } else if (isOAuthRedirect) {
+            // URL has OAuth params but no session yet — the onAuthStateChange
+            // listener will handle it when the SDK finishes processing the redirect.
+            // Keep loading=true so the user sees the loading screen, not the landing page.
+            return; // don't set loading=false yet — the listener will do it
           }
         }
 
@@ -181,45 +239,23 @@ export function useAppState() {
       setLoading(false);
     })();
 
-    // Listen for Supabase auth events (password recovery, sign out)
-    if (supabase) {
-      const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
-        if (event === 'PASSWORD_RECOVERY') {
-          setPasswordRecovery(true);
-        }
-        if (event === 'SIGNED_OUT') {
-          setUser(null);
-          setCurrentView('login');
-          setPasswordRecovery(false);
-        }
-        // Handle OAuth sign-in (backup — primary handling is in the initial load above)
-        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user && !oauthHandled) {
-          const authUser = session.user;
-          const provider = authUser.app_metadata?.provider;
-          if (provider && provider !== 'email') {
-            try {
-              const participant = await ensureParticipant(authUser);
-              if (participant) {
-                oauthHandled = true;
-                setUser(participant);
-                setCurrentView(participant.isAdmin ? 'admin' : 'dashboard');
-                const allParticipants = await storage.getParticipants();
-                setParticipants(allParticipants || []);
-              } else {
-                setAuthError('Account setup failed after sign-in. Check browser console for details.');
-              }
-            } catch (err) {
-              console.error('OAuth participant setup error:', err);
-              setAuthError(`Sign-in error: ${err.message}`);
-            }
+    // Safety timeout: if OAuth redirect takes too long (e.g. network issue),
+    // stop loading after 10 seconds so the user isn't stuck on the loading screen.
+    let safetyTimeout;
+    if (isOAuthRedirect) {
+      safetyTimeout = setTimeout(() => {
+        setLoading(prev => {
+          if (prev) {
+            setAuthError('Sign-in is taking too long. Please try again.');
           }
-        }
-      });
-      authListener = data?.subscription;
+          return false;
+        });
+      }, 10000);
     }
 
     return () => {
       authListener?.unsubscribe();
+      if (safetyTimeout) clearTimeout(safetyTimeout);
     };
   }, []);
 
