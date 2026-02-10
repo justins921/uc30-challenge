@@ -24,7 +24,7 @@ function resizeImage(file, maxSize = 150) {
   });
 }
 
-export default function UserProfile({ user, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, onBack }) {
+export default function UserProfile({ user, onUpdateProfile, onChangePassword, onBack }) {
   // Profile state
   const [email, setEmail] = useState(user.email);
   const [firstName, setFirstName] = useState(user.firstName);
@@ -48,15 +48,7 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
   const [pwMsg, setPwMsg] = useState(null);
   const [savingPw, setSavingPw] = useState(false);
 
-  // Support state
-  const [subject, setSubject] = useState('');
-  const [message, setMessage] = useState('');
-  const [ticketAttachment, setTicketAttachment] = useState(null);
-  const [ticketMsg, setTicketMsg] = useState(null);
-  const [submittingTicket, setSubmittingTicket] = useState(false);
-
   const fileRef = useRef(null);
-  const ticketFileRef = useRef(null);
 
   const initials = `${(user.firstName || '?')[0]}${(user.lastName || '?')[0]}`.toUpperCase();
 
@@ -131,42 +123,6 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
       setConfirmPw('');
     }
     setSavingPw(false);
-  };
-
-  const handleAttachFile = async (file) => {
-    if (!file) return null;
-    if (file.size > 2 * 1024 * 1024) {
-      setTicketMsg({ type: 'error', text: 'File must be under 2 MB.' });
-      return null;
-    }
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve({ name: file.name, type: file.type, data: reader.result });
-      reader.onerror = () => resolve(null);
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const handleSubmitTicket = async () => {
-    setTicketMsg(null);
-    if (!subject.trim()) return setTicketMsg({ type: 'error', text: 'Please enter a subject.' });
-    if (!message.trim()) return setTicketMsg({ type: 'error', text: 'Please describe your issue.' });
-    setSubmittingTicket(true);
-    let att = null;
-    if (ticketAttachment) {
-      att = await handleAttachFile(ticketAttachment);
-    }
-    const result = await onSubmitTicket(subject.trim(), message.trim(), att);
-    if (result?.error) {
-      setTicketMsg({ type: 'error', text: result.error });
-    } else {
-      setTicketMsg({ type: 'success', text: 'Support request submitted! An admin will review it shortly.' });
-      setSubject('');
-      setMessage('');
-      setTicketAttachment(null);
-      if (ticketFileRef.current) ticketFileRef.current.value = '';
-    }
-    setSubmittingTicket(false);
   };
 
   return (
@@ -305,8 +261,57 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
         </button>
       </div>
 
-      {/* Support Section */}
-      <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16 }}>Support</h3>
+    </div>
+  );
+}
+
+export function UserSupport({ user, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets }) {
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
+  const [ticketAttachment, setTicketAttachment] = useState(null);
+  const [ticketMsg, setTicketMsg] = useState(null);
+  const [submittingTicket, setSubmittingTicket] = useState(false);
+  const ticketFileRef = useRef(null);
+
+  const handleAttachFile = async (file) => {
+    if (!file) return null;
+    if (file.size > 2 * 1024 * 1024) {
+      setTicketMsg({ type: 'error', text: 'File must be under 2 MB.' });
+      return null;
+    }
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve({ name: file.name, type: file.type, data: reader.result });
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleSubmitTicket = async () => {
+    setTicketMsg(null);
+    if (!subject.trim()) return setTicketMsg({ type: 'error', text: 'Please enter a subject.' });
+    if (!message.trim()) return setTicketMsg({ type: 'error', text: 'Please describe your issue.' });
+    setSubmittingTicket(true);
+    let att = null;
+    if (ticketAttachment) {
+      att = await handleAttachFile(ticketAttachment);
+    }
+    const result = await onSubmitTicket(subject.trim(), message.trim(), att);
+    if (result?.error) {
+      setTicketMsg({ type: 'error', text: result.error });
+    } else {
+      setTicketMsg({ type: 'success', text: 'Support request submitted! An admin will review it shortly.' });
+      setSubject('');
+      setMessage('');
+      setTicketAttachment(null);
+      if (ticketFileRef.current) ticketFileRef.current.value = '';
+    }
+    setSubmittingTicket(false);
+  };
+
+  return (
+    <div className="fade-up" style={{ maxWidth: 600, margin: '0 auto' }}>
+      <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 24 }}>Support</h2>
 
       {/* Previous Tickets */}
       <MyTickets

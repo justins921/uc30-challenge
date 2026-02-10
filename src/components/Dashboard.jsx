@@ -5,7 +5,7 @@ import TimelineView from './TimelineView';
 import DayView from './DayView';
 import SubmissionsView from './SubmissionsView';
 import StatsView from './StatsView';
-import UserProfile from './UserProfile';
+import UserProfile, { UserSupport } from './UserProfile';
 import { getGettingStartedContent } from '../data/challengeDays';
 import CommunityBoard from './CommunityBoard';
 import Footer from './Footer';
@@ -15,6 +15,7 @@ const TABS = [
   { id: 'community', label: 'Community' },
   { id: 'submissions', label: 'My Submissions' },
   { id: 'stats', label: 'My Stats' },
+  { id: 'support', label: 'Support' },
   { id: 'profile', label: 'Profile' },
 ];
 
@@ -111,11 +112,28 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
     return (p.comments || []).some(c => !c.isDeleted && c.createdAt > communityLastSeen);
   });
 
+  // Support notification: show dot when any of user's tickets has an admin response newer than last seen
+  const [supportLastSeen, setSupportLastSeen] = useState(() => {
+    try { return localStorage.getItem('uc30_support_last_seen') || ''; } catch { return ''; }
+  });
+
+  const hasSupportNotification = (supportTickets || [])
+    .filter(t => t.participantId === user.id)
+    .some(t => {
+      const msgs = t.messages || [];
+      return msgs.some(m => m.from === 'admin' && m.createdAt > supportLastSeen);
+    });
+
   const handleTabChange = (newTab) => {
     if (newTab === 'community') {
       const now = new Date().toISOString();
       setCommunityLastSeen(now);
       try { localStorage.setItem('uc30_community_last_seen', now); } catch {}
+    }
+    if (newTab === 'support') {
+      const now = new Date().toISOString();
+      setSupportLastSeen(now);
+      try { localStorage.setItem('uc30_support_last_seen', now); } catch {}
     }
     setTab(newTab);
     setSelectedDay(null);
@@ -141,10 +159,11 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         user={user}
         currentTab={tab === 'day' ? 'timeline' : tab}
         onTabChange={handleTabChange}
-        tabs={(cohortActive ? TABS : TABS.filter(t => t.id !== 'community')).map(t =>
-          t.id === 'community' && hasCommunityNotification && tab !== 'community'
-            ? { ...t, hasNotification: true } : t
-        )}
+        tabs={(cohortActive ? TABS : TABS.filter(t => t.id !== 'community')).map(t => {
+          if (t.id === 'community' && hasCommunityNotification && tab !== 'community') return { ...t, hasNotification: true };
+          if (t.id === 'support' && hasSupportNotification && tab !== 'support') return { ...t, hasNotification: true };
+          return t;
+        })}
         onLogout={onLogout}
       />
 
@@ -208,15 +227,20 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         )}
         {tab === 'submissions' && <SubmissionsView user={user} />}
         {tab === 'stats' && <StatsView user={user} />}
+        {tab === 'support' && (
+          <UserSupport
+            user={user}
+            onSubmitTicket={onSubmitTicket}
+            onReplyToTicket={onReplyToTicket}
+            onUpdateTicket={onUpdateTicket}
+            supportTickets={supportTickets}
+          />
+        )}
         {tab === 'profile' && (
           <UserProfile
             user={user}
             onUpdateProfile={onUpdateProfile}
             onChangePassword={onChangePassword}
-            onSubmitTicket={onSubmitTicket}
-            onReplyToTicket={onReplyToTicket}
-            onUpdateTicket={onUpdateTicket}
-            supportTickets={supportTickets}
             onBack={() => handleTabChange('timeline')}
           />
         )}

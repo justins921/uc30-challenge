@@ -18,6 +18,7 @@ export function useAppState() {
   const [landingContent, setLandingContentState] = useState(null);
   const [supportTickets, setSupportTicketsState] = useState([]);
   const [communityPosts, setCommunityPostsState] = useState([]);
+  const [cohortStats, setCohortStatsState] = useState({ active: 0, total: 0 });
   // Password recovery mode (triggered by Supabase auth event)
   const [passwordRecovery, setPasswordRecovery] = useState(false);
   // Auth error (shown on login screen after failed OAuth redirect)
@@ -65,6 +66,10 @@ export function useAppState() {
     if (removals.length > 0 && isSupabaseEnabled) {
       const fresh = await storage.getParticipants();
       setParticipants(fresh || []);
+      // Update stored cohort stats so non-admin users see correct counts
+      const na = (fresh || []).filter(p => !p.isAdmin);
+      const stats = { active: na.filter(p => p.isActive).length, total: na.length };
+      try { await Promise.resolve(storage.setCohortStats(stats)); } catch {}
       const currentUser = user;
       if (currentUser && removals.find(r => r.id === currentUser.id)) {
         const updatedUser = { ...currentUser, isActive: false, removedAt: new Date().toISOString() };
@@ -155,6 +160,9 @@ export function useAppState() {
 
       const posts = await Promise.resolve(storage.getCommunityPosts());
       if (posts) setCommunityPostsState(posts);
+
+      const stats = await Promise.resolve(storage.getCohortStats());
+      if (stats) setCohortStatsState(stats);
 
       return { storedParticipants, cohortSettings };
     };
@@ -282,6 +290,14 @@ export function useAppState() {
     return participants;
   }, [participants]);
 
+  // Recompute and persist cohort stats (called after admin participant mutations)
+  const updateCohortStats = useCallback(async (participantsList) => {
+    const na = participantsList.filter(p => !p.isAdmin);
+    const stats = { active: na.filter(p => p.isActive).length, total: na.length };
+    setCohortStatsState(stats);
+    try { await Promise.resolve(storage.setCohortStats(stats)); } catch {}
+  }, []);
+
   // ── Auth (Supabase Auth with legacy migration) ──────────────────
 
   const login = useCallback(async (email, password) => {
@@ -310,6 +326,10 @@ export function useAppState() {
         setCurrentView(participant.isAdmin ? 'admin' : 'dashboard');
         const allParticipants = await storage.getParticipants();
         setParticipants(allParticipants || []);
+        // Admin sees all participants — update stored cohort stats for non-admin users
+        if (participant.isAdmin) {
+          await updateCohortStats(allParticipants || []);
+        }
         return { success: true };
       }
 
@@ -436,6 +456,7 @@ export function useAppState() {
       setCurrentView(saved.isAdmin ? 'admin' : 'dashboard');
       const allParticipants = await storage.getParticipants();
       setParticipants(allParticipants || []);
+      await updateCohortStats(allParticipants || []);
 
       // Kit email (fire and forget)
       subscribeUser(email, firstName).then(() => {
@@ -465,13 +486,14 @@ export function useAppState() {
     setParticipants(newParticipants);
     setCurrentView(newUser.isAdmin ? 'admin' : 'dashboard');
     persist(newUser, newParticipants);
+    await updateCohortStats(newParticipants);
 
     subscribeUser(email, firstName).then(() => {
       tagSignUp(email).catch(() => {});
     }).catch(() => {});
 
     return { success: true };
-  }, [participants, persist, cohortStartDate]);
+  }, [participants, persist, cohortStartDate, updateCohortStats]);
 
   // ── OAuth Login (Google / Apple) ─────────────────────────────
   const loginWithOAuth = useCallback(async (provider) => {
@@ -833,30 +855,34 @@ export function useAppState() {
       await storage.updateParticipant(participantId, updates);
       const allParticipants = await storage.getParticipants();
       setParticipants(allParticipants || []);
+      await updateCohortStats(allParticipants || []);
     } else {
       const updatedParticipants = participants.map(p =>
         p.id === participantId ? { ...p, ...updates } : p
       );
       setParticipants(updatedParticipants);
       persist(user, updatedParticipants);
+      await updateCohortStats(updatedParticipants);
     }
 
     if (removed?.email) {
       tagRemovedFromCohort(removed.email).catch(() => {});
     }
-  }, [participants, user, persist]);
+  }, [participants, user, persist, updateCohortStats]);
 
   const deleteParticipant = useCallback(async (participantId) => {
     if (isSupabaseEnabled) {
       await storage.deleteParticipant(participantId);
       const allParticipants = await storage.getParticipants();
       setParticipants(allParticipants || []);
+      await updateCohortStats(allParticipants || []);
     } else {
       const updatedParticipants = participants.filter(p => p.id !== participantId);
       setParticipants(updatedParticipants);
       persist(user, updatedParticipants);
+      await updateCohortStats(updatedParticipants);
     }
-  }, [participants, user, persist]);
+  }, [participants, user, persist, updateCohortStats]);
 
   const reactivateParticipant = useCallback(async (participantId) => {
     let calDay = 1;
@@ -886,6 +912,7 @@ export function useAppState() {
       const updated = await storage.updateParticipant(participantId, updates);
       const allParticipants = await storage.getParticipants();
       setParticipants(allParticipants || []);
+      await updateCohortStats(allParticipants || []);
       if (user?.id === participantId && updated) {
         setUser(updated);
         storage.setUser(updated);
@@ -895,6 +922,7 @@ export function useAppState() {
         p.id === participantId ? { ...p, ...updates } : p
       );
       setParticipants(updatedParticipants);
+      await updateCohortStats(updatedParticipants);
       if (user?.id === participantId) {
         const reactivated = updatedParticipants.find(p => p.id === participantId);
         setUser(reactivated);
@@ -903,7 +931,7 @@ export function useAppState() {
         persist(user, updatedParticipants);
       }
     }
-  }, [participants, user, persist, cohortStartDate]);
+  }, [participants, user, persist, cohortStartDate, updateCohortStats]);
 
   const setCohortStartDate = useCallback(async (date) => {
     const current = await Promise.resolve(storage.getCohortSettings()) || {};
@@ -1123,10 +1151,7 @@ export function useAppState() {
     cohortStartDate,
     nextCohortDate,
     contentOverrides,
-    cohortStats: (() => {
-      const na = participants.filter(p => !p.isAdmin);
-      return { active: na.filter(p => p.isActive).length, total: na.length };
-    })(),
+    cohortStats,
     passwordRecovery,
     authError,
     navigate: setCurrentView,

@@ -202,6 +202,7 @@ const supabaseStorage = {
     const val = await this._getSetting('cohort_stats');
     return val || { active: 0, total: 0 };
   },
+  async setCohortStats(stats) { await this._setSetting('cohort_stats', stats); },
 
   async getSupportTickets() {
     const val = await this._getSetting('support_tickets');
