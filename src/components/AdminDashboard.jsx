@@ -63,7 +63,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -177,6 +177,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onVerifySubmissionSocial={onVerifySubmissionSocial}
             onWarnCommunityUser={onWarnCommunityUser}
             onBanCommunityUser={onBanCommunityUser}
+            onViewAsUser={onViewAsUser}
           />
         )}
         {tab === 'submissions' && (
@@ -191,6 +192,10 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onPinPost={onPinCommunityPost}
             onWarnUser={onWarnCommunityUser}
             onBanUser={onBanCommunityUser}
+            onCreatePost={onCreateCommunityPost}
+            onComment={onCommentOnPost}
+            user={user}
+            cohortStartDate={cohortStartDate}
           />
         )}
         {tab === 'content' && (
@@ -575,11 +580,15 @@ function AdminStat({ label, value, color }) {
 }
 
 // ── Admin Community Moderation Tab ────────────────────────
-function AdminCommunityTab({ posts, participants, onDeletePost, onDeleteComment, onPinPost, onWarnUser, onBanUser }) {
+function AdminCommunityTab({ posts, participants, onDeletePost, onDeleteComment, onPinPost, onWarnUser, onBanUser, onCreatePost, onComment, user, cohortStartDate }) {
   const [selectedPost, setSelectedPost] = useState(null);
   const [warnTarget, setWarnTarget] = useState(null);
   const [warnMessage, setWarnMessage] = useState('');
   const [filter, setFilter] = useState('all'); // 'all' | 'reported' | 'deleted'
+  const [showNewPost, setShowNewPost] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
+  const [newBody, setNewBody] = useState('');
+  const [adminComment, setAdminComment] = useState('');
 
   const sorted = [...(posts || [])].sort((a, b) => {
     if (a.isPinned && !b.isPinned) return -1;
@@ -684,6 +693,36 @@ function AdminCommunityTab({ posts, participants, onDeletePost, onDeleteComment,
           )}
         </div>
 
+        {/* Admin reply */}
+        {!post.isDeleted && (
+          <div style={{ display: 'flex', gap: 8, marginBottom: 16, alignItems: 'flex-end' }}>
+            <input
+              type="text"
+              placeholder="Reply as admin..."
+              value={adminComment}
+              onChange={e => setAdminComment(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && adminComment.trim()) {
+                  onComment(post.id, adminComment.trim());
+                  setAdminComment('');
+                }
+              }}
+              style={{ flex: 1, fontSize: 13, padding: '8px 12px' }}
+            />
+            <button
+              className="btn-primary"
+              disabled={!adminComment.trim()}
+              onClick={() => {
+                onComment(post.id, adminComment.trim());
+                setAdminComment('');
+              }}
+              style={{ padding: '8px 16px', fontSize: 12, opacity: !adminComment.trim() ? 0.5 : 1 }}
+            >
+              Reply
+            </button>
+          </div>
+        )}
+
         {/* Comments */}
         <h4 style={{ fontSize: 13, color: '#888', marginBottom: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>
           Comments ({comments.length})
@@ -723,6 +762,48 @@ function AdminCommunityTab({ posts, participants, onDeletePost, onDeleteComment,
   // List view
   return (
     <div className="fade-up">
+      {/* Admin New Post */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 16, alignItems: 'center' }}>
+        <button
+          onClick={() => setShowNewPost(!showNewPost)}
+          className="btn-primary"
+          style={{ padding: '8px 18px', fontSize: 13 }}
+        >
+          {showNewPost ? 'Cancel' : '+ New Post as Admin'}
+        </button>
+      </div>
+      {showNewPost && (
+        <div className="card" style={{ padding: 20, marginBottom: 16 }}>
+          <input
+            type="text"
+            placeholder="Post title..."
+            value={newTitle}
+            onChange={e => setNewTitle(e.target.value)}
+            style={{ width: '100%', fontSize: 14, padding: '10px 12px', marginBottom: 10, boxSizing: 'border-box' }}
+          />
+          <textarea
+            placeholder="Post body (optional)..."
+            value={newBody}
+            onChange={e => setNewBody(e.target.value)}
+            rows={4}
+            style={{ width: '100%', fontSize: 13, padding: '10px 12px', resize: 'vertical', marginBottom: 10, boxSizing: 'border-box' }}
+          />
+          <button
+            className="btn-primary"
+            disabled={!newTitle.trim()}
+            onClick={async () => {
+              await onCreatePost(newTitle.trim(), newBody.trim(), null, cohortStartDate);
+              setNewTitle('');
+              setNewBody('');
+              setShowNewPost(false);
+            }}
+            style={{ padding: '8px 20px', fontSize: 13, opacity: !newTitle.trim() ? 0.5 : 1 }}
+          >
+            Post
+          </button>
+        </div>
+      )}
+
       {/* Filter bar */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
         {[
@@ -826,19 +907,23 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communi
     <div className="fade-up">
       {/* Today's Activity Summary */}
       <div className="card" style={{ marginBottom: 24 }}>
-        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Today's Activity</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Community Engagement</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 12 }}>
           <div style={{ textAlign: 'center', padding: 12, borderRadius: 10, background: 'rgba(233,69,96,0.06)' }}>
             <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#e94560' }}>{todayPosts}</div>
-            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>New Posts</div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>Posts Today</div>
           </div>
           <div style={{ textAlign: 'center', padding: 12, borderRadius: 10, background: 'rgba(83,52,131,0.06)' }}>
             <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#533483' }}>{todayComments}</div>
-            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>New Comments</div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>Comments Today</div>
           </div>
           <div style={{ textAlign: 'center', padding: 12, borderRadius: 10, background: 'rgba(72,199,142,0.06)' }}>
-            <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#48c78e' }}>{todayPosts + todayComments}</div>
-            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>Total Engagement</div>
+            <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#48c78e' }}>{livePosts.length}</div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>Total Posts</div>
+          </div>
+          <div style={{ textAlign: 'center', padding: 12, borderRadius: 10, background: 'rgba(240,165,0,0.06)' }}>
+            <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#f0a500' }}>{totalComments}</div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>Total Comments</div>
           </div>
         </div>
       </div>
@@ -871,33 +956,14 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communi
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-        <div className="card">
-          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Retention Rate</h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-            <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#48c78e' }}>
-              {retentionRate}%
-            </div>
-            <div style={{ color: '#888', fontSize: 14, lineHeight: 1.6 }}>
-              {active.length} of {nonAdmin.length} participants still active
-            </div>
+      <div className="card">
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Retention Rate</h3>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#48c78e' }}>
+            {retentionRate}%
           </div>
-        </div>
-        <div className="card">
-          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Community</h3>
-          <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-            <div>
-              <div className="mono" style={{ fontSize: 36, fontWeight: 700, color: '#533483' }}>{livePosts.length}</div>
-              <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>Posts</div>
-            </div>
-            <div>
-              <div className="mono" style={{ fontSize: 36, fontWeight: 700, color: '#e94560' }}>{totalComments}</div>
-              <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>Comments</div>
-            </div>
-            <div>
-              <div className="mono" style={{ fontSize: 36, fontWeight: 700, color: '#48c78e' }}>{livePosts.length + totalComments}</div>
-              <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>Total</div>
-            </div>
+          <div style={{ color: '#888', fontSize: 14, lineHeight: 1.6 }}>
+            {active.length} of {nonAdmin.length} participants still active
           </div>
         </div>
       </div>
@@ -1042,7 +1108,7 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
 }
 
 // ── Participant Detail View (with all submissions) ──────────
-function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onVerifySubmissionSocial, onWarnCommunityUser, onBanCommunityUser }) {
+function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onVerifySubmissionSocial, onWarnCommunityUser, onBanCommunityUser, onViewAsUser }) {
   const [showWarnInput, setShowWarnInput] = useState(false);
   const [warnMessage, setWarnMessage] = useState('');
   const p = participant;
@@ -1089,6 +1155,17 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
             </div>
           </div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <button
+              style={{
+                background: 'rgba(240,165,0,0.08)', color: '#f0a500',
+                border: '1px solid rgba(240,165,0,0.2)', padding: '8px 16px',
+                borderRadius: 8, fontSize: 13, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
+              }}
+              onClick={() => onViewAsUser(p.id)}
+            >
+              View as User
+            </button>
             <button
               style={{
                 background: 'rgba(59,130,246,0.08)', color: '#3b82f6',

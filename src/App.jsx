@@ -61,6 +61,7 @@ export default function App() {
 
   // Check for Stripe success redirect
   const [authMode, setAuthMode] = useState(null);
+  const [viewAsUser, setViewAsUser] = useState(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -147,6 +148,61 @@ export default function App() {
   }
 
   if (currentView === 'admin' && user.isAdmin) {
+    // Impersonation: show Dashboard as selected user
+    if (viewAsUser) {
+      const impersonated = participants.find(p => p.id === viewAsUser);
+      if (impersonated) {
+        return (
+          <div>
+            <div style={{
+              position: 'sticky', top: 0, zIndex: 200,
+              background: 'rgba(240,165,0,0.95)', padding: '8px 20px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
+            }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: '#000' }}>
+                Viewing as: {impersonated.firstName} {impersonated.lastName} ({impersonated.email})
+              </span>
+              <button
+                onClick={() => setViewAsUser(null)}
+                style={{
+                  fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
+                  border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.15)',
+                  color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
+                }}
+              >
+                Exit View
+              </button>
+            </div>
+            <Dashboard
+              user={impersonated}
+              onLogout={() => setViewAsUser(null)}
+              onSubmit={() => {}}
+              cohortStartDate={cohortStartDate}
+              nextCohortDate={nextCohortDate}
+              contentOverrides={contentOverrides}
+              liveCalls={liveCalls}
+              customPhases={customPhases}
+              onUpdateProfile={() => {}}
+              onChangePassword={() => {}}
+              onSubmitTicket={() => {}}
+              onReplyToTicket={() => {}}
+              onUpdateTicket={() => {}}
+              supportTickets={supportTickets}
+              cohortStats={cohortStats}
+              onCompleteGettingStarted={() => {}}
+              communityPosts={communityPosts}
+              onCreateCommunityPost={() => {}}
+              onCommentOnPost={() => {}}
+              onDeleteCommunityPost={() => {}}
+              onDeleteCommunityComment={() => {}}
+              onPinCommunityPost={() => {}}
+              onDismissCommunityWarning={() => {}}
+            />
+          </div>
+        );
+      }
+    }
+
     return (
       <AdminDashboard
         user={user}
@@ -179,6 +235,9 @@ export default function App() {
         onPinCommunityPost={pinCommunityPost}
         onWarnCommunityUser={warnCommunityUser}
         onBanCommunityUser={banCommunityUser}
+        onCreateCommunityPost={createCommunityPost}
+        onCommentOnPost={commentOnPost}
+        onViewAsUser={setViewAsUser}
       />
     );
   }
