@@ -15,6 +15,7 @@ export default function Header({ user, currentTab, onTabChange, tabs, onLogout, 
     }}>
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        maxWidth: 1100, margin: '0 auto',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span className="mono" style={{ fontSize: 20, fontWeight: 700, color: '#e94560' }}>UC30</span>
@@ -28,7 +29,7 @@ export default function Header({ user, currentTab, onTabChange, tabs, onLogout, 
             </span>
           ) : (
             <span style={{ color: '#888', fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 120 }}>
-              {user.name}
+              {user.firstName}
             </span>
           )}
         </div>
@@ -47,7 +48,15 @@ export default function Header({ user, currentTab, onTabChange, tabs, onLogout, 
                 fontFamily: "'DM Sans', sans-serif", fontWeight: 500, transition: 'all 0.2s',
               }}
             >
-              {tab.label}
+              <span style={{ position: 'relative' }}>
+                {tab.label}
+                {tab.hasNotification && (
+                  <span style={{
+                    position: 'absolute', top: -2, right: -8,
+                    width: 7, height: 7, borderRadius: '50%', background: '#e94560',
+                  }} />
+                )}
+              </span>
             </button>
           ))}
           <button
@@ -78,6 +87,7 @@ export default function Header({ user, currentTab, onTabChange, tabs, onLogout, 
           paddingTop: 12, marginTop: 12,
           borderTop: '1px solid rgba(255,255,255,0.06)',
           display: 'none', flexDirection: 'column', gap: 6,
+          maxWidth: 1100, margin: '0 auto',
         }}>
           {tabs.map(tab => (
             <button
@@ -92,7 +102,15 @@ export default function Header({ user, currentTab, onTabChange, tabs, onLogout, 
                 width: '100%',
               }}
             >
-              {tab.label}
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                {tab.label}
+                {tab.hasNotification && (
+                  <span style={{
+                    position: 'absolute', top: -2, right: -8,
+                    width: 7, height: 7, borderRadius: '50%', background: '#e94560',
+                  }} />
+                )}
+              </span>
             </button>
           ))}
           <button
