@@ -41,6 +41,8 @@ export default function App() {
     setPhases,
     landingContent,
     setLandingContent,
+    landingVersion,
+    setLandingVersion,
     supportTickets,
     submitSupportTicket,
     replyToTicket,
@@ -115,12 +117,20 @@ export default function App() {
     }
 
     // Default: show landing page
-    // Visit /v2 to preview the marketing-optimized V2 landing page
+    // Admin-selected version via setting, with URL override for previewing
     const path = window.location.pathname.replace(/\/+$/, '');
-    const isV2 = path === '/v2'
-      || new URLSearchParams(window.location.search).get('v') === '2'
-      || window.location.hash === '#v2';
-    const LandingComponent = isV2 ? LandingPageV2 : LandingPage;
+    const urlOverride = path === '/v2' || path === '/v1'
+      || new URLSearchParams(window.location.search).get('v')
+      || (window.location.hash === '#v2' || window.location.hash === '#v1');
+    let useV2;
+    if (path === '/v2' || new URLSearchParams(window.location.search).get('v') === '2' || window.location.hash === '#v2') {
+      useV2 = true;
+    } else if (path === '/v1' || new URLSearchParams(window.location.search).get('v') === '1' || window.location.hash === '#v1') {
+      useV2 = false;
+    } else {
+      useV2 = landingVersion === 'v2';
+    }
+    const LandingComponent = useV2 ? LandingPageV2 : LandingPage;
     return (
       <LandingComponent
         onGoToLogin={(mode) => setAuthMode(mode || 'login')}
@@ -232,6 +242,8 @@ export default function App() {
         onSetPhases={setPhases}
         landingContent={landingContent}
         onSetLandingContent={setLandingContent}
+        landingVersion={landingVersion}
+        onSetLandingVersion={setLandingVersion}
         supportTickets={supportTickets}
         onUpdateTicket={updateSupportTicket}
         onReplyToTicket={replyToTicket}

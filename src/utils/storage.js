@@ -193,6 +193,12 @@ const supabaseStorage = {
   },
   async setLandingContent(content) { await this._setSetting('landing_content', content); },
 
+  async getLandingVersion() {
+    const val = await this._getSetting('landing_version');
+    return val || 'v1';
+  },
+  async setLandingVersion(version) { await this._setSetting('landing_version', version); },
+
   async getCohortStats() {
     try {
       const { data, error } = await supabase.rpc('get_cohort_stats');
@@ -382,6 +388,12 @@ const localStorageFallback = {
   },
   setLandingContent(content) {
     try { localStorage.setItem('uc30_landing_content', JSON.stringify(content)); } catch {}
+  },
+  getLandingVersion() {
+    try { return localStorage.getItem('uc30_landing_version') || 'v1'; } catch { return 'v1'; }
+  },
+  setLandingVersion(version) {
+    try { localStorage.setItem('uc30_landing_version', version); } catch {}
   },
   getCohortStats() {
     const participants = this.getParticipants();

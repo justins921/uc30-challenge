@@ -63,7 +63,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -206,6 +206,8 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onSetPhases={onSetPhases}
             landingContent={landingContent}
             onSetLandingContent={onSetLandingContent}
+            landingVersion={landingVersion}
+            onSetLandingVersion={onSetLandingVersion}
           />
         )}
         {tab === 'support' && (
@@ -1559,7 +1561,7 @@ function SubmissionsTab({ nonAdmin, onVerifySubmissionSocial }) {
 }
 
 // ── Content Management Tab ──────────────────────────────────
-function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent }) {
+function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion }) {
   const [editingDay, setEditingDay] = useState(null);
   const [editingPhases, setEditingPhases] = useState(false);
   const [editingLanding, setEditingLanding] = useState(false);
@@ -1714,6 +1716,61 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
           <h3 style={{ fontSize: 15, fontWeight: 700 }}>Landing Page</h3>
           <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
         </div>
+
+        {/* Version selector */}
+        <div className="card" style={{ padding: 20, marginBottom: 10 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Active Landing Page</div>
+          <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
+            <button
+              onClick={() => onSetLandingVersion('v1')}
+              style={{
+                flex: 1, padding: '12px 16px', borderRadius: 10, cursor: 'pointer',
+                background: landingVersion !== 'v2' ? 'rgba(233,69,96,0.1)' : 'rgba(255,255,255,0.03)',
+                border: `1px solid ${landingVersion !== 'v2' ? 'rgba(233,69,96,0.3)' : 'rgba(255,255,255,0.06)'}`,
+                color: landingVersion !== 'v2' ? '#e94560' : '#666',
+                fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: 13,
+                transition: 'all 0.15s',
+              }}
+            >
+              <div>V1 — Original</div>
+              <div style={{ fontSize: 11, fontWeight: 400, marginTop: 4, opacity: 0.7 }}>Clean and simple</div>
+            </button>
+            <button
+              onClick={() => onSetLandingVersion('v2')}
+              style={{
+                flex: 1, padding: '12px 16px', borderRadius: 10, cursor: 'pointer',
+                background: landingVersion === 'v2' ? 'rgba(233,69,96,0.1)' : 'rgba(255,255,255,0.03)',
+                border: `1px solid ${landingVersion === 'v2' ? 'rgba(233,69,96,0.3)' : 'rgba(255,255,255,0.06)'}`,
+                color: landingVersion === 'v2' ? '#e94560' : '#666',
+                fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: 13,
+                transition: 'all 0.15s',
+              }}
+            >
+              <div>V2 — Marketing Optimized</div>
+              <div style={{ fontSize: 11, fontWeight: 400, marginTop: 4, opacity: 0.7 }}>CRO, testimonials, FAQ</div>
+            </button>
+          </div>
+          <div style={{ display: 'flex', gap: 10, fontSize: 12 }}>
+            <a
+              href="/?v=1"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#888', textDecoration: 'underline' }}
+            >
+              Preview V1
+            </a>
+            <a
+              href="/?v=2"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#888', textDecoration: 'underline' }}
+            >
+              Preview V2
+            </a>
+          </div>
+        </div>
+
+        {/* Edit landing page content */}
         <div
           className="card"
           style={{ padding: '14px 18px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14 }}
@@ -1727,7 +1784,7 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
             LP
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>Public Landing Page</div>
+            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>Edit Landing Page Content</div>
             <div style={{ fontSize: 12, color: '#555' }}>
               Hero text, stats, features, and call-to-action sections
             </div>

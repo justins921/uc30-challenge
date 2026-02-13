@@ -16,6 +16,7 @@ export function useAppState() {
   const [liveCalls, setLiveCallsState] = useState([]);
   const [customPhases, setCustomPhasesState] = useState(null);
   const [landingContent, setLandingContentState] = useState(null);
+  const [landingVersion, setLandingVersionState] = useState('v1');
   const [supportTickets, setSupportTicketsState] = useState([]);
   const [communityPosts, setCommunityPostsState] = useState([]);
   const [cohortStats, setCohortStatsState] = useState({ active: 0, total: 0 });
@@ -154,6 +155,9 @@ export function useAppState() {
 
       const landing = await Promise.resolve(storage.getLandingContent());
       if (landing) setLandingContentState(landing);
+
+      const lv = await Promise.resolve(storage.getLandingVersion());
+      if (lv) setLandingVersionState(lv);
 
       const tickets = await Promise.resolve(storage.getSupportTickets());
       if (tickets) setSupportTicketsState(tickets);
@@ -1000,6 +1004,11 @@ export function useAppState() {
     setLandingContentState(content);
   }, []);
 
+  const setLandingVersion = useCallback(async (version) => {
+    await Promise.resolve(storage.setLandingVersion(version));
+    setLandingVersionState(version);
+  }, []);
+
   // ── Community Board ─────────────────────────────────────
   const createCommunityPost = useCallback(async (title, body, dayTag) => {
     if (!user) return { error: 'Not logged in.' };
@@ -1180,6 +1189,8 @@ export function useAppState() {
     setPhases,
     landingContent,
     setLandingContent,
+    landingVersion,
+    setLandingVersion,
     supportTickets,
     submitSupportTicket,
     replyToTicket,
