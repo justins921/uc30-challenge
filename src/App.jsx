@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppState } from './hooks/useAppState';
 import LandingPage from './components/LandingPage';
+import LandingPageV2 from './components/LandingPageV2';
 import LoginScreen from './components/LoginScreen';
 import Dashboard from './components/Dashboard';
 import AdminDashboard from './components/AdminDashboard';
@@ -113,9 +114,11 @@ export default function App() {
       );
     }
 
-    // Default: show landing page
+    // Default: show landing page (use ?v=2 to preview V2 marketing page)
+    const landingVersion = new URLSearchParams(window.location.search).get('v');
+    const LandingComponent = landingVersion === '2' ? LandingPageV2 : LandingPage;
     return (
-      <LandingPage
+      <LandingComponent
         onGoToLogin={(mode) => setAuthMode(mode || 'login')}
         landingContent={landingContent}
       />
