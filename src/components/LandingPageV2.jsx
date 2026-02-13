@@ -134,7 +134,7 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
 
         {/* Friction reducer — zero-risk messaging */}
         <p style={{ color: '#555', fontSize: 13, marginBottom: 48 }}>
-          {STRIPE_LINK ? '30-day money-back guarantee. Cancel anytime.' : 'No payment required. Start for free.'}
+          30-day money-back guarantee. Zero risk.
         </p>
       </section>
 
@@ -407,7 +407,7 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
             Start My 30-Day Challenge
           </button>
           <p style={{ color: '#555', fontSize: 13 }}>
-            {STRIPE_LINK ? '30-day money-back guarantee — zero risk.' : 'Free access — no credit card required.'}
+            30-day money-back guarantee — zero risk.
           </p>
         </div>
       </section>

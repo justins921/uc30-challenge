@@ -199,11 +199,9 @@ export default function LandingPage({ onGoToLogin, landingContent }) {
           <button className="btn-primary" style={{ padding: '16px 48px', fontSize: 17 }} onClick={handleGetStarted}>
             {c.ctaButton}
           </button>
-          {!STRIPE_LINK && (
-            <p style={{ color: '#555', fontSize: 12, marginTop: 16 }}>
-              Free access — no payment required
-            </p>
-          )}
+          <p style={{ color: '#555', fontSize: 12, marginTop: 16 }}>
+            30-day money-back guarantee
+          </p>
         </div>
       </section>
 
