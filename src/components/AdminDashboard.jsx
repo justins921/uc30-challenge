@@ -61,6 +61,7 @@ const ADMIN_TABS = [
   { id: 'content', label: 'Content' },
   { id: 'support', label: 'Support' },
   { id: 'social', label: 'Social Proof' },
+  { id: 'qa', label: 'QA Checklist' },
 ];
 
 export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser }) {
@@ -223,6 +224,9 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             retentionRate={retentionRate}
             dayDistribution={dayDistribution}
           />
+        )}
+        {tab === 'qa' && (
+          <QAChecklistTab />
         )}
       </div>
       <Footer />
@@ -2762,6 +2766,265 @@ function SupportTab({ tickets, onUpdateTicket, onReplyToTicket }) {
           })}
         </div>
       )}
+    </div>
+  );
+}
+
+// ── QA Checklist Tab ──────────────────────────────────
+const QA_SECTIONS = [
+  { title: '1. Critical Path — Auth', subsections: [
+    { subtitle: 'Registration', items: [
+      'Register new account with email & password',
+      'Password under 6 chars is rejected',
+      'Duplicate email is rejected',
+      'After registration, lands on user dashboard',
+    ]},
+    { subtitle: 'Login', items: [
+      'Log out, then log back in with same credentials',
+      'Wrong password shows error message',
+      'Non-existent email shows error message',
+      'Page refresh keeps you logged in (session persists)',
+    ]},
+    { subtitle: 'Password Reset', items: [
+      'Click "Forgot Password", enter email',
+      'Reset email arrives (from Supabase, links to uc30.com)',
+      'Click link, set new password successfully',
+      'Log in with new password',
+    ]},
+    { subtitle: 'Admin Access', items: [
+      'Register with admin@uc30.com — gets admin dashboard',
+      'Non-admin user cannot access /admin',
+    ]},
+  ]},
+  { title: '2. Landing Pages', items: [
+    'uc30.com loads landing page',
+    'uc30.com/v2 loads V2 landing page',
+    'CTA buttons work (register or Stripe redirect)',
+    '"Log In" button opens login form',
+    'Responsive on mobile (check phone or devtools)',
+    'Incognito window shows landing page, not dashboard',
+  ]},
+  { title: '3. User Dashboard', subsections: [
+    { subtitle: 'Timeline', items: [
+      'Getting Started card is visible and clickable',
+      '30 day cards displayed with correct phases/colors',
+      'Locked days cannot be opened',
+      'Completed days show checkmark',
+    ]},
+    { subtitle: 'Day Submission', items: [
+      'Open an unlocked day — video, description, tasks load',
+      'Submit with text proof — succeeds',
+      'Submit with file attachment (under 10MB) — succeeds',
+      'File over 10MB shows error',
+      '"I posted on social media" checkbox works',
+      'Completed day shows checkmark on timeline',
+    ]},
+    { subtitle: 'Submissions Tab', items: [
+      'Lists past submissions in reverse chronological order',
+      'Each shows day number, proof text, date, attachment link',
+      'Attachment is downloadable',
+    ]},
+    { subtitle: 'Stats Tab', items: [
+      'Days completed count is correct',
+      'Streak count is correct',
+      'Completion rate percentage is correct',
+      'Activity heatmap renders',
+      'Streak card renders with fire emojis',
+    ]},
+    { subtitle: 'Streak Card Sharing', items: [
+      'Share button works on mobile (Web Share API)',
+      'Download/Copy works on desktop',
+      'Downloaded image looks correct',
+    ]},
+  ]},
+  { title: '4. Profile', items: [
+    'Upload profile picture — resizes to square',
+    'Edit first & last name — saves',
+    'Edit email — saves, works on next login',
+    'Add social media handles — saves',
+    'Change password — requires old password, new one works',
+  ]},
+  { title: '5. Community', items: [
+    'Create a new post (title + body)',
+    'Post appears in feed',
+    'Reply to a post — comment appears',
+    'Notification dot shows for new activity',
+    'Banned user sees error when posting',
+    'Pinned posts appear at top',
+  ]},
+  { title: '6. Support Tickets', items: [
+    'Create new ticket (subject + message)',
+    'Ticket appears with "Open" status',
+    'Reply to own ticket',
+    'Attach file to ticket/reply',
+    'Notification dot when admin responds',
+    'Close ticket — can reopen by replying',
+  ]},
+  { title: '7. Admin — Overview', items: [
+    'Participant counts correct (total, active, removed)',
+    'Aggregate metrics display',
+    'Notification dots for open tickets & community activity',
+  ]},
+  { title: '8. Admin — Participants', items: [
+    'Search/filter participants works',
+    'Remove a participant (sets inactive)',
+    'Reactivate a removed participant',
+    'Toggle admin status on/off',
+    "Reset a user's password",
+    '"View as" impersonation — yellow banner, can exit',
+  ]},
+  { title: '9. Admin — Submissions', items: [
+    'Lists all submissions across all participants',
+    'Can verify social media submissions',
+    'Attachments viewable',
+  ]},
+  { title: '10. Admin — Community Moderation', items: [
+    'Delete a post — disappears from feed',
+    'Delete a comment',
+    'Pin/unpin a post',
+    'Warn a user — user sees warning banner',
+    'Ban a user — user can no longer post',
+  ]},
+  { title: '11. Admin — Content', items: [
+    'Edit landing page content — changes show on landing page',
+    'Switch landing version V1/V2 — correct one loads',
+    'Edit day content (video URL, description, resources)',
+    'Set cohort start date',
+    'Set next cohort date',
+    'Add/edit/remove live calls',
+  ]},
+  { title: '12. Admin — Support', items: [
+    'View all tickets from all users',
+    'Reply to a ticket — user sees "Responded" status',
+    'Close a ticket',
+  ]},
+  { title: '13. Auto-Removal & Edge Cases', items: [
+    'User behind schedule gets auto-removed',
+    'Removed user sees "Challenge Paused" + next cohort info',
+    'Admin reactivates — user returns to correct day',
+    'Expired access user sees expiration message + logout only',
+    "RLS check: user A cannot see user B's data (check Network tab)",
+  ]},
+];
+
+function QAChecklistTab() {
+  const storageKey = 'uc30_qa_checklist';
+  const [checked, setChecked] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch { return {}; }
+  });
+
+  const toggle = (key) => {
+    const next = { ...checked, [key]: !checked[key] };
+    setChecked(next);
+    localStorage.setItem(storageKey, JSON.stringify(next));
+  };
+
+  const reset = () => {
+    setChecked({});
+    localStorage.removeItem(storageKey);
+  };
+
+  let totalItems = 0;
+  let checkedCount = 0;
+  QA_SECTIONS.forEach(section => {
+    const items = section.items || [];
+    const subItems = (section.subsections || []).flatMap(s => s.items);
+    totalItems += items.length + subItems.length;
+    [...items, ...subItems].forEach((_, i) => {
+      const key = section.title + (items.includes(_) ? '' : (section.subsections || []).find(s => s.items.includes(_))?.subtitle || '') + i;
+    });
+  });
+  // Recount properly
+  totalItems = 0;
+  checkedCount = 0;
+  QA_SECTIONS.forEach(section => {
+    const allItems = [
+      ...(section.items || []).map((item, i) => ({ item, key: `${section.title}::${i}` })),
+      ...(section.subsections || []).flatMap(sub =>
+        sub.items.map((item, i) => ({ item, key: `${section.title}::${sub.subtitle}::${i}` }))
+      ),
+    ];
+    totalItems += allItems.length;
+    allItems.forEach(({ key }) => { if (checked[key]) checkedCount++; });
+  });
+
+  const pct = totalItems > 0 ? Math.round((checkedCount / totalItems) * 100) : 0;
+
+  const checkboxStyle = (isChecked) => ({
+    width: 18, height: 18, borderRadius: 4, cursor: 'pointer', flexShrink: 0,
+    border: isChecked ? '2px solid #48c78e' : '2px solid #555',
+    background: isChecked ? '#48c78e' : 'transparent',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    color: '#fff', fontSize: 12, fontWeight: 700,
+  });
+
+  return (
+    <div className="fade-up">
+      {/* Header */}
+      <div className="card" style={{ padding: 24, marginBottom: 20, background: 'linear-gradient(135deg, rgba(72,199,142,0.08), rgba(83,52,131,0.08))' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+          <div>
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>QA Checklist</h3>
+            <p style={{ color: '#888', fontSize: 13 }}>
+              {checkedCount} of {totalItems} items checked ({pct}%)
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              className="btn"
+              onClick={() => window.print()}
+              style={{ padding: '8px 16px', fontSize: 13, background: 'rgba(255,255,255,0.06)', color: '#ccc', border: '1px solid rgba(255,255,255,0.1)' }}
+            >
+              Print
+            </button>
+            <button
+              className="btn"
+              onClick={reset}
+              style={{ padding: '8px 16px', fontSize: 13, background: 'rgba(233,69,96,0.1)', color: '#e94560', border: '1px solid rgba(233,69,96,0.2)' }}
+            >
+              Reset All
+            </button>
+          </div>
+        </div>
+        {/* Progress bar */}
+        <div style={{ marginTop: 12, height: 6, borderRadius: 3, background: 'rgba(255,255,255,0.06)' }}>
+          <div style={{ height: '100%', borderRadius: 3, background: pct === 100 ? '#48c78e' : '#e94560', width: `${pct}%`, transition: 'width 0.3s' }} />
+        </div>
+      </div>
+
+      {/* Sections */}
+      {QA_SECTIONS.map(section => (
+        <div key={section.title} className="card" style={{ padding: 20, marginBottom: 12 }}>
+          <h4 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12, color: '#e94560' }}>{section.title}</h4>
+
+          {/* Direct items */}
+          {(section.items || []).map((item, i) => {
+            const key = `${section.title}::${i}`;
+            return (
+              <div key={key} onClick={() => toggle(key)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', cursor: 'pointer' }}>
+                <div style={checkboxStyle(checked[key])}>{checked[key] ? '✓' : ''}</div>
+                <span style={{ fontSize: 13, color: checked[key] ? '#666' : '#ccc', textDecoration: checked[key] ? 'line-through' : 'none' }}>{item}</span>
+              </div>
+            );
+          })}
+
+          {/* Subsections */}
+          {(section.subsections || []).map(sub => (
+            <div key={sub.subtitle} style={{ marginTop: 10 }}>
+              <h5 style={{ fontSize: 13, fontWeight: 600, color: '#888', marginBottom: 6, borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: 4 }}>{sub.subtitle}</h5>
+              {sub.items.map((item, i) => {
+                const key = `${section.title}::${sub.subtitle}::${i}`;
+                return (
+                  <div key={key} onClick={() => toggle(key)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', cursor: 'pointer' }}>
+                    <div style={checkboxStyle(checked[key])}>{checked[key] ? '✓' : ''}</div>
+                    <span style={{ fontSize: 13, color: checked[key] ? '#666' : '#ccc', textDecoration: checked[key] ? 'line-through' : 'none' }}>{item}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   );
 }
