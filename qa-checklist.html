@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>UC30 Challenge — QA Checklist</title>
+<style>
+  @media print {
+    body { font-size: 11px; }
+    .no-print { display: none; }
+    h1 { font-size: 18px; }
+    h2 { font-size: 14px; break-after: avoid; }
+    h3 { font-size: 12px; break-after: avoid; }
+    ul { break-inside: avoid; }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+    color: #1a1a1a;
+    line-height: 1.5;
+  }
+  h1 {
+    text-align: center;
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 24px;
+  }
+  h2 {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 6px 12px;
+    margin-top: 28px;
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+  h3 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    font-size: 13px;
+  }
+  ul {
+    list-style: none;
+    padding-left: 4px;
+    margin: 4px 0;
+  }
+  li {
+    padding: 3px 0;
+    padding-left: 24px;
+    position: relative;
+  }
+  li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid #555;
+    border-radius: 2px;
+  }
+  .pass-fail {
+    float: right;
+    font-size: 10px;
+    color: #999;
+    letter-spacing: 1px;
+  }
+  .notes-line {
+    border-bottom: 1px dotted #ccc;
+    height: 20px;
+    margin: 4px 0;
+  }
+  .section-notes {
+    margin-top: 8px;
+    padding: 6px;
+    border: 1px solid #ddd;
+    min-height: 40px;
+    font-size: 11px;
+    color: #999;
+  }
+  .section-notes::before {
+    content: "Notes:";
+  }
+  .print-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 32px;
+    font-size: 16px;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .print-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Print This Checklist</button>
+
+<h1>UC30 Challenge — QA Checklist</h1>
+<p class="subtitle">Site: https://uc30.com &nbsp;|&nbsp; Date: _______________  &nbsp;|&nbsp; Tester: _______________</p>
+
+<!-- ============================================ -->
+<h2>1. CRITICAL PATH — Auth</h2>
+
+<h3>Registration</h3>
+<ul>
+  <li>Register new account with email &amp; password</li>
+  <li>Password under 6 chars is rejected</li>
+  <li>Duplicate email is rejected</li>
+  <li>After registration, lands on user dashboard</li>
+</ul>
+
+<h3>Login</h3>
+<ul>
+  <li>Log out, then log back in with same credentials</li>
+  <li>Wrong password shows error message</li>
+  <li>Non-existent email shows error message</li>
+  <li>Page refresh keeps you logged in (session persists)</li>
+</ul>
+
+<h3>Password Reset</h3>
+<ul>
+  <li>Click "Forgot Password", enter email</li>
+  <li>Reset email arrives (from Supabase, links to uc30.com)</li>
+  <li>Click link, set new password successfully</li>
+  <li>Log in with new password</li>
+</ul>
+
+<h3>Admin Access</h3>
+<ul>
+  <li>Register with admin@uc30.com — gets admin dashboard</li>
+  <li>Non-admin user cannot access /admin</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>2. Landing Pages</h2>
+<ul>
+  <li>https://uc30.com loads landing page</li>
+  <li>https://uc30.com/v2 loads V2 landing page</li>
+  <li>CTA buttons work (register or Stripe redirect)</li>
+  <li>"Log In" button opens login form</li>
+  <li>Responsive on mobile (check phone or devtools)</li>
+  <li>Incognito window shows landing page, not dashboard</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>3. User Dashboard</h2>
+
+<h3>Timeline</h3>
+<ul>
+  <li>Getting Started card is visible and clickable</li>
+  <li>30 day cards displayed with correct phases/colors</li>
+  <li>Locked days cannot be opened</li>
+  <li>Completed days show checkmark</li>
+</ul>
+
+<h3>Day Submission</h3>
+<ul>
+  <li>Open an unlocked day — video, description, tasks load</li>
+  <li>Submit with text proof — succeeds</li>
+  <li>Submit with file attachment (under 10MB) — succeeds</li>
+  <li>File over 10MB shows error</li>
+  <li>"I posted on social media" checkbox works</li>
+  <li>Completed day shows checkmark on timeline</li>
+</ul>
+
+<h3>Submissions Tab</h3>
+<ul>
+  <li>Lists past submissions in reverse chronological order</li>
+  <li>Each shows day number, proof text, date, attachment link</li>
+  <li>Attachment is downloadable</li>
+</ul>
+
+<h3>Stats Tab</h3>
+<ul>
+  <li>Days completed count is correct</li>
+  <li>Streak count is correct</li>
+  <li>Completion rate percentage is correct</li>
+  <li>Activity heatmap renders</li>
+  <li>Streak card renders with fire emojis</li>
+</ul>
+
+<h3>Streak Card Sharing</h3>
+<ul>
+  <li>Share button works on mobile (Web Share API)</li>
+  <li>Download/Copy works on desktop</li>
+  <li>Downloaded image looks correct</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>4. Profile</h2>
+<ul>
+  <li>Upload profile picture — resizes to square</li>
+  <li>Edit first &amp; last name — saves</li>
+  <li>Edit email — saves, works on next login</li>
+  <li>Add social media handles — saves</li>
+  <li>Change password — requires old password, new one works</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>5. Community</h2>
+<ul>
+  <li>Create a new post (title + body)</li>
+  <li>Post appears in feed</li>
+  <li>Reply to a post — comment appears</li>
+  <li>Notification dot shows for new activity</li>
+  <li>Banned user sees error when posting</li>
+  <li>Pinned posts appear at top</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>6. Support Tickets</h2>
+<ul>
+  <li>Create new ticket (subject + message)</li>
+  <li>Ticket appears with "Open" status</li>
+  <li>Reply to own ticket</li>
+  <li>Attach file to ticket/reply</li>
+  <li>Notification dot when admin responds</li>
+  <li>Close ticket — can reopen by replying</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>7. Admin — Overview</h2>
+<ul>
+  <li>Participant counts correct (total, active, removed)</li>
+  <li>Aggregate metrics display</li>
+  <li>Notification dots for open tickets &amp; community activity</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>8. Admin — Participants</h2>
+<ul>
+  <li>Search/filter participants works</li>
+  <li>Remove a participant (sets inactive)</li>
+  <li>Reactivate a removed participant</li>
+  <li>Toggle admin status on/off</li>
+  <li>Reset a user's password</li>
+  <li>"View as" impersonation — yellow banner, can exit</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>9. Admin — Submissions</h2>
+<ul>
+  <li>Lists all submissions across all participants</li>
+  <li>Can verify social media submissions</li>
+  <li>Attachments viewable</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>10. Admin — Community Moderation</h2>
+<ul>
+  <li>Delete a post — disappears from feed</li>
+  <li>Delete a comment</li>
+  <li>Pin/unpin a post</li>
+  <li>Warn a user — user sees warning banner</li>
+  <li>Ban a user — user can no longer post</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>11. Admin — Content</h2>
+<ul>
+  <li>Edit landing page content — changes show on landing page</li>
+  <li>Switch landing version V1/V2 — correct one loads</li>
+  <li>Edit day content (video URL, description, resources)</li>
+  <li>Set cohort start date</li>
+  <li>Set next cohort date</li>
+  <li>Add/edit/remove live calls</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>12. Admin — Support</h2>
+<ul>
+  <li>View all tickets from all users</li>
+  <li>Reply to a ticket — user sees "Responded" status</li>
+  <li>Close a ticket</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>13. Auto-Removal &amp; Edge Cases</h2>
+<ul>
+  <li>User behind schedule gets auto-removed</li>
+  <li>Removed user sees "Challenge Paused" + next cohort info</li>
+  <li>Admin reactivates — user returns to correct day</li>
+  <li>Expired access user sees expiration message + logout only</li>
+  <li>RLS check: user A cannot see user B's data (check Network tab)</li>
+</ul>
+<div class="section-notes"></div>
+
+<!-- ============================================ -->
+<h2>14. Final Sign-Off</h2>
+<table style="width:100%;border-collapse:collapse;margin-top:12px;">
+  <tr>
+    <td style="border:1px solid #ccc;padding:8px;width:50%;">All critical tests pass?</td>
+    <td style="border:1px solid #ccc;padding:8px;text-align:center;">YES &nbsp; / &nbsp; NO</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #ccc;padding:8px;">Blocking issues found:</td>
+    <td style="border:1px solid #ccc;padding:8px;min-height:40px;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #ccc;padding:8px;">Non-blocking issues found:</td>
+    <td style="border:1px solid #ccc;padding:8px;min-height:40px;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #ccc;padding:8px;">Ready for launch?</td>
+    <td style="border:1px solid #ccc;padding:8px;text-align:center;">YES &nbsp; / &nbsp; NO</td>
+  </tr>
+</table>
+
+</body>
+</html>
