@@ -54,6 +54,7 @@ CREATE POLICY "Users read own or admin reads all" ON participants
   );
 
 -- Authenticated users can insert a row (session may not link auth_id immediately after signUp)
+DROP POLICY IF EXISTS "Authenticated users can insert" ON participants;
 CREATE POLICY "Authenticated users can insert" ON participants
   FOR INSERT WITH CHECK (
     auth.uid() IS NOT NULL
@@ -70,6 +71,7 @@ CREATE POLICY "Users update own or admin updates all" ON participants
   );
 
 -- Only admins can delete participants
+DROP POLICY IF EXISTS "Admins can delete" ON participants;
 CREATE POLICY "Admins can delete" ON participants
   FOR DELETE USING (
     public.is_admin()
@@ -84,15 +86,18 @@ DROP POLICY IF EXISTS "Allow public insert settings" ON settings;
 DROP POLICY IF EXISTS "Allow public update settings" ON settings;
 
 -- Anyone can read settings (landing page needs this before auth)
+DROP POLICY IF EXISTS "Anyone can read settings" ON settings;
 CREATE POLICY "Anyone can read settings" ON settings
   FOR SELECT USING (true);
 
 -- Admins can write any setting; authenticated users can write support_tickets
+DROP POLICY IF EXISTS "Admins or ticket writers can insert" ON settings;
 CREATE POLICY "Admins or ticket writers can insert" ON settings
   FOR INSERT WITH CHECK (
     public.is_admin() OR (key = 'support_tickets' AND auth.uid() IS NOT NULL)
   );
 
+DROP POLICY IF EXISTS "Admins or ticket writers can update" ON settings;
 CREATE POLICY "Admins or ticket writers can update" ON settings
   FOR UPDATE USING (
     public.is_admin() OR (key = 'support_tickets' AND auth.uid() IS NOT NULL)
