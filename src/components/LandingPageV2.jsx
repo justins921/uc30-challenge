@@ -132,9 +132,8 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
           </button>
         </div>
 
-        {/* Friction reducer — zero-risk messaging */}
         <p style={{ color: '#555', fontSize: 13, marginBottom: 48 }}>
-          30-day money-back guarantee. Zero risk.
+          One-time investment. 1-year access. Unlimited cohort re-runs.
         </p>
       </section>
 
@@ -359,6 +358,76 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
         </div>
       </section>
 
+      {/* ── Pricing — single option, anchored ────────── */}
+      <section style={{
+        maxWidth: 600, margin: '0 auto', padding: '0 24px 80px',
+        textAlign: 'center', position: 'relative', zIndex: 1,
+      }}>
+        <h2 style={{
+          fontSize: 'clamp(22px, 4vw, 32px)', fontWeight: 700, marginBottom: 8,
+        }}>
+          Your Investment
+        </h2>
+        <p style={{ color: '#666', fontSize: 15, marginBottom: 40 }}>
+          One price. Full access. No subscriptions.
+        </p>
+
+        <div className="card" style={{
+          padding: 'clamp(32px, 5vw, 48px)',
+          background: 'linear-gradient(135deg, rgba(233,69,96,0.06), rgba(83,52,131,0.06))',
+          borderColor: 'rgba(233,69,96,0.15)',
+          textAlign: 'center',
+        }}>
+          {/* Price anchor — compare to alternatives */}
+          <p style={{ fontSize: 13, color: '#666', marginBottom: 20, lineHeight: 1.6 }}>
+            Most real estate coaching programs charge $500+/month.
+            <br />This is a one-time investment for a complete system.
+          </p>
+
+          {/* Price */}
+          <div style={{ marginBottom: 8 }}>
+            <span className="mono" style={{ fontSize: 'clamp(48px, 8vw, 64px)', fontWeight: 800, color: '#fff', lineHeight: 1 }}>
+              $997
+            </span>
+          </div>
+          <p style={{ fontSize: 14, color: '#888', marginBottom: 28 }}>
+            One-time payment &middot; 1 year of access
+          </p>
+
+          {/* What's included list */}
+          <div style={{
+            textAlign: 'left', maxWidth: 340, margin: '0 auto 32px',
+            display: 'flex', flexDirection: 'column', gap: 10,
+          }}>
+            {[
+              '30 daily video lessons + action tasks',
+              'Private community with your cohort',
+              'Progress dashboard & accountability',
+              'Templates, scripts, and resources',
+              'Unlimited cohort re-runs for 1 year',
+            ].map((item, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#ccc' }}>
+                <span style={{ color: '#48c78e', fontWeight: 700, fontSize: 16, flexShrink: 0 }}>&#10003;</span>
+                {item}
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="btn-primary"
+            style={{ padding: '18px 44px', fontSize: 18, fontWeight: 700, width: '100%', maxWidth: 340 }}
+            onClick={handleGetStarted}
+          >
+            Join the Challenge — $997
+          </button>
+
+          {/* Daily cost reframe */}
+          <p style={{ fontSize: 12, color: '#555', marginTop: 14 }}>
+            That's less than $2.75/day for a year of access
+          </p>
+        </div>
+      </section>
+
       {/* ── FAQ — Objection handling ────────────────── */}
       <section style={{
         maxWidth: 700, margin: '0 auto', padding: '0 24px 80px',
@@ -407,7 +476,7 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
             Start My 30-Day Challenge
           </button>
           <p style={{ color: '#555', fontSize: 13 }}>
-            30-day money-back guarantee — zero risk.
+            One-time investment. 1-year access with unlimited re-runs.
           </p>
         </div>
       </section>

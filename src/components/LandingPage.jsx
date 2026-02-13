@@ -200,7 +200,7 @@ export default function LandingPage({ onGoToLogin, landingContent }) {
             {c.ctaButton}
           </button>
           <p style={{ color: '#555', fontSize: 12, marginTop: 16 }}>
-            30-day money-back guarantee
+            One-time investment &middot; 1-year access
           </p>
         </div>
       </section>
