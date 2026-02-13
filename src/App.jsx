@@ -114,9 +114,11 @@ export default function App() {
       );
     }
 
-    // Default: show landing page (use ?v=2 to preview V2 marketing page)
-    const landingVersion = new URLSearchParams(window.location.search).get('v');
-    const LandingComponent = landingVersion === '2' ? LandingPageV2 : LandingPage;
+    // Default: show landing page
+    // Visit /v2 to preview the marketing-optimized V2 landing page
+    const isV2 = window.location.pathname === '/v2'
+      || new URLSearchParams(window.location.search).get('v') === '2';
+    const LandingComponent = isV2 ? LandingPageV2 : LandingPage;
     return (
       <LandingComponent
         onGoToLogin={(mode) => setAuthMode(mode || 'login')}
