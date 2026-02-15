@@ -94,7 +94,11 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
     return (p.comments || []).some(c => !c.isDeleted && c.createdAt?.startsWith(todayStr));
   });
 
-  const adminTabs = ADMIN_TABS.map(t => {
+  const baseTabs = user?.isDeveloper
+    ? [...ADMIN_TABS, { id: 'revenue', label: 'Revenue' }]
+    : ADMIN_TABS;
+
+  const adminTabs = baseTabs.map(t => {
     if (t.id === 'support' && hasOpenTickets && tab !== 'support') return { ...t, hasNotification: true };
     if (t.id === 'community' && hasCommunityActivity && tab !== 'community') return { ...t, hasNotification: true };
     return t;
@@ -227,6 +231,9 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
         )}
         {tab === 'qa' && (
           <QAChecklistTab />
+        )}
+        {tab === 'revenue' && user?.isDeveloper && (
+          <RevenueTab participants={participants} />
         )}
       </div>
       <Footer />
@@ -3025,6 +3032,173 @@ function QAChecklistTab() {
           ))}
         </div>
       ))}
+    </div>
+  );
+}
+
+// ── Revenue Tab (Developer Only) ──────────────────────────────────
+const PRICE_PER_USER = 997;
+const DEV_CUT_PCT = 10;
+
+function RevenueTab({ participants }) {
+  const nonAdmin = participants.filter(p => !p.isAdmin && !p.isDeveloper);
+  const paying = nonAdmin.filter(p => p.hasPaid || p.isActive);
+  const totalUsers = paying.length;
+
+  const grossRevenue = totalUsers * PRICE_PER_USER;
+  const devEarnings = Math.round(grossRevenue * DEV_CUT_PCT / 100);
+
+  // Group signups by month
+  const monthlyBreakdown = {};
+  paying.forEach(p => {
+    const month = (p.startDate || p.createdAt || '').slice(0, 7); // YYYY-MM
+    if (!month) return;
+    if (!monthlyBreakdown[month]) monthlyBreakdown[month] = { users: 0, revenue: 0, devCut: 0 };
+    monthlyBreakdown[month].users += 1;
+    monthlyBreakdown[month].revenue += PRICE_PER_USER;
+    monthlyBreakdown[month].devCut += Math.round(PRICE_PER_USER * DEV_CUT_PCT / 100);
+  });
+
+  const sortedMonths = Object.entries(monthlyBreakdown).sort((a, b) => b[0].localeCompare(a[0]));
+
+  const fmt = (n) => '$' + n.toLocaleString();
+
+  const cardStyle = {
+    padding: 24, textAlign: 'center',
+    background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+    borderRadius: 12,
+  };
+
+  const bigNum = (value, label, color) => (
+    <div style={cardStyle}>
+      <div className="mono" style={{ fontSize: 28, fontWeight: 800, color, marginBottom: 4 }}>{value}</div>
+      <div style={{ fontSize: 12, color: '#888' }}>{label}</div>
+    </div>
+  );
+
+  return (
+    <div className="fade-up">
+      {/* Header */}
+      <div className="card" style={{
+        padding: 28, marginBottom: 24,
+        background: 'linear-gradient(135deg, rgba(72,199,142,0.1), rgba(83,52,131,0.1))',
+      }}>
+        <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Revenue Dashboard</h3>
+        <p style={{ color: '#888', fontSize: 13 }}>
+          Developer earnings at {DEV_CUT_PCT}% of all revenue ({fmt(PRICE_PER_USER)}/user)
+        </p>
+      </div>
+
+      {/* Top-level stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 16, marginBottom: 24 }}>
+        {bigNum(totalUsers, 'Paying Users', '#48c78e')}
+        {bigNum(fmt(grossRevenue), 'Gross Revenue', '#533483')}
+        {bigNum(fmt(devEarnings), 'Your Earnings (10%)', '#48c78e')}
+        {bigNum(fmt(grossRevenue - devEarnings), "Chandler's Revenue (90%)", '#e94560')}
+      </div>
+
+      {/* Per-user breakdown */}
+      <div className="card" style={{ padding: 24, marginBottom: 24 }}>
+        <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Per Sale Breakdown</h4>
+        <p style={{ color: '#888', fontSize: 12, marginBottom: 16 }}>For each {fmt(PRICE_PER_USER)} sale</p>
+        <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, minWidth: 200 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ fontSize: 13, color: '#ccc' }}>Sale Price</span>
+              <span className="mono" style={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>{fmt(PRICE_PER_USER)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ fontSize: 13, color: '#48c78e' }}>Your Cut ({DEV_CUT_PCT}%)</span>
+              <span className="mono" style={{ fontSize: 13, fontWeight: 700, color: '#48c78e' }}>{fmt(Math.round(PRICE_PER_USER * DEV_CUT_PCT / 100))}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 8 }}>
+              <span style={{ fontSize: 13, color: '#e94560' }}>Chandler&apos;s Cut (90%)</span>
+              <span className="mono" style={{ fontSize: 13, fontWeight: 700, color: '#e94560' }}>{fmt(PRICE_PER_USER - Math.round(PRICE_PER_USER * DEV_CUT_PCT / 100))}</span>
+            </div>
+          </div>
+          {/* Visual bar */}
+          <div style={{ flex: 1, minWidth: 200, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{ height: 24, borderRadius: 6, overflow: 'hidden', display: 'flex' }}>
+              <div style={{ width: `${DEV_CUT_PCT}%`, background: '#48c78e', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: '#000' }}>
+                {DEV_CUT_PCT}%
+              </div>
+              <div style={{ flex: 1, background: 'rgba(233,69,96,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: '#e94560' }}>
+                {100 - DEV_CUT_PCT}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Projections */}
+      <div className="card" style={{ padding: 24, marginBottom: 24 }}>
+        <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Earnings Projections</h4>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                <th style={{ textAlign: 'left', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Users</th>
+                <th style={{ textAlign: 'right', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Gross Revenue</th>
+                <th style={{ textAlign: 'right', padding: '8px 12px', color: '#48c78e', fontWeight: 600 }}>Your Earnings</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[10, 25, 50, 100, 250, 500, 1000].map(n => (
+                <tr key={n} style={{
+                  borderBottom: '1px solid rgba(255,255,255,0.04)',
+                  background: n <= totalUsers ? 'rgba(72,199,142,0.05)' : 'transparent',
+                }}>
+                  <td style={{ padding: '8px 12px', color: n <= totalUsers ? '#48c78e' : '#ccc' }}>
+                    {n} users {n <= totalUsers ? ' (reached)' : ''}
+                  </td>
+                  <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#ccc' }}>{fmt(n * PRICE_PER_USER)}</td>
+                  <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#48c78e', fontWeight: 700 }}>{fmt(Math.round(n * PRICE_PER_USER * DEV_CUT_PCT / 100))}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Monthly breakdown */}
+      {sortedMonths.length > 0 && (
+        <div className="card" style={{ padding: 24 }}>
+          <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Monthly Breakdown</h4>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                <th style={{ textAlign: 'left', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Month</th>
+                <th style={{ textAlign: 'right', padding: '8px 12px', color: '#888', fontWeight: 600 }}>New Users</th>
+                <th style={{ textAlign: 'right', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Revenue</th>
+                <th style={{ textAlign: 'right', padding: '8px 12px', color: '#48c78e', fontWeight: 600 }}>Your Cut</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedMonths.map(([month, data]) => (
+                <tr key={month} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  <td style={{ padding: '8px 12px', color: '#ccc' }}>{month}</td>
+                  <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#ccc' }}>{data.users}</td>
+                  <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#ccc' }}>{fmt(data.revenue)}</td>
+                  <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#48c78e', fontWeight: 700 }}>{fmt(data.devCut)}</td>
+                </tr>
+              ))}
+              {/* Totals row */}
+              <tr style={{ borderTop: '2px solid rgba(255,255,255,0.1)' }}>
+                <td style={{ padding: '8px 12px', color: '#fff', fontWeight: 700 }}>Total</td>
+                <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#fff', fontWeight: 700 }}>{totalUsers}</td>
+                <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#fff', fontWeight: 700 }}>{fmt(grossRevenue)}</td>
+                <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#48c78e', fontWeight: 700 }}>{fmt(devEarnings)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Note about Stripe */}
+      <div style={{ marginTop: 20, padding: 16, borderRadius: 8, background: 'rgba(240,165,0,0.08)', border: '1px solid rgba(240,165,0,0.2)', fontSize: 12, color: '#f0a500', lineHeight: 1.6 }}>
+        <strong>Note:</strong> Revenue is currently estimated from participant count ({totalUsers} users x {fmt(PRICE_PER_USER)}).
+        Once Stripe is integrated, this will pull actual payment data including renewals and refunds.
+      </div>
     </div>
   );
 }

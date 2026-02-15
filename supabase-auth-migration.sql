@@ -21,6 +21,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_participants_auth_id ON participants (auth
 -- Allow password column to be NULL (Supabase Auth handles passwords now)
 ALTER TABLE participants ALTER COLUMN password DROP NOT NULL;
 
+-- Add developer flag
+ALTER TABLE participants ADD COLUMN IF NOT EXISTS is_developer BOOLEAN DEFAULT false;
+
 -- ─────────────────────────────────────────────────────────────────
 -- 2. Helper function: check if current user is an admin
 --    Uses SECURITY DEFINER to bypass RLS for the check itself.
