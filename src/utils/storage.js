@@ -236,6 +236,7 @@ function toDbRow(user) {
     email: user.email,
     password: user.password || null,
     is_admin: user.isAdmin,
+    is_developer: user.isDeveloper || false,
     current_day: user.currentDay,
     is_active: user.isActive,
     has_paid: user.hasPaid,
@@ -264,6 +265,7 @@ function toDbUpdateRow(updates) {
   if (updates.currentDay !== undefined) row.current_day = updates.currentDay;
   if (updates.isActive !== undefined) row.is_active = updates.isActive;
   if (updates.isAdmin !== undefined) row.is_admin = updates.isAdmin;
+  if (updates.isDeveloper !== undefined) row.is_developer = updates.isDeveloper;
   if (updates.completedDays !== undefined) row.completed_days = updates.completedDays;
   if (updates.submissions !== undefined) row.submissions = updates.submissions;
   if (updates.metrics !== undefined) row.metrics = updates.metrics;
@@ -290,6 +292,7 @@ function fromDbRow(row) {
     email: row.email,
     password: row.password,
     isAdmin: row.is_admin,
+    isDeveloper: row.is_developer || false,
     currentDay: row.current_day,
     isActive: row.is_active,
     hasPaid: row.has_paid || false,
@@ -427,7 +430,8 @@ export function createNewUser(firstName, lastName, email, authId) {
     lastName,
     email: email.toLowerCase(),
     password: null,
-    isAdmin: email.toLowerCase() === 'admin@uc30.com',
+    isAdmin: email.toLowerCase() === 'admin@uc30.com' || email.toLowerCase() === 'dev@uc30.com',
+    isDeveloper: email.toLowerCase() === 'dev@uc30.com',
     currentDay: 1,
     isActive: true,
     hasPaid: false,
