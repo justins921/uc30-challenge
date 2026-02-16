@@ -237,6 +237,144 @@ const supabaseStorage = {
     return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_skool_link')); } catch { return null; } })();
   },
   async setSkoolLink(link) { await this._setSetting('skool_link', link); },
+
+  // ── CRM: Contacts ────────────────────────────────────────────
+  async addContact(contact) {
+    const { data, error } = await supabase
+      .from('contacts')
+      .insert(contact)
+      .select()
+      .single();
+    if (error) { console.error('addContact error:', error); return null; }
+    return data;
+  },
+
+  async getContacts(participantId) {
+    const { data, error } = await supabase
+      .from('contacts')
+      .select('*')
+      .eq('participant_id', participantId)
+      .order('created_at', { ascending: false });
+    if (error) { console.error('getContacts error:', error); return []; }
+    return data || [];
+  },
+
+  async getContactWithFollowUps(contactId) {
+    const { data: contact, error: cErr } = await supabase
+      .from('contacts')
+      .select('*')
+      .eq('id', contactId)
+      .single();
+    if (cErr) { console.error('getContactWithFollowUps error:', cErr); return null; }
+    const { data: followUps, error: fErr } = await supabase
+      .from('follow_ups')
+      .select('*')
+      .eq('contact_id', contactId)
+      .order('created_at', { ascending: true });
+    if (fErr) { console.error('getFollowUps error:', fErr); }
+    return { ...contact, followUps: followUps || [] };
+  },
+
+  // Admin: get all contacts for any participant
+  async getContactsForParticipant(participantId) {
+    const { data, error } = await supabase
+      .from('contacts')
+      .select('*, follow_ups(*)')
+      .eq('participant_id', participantId)
+      .order('created_at', { ascending: false });
+    if (error) { console.error('getContactsForParticipant error:', error); return []; }
+    return data || [];
+  },
+
+  // ── CRM: Follow-Ups ──────────────────────────────────────────
+  async addFollowUp(followUp) {
+    const { data, error } = await supabase
+      .from('follow_ups')
+      .insert(followUp)
+      .select()
+      .single();
+    if (error) { console.error('addFollowUp error:', error); return null; }
+    return data;
+  },
+
+  async getFollowUps(participantId, dayNumber) {
+    let query = supabase
+      .from('follow_ups')
+      .select('*')
+      .eq('participant_id', participantId)
+      .order('created_at', { ascending: false });
+    if (dayNumber !== undefined) {
+      query = query.eq('day_number', dayNumber);
+    }
+    const { data, error } = await query;
+    if (error) { console.error('getFollowUps error:', error); return []; }
+    return data || [];
+  },
+
+  async getFollowUpsByContact(contactId) {
+    const { data, error } = await supabase
+      .from('follow_ups')
+      .select('*')
+      .eq('contact_id', contactId)
+      .order('created_at', { ascending: true });
+    if (error) { console.error('getFollowUpsByContact error:', error); return []; }
+    return data || [];
+  },
+
+  // ── File Uploads (Supabase Storage) ───────────────────────────
+  async uploadFile(participantId, dayNumber, indicator, file) {
+    const ext = file.name.split('.').pop();
+    const fileId = `${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const filePath = `${participantId}/day-${dayNumber}/${indicator}/${fileId}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('uc30-uploads')
+      .upload(filePath, file, { contentType: file.type });
+
+    if (uploadError) { console.error('uploadFile error:', uploadError); return null; }
+
+    // Record in uploads table
+    const uploadRecord = {
+      id: `upload_${fileId}`,
+      participant_id: participantId,
+      day_number: dayNumber,
+      indicator,
+      file_path: filePath,
+      file_name: file.name,
+      file_size: file.size,
+    };
+
+    const { data, error } = await supabase
+      .from('uploads')
+      .insert(uploadRecord)
+      .select()
+      .single();
+
+    if (error) { console.error('upload record error:', error); }
+    return data || uploadRecord;
+  },
+
+  async getUploads(participantId, dayNumber) {
+    let query = supabase
+      .from('uploads')
+      .select('*')
+      .eq('participant_id', participantId)
+      .order('created_at', { ascending: true });
+    if (dayNumber !== undefined) {
+      query = query.eq('day_number', dayNumber);
+    }
+    const { data, error } = await query;
+    if (error) { console.error('getUploads error:', error); return []; }
+    return data || [];
+  },
+
+  async getUploadUrl(filePath) {
+    const { data, error } = await supabase.storage
+      .from('uc30-uploads')
+      .createSignedUrl(filePath, 3600); // 1 hour
+    if (error) { console.error('getUploadUrl error:', error); return null; }
+    return data?.signedUrl || null;
+  },
 };
 
 // ── Database row conversion ──────────────────────────────────────
@@ -342,6 +480,7 @@ function fromDbRow(row) {
     metrics: {
       propertiesAnalyzed: 0, offersSubmitted: 0, dealSourcesActivated: 0,
       counteroffers: 0, followUps: 0, propertiesUnderContract: 0,
+      socialMediaPosts: 0,
       ...(row.metrics || {}),
     },
     ucPoints: row.uc_points || 0,
@@ -484,6 +623,99 @@ const localStorageFallback = {
   setSkoolLink(link) {
     try { localStorage.setItem('uc30_skool_link', JSON.stringify(link)); } catch {}
   },
+
+  // ── CRM: Contacts (localStorage fallback) ─────────────────────
+  addContact(contact) {
+    try {
+      const contacts = JSON.parse(localStorage.getItem('uc30_contacts') || '[]');
+      contacts.push({ ...contact, created_at: new Date().toISOString() });
+      localStorage.setItem('uc30_contacts', JSON.stringify(contacts));
+      return contact;
+    } catch { return null; }
+  },
+  getContacts(participantId) {
+    try {
+      const contacts = JSON.parse(localStorage.getItem('uc30_contacts') || '[]');
+      return contacts
+        .filter(c => c.participant_id === participantId)
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    } catch { return []; }
+  },
+  getContactWithFollowUps(contactId) {
+    try {
+      const contacts = JSON.parse(localStorage.getItem('uc30_contacts') || '[]');
+      const contact = contacts.find(c => c.id === contactId);
+      if (!contact) return null;
+      const followUps = JSON.parse(localStorage.getItem('uc30_follow_ups') || '[]');
+      return { ...contact, followUps: followUps.filter(f => f.contact_id === contactId) };
+    } catch { return null; }
+  },
+  getContactsForParticipant(participantId) {
+    return this.getContacts(participantId);
+  },
+
+  // ── CRM: Follow-Ups (localStorage fallback) ───────────────────
+  addFollowUp(followUp) {
+    try {
+      const followUps = JSON.parse(localStorage.getItem('uc30_follow_ups') || '[]');
+      followUps.push({ ...followUp, created_at: new Date().toISOString() });
+      localStorage.setItem('uc30_follow_ups', JSON.stringify(followUps));
+      return followUp;
+    } catch { return null; }
+  },
+  getFollowUps(participantId, dayNumber) {
+    try {
+      const followUps = JSON.parse(localStorage.getItem('uc30_follow_ups') || '[]');
+      return followUps
+        .filter(f => f.participant_id === participantId && (dayNumber === undefined || f.day_number === dayNumber))
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    } catch { return []; }
+  },
+  getFollowUpsByContact(contactId) {
+    try {
+      const followUps = JSON.parse(localStorage.getItem('uc30_follow_ups') || '[]');
+      return followUps.filter(f => f.contact_id === contactId);
+    } catch { return []; }
+  },
+
+  // ── File Uploads (localStorage fallback — stores base64) ───────
+  uploadFile(participantId, dayNumber, indicator, file) {
+    // In dev mode, store as base64 in localStorage (limited capacity)
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const record = {
+          id: `upload_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+          participant_id: participantId,
+          day_number: dayNumber,
+          indicator,
+          file_path: reader.result, // base64 data URL
+          file_name: file.name,
+          file_size: file.size,
+          created_at: new Date().toISOString(),
+        };
+        try {
+          const uploads = JSON.parse(localStorage.getItem('uc30_uploads') || '[]');
+          uploads.push(record);
+          localStorage.setItem('uc30_uploads', JSON.stringify(uploads));
+        } catch {}
+        resolve(record);
+      };
+      reader.readAsDataURL(file);
+    });
+  },
+  getUploads(participantId, dayNumber) {
+    try {
+      const uploads = JSON.parse(localStorage.getItem('uc30_uploads') || '[]');
+      return uploads.filter(u =>
+        u.participant_id === participantId && (dayNumber === undefined || u.day_number === dayNumber)
+      );
+    } catch { return []; }
+  },
+  getUploadUrl(filePath) {
+    // In localStorage mode, filePath IS the data URL
+    return filePath;
+  },
 };
 
 // ── Export the right storage based on config ─────────────────────
@@ -514,6 +746,7 @@ export function createNewUser(firstName, lastName, email, authId) {
       counteroffers: 0,
       followUps: 0,
       propertiesUnderContract: 0,
+      socialMediaPosts: 0,
     },
     ucPoints: 0,
     removedAt: null,

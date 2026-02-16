@@ -373,51 +373,50 @@ export function getGettingStartedContent(overrides = {}) {
 }
 
 // ── Default Daily Minimums (admin-configurable) ──────────────
-// These are the default minimum standards for each of the 5 daily indicators
-// across the 30-day sprint. Counteroffers & properties under contract have no daily minimum.
+// Chandler's finalized chart: 5 properties/day, 1 deal source/day,
+// cumulative offer target = day number, follow-ups scale 1→2→3.
+// Offers are tracked CUMULATIVELY — offersCumulative is the running target.
 export const DEFAULT_DAILY_MINIMUMS = {
-  // Week 1: Building habits
-  1:  { propertiesAnalyzed: 3, offersSubmitted: 0, dealSourcesActivated: 1, counteroffers: 0, followUps: 0 },
-  2:  { propertiesAnalyzed: 3, offersSubmitted: 0, dealSourcesActivated: 1, counteroffers: 0, followUps: 0 },
-  3:  { propertiesAnalyzed: 5, offersSubmitted: 0, dealSourcesActivated: 1, counteroffers: 0, followUps: 0 },
-  4:  { propertiesAnalyzed: 3, offersSubmitted: 0, dealSourcesActivated: 2, counteroffers: 0, followUps: 0 },
-  5:  { propertiesAnalyzed: 3, offersSubmitted: 0, dealSourcesActivated: 2, counteroffers: 0, followUps: 0 },
-  6:  { propertiesAnalyzed: 3, offersSubmitted: 1, dealSourcesActivated: 1, counteroffers: 0, followUps: 0 },
-  7:  { propertiesAnalyzed: 3, offersSubmitted: 0, dealSourcesActivated: 1, counteroffers: 0, followUps: 1 },
-  // Week 2: Increasing volume
-  8:  { propertiesAnalyzed: 5, offersSubmitted: 1, dealSourcesActivated: 1, counteroffers: 0, followUps: 1 },
-  9:  { propertiesAnalyzed: 5, offersSubmitted: 3, dealSourcesActivated: 1, counteroffers: 0, followUps: 1 },
-  10: { propertiesAnalyzed: 5, offersSubmitted: 1, dealSourcesActivated: 2, counteroffers: 0, followUps: 1 },
-  11: { propertiesAnalyzed: 5, offersSubmitted: 1, dealSourcesActivated: 1, counteroffers: 0, followUps: 2 },
-  12: { propertiesAnalyzed: 5, offersSubmitted: 5, dealSourcesActivated: 1, counteroffers: 0, followUps: 2 },
-  13: { propertiesAnalyzed: 5, offersSubmitted: 1, dealSourcesActivated: 1, counteroffers: 0, followUps: 2 },
-  14: { propertiesAnalyzed: 5, offersSubmitted: 1, dealSourcesActivated: 2, counteroffers: 0, followUps: 2 },
-  // Week 3: Momentum building
-  15: { propertiesAnalyzed: 7, offersSubmitted: 2, dealSourcesActivated: 2, counteroffers: 0, followUps: 3 },
-  16: { propertiesAnalyzed: 7, offersSubmitted: 2, dealSourcesActivated: 2, counteroffers: 0, followUps: 3 },
-  17: { propertiesAnalyzed: 7, offersSubmitted: 3, dealSourcesActivated: 2, counteroffers: 0, followUps: 3 },
-  18: { propertiesAnalyzed: 7, offersSubmitted: 2, dealSourcesActivated: 2, counteroffers: 0, followUps: 5 },
-  19: { propertiesAnalyzed: 7, offersSubmitted: 2, dealSourcesActivated: 3, counteroffers: 0, followUps: 3 },
-  20: { propertiesAnalyzed: 7, offersSubmitted: 3, dealSourcesActivated: 2, counteroffers: 0, followUps: 3 },
-  21: { propertiesAnalyzed: 7, offersSubmitted: 2, dealSourcesActivated: 3, counteroffers: 0, followUps: 3 },
-  // Week 4: Peak execution
-  22: { propertiesAnalyzed: 10, offersSubmitted: 3, dealSourcesActivated: 3, counteroffers: 0, followUps: 4 },
-  23: { propertiesAnalyzed: 10, offersSubmitted: 5, dealSourcesActivated: 3, counteroffers: 0, followUps: 4 },
-  24: { propertiesAnalyzed: 10, offersSubmitted: 3, dealSourcesActivated: 3, counteroffers: 0, followUps: 4 },
-  25: { propertiesAnalyzed: 10, offersSubmitted: 5, dealSourcesActivated: 3, counteroffers: 0, followUps: 5 },
-  26: { propertiesAnalyzed: 10, offersSubmitted: 3, dealSourcesActivated: 3, counteroffers: 0, followUps: 5 },
-  27: { propertiesAnalyzed: 10, offersSubmitted: 5, dealSourcesActivated: 3, counteroffers: 0, followUps: 5 },
-  28: { propertiesAnalyzed: 10, offersSubmitted: 5, dealSourcesActivated: 3, counteroffers: 0, followUps: 5 },
-  29: { propertiesAnalyzed: 10, offersSubmitted: 5, dealSourcesActivated: 3, counteroffers: 0, followUps: 5 },
-  30: { propertiesAnalyzed: 10, offersSubmitted: 5, dealSourcesActivated: 3, counteroffers: 0, followUps: 5 },
+  1:  { propertiesAnalyzed: 5, offersCumulative: 1,  dealSourcesActivated: 1, followUps: 1 },
+  2:  { propertiesAnalyzed: 5, offersCumulative: 2,  dealSourcesActivated: 1, followUps: 1 },
+  3:  { propertiesAnalyzed: 5, offersCumulative: 3,  dealSourcesActivated: 1, followUps: 1 },
+  4:  { propertiesAnalyzed: 5, offersCumulative: 4,  dealSourcesActivated: 1, followUps: 1 },
+  5:  { propertiesAnalyzed: 5, offersCumulative: 5,  dealSourcesActivated: 1, followUps: 1 },
+  6:  { propertiesAnalyzed: 5, offersCumulative: 6,  dealSourcesActivated: 1, followUps: 2 },
+  7:  { propertiesAnalyzed: 5, offersCumulative: 7,  dealSourcesActivated: 1, followUps: 2 },
+  8:  { propertiesAnalyzed: 5, offersCumulative: 8,  dealSourcesActivated: 1, followUps: 2 },
+  9:  { propertiesAnalyzed: 5, offersCumulative: 9,  dealSourcesActivated: 1, followUps: 2 },
+  10: { propertiesAnalyzed: 5, offersCumulative: 10, dealSourcesActivated: 1, followUps: 2 },
+  11: { propertiesAnalyzed: 5, offersCumulative: 11, dealSourcesActivated: 1, followUps: 3 },
+  12: { propertiesAnalyzed: 5, offersCumulative: 12, dealSourcesActivated: 1, followUps: 3 },
+  13: { propertiesAnalyzed: 5, offersCumulative: 13, dealSourcesActivated: 1, followUps: 3 },
+  14: { propertiesAnalyzed: 5, offersCumulative: 14, dealSourcesActivated: 1, followUps: 3 },
+  15: { propertiesAnalyzed: 5, offersCumulative: 15, dealSourcesActivated: 1, followUps: 3 },
+  16: { propertiesAnalyzed: 5, offersCumulative: 16, dealSourcesActivated: 1, followUps: 3 },
+  17: { propertiesAnalyzed: 5, offersCumulative: 17, dealSourcesActivated: 1, followUps: 3 },
+  18: { propertiesAnalyzed: 5, offersCumulative: 18, dealSourcesActivated: 1, followUps: 3 },
+  19: { propertiesAnalyzed: 5, offersCumulative: 19, dealSourcesActivated: 1, followUps: 3 },
+  20: { propertiesAnalyzed: 5, offersCumulative: 20, dealSourcesActivated: 1, followUps: 3 },
+  21: { propertiesAnalyzed: 5, offersCumulative: 21, dealSourcesActivated: 1, followUps: 3 },
+  22: { propertiesAnalyzed: 5, offersCumulative: 22, dealSourcesActivated: 1, followUps: 3 },
+  23: { propertiesAnalyzed: 5, offersCumulative: 23, dealSourcesActivated: 1, followUps: 3 },
+  24: { propertiesAnalyzed: 5, offersCumulative: 24, dealSourcesActivated: 1, followUps: 3 },
+  25: { propertiesAnalyzed: 5, offersCumulative: 25, dealSourcesActivated: 1, followUps: 3 },
+  26: { propertiesAnalyzed: 5, offersCumulative: 26, dealSourcesActivated: 1, followUps: 3 },
+  27: { propertiesAnalyzed: 5, offersCumulative: 27, dealSourcesActivated: 1, followUps: 3 },
+  28: { propertiesAnalyzed: 5, offersCumulative: 28, dealSourcesActivated: 1, followUps: 3 },
+  29: { propertiesAnalyzed: 5, offersCumulative: 29, dealSourcesActivated: 1, followUps: 3 },
+  30: { propertiesAnalyzed: 5, offersCumulative: 30, dealSourcesActivated: 1, followUps: 3 },
 };
 
-// Post-30 "Operator Mode" daily minimums: at least 1 in each category
+// Buffer rule: users are removed if cumulative offers < target - OFFER_BUFFER
+export const OFFER_BUFFER = 3;
+
+// Post-30 "Operator Mode" reduced minimums
 export const POST_30_MINIMUMS = {
   propertiesAnalyzed: 1,
-  offersSubmitted: 1,
-  dealSourcesActivated: 1,
-  counteroffers: 0,
+  offersPerWeek: 2,        // 2 offers per rolling 7-day window (not daily)
+  dealSourcesActivated: 0, // no minimum, but still earns points
   followUps: 1,
 };
 
@@ -428,6 +427,26 @@ export function getDailyMinimums(dayNum, adminOverrides = {}) {
   const override = adminOverrides[dayNum];
   if (override) return { ...defaults, ...override };
   return defaults;
+}
+
+// Get cumulative offer target for a given day
+export function getOfferTarget(dayNum) {
+  if (dayNum > 30) return 30; // post-30: target stays at 30
+  return DEFAULT_DAILY_MINIMUMS[dayNum]?.offersCumulative || dayNum;
+}
+
+// Check if user is within offer buffer (returns { safe, behind, buffer })
+export function checkOfferBuffer(dayNum, cumulativeOffers) {
+  const target = getOfferTarget(dayNum);
+  const behind = Math.max(0, target - cumulativeOffers);
+  return {
+    target,
+    current: cumulativeOffers,
+    behind,
+    buffer: OFFER_BUFFER - behind,
+    safe: behind <= OFFER_BUFFER,
+    status: behind === 0 ? 'green' : behind <= 2 ? 'yellow' : 'red',
+  };
 }
 
 // ── Post-Day-30 Operator Mode ────────────────────────────────

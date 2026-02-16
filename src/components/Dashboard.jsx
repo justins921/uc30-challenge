@@ -10,11 +10,13 @@ import UserProfile, { UserSupport } from './UserProfile';
 import { getGettingStartedContent } from '../data/challengeDays';
 import { calculateUCPoints } from '../data/ucPoints';
 import CommunityBoard from './CommunityBoard';
+import ContactsCRM from './ContactsCRM';
 import Footer from './Footer';
 
 const TABS = [
   { id: 'timeline', label: 'Timeline' },
   { id: 'leaderboard', label: 'Leaderboard' },
+  { id: 'crm', label: 'Contacts' },
   { id: 'community', label: 'Community' },
   { id: 'submissions', label: 'My Submissions' },
   { id: 'stats', label: 'Operator Stats' },
@@ -70,7 +72,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -252,6 +254,11 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             contentOverrides={contentOverrides}
             customPhases={customPhases}
             dailyMinimumsOverrides={dailyMinimumsOverrides}
+            onAddContact={onAddContact}
+            onAddFollowUp={onAddFollowUp}
+            onUploadFile={onUploadFile}
+            contacts={contacts}
+            getUploadUrl={getUploadUrl}
           />
         )}
         {tab === 'community' && (
@@ -269,6 +276,13 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         )}
         {tab === 'leaderboard' && (
           <Leaderboard participants={participants || []} currentUserId={user.id} />
+        )}
+        {tab === 'crm' && (
+          <ContactsCRM
+            user={user}
+            getContacts={getContacts}
+            getFollowUpsByContact={getFollowUpsByContact}
+          />
         )}
         {tab === 'submissions' && <SubmissionsView user={user} />}
         {tab === 'stats' && <StatsView user={user} />}

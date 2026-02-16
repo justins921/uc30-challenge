@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Header from './Header';
-import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DEFAULT_DAILY_MINIMUMS } from '../data/challengeDays';
+import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DEFAULT_DAILY_MINIMUMS, checkOfferBuffer, OFFER_BUFFER } from '../data/challengeDays';
 import { INDICATOR_KEYS, INDICATOR_LABELS, INDICATOR_SHORT_LABELS, INDICATOR_COLORS, UC_POINT_VALUES, calculateUCPoints } from '../data/ucPoints';
 import { AttachmentLink } from './DayView';
 import { LANDING_DEFAULTS } from './LandingPage';
@@ -64,7 +64,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink, getContactsForParticipant, getUploads, getUploadUrl }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -197,6 +197,9 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onWarnCommunityUser={onWarnCommunityUser}
             onBanCommunityUser={onBanCommunityUser}
             onViewAsUser={onViewAsUser}
+            getContactsForParticipant={getContactsForParticipant}
+            getUploads={getUploads}
+            getUploadUrl={getUploadUrl}
           />
         )}
         {tab === 'submissions' && (
@@ -1272,10 +1275,27 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
 }
 
 // ── Participant Detail View (with all submissions) ──────────
-function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onVerifySubmissionSocial, onWarnCommunityUser, onBanCommunityUser, onViewAsUser }) {
+function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onVerifySubmissionSocial, onWarnCommunityUser, onBanCommunityUser, onViewAsUser, getContactsForParticipant, getUploads, getUploadUrl }) {
   const [showWarnInput, setShowWarnInput] = useState(false);
   const [warnMessage, setWarnMessage] = useState('');
+  const [crmContacts, setCrmContacts] = useState(null);
+  const [loadingCrm, setLoadingCrm] = useState(false);
+  const [crmExpanded, setCrmExpanded] = useState(false);
   const p = participant;
+
+  // Offer tracking
+  const currentDay = p.currentDay || 1;
+  const offerStatus = currentDay <= 30 ? checkOfferBuffer(currentDay, p.metrics?.offersSubmitted || 0) : null;
+
+  const handleLoadCrm = async () => {
+    if (crmContacts !== null) { setCrmExpanded(!crmExpanded); return; }
+    if (!getContactsForParticipant) return;
+    setLoadingCrm(true);
+    const contacts = await Promise.resolve(getContactsForParticipant(p.id));
+    setCrmContacts(contacts || []);
+    setCrmExpanded(true);
+    setLoadingCrm(false);
+  };
 
   return (
     <div className="scale-in">
@@ -1540,6 +1560,86 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
             );
           })}
         </div>
+      </div>
+
+      {/* Offer Tracking */}
+      {offerStatus && (
+        <div className="card" style={{ marginBottom: 24 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Offer Tracking</h3>
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 12 }}>
+            <div style={{ textAlign: 'center' }}>
+              <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: '#fff' }}>{offerStatus.target}</div>
+              <div style={{ fontSize: 11, color: '#888' }}>Day {currentDay} Target</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: offerStatus.status === 'green' ? '#48c78e' : offerStatus.status === 'yellow' ? '#f0a500' : '#e94560' }}>
+                {offerStatus.current}
+              </div>
+              <div style={{ fontSize: 11, color: '#888' }}>Cumulative Offers</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: offerStatus.buffer <= 0 ? '#e94560' : offerStatus.buffer <= 1 ? '#f0a500' : '#48c78e' }}>
+                {Math.max(0, offerStatus.buffer)}
+              </div>
+              <div style={{ fontSize: 11, color: '#888' }}>Buffer Remaining</div>
+            </div>
+          </div>
+          <div style={{
+            padding: '8px 14px', borderRadius: 6, fontSize: 12, fontWeight: 600,
+            background: offerStatus.status === 'red' ? 'rgba(233,69,96,0.1)' : offerStatus.status === 'yellow' ? 'rgba(240,165,0,0.1)' : 'rgba(72,199,142,0.1)',
+            color: offerStatus.status === 'red' ? '#e94560' : offerStatus.status === 'yellow' ? '#f0a500' : '#48c78e',
+          }}>
+            {offerStatus.status === 'red' ? 'DANGER — Will be removed if they fall further behind' : offerStatus.status === 'yellow' ? 'WARNING — Close to removal threshold' : 'On track'}
+          </div>
+        </div>
+      )}
+
+      {/* CRM Data */}
+      <div className="card" style={{ marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>CRM Contacts</h3>
+          <button onClick={handleLoadCrm} className="btn-secondary" style={{ padding: '6px 14px', fontSize: 12 }}>
+            {loadingCrm ? 'Loading...' : crmExpanded ? 'Hide' : 'View Contacts'}
+          </button>
+        </div>
+        {crmExpanded && crmContacts && (
+          <div style={{ marginTop: 16 }}>
+            {crmContacts.length === 0 ? (
+              <div style={{ fontSize: 13, color: '#666', fontStyle: 'italic' }}>No contacts added yet.</div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>{crmContacts.length} total contacts</div>
+                {crmContacts.map(c => (
+                  <div key={c.id} style={{
+                    padding: '10px 14px', background: 'rgba(255,255,255,0.02)',
+                    border: '1px solid rgba(255,255,255,0.06)', borderRadius: 8, fontSize: 13,
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                      <span style={{ fontWeight: 600, color: '#ddd' }}>{c.name}</span>
+                      <span style={{ fontSize: 11, padding: '2px 6px', borderRadius: 4, background: 'rgba(233,69,96,0.08)', color: '#e94560' }}>
+                        {c.contact_type}
+                      </span>
+                      <span style={{ fontSize: 11, color: '#555' }}>Day {c.day_added}</span>
+                    </div>
+                    {c.phone && <div style={{ fontSize: 12, color: '#888' }}>📞 {c.phone}</div>}
+                    {c.email && <div style={{ fontSize: 12, color: '#888' }}>✉ {c.email}</div>}
+                    {c.notes && <div style={{ fontSize: 12, color: '#666', marginTop: 4, fontStyle: 'italic' }}>{c.notes}</div>}
+                    {c.follow_ups && c.follow_ups.length > 0 && (
+                      <div style={{ marginTop: 6, paddingLeft: 12, borderLeft: '2px solid rgba(72,199,142,0.2)' }}>
+                        <div style={{ fontSize: 11, color: '#48c78e', marginBottom: 4 }}>{c.follow_ups.length} follow-up{c.follow_ups.length > 1 ? 's' : ''}</div>
+                        {c.follow_ups.map((f, i) => (
+                          <div key={f.id || i} style={{ fontSize: 12, color: '#888', marginBottom: 2 }}>
+                            Day {f.day_number}: {f.notes}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Submissions */}

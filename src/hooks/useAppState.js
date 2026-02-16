@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { storage, createNewUser, isSupabaseEnabled } from '../utils/storage';
 import { supabase } from '../utils/supabaseClient';
-import { CHALLENGE_DAYS, POST_30_TASK } from '../data/challengeDays';
+import { CHALLENGE_DAYS, POST_30_TASK, DEFAULT_DAILY_MINIMUMS, OFFER_BUFFER } from '../data/challengeDays';
 import { calculateUCPoints } from '../data/ucPoints';
 import { hashPassword } from '../utils/crypto';
 import { subscribeUser, tagSignUp, tagDayStarted, tagChallengeCompleted, tagRemovedFromCohort } from '../utils/kit';
@@ -54,8 +54,20 @@ export function useAppState() {
     const removals = [];
     for (const p of currentParticipants) {
       if (p.isAdmin || !p.isActive || p.currentDay > 30) continue;
+      // Existing check: missed daily submission
       if (p.currentDay < pacificDayNum) {
         removals.push(p);
+        continue;
+      }
+      // New check: offer buffer rule
+      // Check if user's cumulative offers have fallen too far behind
+      const completedDay = p.currentDay - 1; // last completed day
+      if (completedDay >= 1 && completedDay <= 30) {
+        const offerTarget = DEFAULT_DAILY_MINIMUMS[completedDay]?.offersCumulative || completedDay;
+        const cumulativeOffers = p.metrics?.offersSubmitted || 0;
+        if (cumulativeOffers < offerTarget - OFFER_BUFFER) {
+          removals.push(p);
+        }
       }
     }
 
@@ -1239,6 +1251,71 @@ export function useAppState() {
     setDailyMinimumsOverridesState(minimums);
   }, []);
 
+  // ── CRM: Contacts & Follow-Ups ────────────────────────────
+  const addContact = useCallback(async (contactData) => {
+    if (!user) return { error: 'Not logged in.' };
+    const contact = {
+      id: `contact_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      participant_id: user.id,
+      ...contactData,
+    };
+    const saved = await Promise.resolve(storage.addContact(contact));
+    if (!saved) return { error: 'Failed to save contact.' };
+    return { success: true, contact: saved };
+  }, [user]);
+
+  const getContacts = useCallback(async (participantId) => {
+    const id = participantId || user?.id;
+    if (!id) return [];
+    return Promise.resolve(storage.getContacts(id));
+  }, [user]);
+
+  const addFollowUp = useCallback(async (followUpData) => {
+    if (!user) return { error: 'Not logged in.' };
+    const followUp = {
+      id: `followup_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      participant_id: user.id,
+      ...followUpData,
+    };
+    const saved = await Promise.resolve(storage.addFollowUp(followUp));
+    if (!saved) return { error: 'Failed to save follow-up.' };
+    return { success: true, followUp: saved };
+  }, [user]);
+
+  const getFollowUps = useCallback(async (participantId, dayNumber) => {
+    const id = participantId || user?.id;
+    if (!id) return [];
+    return Promise.resolve(storage.getFollowUps(id, dayNumber));
+  }, [user]);
+
+  // ── File Uploads ──────────────────────────────────────────
+  const uploadFile = useCallback(async (dayNumber, indicator, file) => {
+    if (!user) return { error: 'Not logged in.' };
+    if (file.size > 5 * 1024 * 1024) return { error: 'File must be under 5 MB.' };
+    const result = await Promise.resolve(storage.uploadFile(user.id, dayNumber, indicator, file));
+    if (!result) return { error: 'Upload failed.' };
+    return { success: true, upload: result };
+  }, [user]);
+
+  const getUploads = useCallback(async (participantId, dayNumber) => {
+    const id = participantId || user?.id;
+    if (!id) return [];
+    return Promise.resolve(storage.getUploads(id, dayNumber));
+  }, [user]);
+
+  const getUploadUrl = useCallback(async (filePath) => {
+    return Promise.resolve(storage.getUploadUrl(filePath));
+  }, []);
+
+  const getFollowUpsByContact = useCallback(async (contactId) => {
+    return Promise.resolve(storage.getFollowUpsByContact(contactId));
+  }, []);
+
+  // Admin: get contacts for any participant
+  const getContactsForParticipant = useCallback(async (participantId) => {
+    return Promise.resolve(storage.getContactsForParticipant(participantId));
+  }, []);
+
   // Refresh community posts every 30 seconds
   useEffect(() => {
     if (!user || currentView === 'login') return;
@@ -1309,5 +1386,14 @@ export function useAppState() {
     setSkoolLink,
     dailyMinimumsOverrides,
     setDailyMinimums,
+    addContact,
+    getContacts,
+    addFollowUp,
+    getFollowUps,
+    uploadFile,
+    getUploads,
+    getUploadUrl,
+    getFollowUpsByContact,
+    getContactsForParticipant,
   };
 }

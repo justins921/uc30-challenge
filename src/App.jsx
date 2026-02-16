@@ -67,8 +67,36 @@ export default function App() {
     setSkoolLink,
     dailyMinimumsOverrides,
     setDailyMinimums,
+    addContact,
+    getContacts,
+    addFollowUp,
+    getFollowUps,
+    getFollowUpsByContact,
+    uploadFile,
+    getUploads,
+    getUploadUrl,
+    getContactsForParticipant,
     navigate,
   } = useAppState();
+
+  // CRM contacts for current user (loaded on login)
+  const [userContacts, setUserContacts] = useState([]);
+  useEffect(() => {
+    if (user && getContacts) {
+      Promise.resolve(getContacts(user.id)).then(c => setUserContacts(c || []));
+    }
+  }, [user, getContacts]);
+
+  // Refresh contacts when adding one
+  const handleAddContact = async (contactData) => {
+    const result = await addContact(contactData);
+    if (result?.success) {
+      // Refresh the contacts list
+      const fresh = await Promise.resolve(getContacts(user.id));
+      setUserContacts(fresh || []);
+    }
+    return result;
+  };
 
   // Check for Stripe success redirect
   const [authMode, setAuthMode] = useState(null);
@@ -224,6 +252,14 @@ export default function App() {
               onDismissCommunityWarning={() => {}}
               participants={participants}
               dailyMinimumsOverrides={dailyMinimumsOverrides}
+              onAddContact={() => {}}
+              onAddFollowUp={() => {}}
+              onUploadFile={() => {}}
+              getContacts={getContacts}
+              getFollowUps={getFollowUps}
+              getFollowUpsByContact={getFollowUpsByContact}
+              getUploadUrl={getUploadUrl}
+              contacts={[]}
             />
           </div>
         );
@@ -271,6 +307,9 @@ export default function App() {
         onSetDailyMinimums={setDailyMinimums}
         skoolLink={skoolLink}
         onSetSkoolLink={setSkoolLink}
+        getContactsForParticipant={getContactsForParticipant}
+        getUploads={getUploads}
+        getUploadUrl={getUploadUrl}
       />
     );
   }
@@ -308,6 +347,14 @@ export default function App() {
       participants={participants}
       dailyMinimumsOverrides={dailyMinimumsOverrides}
       skoolLink={skoolLink}
+      onAddContact={handleAddContact}
+      onAddFollowUp={addFollowUp}
+      onUploadFile={uploadFile}
+      getContacts={getContacts}
+      getFollowUps={getFollowUps}
+      getFollowUpsByContact={getFollowUpsByContact}
+      getUploadUrl={getUploadUrl}
+      contacts={userContacts}
     />
   );
 }

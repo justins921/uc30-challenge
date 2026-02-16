@@ -8,6 +8,7 @@ export const UC_POINT_VALUES = {
   counteroffers: 15,
   followUps: 3,
   propertiesUnderContract: 100,
+  socialMediaPosts: 2,
 };
 
 // Labels for display
@@ -18,6 +19,7 @@ export const INDICATOR_LABELS = {
   counteroffers: 'Counteroffers',
   followUps: 'Follow-Ups',
   propertiesUnderContract: 'Properties Under Contract',
+  socialMediaPosts: 'Social Media Posts',
 };
 
 // Short labels for compact displays
@@ -28,6 +30,7 @@ export const INDICATOR_SHORT_LABELS = {
   counteroffers: 'Counters',
   followUps: 'Follow-Ups',
   propertiesUnderContract: 'Under Contract',
+  socialMediaPosts: 'Social Posts',
 };
 
 // Colors for each indicator
@@ -38,6 +41,7 @@ export const INDICATOR_COLORS = {
   counteroffers: '#f0a500',
   followUps: '#48c78e',
   propertiesUnderContract: '#c9a0ff',
+  socialMediaPosts: '#ff6b9d',
 };
 
 // Ordered list of all 6 indicator keys
@@ -48,6 +52,7 @@ export const INDICATOR_KEYS = [
   'counteroffers',
   'followUps',
   'propertiesUnderContract',
+  'socialMediaPosts',
 ];
 
 // 5 daily-trackable indicators (excludes propertiesUnderContract which has no daily minimum)
