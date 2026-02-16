@@ -406,7 +406,7 @@ function CohortCountdown({ cohortStartDate }) {
       <div className="card" style={{ padding: 24, textAlign: 'left', maxWidth: 400, margin: '0 auto' }}>
         <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>You're activated. Use this time to:</h3>
         <ul style={{ color: '#888', fontSize: 14, lineHeight: 2, listStyle: 'none', padding: 0 }}>
-          <li>✅ Review your buy box and target markets</li>
+          <li>✅ Complete the Getting Started section</li>
           <li>✅ Set up your deal-finding tools</li>
           <li>✅ Research properties in your target area</li>
           <li>✅ Get ready to submit offers on Day 1</li>
@@ -624,6 +624,10 @@ function socialHandlesToObject(arr) {
   return obj;
 }
 
+// ── Buy Box Constants ────────────────────────────────────
+const PROPERTY_TYPES = ['SFR', 'Multifamily', 'Commercial', 'Land', 'Mixed-Use'];
+const STRATEGIES = ['Flip', 'BRRRR', 'Buy & Hold Rental', 'Wholesale', 'Subject-To', 'Seller Finance'];
+
 // ── Getting Started Section ──────────────────────────────
 function GettingStartedSection({ user, onComplete, contentOverrides }) {
   const content = getGettingStartedContent(contentOverrides);
@@ -633,6 +637,21 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
   const [fileData, setFileData] = useState(null);
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
+
+  // Buy Box state
+  const existingBuyBox = user.buyBox || {};
+  const [markets, setMarkets] = useState(() => (existingBuyBox.markets || []).join(', '));
+  const [propertyTypes, setPropertyTypes] = useState(() => existingBuyBox.propertyTypes || []);
+  const [priceMin, setPriceMin] = useState(() => existingBuyBox.priceMin ? String(existingBuyBox.priceMin) : '');
+  const [priceMax, setPriceMax] = useState(() => existingBuyBox.priceMax ? String(existingBuyBox.priceMax) : '');
+  const [strategy, setStrategy] = useState(() => existingBuyBox.strategy || '');
+  const [targetReturns, setTargetReturns] = useState(() => existingBuyBox.targetReturns || '');
+
+  const togglePropertyType = (pt) => {
+    setPropertyTypes(prev =>
+      prev.includes(pt) ? prev.filter(t => t !== pt) : [...prev, pt]
+    );
+  };
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
@@ -647,11 +666,19 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
   const hasValidHandle = handles.some(h => h.handle.trim().length > 0);
 
   const handleComplete = async () => {
-    if (!hasValidHandle) return;
+    if (!hasValidHandle || !markets.trim()) return;
     setSaving(true);
     const socialHandles = socialHandlesToObject(handles);
     const proof = (proofText.trim() || fileName) ? { text: proofText, fileName, fileData } : null;
-    await onComplete(socialHandles, proof);
+    const buyBox = {
+      markets: markets.split(',').map(m => m.trim()).filter(Boolean),
+      propertyTypes,
+      priceMin: parseInt(priceMin) || 0,
+      priceMax: parseInt(priceMax) || 0,
+      strategy,
+      targetReturns: targetReturns.trim() || null,
+    };
+    await onComplete(socialHandles, proof, buyBox);
     setDone(true);
     setSaving(false);
   };
@@ -758,6 +785,132 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
         </details>
       )}
 
+      {/* Buy Box Setup */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+          }}>🎯</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Define Your Buy Box</h3>
+        </div>
+        <p style={{ fontSize: 13, color: '#888', marginBottom: 16 }}>
+          Set your investment criteria so you're ready to act on Day 1. You can update this later.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Target Markets */}
+          <div>
+            <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              Target Market(s) <span style={{ color: '#e94560' }}>*</span>
+            </label>
+            <input
+              value={markets}
+              onChange={e => setMarkets(e.target.value)}
+              placeholder="e.g. Austin TX, San Antonio TX, Dallas TX"
+              style={{ width: '100%', fontSize: 14, padding: '12px 14px' }}
+            />
+            <p style={{ fontSize: 11, color: '#555', marginTop: 4 }}>
+              Separate multiple markets with commas
+            </p>
+          </div>
+
+          {/* Property Types */}
+          <div>
+            <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              Property Type(s)
+            </label>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {PROPERTY_TYPES.map(pt => {
+                const selected = propertyTypes.includes(pt);
+                return (
+                  <button
+                    key={pt}
+                    onClick={() => togglePropertyType(pt)}
+                    style={{
+                      padding: '8px 16px', borderRadius: 8, fontSize: 13, cursor: 'pointer',
+                      background: selected ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.04)',
+                      color: selected ? '#e94560' : '#888',
+                      border: selected ? '1px solid rgba(233,69,96,0.3)' : '1px solid rgba(255,255,255,0.08)',
+                      fontFamily: "'DM Sans', sans-serif", fontWeight: selected ? 600 : 400,
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    {selected && '+ '}{pt}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Price Range */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div>
+              <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 6, fontWeight: 600 }}>
+                Min Price ($)
+              </label>
+              <input
+                type="number"
+                value={priceMin}
+                onChange={e => setPriceMin(e.target.value)}
+                placeholder="50,000"
+                style={{ width: '100%', fontSize: 14, padding: '12px 14px' }}
+              />
+            </div>
+            <div>
+              <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 6, fontWeight: 600 }}>
+                Max Price ($)
+              </label>
+              <input
+                type="number"
+                value={priceMax}
+                onChange={e => setPriceMax(e.target.value)}
+                placeholder="300,000"
+                style={{ width: '100%', fontSize: 14, padding: '12px 14px' }}
+              />
+            </div>
+          </div>
+
+          {/* Strategy */}
+          <div>
+            <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              Strategy
+            </label>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {STRATEGIES.map(s => (
+                <button
+                  key={s}
+                  onClick={() => setStrategy(s)}
+                  style={{
+                    padding: '8px 16px', borderRadius: 8, fontSize: 13, cursor: 'pointer',
+                    background: strategy === s ? 'rgba(83,52,131,0.15)' : 'rgba(255,255,255,0.04)',
+                    color: strategy === s ? '#c9a0ff' : '#888',
+                    border: strategy === s ? '1px solid rgba(83,52,131,0.3)' : '1px solid rgba(255,255,255,0.08)',
+                    fontFamily: "'DM Sans', sans-serif", fontWeight: strategy === s ? 600 : 400,
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Target Returns */}
+          <div>
+            <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              Target Returns / Cash Flow Goals <span style={{ color: '#555', fontWeight: 400 }}>(optional)</span>
+            </label>
+            <input
+              value={targetReturns}
+              onChange={e => setTargetReturns(e.target.value)}
+              placeholder="e.g. $500/mo cash flow, 20% ROI, $30k profit per flip"
+              style={{ width: '100%', fontSize: 14, padding: '12px 14px' }}
+            />
+          </div>
+        </div>
+      </div>
+
       {/* Social Media Handles */}
       <div className="card" style={{ marginBottom: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
@@ -809,13 +962,17 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
         className="btn-primary"
         style={{ width: '100%', padding: '14px 24px', fontSize: 16 }}
         onClick={handleComplete}
-        disabled={saving || !hasValidHandle}
+        disabled={saving || !hasValidHandle || !markets.trim()}
       >
         {saving ? 'Saving...' : 'Complete Getting Started →'}
       </button>
-      {!hasValidHandle && (
+      {(!hasValidHandle || !markets.trim()) && (
         <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 8 }}>
-          Enter at least one social media handle to continue
+          {!markets.trim() && !hasValidHandle
+            ? 'Enter your target market(s) and at least one social media handle to continue'
+            : !markets.trim()
+            ? 'Enter your target market(s) to continue'
+            : 'Enter at least one social media handle to continue'}
         </p>
       )}
     </div>

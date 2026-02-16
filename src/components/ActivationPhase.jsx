@@ -1,50 +1,23 @@
 import { useState } from 'react';
 
-const PROPERTY_TYPES = ['SFR', 'Multifamily', 'Commercial', 'Land', 'Mixed-Use'];
-const STRATEGIES = ['Flip', 'BRRRR', 'Buy & Hold Rental', 'Wholesale', 'Subject-To', 'Seller Finance'];
-
 export default function ActivationPhase({ user, onComplete, skoolLink }) {
   const [step, setStep] = useState(1);
   const [saving, setSaving] = useState(false);
 
-  // Step 2: Market Selection
-  const [markets, setMarkets] = useState('');
-
-  // Step 3: Buy Box
-  const [propertyTypes, setPropertyTypes] = useState([]);
-  const [priceMin, setPriceMin] = useState('');
-  const [priceMax, setPriceMax] = useState('');
-  const [strategy, setStrategy] = useState('');
-  const [targetReturns, setTargetReturns] = useState('');
-
-  // Step 4: Offer Commitment
+  // Step 2: Offer Commitment
   const [offerCommitment, setOfferCommitment] = useState('');
 
-  // Step 5: Stakes Declaration
+  // Step 3: Stakes Declaration
   const [stakesDeclaration, setStakesDeclaration] = useState('');
 
-  // Step 6: Commitment Confirmation
+  // Step 4: Commitment Confirmation
   const [committed, setCommitted] = useState(false);
 
-  const totalSteps = 7;
-
-  const togglePropertyType = (pt) => {
-    setPropertyTypes(prev =>
-      prev.includes(pt) ? prev.filter(t => t !== pt) : [...prev, pt]
-    );
-  };
+  const totalSteps = 5;
 
   const handleComplete = async () => {
     setSaving(true);
     await onComplete({
-      buyBox: {
-        markets: markets.split(',').map(m => m.trim()).filter(Boolean),
-        propertyTypes,
-        priceMin: parseInt(priceMin) || 0,
-        priceMax: parseInt(priceMax) || 0,
-        strategy,
-        targetReturns: targetReturns.trim() || null,
-      },
       offerCommitment: parseInt(offerCommitment) || 0,
       stakesDeclaration: stakesDeclaration.trim(),
       commitmentDeclaredAt: new Date().toISOString(),
@@ -86,7 +59,7 @@ export default function ActivationPhase({ user, onComplete, skoolLink }) {
               UC30
             </div>
             <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 12, lineHeight: 1.3 }}>
-              Welcome, Operator.
+              Welcome, {user.firstName}.
             </h1>
             <p style={{ color: '#aaa', fontSize: 15, lineHeight: 1.8, marginBottom: 12 }}>
               You've made the decision. Now let's make sure you're ready to execute.
@@ -109,171 +82,8 @@ export default function ActivationPhase({ user, onComplete, skoolLink }) {
           </div>
         )}
 
-        {/* ── Step 2: Market Selection ── */}
+        {/* ── Step 2: Offer Commitment ── */}
         {step === 2 && (
-          <div className="card fade-up" style={{ padding: 36 }}>
-            <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
-              Select Your Market
-            </h2>
-            <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7, marginBottom: 28 }}>
-              Where will you be analyzing properties and submitting offers?
-              Choose your primary target market(s).
-            </p>
-
-            <div>
-              <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 8, fontWeight: 600 }}>
-                Target Market(s)
-              </label>
-              <input
-                value={markets}
-                onChange={e => setMarkets(e.target.value)}
-                placeholder="e.g. Austin TX, San Antonio TX, Dallas TX"
-                style={{ width: '100%', fontSize: 15, padding: '14px 16px' }}
-              />
-              <p style={{ fontSize: 12, color: '#555', marginTop: 8 }}>
-                Separate multiple markets with commas
-              </p>
-            </div>
-
-            <div style={{ display: 'flex', gap: 12, marginTop: 32 }}>
-              <button className="btn-secondary" onClick={() => setStep(1)} style={{ padding: '14px 24px' }}>
-                Back
-              </button>
-              <button
-                className="btn-primary"
-                style={{ flex: 1, padding: '14px 24px', opacity: markets.trim() ? 1 : 0.5 }}
-                onClick={() => markets.trim() && setStep(3)}
-                disabled={!markets.trim()}
-              >
-                Continue
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ── Step 3: Buy Box Setup ── */}
-        {step === 3 && (
-          <div className="card fade-up" style={{ padding: 36 }}>
-            <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
-              Define Your Buy Box
-            </h2>
-            <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7, marginBottom: 28 }}>
-              Set your investment criteria so you're ready to act on Day 1.
-            </p>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-              {/* Property Type - multi-select */}
-              <div>
-                <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 8, fontWeight: 600 }}>
-                  Property Type(s)
-                </label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {PROPERTY_TYPES.map(pt => {
-                    const selected = propertyTypes.includes(pt);
-                    return (
-                      <button
-                        key={pt}
-                        onClick={() => togglePropertyType(pt)}
-                        style={{
-                          padding: '10px 18px', borderRadius: 8, fontSize: 13, cursor: 'pointer',
-                          background: selected ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.04)',
-                          color: selected ? '#e94560' : '#888',
-                          border: selected ? '1px solid rgba(233,69,96,0.3)' : '1px solid rgba(255,255,255,0.08)',
-                          fontFamily: "'DM Sans', sans-serif", fontWeight: selected ? 600 : 400,
-                          transition: 'all 0.2s',
-                        }}
-                      >
-                        {selected && '+ '}{pt}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Price Range */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                <div>
-                  <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 8, fontWeight: 600 }}>
-                    Min Price ($)
-                  </label>
-                  <input
-                    type="number"
-                    value={priceMin}
-                    onChange={e => setPriceMin(e.target.value)}
-                    placeholder="50,000"
-                    style={{ width: '100%', fontSize: 15, padding: '12px 14px' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 8, fontWeight: 600 }}>
-                    Max Price ($)
-                  </label>
-                  <input
-                    type="number"
-                    value={priceMax}
-                    onChange={e => setPriceMax(e.target.value)}
-                    placeholder="300,000"
-                    style={{ width: '100%', fontSize: 15, padding: '12px 14px' }}
-                  />
-                </div>
-              </div>
-
-              {/* Strategy */}
-              <div>
-                <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 8, fontWeight: 600 }}>
-                  Strategy
-                </label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {STRATEGIES.map(s => (
-                    <button
-                      key={s}
-                      onClick={() => setStrategy(s)}
-                      style={{
-                        padding: '10px 18px', borderRadius: 8, fontSize: 13, cursor: 'pointer',
-                        background: strategy === s ? 'rgba(83,52,131,0.15)' : 'rgba(255,255,255,0.04)',
-                        color: strategy === s ? '#c9a0ff' : '#888',
-                        border: strategy === s ? '1px solid rgba(83,52,131,0.3)' : '1px solid rgba(255,255,255,0.08)',
-                        fontFamily: "'DM Sans', sans-serif", fontWeight: strategy === s ? 600 : 400,
-                        transition: 'all 0.2s',
-                      }}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Target Returns */}
-              <div>
-                <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 8, fontWeight: 600 }}>
-                  Target Returns / Cash Flow Goals <span style={{ color: '#555', fontWeight: 400 }}>(optional)</span>
-                </label>
-                <input
-                  value={targetReturns}
-                  onChange={e => setTargetReturns(e.target.value)}
-                  placeholder="e.g. $500/mo cash flow, 20% ROI, $30k profit per flip"
-                  style={{ width: '100%', fontSize: 14, padding: '12px 14px' }}
-                />
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: 12, marginTop: 32 }}>
-              <button className="btn-secondary" onClick={() => setStep(2)} style={{ padding: '14px 24px' }}>
-                Back
-              </button>
-              <button
-                className="btn-primary"
-                style={{ flex: 1, padding: '14px 24px' }}
-                onClick={() => setStep(4)}
-              >
-                Continue
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ── Step 4: Offer Commitment ── */}
-        {step === 4 && (
           <div className="card fade-up" style={{ padding: 36 }}>
             <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
               Set Your Offer Target
@@ -318,13 +128,13 @@ export default function ActivationPhase({ user, onComplete, skoolLink }) {
             )}
 
             <div style={{ display: 'flex', gap: 12, marginTop: 32 }}>
-              <button className="btn-secondary" onClick={() => setStep(3)} style={{ padding: '14px 24px' }}>
+              <button className="btn-secondary" onClick={() => setStep(1)} style={{ padding: '14px 24px' }}>
                 Back
               </button>
               <button
                 className="btn-primary"
                 style={{ flex: 1, padding: '14px 24px', opacity: offerCommitment && parseInt(offerCommitment) > 0 ? 1 : 0.5 }}
-                onClick={() => offerCommitment && parseInt(offerCommitment) > 0 && setStep(5)}
+                onClick={() => offerCommitment && parseInt(offerCommitment) > 0 && setStep(3)}
                 disabled={!offerCommitment || parseInt(offerCommitment) <= 0}
               >
                 Continue
@@ -333,8 +143,8 @@ export default function ActivationPhase({ user, onComplete, skoolLink }) {
           </div>
         )}
 
-        {/* ── Step 5: Stakes Declaration ── */}
-        {step === 5 && (
+        {/* ── Step 3: Stakes Declaration ── */}
+        {step === 3 && (
           <div className="card fade-up" style={{ padding: 36 }}>
             <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
               Declare Your Stakes
@@ -361,13 +171,13 @@ export default function ActivationPhase({ user, onComplete, skoolLink }) {
             />
 
             <div style={{ display: 'flex', gap: 12, marginTop: 32 }}>
-              <button className="btn-secondary" onClick={() => setStep(4)} style={{ padding: '14px 24px' }}>
+              <button className="btn-secondary" onClick={() => setStep(2)} style={{ padding: '14px 24px' }}>
                 Back
               </button>
               <button
                 className="btn-primary"
                 style={{ flex: 1, padding: '14px 24px', opacity: stakesDeclaration.trim() ? 1 : 0.5 }}
-                onClick={() => stakesDeclaration.trim() && setStep(6)}
+                onClick={() => stakesDeclaration.trim() && setStep(4)}
                 disabled={!stakesDeclaration.trim()}
               >
                 Continue
@@ -376,30 +186,30 @@ export default function ActivationPhase({ user, onComplete, skoolLink }) {
           </div>
         )}
 
-        {/* ── Step 6: Commitment Confirmation ── */}
-        {step === 6 && (
+        {/* ── Step 4: Commitment Confirmation ── */}
+        {step === 4 && (
           <div className="card fade-up" style={{ padding: 36 }}>
             <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
               Confirm Your Commitment
             </h2>
             <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7, marginBottom: 28 }}>
-              Review your setup and lock in your commitment.
+              Review your commitment and lock it in.
             </p>
 
             {/* Summary */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
-              <SummaryRow label="Markets" value={markets} />
-              {propertyTypes.length > 0 && (
-                <SummaryRow label="Property Types" value={propertyTypes.join(', ')} />
-              )}
-              {(priceMin || priceMax) && (
-                <SummaryRow
-                  label="Price Range"
-                  value={`$${parseInt(priceMin || 0).toLocaleString()} – $${parseInt(priceMax || 0).toLocaleString()}`}
-                />
-              )}
-              {strategy && <SummaryRow label="Strategy" value={strategy} />}
               <SummaryRow label="Offer Commitment" value={`${offerCommitment} offers in 30 days`} />
+              {stakesDeclaration.trim() && (
+                <div style={{
+                  padding: '10px 14px', borderRadius: 8,
+                  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                }}>
+                  <span style={{ fontSize: 13, color: '#666', fontWeight: 600, display: 'block', marginBottom: 6 }}>Your Stakes</span>
+                  <span style={{ fontSize: 13, color: '#aaa', lineHeight: 1.6 }}>
+                    {stakesDeclaration.length > 150 ? stakesDeclaration.slice(0, 150) + '...' : stakesDeclaration}
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Commitment Statement */}
@@ -441,13 +251,13 @@ export default function ActivationPhase({ user, onComplete, skoolLink }) {
             </label>
 
             <div style={{ display: 'flex', gap: 12 }}>
-              <button className="btn-secondary" onClick={() => setStep(5)} style={{ padding: '14px 24px' }}>
+              <button className="btn-secondary" onClick={() => setStep(3)} style={{ padding: '14px 24px' }}>
                 Back
               </button>
               <button
                 className="btn-primary"
                 style={{ flex: 1, padding: '14px 24px', opacity: committed ? 1 : 0.5 }}
-                onClick={() => committed && setStep(7)}
+                onClick={() => committed && setStep(5)}
                 disabled={!committed}
               >
                 Lock It In
@@ -456,8 +266,8 @@ export default function ActivationPhase({ user, onComplete, skoolLink }) {
           </div>
         )}
 
-        {/* ── Step 7: Community Access (Optional Bonus) ── */}
-        {step === 7 && (
+        {/* ── Step 5: Community Access (Optional Bonus) ── */}
+        {step === 5 && (
           <div className="card fade-up" style={{ padding: 40, textAlign: 'center' }}>
             <div style={{
               width: 80, height: 80, borderRadius: '50%', margin: '0 auto 20px',

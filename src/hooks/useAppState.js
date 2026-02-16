@@ -754,9 +754,10 @@ export function useAppState() {
   }, [supportTickets]);
 
   // ── Getting Started ──────────────────────────────────
-  const completeGettingStarted = useCallback(async (socialHandles, proof) => {
+  const completeGettingStarted = useCallback(async (socialHandles, proof, buyBox) => {
     if (!user) return { error: 'Not logged in.' };
     const updates = { gettingStartedCompleted: true, socialHandles: socialHandles || {} };
+    if (buyBox) updates.buyBox = buyBox;
     // Store proof as a Getting Started submission if provided
     if (proof && (proof.text || proof.fileName)) {
       const gsSubmission = {
@@ -1216,7 +1217,6 @@ export function useAppState() {
   const completeActivation = useCallback(async (activationData) => {
     if (!user) return { error: 'Not logged in.' };
     const updates = {
-      buyBox: activationData.buyBox || null,
       offerCommitment: activationData.offerCommitment || null,
       stakesDeclaration: activationData.stakesDeclaration || null,
       commitmentDeclaredAt: activationData.commitmentDeclaredAt || new Date().toISOString(),
