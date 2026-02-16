@@ -731,7 +731,7 @@ export function createNewUser(firstName, lastName, email, authId) {
     lastName,
     email: email.toLowerCase(),
     password: null,
-    isAdmin: email.toLowerCase() === 'admin@uc30.com' || email.toLowerCase() === 'dev@uc30.com' || email.toLowerCase() === 'justin.sobojinski@gmail.com',
+    isAdmin: email.toLowerCase() === 'admin@uc30.com' || email.toLowerCase() === 'dev@uc30.com',
     isDeveloper: email.toLowerCase() === 'dev@uc30.com' || email.toLowerCase() === 'justin.sobojinski@gmail.com',
     currentDay: 1,
     isActive: true,
