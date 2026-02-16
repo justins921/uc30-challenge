@@ -255,7 +255,7 @@ export default function ShareableStreakCard({ user, calendarDay }) {
         }}>
           <StatBox value={user.metrics.propertiesAnalyzed} label="Analyzed" color="#533483" />
           <StatBox value={user.metrics.offersSubmitted} label="Offers" color={accentColor} />
-          <StatBox value={user.metrics.agentsContacted} label="Agents" color="#0f3460" />
+          <StatBox value={user.ucPoints || 0} label="UC Points" color="#f0a500" />
         </div>
 
         {/* Footer branding */}

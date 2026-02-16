@@ -22,7 +22,7 @@ const DEFAULTS = {
   features: [
     { icon: '🎬', title: '30 Video Lessons', text: 'Daily instructional videos walking you through every step of finding and closing your first deal.' },
     { icon: '📋', title: 'Daily Action Tasks', text: 'No theory paralysis. Every day has one clear task you must complete to stay in the challenge.' },
-    { icon: '📊', title: 'Progress Dashboard', text: 'Track your properties analyzed, offers submitted, and agents contacted in real-time.' },
+    { icon: '📊', title: 'Operator Dashboard', text: 'Track 6 key indicators, earn UC Points, and compete on the global leaderboard.' },
     { icon: '⏰', title: 'Accountability System', text: 'Daily deadlines with automatic removal. Skin in the game keeps you moving.' },
     { icon: '📥', title: 'Templates & Resources', text: 'Scripts, spreadsheets, and templates you can use immediately in your deal-finding process.' },
     { icon: '🔄', title: '1-Year Re-run Access', text: 'Life happens. If you fall off, you can rejoin a future cohort within your one-year access window.' },

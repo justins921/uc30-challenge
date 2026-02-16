@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Header from './Header';
-import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent } from '../data/challengeDays';
+import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DEFAULT_DAILY_MINIMUMS } from '../data/challengeDays';
+import { INDICATOR_KEYS, INDICATOR_LABELS, INDICATOR_SHORT_LABELS, INDICATOR_COLORS, UC_POINT_VALUES, calculateUCPoints } from '../data/ucPoints';
 import { AttachmentLink } from './DayView';
 import { LANDING_DEFAULTS } from './LandingPage';
 import Footer from './Footer';
@@ -64,7 +65,7 @@ const ADMIN_TABS = [
   { id: 'qa', label: 'QA Checklist' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -73,9 +74,16 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
   const active = nonAdmin.filter(p => p.isActive);
   const removed = nonAdmin.filter(p => !p.isActive);
 
-  const totalAnalyzed = nonAdmin.reduce((s, p) => s + (p.metrics?.propertiesAnalyzed || 0), 0);
-  const totalOffers = nonAdmin.reduce((s, p) => s + (p.metrics?.offersSubmitted || 0), 0);
-  const totalAgents = nonAdmin.reduce((s, p) => s + (p.metrics?.agentsContacted || 0), 0);
+  // Aggregate indicator totals
+  const indicatorTotals = {};
+  INDICATOR_KEYS.forEach(key => {
+    indicatorTotals[key] = nonAdmin.reduce((s, p) => s + (p.metrics?.[key] || 0), 0);
+  });
+  const totalUCPoints = nonAdmin.reduce((s, p) => s + (p.ucPoints || calculateUCPoints(p.metrics || {})), 0);
+  const avgUCPoints = active.length > 0 ? Math.round(totalUCPoints / active.length) : 0;
+
+  const totalAnalyzed = indicatorTotals.propertiesAnalyzed;
+  const totalOffers = indicatorTotals.offersSubmitted;
 
   const dayDistribution = {};
   active.forEach(p => {
@@ -144,9 +152,11 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
           <AdminStat label="Total Enrolled" value={nonAdmin.length} color="#888" />
           <AdminStat label="Active Now" value={active.length} color="#48c78e" />
           <AdminStat label="Removed" value={removed.length} color="#e94560" />
-          <AdminStat label="Properties Analyzed" value={totalAnalyzed} color="#533483" />
-          <AdminStat label="Offers Submitted" value={totalOffers} color="#e94560" />
-          <AdminStat label="Agents Contacted" value={totalAgents} color="#0f3460" />
+          <AdminStat label="Total UC Points" value={totalUCPoints.toLocaleString()} color="#f0a500" />
+          <AdminStat label="Avg UC Points" value={avgUCPoints.toLocaleString()} color="#f0a500" />
+          {INDICATOR_KEYS.map(key => (
+            <AdminStat key={key} label={INDICATOR_SHORT_LABELS[key]} value={indicatorTotals[key]} color={INDICATOR_COLORS[key]} />
+          ))}
         </div>
 
         {/* Tab Content */}
@@ -157,6 +167,8 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             dayDistribution={dayDistribution}
             retentionRate={retentionRate}
             communityPosts={communityPosts || []}
+            totalUCPoints={totalUCPoints}
+            avgUCPoints={avgUCPoints}
           />
         )}
         {tab === 'participants' && !selectedParticipant && (
@@ -213,6 +225,8 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onSetLandingContent={onSetLandingContent}
             landingVersion={landingVersion}
             onSetLandingVersion={onSetLandingVersion}
+            dailyMinimumsOverrides={dailyMinimumsOverrides || {}}
+            onSetDailyMinimums={onSetDailyMinimums}
           />
         )}
         {tab === 'support' && (
@@ -224,7 +238,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             nonAdmin={nonAdmin}
             totalOffers={totalOffers}
             totalAnalyzed={totalAnalyzed}
-            totalAgents={totalAgents}
+            indicatorTotals={indicatorTotals}
             retentionRate={retentionRate}
             dayDistribution={dayDistribution}
           />
@@ -904,7 +918,7 @@ function AdminCommunityTab({ posts, participants, onDeletePost, onDeleteComment,
   );
 }
 
-function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communityPosts }) {
+function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communityPosts, totalUCPoints, avgUCPoints }) {
   const maxCount = Math.max(...Object.values(dayDistribution), 1);
 
   // Community stats
@@ -916,9 +930,63 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communi
     s + (p.comments || []).filter(c => !c.isDeleted && c.createdAt?.startsWith(todayStr)).length, 0
   );
 
+  // Leaderboard: Top 5 by UC Points
+  const topOperators = [...nonAdmin]
+    .filter(p => p.isActive)
+    .map(p => ({ ...p, ucPts: p.ucPoints || calculateUCPoints(p.metrics || {}) }))
+    .sort((a, b) => b.ucPts - a.ucPts)
+    .slice(0, 5);
+
   return (
     <div className="fade-up">
-      {/* Today's Activity Summary */}
+      {/* UC Points Overview */}
+      <div className="card" style={{ marginBottom: 24 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>UC Points Overview</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
+          <div style={{ textAlign: 'center', padding: 16, borderRadius: 10, background: 'rgba(240,165,0,0.06)', border: '1px solid rgba(240,165,0,0.15)' }}>
+            <div className="mono" style={{ fontSize: 32, fontWeight: 700, color: '#f0a500' }}>{totalUCPoints.toLocaleString()}</div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>Total UC Points</div>
+          </div>
+          <div style={{ textAlign: 'center', padding: 16, borderRadius: 10, background: 'rgba(240,165,0,0.04)' }}>
+            <div className="mono" style={{ fontSize: 32, fontWeight: 700, color: '#f0a500' }}>{avgUCPoints.toLocaleString()}</div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>Avg per Operator</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Top 5 Leaderboard */}
+      {topOperators.length > 0 && (
+        <div className="card" style={{ marginBottom: 24 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Top Operators by UC Points</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {topOperators.map((p, i) => (
+              <div key={p.id} style={{
+                display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 10,
+                background: i === 0 ? 'rgba(240,165,0,0.06)' : 'rgba(255,255,255,0.02)',
+                border: `1px solid ${i === 0 ? 'rgba(240,165,0,0.2)' : 'rgba(255,255,255,0.06)'}`,
+              }}>
+                <div className="mono" style={{
+                  width: 28, height: 28, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: i < 3 ? 16 : 12, fontWeight: 700,
+                  color: i === 0 ? '#f0a500' : i === 1 ? '#c0c0c0' : i === 2 ? '#cd7f32' : '#666',
+                  background: i < 3 ? `${i === 0 ? '#f0a500' : i === 1 ? '#c0c0c0' : '#cd7f32'}15` : 'rgba(255,255,255,0.04)',
+                }}>
+                  {i < 3 ? ['🥇', '🥈', '🥉'][i] : `#${i + 1}`}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600 }}>{p.firstName} {p.lastName}</div>
+                  <div style={{ fontSize: 11, color: '#666' }}>{p.email}</div>
+                </div>
+                <div className="mono" style={{ fontSize: 16, fontWeight: 700, color: '#f0a500' }}>
+                  {p.ucPts.toLocaleString()}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Community Engagement */}
       <div className="card" style={{ marginBottom: 24 }}>
         <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Community Engagement</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 12 }}>
@@ -942,7 +1010,7 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communi
       </div>
 
       <div className="card" style={{ marginBottom: 24 }}>
-        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Active Participants by Day</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Active Operators by Day</h3>
         <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 160, overflowX: 'auto' }}>
           {Array.from({ length: 30 }, (_, i) => {
             const count = dayDistribution[i + 1] || 0;
@@ -976,7 +1044,7 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communi
             {retentionRate}%
           </div>
           <div style={{ color: '#888', fontSize: 14, lineHeight: 1.6 }}>
-            {active.length} of {nonAdmin.length} participants still active
+            {active.length} of {nonAdmin.length} Operators still active
           </div>
         </div>
       </div>
@@ -1053,9 +1121,9 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
               {/* Stats row */}
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
                 <MiniStat label="Day" value={p.currentDay > 30 ? '✓' : p.currentDay} color="#e94560" />
-                <MiniStat label="Analyzed" value={p.metrics?.propertiesAnalyzed || 0} color="#533483" />
+                <MiniStat label="UC Pts" value={p.ucPoints || calculateUCPoints(p.metrics || {})} color="#f0a500" />
                 <MiniStat label="Offers" value={p.metrics?.offersSubmitted || 0} color="#e94560" />
-                <MiniStat label="Submissions" value={p.submissions?.length || 0} color="#888" />
+                <MiniStat label="Subs" value={p.submissions?.length || 0} color="#888" />
                 <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, flexWrap: 'wrap' }} onClick={e => e.stopPropagation()}>
                   <button
                     style={{
@@ -1313,23 +1381,19 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
           <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>Current Day</div>
         </div>
         <div className="card" style={{ textAlign: 'center', padding: 16 }}>
-          <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#533483' }}>
-            {p.metrics?.propertiesAnalyzed || 0}
+          <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#f0a500' }}>
+            {p.ucPoints || calculateUCPoints(p.metrics || {})}
           </div>
-          <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>Properties Analyzed</div>
+          <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>UC Points</div>
         </div>
-        <div className="card" style={{ textAlign: 'center', padding: 16 }}>
-          <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#e94560' }}>
-            {p.metrics?.offersSubmitted || 0}
+        {INDICATOR_KEYS.map(key => (
+          <div key={key} className="card" style={{ textAlign: 'center', padding: 16 }}>
+            <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: INDICATOR_COLORS[key] }}>
+              {p.metrics?.[key] || 0}
+            </div>
+            <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>{INDICATOR_SHORT_LABELS[key]}</div>
           </div>
-          <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>Offers Submitted</div>
-        </div>
-        <div className="card" style={{ textAlign: 'center', padding: 16 }}>
-          <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#0f3460' }}>
-            {p.metrics?.agentsContacted || 0}
-          </div>
-          <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>Agents Contacted</div>
-        </div>
+        ))}
       </div>
 
       {/* Activity Map */}
@@ -1572,10 +1636,107 @@ function SubmissionsTab({ nonAdmin, onVerifySubmissionSocial }) {
 }
 
 // ── Content Management Tab ──────────────────────────────────
-function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion }) {
+// ── Daily Minimums Editor ──────────────────────────────────
+const DAILY_MIN_KEYS = ['propertiesAnalyzed', 'offersSubmitted', 'dealSourcesActivated', 'counteroffers', 'followUps'];
+
+function DailyMinimumsEditor({ overrides, onSave, onBack }) {
+  const [values, setValues] = useState(() => {
+    const v = {};
+    for (let d = 1; d <= 30; d++) {
+      const defaults = DEFAULT_DAILY_MINIMUMS[d] || {};
+      const over = overrides[d] || {};
+      v[d] = {};
+      DAILY_MIN_KEYS.forEach(k => {
+        v[d][k] = over[k] !== undefined ? over[k] : (defaults[k] || 0);
+      });
+    }
+    return v;
+  });
+
+  const handleChange = (day, key, val) => {
+    const num = Math.max(0, parseInt(val) || 0);
+    setValues(prev => ({
+      ...prev,
+      [day]: { ...prev[day], [key]: num },
+    }));
+  };
+
+  const handleSave = () => {
+    // Only store overrides that differ from defaults
+    const result = {};
+    for (let d = 1; d <= 30; d++) {
+      const defaults = DEFAULT_DAILY_MINIMUMS[d] || {};
+      const hasChange = DAILY_MIN_KEYS.some(k => (values[d][k] || 0) !== (defaults[k] || 0));
+      if (hasChange) {
+        result[d] = values[d];
+      }
+    }
+    onSave(result);
+  };
+
+  return (
+    <div className="scale-in">
+      <button className="btn-secondary" onClick={onBack} style={{ marginBottom: 24, padding: '8px 20px', fontSize: 13 }}>
+        ← Back to Content
+      </button>
+      <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Daily Standards Editor</h2>
+      <p style={{ color: '#888', fontSize: 13, marginBottom: 24 }}>
+        Set the minimum required count for each indicator on each day of the sprint.
+        Counteroffers minimum is typically 0 (cannot force receiving counteroffers).
+      </p>
+
+      <div style={{ overflowX: 'auto', marginBottom: 24 }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+          <thead>
+            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+              <th style={{ padding: '8px 6px', textAlign: 'left', color: '#888', fontWeight: 600 }}>Day</th>
+              {DAILY_MIN_KEYS.map(k => (
+                <th key={k} style={{ padding: '8px 6px', textAlign: 'center', color: INDICATOR_COLORS[k], fontWeight: 600 }}>
+                  {INDICATOR_SHORT_LABELS[k]}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: 30 }, (_, i) => {
+              const d = i + 1;
+              return (
+                <tr key={d} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  <td className="mono" style={{ padding: '6px', fontWeight: 600, color: '#ccc' }}>{d}</td>
+                  {DAILY_MIN_KEYS.map(k => (
+                    <td key={k} style={{ padding: '4px 3px', textAlign: 'center' }}>
+                      <input
+                        type="number"
+                        min="0"
+                        value={values[d]?.[k] ?? 0}
+                        onChange={e => handleChange(d, k, e.target.value)}
+                        style={{
+                          width: 48, textAlign: 'center', fontSize: 12, padding: '4px',
+                          background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                          borderRadius: 4, color: '#fff',
+                        }}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <button className="btn-primary" onClick={handleSave} style={{ padding: '12px 32px' }}>
+        Save Daily Standards
+      </button>
+    </div>
+  );
+}
+
+function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, dailyMinimumsOverrides, onSetDailyMinimums }) {
   const [editingDay, setEditingDay] = useState(null);
   const [editingPhases, setEditingPhases] = useState(false);
   const [editingLanding, setEditingLanding] = useState(false);
+  const [editingMinimums, setEditingMinimums] = useState(false);
 
   if (editingLanding) {
     return (
@@ -1616,11 +1777,45 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
     );
   }
 
+  if (editingMinimums) {
+    return (
+      <DailyMinimumsEditor
+        overrides={dailyMinimumsOverrides || {}}
+        onSave={(updated) => {
+          onSetDailyMinimums(updated);
+          setEditingMinimums(false);
+        }}
+        onBack={() => setEditingMinimums(false)}
+      />
+    );
+  }
+
   return (
     <div className="fade-up">
+      {/* Daily Minimums Editor Card */}
+      <div className="card" style={{
+        marginBottom: 20, padding: '16px 20px', display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
+        background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.15)',
+      }}>
+        <div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: '#f0a500' }}>Daily Standards (Minimums)</div>
+          <p style={{ color: '#888', fontSize: 12, margin: '4px 0 0' }}>
+            Configure the minimum indicator requirements for each day of the sprint.
+          </p>
+        </div>
+        <button
+          className="btn-secondary"
+          style={{ padding: '8px 18px', fontSize: 12, color: '#f0a500', borderColor: 'rgba(240,165,0,0.3)' }}
+          onClick={() => setEditingMinimums(true)}
+        >
+          Edit Daily Minimums
+        </button>
+      </div>
+
       <div className="card" style={{ marginBottom: 20, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <p style={{ color: '#888', fontSize: 13, margin: 0 }}>
-          Edit the text, videos, and resources for each day. Changes are saved to the database and visible to all users.
+          Edit the text, videos, and resources for each day. Changes are saved to the database and visible to all Operators.
         </p>
         <button
           className="btn-secondary"
@@ -2476,7 +2671,7 @@ function LandingPageEditor({ landingContent, onSave }) {
   );
 }
 
-function SocialProofTab({ active, nonAdmin, totalOffers, totalAnalyzed, totalAgents, retentionRate, dayDistribution }) {
+function SocialProofTab({ active, nonAdmin, totalOffers, totalAnalyzed, indicatorTotals, retentionRate, dayDistribution }) {
   return (
     <div className="fade-up">
       <div className="card" style={{
@@ -2488,31 +2683,31 @@ function SocialProofTab({ active, nonAdmin, totalOffers, totalAnalyzed, totalAge
           Copy-ready stats for social media and marketing.
         </p>
         <div className="social-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
-          <SocialCard icon="🔥" stat={`${active.length} participants`} text="are currently active in the 30-Day First Deal Challenge" />
-          <SocialCard icon="📝" stat={`${totalOffers} offers`} text="have been submitted by our challenge participants" />
-          <SocialCard icon="📊" stat={`${totalAnalyzed} properties`} text="have been analyzed through the challenge so far" />
-          <SocialCard icon="💪" stat={`${retentionRate}% retention`} text="of enrolled participants are still crushing it daily" />
+          <SocialCard icon="🔥" stat={`${active.length} Operators`} text="are currently active in the UC30 Sprint" />
+          <SocialCard icon="📝" stat={`${totalOffers} offers`} text="have been submitted by Operators" />
+          <SocialCard icon="📊" stat={`${totalAnalyzed} properties`} text="have been analyzed through the sprint" />
+          <SocialCard icon="💪" stat={`${retentionRate}% retention`} text="of enrolled Operators are still executing daily" />
         </div>
       </div>
 
       <div className="card">
-        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Today's Activity Summary</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Activity Summary</h3>
         <div className="mono" style={{
           fontSize: 13, color: '#bbb', lineHeight: 2,
           background: 'rgba(0,0,0,0.3)', padding: 20, borderRadius: 10,
           overflowX: 'auto',
         }}>
-          <div>📅 Active Participants: <span style={{ color: '#48c78e' }}>{active.length}</span></div>
-          <div>📊 Total Properties Analyzed: <span style={{ color: '#533483' }}>{totalAnalyzed}</span></div>
-          <div>📝 Total Offers Submitted: <span style={{ color: '#e94560' }}>{totalOffers}</span></div>
-          <div>🤝 Total Agents Contacted: <span style={{ color: '#0f3460' }}>{totalAgents}</span></div>
+          <div>📅 Active Operators: <span style={{ color: '#48c78e' }}>{active.length}</span></div>
+          {INDICATOR_KEYS.map(key => (
+            <div key={key}>📊 {INDICATOR_LABELS[key]}: <span style={{ color: INDICATOR_COLORS[key] }}>{indicatorTotals[key]}</span></div>
+          ))}
           <div>📈 Retention Rate: <span style={{ color: '#48c78e' }}>{retentionRate}%</span></div>
           <div style={{ marginTop: 8, borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 8 }}>
             {Object.entries(dayDistribution)
               .sort((a, b) => Number(a[0]) - Number(b[0]))
               .map(([day, count]) => (
                 <div key={day}>
-                  {'  '}Day {day}: <span style={{ color: '#e94560' }}>{count}</span> participant{count !== 1 ? 's' : ''}
+                  {'  '}Day {day}: <span style={{ color: '#e94560' }}>{count}</span> Operator{count !== 1 ? 's' : ''}
                 </div>
               ))}
           </div>
