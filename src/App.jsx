@@ -5,6 +5,7 @@ import LandingPageV2 from './components/LandingPageV2';
 import LoginScreen from './components/LoginScreen';
 import Dashboard from './components/Dashboard';
 import AdminDashboard from './components/AdminDashboard';
+import OnboardingFlow from './components/OnboardingFlow';
 
 export default function App() {
   const {
@@ -59,6 +60,9 @@ export default function App() {
     warnCommunityUser,
     banCommunityUser,
     dismissCommunityWarning,
+    completeOnboarding,
+    dailyMinimumsOverrides,
+    setDailyMinimums,
     navigate,
   } = useAppState();
 
@@ -214,6 +218,8 @@ export default function App() {
               onDeleteCommunityComment={() => {}}
               onPinCommunityPost={() => {}}
               onDismissCommunityWarning={() => {}}
+              participants={participants}
+              dailyMinimumsOverrides={dailyMinimumsOverrides}
             />
           </div>
         );
@@ -257,8 +263,15 @@ export default function App() {
         onCreateCommunityPost={createCommunityPost}
         onCommentOnPost={commentOnPost}
         onViewAsUser={setViewAsUser}
+        dailyMinimumsOverrides={dailyMinimumsOverrides}
+        onSetDailyMinimums={setDailyMinimums}
       />
     );
+  }
+
+  // Show onboarding for new non-admin users
+  if (!user.isAdmin && !user.onboardingCompleted) {
+    return <OnboardingFlow user={user} onComplete={completeOnboarding} />;
   }
 
   return (
@@ -286,6 +299,8 @@ export default function App() {
       onDeleteCommunityComment={deleteCommunityComment}
       onPinCommunityPost={pinCommunityPost}
       onDismissCommunityWarning={dismissCommunityWarning}
+      participants={participants}
+      dailyMinimumsOverrides={dailyMinimumsOverrides}
     />
   );
 }

@@ -1,4 +1,5 @@
 import { CHALLENGE_DAYS } from '../data/challengeDays';
+import { INDICATOR_KEYS, INDICATOR_LABELS, INDICATOR_SHORT_LABELS, INDICATOR_COLORS, UC_POINT_VALUES, calculateUCPoints } from '../data/ucPoints';
 import ShareableStreakCard from './ShareableStreakCard';
 
 export default function StatsView({ user }) {
@@ -6,9 +7,25 @@ export default function StatsView({ user }) {
     ? Math.round((user.completedDays.length / Math.max(user.currentDay - 1, 1)) * 100)
     : 0;
 
+  const ucPoints = user.ucPoints || calculateUCPoints(user.metrics);
+
   return (
     <div className="fade-up">
-      <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 24 }}>My Challenge Stats</h2>
+      <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 24 }}>Operator Stats</h2>
+
+      {/* UC Points Hero */}
+      <div className="card" style={{
+        textAlign: 'center', padding: 32, marginBottom: 24,
+        background: 'linear-gradient(135deg, rgba(240,165,0,0.08), rgba(240,165,0,0.02))',
+        border: '1px solid rgba(240,165,0,0.2)',
+      }}>
+        <div style={{ fontSize: 12, color: '#f0a500', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>
+          Total UC Points
+        </div>
+        <div className="mono" style={{ fontSize: 56, fontWeight: 700, color: '#f0a500' }}>
+          {ucPoints.toLocaleString()}
+        </div>
+      </div>
 
       {/* Shareable streak card with share button */}
       <ShareableStreakCard user={user} />
@@ -17,8 +34,30 @@ export default function StatsView({ user }) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 32 }}>
         <BigStat value={user.completedDays.length} label="Days Completed" color="#e94560" />
         <BigStat value={`${completionRate}%`} label="Completion Rate" color="#48c78e" />
-        <BigStat value={user.metrics.propertiesAnalyzed} label="Properties Analyzed" color="#533483" />
-        <BigStat value={user.metrics.offersSubmitted} label="Offers Submitted" color="#0f3460" />
+      </div>
+
+      {/* 6 Indicators Grid */}
+      <div className="card" style={{ marginBottom: 24 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>UC30 Indicators</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+          {INDICATOR_KEYS.map(key => (
+            <div key={key} style={{
+              padding: 16, borderRadius: 10,
+              background: `${INDICATOR_COLORS[key]}08`,
+              border: `1px solid ${INDICATOR_COLORS[key]}20`,
+            }}>
+              <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: INDICATOR_COLORS[key] }}>
+                {user.metrics[key] || 0}
+              </div>
+              <div style={{ fontSize: 12, color: '#888', marginTop: 4 }}>
+                {INDICATOR_LABELS[key]}
+              </div>
+              <div style={{ fontSize: 11, color: '#555', marginTop: 2 }}>
+                {(user.metrics[key] || 0) * UC_POINT_VALUES[key]} pts
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* 30-Day Activity Heatmap */}
@@ -51,10 +90,16 @@ export default function StatsView({ user }) {
       {/* Bar Chart */}
       <div className="card">
         <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Cumulative Progress</h3>
-        <div style={{ display: 'flex', gap: 24 }}>
-          <MiniBar label="Analyzed" value={user.metrics.propertiesAnalyzed} max={Math.max(50, user.metrics.propertiesAnalyzed)} color="#533483" />
-          <MiniBar label="Offers" value={user.metrics.offersSubmitted} max={Math.max(40, user.metrics.offersSubmitted)} color="#e94560" />
-          <MiniBar label="Agents" value={user.metrics.agentsContacted} max={Math.max(20, user.metrics.agentsContacted)} color="#0f3460" />
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          {INDICATOR_KEYS.map(key => (
+            <MiniBar
+              key={key}
+              label={INDICATOR_SHORT_LABELS[key]}
+              value={user.metrics[key] || 0}
+              max={Math.max(50, user.metrics[key] || 0)}
+              color={INDICATOR_COLORS[key]}
+            />
+          ))}
         </div>
       </div>
     </div>
@@ -73,7 +118,7 @@ function BigStat({ value, label, color }) {
 function MiniBar({ label, value, max, color }) {
   const pct = max > 0 ? (value / max) * 100 : 0;
   return (
-    <div style={{ flex: 1, textAlign: 'center' }}>
+    <div style={{ flex: '1 0 60px', textAlign: 'center', minWidth: 60 }}>
       <div style={{
         height: 120, background: 'rgba(255,255,255,0.03)', borderRadius: 8,
         position: 'relative', overflow: 'hidden', marginBottom: 8,
@@ -86,12 +131,12 @@ function MiniBar({ label, value, max, color }) {
         <div className="mono" style={{
           position: 'absolute', inset: 0, display: 'flex',
           alignItems: 'center', justifyContent: 'center',
-          fontSize: 18, fontWeight: 700,
+          fontSize: 16, fontWeight: 700,
         }}>
           {value}
         </div>
       </div>
-      <div style={{ fontSize: 11, color: '#666' }}>{label}</div>
+      <div style={{ fontSize: 10, color: '#666' }}>{label}</div>
     </div>
   );
 }

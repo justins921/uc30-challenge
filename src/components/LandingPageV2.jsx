@@ -542,7 +542,7 @@ const DEFAULTS = {
   features: [
     { icon: '🎬', title: '30 Video Lessons', text: 'Daily instructional videos walking you through every step of finding and closing your first deal.' },
     { icon: '📋', title: 'Daily Action Tasks', text: 'No theory paralysis. Every day has one clear task you must complete to stay in the challenge.' },
-    { icon: '📊', title: 'Progress Dashboard', text: 'Track your properties analyzed, offers submitted, and agents contacted — all in real-time.' },
+    { icon: '📊', title: 'Operator Dashboard', text: 'Track 6 key indicators, earn UC Points, and compete on the global leaderboard.' },
     { icon: '⏰', title: 'Strict Accountability', text: 'Daily deadlines with automatic removal. No excuses, no extensions. That\'s what makes it work.' },
     { icon: '💬', title: 'Private Community', text: 'Connect with your cohort. Share wins, ask questions, and stay motivated with people on the same journey.' },
     { icon: '🔄', title: '1-Year Re-run Access', text: 'Life happens. If you fall off, rejoin a future cohort within your one-year access window. No extra cost.' },

@@ -1,5 +1,5 @@
-// ── 30-Day Challenge Content ────────────────────────────────────────
-// Each day has: title, taskDescription, category, proofType, and optional metrics
+// ── 30-Day Sprint Content ────────────────────────────────────────
+// Each day has: title, taskDescription, category, proofType
 // Chandler: Replace video URLs, transcripts, and downloadable resources per day
 
 export const CHALLENGE_DAYS = [
@@ -9,7 +9,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Define the exact property criteria you'll target: location, price range, property type, and minimum ROI. Submit a screenshot of your written buy box criteria.",
     category: "foundation",
     proofType: "screenshot",
-    metrics: null,
     videoUrl: null, // Chandler: Add video URL
     transcript: null, // Chandler: Add transcript
     downloads: [], // Chandler: Add downloadable resources
@@ -20,7 +19,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Set up at least 2 deal-finding platforms (Zillow, PropStream, BatchLeads, etc.). Submit screenshots showing your active accounts and search filters configured.",
     category: "foundation",
     proofType: "screenshot",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -31,7 +29,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Run numbers on 5 properties using the 70% rule or your preferred analysis method. Submit your completed analysis spreadsheet or screenshots.",
     category: "foundation",
     proofType: "spreadsheet",
-    metrics: { key: "propertiesAnalyzed", label: "Properties Analyzed", count: 5 },
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -42,18 +39,16 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Find and organize at least 20 potential cash buyers. Submit your buyer list with names and contact methods.",
     category: "foundation",
     proofType: "document",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
   },
   {
     day: 5,
-    title: "Contact 10 Agents",
-    taskDescription: "Reach out to 10 real estate agents in your target market. Submit screenshots of your outreach messages or call log.",
+    title: "Activate 10 Deal Sources",
+    taskDescription: "Reach out to 10 agents, PMs, wholesalers, or direct sellers in your target market. Submit screenshots of your outreach messages or call log.",
     category: "foundation",
     proofType: "screenshot",
-    metrics: { key: "agentsContacted", label: "Agents Contacted", count: 10 },
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -64,7 +59,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Write and submit a real offer on a property. Submit the offer document or screenshot of submission confirmation.",
     category: "action",
     proofType: "document",
-    metrics: { key: "offersSubmitted", label: "Offers Submitted", count: 1 },
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -75,7 +69,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Follow up on yesterday's offer and document the response. Submit screenshot of follow-up communication.",
     category: "action",
     proofType: "screenshot",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -86,7 +79,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Analyze 10 properties today with full financial breakdowns. Submit your analysis spreadsheet.",
     category: "action",
     proofType: "spreadsheet",
-    metrics: { key: "propertiesAnalyzed", label: "Properties Analyzed", count: 10 },
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -97,7 +89,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Submit 3 new offers on different properties. Submit offer confirmations or documents.",
     category: "action",
     proofType: "document",
-    metrics: { key: "offersSubmitted", label: "Offers Submitted", count: 3 },
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -108,7 +99,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Find and contact 5 contractors for estimates. Submit your contractor contact list with specialties.",
     category: "action",
     proofType: "document",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -119,7 +109,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Spend 1 hour driving target neighborhoods and identify 5 distressed properties. Submit photos and addresses.",
     category: "action",
     proofType: "photo",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -130,7 +119,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Submit 5 real offers today — volume is key. Submit all offer confirmations.",
     category: "action",
     proofType: "document",
-    metrics: { key: "offersSubmitted", label: "Offers Submitted", count: 5 },
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -141,18 +129,16 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Review your results so far and adjust your buy box if needed. Submit updated criteria and reasoning.",
     category: "action",
     proofType: "document",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
   },
   {
     day: 14,
-    title: "Contact Private Lenders",
-    taskDescription: "Contact at least 3 private lenders or hard money lenders. Submit communication screenshots.",
+    title: "Activate New Deal Sources",
+    taskDescription: "Contact at least 3 private lenders, wholesalers, or new deal sources. Submit communication screenshots.",
     category: "action",
     proofType: "screenshot",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -163,7 +149,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "If you have a counter-offer, negotiate it. If not, follow up on all pending. Submit documentation.",
     category: "action",
     proofType: "document",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -174,7 +159,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Analyze at least 1 commercial or multifamily property. Submit your analysis.",
     category: "momentum",
     proofType: "spreadsheet",
-    metrics: { key: "propertiesAnalyzed", label: "Properties Analyzed", count: 1 },
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -185,7 +169,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Submit your most aggressive offer yet on your best lead. Submit the offer.",
     category: "momentum",
     proofType: "document",
-    metrics: { key: "offersSubmitted", label: "Offers Submitted", count: 1 },
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -196,7 +179,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Follow up on EVERY pending offer and outreach. Submit a log of all follow-ups.",
     category: "momentum",
     proofType: "screenshot",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -207,7 +189,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Connect with 5 local investors via meetups, social media, or calls. Submit proof of outreach.",
     category: "momentum",
     proofType: "screenshot",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -218,7 +199,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Take your best rejected offers and resubmit with better terms. Submit updated offers.",
     category: "momentum",
     proofType: "document",
-    metrics: { key: "offersSubmitted", label: "Offers Submitted", count: 1 },
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -229,7 +209,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Prepare and send direct mail to at least 20 property owners. Submit proof of mailing.",
     category: "momentum",
     proofType: "photo",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -240,7 +219,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Analyze at least 3 multifamily properties. Submit your analysis.",
     category: "momentum",
     proofType: "spreadsheet",
-    metrics: { key: "propertiesAnalyzed", label: "Properties Analyzed", count: 3 },
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -251,7 +229,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Submit 10 offers today — this is your push day. Submit all confirmations.",
     category: "momentum",
     proofType: "document",
-    metrics: { key: "offersSubmitted", label: "Offers Submitted", count: 10 },
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -262,7 +239,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Door knock or drop letters at 20 properties. Submit your route log and photos.",
     category: "momentum",
     proofType: "photo",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -273,7 +249,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "If you have a deal progressing, negotiate inspection terms. Otherwise submit 5 offers. Submit documentation.",
     category: "momentum",
     proofType: "document",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -284,7 +259,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Confirm your title company or closing attorney is ready. Submit confirmation of relationship.",
     category: "closing",
     proofType: "document",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -295,7 +269,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Final push — submit 15 offers. This is where deals happen. Submit all confirmations.",
     category: "closing",
     proofType: "document",
-    metrics: { key: "offersSubmitted", label: "Offers Submitted", count: 15 },
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -306,7 +279,6 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Follow up on every single active offer with urgency. Submit complete follow-up log.",
     category: "closing",
     proofType: "screenshot",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -317,18 +289,16 @@ export const CHALLENGE_DAYS = [
     taskDescription: "Negotiate your best lead to a signed contract. Submit the signed contract or latest negotiation.",
     category: "closing",
     proofType: "document",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
   },
   {
     day: 30,
-    title: "Close & Celebrate 🎉",
+    title: "Close & Celebrate",
     taskDescription: "Celebrate getting your first deal under contract! Submit your contract or victory documentation.",
     category: "closing",
     proofType: "document",
-    metrics: null,
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -378,13 +348,13 @@ export const CATEGORY_COLORS = {
   action: { accent: "#0f3460", label: "Action Phase" },
   momentum: { accent: "#533483", label: "Momentum" },
   closing: { accent: "#e94560", label: "Closing" },
-  continuation: { accent: "#f0a500", label: "Continuing" },
+  continuation: { accent: "#f0a500", label: "Operator Mode" },
 };
 
 // ── Getting Started (pre-Day-1 section) ─────────────────────
 export const GETTING_STARTED_DEFAULT = {
   title: "Getting Started",
-  taskDescription: "Welcome to the UC30 Challenge! Before Day 1 begins, watch the intro video, review the resources below, and add your social media handles.\n\nYou'll be posting daily about your progress — this builds accountability and helps you find deals.",
+  taskDescription: "Welcome to the UC30 Sprint! Before Day 1 begins, watch the intro video, review the resources below, and add your social media handles.\n\nYou'll be posting daily about your progress — this builds accountability and helps you find deals.",
   category: "foundation",
   proofType: "screenshot",
   metrics: null,
@@ -402,21 +372,74 @@ export function getGettingStartedContent(overrides = {}) {
   };
 }
 
-// ── Post-Day-30 Continuation ────────────────────────────────
-// Generic repeating daily task for users who completed the 30-day challenge
-export const POST_30_TASK = {
-  title: "Daily Deal Hustle",
-  taskDescription: "Keep your momentum going! Complete these daily tasks to maintain your streak:\n\n• Analyze 3 new properties in your target market\n• Submit 2 offers on your best leads\n• Contact 1 new agent or follow up on existing leads\n• Review your pipeline and update your deal tracker\n\nSubmit a screenshot or document showing your activity for today.",
-  category: "continuation",
-  proofType: "screenshot",
-  multiMetrics: [
-    { key: "propertiesAnalyzed", label: "Properties Analyzed", count: 3 },
-    { key: "offersSubmitted", label: "Offers Submitted", count: 2 },
-    { key: "agentsContacted", label: "Agents Contacted", count: 1 },
-  ],
+// ── Default Daily Minimums (admin-configurable) ──────────────
+// These are the default minimum standards for each of the 5 daily indicators
+// across the 30-day sprint. Counteroffers & properties under contract have no daily minimum.
+export const DEFAULT_DAILY_MINIMUMS = {
+  // Week 1: Building habits
+  1:  { propertiesAnalyzed: 3, offersSubmitted: 0, dealSourcesActivated: 1, counteroffers: 0, followUps: 0 },
+  2:  { propertiesAnalyzed: 3, offersSubmitted: 0, dealSourcesActivated: 1, counteroffers: 0, followUps: 0 },
+  3:  { propertiesAnalyzed: 5, offersSubmitted: 0, dealSourcesActivated: 1, counteroffers: 0, followUps: 0 },
+  4:  { propertiesAnalyzed: 3, offersSubmitted: 0, dealSourcesActivated: 2, counteroffers: 0, followUps: 0 },
+  5:  { propertiesAnalyzed: 3, offersSubmitted: 0, dealSourcesActivated: 2, counteroffers: 0, followUps: 0 },
+  6:  { propertiesAnalyzed: 3, offersSubmitted: 1, dealSourcesActivated: 1, counteroffers: 0, followUps: 0 },
+  7:  { propertiesAnalyzed: 3, offersSubmitted: 0, dealSourcesActivated: 1, counteroffers: 0, followUps: 1 },
+  // Week 2: Increasing volume
+  8:  { propertiesAnalyzed: 5, offersSubmitted: 1, dealSourcesActivated: 1, counteroffers: 0, followUps: 1 },
+  9:  { propertiesAnalyzed: 5, offersSubmitted: 3, dealSourcesActivated: 1, counteroffers: 0, followUps: 1 },
+  10: { propertiesAnalyzed: 5, offersSubmitted: 1, dealSourcesActivated: 2, counteroffers: 0, followUps: 1 },
+  11: { propertiesAnalyzed: 5, offersSubmitted: 1, dealSourcesActivated: 1, counteroffers: 0, followUps: 2 },
+  12: { propertiesAnalyzed: 5, offersSubmitted: 5, dealSourcesActivated: 1, counteroffers: 0, followUps: 2 },
+  13: { propertiesAnalyzed: 5, offersSubmitted: 1, dealSourcesActivated: 1, counteroffers: 0, followUps: 2 },
+  14: { propertiesAnalyzed: 5, offersSubmitted: 1, dealSourcesActivated: 2, counteroffers: 0, followUps: 2 },
+  // Week 3: Momentum building
+  15: { propertiesAnalyzed: 7, offersSubmitted: 2, dealSourcesActivated: 2, counteroffers: 0, followUps: 3 },
+  16: { propertiesAnalyzed: 7, offersSubmitted: 2, dealSourcesActivated: 2, counteroffers: 0, followUps: 3 },
+  17: { propertiesAnalyzed: 7, offersSubmitted: 3, dealSourcesActivated: 2, counteroffers: 0, followUps: 3 },
+  18: { propertiesAnalyzed: 7, offersSubmitted: 2, dealSourcesActivated: 2, counteroffers: 0, followUps: 5 },
+  19: { propertiesAnalyzed: 7, offersSubmitted: 2, dealSourcesActivated: 3, counteroffers: 0, followUps: 3 },
+  20: { propertiesAnalyzed: 7, offersSubmitted: 3, dealSourcesActivated: 2, counteroffers: 0, followUps: 3 },
+  21: { propertiesAnalyzed: 7, offersSubmitted: 2, dealSourcesActivated: 3, counteroffers: 0, followUps: 3 },
+  // Week 4: Peak execution
+  22: { propertiesAnalyzed: 10, offersSubmitted: 3, dealSourcesActivated: 3, counteroffers: 0, followUps: 4 },
+  23: { propertiesAnalyzed: 10, offersSubmitted: 5, dealSourcesActivated: 3, counteroffers: 0, followUps: 4 },
+  24: { propertiesAnalyzed: 10, offersSubmitted: 3, dealSourcesActivated: 3, counteroffers: 0, followUps: 4 },
+  25: { propertiesAnalyzed: 10, offersSubmitted: 5, dealSourcesActivated: 3, counteroffers: 0, followUps: 5 },
+  26: { propertiesAnalyzed: 10, offersSubmitted: 3, dealSourcesActivated: 3, counteroffers: 0, followUps: 5 },
+  27: { propertiesAnalyzed: 10, offersSubmitted: 5, dealSourcesActivated: 3, counteroffers: 0, followUps: 5 },
+  28: { propertiesAnalyzed: 10, offersSubmitted: 5, dealSourcesActivated: 3, counteroffers: 0, followUps: 5 },
+  29: { propertiesAnalyzed: 10, offersSubmitted: 5, dealSourcesActivated: 3, counteroffers: 0, followUps: 5 },
+  30: { propertiesAnalyzed: 10, offersSubmitted: 5, dealSourcesActivated: 3, counteroffers: 0, followUps: 5 },
 };
 
-// Get day data for any day number (1-30 from challenge, 31+ from generic template)
+// Post-30 "Operator Mode" daily minimums: at least 1 in each category
+export const POST_30_MINIMUMS = {
+  propertiesAnalyzed: 1,
+  offersSubmitted: 1,
+  dealSourcesActivated: 1,
+  counteroffers: 0,
+  followUps: 1,
+};
+
+// Get the daily minimums for a specific day, merging admin overrides
+export function getDailyMinimums(dayNum, adminOverrides = {}) {
+  if (dayNum > 30) return POST_30_MINIMUMS;
+  const defaults = DEFAULT_DAILY_MINIMUMS[dayNum] || DEFAULT_DAILY_MINIMUMS[1];
+  const override = adminOverrides[dayNum];
+  if (override) return { ...defaults, ...override };
+  return defaults;
+}
+
+// ── Post-Day-30 Operator Mode ────────────────────────────────
+// Repeating daily task for operators who completed the 30-day sprint
+export const POST_30_TASK = {
+  title: "Operator Mode",
+  taskDescription: "You've completed the sprint. Now execute daily to build your empire:\n\n• Analyze properties in your target market\n• Submit offers on your best leads\n• Activate new deal sources\n• Follow up on all active deals\n\nLog your activity and keep your UC Points growing.",
+  category: "continuation",
+  proofType: "screenshot",
+};
+
+// Get day data for any day number (1-30 from sprint, 31+ from Operator Mode)
 export function getDayDataForNum(dayNum, overrides = {}) {
   if (dayNum <= 30) {
     return getDayContent(dayNum, overrides);

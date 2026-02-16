@@ -1,7 +1,13 @@
-import { useState } from 'react';
-import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum } from '../data/challengeDays';
+import { useState, useMemo } from 'react';
+import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum, getDailyMinimums } from '../data/challengeDays';
+import { INDICATOR_KEYS, INDICATOR_LABELS, INDICATOR_COLORS, UC_POINT_VALUES, DAILY_INDICATOR_KEYS, calculateDayPoints } from '../data/ucPoints';
 
-export default function DayView({ day, user, onSubmit, onBack, contentOverrides, customPhases }) {
+export default function DayView({ day, user, onSubmit, onBack, contentOverrides, customPhases, dailyMinimumsOverrides }) {
+  const [metricInputs, setMetricInputs] = useState(() => {
+    const init = {};
+    INDICATOR_KEYS.forEach(k => { init[k] = 0; });
+    return init;
+  });
   const [proofText, setProofText] = useState('');
   const [fileName, setFileName] = useState('');
   const [fileData, setFileData] = useState(null);
@@ -15,8 +21,18 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
   const existingSubmission = user.submissions.find(s => s.day === day);
   const dayColors = customPhases ? getCategoryColors(getPhases(customPhases)) : null;
   const cat = isPost30
-    ? { accent: '#f0a500', label: 'Continuing' }
+    ? { accent: '#f0a500', label: 'Operator Mode' }
     : (dayColors && dayColors[day]) || CATEGORY_COLORS[dayData.category] || { accent: '#888', label: '' };
+
+  const minimums = getDailyMinimums(day, dailyMinimumsOverrides || {});
+
+  // Calculate UC Points for current inputs
+  const previewPoints = useMemo(() => calculateDayPoints(metricInputs), [metricInputs]);
+
+  // Check if all daily standards are met
+  const standardsMet = useMemo(() => {
+    return DAILY_INDICATOR_KEYS.every(k => (metricInputs[k] || 0) >= (minimums[k] || 0));
+  }, [metricInputs, minimums]);
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
@@ -31,9 +47,20 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
     reader.readAsDataURL(file);
   };
 
+  const updateMetric = (key, value) => {
+    const num = Math.max(0, parseInt(value) || 0);
+    setMetricInputs(prev => ({ ...prev, [key]: num }));
+  };
+
   const handleSubmit = () => {
     if (!proofText.trim() && !fileName) return;
-    onSubmit(day, { text: proofText, fileName, fileData, socialMediaPosted });
+    onSubmit(day, {
+      text: proofText,
+      fileName,
+      fileData,
+      socialMediaPosted,
+      dayMetrics: metricInputs,
+    });
     setSubmitted(true);
   };
 
@@ -131,31 +158,9 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
             width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
           }}>📋</div>
-          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Today's Task</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Today's Standards</h3>
         </div>
         <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.taskDescription}</p>
-        {dayData.multiMetrics ? (
-          <div style={{
-            marginTop: 16, padding: '12px 16px', background: 'rgba(240,165,0,0.06)',
-            borderRadius: 10, border: '1px solid rgba(240,165,0,0.1)',
-          }}>
-            <div style={{ fontSize: 13, color: '#f0a500', marginBottom: 4 }}>📈 Daily targets:</div>
-            {dayData.multiMetrics.map((m, i) => (
-              <div key={i} style={{ fontSize: 13, color: '#f0a500', marginLeft: 8 }}>
-                <strong>+{m.count}</strong> {m.label}
-              </div>
-            ))}
-          </div>
-        ) : dayData.metrics && (
-          <div style={{
-            marginTop: 16, padding: '12px 16px', background: 'rgba(233,69,96,0.06)',
-            borderRadius: 10, border: '1px solid rgba(233,69,96,0.1)',
-          }}>
-            <span style={{ fontSize: 13, color: '#e94560' }}>
-              📈 This contributes: <strong>+{dayData.metrics.count} {dayData.metrics.label}</strong>
-            </span>
-          </div>
-        )}
       </div>
 
       {/* Transcript (if any) */}
@@ -174,18 +179,101 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
       {isComplete || existingSubmission ? (
         <SubmissionComplete submission={existingSubmission} />
       ) : submitted ? (
-        <SubmissionSuccess day={day} />
+        <SubmissionSuccess day={day} points={previewPoints} />
       ) : isCurrentOrPast && !isComplete ? (
-        <SubmissionForm
-          day={day}
-          proofText={proofText}
-          setProofText={setProofText}
-          fileName={fileName}
-          onFileSelect={handleFileSelect}
-          onSubmit={handleSubmit}
-          socialMediaPosted={socialMediaPosted}
-          setSocialMediaPosted={setSocialMediaPosted}
-        />
+        <>
+          {/* 6-Indicator Inputs */}
+          <div className="card" style={{ marginBottom: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: 8, background: 'rgba(240,165,0,0.15)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+                }}>📊</div>
+                <h3 style={{ fontSize: 16, fontWeight: 700 }}>Log Your Activity</h3>
+              </div>
+              {previewPoints > 0 && (
+                <div style={{
+                  background: 'rgba(240,165,0,0.1)', border: '1px solid rgba(240,165,0,0.2)',
+                  padding: '6px 14px', borderRadius: 8, fontSize: 14, fontWeight: 700, color: '#f0a500',
+                }}>
+                  +{previewPoints} UC Points
+                </div>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {INDICATOR_KEYS.map(key => {
+                const min = minimums[key] || 0;
+                const val = metricInputs[key] || 0;
+                const isMet = val >= min;
+                const isRequired = min > 0;
+                const pts = val * UC_POINT_VALUES[key];
+                return (
+                  <div key={key} style={{
+                    display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px',
+                    background: isMet && isRequired ? 'rgba(72,199,142,0.04)' : (!isMet && isRequired ? 'rgba(233,69,96,0.04)' : 'rgba(255,255,255,0.02)'),
+                    border: `1px solid ${isMet && isRequired ? 'rgba(72,199,142,0.15)' : (!isMet && isRequired ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.06)')}`,
+                    borderRadius: 10,
+                  }}>
+                    <div style={{
+                      width: 8, height: 8, borderRadius: '50%',
+                      background: INDICATOR_COLORS[key], flexShrink: 0,
+                    }} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#ddd' }}>
+                        {INDICATOR_LABELS[key]}
+                      </div>
+                      <div style={{ fontSize: 11, color: '#666' }}>
+                        {min > 0 ? `Min: ${min}` : 'No minimum'} · {UC_POINT_VALUES[key]} pts each
+                        {pts > 0 && <span style={{ color: '#f0a500', marginLeft: 6 }}>+{pts} pts</span>}
+                      </div>
+                    </div>
+                    <input
+                      type="number"
+                      min="0"
+                      value={val}
+                      onChange={e => updateMetric(key, e.target.value)}
+                      style={{
+                        width: 64, textAlign: 'center', fontSize: 16, fontWeight: 700,
+                        padding: '6px 8px', borderRadius: 8,
+                        background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                        color: '#fff',
+                      }}
+                    />
+                    {isMet && isRequired && (
+                      <span style={{ color: '#48c78e', fontSize: 16, flexShrink: 0 }}>✓</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {!standardsMet && (
+              <div style={{
+                marginTop: 12, padding: '10px 14px', borderRadius: 8,
+                background: 'rgba(233,69,96,0.06)', border: '1px solid rgba(233,69,96,0.1)',
+                fontSize: 12, color: '#e94560',
+              }}>
+                Meet all daily standards to complete this day
+              </div>
+            )}
+          </div>
+
+          {/* Proof + Submit */}
+          <SubmissionForm
+            day={day}
+            proofText={proofText}
+            setProofText={setProofText}
+            fileName={fileName}
+            onFileSelect={handleFileSelect}
+            onSubmit={handleSubmit}
+            socialMediaPosted={socialMediaPosted}
+            setSocialMediaPosted={setSocialMediaPosted}
+            standardsMet={standardsMet}
+            previewPoints={previewPoints}
+          />
+        </>
       ) : null}
 
       {/* Deadline Reminder */}
@@ -223,6 +311,23 @@ function SubmissionComplete({ submission }) {
         {submission?.fileName && (
           <AttachmentLink fileName={submission.fileName} fileData={submission.fileData} />
         )}
+        {submission?.dayMetrics && (
+          <div style={{ marginTop: 12, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            {INDICATOR_KEYS.map(key => {
+              const val = submission.dayMetrics[key];
+              if (!val) return null;
+              return (
+                <span key={key} style={{
+                  fontSize: 11, padding: '3px 8px', borderRadius: 6,
+                  background: `${INDICATOR_COLORS[key]}15`, color: INDICATOR_COLORS[key],
+                  fontWeight: 600,
+                }}>
+                  +{val} {INDICATOR_LABELS[key]}
+                </span>
+              );
+            })}
+          </div>
+        )}
         {submission?.socialMediaPosted && (
           <div style={{
             marginTop: 10, display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -244,23 +349,30 @@ function SubmissionComplete({ submission }) {
   );
 }
 
-function SubmissionSuccess({ day }) {
+function SubmissionSuccess({ day, points }) {
   return (
     <div className="card scale-in" style={{ borderColor: 'rgba(72,199,142,0.3)', textAlign: 'center', padding: 40 }}>
       <div style={{ fontSize: 48, marginBottom: 12 }}>🎯</div>
       <h3 style={{ fontSize: 20, fontWeight: 700, color: '#48c78e', marginBottom: 8 }}>
         Submission Received!
       </h3>
+      {points > 0 && (
+        <div className="mono" style={{
+          fontSize: 28, fontWeight: 700, color: '#f0a500', marginBottom: 12,
+        }}>
+          +{points} UC Points
+        </div>
+      )}
       <p style={{ color: '#888', fontSize: 14 }}>
         Day {day} is now complete. {day > 30
           ? 'Streak extended! Come back tomorrow to keep it going.'
-          : day < 30 ? `You've unlocked Day ${day + 1}.` : 'You did it! 🎉 Keep going to build your streak!'}
+          : day < 30 ? `You've unlocked Day ${day + 1}.` : 'Sprint complete! Welcome to Operator Mode.'}
       </p>
     </div>
   );
 }
 
-function SubmissionForm({ day, proofText, setProofText, fileName, onFileSelect, onSubmit, socialMediaPosted, setSocialMediaPosted }) {
+function SubmissionForm({ day, proofText, setProofText, fileName, onFileSelect, onSubmit, socialMediaPosted, setSocialMediaPosted, standardsMet, previewPoints }) {
   return (
     <div className="card">
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
@@ -277,7 +389,7 @@ function SubmissionForm({ day, proofText, setProofText, fileName, onFileSelect, 
       <textarea
         value={proofText}
         onChange={e => setProofText(e.target.value)}
-        placeholder="Describe your completed task, paste links, or summarize your results..."
+        placeholder="Describe your completed standards, paste links, or summarize your results..."
         style={{ marginBottom: 12 }}
       />
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
@@ -310,17 +422,27 @@ function SubmissionForm({ day, proofText, setProofText, fileName, onFileSelect, 
         />
         <div>
           <div style={{ fontSize: 14, fontWeight: 600, color: socialMediaPosted ? '#48c78e' : '#ccc' }}>
-            I posted about today's task on social media
+            I posted about today's standards on social media
           </div>
           <div style={{ fontSize: 12, color: '#666', marginTop: 2 }}>
-            Share your progress to stay accountable and inspire others
+            Share your progress to stay accountable and inspire other Operators
           </div>
         </div>
       </label>
 
-      <button className="btn-primary" onClick={onSubmit} style={{ width: '100%' }}>
-        Submit Day {day} ✓
+      <button
+        className="btn-primary"
+        onClick={onSubmit}
+        disabled={!standardsMet || (!proofText.trim() && !fileName)}
+        style={{ width: '100%', opacity: (!standardsMet || (!proofText.trim() && !fileName)) ? 0.5 : 1 }}
+      >
+        Submit Day {day} {previewPoints > 0 ? `(+${previewPoints} UC Points)` : ''} ✓
       </button>
+      {!standardsMet && (
+        <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 8 }}>
+          Meet all daily standards above before submitting
+        </p>
+      )}
     </div>
   );
 }

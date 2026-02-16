@@ -27,10 +27,10 @@ export default function ProgressBanner({ user, cohortStartDate, calendarDay }) {
           {inContinuation ? (
             <>
               <h1 style={{ fontSize: 'clamp(20px, 5vw, 28px)', fontWeight: 700, marginBottom: 4 }}>
-                Beyond Day 30
+                Operator Mode — Day {user.currentDay}
               </h1>
               <p style={{ color: '#f0a500', fontSize: 15 }}>
-                Keep the streak alive! Day {completedCount + 1} overall
+                Keep the streak alive! Execute daily.
               </p>
             </>
           ) : (

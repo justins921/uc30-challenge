@@ -5,16 +5,19 @@ import TimelineView from './TimelineView';
 import DayView from './DayView';
 import SubmissionsView from './SubmissionsView';
 import StatsView from './StatsView';
+import Leaderboard from './Leaderboard';
 import UserProfile, { UserSupport } from './UserProfile';
 import { getGettingStartedContent } from '../data/challengeDays';
+import { calculateUCPoints } from '../data/ucPoints';
 import CommunityBoard from './CommunityBoard';
 import Footer from './Footer';
 
 const TABS = [
   { id: 'timeline', label: 'Timeline' },
+  { id: 'leaderboard', label: 'Leaderboard' },
   { id: 'community', label: 'Community' },
   { id: 'submissions', label: 'My Submissions' },
-  { id: 'stats', label: 'My Stats' },
+  { id: 'stats', label: 'Operator Stats' },
   { id: 'support', label: 'Support' },
   { id: 'profile', label: 'Profile' },
 ];
@@ -67,7 +70,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -168,6 +171,11 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
       />
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
+        {/* UC Points Score */}
+        {(tab === 'timeline' || tab === 'day') && (
+          <UCPointsBanner ucPoints={user.ucPoints || calculateUCPoints(user.metrics)} />
+        )}
+
         {cohortActive && cohortStats && cohortStats.total > 0 && (
           <CohortStatsBanner active={cohortStats.active} total={cohortStats.total} />
         )}
@@ -210,6 +218,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             onBack={handleBackToTimeline}
             contentOverrides={contentOverrides}
             customPhases={customPhases}
+            dailyMinimumsOverrides={dailyMinimumsOverrides}
           />
         )}
         {tab === 'community' && (
@@ -224,6 +233,9 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             onPin={onPinCommunityPost}
             onDismissWarning={onDismissCommunityWarning}
           />
+        )}
+        {tab === 'leaderboard' && (
+          <Leaderboard participants={participants || []} currentUserId={user.id} />
         )}
         {tab === 'submissions' && <SubmissionsView user={user} />}
         {tab === 'stats' && <StatsView user={user} />}
@@ -444,6 +456,28 @@ function CohortStatsBanner({ active, total }) {
       <span style={{ fontSize: 14, color: '#ccc' }}>
         You are 1 of <strong style={{ color: '#e94560' }}>{active}</strong> participants still active
       </span>
+    </div>
+  );
+}
+
+// ── UC Points Banner ─────────────────────────────────────
+function UCPointsBanner({ ucPoints }) {
+  return (
+    <div className="fade-up" style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '16px 20px', marginBottom: 16,
+      background: 'linear-gradient(135deg, rgba(240,165,0,0.08), rgba(240,165,0,0.02))',
+      border: '1px solid rgba(240,165,0,0.15)',
+      borderRadius: 12,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ fontSize: 12, color: '#f0a500', textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: 600 }}>
+          UC Points
+        </div>
+      </div>
+      <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#f0a500' }}>
+        {ucPoints.toLocaleString()}
+      </div>
     </div>
   );
 }
