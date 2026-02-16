@@ -55,7 +55,7 @@ export default function OnboardingFlow({ user, onComplete }) {
               UC30
             </div>
             <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 12 }}>
-              Welcome, Operator.
+              Welcome, {user.firstName}.
             </h1>
             <p style={{ color: '#888', fontSize: 15, lineHeight: 1.7, marginBottom: 32 }}>
               Let's set up your UC30 command center. You're about to join an elite execution system
