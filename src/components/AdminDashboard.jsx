@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Header from './Header';
-import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent } from '../data/challengeDays';
+import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DEFAULT_DAILY_MINIMUMS, checkOfferBuffer, OFFER_BUFFER } from '../data/challengeDays';
+import { INDICATOR_KEYS, INDICATOR_LABELS, INDICATOR_SHORT_LABELS, INDICATOR_COLORS, UC_POINT_VALUES, calculateUCPoints } from '../data/ucPoints';
 import { AttachmentLink } from './DayView';
 import { LANDING_DEFAULTS } from './LandingPage';
 import Footer from './Footer';
@@ -61,10 +62,9 @@ const ADMIN_TABS = [
   { id: 'content', label: 'Content' },
   { id: 'support', label: 'Support' },
   { id: 'social', label: 'Social Proof' },
-  { id: 'qa', label: 'QA Checklist' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink, getContactsForParticipant, getUploads, getUploadUrl }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -73,9 +73,16 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
   const active = nonAdmin.filter(p => p.isActive);
   const removed = nonAdmin.filter(p => !p.isActive);
 
-  const totalAnalyzed = nonAdmin.reduce((s, p) => s + (p.metrics?.propertiesAnalyzed || 0), 0);
-  const totalOffers = nonAdmin.reduce((s, p) => s + (p.metrics?.offersSubmitted || 0), 0);
-  const totalAgents = nonAdmin.reduce((s, p) => s + (p.metrics?.agentsContacted || 0), 0);
+  // Aggregate indicator totals
+  const indicatorTotals = {};
+  INDICATOR_KEYS.forEach(key => {
+    indicatorTotals[key] = nonAdmin.reduce((s, p) => s + (p.metrics?.[key] || 0), 0);
+  });
+  const totalUCPoints = nonAdmin.reduce((s, p) => s + (p.ucPoints || calculateUCPoints(p.metrics || {})), 0);
+  const avgUCPoints = active.length > 0 ? Math.round(totalUCPoints / active.length) : 0;
+
+  const totalAnalyzed = indicatorTotals.propertiesAnalyzed;
+  const totalOffers = indicatorTotals.offersSubmitted;
 
   const dayDistribution = {};
   active.forEach(p => {
@@ -94,7 +101,11 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
     return (p.comments || []).some(c => !c.isDeleted && c.createdAt?.startsWith(todayStr));
   });
 
-  const adminTabs = ADMIN_TABS.map(t => {
+  const baseTabs = user?.isDeveloper
+    ? [...ADMIN_TABS, { id: 'qa', label: 'QA Checklist' }, { id: 'revenue', label: 'Revenue' }]
+    : ADMIN_TABS;
+
+  const adminTabs = baseTabs.map(t => {
     if (t.id === 'support' && hasOpenTickets && tab !== 'support') return { ...t, hasNotification: true };
     if (t.id === 'community' && hasCommunityActivity && tab !== 'community') return { ...t, hasNotification: true };
     return t;
@@ -132,6 +143,9 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
         {/* Live Calls */}
         <LiveCallsManager calls={liveCalls || []} onSave={onSetLiveCalls} />
 
+        {/* Skool Link Setting */}
+        <SkoolLinkSetting skoolLink={skoolLink} onSave={onSetSkoolLink} />
+
         {/* Top Stats */}
         <div className="fade-up-delay-1 admin-stats-grid" style={{
           display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
@@ -140,9 +154,11 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
           <AdminStat label="Total Enrolled" value={nonAdmin.length} color="#888" />
           <AdminStat label="Active Now" value={active.length} color="#48c78e" />
           <AdminStat label="Removed" value={removed.length} color="#e94560" />
-          <AdminStat label="Properties Analyzed" value={totalAnalyzed} color="#533483" />
-          <AdminStat label="Offers Submitted" value={totalOffers} color="#e94560" />
-          <AdminStat label="Agents Contacted" value={totalAgents} color="#0f3460" />
+          <AdminStat label="Total UC Points" value={totalUCPoints.toLocaleString()} color="#f0a500" />
+          <AdminStat label="Avg UC Points" value={avgUCPoints.toLocaleString()} color="#f0a500" />
+          {INDICATOR_KEYS.map(key => (
+            <AdminStat key={key} label={INDICATOR_SHORT_LABELS[key]} value={indicatorTotals[key]} color={INDICATOR_COLORS[key]} />
+          ))}
         </div>
 
         {/* Tab Content */}
@@ -153,6 +169,8 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             dayDistribution={dayDistribution}
             retentionRate={retentionRate}
             communityPosts={communityPosts || []}
+            totalUCPoints={totalUCPoints}
+            avgUCPoints={avgUCPoints}
           />
         )}
         {tab === 'participants' && !selectedParticipant && (
@@ -179,6 +197,9 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onWarnCommunityUser={onWarnCommunityUser}
             onBanCommunityUser={onBanCommunityUser}
             onViewAsUser={onViewAsUser}
+            getContactsForParticipant={getContactsForParticipant}
+            getUploads={getUploads}
+            getUploadUrl={getUploadUrl}
           />
         )}
         {tab === 'submissions' && (
@@ -209,6 +230,8 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onSetLandingContent={onSetLandingContent}
             landingVersion={landingVersion}
             onSetLandingVersion={onSetLandingVersion}
+            dailyMinimumsOverrides={dailyMinimumsOverrides || {}}
+            onSetDailyMinimums={onSetDailyMinimums}
           />
         )}
         {tab === 'support' && (
@@ -220,13 +243,16 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             nonAdmin={nonAdmin}
             totalOffers={totalOffers}
             totalAnalyzed={totalAnalyzed}
-            totalAgents={totalAgents}
+            indicatorTotals={indicatorTotals}
             retentionRate={retentionRate}
             dayDistribution={dayDistribution}
           />
         )}
-        {tab === 'qa' && (
+        {tab === 'qa' && user?.isDeveloper && (
           <QAChecklistTab />
+        )}
+        {tab === 'revenue' && user?.isDeveloper && (
+          <RevenueTab participants={participants} />
         )}
       </div>
       <Footer />
@@ -407,6 +433,63 @@ function CohortSettings({ cohortStartDate, nextCohortDate, onSetCohortStartDate,
 }
 
 // ── Live Calls Manager ─────────────────────────────────────
+// ── Skool Link Setting ──────────────────────────────────────
+function SkoolLinkSetting({ skoolLink, onSave }) {
+  const [editing, setEditing] = useState(false);
+  const [linkValue, setLinkValue] = useState(skoolLink || '');
+
+  const handleSave = () => {
+    onSave(linkValue.trim() || null);
+    setEditing(false);
+  };
+
+  return (
+    <div className="card fade-up" style={{ marginBottom: 24, padding: '16px 24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontSize: 20 }}>🔗</span>
+          <div>
+            <div style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>
+              CDS Collective (Skool)
+            </div>
+            {!editing ? (
+              <span style={{ fontSize: 14, color: skoolLink ? '#c9a0ff' : '#555' }}>
+                {skoolLink || 'No Skool link set'}
+              </span>
+            ) : (
+              <input
+                type="url"
+                value={linkValue}
+                onChange={e => setLinkValue(e.target.value)}
+                placeholder="https://www.skool.com/cds-collective"
+                style={{ width: 340, maxWidth: '100%', fontSize: 13, padding: '8px 12px' }}
+              />
+            )}
+          </div>
+        </div>
+        {!editing ? (
+          <button
+            className="btn-secondary"
+            style={{ padding: '8px 16px', fontSize: 13 }}
+            onClick={() => { setLinkValue(skoolLink || ''); setEditing(true); }}
+          >
+            {skoolLink ? 'Edit' : 'Set Link'}
+          </button>
+        ) : (
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn-primary" style={{ padding: '8px 16px', fontSize: 13 }} onClick={handleSave}>
+              Save
+            </button>
+            <button className="btn-secondary" style={{ padding: '8px 16px', fontSize: 13 }} onClick={() => setEditing(false)}>
+              Cancel
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function LiveCallsManager({ calls, onSave }) {
   const [adding, setAdding] = useState(false);
   const [title, setTitle] = useState('');
@@ -582,6 +665,17 @@ function AdminStat({ label, value, color }) {
       <div className="mono" style={{ fontSize: 28, fontWeight: 700, color }}>{value}</div>
       <div style={{ fontSize: 10, color: '#666', marginTop: 4, lineHeight: 1.3 }}>{label}</div>
     </div>
+  );
+}
+
+function StatusBadge({ label, color }) {
+  return (
+    <span style={{
+      fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6,
+      background: `${color}15`, border: `1px solid ${color}30`, color,
+    }}>
+      {label}
+    </span>
   );
 }
 
@@ -897,7 +991,7 @@ function AdminCommunityTab({ posts, participants, onDeletePost, onDeleteComment,
   );
 }
 
-function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communityPosts }) {
+function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communityPosts, totalUCPoints, avgUCPoints }) {
   const maxCount = Math.max(...Object.values(dayDistribution), 1);
 
   // Community stats
@@ -909,9 +1003,63 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communi
     s + (p.comments || []).filter(c => !c.isDeleted && c.createdAt?.startsWith(todayStr)).length, 0
   );
 
+  // Leaderboard: Top 5 by UC Points
+  const topOperators = [...nonAdmin]
+    .filter(p => p.isActive)
+    .map(p => ({ ...p, ucPts: p.ucPoints || calculateUCPoints(p.metrics || {}) }))
+    .sort((a, b) => b.ucPts - a.ucPts)
+    .slice(0, 5);
+
   return (
     <div className="fade-up">
-      {/* Today's Activity Summary */}
+      {/* UC Points Overview */}
+      <div className="card" style={{ marginBottom: 24 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>UC Points Overview</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
+          <div style={{ textAlign: 'center', padding: 16, borderRadius: 10, background: 'rgba(240,165,0,0.06)', border: '1px solid rgba(240,165,0,0.15)' }}>
+            <div className="mono" style={{ fontSize: 32, fontWeight: 700, color: '#f0a500' }}>{totalUCPoints.toLocaleString()}</div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>Total UC Points</div>
+          </div>
+          <div style={{ textAlign: 'center', padding: 16, borderRadius: 10, background: 'rgba(240,165,0,0.04)' }}>
+            <div className="mono" style={{ fontSize: 32, fontWeight: 700, color: '#f0a500' }}>{avgUCPoints.toLocaleString()}</div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>Avg per Operator</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Top 5 Leaderboard */}
+      {topOperators.length > 0 && (
+        <div className="card" style={{ marginBottom: 24 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Top Operators by UC Points</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {topOperators.map((p, i) => (
+              <div key={p.id} style={{
+                display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 10,
+                background: i === 0 ? 'rgba(240,165,0,0.06)' : 'rgba(255,255,255,0.02)',
+                border: `1px solid ${i === 0 ? 'rgba(240,165,0,0.2)' : 'rgba(255,255,255,0.06)'}`,
+              }}>
+                <div className="mono" style={{
+                  width: 28, height: 28, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: i < 3 ? 16 : 12, fontWeight: 700,
+                  color: i === 0 ? '#f0a500' : i === 1 ? '#c0c0c0' : i === 2 ? '#cd7f32' : '#666',
+                  background: i < 3 ? `${i === 0 ? '#f0a500' : i === 1 ? '#c0c0c0' : '#cd7f32'}15` : 'rgba(255,255,255,0.04)',
+                }}>
+                  {i < 3 ? ['🥇', '🥈', '🥉'][i] : `#${i + 1}`}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600 }}>{p.firstName} {p.lastName}</div>
+                  <div style={{ fontSize: 11, color: '#666' }}>{p.email}</div>
+                </div>
+                <div className="mono" style={{ fontSize: 16, fontWeight: 700, color: '#f0a500' }}>
+                  {p.ucPts.toLocaleString()}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Community Engagement */}
       <div className="card" style={{ marginBottom: 24 }}>
         <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Community Engagement</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 12 }}>
@@ -935,7 +1083,7 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communi
       </div>
 
       <div className="card" style={{ marginBottom: 24 }}>
-        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Active Participants by Day</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Active Operators by Day</h3>
         <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 160, overflowX: 'auto' }}>
           {Array.from({ length: 30 }, (_, i) => {
             const count = dayDistribution[i + 1] || 0;
@@ -969,7 +1117,7 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communi
             {retentionRate}%
           </div>
           <div style={{ color: '#888', fontSize: 14, lineHeight: 1.6 }}>
-            {active.length} of {nonAdmin.length} participants still active
+            {active.length} of {nonAdmin.length} Operators still active
           </div>
         </div>
       </div>
@@ -981,26 +1129,39 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
   const [filter, setFilter] = useState('all');
   const filtered = filter === 'all' ? nonAdmin
     : filter === 'active' ? nonAdmin.filter(p => p.isActive)
-    : nonAdmin.filter(p => !p.isActive);
+    : filter === 'removed' ? nonAdmin.filter(p => !p.isActive)
+    : filter === 'refund' ? nonAdmin.filter(p => p.refundEligible !== false)
+    : nonAdmin;
+
+  const refundCount = nonAdmin.filter(p => p.refundEligible !== false).length;
 
   return (
     <div className="fade-up">
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
-        {['all', 'active', 'removed'].map(f => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            style={{
-              background: filter === f ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.04)',
-              color: filter === f ? '#e94560' : '#888',
-              border: filter === f ? '1px solid rgba(233,69,96,0.3)' : '1px solid rgba(255,255,255,0.06)',
-              padding: '6px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
-              fontFamily: "'DM Sans', sans-serif", fontWeight: 500, textTransform: 'capitalize',
-            }}
-          >
-            {f} ({f === 'all' ? nonAdmin.length : f === 'active' ? nonAdmin.filter(p => p.isActive).length : nonAdmin.filter(p => !p.isActive).length})
-          </button>
-        ))}
+        {['all', 'active', 'removed', 'refund'].map(f => {
+          const labels = { all: 'All', active: 'Active', removed: 'Removed', refund: 'Refund Eligible' };
+          const counts = {
+            all: nonAdmin.length,
+            active: nonAdmin.filter(p => p.isActive).length,
+            removed: nonAdmin.filter(p => !p.isActive).length,
+            refund: refundCount,
+          };
+          return (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              style={{
+                background: filter === f ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.04)',
+                color: filter === f ? '#e94560' : '#888',
+                border: filter === f ? '1px solid rgba(233,69,96,0.3)' : '1px solid rgba(255,255,255,0.06)',
+                padding: '6px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+              }}
+            >
+              {labels[f]} ({counts[f]})
+            </button>
+          );
+        })}
       </div>
 
       {filtered.length === 0 ? (
@@ -1046,9 +1207,9 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
               {/* Stats row */}
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
                 <MiniStat label="Day" value={p.currentDay > 30 ? '✓' : p.currentDay} color="#e94560" />
-                <MiniStat label="Analyzed" value={p.metrics?.propertiesAnalyzed || 0} color="#533483" />
+                <MiniStat label="UC Pts" value={p.ucPoints || calculateUCPoints(p.metrics || {})} color="#f0a500" />
                 <MiniStat label="Offers" value={p.metrics?.offersSubmitted || 0} color="#e94560" />
-                <MiniStat label="Submissions" value={p.submissions?.length || 0} color="#888" />
+                <MiniStat label="Subs" value={p.submissions?.length || 0} color="#888" />
                 <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, flexWrap: 'wrap' }} onClick={e => e.stopPropagation()}>
                   <button
                     style={{
@@ -1114,10 +1275,27 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
 }
 
 // ── Participant Detail View (with all submissions) ──────────
-function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onVerifySubmissionSocial, onWarnCommunityUser, onBanCommunityUser, onViewAsUser }) {
+function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onVerifySubmissionSocial, onWarnCommunityUser, onBanCommunityUser, onViewAsUser, getContactsForParticipant, getUploads, getUploadUrl }) {
   const [showWarnInput, setShowWarnInput] = useState(false);
   const [warnMessage, setWarnMessage] = useState('');
+  const [crmContacts, setCrmContacts] = useState(null);
+  const [loadingCrm, setLoadingCrm] = useState(false);
+  const [crmExpanded, setCrmExpanded] = useState(false);
   const p = participant;
+
+  // Offer tracking
+  const currentDay = p.currentDay || 1;
+  const offerStatus = currentDay <= 30 ? checkOfferBuffer(currentDay, p.metrics?.offersSubmitted || 0) : null;
+
+  const handleLoadCrm = async () => {
+    if (crmContacts !== null) { setCrmExpanded(!crmExpanded); return; }
+    if (!getContactsForParticipant) return;
+    setLoadingCrm(true);
+    const contacts = await Promise.resolve(getContactsForParticipant(p.id));
+    setCrmContacts(contacts || []);
+    setCrmExpanded(true);
+    setLoadingCrm(false);
+  };
 
   return (
     <div className="scale-in">
@@ -1297,6 +1475,43 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
         </div>
       </div>
 
+      {/* Guarantee & Activation Status */}
+      <div className="card" style={{ marginBottom: 24 }}>
+        <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12, color: '#888', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+          Guarantee & Activation
+        </h3>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          <StatusBadge
+            label={`Cohort Attempt #${p.cohortAttempt || 1}`}
+            color="#888"
+          />
+          <StatusBadge
+            label={p.refundEligible !== false ? 'Refund Eligible' : 'Not Refund Eligible'}
+            color={p.refundEligible !== false ? '#48c78e' : '#e94560'}
+          />
+          <StatusBadge
+            label={p.firstCohortCompleted ? 'First Cohort Completed' : 'First Cohort Incomplete'}
+            color={p.firstCohortCompleted ? '#48c78e' : '#666'}
+          />
+          <StatusBadge
+            label={p.activationCompleted ? 'Activated' : 'Not Activated'}
+            color={p.activationCompleted ? '#48c78e' : '#f0a500'}
+          />
+          {p.offerCommitment && (
+            <StatusBadge
+              label={`${p.offerCommitment} offers committed`}
+              color="#f0a500"
+            />
+          )}
+        </div>
+        {p.stakesDeclaration && (
+          <div style={{ marginTop: 12, padding: '10px 14px', borderRadius: 8, background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.1)' }}>
+            <div style={{ fontSize: 11, color: '#666', fontWeight: 600, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 }}>Stakes Declaration</div>
+            <p style={{ fontSize: 13, color: '#aaa', lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>"{p.stakesDeclaration}"</p>
+          </div>
+        )}
+      </div>
+
       {/* Stats Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12, marginBottom: 24 }}>
         <div className="card" style={{ textAlign: 'center', padding: 16 }}>
@@ -1306,23 +1521,19 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
           <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>Current Day</div>
         </div>
         <div className="card" style={{ textAlign: 'center', padding: 16 }}>
-          <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#533483' }}>
-            {p.metrics?.propertiesAnalyzed || 0}
+          <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#f0a500' }}>
+            {p.ucPoints || calculateUCPoints(p.metrics || {})}
           </div>
-          <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>Properties Analyzed</div>
+          <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>UC Points</div>
         </div>
-        <div className="card" style={{ textAlign: 'center', padding: 16 }}>
-          <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#e94560' }}>
-            {p.metrics?.offersSubmitted || 0}
+        {INDICATOR_KEYS.map(key => (
+          <div key={key} className="card" style={{ textAlign: 'center', padding: 16 }}>
+            <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: INDICATOR_COLORS[key] }}>
+              {p.metrics?.[key] || 0}
+            </div>
+            <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>{INDICATOR_SHORT_LABELS[key]}</div>
           </div>
-          <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>Offers Submitted</div>
-        </div>
-        <div className="card" style={{ textAlign: 'center', padding: 16 }}>
-          <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#0f3460' }}>
-            {p.metrics?.agentsContacted || 0}
-          </div>
-          <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>Agents Contacted</div>
-        </div>
+        ))}
       </div>
 
       {/* Activity Map */}
@@ -1349,6 +1560,86 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
             );
           })}
         </div>
+      </div>
+
+      {/* Offer Tracking */}
+      {offerStatus && (
+        <div className="card" style={{ marginBottom: 24 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Offer Tracking</h3>
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 12 }}>
+            <div style={{ textAlign: 'center' }}>
+              <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: '#fff' }}>{offerStatus.target}</div>
+              <div style={{ fontSize: 11, color: '#888' }}>Day {currentDay} Target</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: offerStatus.status === 'green' ? '#48c78e' : offerStatus.status === 'yellow' ? '#f0a500' : '#e94560' }}>
+                {offerStatus.current}
+              </div>
+              <div style={{ fontSize: 11, color: '#888' }}>Cumulative Offers</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: offerStatus.buffer <= 0 ? '#e94560' : offerStatus.buffer <= 1 ? '#f0a500' : '#48c78e' }}>
+                {Math.max(0, offerStatus.buffer)}
+              </div>
+              <div style={{ fontSize: 11, color: '#888' }}>Buffer Remaining</div>
+            </div>
+          </div>
+          <div style={{
+            padding: '8px 14px', borderRadius: 6, fontSize: 12, fontWeight: 600,
+            background: offerStatus.status === 'red' ? 'rgba(233,69,96,0.1)' : offerStatus.status === 'yellow' ? 'rgba(240,165,0,0.1)' : 'rgba(72,199,142,0.1)',
+            color: offerStatus.status === 'red' ? '#e94560' : offerStatus.status === 'yellow' ? '#f0a500' : '#48c78e',
+          }}>
+            {offerStatus.status === 'red' ? 'DANGER — Will be removed if they fall further behind' : offerStatus.status === 'yellow' ? 'WARNING — Close to removal threshold' : 'On track'}
+          </div>
+        </div>
+      )}
+
+      {/* CRM Data */}
+      <div className="card" style={{ marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>CRM Contacts</h3>
+          <button onClick={handleLoadCrm} className="btn-secondary" style={{ padding: '6px 14px', fontSize: 12 }}>
+            {loadingCrm ? 'Loading...' : crmExpanded ? 'Hide' : 'View Contacts'}
+          </button>
+        </div>
+        {crmExpanded && crmContacts && (
+          <div style={{ marginTop: 16 }}>
+            {crmContacts.length === 0 ? (
+              <div style={{ fontSize: 13, color: '#666', fontStyle: 'italic' }}>No contacts added yet.</div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>{crmContacts.length} total contacts</div>
+                {crmContacts.map(c => (
+                  <div key={c.id} style={{
+                    padding: '10px 14px', background: 'rgba(255,255,255,0.02)',
+                    border: '1px solid rgba(255,255,255,0.06)', borderRadius: 8, fontSize: 13,
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                      <span style={{ fontWeight: 600, color: '#ddd' }}>{c.name}</span>
+                      <span style={{ fontSize: 11, padding: '2px 6px', borderRadius: 4, background: 'rgba(233,69,96,0.08)', color: '#e94560' }}>
+                        {c.contact_type}
+                      </span>
+                      <span style={{ fontSize: 11, color: '#555' }}>Day {c.day_added}</span>
+                    </div>
+                    {c.phone && <div style={{ fontSize: 12, color: '#888' }}>📞 {c.phone}</div>}
+                    {c.email && <div style={{ fontSize: 12, color: '#888' }}>✉ {c.email}</div>}
+                    {c.notes && <div style={{ fontSize: 12, color: '#666', marginTop: 4, fontStyle: 'italic' }}>{c.notes}</div>}
+                    {c.follow_ups && c.follow_ups.length > 0 && (
+                      <div style={{ marginTop: 6, paddingLeft: 12, borderLeft: '2px solid rgba(72,199,142,0.2)' }}>
+                        <div style={{ fontSize: 11, color: '#48c78e', marginBottom: 4 }}>{c.follow_ups.length} follow-up{c.follow_ups.length > 1 ? 's' : ''}</div>
+                        {c.follow_ups.map((f, i) => (
+                          <div key={f.id || i} style={{ fontSize: 12, color: '#888', marginBottom: 2 }}>
+                            Day {f.day_number}: {f.notes}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Submissions */}
@@ -1565,10 +1856,107 @@ function SubmissionsTab({ nonAdmin, onVerifySubmissionSocial }) {
 }
 
 // ── Content Management Tab ──────────────────────────────────
-function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion }) {
+// ── Daily Minimums Editor ──────────────────────────────────
+const DAILY_MIN_KEYS = ['propertiesAnalyzed', 'offersSubmitted', 'dealSourcesActivated', 'counteroffers', 'followUps'];
+
+function DailyMinimumsEditor({ overrides, onSave, onBack }) {
+  const [values, setValues] = useState(() => {
+    const v = {};
+    for (let d = 1; d <= 30; d++) {
+      const defaults = DEFAULT_DAILY_MINIMUMS[d] || {};
+      const over = overrides[d] || {};
+      v[d] = {};
+      DAILY_MIN_KEYS.forEach(k => {
+        v[d][k] = over[k] !== undefined ? over[k] : (defaults[k] || 0);
+      });
+    }
+    return v;
+  });
+
+  const handleChange = (day, key, val) => {
+    const num = Math.max(0, parseInt(val) || 0);
+    setValues(prev => ({
+      ...prev,
+      [day]: { ...prev[day], [key]: num },
+    }));
+  };
+
+  const handleSave = () => {
+    // Only store overrides that differ from defaults
+    const result = {};
+    for (let d = 1; d <= 30; d++) {
+      const defaults = DEFAULT_DAILY_MINIMUMS[d] || {};
+      const hasChange = DAILY_MIN_KEYS.some(k => (values[d][k] || 0) !== (defaults[k] || 0));
+      if (hasChange) {
+        result[d] = values[d];
+      }
+    }
+    onSave(result);
+  };
+
+  return (
+    <div className="scale-in">
+      <button className="btn-secondary" onClick={onBack} style={{ marginBottom: 24, padding: '8px 20px', fontSize: 13 }}>
+        ← Back to Content
+      </button>
+      <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Daily Standards Editor</h2>
+      <p style={{ color: '#888', fontSize: 13, marginBottom: 24 }}>
+        Set the minimum required count for each indicator on each day of the sprint.
+        Counteroffers minimum is typically 0 (cannot force receiving counteroffers).
+      </p>
+
+      <div style={{ overflowX: 'auto', marginBottom: 24 }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+          <thead>
+            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+              <th style={{ padding: '8px 6px', textAlign: 'left', color: '#888', fontWeight: 600 }}>Day</th>
+              {DAILY_MIN_KEYS.map(k => (
+                <th key={k} style={{ padding: '8px 6px', textAlign: 'center', color: INDICATOR_COLORS[k], fontWeight: 600 }}>
+                  {INDICATOR_SHORT_LABELS[k]}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: 30 }, (_, i) => {
+              const d = i + 1;
+              return (
+                <tr key={d} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  <td className="mono" style={{ padding: '6px', fontWeight: 600, color: '#ccc' }}>{d}</td>
+                  {DAILY_MIN_KEYS.map(k => (
+                    <td key={k} style={{ padding: '4px 3px', textAlign: 'center' }}>
+                      <input
+                        type="number"
+                        min="0"
+                        value={values[d]?.[k] ?? 0}
+                        onChange={e => handleChange(d, k, e.target.value)}
+                        style={{
+                          width: 48, textAlign: 'center', fontSize: 12, padding: '4px',
+                          background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                          borderRadius: 4, color: '#fff',
+                        }}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <button className="btn-primary" onClick={handleSave} style={{ padding: '12px 32px' }}>
+        Save Daily Standards
+      </button>
+    </div>
+  );
+}
+
+function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, dailyMinimumsOverrides, onSetDailyMinimums }) {
   const [editingDay, setEditingDay] = useState(null);
   const [editingPhases, setEditingPhases] = useState(false);
   const [editingLanding, setEditingLanding] = useState(false);
+  const [editingMinimums, setEditingMinimums] = useState(false);
 
   if (editingLanding) {
     return (
@@ -1609,11 +1997,45 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
     );
   }
 
+  if (editingMinimums) {
+    return (
+      <DailyMinimumsEditor
+        overrides={dailyMinimumsOverrides || {}}
+        onSave={(updated) => {
+          onSetDailyMinimums(updated);
+          setEditingMinimums(false);
+        }}
+        onBack={() => setEditingMinimums(false)}
+      />
+    );
+  }
+
   return (
     <div className="fade-up">
+      {/* Daily Minimums Editor Card */}
+      <div className="card" style={{
+        marginBottom: 20, padding: '16px 20px', display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
+        background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.15)',
+      }}>
+        <div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: '#f0a500' }}>Daily Standards (Minimums)</div>
+          <p style={{ color: '#888', fontSize: 12, margin: '4px 0 0' }}>
+            Configure the minimum indicator requirements for each day of the sprint.
+          </p>
+        </div>
+        <button
+          className="btn-secondary"
+          style={{ padding: '8px 18px', fontSize: 12, color: '#f0a500', borderColor: 'rgba(240,165,0,0.3)' }}
+          onClick={() => setEditingMinimums(true)}
+        >
+          Edit Daily Minimums
+        </button>
+      </div>
+
       <div className="card" style={{ marginBottom: 20, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <p style={{ color: '#888', fontSize: 13, margin: 0 }}>
-          Edit the text, videos, and resources for each day. Changes are saved to the database and visible to all users.
+          Edit the text, videos, and resources for each day. Changes are saved to the database and visible to all Operators.
         </p>
         <button
           className="btn-secondary"
@@ -2469,7 +2891,7 @@ function LandingPageEditor({ landingContent, onSave }) {
   );
 }
 
-function SocialProofTab({ active, nonAdmin, totalOffers, totalAnalyzed, totalAgents, retentionRate, dayDistribution }) {
+function SocialProofTab({ active, nonAdmin, totalOffers, totalAnalyzed, indicatorTotals, retentionRate, dayDistribution }) {
   return (
     <div className="fade-up">
       <div className="card" style={{
@@ -2481,31 +2903,31 @@ function SocialProofTab({ active, nonAdmin, totalOffers, totalAnalyzed, totalAge
           Copy-ready stats for social media and marketing.
         </p>
         <div className="social-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
-          <SocialCard icon="🔥" stat={`${active.length} participants`} text="are currently active in the 30-Day First Deal Challenge" />
-          <SocialCard icon="📝" stat={`${totalOffers} offers`} text="have been submitted by our challenge participants" />
-          <SocialCard icon="📊" stat={`${totalAnalyzed} properties`} text="have been analyzed through the challenge so far" />
-          <SocialCard icon="💪" stat={`${retentionRate}% retention`} text="of enrolled participants are still crushing it daily" />
+          <SocialCard icon="🔥" stat={`${active.length} Operators`} text="are currently active in the UC30 Sprint" />
+          <SocialCard icon="📝" stat={`${totalOffers} offers`} text="have been submitted by Operators" />
+          <SocialCard icon="📊" stat={`${totalAnalyzed} properties`} text="have been analyzed through the sprint" />
+          <SocialCard icon="💪" stat={`${retentionRate}% retention`} text="of enrolled Operators are still executing daily" />
         </div>
       </div>
 
       <div className="card">
-        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Today's Activity Summary</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Activity Summary</h3>
         <div className="mono" style={{
           fontSize: 13, color: '#bbb', lineHeight: 2,
           background: 'rgba(0,0,0,0.3)', padding: 20, borderRadius: 10,
           overflowX: 'auto',
         }}>
-          <div>📅 Active Participants: <span style={{ color: '#48c78e' }}>{active.length}</span></div>
-          <div>📊 Total Properties Analyzed: <span style={{ color: '#533483' }}>{totalAnalyzed}</span></div>
-          <div>📝 Total Offers Submitted: <span style={{ color: '#e94560' }}>{totalOffers}</span></div>
-          <div>🤝 Total Agents Contacted: <span style={{ color: '#0f3460' }}>{totalAgents}</span></div>
+          <div>📅 Active Operators: <span style={{ color: '#48c78e' }}>{active.length}</span></div>
+          {INDICATOR_KEYS.map(key => (
+            <div key={key}>📊 {INDICATOR_LABELS[key]}: <span style={{ color: INDICATOR_COLORS[key] }}>{indicatorTotals[key]}</span></div>
+          ))}
           <div>📈 Retention Rate: <span style={{ color: '#48c78e' }}>{retentionRate}%</span></div>
           <div style={{ marginTop: 8, borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 8 }}>
             {Object.entries(dayDistribution)
               .sort((a, b) => Number(a[0]) - Number(b[0]))
               .map(([day, count]) => (
                 <div key={day}>
-                  {'  '}Day {day}: <span style={{ color: '#e94560' }}>{count}</span> participant{count !== 1 ? 's' : ''}
+                  {'  '}Day {day}: <span style={{ color: '#e94560' }}>{count}</span> Operator{count !== 1 ? 's' : ''}
                 </div>
               ))}
           </div>
@@ -3025,6 +3447,173 @@ function QAChecklistTab() {
           ))}
         </div>
       ))}
+    </div>
+  );
+}
+
+// ── Revenue Tab (Developer Only) ──────────────────────────────────
+const PRICE_PER_USER = 997;
+const DEV_CUT_PCT = 10;
+
+function RevenueTab({ participants }) {
+  const nonAdmin = participants.filter(p => !p.isAdmin && !p.isDeveloper);
+  const paying = nonAdmin.filter(p => p.hasPaid || p.isActive);
+  const totalUsers = paying.length;
+
+  const grossRevenue = totalUsers * PRICE_PER_USER;
+  const devEarnings = Math.round(grossRevenue * DEV_CUT_PCT / 100);
+
+  // Group signups by month
+  const monthlyBreakdown = {};
+  paying.forEach(p => {
+    const month = (p.startDate || p.createdAt || '').slice(0, 7); // YYYY-MM
+    if (!month) return;
+    if (!monthlyBreakdown[month]) monthlyBreakdown[month] = { users: 0, revenue: 0, devCut: 0 };
+    monthlyBreakdown[month].users += 1;
+    monthlyBreakdown[month].revenue += PRICE_PER_USER;
+    monthlyBreakdown[month].devCut += Math.round(PRICE_PER_USER * DEV_CUT_PCT / 100);
+  });
+
+  const sortedMonths = Object.entries(monthlyBreakdown).sort((a, b) => b[0].localeCompare(a[0]));
+
+  const fmt = (n) => '$' + n.toLocaleString();
+
+  const cardStyle = {
+    padding: 24, textAlign: 'center',
+    background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+    borderRadius: 12,
+  };
+
+  const bigNum = (value, label, color) => (
+    <div style={cardStyle}>
+      <div className="mono" style={{ fontSize: 28, fontWeight: 800, color, marginBottom: 4 }}>{value}</div>
+      <div style={{ fontSize: 12, color: '#888' }}>{label}</div>
+    </div>
+  );
+
+  return (
+    <div className="fade-up">
+      {/* Header */}
+      <div className="card" style={{
+        padding: 28, marginBottom: 24,
+        background: 'linear-gradient(135deg, rgba(72,199,142,0.1), rgba(83,52,131,0.1))',
+      }}>
+        <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Revenue Dashboard</h3>
+        <p style={{ color: '#888', fontSize: 13 }}>
+          Developer earnings at {DEV_CUT_PCT}% of all revenue ({fmt(PRICE_PER_USER)}/user)
+        </p>
+      </div>
+
+      {/* Top-level stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 16, marginBottom: 24 }}>
+        {bigNum(totalUsers, 'Paying Users', '#48c78e')}
+        {bigNum(fmt(grossRevenue), 'Gross Revenue', '#533483')}
+        {bigNum(fmt(devEarnings), 'Your Earnings (10%)', '#48c78e')}
+        {bigNum(fmt(grossRevenue - devEarnings), "Chandler's Revenue (90%)", '#e94560')}
+      </div>
+
+      {/* Per-user breakdown */}
+      <div className="card" style={{ padding: 24, marginBottom: 24 }}>
+        <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Per Sale Breakdown</h4>
+        <p style={{ color: '#888', fontSize: 12, marginBottom: 16 }}>For each {fmt(PRICE_PER_USER)} sale</p>
+        <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, minWidth: 200 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ fontSize: 13, color: '#ccc' }}>Sale Price</span>
+              <span className="mono" style={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>{fmt(PRICE_PER_USER)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ fontSize: 13, color: '#48c78e' }}>Your Cut ({DEV_CUT_PCT}%)</span>
+              <span className="mono" style={{ fontSize: 13, fontWeight: 700, color: '#48c78e' }}>{fmt(Math.round(PRICE_PER_USER * DEV_CUT_PCT / 100))}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 8 }}>
+              <span style={{ fontSize: 13, color: '#e94560' }}>Chandler&apos;s Cut (90%)</span>
+              <span className="mono" style={{ fontSize: 13, fontWeight: 700, color: '#e94560' }}>{fmt(PRICE_PER_USER - Math.round(PRICE_PER_USER * DEV_CUT_PCT / 100))}</span>
+            </div>
+          </div>
+          {/* Visual bar */}
+          <div style={{ flex: 1, minWidth: 200, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{ height: 24, borderRadius: 6, overflow: 'hidden', display: 'flex' }}>
+              <div style={{ width: `${DEV_CUT_PCT}%`, background: '#48c78e', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: '#000' }}>
+                {DEV_CUT_PCT}%
+              </div>
+              <div style={{ flex: 1, background: 'rgba(233,69,96,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: '#e94560' }}>
+                {100 - DEV_CUT_PCT}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Projections */}
+      <div className="card" style={{ padding: 24, marginBottom: 24 }}>
+        <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Earnings Projections</h4>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                <th style={{ textAlign: 'left', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Users</th>
+                <th style={{ textAlign: 'right', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Gross Revenue</th>
+                <th style={{ textAlign: 'right', padding: '8px 12px', color: '#48c78e', fontWeight: 600 }}>Your Earnings</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[10, 25, 50, 100, 250, 500, 1000].map(n => (
+                <tr key={n} style={{
+                  borderBottom: '1px solid rgba(255,255,255,0.04)',
+                  background: n <= totalUsers ? 'rgba(72,199,142,0.05)' : 'transparent',
+                }}>
+                  <td style={{ padding: '8px 12px', color: n <= totalUsers ? '#48c78e' : '#ccc' }}>
+                    {n} users {n <= totalUsers ? ' (reached)' : ''}
+                  </td>
+                  <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#ccc' }}>{fmt(n * PRICE_PER_USER)}</td>
+                  <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#48c78e', fontWeight: 700 }}>{fmt(Math.round(n * PRICE_PER_USER * DEV_CUT_PCT / 100))}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Monthly breakdown */}
+      {sortedMonths.length > 0 && (
+        <div className="card" style={{ padding: 24 }}>
+          <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Monthly Breakdown</h4>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                <th style={{ textAlign: 'left', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Month</th>
+                <th style={{ textAlign: 'right', padding: '8px 12px', color: '#888', fontWeight: 600 }}>New Users</th>
+                <th style={{ textAlign: 'right', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Revenue</th>
+                <th style={{ textAlign: 'right', padding: '8px 12px', color: '#48c78e', fontWeight: 600 }}>Your Cut</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedMonths.map(([month, data]) => (
+                <tr key={month} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  <td style={{ padding: '8px 12px', color: '#ccc' }}>{month}</td>
+                  <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#ccc' }}>{data.users}</td>
+                  <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#ccc' }}>{fmt(data.revenue)}</td>
+                  <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#48c78e', fontWeight: 700 }}>{fmt(data.devCut)}</td>
+                </tr>
+              ))}
+              {/* Totals row */}
+              <tr style={{ borderTop: '2px solid rgba(255,255,255,0.1)' }}>
+                <td style={{ padding: '8px 12px', color: '#fff', fontWeight: 700 }}>Total</td>
+                <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#fff', fontWeight: 700 }}>{totalUsers}</td>
+                <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#fff', fontWeight: 700 }}>{fmt(grossRevenue)}</td>
+                <td className="mono" style={{ padding: '8px 12px', textAlign: 'right', color: '#48c78e', fontWeight: 700 }}>{fmt(devEarnings)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Note about Stripe */}
+      <div style={{ marginTop: 20, padding: 16, borderRadius: 8, background: 'rgba(240,165,0,0.08)', border: '1px solid rgba(240,165,0,0.2)', fontSize: 12, color: '#f0a500', lineHeight: 1.6 }}>
+        <strong>Note:</strong> Revenue is currently estimated from participant count ({totalUsers} users x {fmt(PRICE_PER_USER)}).
+        Once Stripe is integrated, this will pull actual payment data including renewals and refunds.
+      </div>
     </div>
   );
 }

@@ -217,12 +217,164 @@ const supabaseStorage = {
   },
   async setSupportTickets(tickets) { await this._setSetting('support_tickets', tickets); },
 
+  async getDailyMinimums() {
+    const val = await this._getSetting('daily_minimums');
+    if (val) { try { localStorage.setItem('uc30_daily_minimums', JSON.stringify(val)); } catch {} }
+    return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_daily_minimums')) || {}; } catch { return {}; } })();
+  },
+  async setDailyMinimums(minimums) { await this._setSetting('daily_minimums', minimums); },
+
   async getCommunityPosts() {
     const val = await this._getSetting('community_posts');
     if (val) { try { localStorage.setItem('uc30_community_posts', JSON.stringify(val)); } catch {} }
     return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_community_posts')) || []; } catch { return []; } })();
   },
   async setCommunityPosts(posts) { await this._setSetting('community_posts', posts); },
+
+  async getSkoolLink() {
+    const val = await this._getSetting('skool_link');
+    if (val) { try { localStorage.setItem('uc30_skool_link', JSON.stringify(val)); } catch {} }
+    return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_skool_link')); } catch { return null; } })();
+  },
+  async setSkoolLink(link) { await this._setSetting('skool_link', link); },
+
+  // ── CRM: Contacts ────────────────────────────────────────────
+  async addContact(contact) {
+    const { data, error } = await supabase
+      .from('contacts')
+      .insert(contact)
+      .select()
+      .single();
+    if (error) { console.error('addContact error:', error); return null; }
+    return data;
+  },
+
+  async getContacts(participantId) {
+    const { data, error } = await supabase
+      .from('contacts')
+      .select('*')
+      .eq('participant_id', participantId)
+      .order('created_at', { ascending: false });
+    if (error) { console.error('getContacts error:', error); return []; }
+    return data || [];
+  },
+
+  async getContactWithFollowUps(contactId) {
+    const { data: contact, error: cErr } = await supabase
+      .from('contacts')
+      .select('*')
+      .eq('id', contactId)
+      .single();
+    if (cErr) { console.error('getContactWithFollowUps error:', cErr); return null; }
+    const { data: followUps, error: fErr } = await supabase
+      .from('follow_ups')
+      .select('*')
+      .eq('contact_id', contactId)
+      .order('created_at', { ascending: true });
+    if (fErr) { console.error('getFollowUps error:', fErr); }
+    return { ...contact, followUps: followUps || [] };
+  },
+
+  // Admin: get all contacts for any participant
+  async getContactsForParticipant(participantId) {
+    const { data, error } = await supabase
+      .from('contacts')
+      .select('*, follow_ups(*)')
+      .eq('participant_id', participantId)
+      .order('created_at', { ascending: false });
+    if (error) { console.error('getContactsForParticipant error:', error); return []; }
+    return data || [];
+  },
+
+  // ── CRM: Follow-Ups ──────────────────────────────────────────
+  async addFollowUp(followUp) {
+    const { data, error } = await supabase
+      .from('follow_ups')
+      .insert(followUp)
+      .select()
+      .single();
+    if (error) { console.error('addFollowUp error:', error); return null; }
+    return data;
+  },
+
+  async getFollowUps(participantId, dayNumber) {
+    let query = supabase
+      .from('follow_ups')
+      .select('*')
+      .eq('participant_id', participantId)
+      .order('created_at', { ascending: false });
+    if (dayNumber !== undefined) {
+      query = query.eq('day_number', dayNumber);
+    }
+    const { data, error } = await query;
+    if (error) { console.error('getFollowUps error:', error); return []; }
+    return data || [];
+  },
+
+  async getFollowUpsByContact(contactId) {
+    const { data, error } = await supabase
+      .from('follow_ups')
+      .select('*')
+      .eq('contact_id', contactId)
+      .order('created_at', { ascending: true });
+    if (error) { console.error('getFollowUpsByContact error:', error); return []; }
+    return data || [];
+  },
+
+  // ── File Uploads (Supabase Storage) ───────────────────────────
+  async uploadFile(participantId, dayNumber, indicator, file) {
+    const ext = file.name.split('.').pop();
+    const fileId = `${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const filePath = `${participantId}/day-${dayNumber}/${indicator}/${fileId}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('uc30-uploads')
+      .upload(filePath, file, { contentType: file.type });
+
+    if (uploadError) { console.error('uploadFile error:', uploadError); return null; }
+
+    // Record in uploads table
+    const uploadRecord = {
+      id: `upload_${fileId}`,
+      participant_id: participantId,
+      day_number: dayNumber,
+      indicator,
+      file_path: filePath,
+      file_name: file.name,
+      file_size: file.size,
+    };
+
+    const { data, error } = await supabase
+      .from('uploads')
+      .insert(uploadRecord)
+      .select()
+      .single();
+
+    if (error) { console.error('upload record error:', error); }
+    return data || uploadRecord;
+  },
+
+  async getUploads(participantId, dayNumber) {
+    let query = supabase
+      .from('uploads')
+      .select('*')
+      .eq('participant_id', participantId)
+      .order('created_at', { ascending: true });
+    if (dayNumber !== undefined) {
+      query = query.eq('day_number', dayNumber);
+    }
+    const { data, error } = await query;
+    if (error) { console.error('getUploads error:', error); return []; }
+    return data || [];
+  },
+
+  async getUploadUrl(filePath) {
+    const { data, error } = await supabase.storage
+      .from('uc30-uploads')
+      .createSignedUrl(filePath, 3600); // 1 hour
+    if (error) { console.error('getUploadUrl error:', error); return null; }
+    return data?.signedUrl || null;
+  },
 };
 
 // ── Database row conversion ──────────────────────────────────────
@@ -236,6 +388,7 @@ function toDbRow(user) {
     email: user.email,
     password: user.password || null,
     is_admin: user.isAdmin,
+    is_developer: user.isDeveloper || false,
     current_day: user.currentDay,
     is_active: user.isActive,
     has_paid: user.hasPaid,
@@ -246,12 +399,25 @@ function toDbRow(user) {
     removed_at: user.removedAt,
     access_expires_at: user.accessExpiresAt || null,
   };
+  if (user.ucPoints !== undefined) row.uc_points = user.ucPoints;
   // Only include profile_picture if it has a value (column may not exist yet)
   if (user.profilePicture) row.profile_picture = user.profilePicture;
   if (user.socialHandles && Object.keys(user.socialHandles).length > 0) row.social_handles = user.socialHandles;
   if (user.gettingStartedCompleted) row.getting_started_completed = true;
+  if (user.buyBox) row.buy_box = user.buyBox;
+  if (user.commitmentDeclaredAt) row.commitment_declared_at = user.commitmentDeclaredAt;
+  if (user.onboardingCompleted) row.onboarding_completed = true;
   if (user.communityBanned) row.community_banned = true;
   if (user.communityWarnings?.length > 0) row.community_warnings = user.communityWarnings;
+  // Activation Phase fields
+  if (user.offerCommitment != null) row.offer_commitment = user.offerCommitment;
+  if (user.stakesDeclaration) row.stakes_declaration = user.stakesDeclaration;
+  if (user.activationCompleted) row.activation_completed = true;
+  if (user.activationCompletedAt) row.activation_completed_at = user.activationCompletedAt;
+  // Guarantee tracking
+  if (user.cohortAttempt != null) row.cohort_attempt = user.cohortAttempt;
+  if (user.refundEligible !== undefined) row.refund_eligible = user.refundEligible;
+  if (user.firstCohortCompleted) row.first_cohort_completed = true;
   return row;
 }
 
@@ -264,6 +430,7 @@ function toDbUpdateRow(updates) {
   if (updates.currentDay !== undefined) row.current_day = updates.currentDay;
   if (updates.isActive !== undefined) row.is_active = updates.isActive;
   if (updates.isAdmin !== undefined) row.is_admin = updates.isAdmin;
+  if (updates.isDeveloper !== undefined) row.is_developer = updates.isDeveloper;
   if (updates.completedDays !== undefined) row.completed_days = updates.completedDays;
   if (updates.submissions !== undefined) row.submissions = updates.submissions;
   if (updates.metrics !== undefined) row.metrics = updates.metrics;
@@ -275,8 +442,21 @@ function toDbUpdateRow(updates) {
   if (updates.profilePicture !== undefined) row.profile_picture = updates.profilePicture;
   if (updates.socialHandles !== undefined) row.social_handles = updates.socialHandles;
   if (updates.gettingStartedCompleted !== undefined) row.getting_started_completed = updates.gettingStartedCompleted;
+  if (updates.ucPoints !== undefined) row.uc_points = updates.ucPoints;
+  if (updates.buyBox !== undefined) row.buy_box = updates.buyBox;
+  if (updates.commitmentDeclaredAt !== undefined) row.commitment_declared_at = updates.commitmentDeclaredAt;
+  if (updates.onboardingCompleted !== undefined) row.onboarding_completed = updates.onboardingCompleted;
   if (updates.communityBanned !== undefined) row.community_banned = updates.communityBanned;
   if (updates.communityWarnings !== undefined) row.community_warnings = updates.communityWarnings;
+  // Activation Phase fields
+  if (updates.offerCommitment !== undefined) row.offer_commitment = updates.offerCommitment;
+  if (updates.stakesDeclaration !== undefined) row.stakes_declaration = updates.stakesDeclaration;
+  if (updates.activationCompleted !== undefined) row.activation_completed = updates.activationCompleted;
+  if (updates.activationCompletedAt !== undefined) row.activation_completed_at = updates.activationCompletedAt;
+  // Guarantee tracking
+  if (updates.cohortAttempt !== undefined) row.cohort_attempt = updates.cohortAttempt;
+  if (updates.refundEligible !== undefined) row.refund_eligible = updates.refundEligible;
+  if (updates.firstCohortCompleted !== undefined) row.first_cohort_completed = updates.firstCohortCompleted;
   return row;
 }
 
@@ -290,21 +470,40 @@ function fromDbRow(row) {
     email: row.email,
     password: row.password,
     isAdmin: row.is_admin,
+    isDeveloper: row.is_developer || false,
     currentDay: row.current_day,
     isActive: row.is_active,
     hasPaid: row.has_paid || false,
     startDate: row.start_date,
     completedDays: row.completed_days || [],
     submissions: row.submissions || [],
-    metrics: row.metrics || { propertiesAnalyzed: 0, offersSubmitted: 0, agentsContacted: 0 },
+    metrics: {
+      propertiesAnalyzed: 0, offersSubmitted: 0, dealSourcesActivated: 0,
+      counteroffers: 0, followUps: 0, propertiesUnderContract: 0,
+      socialMediaPosts: 0,
+      ...(row.metrics || {}),
+    },
+    ucPoints: row.uc_points || 0,
     removedAt: row.removed_at,
     reactivatedAt: row.reactivated_at || null,
     accessExpiresAt: row.access_expires_at || null,
     profilePicture: row.profile_picture || null,
     socialHandles: row.social_handles || {},
     gettingStartedCompleted: row.getting_started_completed || false,
+    buyBox: row.buy_box || null,
+    commitmentDeclaredAt: row.commitment_declared_at || null,
+    onboardingCompleted: row.onboarding_completed || false,
     communityBanned: row.community_banned || false,
     communityWarnings: row.community_warnings || [],
+    // Activation Phase fields
+    offerCommitment: row.offer_commitment || null,
+    stakesDeclaration: row.stakes_declaration || null,
+    activationCompleted: row.activation_completed || false,
+    activationCompletedAt: row.activation_completed_at || null,
+    // Guarantee tracking
+    cohortAttempt: row.cohort_attempt || 1,
+    refundEligible: row.refund_eligible !== false,
+    firstCohortCompleted: row.first_cohort_completed || false,
   };
 }
 
@@ -406,11 +605,116 @@ const localStorageFallback = {
   setSupportTickets(tickets) {
     try { localStorage.setItem('uc30_support_tickets', JSON.stringify(tickets)); } catch {}
   },
+  getDailyMinimums() {
+    try { return JSON.parse(localStorage.getItem('uc30_daily_minimums')) || {}; } catch { return {}; }
+  },
+  setDailyMinimums(minimums) {
+    try { localStorage.setItem('uc30_daily_minimums', JSON.stringify(minimums)); } catch {}
+  },
   getCommunityPosts() {
     try { return JSON.parse(localStorage.getItem('uc30_community_posts')) || []; } catch { return []; }
   },
   setCommunityPosts(posts) {
     try { localStorage.setItem('uc30_community_posts', JSON.stringify(posts)); } catch {}
+  },
+  getSkoolLink() {
+    try { return JSON.parse(localStorage.getItem('uc30_skool_link')); } catch { return null; }
+  },
+  setSkoolLink(link) {
+    try { localStorage.setItem('uc30_skool_link', JSON.stringify(link)); } catch {}
+  },
+
+  // ── CRM: Contacts (localStorage fallback) ─────────────────────
+  addContact(contact) {
+    try {
+      const contacts = JSON.parse(localStorage.getItem('uc30_contacts') || '[]');
+      contacts.push({ ...contact, created_at: new Date().toISOString() });
+      localStorage.setItem('uc30_contacts', JSON.stringify(contacts));
+      return contact;
+    } catch { return null; }
+  },
+  getContacts(participantId) {
+    try {
+      const contacts = JSON.parse(localStorage.getItem('uc30_contacts') || '[]');
+      return contacts
+        .filter(c => c.participant_id === participantId)
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    } catch { return []; }
+  },
+  getContactWithFollowUps(contactId) {
+    try {
+      const contacts = JSON.parse(localStorage.getItem('uc30_contacts') || '[]');
+      const contact = contacts.find(c => c.id === contactId);
+      if (!contact) return null;
+      const followUps = JSON.parse(localStorage.getItem('uc30_follow_ups') || '[]');
+      return { ...contact, followUps: followUps.filter(f => f.contact_id === contactId) };
+    } catch { return null; }
+  },
+  getContactsForParticipant(participantId) {
+    return this.getContacts(participantId);
+  },
+
+  // ── CRM: Follow-Ups (localStorage fallback) ───────────────────
+  addFollowUp(followUp) {
+    try {
+      const followUps = JSON.parse(localStorage.getItem('uc30_follow_ups') || '[]');
+      followUps.push({ ...followUp, created_at: new Date().toISOString() });
+      localStorage.setItem('uc30_follow_ups', JSON.stringify(followUps));
+      return followUp;
+    } catch { return null; }
+  },
+  getFollowUps(participantId, dayNumber) {
+    try {
+      const followUps = JSON.parse(localStorage.getItem('uc30_follow_ups') || '[]');
+      return followUps
+        .filter(f => f.participant_id === participantId && (dayNumber === undefined || f.day_number === dayNumber))
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    } catch { return []; }
+  },
+  getFollowUpsByContact(contactId) {
+    try {
+      const followUps = JSON.parse(localStorage.getItem('uc30_follow_ups') || '[]');
+      return followUps.filter(f => f.contact_id === contactId);
+    } catch { return []; }
+  },
+
+  // ── File Uploads (localStorage fallback — stores base64) ───────
+  uploadFile(participantId, dayNumber, indicator, file) {
+    // In dev mode, store as base64 in localStorage (limited capacity)
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const record = {
+          id: `upload_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+          participant_id: participantId,
+          day_number: dayNumber,
+          indicator,
+          file_path: reader.result, // base64 data URL
+          file_name: file.name,
+          file_size: file.size,
+          created_at: new Date().toISOString(),
+        };
+        try {
+          const uploads = JSON.parse(localStorage.getItem('uc30_uploads') || '[]');
+          uploads.push(record);
+          localStorage.setItem('uc30_uploads', JSON.stringify(uploads));
+        } catch {}
+        resolve(record);
+      };
+      reader.readAsDataURL(file);
+    });
+  },
+  getUploads(participantId, dayNumber) {
+    try {
+      const uploads = JSON.parse(localStorage.getItem('uc30_uploads') || '[]');
+      return uploads.filter(u =>
+        u.participant_id === participantId && (dayNumber === undefined || u.day_number === dayNumber)
+      );
+    } catch { return []; }
+  },
+  getUploadUrl(filePath) {
+    // In localStorage mode, filePath IS the data URL
+    return filePath;
   },
 };
 
@@ -427,7 +731,8 @@ export function createNewUser(firstName, lastName, email, authId) {
     lastName,
     email: email.toLowerCase(),
     password: null,
-    isAdmin: email.toLowerCase() === 'admin@uc30.com',
+    isAdmin: email.toLowerCase() === 'admin@uc30.com' || email.toLowerCase() === 'dev@uc30.com' || email.toLowerCase() === 'justin.sobojinski@gmail.com',
+    isDeveloper: email.toLowerCase() === 'dev@uc30.com' || email.toLowerCase() === 'justin.sobojinski@gmail.com',
     currentDay: 1,
     isActive: true,
     hasPaid: false,
@@ -437,14 +742,31 @@ export function createNewUser(firstName, lastName, email, authId) {
     metrics: {
       propertiesAnalyzed: 0,
       offersSubmitted: 0,
-      agentsContacted: 0,
+      dealSourcesActivated: 0,
+      counteroffers: 0,
+      followUps: 0,
+      propertiesUnderContract: 0,
+      socialMediaPosts: 0,
     },
+    ucPoints: 0,
     removedAt: null,
     accessExpiresAt: null,
     profilePicture: null,
     socialHandles: {},
     gettingStartedCompleted: false,
+    buyBox: null,
+    commitmentDeclaredAt: null,
+    onboardingCompleted: false,
     communityBanned: false,
     communityWarnings: [],
+    // Activation Phase
+    offerCommitment: null,
+    stakesDeclaration: null,
+    activationCompleted: false,
+    activationCompletedAt: null,
+    // Guarantee tracking
+    cohortAttempt: 1,
+    refundEligible: true,
+    firstCohortCompleted: false,
   };
 }

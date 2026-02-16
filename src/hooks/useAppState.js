@@ -1,7 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
 import { storage, createNewUser, isSupabaseEnabled } from '../utils/storage';
 import { supabase } from '../utils/supabaseClient';
-import { CHALLENGE_DAYS, POST_30_TASK } from '../data/challengeDays';
+import { CHALLENGE_DAYS, POST_30_TASK, DEFAULT_DAILY_MINIMUMS, OFFER_BUFFER } from '../data/challengeDays';
+import { calculateUCPoints } from '../data/ucPoints';
 import { hashPassword } from '../utils/crypto';
 import { subscribeUser, tagSignUp, tagDayStarted, tagChallengeCompleted, tagRemovedFromCohort } from '../utils/kit';
 
@@ -20,6 +21,8 @@ export function useAppState() {
   const [supportTickets, setSupportTicketsState] = useState([]);
   const [communityPosts, setCommunityPostsState] = useState([]);
   const [cohortStats, setCohortStatsState] = useState({ active: 0, total: 0 });
+  const [dailyMinimumsOverrides, setDailyMinimumsOverridesState] = useState({});
+  const [skoolLink, setSkoolLinkState] = useState(null);
   // Password recovery mode (triggered by Supabase auth event)
   const [passwordRecovery, setPasswordRecovery] = useState(false);
   // Auth error (shown on login screen after failed OAuth redirect)
@@ -51,13 +54,27 @@ export function useAppState() {
     const removals = [];
     for (const p of currentParticipants) {
       if (p.isAdmin || !p.isActive || p.currentDay > 30) continue;
+      // Existing check: missed daily submission
       if (p.currentDay < pacificDayNum) {
         removals.push(p);
+        continue;
+      }
+      // New check: offer buffer rule
+      // Check if user's cumulative offers have fallen too far behind
+      const completedDay = p.currentDay - 1; // last completed day
+      if (completedDay >= 1 && completedDay <= 30) {
+        const offerTarget = DEFAULT_DAILY_MINIMUMS[completedDay]?.offersCumulative || completedDay;
+        const cumulativeOffers = p.metrics?.offersSubmitted || 0;
+        if (cumulativeOffers < offerTarget - OFFER_BUFFER) {
+          removals.push(p);
+        }
       }
     }
 
     for (const p of removals) {
       const updates = { isActive: false, removedAt: new Date().toISOString() };
+      // First cohort attempt → lose refund eligibility
+      if ((p.cohortAttempt || 1) === 1) updates.refundEligible = false;
       if (isSupabaseEnabled) {
         await storage.updateParticipant(p.id, updates);
       }
@@ -73,14 +90,17 @@ export function useAppState() {
       try { await Promise.resolve(storage.setCohortStats(stats)); } catch {}
       const currentUser = user;
       if (currentUser && removals.find(r => r.id === currentUser.id)) {
-        const updatedUser = { ...currentUser, isActive: false, removedAt: new Date().toISOString() };
+        const updatedUser = { ...currentUser, isActive: false, removedAt: new Date().toISOString(), refundEligible: (currentUser.cohortAttempt || 1) === 1 ? false : currentUser.refundEligible };
         setUser(updatedUser);
         storage.setUser(updatedUser);
       }
     } else if (removals.length > 0) {
       const updatedParticipants = currentParticipants.map(p => {
         const removed = removals.find(r => r.id === p.id);
-        return removed ? { ...p, isActive: false, removedAt: new Date().toISOString() } : p;
+        if (!removed) return p;
+        const updates = { isActive: false, removedAt: new Date().toISOString() };
+        if ((p.cohortAttempt || 1) === 1) updates.refundEligible = false;
+        return { ...p, ...updates };
       });
       setParticipants(updatedParticipants);
       persist(user, updatedParticipants);
@@ -167,6 +187,12 @@ export function useAppState() {
 
       const stats = await Promise.resolve(storage.getCohortStats());
       if (stats) setCohortStatsState(stats);
+
+      const minimums = await Promise.resolve(storage.getDailyMinimums());
+      if (minimums) setDailyMinimumsOverridesState(minimums);
+
+      const skool = await Promise.resolve(storage.getSkoolLink());
+      if (skool) setSkoolLinkState(skool);
 
       return { storedParticipants, cohortSettings };
     };
@@ -796,6 +822,8 @@ export function useAppState() {
 
     const isPost30 = dayNum > 30;
     const dayData = isPost30 ? POST_30_TASK : CHALLENGE_DAYS[dayNum - 1];
+    const dayMetrics = proof.dayMetrics || {};
+
     const submission = {
       day: dayNum,
       title: isPost30 ? `${dayData.title} (Day ${dayNum})` : dayData.title,
@@ -806,23 +834,26 @@ export function useAppState() {
       socialMediaPosted: proof.socialMediaPosted || false,
       socialMediaVerified: false,
       status: 'completed',
+      dayMetrics,
     };
 
+    // Accumulate day metrics into cumulative totals
     const updatedMetrics = { ...user.metrics };
-    if (isPost30 && dayData.multiMetrics) {
-      for (const m of dayData.multiMetrics) {
-        updatedMetrics[m.key] = (updatedMetrics[m.key] || 0) + m.count;
+    for (const [key, val] of Object.entries(dayMetrics)) {
+      if (val > 0) {
+        updatedMetrics[key] = (updatedMetrics[key] || 0) + val;
       }
-    } else if (dayData.metrics) {
-      updatedMetrics[dayData.metrics.key] =
-        (updatedMetrics[dayData.metrics.key] || 0) + dayData.metrics.count;
     }
+
+    // Recalculate total UC Points from cumulative metrics
+    const ucPoints = calculateUCPoints(updatedMetrics);
 
     const updates = {
       currentDay: dayNum + 1,
       completedDays: [...user.completedDays, dayNum],
       submissions: [...user.submissions, submission],
       metrics: updatedMetrics,
+      ucPoints,
     };
 
     const updatedUser = { ...user, ...updates };
@@ -848,12 +879,27 @@ export function useAppState() {
     if (dayNum === 30 && (updatedMetrics.offersSubmitted || 0) > 0) {
       tagChallengeCompleted(user.email).catch(() => {});
     }
+
+    // Mark first cohort completed if they finish day 30 on attempt 1
+    if (dayNum === 30 && (user.cohortAttempt || 1) === 1) {
+      const guaranteeUpdates = { firstCohortCompleted: true };
+      const guaranteeUser = { ...updatedUser, ...guaranteeUpdates };
+      if (isSupabaseEnabled) {
+        await storage.updateParticipant(user.id, guaranteeUpdates);
+      }
+      setUser(guaranteeUser);
+      storage.setUser(guaranteeUser);
+    }
   }, [user, participants, persist]);
 
   // ── Admin Actions ────────────────────────────────────
   const removeParticipant = useCallback(async (participantId) => {
-    const updates = { isActive: false, removedAt: new Date().toISOString() };
     const removed = participants.find(p => p.id === participantId);
+    const updates = { isActive: false, removedAt: new Date().toISOString() };
+    // If this is their first cohort attempt, they lose refund eligibility
+    if (removed && (removed.cohortAttempt || 1) === 1) {
+      updates.refundEligible = false;
+    }
 
     if (isSupabaseEnabled) {
       await storage.updateParticipant(participantId, updates);
@@ -910,6 +956,7 @@ export function useAppState() {
       removedAt: null,
       reactivatedAt: new Date().toISOString(),
       currentDay,
+      cohortAttempt: (existing?.cohortAttempt || 1) + 1,
     };
 
     if (isSupabaseEnabled) {
@@ -1142,6 +1189,133 @@ export function useAppState() {
     storage.setUser(updatedUser);
   }, [user, participants, persist]);
 
+  // ── Onboarding ─────────────────────────────────────────
+  const completeOnboarding = useCallback(async (onboardingData) => {
+    if (!user) return { error: 'Not logged in.' };
+    const updates = {
+      buyBox: onboardingData.buyBox || null,
+      commitmentDeclaredAt: onboardingData.commitmentDeclaredAt || new Date().toISOString(),
+      onboardingCompleted: true,
+    };
+    const updatedUser = { ...user, ...updates };
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(user.id, updates);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === user.id ? updatedUser : p
+      );
+      setParticipants(updatedParticipants);
+      persist(updatedUser, updatedParticipants);
+    }
+    setUser(updatedUser);
+    storage.setUser(updatedUser);
+    return { success: true };
+  }, [user, participants, persist]);
+
+  // ── Activation Phase ─────────────────────────────────────
+  const completeActivation = useCallback(async (activationData) => {
+    if (!user) return { error: 'Not logged in.' };
+    const updates = {
+      buyBox: activationData.buyBox || null,
+      offerCommitment: activationData.offerCommitment || null,
+      stakesDeclaration: activationData.stakesDeclaration || null,
+      commitmentDeclaredAt: activationData.commitmentDeclaredAt || new Date().toISOString(),
+      activationCompleted: true,
+      activationCompletedAt: activationData.activationCompletedAt || new Date().toISOString(),
+      onboardingCompleted: true,
+    };
+    const updatedUser = { ...user, ...updates };
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(user.id, updates);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === user.id ? updatedUser : p
+      );
+      setParticipants(updatedParticipants);
+      persist(updatedUser, updatedParticipants);
+    }
+    setUser(updatedUser);
+    storage.setUser(updatedUser);
+    return { success: true };
+  }, [user, participants, persist]);
+
+  // ── Skool Link (admin) ───────────────────────────────────
+  const setSkoolLink = useCallback(async (link) => {
+    await Promise.resolve(storage.setSkoolLink(link));
+    setSkoolLinkState(link);
+  }, []);
+
+  // ── Daily Minimums (admin) ──────────────────────────────
+  const setDailyMinimums = useCallback(async (minimums) => {
+    await Promise.resolve(storage.setDailyMinimums(minimums));
+    setDailyMinimumsOverridesState(minimums);
+  }, []);
+
+  // ── CRM: Contacts & Follow-Ups ────────────────────────────
+  const addContact = useCallback(async (contactData) => {
+    if (!user) return { error: 'Not logged in.' };
+    const contact = {
+      id: `contact_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      participant_id: user.id,
+      ...contactData,
+    };
+    const saved = await Promise.resolve(storage.addContact(contact));
+    if (!saved) return { error: 'Failed to save contact.' };
+    return { success: true, contact: saved };
+  }, [user]);
+
+  const getContacts = useCallback(async (participantId) => {
+    const id = participantId || user?.id;
+    if (!id) return [];
+    return Promise.resolve(storage.getContacts(id));
+  }, [user]);
+
+  const addFollowUp = useCallback(async (followUpData) => {
+    if (!user) return { error: 'Not logged in.' };
+    const followUp = {
+      id: `followup_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      participant_id: user.id,
+      ...followUpData,
+    };
+    const saved = await Promise.resolve(storage.addFollowUp(followUp));
+    if (!saved) return { error: 'Failed to save follow-up.' };
+    return { success: true, followUp: saved };
+  }, [user]);
+
+  const getFollowUps = useCallback(async (participantId, dayNumber) => {
+    const id = participantId || user?.id;
+    if (!id) return [];
+    return Promise.resolve(storage.getFollowUps(id, dayNumber));
+  }, [user]);
+
+  // ── File Uploads ──────────────────────────────────────────
+  const uploadFile = useCallback(async (dayNumber, indicator, file) => {
+    if (!user) return { error: 'Not logged in.' };
+    if (file.size > 5 * 1024 * 1024) return { error: 'File must be under 5 MB.' };
+    const result = await Promise.resolve(storage.uploadFile(user.id, dayNumber, indicator, file));
+    if (!result) return { error: 'Upload failed.' };
+    return { success: true, upload: result };
+  }, [user]);
+
+  const getUploads = useCallback(async (participantId, dayNumber) => {
+    const id = participantId || user?.id;
+    if (!id) return [];
+    return Promise.resolve(storage.getUploads(id, dayNumber));
+  }, [user]);
+
+  const getUploadUrl = useCallback(async (filePath) => {
+    return Promise.resolve(storage.getUploadUrl(filePath));
+  }, []);
+
+  const getFollowUpsByContact = useCallback(async (contactId) => {
+    return Promise.resolve(storage.getFollowUpsByContact(contactId));
+  }, []);
+
+  // Admin: get contacts for any participant
+  const getContactsForParticipant = useCallback(async (participantId) => {
+    return Promise.resolve(storage.getContactsForParticipant(participantId));
+  }, []);
+
   // Refresh community posts every 30 seconds
   useEffect(() => {
     if (!user || currentView === 'login') return;
@@ -1206,5 +1380,20 @@ export function useAppState() {
     warnCommunityUser,
     banCommunityUser,
     dismissCommunityWarning,
+    completeOnboarding,
+    completeActivation,
+    skoolLink,
+    setSkoolLink,
+    dailyMinimumsOverrides,
+    setDailyMinimums,
+    addContact,
+    getContacts,
+    addFollowUp,
+    getFollowUps,
+    uploadFile,
+    getUploads,
+    getUploadUrl,
+    getFollowUpsByContact,
+    getContactsForParticipant,
   };
 }
