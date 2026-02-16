@@ -24,7 +24,7 @@ function resizeImage(file, maxSize = 150) {
   });
 }
 
-export default function UserProfile({ user, onUpdateProfile, onChangePassword, onBack }) {
+export default function UserProfile({ user, onUpdateProfile, onChangePassword, onBack, skoolLink }) {
   // Profile state
   const [email, setEmail] = useState(user.email);
   const [firstName, setFirstName] = useState(user.firstName);
@@ -260,6 +260,45 @@ export default function UserProfile({ user, onUpdateProfile, onChangePassword, o
           {savingPw ? 'Updating...' : 'Update Password'}
         </button>
       </div>
+
+      {/* CDS Collective / Skool Bonus */}
+      {skoolLink && (
+        <div className="card" style={{ padding: 24, marginBottom: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+            <div style={{
+              width: 40, height: 40, borderRadius: 10,
+              background: 'linear-gradient(135deg, rgba(83,52,131,0.2), rgba(233,69,96,0.2))',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 18, flexShrink: 0,
+            }}>
+              +
+            </div>
+            <div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 2 }}>CDS Collective</h3>
+              <p style={{ fontSize: 13, color: '#666', margin: 0 }}>
+                Bonus community access for UC30 Operators
+              </p>
+            </div>
+          </div>
+          <p style={{ fontSize: 14, color: '#888', lineHeight: 1.6, marginBottom: 16 }}>
+            As a UC30 Operator, you have bonus access to the CDS Collective community on Skool.
+            Connect with other operators, share wins, and level up together.
+          </p>
+          <a
+            href={skoolLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-block', padding: '10px 24px', borderRadius: 10,
+              background: 'rgba(83,52,131,0.15)', border: '1px solid rgba(83,52,131,0.3)',
+              color: '#c9a0ff', textDecoration: 'none', fontSize: 14, fontWeight: 600,
+              fontFamily: "'DM Sans', sans-serif",
+            }}
+          >
+            Join CDS Collective
+          </a>
+        </div>
+      )}
 
     </div>
   );

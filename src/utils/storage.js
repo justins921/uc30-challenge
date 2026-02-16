@@ -230,6 +230,13 @@ const supabaseStorage = {
     return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_community_posts')) || []; } catch { return []; } })();
   },
   async setCommunityPosts(posts) { await this._setSetting('community_posts', posts); },
+
+  async getSkoolLink() {
+    const val = await this._getSetting('skool_link');
+    if (val) { try { localStorage.setItem('uc30_skool_link', JSON.stringify(val)); } catch {} }
+    return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_skool_link')); } catch { return null; } })();
+  },
+  async setSkoolLink(link) { await this._setSetting('skool_link', link); },
 };
 
 // ── Database row conversion ──────────────────────────────────────
@@ -264,6 +271,15 @@ function toDbRow(user) {
   if (user.onboardingCompleted) row.onboarding_completed = true;
   if (user.communityBanned) row.community_banned = true;
   if (user.communityWarnings?.length > 0) row.community_warnings = user.communityWarnings;
+  // Activation Phase fields
+  if (user.offerCommitment != null) row.offer_commitment = user.offerCommitment;
+  if (user.stakesDeclaration) row.stakes_declaration = user.stakesDeclaration;
+  if (user.activationCompleted) row.activation_completed = true;
+  if (user.activationCompletedAt) row.activation_completed_at = user.activationCompletedAt;
+  // Guarantee tracking
+  if (user.cohortAttempt != null) row.cohort_attempt = user.cohortAttempt;
+  if (user.refundEligible !== undefined) row.refund_eligible = user.refundEligible;
+  if (user.firstCohortCompleted) row.first_cohort_completed = true;
   return row;
 }
 
@@ -294,6 +310,15 @@ function toDbUpdateRow(updates) {
   if (updates.onboardingCompleted !== undefined) row.onboarding_completed = updates.onboardingCompleted;
   if (updates.communityBanned !== undefined) row.community_banned = updates.communityBanned;
   if (updates.communityWarnings !== undefined) row.community_warnings = updates.communityWarnings;
+  // Activation Phase fields
+  if (updates.offerCommitment !== undefined) row.offer_commitment = updates.offerCommitment;
+  if (updates.stakesDeclaration !== undefined) row.stakes_declaration = updates.stakesDeclaration;
+  if (updates.activationCompleted !== undefined) row.activation_completed = updates.activationCompleted;
+  if (updates.activationCompletedAt !== undefined) row.activation_completed_at = updates.activationCompletedAt;
+  // Guarantee tracking
+  if (updates.cohortAttempt !== undefined) row.cohort_attempt = updates.cohortAttempt;
+  if (updates.refundEligible !== undefined) row.refund_eligible = updates.refundEligible;
+  if (updates.firstCohortCompleted !== undefined) row.first_cohort_completed = updates.firstCohortCompleted;
   return row;
 }
 
@@ -331,6 +356,15 @@ function fromDbRow(row) {
     onboardingCompleted: row.onboarding_completed || false,
     communityBanned: row.community_banned || false,
     communityWarnings: row.community_warnings || [],
+    // Activation Phase fields
+    offerCommitment: row.offer_commitment || null,
+    stakesDeclaration: row.stakes_declaration || null,
+    activationCompleted: row.activation_completed || false,
+    activationCompletedAt: row.activation_completed_at || null,
+    // Guarantee tracking
+    cohortAttempt: row.cohort_attempt || 1,
+    refundEligible: row.refund_eligible !== false,
+    firstCohortCompleted: row.first_cohort_completed || false,
   };
 }
 
@@ -444,6 +478,12 @@ const localStorageFallback = {
   setCommunityPosts(posts) {
     try { localStorage.setItem('uc30_community_posts', JSON.stringify(posts)); } catch {}
   },
+  getSkoolLink() {
+    try { return JSON.parse(localStorage.getItem('uc30_skool_link')); } catch { return null; }
+  },
+  setSkoolLink(link) {
+    try { localStorage.setItem('uc30_skool_link', JSON.stringify(link)); } catch {}
+  },
 };
 
 // ── Export the right storage based on config ─────────────────────
@@ -486,5 +526,14 @@ export function createNewUser(firstName, lastName, email, authId) {
     onboardingCompleted: false,
     communityBanned: false,
     communityWarnings: [],
+    // Activation Phase
+    offerCommitment: null,
+    stakesDeclaration: null,
+    activationCompleted: false,
+    activationCompletedAt: null,
+    // Guarantee tracking
+    cohortAttempt: 1,
+    refundEligible: true,
+    firstCohortCompleted: false,
   };
 }

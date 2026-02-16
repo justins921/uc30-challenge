@@ -175,6 +175,22 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
         </details>
       )}
 
+      {/* Stakes Reminder — show when user hasn't submitted today */}
+      {!isComplete && !existingSubmission && !submitted && user.stakesDeclaration && isCurrentOrPast && (
+        <div style={{
+          marginBottom: 24, padding: '16px 20px', borderRadius: 12,
+          background: 'linear-gradient(135deg, rgba(233,69,96,0.04), rgba(240,165,0,0.04))',
+          border: '1px solid rgba(233,69,96,0.1)',
+        }}>
+          <div style={{ fontSize: 12, color: '#e94560', fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+            Remember why you started
+          </div>
+          <p style={{ fontSize: 14, color: '#aaa', lineHeight: 1.7, margin: 0, fontStyle: 'italic' }}>
+            "{user.stakesDeclaration}"
+          </p>
+        </div>
+      )}
+
       {/* Submission Area */}
       {isComplete || existingSubmission ? (
         <SubmissionComplete submission={existingSubmission} />

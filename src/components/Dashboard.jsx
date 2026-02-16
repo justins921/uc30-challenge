@@ -70,7 +70,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -89,6 +89,24 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           <p style={{ color: '#888', lineHeight: 1.7, marginBottom: 24 }}>
             You missed a daily submission and were removed from this run.
           </p>
+          {/* Stakes Declaration Reminder */}
+          {user.stakesDeclaration && (
+            <div style={{
+              padding: '16px 20px', borderRadius: 12, marginBottom: 24,
+              background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.12)',
+              textAlign: 'left',
+            }}>
+              <div style={{ fontSize: 12, color: '#e94560', fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                You wrote this during activation
+              </div>
+              <p style={{ fontSize: 14, color: '#ccc', lineHeight: 1.7, margin: 0, fontStyle: 'italic' }}>
+                "{user.stakesDeclaration}"
+              </p>
+              <p style={{ fontSize: 13, color: '#888', marginTop: 10, marginBottom: 0 }}>
+                Come back stronger in the next cohort.
+              </p>
+            </div>
+          )}
           {nextCohortDate ? (
             <NextCohortCountdown nextCohortDate={nextCohortDate} />
           ) : (
@@ -183,6 +201,21 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           <ProgressBanner user={user} cohortStartDate={cohortStartDate} calendarDay={calendarDay} />
         )}
 
+        {/* Stakes nudge when user hasn't submitted today */}
+        {cohortActive && !userCompletedToday && user.stakesDeclaration && (tab === 'timeline' || tab === 'day') && (
+          <div className="fade-up" style={{
+            padding: '12px 18px', borderRadius: 12, marginBottom: 16,
+            background: 'linear-gradient(135deg, rgba(233,69,96,0.04), rgba(240,165,0,0.04))',
+            border: '1px solid rgba(233,69,96,0.08)',
+            display: 'flex', alignItems: 'flex-start', gap: 10,
+          }}>
+            <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>*</span>
+            <p style={{ fontSize: 13, color: '#999', lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>
+              "{user.stakesDeclaration}"
+            </p>
+          </div>
+        )}
+
         {/* Cohort countdown when pre-cohort */}
         {cohortStartDate && !cohortActive && (tab === 'timeline' || tab === 'day') && (
           <CohortCountdown cohortStartDate={cohortStartDate} />
@@ -254,6 +287,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             onUpdateProfile={onUpdateProfile}
             onChangePassword={onChangePassword}
             onBack={() => handleTabChange('timeline')}
+            skoolLink={skoolLink}
           />
         )}
       </div>
@@ -356,12 +390,12 @@ function CohortCountdown({ cohortStartDate }) {
       )}
 
       <div className="card" style={{ padding: 24, textAlign: 'left', maxWidth: 400, margin: '0 auto' }}>
-        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>While you wait:</h3>
+        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>You're activated. Use this time to:</h3>
         <ul style={{ color: '#888', fontSize: 14, lineHeight: 2, listStyle: 'none', padding: 0 }}>
-          <li>✅ Review the challenge overview</li>
+          <li>✅ Review your buy box and target markets</li>
           <li>✅ Set up your deal-finding tools</li>
-          <li>✅ Research your target market</li>
-          <li>✅ Get ready to take action on Day 1</li>
+          <li>✅ Research properties in your target area</li>
+          <li>✅ Get ready to submit offers on Day 1</li>
         </ul>
       </div>
     </div>

@@ -64,7 +64,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -142,6 +142,9 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
 
         {/* Live Calls */}
         <LiveCallsManager calls={liveCalls || []} onSave={onSetLiveCalls} />
+
+        {/* Skool Link Setting */}
+        <SkoolLinkSetting skoolLink={skoolLink} onSave={onSetSkoolLink} />
 
         {/* Top Stats */}
         <div className="fade-up-delay-1 admin-stats-grid" style={{
@@ -427,6 +430,63 @@ function CohortSettings({ cohortStartDate, nextCohortDate, onSetCohortStartDate,
 }
 
 // ── Live Calls Manager ─────────────────────────────────────
+// ── Skool Link Setting ──────────────────────────────────────
+function SkoolLinkSetting({ skoolLink, onSave }) {
+  const [editing, setEditing] = useState(false);
+  const [linkValue, setLinkValue] = useState(skoolLink || '');
+
+  const handleSave = () => {
+    onSave(linkValue.trim() || null);
+    setEditing(false);
+  };
+
+  return (
+    <div className="card fade-up" style={{ marginBottom: 24, padding: '16px 24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontSize: 20 }}>🔗</span>
+          <div>
+            <div style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>
+              CDS Collective (Skool)
+            </div>
+            {!editing ? (
+              <span style={{ fontSize: 14, color: skoolLink ? '#c9a0ff' : '#555' }}>
+                {skoolLink || 'No Skool link set'}
+              </span>
+            ) : (
+              <input
+                type="url"
+                value={linkValue}
+                onChange={e => setLinkValue(e.target.value)}
+                placeholder="https://www.skool.com/cds-collective"
+                style={{ width: 340, maxWidth: '100%', fontSize: 13, padding: '8px 12px' }}
+              />
+            )}
+          </div>
+        </div>
+        {!editing ? (
+          <button
+            className="btn-secondary"
+            style={{ padding: '8px 16px', fontSize: 13 }}
+            onClick={() => { setLinkValue(skoolLink || ''); setEditing(true); }}
+          >
+            {skoolLink ? 'Edit' : 'Set Link'}
+          </button>
+        ) : (
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn-primary" style={{ padding: '8px 16px', fontSize: 13 }} onClick={handleSave}>
+              Save
+            </button>
+            <button className="btn-secondary" style={{ padding: '8px 16px', fontSize: 13 }} onClick={() => setEditing(false)}>
+              Cancel
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function LiveCallsManager({ calls, onSave }) {
   const [adding, setAdding] = useState(false);
   const [title, setTitle] = useState('');
@@ -602,6 +662,17 @@ function AdminStat({ label, value, color }) {
       <div className="mono" style={{ fontSize: 28, fontWeight: 700, color }}>{value}</div>
       <div style={{ fontSize: 10, color: '#666', marginTop: 4, lineHeight: 1.3 }}>{label}</div>
     </div>
+  );
+}
+
+function StatusBadge({ label, color }) {
+  return (
+    <span style={{
+      fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6,
+      background: `${color}15`, border: `1px solid ${color}30`, color,
+    }}>
+      {label}
+    </span>
   );
 }
 
@@ -1055,26 +1126,39 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
   const [filter, setFilter] = useState('all');
   const filtered = filter === 'all' ? nonAdmin
     : filter === 'active' ? nonAdmin.filter(p => p.isActive)
-    : nonAdmin.filter(p => !p.isActive);
+    : filter === 'removed' ? nonAdmin.filter(p => !p.isActive)
+    : filter === 'refund' ? nonAdmin.filter(p => p.refundEligible !== false)
+    : nonAdmin;
+
+  const refundCount = nonAdmin.filter(p => p.refundEligible !== false).length;
 
   return (
     <div className="fade-up">
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
-        {['all', 'active', 'removed'].map(f => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            style={{
-              background: filter === f ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.04)',
-              color: filter === f ? '#e94560' : '#888',
-              border: filter === f ? '1px solid rgba(233,69,96,0.3)' : '1px solid rgba(255,255,255,0.06)',
-              padding: '6px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
-              fontFamily: "'DM Sans', sans-serif", fontWeight: 500, textTransform: 'capitalize',
-            }}
-          >
-            {f} ({f === 'all' ? nonAdmin.length : f === 'active' ? nonAdmin.filter(p => p.isActive).length : nonAdmin.filter(p => !p.isActive).length})
-          </button>
-        ))}
+        {['all', 'active', 'removed', 'refund'].map(f => {
+          const labels = { all: 'All', active: 'Active', removed: 'Removed', refund: 'Refund Eligible' };
+          const counts = {
+            all: nonAdmin.length,
+            active: nonAdmin.filter(p => p.isActive).length,
+            removed: nonAdmin.filter(p => !p.isActive).length,
+            refund: refundCount,
+          };
+          return (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              style={{
+                background: filter === f ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.04)',
+                color: filter === f ? '#e94560' : '#888',
+                border: filter === f ? '1px solid rgba(233,69,96,0.3)' : '1px solid rgba(255,255,255,0.06)',
+                padding: '6px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+              }}
+            >
+              {labels[f]} ({counts[f]})
+            </button>
+          );
+        })}
       </div>
 
       {filtered.length === 0 ? (
@@ -1369,6 +1453,43 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
             )}
           </div>
         </div>
+      </div>
+
+      {/* Guarantee & Activation Status */}
+      <div className="card" style={{ marginBottom: 24 }}>
+        <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12, color: '#888', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+          Guarantee & Activation
+        </h3>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          <StatusBadge
+            label={`Cohort Attempt #${p.cohortAttempt || 1}`}
+            color="#888"
+          />
+          <StatusBadge
+            label={p.refundEligible !== false ? 'Refund Eligible' : 'Not Refund Eligible'}
+            color={p.refundEligible !== false ? '#48c78e' : '#e94560'}
+          />
+          <StatusBadge
+            label={p.firstCohortCompleted ? 'First Cohort Completed' : 'First Cohort Incomplete'}
+            color={p.firstCohortCompleted ? '#48c78e' : '#666'}
+          />
+          <StatusBadge
+            label={p.activationCompleted ? 'Activated' : 'Not Activated'}
+            color={p.activationCompleted ? '#48c78e' : '#f0a500'}
+          />
+          {p.offerCommitment && (
+            <StatusBadge
+              label={`${p.offerCommitment} offers committed`}
+              color="#f0a500"
+            />
+          )}
+        </div>
+        {p.stakesDeclaration && (
+          <div style={{ marginTop: 12, padding: '10px 14px', borderRadius: 8, background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.1)' }}>
+            <div style={{ fontSize: 11, color: '#666', fontWeight: 600, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 }}>Stakes Declaration</div>
+            <p style={{ fontSize: 13, color: '#aaa', lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>"{p.stakesDeclaration}"</p>
+          </div>
+        )}
       </div>
 
       {/* Stats Row */}
