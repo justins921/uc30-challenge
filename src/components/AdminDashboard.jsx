@@ -62,7 +62,6 @@ const ADMIN_TABS = [
   { id: 'content', label: 'Content' },
   { id: 'support', label: 'Support' },
   { id: 'social', label: 'Social Proof' },
-  { id: 'qa', label: 'QA Checklist' },
 ];
 
 export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums }) {
@@ -103,7 +102,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
   });
 
   const baseTabs = user?.isDeveloper
-    ? [...ADMIN_TABS, { id: 'revenue', label: 'Revenue' }]
+    ? [...ADMIN_TABS, { id: 'qa', label: 'QA Checklist' }, { id: 'revenue', label: 'Revenue' }]
     : ADMIN_TABS;
 
   const adminTabs = baseTabs.map(t => {
@@ -243,7 +242,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             dayDistribution={dayDistribution}
           />
         )}
-        {tab === 'qa' && (
+        {tab === 'qa' && user?.isDeveloper && (
           <QAChecklistTab />
         )}
         {tab === 'revenue' && user?.isDeveloper && (
