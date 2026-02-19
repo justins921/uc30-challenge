@@ -6,7 +6,6 @@ import LoginScreen from './components/LoginScreen';
 import Dashboard from './components/Dashboard';
 import AdminDashboard from './components/AdminDashboard';
 import OnboardingFlow from './components/OnboardingFlow';
-import ActivationPhase from './components/ActivationPhase';
 
 export default function App() {
   const {
@@ -62,7 +61,6 @@ export default function App() {
     banCommunityUser,
     dismissCommunityWarning,
     completeOnboarding,
-    completeActivation,
     skoolLink,
     setSkoolLink,
     dailyMinimumsOverrides,
@@ -312,11 +310,6 @@ export default function App() {
         getUploadUrl={getUploadUrl}
       />
     );
-  }
-
-  // Show Activation Phase for new non-admin users (replaces old onboarding)
-  if (!user.isAdmin && !user.activationCompleted && !user.onboardingCompleted) {
-    return <ActivationPhase user={user} onComplete={completeActivation} skoolLink={skoolLink || 'https://www.skool.com/cds-collective'} />;
   }
 
   return (

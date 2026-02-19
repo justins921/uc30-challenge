@@ -647,6 +647,11 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
   const [strategy, setStrategy] = useState(() => existingBuyBox.strategy || '');
   const [targetReturns, setTargetReturns] = useState(() => existingBuyBox.targetReturns || '');
 
+  // Activation state (offer commitment, stakes, commitment)
+  const [offerCommitment, setOfferCommitment] = useState(() => user.offerCommitment ? String(user.offerCommitment) : '');
+  const [stakesDeclaration, setStakesDeclaration] = useState(() => user.stakesDeclaration || '');
+  const [committed, setCommitted] = useState(false);
+
   const togglePropertyType = (pt) => {
     setPropertyTypes(prev =>
       prev.includes(pt) ? prev.filter(t => t !== pt) : [...prev, pt]
@@ -664,9 +669,10 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
   };
 
   const hasValidHandle = handles.some(h => h.handle.trim().length > 0);
+  const hasValidOffer = offerCommitment && parseInt(offerCommitment) > 0;
 
   const handleComplete = async () => {
-    if (!hasValidHandle || !markets.trim()) return;
+    if (!hasValidHandle || !markets.trim() || !hasValidOffer || !stakesDeclaration.trim() || !committed) return;
     setSaving(true);
     const socialHandles = socialHandlesToObject(handles);
     const proof = (proofText.trim() || fileName) ? { text: proofText, fileName, fileData } : null;
@@ -678,7 +684,12 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
       strategy,
       targetReturns: targetReturns.trim() || null,
     };
-    await onComplete(socialHandles, proof, buyBox);
+    const activationData = {
+      offerCommitment: parseInt(offerCommitment) || 0,
+      stakesDeclaration: stakesDeclaration.trim(),
+      commitmentDeclaredAt: new Date().toISOString(),
+    };
+    await onComplete(socialHandles, proof, buyBox, activationData);
     setDone(true);
     setSaving(false);
   };
@@ -687,15 +698,39 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
     return (
       <div className="card scale-in" style={{ padding: 32, textAlign: 'center', marginBottom: 24, borderColor: 'rgba(72,199,142,0.3)' }}>
         <div style={{ fontSize: 40, marginBottom: 12 }}>✅</div>
-        <h3 style={{ fontSize: 18, fontWeight: 700, color: '#48c78e' }}>Getting Started Complete!</h3>
+        <h3 style={{ fontSize: 18, fontWeight: 700, color: '#48c78e' }}>You're Activated!</h3>
         <p style={{ color: '#888', fontSize: 14, marginTop: 8 }}>You're all set. Day 1 is now unlocked.</p>
       </div>
     );
   }
 
+  // Validation summary
+  const missingFields = [];
+  if (!markets.trim()) missingFields.push('target market(s)');
+  if (!hasValidHandle) missingFields.push('at least one social media handle');
+  if (!hasValidOffer) missingFields.push('offer target');
+  if (!stakesDeclaration.trim()) missingFields.push('stakes declaration');
+  if (!committed) missingFields.push('commitment confirmation');
+
   return (
     <div className="fade-up" style={{ marginBottom: 24 }}>
-      {/* Header */}
+      {/* Welcome Header */}
+      <div className="card" style={{ textAlign: 'center', padding: '36px 28px', marginBottom: 20 }}>
+        <div className="mono" style={{ fontSize: 36, fontWeight: 700, color: '#e94560', marginBottom: 12 }}>
+          UC30
+        </div>
+        <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 10, lineHeight: 1.3 }}>
+          Welcome, {user.firstName || 'Operator'}.
+        </h1>
+        <p style={{ color: '#aaa', fontSize: 14, lineHeight: 1.7, marginBottom: 8 }}>
+          You've made the decision. Now let's make sure you're ready to execute.
+        </p>
+        <p style={{ color: '#666', fontSize: 13, lineHeight: 1.6 }}>
+          Complete everything below to activate your challenge and unlock Day 1.
+        </p>
+      </div>
+
+      {/* Section Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
         <div style={{
           width: 32, height: 32, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
@@ -911,6 +946,55 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
         </div>
       </div>
 
+      {/* Offer Target */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: 8, background: 'rgba(240,165,0,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+          }}>📊</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Set Your Offer Target</h3>
+        </div>
+        <p style={{ fontSize: 13, color: '#888', marginBottom: 16 }}>
+          How many offers will you commit to submitting during your 30-day sprint?
+        </p>
+
+        <div style={{
+          padding: 16, borderRadius: 12,
+          background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.15)',
+          marginBottom: 20,
+        }}>
+          <p style={{ color: '#f0a500', fontSize: 13, fontWeight: 600, margin: 0 }}>
+            Top operators commit to 50+ offers in 30 days. The more you submit, the higher your chances of closing.
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <input
+            type="number"
+            min="1"
+            value={offerCommitment}
+            onChange={e => setOfferCommitment(e.target.value)}
+            placeholder="50"
+            style={{
+              width: 120, fontSize: 32, fontWeight: 700, textAlign: 'center',
+              padding: '12px 16px', borderRadius: 12,
+              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
+              color: '#fff',
+            }}
+          />
+          <span style={{ fontSize: 16, color: '#888', fontWeight: 600 }}>offers in 30 days</span>
+        </div>
+
+        {hasValidOffer && (
+          <p style={{ fontSize: 13, color: '#666', marginTop: 12, marginBottom: 0 }}>
+            That's roughly <strong style={{ color: '#ccc' }}>
+              {Math.ceil(parseInt(offerCommitment) / 30)} offers per day
+            </strong>. You've got this.
+          </p>
+        )}
+      </div>
+
       {/* Social Media Handles */}
       <div className="card" style={{ marginBottom: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
@@ -924,6 +1008,84 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
           Add at least one handle. You can update these later in your Profile.
         </p>
         <SocialHandlesInput handles={handles} onChange={setHandles} />
+      </div>
+
+      {/* Stakes Declaration */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+          }}>🔥</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Declare Your Stakes</h3>
+        </div>
+        <p style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>
+          What will it cost you if you DON'T complete UC30?
+        </p>
+        <p style={{ fontSize: 12, color: '#666', lineHeight: 1.6, marginBottom: 16 }}>
+          Write out what you lose by not following through.
+          We'll show this back to you on tough days as a reminder of why you started.
+        </p>
+        <textarea
+          value={stakesDeclaration}
+          onChange={e => setStakesDeclaration(e.target.value)}
+          placeholder={"What happens if you quit? What stays the same? What opportunity do you lose?\n\nExample: \"If I don't finish UC30, I'll waste another year talking about real estate instead of doing it. My family won't see me step up. I'll still be stuck wondering 'what if' while other operators are closing deals.\""}
+          rows={5}
+          style={{
+            width: '100%', padding: '14px 16px', fontSize: 14, borderRadius: 10,
+            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+            color: '#eee', resize: 'vertical', fontFamily: "'DM Sans', sans-serif",
+            lineHeight: 1.7, boxSizing: 'border-box',
+          }}
+        />
+      </div>
+
+      {/* Commitment Confirmation */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: 8, background: 'rgba(72,199,142,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+          }}>✊</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Confirm Your Commitment</h3>
+        </div>
+
+        <div style={{
+          padding: 16, borderRadius: 12,
+          background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.15)',
+          marginBottom: 20,
+        }}>
+          <p style={{ color: '#ccc', fontSize: 14, lineHeight: 1.8, margin: 0, fontStyle: 'italic' }}>
+            "I commit to completing all daily standards for 30 consecutive days.
+            I understand that if I fall behind, I will restart with the next cohort.
+            I am ready to execute."
+          </p>
+        </div>
+
+        <label
+          style={{
+            display: 'flex', alignItems: 'flex-start', gap: 12, padding: '16px 18px',
+            background: committed ? 'rgba(72,199,142,0.06)' : 'rgba(255,255,255,0.03)',
+            border: `1px solid ${committed ? 'rgba(72,199,142,0.2)' : 'rgba(255,255,255,0.08)'}`,
+            borderRadius: 12, cursor: 'pointer',
+            transition: 'all 0.2s',
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={committed}
+            onChange={e => setCommitted(e.target.checked)}
+            style={{ marginTop: 3, accentColor: '#48c78e', width: 20, height: 20, cursor: 'pointer' }}
+          />
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: committed ? '#48c78e' : '#ccc' }}>
+              I Commit
+            </div>
+            <div style={{ fontSize: 13, color: '#666', marginTop: 4 }}>
+              I'm ready to execute for 30 consecutive days
+            </div>
+          </div>
+        </label>
       </div>
 
       {/* Proof Submission (optional) */}
@@ -960,19 +1122,15 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
       {/* Submit */}
       <button
         className="btn-primary"
-        style={{ width: '100%', padding: '14px 24px', fontSize: 16 }}
+        style={{ width: '100%', padding: '14px 24px', fontSize: 16, opacity: missingFields.length > 0 ? 0.5 : 1 }}
         onClick={handleComplete}
-        disabled={saving || !hasValidHandle || !markets.trim()}
+        disabled={saving || missingFields.length > 0}
       >
-        {saving ? 'Saving...' : 'Complete Getting Started →'}
+        {saving ? 'Activating...' : 'Activate & Start UC30'}
       </button>
-      {(!hasValidHandle || !markets.trim()) && (
+      {missingFields.length > 0 && (
         <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 8 }}>
-          {!markets.trim() && !hasValidHandle
-            ? 'Enter your target market(s) and at least one social media handle to continue'
-            : !markets.trim()
-            ? 'Enter your target market(s) to continue'
-            : 'Enter at least one social media handle to continue'}
+          Complete the following to continue: {missingFields.join(', ')}
         </p>
       )}
     </div>
