@@ -1,4 +1,7 @@
-const STRIPE_LINK = import.meta.env.VITE_STRIPE_PAYMENT_LINK || '';
+import { useState } from 'react';
+import { supabase } from '../utils/supabaseClient';
+
+const SUPABASE_FUNCTION_URL = import.meta.env.VITE_SUPABASE_FUNCTION_URL || '';
 
 const DEFAULTS = {
   badge: '30-Day Challenge',
@@ -41,12 +44,43 @@ export { DEFAULTS as LANDING_DEFAULTS };
 export default function LandingPage({ onGoToLogin, landingContent }) {
   // Merge custom content over defaults
   const c = { ...DEFAULTS, ...landingContent };
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
-  const handleGetStarted = () => {
-    if (STRIPE_LINK) {
-      window.location.href = STRIPE_LINK;
-    } else {
+  const handleGetStarted = async () => {
+    if (!SUPABASE_FUNCTION_URL) {
       onGoToLogin('register');
+      return;
+    }
+
+    // Check if user is logged in
+    const { data: { user } } = supabase ? await supabase.auth.getUser() : { data: { user: null } };
+
+    if (!user) {
+      // Not logged in — send to register first
+      onGoToLogin('register');
+      return;
+    }
+
+    setCheckoutLoading(true);
+    try {
+      const res = await fetch(`${SUPABASE_FUNCTION_URL}/create-checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          supabase_user_id: user.id,
+          email: user.email,
+        }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error('Checkout error:', data.error);
+        setCheckoutLoading(false);
+      }
+    } catch (err) {
+      console.error('Checkout error:', err);
+      setCheckoutLoading(false);
     }
   };
 
@@ -106,8 +140,8 @@ export default function LandingPage({ onGoToLogin, landingContent }) {
           {c.subtext}
         </p>
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button className="btn-primary" style={{ padding: '16px 40px', fontSize: 17 }} onClick={handleGetStarted}>
-            {c.ctaButton}
+          <button className="btn-primary" style={{ padding: '16px 40px', fontSize: 17 }} onClick={handleGetStarted} disabled={checkoutLoading}>
+            {checkoutLoading ? 'Loading…' : c.ctaButton}
           </button>
           <button
             className="btn-secondary"
@@ -196,8 +230,8 @@ export default function LandingPage({ onGoToLogin, landingContent }) {
           <p style={{ color: '#888', fontSize: 16, marginBottom: 32, lineHeight: 1.7 }}>
             {c.finalSubtext}
           </p>
-          <button className="btn-primary" style={{ padding: '16px 48px', fontSize: 17 }} onClick={handleGetStarted}>
-            {c.ctaButton}
+          <button className="btn-primary" style={{ padding: '16px 48px', fontSize: 17 }} onClick={handleGetStarted} disabled={checkoutLoading}>
+            {checkoutLoading ? 'Loading…' : c.ctaButton}
           </button>
           <p style={{ color: '#555', fontSize: 12, marginTop: 16 }}>
             One-time investment &middot; 1-year access
