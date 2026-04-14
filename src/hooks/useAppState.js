@@ -830,7 +830,19 @@ export function useAppState() {
   const submitDay = useCallback(async (dayNum, proof) => {
     if (!user) return;
 
+    // Validate: must be the user's current day (or post-30 operator mode)
     const isPost30 = dayNum > 30;
+    if (!isPost30 && dayNum !== user.currentDay) {
+      console.error(`Submission rejected: dayNum ${dayNum} does not match currentDay ${user.currentDay}`);
+      return { error: 'You can only submit your current day.' };
+    }
+
+    // Validate: day must not already be completed
+    if (user.completedDays.includes(dayNum)) {
+      console.error(`Submission rejected: day ${dayNum} already completed`);
+      return { error: 'This day has already been submitted.' };
+    }
+
     const dayData = isPost30 ? POST_30_TASK : CHALLENGE_DAYS[dayNum - 1];
     const dayMetrics = proof.dayMetrics || {};
 

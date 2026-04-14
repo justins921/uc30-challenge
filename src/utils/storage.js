@@ -418,6 +418,9 @@ function toDbRow(user) {
   if (user.cohortAttempt != null) row.cohort_attempt = user.cohortAttempt;
   if (user.refundEligible !== undefined) row.refund_eligible = user.refundEligible;
   if (user.firstCohortCompleted) row.first_cohort_completed = true;
+  // Stripe payment tracking
+  if (user.stripeCustomerId) row.stripe_customer_id = user.stripeCustomerId;
+  if (user.stripeSubscriptionId) row.stripe_subscription_id = user.stripeSubscriptionId;
   return row;
 }
 
@@ -457,6 +460,9 @@ function toDbUpdateRow(updates) {
   if (updates.cohortAttempt !== undefined) row.cohort_attempt = updates.cohortAttempt;
   if (updates.refundEligible !== undefined) row.refund_eligible = updates.refundEligible;
   if (updates.firstCohortCompleted !== undefined) row.first_cohort_completed = updates.firstCohortCompleted;
+  // Stripe payment tracking
+  if (updates.stripeCustomerId !== undefined) row.stripe_customer_id = updates.stripeCustomerId;
+  if (updates.stripeSubscriptionId !== undefined) row.stripe_subscription_id = updates.stripeSubscriptionId;
   return row;
 }
 
@@ -504,6 +510,9 @@ function fromDbRow(row) {
     cohortAttempt: row.cohort_attempt || 1,
     refundEligible: row.refund_eligible !== false,
     firstCohortCompleted: row.first_cohort_completed || false,
+    // Stripe payment tracking
+    stripeCustomerId: row.stripe_customer_id || null,
+    stripeSubscriptionId: row.stripe_subscription_id || null,
   };
 }
 

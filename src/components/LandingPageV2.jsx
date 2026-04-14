@@ -19,6 +19,8 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
   const c = { ...DEFAULTS, ...landingContent };
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
+  const [checkoutError, setCheckoutError] = useState(null);
+
   const handleGetStarted = async () => {
     if (!SUPABASE_FUNCTION_URL) {
       onGoToLogin('register');
@@ -34,13 +36,17 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
     }
 
     setCheckoutLoading(true);
+    setCheckoutError(null);
     try {
+      const origin = window.location.origin;
       const res = await fetch(`${SUPABASE_FUNCTION_URL}/create-checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           supabase_user_id: user.id,
           email: user.email,
+          success_url: `${origin}/?success=true`,
+          cancel_url: `${origin}/`,
         }),
       });
       const data = await res.json();
@@ -48,10 +54,12 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
         window.location.href = data.url;
       } else {
         console.error('Checkout error:', data.error);
+        setCheckoutError('Unable to start checkout. Please try again or contact support.');
         setCheckoutLoading(false);
       }
     } catch (err) {
       console.error('Checkout error:', err);
+      setCheckoutError('Unable to start checkout. Please try again or contact support.');
       setCheckoutLoading(false);
     }
   };
@@ -170,6 +178,15 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
         <p style={{ color: '#555', fontSize: 13, marginBottom: 48 }}>
           One-time investment. 1-year access. Unlimited cohort re-runs.
         </p>
+        {checkoutError && (
+          <div style={{
+            padding: '12px 20px', borderRadius: 10,
+            background: 'rgba(233,69,96,0.1)', border: '1px solid rgba(233,69,96,0.3)',
+            color: '#e94560', fontSize: 14, maxWidth: 500, margin: '0 auto 48px',
+          }}>
+            {checkoutError}
+          </div>
+        )}
       </section>
 
       {/* ── Social Proof Bar — bandwagon + authority ──── */}

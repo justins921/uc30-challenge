@@ -246,9 +246,34 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
       {/* Video Player */}
       {!isPost30 && <div className="card" style={{ marginBottom: 24, padding: 0, overflow: 'hidden' }}>
         {dayData.videoUrl ? (
-          <div style={{ aspectRatio: '16/9' }}>
-            <iframe src={dayData.videoUrl} style={{ width: '100%', height: '100%', border: 'none' }}
-              allow="accelerometer; autoplay; encrypted-media; gyroscope" allowFullScreen />
+          <div style={{ aspectRatio: '16/9', position: 'relative' }}>
+            <iframe
+              src={dayData.videoUrl}
+              style={{ width: '100%', height: '100%', border: 'none' }}
+              allow="accelerometer; autoplay; encrypted-media; gyroscope"
+              allowFullScreen
+              onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+            />
+            <div style={{
+              display: 'none', position: 'absolute', inset: 0,
+              background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
+              alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12,
+            }}>
+              <div style={{ fontSize: 14, color: '#e94560', fontWeight: 600 }}>Video failed to load</div>
+              <button
+                className="btn-secondary"
+                style={{ padding: '8px 20px', fontSize: 13 }}
+                onClick={() => {
+                  const iframe = document.querySelector(`iframe[src="${dayData.videoUrl}"]`);
+                  if (iframe) { iframe.style.display = ''; iframe.nextSibling.style.display = 'none'; iframe.src = dayData.videoUrl; }
+                }}
+              >
+                Retry
+              </button>
+              <a href={dayData.videoUrl} target="_blank" rel="noopener" style={{ color: '#888', fontSize: 12, textDecoration: 'underline' }}>
+                Open video directly
+              </a>
+            </div>
           </div>
         ) : (
           <div style={{
@@ -260,7 +285,7 @@ export default function DayView({ day, user, onSubmit, onBack, contentOverrides,
               width: 72, height: 72, borderRadius: '50%',
               background: 'rgba(233,69,96,0.2)', border: '2px solid rgba(233,69,96,0.4)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28,
-            }}>▶</div>
+            }}>&#9654;</div>
             <div style={{ fontSize: 13, color: '#888' }}>Day {day} Instructional Video</div>
           </div>
         )}

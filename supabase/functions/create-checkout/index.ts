@@ -18,7 +18,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { supabase_user_id, email } = await req.json();
+    const { supabase_user_id, email, success_url, cancel_url } = await req.json();
 
     if (!supabase_user_id || !email) {
       return new Response(
@@ -26,6 +26,10 @@ Deno.serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
+
+    // Use client-provided URLs with fallback to default
+    const resolvedSuccessUrl = success_url || "https://uc30-challenge.vercel.app/?success=true";
+    const resolvedCancelUrl = cancel_url || "https://uc30-challenge.vercel.app/";
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
@@ -59,8 +63,8 @@ Deno.serve(async (req) => {
         email,
       },
       customer_email: email,
-      success_url: "https://uc30-challenge.vercel.app/?success=true",
-      cancel_url: "https://uc30-challenge.vercel.app/",
+      success_url: resolvedSuccessUrl,
+      cancel_url: resolvedCancelUrl,
     });
 
     return new Response(

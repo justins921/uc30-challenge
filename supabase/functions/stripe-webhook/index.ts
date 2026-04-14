@@ -50,12 +50,24 @@ Deno.serve(async (req) => {
         const expiresAt = new Date();
         expiresAt.setFullYear(expiresAt.getFullYear() + 1);
 
+        // Extract Stripe IDs for future lookups (refunds, portal, etc.)
+        const stripeCustomerId = typeof session.customer === "string"
+          ? session.customer
+          : session.customer?.id;
+        const stripeSubscriptionId = typeof session.subscription === "string"
+          ? session.subscription
+          : (session.subscription as Stripe.Subscription | null)?.id;
+
+        const updatePayload: Record<string, unknown> = {
+          has_paid: true,
+          access_expires_at: expiresAt.toISOString(),
+        };
+        if (stripeCustomerId) updatePayload.stripe_customer_id = stripeCustomerId;
+        if (stripeSubscriptionId) updatePayload.stripe_subscription_id = stripeSubscriptionId;
+
         const { error } = await supabase
           .from("participants")
-          .update({
-            has_paid: true,
-            access_expires_at: expiresAt.toISOString(),
-          })
+          .update(updatePayload)
           .eq("auth_id", userId);
 
         if (error) {
