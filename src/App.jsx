@@ -6,6 +6,7 @@ import LoginScreen from './components/LoginScreen';
 import Dashboard from './components/Dashboard';
 import AdminDashboard from './components/AdminDashboard';
 import OnboardingFlow from './components/OnboardingFlow';
+import AffiliatePage from './components/AffiliatePage';
 
 export default function App() {
   const {
@@ -137,6 +138,11 @@ export default function App() {
         </div>
       </div>
     );
+  }
+
+  // Affiliate page — accessible to anyone, no auth required
+  if (window.location.pathname.replace(/\/+$/, '') === '/affiliates') {
+    return <AffiliatePage />;
   }
 
   // Not logged in

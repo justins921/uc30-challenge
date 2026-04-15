@@ -18,7 +18,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { supabase_user_id, email, success_url, cancel_url } = await req.json();
+    const { supabase_user_id, email, success_url, cancel_url, tolt_referral } = await req.json();
 
     if (!supabase_user_id || !email) {
       return new Response(
@@ -56,12 +56,16 @@ Deno.serve(async (req) => {
         metadata: {
           supabase_user_id,
           email,
+          ...(tolt_referral ? { tolt_referral } : {}),
         },
       },
       metadata: {
         supabase_user_id,
         email,
+        ...(tolt_referral ? { tolt_referral } : {}),
       },
+      // Tolt uses client_reference_id to attribute affiliate conversions
+      ...(tolt_referral ? { client_reference_id: tolt_referral } : {}),
       customer_email: email,
       success_url: resolvedSuccessUrl,
       cancel_url: resolvedCancelUrl,

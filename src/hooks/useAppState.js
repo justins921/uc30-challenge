@@ -493,6 +493,11 @@ export function useAppState() {
         tagSignUp(email).catch(() => {});
       }).catch(() => {});
 
+      // Tolt affiliate lead tracking (fire and forget)
+      if (window.tolt_referral && window.tolt?.signup) {
+        window.tolt.signup(email).catch(() => {});
+      }
+
       return { success: true };
     }
 
@@ -521,6 +526,11 @@ export function useAppState() {
     subscribeUser(email, firstName).then(() => {
       tagSignUp(email).catch(() => {});
     }).catch(() => {});
+
+    // Tolt affiliate lead tracking (fire and forget)
+    if (window.tolt_referral && window.tolt?.signup) {
+      window.tolt.signup(email).catch(() => {});
+    }
 
     return { success: true };
   }, [participants, persist, cohortStartDate, updateCohortStats]);

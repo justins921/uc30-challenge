@@ -47,6 +47,7 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
           email: user.email,
           success_url: `${origin}/?success=true`,
           cancel_url: `${origin}/`,
+          tolt_referral: window.tolt_referral || null,
         }),
       });
       const data = await res.json();
@@ -540,7 +541,15 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
         borderTop: '1px solid rgba(255,255,255,0.06)', padding: '24px',
         textAlign: 'center', fontSize: 13, color: '#444',
       }}>
-        UC30 — 30-Day First Deal Challenge
+        <div>UC30 — 30-Day First Deal Challenge</div>
+        <a
+          href="/affiliates"
+          style={{ color: '#444', textDecoration: 'none', fontSize: 12, marginTop: 8, display: 'inline-block' }}
+          onMouseEnter={e => e.currentTarget.style.color = '#888'}
+          onMouseLeave={e => e.currentTarget.style.color = '#444'}
+        >
+          Affiliate Program
+        </a>
       </footer>
 
       {/* Pulse animation for the urgency dot */}
