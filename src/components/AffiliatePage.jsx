@@ -150,6 +150,27 @@ export default function AffiliatePage() {
         </div>
       </section>
 
+      {/* Swipe Copy / Resources */}
+      <section style={{
+        maxWidth: 700, margin: '0 auto', padding: '0 24px 64px',
+        position: 'relative', zIndex: 1,
+      }}>
+        <h2 style={{
+          fontSize: 'clamp(20px, 3.5vw, 28px)', fontWeight: 700,
+          textAlign: 'center', marginBottom: 12,
+        }}>
+          Ready-to-Use Promo Copy
+        </h2>
+        <p style={{ textAlign: 'center', color: '#666', fontSize: 14, marginBottom: 32 }}>
+          Copy, customize, and post. Just swap in your affiliate link.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {SWIPE_COPY.map((item, i) => (
+            <SwipeCard key={i} label={item.label} platform={item.platform} text={item.text} />
+          ))}
+        </div>
+      </section>
+
       {/* FAQ */}
       <section style={{
         maxWidth: 600, margin: '0 auto', padding: '0 24px 80px',
@@ -197,3 +218,128 @@ export default function AffiliatePage() {
     </div>
   );
 }
+
+function SwipeCard({ label, platform, text }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <div className="card" style={{ padding: '20px 24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={{ fontSize: 14, fontWeight: 700 }}>{label}</span>
+          <span style={{
+            fontSize: 11, color: '#888', padding: '2px 8px', borderRadius: 6,
+            background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.06)',
+          }}>
+            {platform}
+          </span>
+        </div>
+        <button
+          onClick={handleCopy}
+          style={{
+            fontSize: 12, padding: '4px 12px', borderRadius: 6, cursor: 'pointer',
+            border: '1px solid rgba(255,255,255,0.1)', background: copied ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.04)',
+            color: copied ? '#48c78e' : '#888', fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
+            transition: 'all 0.2s',
+          }}
+        >
+          {copied ? 'Copied!' : 'Copy'}
+        </button>
+      </div>
+      <p style={{ color: '#999', fontSize: 13, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{text}</p>
+    </div>
+  );
+}
+
+const SWIPE_COPY = [
+  {
+    label: 'Problem/Solution',
+    platform: 'Twitter/X',
+    text: `Most people "interested in real estate" stay interested for years.
+
+They watch YouTube. Buy courses that sit unopened. Tell themselves "next month."
+
+UC30 fixes that. 30 days. One task per day. Miss a day, you're out.
+
+It's the accountability most people are missing.
+
+[YOUR LINK]`,
+  },
+  {
+    label: 'Outcome-Focused',
+    platform: 'Twitter/X',
+    text: `What would change if you went from zero real estate experience to submitting your first offer in 30 days?
+
+That's what UC30 does. Daily video lesson. One clear task. A community that holds you accountable.
+
+No theory spirals. Just execution.
+
+[YOUR LINK]`,
+  },
+  {
+    label: 'Story Format',
+    platform: 'LinkedIn',
+    text: `I keep meeting people who say they want to get into real estate.
+
+They've watched the YouTube videos. Read the books. Maybe even bought a course or two.
+
+But they haven't taken a single real action.
+
+The problem isn't knowledge. It's accountability.
+
+That's why UC30 exists. It's a 30-day challenge:
+- Daily video lesson (short, actionable)
+- One clear task per day
+- Submit proof before midnight
+- Miss a day? You're removed from the cohort
+
+By the end, participants have set up deal-finding systems, analyzed real properties, contacted agents, and submitted actual offers.
+
+$997 for a year of access. If you know someone who keeps saying "I want to get into real estate" but hasn't done anything about it \u2014 this is what they need.
+
+[YOUR LINK]`,
+  },
+  {
+    label: 'Quick Hook',
+    platform: 'Instagram/TikTok',
+    text: `Stop me if this sounds familiar:
+
+You've been "interested in real estate" for months (maybe years). You've watched the YouTube videos. Maybe bought a course. But you still haven't done anything.
+
+Here's the fix: UC30.
+
+30 days. One video lesson and one task per day. Miss a day and you're kicked out.
+
+That last part is what makes it work. When there are real consequences, you actually show up.
+
+Link in bio.`,
+  },
+  {
+    label: 'Intro Email',
+    platform: 'Email',
+    text: `Subject: The real estate program that kicks you out
+
+I wanted to share something \u2014 especially if you've been thinking about getting into real estate but haven't pulled the trigger.
+
+It's called UC30. A 30-day challenge where each day you watch a short video lesson, complete one action task, and submit proof before midnight. Miss a day? You're removed.
+
+Sounds harsh, but it's the feature. Most courses fail because there's no urgency. UC30 makes accountability non-negotiable.
+
+By day 30, participants have analyzed properties, contacted agents, and submitted real offers. It's designed for complete beginners and works around a full-time job (1-2 hours/day).
+
+$997 one-time. 1-year access with unlimited cohort re-runs.
+
+[YOUR LINK]`,
+  },
+  {
+    label: 'DM Template',
+    platform: 'Direct Message',
+    text: `Hey \u2014 have you looked into UC30? It's a 30-day real estate challenge with daily lessons and tasks. Real accountability too (miss a day, you're out). Might be what you need to actually get started. Worth a look: [YOUR LINK]`,
+  },
+];
