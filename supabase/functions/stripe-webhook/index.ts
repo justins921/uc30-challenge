@@ -1,5 +1,6 @@
 import Stripe from "https://esm.sh/stripe@17?target=deno";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendEmail } from "../_shared/email.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
   apiVersion: "2025-03-31.basil",
@@ -74,6 +75,16 @@ Deno.serve(async (req) => {
           console.error("Failed to update participant access:", error);
         } else {
           console.log(`Granted access to user ${userId} until ${expiresAt.toISOString()}`);
+
+          // Send payment confirmation email via Resend
+          const email = session.metadata?.email || session.customer_email;
+          if (email) {
+            sendEmail({
+              to: email,
+              template: "payment-confirmed",
+              data: { email, expiresAt: expiresAt.toISOString() },
+            }).catch((err) => console.error("Failed to send payment-confirmed email:", err));
+          }
         }
         break;
       }
@@ -112,6 +123,24 @@ Deno.serve(async (req) => {
           console.error("Failed to revoke participant access:", error);
         } else {
           console.log(`Revoked access for user ${userId}`);
+
+          // Look up participant email to send notification
+          const { data: participant } = await supabase
+            .from("participants")
+            .select("email, first_name")
+            .eq("auth_id", userId)
+            .single();
+
+          if (participant?.email) {
+            const template = event.type === "customer.subscription.deleted"
+              ? "subscription-cancelled"
+              : "payment-failed";
+            sendEmail({
+              to: participant.email,
+              template,
+              data: { email: participant.email, firstName: participant.first_name },
+            }).catch((err) => console.error(`Failed to send ${template} email:`, err));
+          }
         }
         break;
       }

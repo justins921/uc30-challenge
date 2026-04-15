@@ -5,6 +5,7 @@ import { CHALLENGE_DAYS, POST_30_TASK, DEFAULT_DAILY_MINIMUMS, OFFER_BUFFER } fr
 import { calculateUCPoints } from '../data/ucPoints';
 import { hashPassword } from '../utils/crypto';
 import { subscribeUser, tagSignUp, tagDayStarted, tagChallengeCompleted, tagRemovedFromCohort } from '../utils/kit';
+import { emailWelcome, emailDayCompleted, emailChallengeCompleted, emailRemovedFromCohort, emailReactivated } from '../utils/email';
 
 export function useAppState() {
   const [user, setUser] = useState(null);
@@ -79,6 +80,7 @@ export function useAppState() {
         await storage.updateParticipant(p.id, updates);
       }
       tagRemovedFromCohort(p.email).catch(() => {});
+      emailRemovedFromCohort(p.email, p.firstName);
     }
 
     if (removals.length > 0 && isSupabaseEnabled) {
@@ -149,6 +151,7 @@ export function useAppState() {
         subscribeUser(authUser.email, firstName).then(() => {
           tagSignUp(authUser.email).catch(() => {});
         }).catch(() => {});
+        emailWelcome(authUser.email, firstName);
         return saved;
       }
       console.error('ensureParticipant: addParticipant failed', saved?.__error || 'returned null');
@@ -493,6 +496,9 @@ export function useAppState() {
         tagSignUp(email).catch(() => {});
       }).catch(() => {});
 
+      // Transactional welcome email via Resend
+      emailWelcome(email, firstName);
+
       // Tolt affiliate lead tracking (fire and forget)
       if (window.tolt_referral && window.tolt?.signup) {
         window.tolt.signup(email).catch(() => {});
@@ -526,6 +532,9 @@ export function useAppState() {
     subscribeUser(email, firstName).then(() => {
       tagSignUp(email).catch(() => {});
     }).catch(() => {});
+
+    // Transactional welcome email via Resend
+    emailWelcome(email, firstName);
 
     // Tolt affiliate lead tracking (fire and forget)
     if (window.tolt_referral && window.tolt?.signup) {
@@ -912,6 +921,12 @@ export function useAppState() {
       tagChallengeCompleted(user.email).catch(() => {});
     }
 
+    // Transactional emails via Resend
+    emailDayCompleted(user.email, user.firstName, dayNum);
+    if (dayNum === 30) {
+      emailChallengeCompleted(user.email, user.firstName);
+    }
+
     // Mark first cohort completed if they finish day 30 on attempt 1
     if (dayNum === 30 && (user.cohortAttempt || 1) === 1) {
       const guaranteeUpdates = { firstCohortCompleted: true };
@@ -949,6 +964,7 @@ export function useAppState() {
 
     if (removed?.email) {
       tagRemovedFromCohort(removed.email).catch(() => {});
+      emailRemovedFromCohort(removed.email, removed.firstName);
     }
   }, [participants, user, persist, updateCohortStats]);
 
@@ -1013,6 +1029,11 @@ export function useAppState() {
       } else {
         persist(user, updatedParticipants);
       }
+    }
+
+    // Send reactivation email
+    if (existing?.email) {
+      emailReactivated(existing.email, existing.firstName, currentDay, updates.cohortAttempt);
     }
   }, [participants, user, persist, cohortStartDate, updateCohortStats]);
 
