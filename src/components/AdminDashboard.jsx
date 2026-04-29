@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './Header';
 import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DEFAULT_DAILY_MINIMUMS, checkOfferBuffer, OFFER_BUFFER } from '../data/challengeDays';
 import { INDICATOR_KEYS, INDICATOR_LABELS, INDICATOR_SHORT_LABELS, INDICATOR_COLORS, UC_POINT_VALUES, calculateUCPoints } from '../data/ucPoints';
 import { AttachmentLink } from './DayView';
 import { LANDING_DEFAULTS } from './LandingPage';
 import Footer from './Footer';
+import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT, checkWeeklyCompliance, getWeekNumber, getWeekRange, getWeekDayCount, calculateAtRisk, getNowInTimezone } from '../data/compliance';
 
 function getSocialUrl(platform, handle) {
   const clean = handle.replace(/^@/, '').trim();
@@ -57,6 +58,7 @@ function SocialHandleLinks({ socialHandles }) {
 const ADMIN_TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'participants', label: 'Participants' },
+  { id: 'compliance', label: 'Compliance' },
   { id: 'submissions', label: 'Submissions' },
   { id: 'community', label: 'Community' },
   { id: 'content', label: 'Content' },
@@ -64,7 +66,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink, getContactsForParticipant, getUploads, getUploadUrl }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink, getContactsForParticipant, getUploads, getUploadUrl, complianceSettings, onSetComplianceDailyMinimums, onSetComplianceWeeklyMinimums, onSetComplianceEnforcement, getAllDailySubmissions, getRemovalLog }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -200,6 +202,19 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             getContactsForParticipant={getContactsForParticipant}
             getUploads={getUploads}
             getUploadUrl={getUploadUrl}
+          />
+        )}
+        {tab === 'compliance' && (
+          <ComplianceTab
+            complianceSettings={complianceSettings}
+            onSetDailyMinimums={onSetComplianceDailyMinimums}
+            onSetWeeklyMinimums={onSetComplianceWeeklyMinimums}
+            onSetEnforcement={onSetComplianceEnforcement}
+            getAllDailySubmissions={getAllDailySubmissions}
+            getRemovalLog={getRemovalLog}
+            participants={nonAdmin}
+            cohortStartDate={cohortStartDate}
+            onReactivate={onReactivate}
           />
         )}
         {tab === 'submissions' && (
@@ -3613,6 +3628,515 @@ function RevenueTab({ participants }) {
       <div style={{ marginTop: 20, padding: 16, borderRadius: 8, background: 'rgba(240,165,0,0.08)', border: '1px solid rgba(240,165,0,0.2)', fontSize: 12, color: '#f0a500', lineHeight: 1.6 }}>
         <strong>Note:</strong> Revenue is currently estimated from participant count ({totalUsers} users x {fmt(PRICE_PER_USER)}).
         Once Stripe is integrated, this will pull actual payment data including renewals and refunds.
+      </div>
+    </div>
+  );
+}
+
+// ── Compliance Tab ─────────────────────────────────────────
+function ComplianceTab({ complianceSettings, onSetDailyMinimums, onSetWeeklyMinimums, onSetEnforcement, getAllDailySubmissions, getRemovalLog, participants, cohortStartDate, onReactivate }) {
+  const [section, setSection] = useState('overview');
+  const [allSubmissions, setAllSubmissions] = useState([]);
+  const [removalLog, setRemovalLog] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const dailyMins = { ...COMP_DAILY_DEFAULTS, ...complianceSettings?.dailyMinimums };
+  const weeklyMins = { ...DEFAULT_WEEKLY_MINIMUMS, ...complianceSettings?.weeklyMinimums };
+  const enforcement = { ...DEFAULT_ENFORCEMENT, ...complianceSettings?.enforcement };
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const [subs, log] = await Promise.all([
+        getAllDailySubmissions ? getAllDailySubmissions() : [],
+        getRemovalLog ? getRemovalLog() : [],
+      ]);
+      setAllSubmissions(subs || []);
+      setRemovalLog(log || []);
+      setLoading(false);
+    })();
+  }, []);
+
+  const sections = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'settings', label: 'Settings' },
+    { id: 'removals', label: 'Removal History' },
+  ];
+
+  return (
+    <div className="fade-up">
+      <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
+        {sections.map(s => (
+          <button
+            key={s.id}
+            onClick={() => setSection(s.id)}
+            style={{
+              padding: '8px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer',
+              background: section === s.id ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.04)',
+              color: section === s.id ? '#e94560' : '#888',
+              border: section === s.id ? '1px solid rgba(233,69,96,0.3)' : '1px solid rgba(255,255,255,0.08)',
+              fontFamily: "'DM Sans', sans-serif",
+            }}
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
+
+      {section === 'overview' && (
+        <ComplianceOverview
+          participants={participants}
+          allSubmissions={allSubmissions}
+          dailyMins={dailyMins}
+          weeklyMins={weeklyMins}
+          enforcement={enforcement}
+          cohortStartDate={cohortStartDate}
+          loading={loading}
+        />
+      )}
+      {section === 'settings' && (
+        <ComplianceSettings
+          dailyMins={dailyMins}
+          weeklyMins={weeklyMins}
+          enforcement={enforcement}
+          onSetDailyMinimums={onSetDailyMinimums}
+          onSetWeeklyMinimums={onSetWeeklyMinimums}
+          onSetEnforcement={onSetEnforcement}
+        />
+      )}
+      {section === 'removals' && (
+        <ComplianceRemovals
+          removalLog={removalLog}
+          participants={participants}
+          onReactivate={onReactivate}
+          loading={loading}
+        />
+      )}
+    </div>
+  );
+}
+
+// ── Compliance Overview ────────────────────────────────────
+function ComplianceOverview({ participants, allSubmissions, dailyMins, weeklyMins, enforcement, cohortStartDate, loading }) {
+  if (loading) {
+    return <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>Loading compliance data...</div>;
+  }
+
+  const active = participants.filter(p => p.isActive);
+
+  const now = getNowInTimezone(enforcement.timezone);
+  const start = cohortStartDate ? new Date(cohortStartDate + 'T00:00:00') : null;
+  let calendarDay = 0;
+  if (start) {
+    const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+    const nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    calendarDay = Math.floor((nowDay - startDay) / (1000 * 60 * 60 * 24)) + 1;
+  }
+  const currentDay = Math.max(1, Math.min(calendarDay, 30));
+  const currentWeek = getWeekNumber(currentDay);
+  const { start: weekStart } = getWeekRange(currentWeek);
+  const dayInWeek = currentDay - weekStart + 1;
+  const totalDaysInWeek = getWeekDayCount(currentWeek);
+
+  const subsByParticipant = {};
+  for (const s of allSubmissions) {
+    if (!subsByParticipant[s.participant_id]) subsByParticipant[s.participant_id] = [];
+    subsByParticipant[s.participant_id].push(s);
+  }
+
+  const rows = active.map(p => {
+    const pSubs = subsByParticipant[p.id] || [];
+    const todaySub = pSubs.find(s => s.challenge_day === currentDay);
+    const weekSubs = pSubs.filter(s => s.challenge_day >= weekStart && s.challenge_day <= currentDay);
+    const weekResult = checkWeeklyCompliance(weekSubs, weeklyMins);
+    const atRiskResult = calculateAtRisk(dayInWeek, totalDaysInWeek, weekSubs, weeklyMins);
+
+    return {
+      participant: p,
+      todaySubmitted: !!todaySub,
+      todayMet: todaySub?.met_daily_minimum ?? null,
+      weekTotals: weekResult.totals,
+      weekMet: weekResult.met,
+      atRisk: atRiskResult.atRisk,
+      risks: atRiskResult.risks,
+      totalSubmissions: pSubs.length,
+    };
+  });
+
+  const submittedToday = rows.filter(r => r.todaySubmitted).length;
+  const atRiskCount = rows.filter(r => r.atRisk).length;
+  const failedDailyCount = rows.filter(r => r.todaySubmitted && r.todayMet === false).length;
+
+  return (
+    <div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12, marginBottom: 24 }}>
+        <div className="card" style={{ padding: 16, textAlign: 'center' }}>
+          <div style={{ fontSize: 11, color: '#888', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>Day</div>
+          <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#e94560' }}>{currentDay}</div>
+          <div style={{ fontSize: 11, color: '#666' }}>Week {currentWeek}</div>
+        </div>
+        <div className="card" style={{ padding: 16, textAlign: 'center' }}>
+          <div style={{ fontSize: 11, color: '#888', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>Submitted Today</div>
+          <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#48c78e' }}>{submittedToday}/{active.length}</div>
+        </div>
+        <div className="card" style={{ padding: 16, textAlign: 'center' }}>
+          <div style={{ fontSize: 11, color: '#888', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>Failed Daily Min</div>
+          <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: failedDailyCount > 0 ? '#e94560' : '#48c78e' }}>{failedDailyCount}</div>
+        </div>
+        <div className="card" style={{ padding: 16, textAlign: 'center' }}>
+          <div style={{ fontSize: 11, color: '#888', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>At Risk</div>
+          <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: atRiskCount > 0 ? '#f0a500' : '#48c78e' }}>{atRiskCount}</div>
+        </div>
+      </div>
+
+      <div className="card" style={{ padding: 0, overflow: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+          <thead>
+            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+              <th style={{ textAlign: 'left', padding: '10px 12px', color: '#888', fontWeight: 600 }}>Participant</th>
+              <th style={{ textAlign: 'center', padding: '10px 8px', color: '#888', fontWeight: 600 }}>Today</th>
+              {COMPLIANCE_METRICS.map(m => (
+                <th key={m.id} style={{ textAlign: 'center', padding: '10px 6px', color: '#888', fontWeight: 600, fontSize: 11 }}>
+                  {m.icon}
+                </th>
+              ))}
+              <th style={{ textAlign: 'center', padding: '10px 8px', color: '#888', fontWeight: 600 }}>Week</th>
+              <th style={{ textAlign: 'center', padding: '10px 8px', color: '#888', fontWeight: 600 }}>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.sort((a, b) => {
+              if (a.atRisk && !b.atRisk) return -1;
+              if (!a.atRisk && b.atRisk) return 1;
+              if (!a.todaySubmitted && b.todaySubmitted) return -1;
+              return 0;
+            }).map(r => (
+              <tr key={r.participant.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                <td style={{ padding: '10px 12px', color: '#ccc' }}>
+                  {r.participant.firstName} {r.participant.lastName}
+                </td>
+                <td style={{ textAlign: 'center', padding: '10px 8px' }}>
+                  {r.todaySubmitted ? (
+                    <span style={{ color: r.todayMet === false ? '#e94560' : '#48c78e', fontWeight: 600 }}>
+                      {r.todayMet === false ? 'Below' : 'Met'}
+                    </span>
+                  ) : (
+                    <span style={{ color: '#666' }}>--</span>
+                  )}
+                </td>
+                {COMPLIANCE_METRICS.map(m => (
+                  <td key={m.id} className="mono" style={{ textAlign: 'center', padding: '10px 6px', fontSize: 12, color: (r.weekTotals[m.id] || 0) >= weeklyMins[m.id] ? '#48c78e' : '#ccc' }}>
+                    {r.weekTotals[m.id] || 0}
+                  </td>
+                ))}
+                <td style={{ textAlign: 'center', padding: '10px 8px' }}>
+                  <span style={{ color: r.weekMet ? '#48c78e' : '#888', fontWeight: 600, fontSize: 12 }}>
+                    {r.weekMet ? 'On Track' : 'Behind'}
+                  </span>
+                </td>
+                <td style={{ textAlign: 'center', padding: '10px 8px' }}>
+                  {r.atRisk ? (
+                    <span style={{
+                      padding: '3px 8px', borderRadius: 6, fontSize: 11, fontWeight: 600,
+                      background: 'rgba(240,165,0,0.15)', color: '#f0a500',
+                    }}>
+                      At Risk
+                    </span>
+                  ) : (
+                    <span style={{ color: '#48c78e', fontSize: 11, fontWeight: 600 }}>OK</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+            {rows.length === 0 && (
+              <tr>
+                <td colSpan={10 + COMPLIANCE_METRICS.length} style={{ padding: 24, textAlign: 'center', color: '#666' }}>
+                  No active participants
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div style={{ marginTop: 16, fontSize: 11, color: '#555' }}>
+        {COMPLIANCE_METRICS.map(m => (
+          <span key={m.id} style={{ marginRight: 12 }}>{m.icon} {m.label}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Compliance Settings ────────────────────────────────────
+function ComplianceSettings({ dailyMins, weeklyMins, enforcement, onSetDailyMinimums, onSetWeeklyMinimums, onSetEnforcement }) {
+  const [daily, setDaily] = useState({ ...dailyMins });
+  const [weekly, setWeekly] = useState({ ...weeklyMins });
+  const [enf, setEnf] = useState({ ...enforcement });
+  const [saved, setSaved] = useState(null);
+
+  const handleSaveDaily = async () => {
+    await onSetDailyMinimums(daily);
+    setSaved('daily');
+    setTimeout(() => setSaved(null), 2000);
+  };
+
+  const handleSaveWeekly = async () => {
+    await onSetWeeklyMinimums(weekly);
+    setSaved('weekly');
+    setTimeout(() => setSaved(null), 2000);
+  };
+
+  const handleSaveEnforcement = async () => {
+    await onSetEnforcement(enf);
+    setSaved('enforcement');
+    setTimeout(() => setSaved(null), 2000);
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      {/* Daily Minimums */}
+      <div className="card" style={{ padding: 24 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Daily Minimums</h3>
+        <p style={{ fontSize: 13, color: '#888', marginBottom: 16 }}>
+          Minimum values each participant must hit every day to remain in the challenge.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
+          {COMPLIANCE_METRICS.map(m => (
+            <div key={m.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: 'rgba(255,255,255,0.03)', borderRadius: 8 }}>
+              <span style={{ fontSize: 16 }}>{m.icon}</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 12, color: '#aaa', marginBottom: 2 }}>{m.label}</div>
+                {m.type === 'boolean' ? (
+                  <select
+                    value={daily[m.id] ? 'required' : 'optional'}
+                    onChange={e => setDaily({ ...daily, [m.id]: e.target.value === 'required' })}
+                    style={{ fontSize: 13, padding: '4px 8px', width: '100%' }}
+                  >
+                    <option value="required">Required</option>
+                    <option value="optional">Optional</option>
+                  </select>
+                ) : (
+                  <input
+                    type="number"
+                    min="0"
+                    value={daily[m.id] ?? 0}
+                    onChange={e => setDaily({ ...daily, [m.id]: parseInt(e.target.value) || 0 })}
+                    style={{ fontSize: 13, padding: '4px 8px', width: '100%' }}
+                  />
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+        <button className="btn-primary" onClick={handleSaveDaily} style={{ marginTop: 16, padding: '8px 20px', fontSize: 13 }}>
+          {saved === 'daily' ? 'Saved!' : 'Save Daily Minimums'}
+        </button>
+      </div>
+
+      {/* Weekly Minimums */}
+      <div className="card" style={{ padding: 24 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Weekly Minimums</h3>
+        <p style={{ fontSize: 13, color: '#888', marginBottom: 16 }}>
+          Total values each participant must accumulate per week (Days 1-7, 8-14, 15-21, 22-28, 29-30).
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
+          {COMPLIANCE_METRICS.map(m => (
+            <div key={m.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: 'rgba(255,255,255,0.03)', borderRadius: 8 }}>
+              <span style={{ fontSize: 16 }}>{m.icon}</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 12, color: '#aaa', marginBottom: 2 }}>{m.label}</div>
+                <input
+                  type="number"
+                  min="0"
+                  value={weekly[m.id] ?? 0}
+                  onChange={e => setWeekly({ ...weekly, [m.id]: parseInt(e.target.value) || 0 })}
+                  style={{ fontSize: 13, padding: '4px 8px', width: '100%' }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+        <button className="btn-primary" onClick={handleSaveWeekly} style={{ marginTop: 16, padding: '8px 20px', fontSize: 13 }}>
+          {saved === 'weekly' ? 'Saved!' : 'Save Weekly Minimums'}
+        </button>
+      </div>
+
+      {/* Enforcement Settings */}
+      <div className="card" style={{ padding: 24 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Enforcement</h3>
+        <p style={{ fontSize: 13, color: '#888', marginBottom: 16 }}>
+          Controls when deadlines are enforced and whether automatic removal is active.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div>
+            <label style={{ fontSize: 12, color: '#aaa', display: 'block', marginBottom: 4, fontWeight: 600 }}>Enabled</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={enf.enabled}
+                onChange={e => setEnf({ ...enf, enabled: e.target.checked })}
+                style={{ accentColor: '#48c78e', width: 18, height: 18 }}
+              />
+              <span style={{ fontSize: 13, color: enf.enabled ? '#48c78e' : '#888' }}>
+                {enf.enabled ? 'Enforcement active — participants will be auto-removed' : 'Enforcement disabled — no auto-removal'}
+              </span>
+            </label>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div>
+              <label style={{ fontSize: 12, color: '#aaa', display: 'block', marginBottom: 4, fontWeight: 600 }}>Timezone</label>
+              <select
+                value={enf.timezone}
+                onChange={e => setEnf({ ...enf, timezone: e.target.value })}
+                style={{ fontSize: 13, padding: '8px 10px', width: '100%' }}
+              >
+                <option value="America/Los_Angeles">Pacific (PT)</option>
+                <option value="America/Denver">Mountain (MT)</option>
+                <option value="America/Chicago">Central (CT)</option>
+                <option value="America/New_York">Eastern (ET)</option>
+              </select>
+            </div>
+            <div>
+              <label style={{ fontSize: 12, color: '#aaa', display: 'block', marginBottom: 4, fontWeight: 600 }}>Daily Deadline Hour</label>
+              <select
+                value={enf.daily_deadline_hour}
+                onChange={e => setEnf({ ...enf, daily_deadline_hour: parseInt(e.target.value) })}
+                style={{ fontSize: 13, padding: '8px 10px', width: '100%' }}
+              >
+                {Array.from({ length: 24 }, (_, i) => (
+                  <option key={i} value={i}>
+                    {i === 0 ? '12:00 AM (Midnight)' : i < 12 ? `${i}:00 AM` : i === 12 ? '12:00 PM (Noon)' : `${i - 12}:00 PM`}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+        <button className="btn-primary" onClick={handleSaveEnforcement} style={{ marginTop: 16, padding: '8px 20px', fontSize: 13 }}>
+          {saved === 'enforcement' ? 'Saved!' : 'Save Enforcement Settings'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Compliance Removal History ─────────────────────────────
+function ComplianceRemovals({ removalLog, participants, onReactivate, loading }) {
+  if (loading) {
+    return <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>Loading removal history...</div>;
+  }
+
+  const participantMap = {};
+  for (const p of participants) participantMap[p.id] = p;
+
+  const removed = participants.filter(p => !p.isActive);
+
+  const REASON_LABELS = {
+    missed_deadline: 'Missed Deadline',
+    failed_daily_minimum: 'Failed Daily Minimum',
+    failed_weekly_minimum: 'Failed Weekly Minimum',
+  };
+
+  return (
+    <div>
+      {removed.length > 0 && (
+        <div className="card" style={{ padding: 24, marginBottom: 24 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Removed Participants</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {removed.map(p => {
+              const logEntry = removalLog.find(r => r.participant_id === p.id);
+              return (
+                <div key={p.id} style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  padding: '12px 16px', borderRadius: 10,
+                  background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.12)',
+                  flexWrap: 'wrap', gap: 8,
+                }}>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#ccc' }}>
+                      {p.firstName} {p.lastName}
+                    </div>
+                    <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>
+                      {p.email}
+                    </div>
+                    {logEntry && (
+                      <div style={{ fontSize: 12, color: '#e94560', marginTop: 4 }}>
+                        <span style={{
+                          padding: '2px 6px', borderRadius: 4, fontSize: 10, fontWeight: 600,
+                          background: 'rgba(233,69,96,0.12)', marginRight: 6,
+                        }}>
+                          {REASON_LABELS[logEntry.reason] || logEntry.reason}
+                        </span>
+                        {logEntry.details}
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => onReactivate(p.id)}
+                    style={{
+                      padding: '6px 14px', borderRadius: 6, fontSize: 12, fontWeight: 600,
+                      background: 'rgba(72,199,142,0.12)', color: '#48c78e',
+                      border: '1px solid rgba(72,199,142,0.25)', cursor: 'pointer',
+                      fontFamily: "'DM Sans', sans-serif",
+                    }}
+                  >
+                    Reactivate
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <div className="card" style={{ padding: 24 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Full Removal Log</h3>
+        {removalLog.length === 0 ? (
+          <p style={{ color: '#666', fontSize: 14, textAlign: 'center', padding: 20 }}>
+            No removals recorded yet.
+          </p>
+        ) : (
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                <th style={{ textAlign: 'left', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Participant</th>
+                <th style={{ textAlign: 'left', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Reason</th>
+                <th style={{ textAlign: 'left', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Details</th>
+                <th style={{ textAlign: 'center', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Day</th>
+                <th style={{ textAlign: 'center', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Week</th>
+                <th style={{ textAlign: 'left', padding: '8px 12px', color: '#888', fontWeight: 600 }}>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {removalLog.sort((a, b) => (b.created_at || '').localeCompare(a.created_at || '')).map((entry, i) => {
+                const p = participantMap[entry.participant_id];
+                return (
+                  <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                    <td style={{ padding: '8px 12px', color: '#ccc' }}>
+                      {p ? `${p.firstName} ${p.lastName}` : entry.participant_id?.slice(0, 8)}
+                    </td>
+                    <td style={{ padding: '8px 12px' }}>
+                      <span style={{
+                        padding: '2px 8px', borderRadius: 4, fontSize: 11, fontWeight: 600,
+                        background: entry.reason === 'missed_deadline' ? 'rgba(233,69,96,0.12)' : entry.reason === 'failed_weekly_minimum' ? 'rgba(240,165,0,0.12)' : 'rgba(233,69,96,0.12)',
+                        color: entry.reason === 'failed_weekly_minimum' ? '#f0a500' : '#e94560',
+                      }}>
+                        {REASON_LABELS[entry.reason] || entry.reason}
+                      </span>
+                    </td>
+                    <td style={{ padding: '8px 12px', color: '#888', fontSize: 12 }}>{entry.details}</td>
+                    <td className="mono" style={{ textAlign: 'center', padding: '8px 12px', color: '#ccc' }}>{entry.challenge_day || '--'}</td>
+                    <td className="mono" style={{ textAlign: 'center', padding: '8px 12px', color: '#ccc' }}>{entry.week_number || '--'}</td>
+                    <td style={{ padding: '8px 12px', color: '#666', fontSize: 12 }}>
+                      {entry.created_at ? new Date(entry.created_at).toLocaleDateString() : '--'}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

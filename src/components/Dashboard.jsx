@@ -9,6 +9,7 @@ import Leaderboard from './Leaderboard';
 import UserProfile, { UserSupport } from './UserProfile';
 import { getGettingStartedContent } from '../data/challengeDays';
 import { calculateUCPoints } from '../data/ucPoints';
+import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT, checkWeeklyCompliance, getWeekNumber, getWeekRange, getWeekDayCount, calculateAtRisk, getTimeUntilDeadline } from '../data/compliance';
 import CommunityBoard from './CommunityBoard';
 import ContactsCRM from './ContactsCRM';
 import Footer from './Footer';
@@ -72,11 +73,20 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
+  const [existingDailySubmission, setExistingDailySubmission] = useState(null);
 
   const calendarDay = getCalendarDay(cohortStartDate);
+
+  useEffect(() => {
+    if (!getDailySubmission || !user?.id || !calendarDay || calendarDay < 1) return;
+    (async () => {
+      const sub = await getDailySubmission(user.id, calendarDay);
+      setExistingDailySubmission(sub || null);
+    })();
+  }, [calendarDay, user?.id, user?.currentDay]);
 
   // Removed/paused state
   if (!user.isActive) {
@@ -218,6 +228,16 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           </div>
         )}
 
+        {/* Compliance Cards */}
+        {cohortActive && (tab === 'timeline' || tab === 'day') && complianceSettings && (
+          <ComplianceCards
+            calendarDay={calendarDay}
+            existingDailySubmission={existingDailySubmission}
+            complianceSettings={complianceSettings}
+            user={user}
+          />
+        )}
+
         {/* Cohort countdown when pre-cohort */}
         {cohortStartDate && !cohortActive && (tab === 'timeline' || tab === 'day') && (
           <CohortCountdown cohortStartDate={cohortStartDate} />
@@ -259,6 +279,8 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             onUploadFile={onUploadFile}
             contacts={contacts}
             getUploadUrl={getUploadUrl}
+            complianceSettings={complianceSettings}
+            existingDailySubmission={existingDailySubmission}
           />
         )}
         {tab === 'community' && (
@@ -1207,6 +1229,83 @@ function NextCohortCountdown({ nextCohortDate }) {
             The next cohort is starting now!
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// ── Compliance Cards (Participant Dashboard) ───────────────
+function ComplianceCards({ calendarDay, existingDailySubmission, complianceSettings, user }) {
+  const dailyMins = { ...COMP_DAILY_DEFAULTS, ...complianceSettings?.dailyMinimums };
+  const weeklyMins = { ...DEFAULT_WEEKLY_MINIMUMS, ...complianceSettings?.weeklyMinimums };
+  const enforcement = { ...DEFAULT_ENFORCEMENT, ...complianceSettings?.enforcement };
+
+  const currentDay = Math.max(1, Math.min(calendarDay || 1, 30));
+  const currentWeek = getWeekNumber(currentDay);
+  const { start: weekStart } = getWeekRange(currentWeek);
+  const dayInWeek = currentDay - weekStart + 1;
+  const totalDaysInWeek = getWeekDayCount(currentWeek);
+
+  const [deadlineMs, setDeadlineMs] = useState(() => getTimeUntilDeadline(enforcement));
+
+  useEffect(() => {
+    const timer = setInterval(() => setDeadlineMs(getTimeUntilDeadline(enforcement)), 1000);
+    return () => clearInterval(timer);
+  }, [enforcement.timezone, enforcement.daily_deadline_hour]);
+
+  const hours = Math.floor(deadlineMs / (1000 * 60 * 60));
+  const minutes = Math.floor((deadlineMs % (1000 * 60 * 60)) / (1000 * 60));
+  const deadlineUrgent = hours < 2;
+
+  const todaySubmitted = !!existingDailySubmission;
+  const todayMet = existingDailySubmission?.met_daily_minimum ?? null;
+
+  return (
+    <div className="fade-up" style={{ marginBottom: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+        {/* Daily Status */}
+        <div style={{
+          padding: '14px 18px', borderRadius: 12,
+          background: todaySubmitted
+            ? (todayMet ? 'rgba(72,199,142,0.06)' : 'rgba(233,69,96,0.06)')
+            : 'rgba(255,255,255,0.03)',
+          border: `1px solid ${todaySubmitted ? (todayMet ? 'rgba(72,199,142,0.15)' : 'rgba(233,69,96,0.15)') : 'rgba(255,255,255,0.08)'}`,
+        }}>
+          <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>
+            Day {currentDay} Status
+          </div>
+          {todaySubmitted ? (
+            <div style={{ fontSize: 14, fontWeight: 600, color: todayMet ? '#48c78e' : '#e94560' }}>
+              {todayMet ? 'Submitted & Met Minimums' : 'Submitted — Below Minimums'}
+            </div>
+          ) : (
+            <>
+              <div style={{ fontSize: 14, fontWeight: 600, color: deadlineUrgent ? '#e94560' : '#f0a500' }}>
+                Not Yet Submitted
+              </div>
+              <div style={{ fontSize: 12, color: deadlineUrgent ? '#e94560' : '#888', marginTop: 4 }}>
+                {hours}h {minutes}m until deadline
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Weekly Progress */}
+        <div style={{
+          padding: '14px 18px', borderRadius: 12,
+          background: 'rgba(83,52,131,0.06)',
+          border: '1px solid rgba(83,52,131,0.15)',
+        }}>
+          <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>
+            Week {currentWeek} Progress
+          </div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: '#c9a0ff' }}>
+            Day {dayInWeek} of {totalDaysInWeek}
+          </div>
+          <div style={{ fontSize: 12, color: '#888', marginTop: 4 }}>
+            {totalDaysInWeek - dayInWeek} day{totalDaysInWeek - dayInWeek !== 1 ? 's' : ''} remaining this week
+          </div>
+        </div>
       </div>
     </div>
   );

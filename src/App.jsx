@@ -76,6 +76,17 @@ export default function App() {
     getUploadUrl,
     getContactsForParticipant,
     navigate,
+    // Compliance system
+    complianceSettings,
+    removalReason,
+    setRemovalReason,
+    getDailySubmissions,
+    getAllDailySubmissions,
+    getDailySubmission,
+    getRemovalLog,
+    setComplianceDailyMinimums,
+    setComplianceWeeklyMinimums,
+    setComplianceEnforcement,
   } = useAppState();
 
   // CRM contacts for current user (loaded on login)
@@ -272,6 +283,56 @@ export default function App() {
     );
   }
 
+  // Show removal screen if enforcement check failed
+  if (removalReason && !user.isAdmin) {
+    const reasonLabels = {
+      missed_deadline: 'Missed Daily Deadline',
+      failed_daily_minimum: 'Did Not Meet Daily Minimums',
+      failed_weekly_minimum: 'Did Not Meet Weekly Minimums',
+      manual: 'Removed by Admin',
+    };
+    return (
+      <div style={{
+        minHeight: '100vh', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', padding: 20,
+      }}>
+        <div style={{ maxWidth: 520, textAlign: 'center' }}>
+          <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#e94560', marginBottom: 16 }}>
+            UC30
+          </div>
+          <div className="card" style={{ padding: 36 }}>
+            <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#e94560' }}>
+              Removed from Cohort
+            </div>
+            <div style={{
+              display: 'inline-block', padding: '6px 14px', borderRadius: 8, fontSize: 13,
+              background: 'rgba(233,69,96,0.1)', color: '#e94560', fontWeight: 600, marginBottom: 16,
+            }}>
+              {reasonLabels[removalReason.reason] || removalReason.reason}
+            </div>
+            <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7, marginBottom: 8 }}>
+              {removalReason.details}
+            </p>
+            <p style={{ color: '#666', fontSize: 13, lineHeight: 1.6, marginBottom: 24 }}>
+              Your 1-year access is still active. You can rejoin a future cohort and
+              pick up where you left off. The strict accountability is what makes
+              this program work — when you're ready to commit again, we'll be here.
+            </p>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+              <button className="btn-primary" style={{ padding: '12px 28px' }}
+                onClick={() => setRemovalReason(null)}>
+                Continue to Dashboard
+              </button>
+              <button className="btn-secondary" style={{ padding: '12px 28px' }} onClick={logout}>
+                Log Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (currentView === 'admin' && user.isAdmin) {
     // Impersonation: show Dashboard as selected user
     if (viewAsUser) {
@@ -382,6 +443,12 @@ export default function App() {
         getContactsForParticipant={getContactsForParticipant}
         getUploads={getUploads}
         getUploadUrl={getUploadUrl}
+        complianceSettings={complianceSettings}
+        onSetComplianceDailyMinimums={setComplianceDailyMinimums}
+        onSetComplianceWeeklyMinimums={setComplianceWeeklyMinimums}
+        onSetComplianceEnforcement={setComplianceEnforcement}
+        getAllDailySubmissions={getAllDailySubmissions}
+        getRemovalLog={getRemovalLog}
       />
     );
   }
@@ -422,6 +489,8 @@ export default function App() {
       getFollowUpsByContact={getFollowUpsByContact}
       getUploadUrl={getUploadUrl}
       contacts={userContacts}
+      complianceSettings={complianceSettings}
+      getDailySubmission={getDailySubmission}
     />
   );
 }

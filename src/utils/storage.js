@@ -375,6 +375,93 @@ const supabaseStorage = {
     if (error) { console.error('getUploadUrl error:', error); return null; }
     return data?.signedUrl || null;
   },
+
+  // ── Daily Submissions (compliance system) ──────────────────────
+  async upsertDailySubmission(submission) {
+    const { data, error } = await supabase
+      .from('daily_submissions')
+      .upsert(submission, { onConflict: 'participant_id,challenge_day' })
+      .select()
+      .single();
+    if (error) { console.error('upsertDailySubmission error:', error); return null; }
+    return data;
+  },
+
+  async getDailySubmission(participantId, challengeDay) {
+    const { data, error } = await supabase
+      .from('daily_submissions')
+      .select('*')
+      .eq('participant_id', participantId)
+      .eq('challenge_day', challengeDay)
+      .maybeSingle();
+    if (error) { console.error('getDailySubmission error:', error); return null; }
+    return data;
+  },
+
+  async getDailySubmissions(participantId) {
+    const { data, error } = await supabase
+      .from('daily_submissions')
+      .select('*')
+      .eq('participant_id', participantId)
+      .order('challenge_day', { ascending: true });
+    if (error) { console.error('getDailySubmissions error:', error); return []; }
+    return data || [];
+  },
+
+  async getAllDailySubmissions() {
+    const { data, error } = await supabase
+      .from('daily_submissions')
+      .select('*')
+      .order('challenge_day', { ascending: true });
+    if (error) { console.error('getAllDailySubmissions error:', error); return []; }
+    return data || [];
+  },
+
+  // ── Removal Log ─────────────────────────────────────────────────
+  async addRemovalLog(entry) {
+    const { data, error } = await supabase
+      .from('removal_log')
+      .insert(entry)
+      .select()
+      .single();
+    if (error) { console.error('addRemovalLog error:', error); return null; }
+    return data;
+  },
+
+  async getRemovalLog(participantId) {
+    let query = supabase
+      .from('removal_log')
+      .select('*')
+      .order('removed_at', { ascending: false });
+    if (participantId) query = query.eq('participant_id', participantId);
+    const { data, error } = await query;
+    if (error) { console.error('getRemovalLog error:', error); return []; }
+    return data || [];
+  },
+
+  // ── Compliance Settings ─────────────────────────────────────────
+  async getComplianceSettings() {
+    const daily = await this._getSetting('compliance_daily_minimums');
+    const weekly = await this._getSetting('compliance_weekly_minimums');
+    const enforcement = await this._getSetting('compliance_enforcement');
+    return {
+      dailyMinimums: daily || null,
+      weeklyMinimums: weekly || null,
+      enforcement: enforcement || null,
+    };
+  },
+
+  async setComplianceDailyMinimums(minimums) {
+    await this._setSetting('compliance_daily_minimums', minimums);
+  },
+
+  async setComplianceWeeklyMinimums(minimums) {
+    await this._setSetting('compliance_weekly_minimums', minimums);
+  },
+
+  async setComplianceEnforcement(enforcement) {
+    await this._setSetting('compliance_enforcement', enforcement);
+  },
 };
 
 // ── Database row conversion ──────────────────────────────────────
@@ -724,6 +811,67 @@ const localStorageFallback = {
   getUploadUrl(filePath) {
     // In localStorage mode, filePath IS the data URL
     return filePath;
+  },
+
+  // ── Daily Submissions (localStorage fallback) ──────────────────
+  upsertDailySubmission(submission) {
+    try {
+      const subs = JSON.parse(localStorage.getItem('uc30_daily_submissions') || '[]');
+      const idx = subs.findIndex(s => s.participant_id === submission.participant_id && s.challenge_day === submission.challenge_day);
+      const record = { ...submission, id: submission.id || `ds_${Date.now()}`, updated_at: new Date().toISOString() };
+      if (idx >= 0) { subs[idx] = { ...subs[idx], ...record }; } else { record.submitted_at = new Date().toISOString(); subs.push(record); }
+      localStorage.setItem('uc30_daily_submissions', JSON.stringify(subs));
+      return idx >= 0 ? subs[idx] : record;
+    } catch { return null; }
+  },
+  getDailySubmission(participantId, challengeDay) {
+    try {
+      const subs = JSON.parse(localStorage.getItem('uc30_daily_submissions') || '[]');
+      return subs.find(s => s.participant_id === participantId && s.challenge_day === challengeDay) || null;
+    } catch { return null; }
+  },
+  getDailySubmissions(participantId) {
+    try {
+      const subs = JSON.parse(localStorage.getItem('uc30_daily_submissions') || '[]');
+      return subs.filter(s => s.participant_id === participantId).sort((a, b) => a.challenge_day - b.challenge_day);
+    } catch { return []; }
+  },
+  getAllDailySubmissions() {
+    try { return JSON.parse(localStorage.getItem('uc30_daily_submissions') || '[]'); } catch { return []; }
+  },
+  addRemovalLog(entry) {
+    try {
+      const log = JSON.parse(localStorage.getItem('uc30_removal_log') || '[]');
+      const record = { ...entry, id: `rl_${Date.now()}`, removed_at: new Date().toISOString() };
+      log.push(record);
+      localStorage.setItem('uc30_removal_log', JSON.stringify(log));
+      return record;
+    } catch { return null; }
+  },
+  getRemovalLog(participantId) {
+    try {
+      const log = JSON.parse(localStorage.getItem('uc30_removal_log') || '[]');
+      if (participantId) return log.filter(e => e.participant_id === participantId);
+      return log;
+    } catch { return []; }
+  },
+  getComplianceSettings() {
+    try {
+      return {
+        dailyMinimums: JSON.parse(localStorage.getItem('uc30_compliance_daily') || 'null'),
+        weeklyMinimums: JSON.parse(localStorage.getItem('uc30_compliance_weekly') || 'null'),
+        enforcement: JSON.parse(localStorage.getItem('uc30_compliance_enforcement') || 'null'),
+      };
+    } catch { return { dailyMinimums: null, weeklyMinimums: null, enforcement: null }; }
+  },
+  setComplianceDailyMinimums(minimums) {
+    try { localStorage.setItem('uc30_compliance_daily', JSON.stringify(minimums)); } catch {}
+  },
+  setComplianceWeeklyMinimums(minimums) {
+    try { localStorage.setItem('uc30_compliance_weekly', JSON.stringify(minimums)); } catch {}
+  },
+  setComplianceEnforcement(enforcement) {
+    try { localStorage.setItem('uc30_compliance_enforcement', JSON.stringify(enforcement)); } catch {}
   },
 };
 
