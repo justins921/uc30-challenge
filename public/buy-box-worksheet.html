@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UC30 — Creating a Buy Box</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #0a0a0f; color: #e8e6e3; padding: 40px 24px; max-width: 800px; margin: 0 auto; }
+  @media print {
+    body { background: #fff; color: #111; padding: 20px; font-size: 11pt; }
+    .no-print { display: none !important; }
+    h1 { color: #c0354a !important; }
+    h2 { color: #333 !important; border-bottom-color: #ccc !important; }
+    .field { border-bottom-color: #ccc !important; }
+    .quote { color: #555 !important; border-left-color: #c0354a !important; }
+    .header-badge { background: #c0354a !important; }
+  }
+  .header-badge { display: inline-block; background: #e94560; color: #fff; font-size: 14px; font-weight: 700; padding: 6px 16px; border-radius: 6px; letter-spacing: 2px; margin-bottom: 16px; }
+  h1 { font-size: 32px; font-weight: 700; color: #e94560; margin-bottom: 8px; }
+  .quote { font-style: italic; color: #888; font-size: 15px; line-height: 1.7; margin-bottom: 32px; padding-left: 16px; border-left: 3px solid #e94560; }
+  h2 { font-size: 18px; font-weight: 700; color: #e94560; margin-top: 36px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .field { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 1px dotted rgba(255,255,255,0.08); }
+  .field-label { font-size: 14px; color: #ccc; flex-shrink: 0; margin-right: 12px; }
+  .field-line { flex: 1; border-bottom: 1px solid rgba(255,255,255,0.15); min-height: 20px; }
+  .instructions { font-size: 13px; color: #666; margin-bottom: 12px; line-height: 1.6; }
+  .print-btn { display: inline-block; background: #e94560; color: #fff; border: none; padding: 12px 28px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-bottom: 32px; font-family: 'DM Sans', sans-serif; }
+  .print-btn:hover { opacity: 0.9; }
+  @page { margin: 0.75in; }
+</style>
+</head>
+<body>
+
+<div class="no-print" style="margin-bottom: 24px;">
+  <button class="print-btn" onclick="window.print()">Download as PDF / Print</button>
+</div>
+
+<div class="header-badge">UC30</div>
+<h1>Creating a Buy Box</h1>
+<div class="quote">
+  "Successful people know what they want, so they make decisions quickly and hold to those decisions."
+</div>
+
+<p class="instructions">
+  Fill out each section below to define your investment criteria. The more specific you are, the faster you'll identify and act on the right deals during your 30-day sprint.
+</p>
+
+<h2>1. Location</h2>
+<div class="field"><span class="field-label">Target Markets</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Proximity Requirements</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Crime Rate Tolerance</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Appreciation vs. Cash-Flow Preference</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Specific Neighborhoods / Zip Codes</span><span class="field-line"></span></div>
+
+<h2>2. Property Type</h2>
+<div class="field"><span class="field-label">Property Types</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Year Built Range</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Square Footage Range</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Bedrooms / Bathrooms</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Condition Tolerance</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Lot Size Preference</span><span class="field-line"></span></div>
+
+<h2>3. Deal Size</h2>
+<div class="field"><span class="field-label">Purchase Price Range</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Down Payment / Cash Available</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Loan Type Preference</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Desired Leverage (LTV%)</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Max Monthly Payment</span><span class="field-line"></span></div>
+
+<h2>4. Financial Criteria</h2>
+<div class="field"><span class="field-label">Minimum Cash-on-Cash Return</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Minimum Cap Rate</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Rent-to-Value Ratio Target</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Expense Ratio Limit</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">DSCR Minimum</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Target Monthly Cash Flow (per unit)</span><span class="field-line"></span></div>
+
+<h2>5. Tenant & Market Assumptions</h2>
+<div class="field"><span class="field-label">Target Rent per Unit / SF</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Ideal Tenant Profile</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Acceptable Vacancy Rate</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Property Management (Yes / No)</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Expected Rent Growth (%/yr)</span><span class="field-line"></span></div>
+
+<h2>6. Risk Tolerance / Red Flags</h2>
+<div class="field"><span class="field-label">Areas to Avoid</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Age Restrictions</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Max Acceptable CapEx (Year 1)</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Foundation / Structural Tolerance</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Other Deal-Breakers</span><span class="field-line"></span></div>
+
+<h2>7. Exit Strategy</h2>
+<div class="field"><span class="field-label">Primary Strategy</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Expected Hold Period</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Target Equity Gain</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Refinance / Disposition Preferences</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Backup Exit Plan</span><span class="field-line"></span></div>
+
+<h2>8. Financing Flexibility</h2>
+<div class="field"><span class="field-label">Preferred Financing Structure</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Max Acceptable Interest Rate</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Min Seller Finance Terms</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Willing to JV? (Yes / No)</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Bridge Loan Tolerance</span><span class="field-line"></span></div>
+
+<h2>9. Operational Preferences</h2>
+<div class="field"><span class="field-label">Max Distance from Home Base</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Min Occupancy at Purchase</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Self-Manage vs. Property Manager</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Willingness for Heavy Management</span><span class="field-line"></span></div>
+<div class="field"><span class="field-label">Available Hours per Week for RE</span><span class="field-line"></span></div>
+
+</body>
+</html>

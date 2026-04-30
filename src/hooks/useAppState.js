@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import { storage, createNewUser, isSupabaseEnabled } from '../utils/storage';
 import { supabase } from '../utils/supabaseClient';
-import { CHALLENGE_DAYS, POST_30_TASK, DEFAULT_DAILY_MINIMUMS, OFFER_BUFFER } from '../data/challengeDays';
+import { CHALLENGE_DAYS, POST_30_TASK, DEFAULT_DAILY_MINIMUMS as LEGACY_DAILY_MINIMUMS, OFFER_BUFFER } from '../data/challengeDays';
 import { calculateUCPoints } from '../data/ucPoints';
+import { checkDailyCompliance, checkEnforcement, DEFAULT_DAILY_MINIMUMS as COMPLIANCE_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
 import { hashPassword } from '../utils/crypto';
 import { subscribeUser, tagSignUp, tagDayStarted, tagChallengeCompleted, tagRemovedFromCohort } from '../utils/kit';
+import { emailWelcome, emailDayCompleted, emailChallengeCompleted, emailRemovedFromCohort, emailReactivated } from '../utils/email';
 
 export function useAppState() {
   const [user, setUser] = useState(null);
@@ -23,6 +25,9 @@ export function useAppState() {
   const [cohortStats, setCohortStatsState] = useState({ active: 0, total: 0 });
   const [dailyMinimumsOverrides, setDailyMinimumsOverridesState] = useState({});
   const [skoolLink, setSkoolLinkState] = useState(null);
+  // Compliance system state
+  const [complianceSettings, setComplianceSettingsState] = useState({ dailyMinimums: null, weeklyMinimums: null, enforcement: null });
+  const [removalReason, setRemovalReason] = useState(null); // set if enforcement check fails on login
   // Password recovery mode (triggered by Supabase auth event)
   const [passwordRecovery, setPasswordRecovery] = useState(false);
   // Auth error (shown on login screen after failed OAuth redirect)
@@ -79,6 +84,7 @@ export function useAppState() {
         await storage.updateParticipant(p.id, updates);
       }
       tagRemovedFromCohort(p.email).catch(() => {});
+      emailRemovedFromCohort(p.email, p.firstName);
     }
 
     if (removals.length > 0 && isSupabaseEnabled) {
@@ -149,6 +155,7 @@ export function useAppState() {
         subscribeUser(authUser.email, firstName).then(() => {
           tagSignUp(authUser.email).catch(() => {});
         }).catch(() => {});
+        emailWelcome(authUser.email, firstName);
         return saved;
       }
       console.error('ensureParticipant: addParticipant failed', saved?.__error || 'returned null');
@@ -193,6 +200,9 @@ export function useAppState() {
 
       const skool = await Promise.resolve(storage.getSkoolLink());
       if (skool) setSkoolLinkState(skool);
+
+      const compSettings = await Promise.resolve(storage.getComplianceSettings());
+      if (compSettings) setComplianceSettingsState(compSettings);
 
       return { storedParticipants, cohortSettings };
     };
@@ -493,6 +503,14 @@ export function useAppState() {
         tagSignUp(email).catch(() => {});
       }).catch(() => {});
 
+      // Transactional welcome email via Resend
+      emailWelcome(email, firstName);
+
+      // Tolt affiliate lead tracking (fire and forget)
+      if (window.tolt_referral && window.tolt?.signup) {
+        window.tolt.signup(email).catch(() => {});
+      }
+
       return { success: true };
     }
 
@@ -521,6 +539,14 @@ export function useAppState() {
     subscribeUser(email, firstName).then(() => {
       tagSignUp(email).catch(() => {});
     }).catch(() => {});
+
+    // Transactional welcome email via Resend
+    emailWelcome(email, firstName);
+
+    // Tolt affiliate lead tracking (fire and forget)
+    if (window.tolt_referral && window.tolt?.signup) {
+      window.tolt.signup(email).catch(() => {});
+    }
 
     return { success: true };
   }, [participants, persist, cohortStartDate, updateCohortStats]);
@@ -753,10 +779,20 @@ export function useAppState() {
     return { success: true };
   }, [supportTickets]);
 
-  // ── Getting Started ──────────────────────────────────
-  const completeGettingStarted = useCallback(async (socialHandles, proof) => {
+  // ── Getting Started (includes activation) ──────────────────────────────────
+  const completeGettingStarted = useCallback(async (socialHandles, proof, buyBox, activationData) => {
     if (!user) return { error: 'Not logged in.' };
     const updates = { gettingStartedCompleted: true, socialHandles: socialHandles || {} };
+    if (buyBox) updates.buyBox = buyBox;
+    // Activation data (offer commitment, stakes, commitment)
+    if (activationData) {
+      updates.offerCommitment = activationData.offerCommitment || null;
+      updates.stakesDeclaration = activationData.stakesDeclaration || null;
+      updates.commitmentDeclaredAt = activationData.commitmentDeclaredAt || new Date().toISOString();
+      updates.activationCompleted = true;
+      updates.activationCompletedAt = new Date().toISOString();
+      updates.onboardingCompleted = true;
+    }
     // Store proof as a Getting Started submission if provided
     if (proof && (proof.text || proof.fileName)) {
       const gsSubmission = {
@@ -820,7 +856,19 @@ export function useAppState() {
   const submitDay = useCallback(async (dayNum, proof) => {
     if (!user) return;
 
+    // Validate: must be the user's current day (or post-30 operator mode)
     const isPost30 = dayNum > 30;
+    if (!isPost30 && dayNum !== user.currentDay) {
+      console.error(`Submission rejected: dayNum ${dayNum} does not match currentDay ${user.currentDay}`);
+      return { error: 'You can only submit your current day.' };
+    }
+
+    // Validate: day must not already be completed
+    if (user.completedDays.includes(dayNum)) {
+      console.error(`Submission rejected: day ${dayNum} already completed`);
+      return { error: 'This day has already been submitted.' };
+    }
+
     const dayData = isPost30 ? POST_30_TASK : CHALLENGE_DAYS[dayNum - 1];
     const dayMetrics = proof.dayMetrics || {};
 
@@ -873,11 +921,39 @@ export function useAppState() {
     setUser(updatedUser);
     storage.setUser(updatedUser);
 
+    // Write to daily_submissions table (new compliance system)
+    if (proof.complianceMetrics) {
+      const dailyMins = { ...COMPLIANCE_DEFAULTS, ...complianceSettings?.dailyMinimums };
+      const compResult = checkDailyCompliance(proof.complianceMetrics, dailyMins);
+      const submissionRecord = {
+        participant_id: user.id,
+        auth_id: user.authId || null,
+        challenge_day: dayNum,
+        submission_date: new Date().toISOString().split('T')[0],
+        training_completed: proof.complianceMetrics.training_completed || false,
+        properties_analyzed: proof.complianceMetrics.properties_analyzed || 0,
+        arsenal_contacts: proof.complianceMetrics.arsenal_contacts || 0,
+        target_contacts: proof.complianceMetrics.target_contacts || 0,
+        follow_ups: proof.complianceMetrics.follow_ups || 0,
+        offers_submitted: proof.complianceMetrics.offers_submitted || 0,
+        properties_under_contract: proof.complianceMetrics.properties_under_contract || 0,
+        met_daily_minimum: compResult.met,
+        proof_text: proof.text || null,
+      };
+      storage.upsertDailySubmission(submissionRecord);
+    }
+
     if (dayNum < 30) {
       tagDayStarted(user.email, dayNum + 1).catch(() => {});
     }
     if (dayNum === 30 && (updatedMetrics.offersSubmitted || 0) > 0) {
       tagChallengeCompleted(user.email).catch(() => {});
+    }
+
+    // Transactional emails via Resend
+    emailDayCompleted(user.email, user.firstName, dayNum);
+    if (dayNum === 30) {
+      emailChallengeCompleted(user.email, user.firstName);
     }
 
     // Mark first cohort completed if they finish day 30 on attempt 1
@@ -917,6 +993,7 @@ export function useAppState() {
 
     if (removed?.email) {
       tagRemovedFromCohort(removed.email).catch(() => {});
+      emailRemovedFromCohort(removed.email, removed.firstName);
     }
   }, [participants, user, persist, updateCohortStats]);
 
@@ -981,6 +1058,11 @@ export function useAppState() {
       } else {
         persist(user, updatedParticipants);
       }
+    }
+
+    // Send reactivation email
+    if (existing?.email) {
+      emailReactivated(existing.email, existing.firstName, currentDay, updates.cohortAttempt);
     }
   }, [participants, user, persist, cohortStartDate, updateCohortStats]);
 
@@ -1215,15 +1297,7 @@ export function useAppState() {
   // ── Activation Phase ─────────────────────────────────────
   const completeActivation = useCallback(async (activationData) => {
     if (!user) return { error: 'Not logged in.' };
-    const updates = {
-      buyBox: activationData.buyBox || null,
-      offerCommitment: activationData.offerCommitment || null,
-      stakesDeclaration: activationData.stakesDeclaration || null,
-      commitmentDeclaredAt: activationData.commitmentDeclaredAt || new Date().toISOString(),
-      activationCompleted: true,
-      activationCompletedAt: activationData.activationCompletedAt || new Date().toISOString(),
-      onboardingCompleted: true,
-    };
+    const updates = { ...activationData };
     const updatedUser = { ...user, ...updates };
     if (isSupabaseEnabled) {
       await storage.updateParticipant(user.id, updates);
@@ -1316,6 +1390,96 @@ export function useAppState() {
     return Promise.resolve(storage.getContactsForParticipant(participantId));
   }, []);
 
+  // ── Compliance System ─────────────────────────────────────
+  const runEnforcementCheck = useCallback(async (participant) => {
+    if (!participant || participant.isAdmin || !participant.isActive) return null;
+    const compSettings = await Promise.resolve(storage.getComplianceSettings());
+    const enforcement = { ...DEFAULT_ENFORCEMENT, ...compSettings?.enforcement };
+    if (!enforcement.enabled) return null;
+
+    const submissions = await Promise.resolve(storage.getDailySubmissions(participant.id));
+    const result = checkEnforcement({
+      participant,
+      cohortStartDate,
+      dailySubmissions: submissions,
+      dailyMinimums: { ...COMPLIANCE_DEFAULTS, ...compSettings?.dailyMinimums },
+      weeklyMinimums: { ...DEFAULT_WEEKLY_MINIMUMS, ...compSettings?.weeklyMinimums },
+      enforcement,
+    });
+
+    if (result) {
+      // Remove the participant
+      const updates = { isActive: false, removedAt: new Date().toISOString() };
+      if ((participant.cohortAttempt || 1) === 1) updates.refundEligible = false;
+
+      if (isSupabaseEnabled) {
+        await storage.updateParticipant(participant.id, updates);
+      }
+
+      // Log the removal
+      storage.addRemovalLog({
+        participant_id: participant.id,
+        auth_id: participant.authId || null,
+        reason: result.reason,
+        details: result.details,
+        challenge_day: result.challenge_day,
+        week_number: result.week_number,
+      });
+
+      tagRemovedFromCohort(participant.email).catch(() => {});
+      emailRemovedFromCohort(participant.email, participant.firstName);
+
+      const removedUser = { ...participant, ...updates };
+      setUser(removedUser);
+      storage.setUser(removedUser);
+      setRemovalReason(result);
+
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+    }
+    return result;
+  }, [cohortStartDate]);
+
+  // Run enforcement check when user logs in (non-admin, active)
+  useEffect(() => {
+    if (user && !user.isAdmin && user.isActive && cohortStartDate && currentView === 'dashboard') {
+      runEnforcementCheck(user);
+    }
+  }, [user?.id, currentView, cohortStartDate]);
+
+  const getDailySubmissions = useCallback(async (participantId) => {
+    const id = participantId || user?.id;
+    if (!id) return [];
+    return Promise.resolve(storage.getDailySubmissions(id));
+  }, [user]);
+
+  const getAllDailySubmissions = useCallback(async () => {
+    return Promise.resolve(storage.getAllDailySubmissions());
+  }, []);
+
+  const getDailySubmission = useCallback(async (participantId, challengeDay) => {
+    return Promise.resolve(storage.getDailySubmission(participantId, challengeDay));
+  }, []);
+
+  const getRemovalLog = useCallback(async (participantId) => {
+    return Promise.resolve(storage.getRemovalLog(participantId));
+  }, []);
+
+  const setComplianceDailyMinimums = useCallback(async (minimums) => {
+    await Promise.resolve(storage.setComplianceDailyMinimums(minimums));
+    setComplianceSettingsState(prev => ({ ...prev, dailyMinimums: minimums }));
+  }, []);
+
+  const setComplianceWeeklyMinimums = useCallback(async (minimums) => {
+    await Promise.resolve(storage.setComplianceWeeklyMinimums(minimums));
+    setComplianceSettingsState(prev => ({ ...prev, weeklyMinimums: minimums }));
+  }, []);
+
+  const setComplianceEnforcement = useCallback(async (enforcement) => {
+    await Promise.resolve(storage.setComplianceEnforcement(enforcement));
+    setComplianceSettingsState(prev => ({ ...prev, enforcement }));
+  }, []);
+
   // Refresh community posts every 30 seconds
   useEffect(() => {
     if (!user || currentView === 'login') return;
@@ -1395,5 +1559,17 @@ export function useAppState() {
     getUploadUrl,
     getFollowUpsByContact,
     getContactsForParticipant,
+    // Compliance system
+    complianceSettings,
+    removalReason,
+    setRemovalReason,
+    getDailySubmissions,
+    getAllDailySubmissions,
+    getDailySubmission,
+    getRemovalLog,
+    setComplianceDailyMinimums,
+    setComplianceWeeklyMinimums,
+    setComplianceEnforcement,
+    runEnforcementCheck,
   };
 }

@@ -375,6 +375,93 @@ const supabaseStorage = {
     if (error) { console.error('getUploadUrl error:', error); return null; }
     return data?.signedUrl || null;
   },
+
+  // ── Daily Submissions (compliance system) ──────────────────────
+  async upsertDailySubmission(submission) {
+    const { data, error } = await supabase
+      .from('daily_submissions')
+      .upsert(submission, { onConflict: 'participant_id,challenge_day' })
+      .select()
+      .single();
+    if (error) { console.error('upsertDailySubmission error:', error); return null; }
+    return data;
+  },
+
+  async getDailySubmission(participantId, challengeDay) {
+    const { data, error } = await supabase
+      .from('daily_submissions')
+      .select('*')
+      .eq('participant_id', participantId)
+      .eq('challenge_day', challengeDay)
+      .maybeSingle();
+    if (error) { console.error('getDailySubmission error:', error); return null; }
+    return data;
+  },
+
+  async getDailySubmissions(participantId) {
+    const { data, error } = await supabase
+      .from('daily_submissions')
+      .select('*')
+      .eq('participant_id', participantId)
+      .order('challenge_day', { ascending: true });
+    if (error) { console.error('getDailySubmissions error:', error); return []; }
+    return data || [];
+  },
+
+  async getAllDailySubmissions() {
+    const { data, error } = await supabase
+      .from('daily_submissions')
+      .select('*')
+      .order('challenge_day', { ascending: true });
+    if (error) { console.error('getAllDailySubmissions error:', error); return []; }
+    return data || [];
+  },
+
+  // ── Removal Log ─────────────────────────────────────────────────
+  async addRemovalLog(entry) {
+    const { data, error } = await supabase
+      .from('removal_log')
+      .insert(entry)
+      .select()
+      .single();
+    if (error) { console.error('addRemovalLog error:', error); return null; }
+    return data;
+  },
+
+  async getRemovalLog(participantId) {
+    let query = supabase
+      .from('removal_log')
+      .select('*')
+      .order('removed_at', { ascending: false });
+    if (participantId) query = query.eq('participant_id', participantId);
+    const { data, error } = await query;
+    if (error) { console.error('getRemovalLog error:', error); return []; }
+    return data || [];
+  },
+
+  // ── Compliance Settings ─────────────────────────────────────────
+  async getComplianceSettings() {
+    const daily = await this._getSetting('compliance_daily_minimums');
+    const weekly = await this._getSetting('compliance_weekly_minimums');
+    const enforcement = await this._getSetting('compliance_enforcement');
+    return {
+      dailyMinimums: daily || null,
+      weeklyMinimums: weekly || null,
+      enforcement: enforcement || null,
+    };
+  },
+
+  async setComplianceDailyMinimums(minimums) {
+    await this._setSetting('compliance_daily_minimums', minimums);
+  },
+
+  async setComplianceWeeklyMinimums(minimums) {
+    await this._setSetting('compliance_weekly_minimums', minimums);
+  },
+
+  async setComplianceEnforcement(enforcement) {
+    await this._setSetting('compliance_enforcement', enforcement);
+  },
 };
 
 // ── Database row conversion ──────────────────────────────────────
@@ -410,14 +497,25 @@ function toDbRow(user) {
   if (user.communityBanned) row.community_banned = true;
   if (user.communityWarnings?.length > 0) row.community_warnings = user.communityWarnings;
   // Activation Phase fields
+  if (user.marketResearchConfirmed) row.market_research_confirmed = true;
+  if (user.marketResearchConfirmedAt) row.market_research_confirmed_at = user.marketResearchConfirmedAt;
+  if (user.capitalConfirmation) row.capital_confirmation = user.capitalConfirmation;
   if (user.offerCommitment != null) row.offer_commitment = user.offerCommitment;
+  if (user.offerCommitmentSetAt) row.offer_commitment_set_at = user.offerCommitmentSetAt;
   if (user.stakesDeclaration) row.stakes_declaration = user.stakesDeclaration;
+  if (user.stakesDeclarationSetAt) row.stakes_declaration_set_at = user.stakesDeclarationSetAt;
+  if (user.theirWhy) row.their_why = user.theirWhy;
+  if (user.theirWhySetAt) row.their_why_set_at = user.theirWhySetAt;
+  if (user.notificationPreferences) row.notification_preferences = user.notificationPreferences;
   if (user.activationCompleted) row.activation_completed = true;
   if (user.activationCompletedAt) row.activation_completed_at = user.activationCompletedAt;
   // Guarantee tracking
   if (user.cohortAttempt != null) row.cohort_attempt = user.cohortAttempt;
   if (user.refundEligible !== undefined) row.refund_eligible = user.refundEligible;
   if (user.firstCohortCompleted) row.first_cohort_completed = true;
+  // Stripe payment tracking
+  if (user.stripeCustomerId) row.stripe_customer_id = user.stripeCustomerId;
+  if (user.stripeSubscriptionId) row.stripe_subscription_id = user.stripeSubscriptionId;
   return row;
 }
 
@@ -449,14 +547,25 @@ function toDbUpdateRow(updates) {
   if (updates.communityBanned !== undefined) row.community_banned = updates.communityBanned;
   if (updates.communityWarnings !== undefined) row.community_warnings = updates.communityWarnings;
   // Activation Phase fields
+  if (updates.marketResearchConfirmed !== undefined) row.market_research_confirmed = updates.marketResearchConfirmed;
+  if (updates.marketResearchConfirmedAt !== undefined) row.market_research_confirmed_at = updates.marketResearchConfirmedAt;
+  if (updates.capitalConfirmation !== undefined) row.capital_confirmation = updates.capitalConfirmation;
   if (updates.offerCommitment !== undefined) row.offer_commitment = updates.offerCommitment;
+  if (updates.offerCommitmentSetAt !== undefined) row.offer_commitment_set_at = updates.offerCommitmentSetAt;
   if (updates.stakesDeclaration !== undefined) row.stakes_declaration = updates.stakesDeclaration;
+  if (updates.stakesDeclarationSetAt !== undefined) row.stakes_declaration_set_at = updates.stakesDeclarationSetAt;
+  if (updates.theirWhy !== undefined) row.their_why = updates.theirWhy;
+  if (updates.theirWhySetAt !== undefined) row.their_why_set_at = updates.theirWhySetAt;
+  if (updates.notificationPreferences !== undefined) row.notification_preferences = updates.notificationPreferences;
   if (updates.activationCompleted !== undefined) row.activation_completed = updates.activationCompleted;
   if (updates.activationCompletedAt !== undefined) row.activation_completed_at = updates.activationCompletedAt;
   // Guarantee tracking
   if (updates.cohortAttempt !== undefined) row.cohort_attempt = updates.cohortAttempt;
   if (updates.refundEligible !== undefined) row.refund_eligible = updates.refundEligible;
   if (updates.firstCohortCompleted !== undefined) row.first_cohort_completed = updates.firstCohortCompleted;
+  // Stripe payment tracking
+  if (updates.stripeCustomerId !== undefined) row.stripe_customer_id = updates.stripeCustomerId;
+  if (updates.stripeSubscriptionId !== undefined) row.stripe_subscription_id = updates.stripeSubscriptionId;
   return row;
 }
 
@@ -496,14 +605,25 @@ function fromDbRow(row) {
     communityBanned: row.community_banned || false,
     communityWarnings: row.community_warnings || [],
     // Activation Phase fields
+    marketResearchConfirmed: row.market_research_confirmed || false,
+    marketResearchConfirmedAt: row.market_research_confirmed_at || null,
+    capitalConfirmation: row.capital_confirmation || null,
     offerCommitment: row.offer_commitment || null,
+    offerCommitmentSetAt: row.offer_commitment_set_at || null,
     stakesDeclaration: row.stakes_declaration || null,
+    stakesDeclarationSetAt: row.stakes_declaration_set_at || null,
+    theirWhy: row.their_why || null,
+    theirWhySetAt: row.their_why_set_at || null,
+    notificationPreferences: row.notification_preferences || null,
     activationCompleted: row.activation_completed || false,
     activationCompletedAt: row.activation_completed_at || null,
     // Guarantee tracking
     cohortAttempt: row.cohort_attempt || 1,
     refundEligible: row.refund_eligible !== false,
     firstCohortCompleted: row.first_cohort_completed || false,
+    // Stripe payment tracking
+    stripeCustomerId: row.stripe_customer_id || null,
+    stripeSubscriptionId: row.stripe_subscription_id || null,
   };
 }
 
@@ -716,6 +836,67 @@ const localStorageFallback = {
     // In localStorage mode, filePath IS the data URL
     return filePath;
   },
+
+  // ── Daily Submissions (localStorage fallback) ──────────────────
+  upsertDailySubmission(submission) {
+    try {
+      const subs = JSON.parse(localStorage.getItem('uc30_daily_submissions') || '[]');
+      const idx = subs.findIndex(s => s.participant_id === submission.participant_id && s.challenge_day === submission.challenge_day);
+      const record = { ...submission, id: submission.id || `ds_${Date.now()}`, updated_at: new Date().toISOString() };
+      if (idx >= 0) { subs[idx] = { ...subs[idx], ...record }; } else { record.submitted_at = new Date().toISOString(); subs.push(record); }
+      localStorage.setItem('uc30_daily_submissions', JSON.stringify(subs));
+      return idx >= 0 ? subs[idx] : record;
+    } catch { return null; }
+  },
+  getDailySubmission(participantId, challengeDay) {
+    try {
+      const subs = JSON.parse(localStorage.getItem('uc30_daily_submissions') || '[]');
+      return subs.find(s => s.participant_id === participantId && s.challenge_day === challengeDay) || null;
+    } catch { return null; }
+  },
+  getDailySubmissions(participantId) {
+    try {
+      const subs = JSON.parse(localStorage.getItem('uc30_daily_submissions') || '[]');
+      return subs.filter(s => s.participant_id === participantId).sort((a, b) => a.challenge_day - b.challenge_day);
+    } catch { return []; }
+  },
+  getAllDailySubmissions() {
+    try { return JSON.parse(localStorage.getItem('uc30_daily_submissions') || '[]'); } catch { return []; }
+  },
+  addRemovalLog(entry) {
+    try {
+      const log = JSON.parse(localStorage.getItem('uc30_removal_log') || '[]');
+      const record = { ...entry, id: `rl_${Date.now()}`, removed_at: new Date().toISOString() };
+      log.push(record);
+      localStorage.setItem('uc30_removal_log', JSON.stringify(log));
+      return record;
+    } catch { return null; }
+  },
+  getRemovalLog(participantId) {
+    try {
+      const log = JSON.parse(localStorage.getItem('uc30_removal_log') || '[]');
+      if (participantId) return log.filter(e => e.participant_id === participantId);
+      return log;
+    } catch { return []; }
+  },
+  getComplianceSettings() {
+    try {
+      return {
+        dailyMinimums: JSON.parse(localStorage.getItem('uc30_compliance_daily') || 'null'),
+        weeklyMinimums: JSON.parse(localStorage.getItem('uc30_compliance_weekly') || 'null'),
+        enforcement: JSON.parse(localStorage.getItem('uc30_compliance_enforcement') || 'null'),
+      };
+    } catch { return { dailyMinimums: null, weeklyMinimums: null, enforcement: null }; }
+  },
+  setComplianceDailyMinimums(minimums) {
+    try { localStorage.setItem('uc30_compliance_daily', JSON.stringify(minimums)); } catch {}
+  },
+  setComplianceWeeklyMinimums(minimums) {
+    try { localStorage.setItem('uc30_compliance_weekly', JSON.stringify(minimums)); } catch {}
+  },
+  setComplianceEnforcement(enforcement) {
+    try { localStorage.setItem('uc30_compliance_enforcement', JSON.stringify(enforcement)); } catch {}
+  },
 };
 
 // ── Export the right storage based on config ─────────────────────
@@ -731,7 +912,7 @@ export function createNewUser(firstName, lastName, email, authId) {
     lastName,
     email: email.toLowerCase(),
     password: null,
-    isAdmin: email.toLowerCase() === 'admin@uc30.com' || email.toLowerCase() === 'dev@uc30.com' || email.toLowerCase() === 'justin.sobojinski@gmail.com',
+    isAdmin: email.toLowerCase() === 'admin@uc30.com' || email.toLowerCase() === 'dev@uc30.com',
     isDeveloper: email.toLowerCase() === 'dev@uc30.com' || email.toLowerCase() === 'justin.sobojinski@gmail.com',
     currentDay: 1,
     isActive: true,
@@ -760,8 +941,16 @@ export function createNewUser(firstName, lastName, email, authId) {
     communityBanned: false,
     communityWarnings: [],
     // Activation Phase
+    marketResearchConfirmed: false,
+    marketResearchConfirmedAt: null,
+    capitalConfirmation: null,
     offerCommitment: null,
+    offerCommitmentSetAt: null,
     stakesDeclaration: null,
+    stakesDeclarationSetAt: null,
+    theirWhy: null,
+    theirWhySetAt: null,
+    notificationPreferences: null,
     activationCompleted: false,
     activationCompletedAt: null,
     // Guarantee tracking

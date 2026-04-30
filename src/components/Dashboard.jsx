@@ -9,6 +9,7 @@ import Leaderboard from './Leaderboard';
 import UserProfile, { UserSupport } from './UserProfile';
 import { getGettingStartedContent } from '../data/challengeDays';
 import { calculateUCPoints } from '../data/ucPoints';
+import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT, checkWeeklyCompliance, getWeekNumber, getWeekRange, getWeekDayCount, calculateAtRisk, getTimeUntilDeadline } from '../data/compliance';
 import CommunityBoard from './CommunityBoard';
 import ContactsCRM from './ContactsCRM';
 import Footer from './Footer';
@@ -72,11 +73,20 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
+  const [existingDailySubmission, setExistingDailySubmission] = useState(null);
 
   const calendarDay = getCalendarDay(cohortStartDate);
+
+  useEffect(() => {
+    if (!getDailySubmission || !user?.id || !calendarDay || calendarDay < 1) return;
+    (async () => {
+      const sub = await getDailySubmission(user.id, calendarDay);
+      setExistingDailySubmission(sub || null);
+    })();
+  }, [calendarDay, user?.id, user?.currentDay]);
 
   // Removed/paused state
   if (!user.isActive) {
@@ -91,8 +101,8 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           <p style={{ color: '#888', lineHeight: 1.7, marginBottom: 24 }}>
             You missed a daily submission and were removed from this run.
           </p>
-          {/* Stakes Declaration Reminder */}
-          {user.stakesDeclaration && (
+          {/* Motivation Reminder */}
+          {(user.stakesDeclaration || user.theirWhy) && (
             <div style={{
               padding: '16px 20px', borderRadius: 12, marginBottom: 24,
               background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.12)',
@@ -101,10 +111,17 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
               <div style={{ fontSize: 12, color: '#e94560', fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>
                 You wrote this during activation
               </div>
-              <p style={{ fontSize: 14, color: '#ccc', lineHeight: 1.7, margin: 0, fontStyle: 'italic' }}>
-                "{user.stakesDeclaration}"
-              </p>
-              <p style={{ fontSize: 13, color: '#888', marginTop: 10, marginBottom: 0 }}>
+              {user.stakesDeclaration && (
+                <p style={{ fontSize: 14, color: '#ccc', lineHeight: 1.7, margin: '0 0 10px', fontStyle: 'italic' }}>
+                  "{user.stakesDeclaration}"
+                </p>
+              )}
+              {user.theirWhy && (
+                <p style={{ fontSize: 14, color: '#48c78e', lineHeight: 1.7, margin: '0 0 10px', fontStyle: 'italic' }}>
+                  "{user.theirWhy}"
+                </p>
+              )}
+              <p style={{ fontSize: 13, color: '#888', marginTop: 4, marginBottom: 0 }}>
                 Come back stronger in the next cohort.
               </p>
             </div>
@@ -203,19 +220,29 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           <ProgressBanner user={user} cohortStartDate={cohortStartDate} calendarDay={calendarDay} />
         )}
 
-        {/* Stakes nudge when user hasn't submitted today */}
-        {cohortActive && !userCompletedToday && user.stakesDeclaration && (tab === 'timeline' || tab === 'day') && (
+        {/* Motivation nudge when user hasn't submitted today */}
+        {cohortActive && !userCompletedToday && (user.stakesDeclaration || user.theirWhy) && (tab === 'timeline' || tab === 'day') && (
           <div className="fade-up" style={{
             padding: '12px 18px', borderRadius: 12, marginBottom: 16,
-            background: 'linear-gradient(135deg, rgba(233,69,96,0.04), rgba(240,165,0,0.04))',
-            border: '1px solid rgba(233,69,96,0.08)',
+            background: 'linear-gradient(135deg, rgba(233,69,96,0.04), rgba(72,199,142,0.04))',
+            border: '1px solid rgba(255,255,255,0.06)',
             display: 'flex', alignItems: 'flex-start', gap: 10,
           }}>
             <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>*</span>
             <p style={{ fontSize: 13, color: '#999', lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>
-              "{user.stakesDeclaration}"
+              "{user.theirWhy || user.stakesDeclaration}"
             </p>
           </div>
+        )}
+
+        {/* Compliance Cards */}
+        {cohortActive && (tab === 'timeline' || tab === 'day') && complianceSettings && (
+          <ComplianceCards
+            calendarDay={calendarDay}
+            existingDailySubmission={existingDailySubmission}
+            complianceSettings={complianceSettings}
+            user={user}
+          />
         )}
 
         {/* Cohort countdown when pre-cohort */}
@@ -259,6 +286,8 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             onUploadFile={onUploadFile}
             contacts={contacts}
             getUploadUrl={getUploadUrl}
+            complianceSettings={complianceSettings}
+            existingDailySubmission={existingDailySubmission}
           />
         )}
         {tab === 'community' && (
@@ -406,7 +435,7 @@ function CohortCountdown({ cohortStartDate }) {
       <div className="card" style={{ padding: 24, textAlign: 'left', maxWidth: 400, margin: '0 auto' }}>
         <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>You're activated. Use this time to:</h3>
         <ul style={{ color: '#888', fontSize: 14, lineHeight: 2, listStyle: 'none', padding: 0 }}>
-          <li>✅ Review your buy box and target markets</li>
+          <li>✅ Complete the Getting Started section</li>
           <li>✅ Set up your deal-finding tools</li>
           <li>✅ Research properties in your target area</li>
           <li>✅ Get ready to submit offers on Day 1</li>
@@ -624,6 +653,10 @@ function socialHandlesToObject(arr) {
   return obj;
 }
 
+// ── Buy Box Constants ────────────────────────────────────
+const PROPERTY_TYPES = ['SFR', 'Multifamily', 'Commercial', 'Land', 'Mixed-Use'];
+const STRATEGIES = ['Flip', 'BRRRR', 'Buy & Hold Rental', 'Wholesale', 'Subject-To', 'Seller Finance'];
+
 // ── Getting Started Section ──────────────────────────────
 function GettingStartedSection({ user, onComplete, contentOverrides }) {
   const content = getGettingStartedContent(contentOverrides);
@@ -633,6 +666,26 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
   const [fileData, setFileData] = useState(null);
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
+
+  // Buy Box state
+  const existingBuyBox = user.buyBox || {};
+  const [markets, setMarkets] = useState(() => (existingBuyBox.markets || []).join(', '));
+  const [propertyTypes, setPropertyTypes] = useState(() => existingBuyBox.propertyTypes || []);
+  const [priceMin, setPriceMin] = useState(() => existingBuyBox.priceMin ? String(existingBuyBox.priceMin) : '');
+  const [priceMax, setPriceMax] = useState(() => existingBuyBox.priceMax ? String(existingBuyBox.priceMax) : '');
+  const [strategy, setStrategy] = useState(() => existingBuyBox.strategy || '');
+  const [targetReturns, setTargetReturns] = useState(() => existingBuyBox.targetReturns || '');
+
+  // Activation state (offer commitment, stakes, commitment)
+  const [offerCommitment, setOfferCommitment] = useState(() => user.offerCommitment ? String(user.offerCommitment) : '');
+  const [stakesDeclaration, setStakesDeclaration] = useState(() => user.stakesDeclaration || '');
+  const [committed, setCommitted] = useState(false);
+
+  const togglePropertyType = (pt) => {
+    setPropertyTypes(prev =>
+      prev.includes(pt) ? prev.filter(t => t !== pt) : [...prev, pt]
+    );
+  };
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
@@ -645,13 +698,27 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
   };
 
   const hasValidHandle = handles.some(h => h.handle.trim().length > 0);
+  const hasValidOffer = offerCommitment && parseInt(offerCommitment) > 0;
 
   const handleComplete = async () => {
-    if (!hasValidHandle) return;
+    if (!hasValidHandle || !markets.trim() || !hasValidOffer || !stakesDeclaration.trim() || !committed) return;
     setSaving(true);
     const socialHandles = socialHandlesToObject(handles);
     const proof = (proofText.trim() || fileName) ? { text: proofText, fileName, fileData } : null;
-    await onComplete(socialHandles, proof);
+    const buyBox = {
+      markets: markets.split(',').map(m => m.trim()).filter(Boolean),
+      propertyTypes,
+      priceMin: parseInt(priceMin) || 0,
+      priceMax: parseInt(priceMax) || 0,
+      strategy,
+      targetReturns: targetReturns.trim() || null,
+    };
+    const activationData = {
+      offerCommitment: parseInt(offerCommitment) || 0,
+      stakesDeclaration: stakesDeclaration.trim(),
+      commitmentDeclaredAt: new Date().toISOString(),
+    };
+    await onComplete(socialHandles, proof, buyBox, activationData);
     setDone(true);
     setSaving(false);
   };
@@ -660,15 +727,39 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
     return (
       <div className="card scale-in" style={{ padding: 32, textAlign: 'center', marginBottom: 24, borderColor: 'rgba(72,199,142,0.3)' }}>
         <div style={{ fontSize: 40, marginBottom: 12 }}>✅</div>
-        <h3 style={{ fontSize: 18, fontWeight: 700, color: '#48c78e' }}>Getting Started Complete!</h3>
+        <h3 style={{ fontSize: 18, fontWeight: 700, color: '#48c78e' }}>You're Activated!</h3>
         <p style={{ color: '#888', fontSize: 14, marginTop: 8 }}>You're all set. Day 1 is now unlocked.</p>
       </div>
     );
   }
 
+  // Validation summary
+  const missingFields = [];
+  if (!markets.trim()) missingFields.push('target market(s)');
+  if (!hasValidHandle) missingFields.push('at least one social media handle');
+  if (!hasValidOffer) missingFields.push('offer target');
+  if (!stakesDeclaration.trim()) missingFields.push('stakes declaration');
+  if (!committed) missingFields.push('commitment confirmation');
+
   return (
     <div className="fade-up" style={{ marginBottom: 24 }}>
-      {/* Header */}
+      {/* Welcome Header */}
+      <div className="card" style={{ textAlign: 'center', padding: '36px 28px', marginBottom: 20 }}>
+        <div className="mono" style={{ fontSize: 36, fontWeight: 700, color: '#e94560', marginBottom: 12 }}>
+          UC30
+        </div>
+        <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 10, lineHeight: 1.3 }}>
+          Welcome, {user.firstName || 'Operator'}.
+        </h1>
+        <p style={{ color: '#aaa', fontSize: 14, lineHeight: 1.7, marginBottom: 8 }}>
+          You've made the decision. Now let's make sure you're ready to execute.
+        </p>
+        <p style={{ color: '#666', fontSize: 13, lineHeight: 1.6 }}>
+          Complete everything below to activate your challenge and unlock Day 1.
+        </p>
+      </div>
+
+      {/* Section Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
         <div style={{
           width: 32, height: 32, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
@@ -758,6 +849,181 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
         </details>
       )}
 
+      {/* Buy Box Setup */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+          }}>🎯</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Define Your Buy Box</h3>
+        </div>
+        <p style={{ fontSize: 13, color: '#888', marginBottom: 16 }}>
+          Set your investment criteria so you're ready to act on Day 1. You can update this later.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Target Markets */}
+          <div>
+            <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              Target Market(s) <span style={{ color: '#e94560' }}>*</span>
+            </label>
+            <input
+              value={markets}
+              onChange={e => setMarkets(e.target.value)}
+              placeholder="e.g. Austin TX, San Antonio TX, Dallas TX"
+              style={{ width: '100%', fontSize: 14, padding: '12px 14px' }}
+            />
+            <p style={{ fontSize: 11, color: '#555', marginTop: 4 }}>
+              Separate multiple markets with commas
+            </p>
+          </div>
+
+          {/* Property Types */}
+          <div>
+            <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              Property Type(s)
+            </label>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {PROPERTY_TYPES.map(pt => {
+                const selected = propertyTypes.includes(pt);
+                return (
+                  <button
+                    key={pt}
+                    onClick={() => togglePropertyType(pt)}
+                    style={{
+                      padding: '8px 16px', borderRadius: 8, fontSize: 13, cursor: 'pointer',
+                      background: selected ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.04)',
+                      color: selected ? '#e94560' : '#888',
+                      border: selected ? '1px solid rgba(233,69,96,0.3)' : '1px solid rgba(255,255,255,0.08)',
+                      fontFamily: "'DM Sans', sans-serif", fontWeight: selected ? 600 : 400,
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    {selected && '+ '}{pt}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Price Range */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div>
+              <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 6, fontWeight: 600 }}>
+                Min Price ($)
+              </label>
+              <input
+                type="number"
+                value={priceMin}
+                onChange={e => setPriceMin(e.target.value)}
+                placeholder="50,000"
+                style={{ width: '100%', fontSize: 14, padding: '12px 14px' }}
+              />
+            </div>
+            <div>
+              <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 6, fontWeight: 600 }}>
+                Max Price ($)
+              </label>
+              <input
+                type="number"
+                value={priceMax}
+                onChange={e => setPriceMax(e.target.value)}
+                placeholder="300,000"
+                style={{ width: '100%', fontSize: 14, padding: '12px 14px' }}
+              />
+            </div>
+          </div>
+
+          {/* Strategy */}
+          <div>
+            <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              Strategy
+            </label>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {STRATEGIES.map(s => (
+                <button
+                  key={s}
+                  onClick={() => setStrategy(s)}
+                  style={{
+                    padding: '8px 16px', borderRadius: 8, fontSize: 13, cursor: 'pointer',
+                    background: strategy === s ? 'rgba(83,52,131,0.15)' : 'rgba(255,255,255,0.04)',
+                    color: strategy === s ? '#c9a0ff' : '#888',
+                    border: strategy === s ? '1px solid rgba(83,52,131,0.3)' : '1px solid rgba(255,255,255,0.08)',
+                    fontFamily: "'DM Sans', sans-serif", fontWeight: strategy === s ? 600 : 400,
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Target Returns */}
+          <div>
+            <label style={{ fontSize: 13, color: '#aaa', display: 'block', marginBottom: 6, fontWeight: 600 }}>
+              Target Returns / Cash Flow Goals <span style={{ color: '#555', fontWeight: 400 }}>(optional)</span>
+            </label>
+            <input
+              value={targetReturns}
+              onChange={e => setTargetReturns(e.target.value)}
+              placeholder="e.g. $500/mo cash flow, 20% ROI, $30k profit per flip"
+              style={{ width: '100%', fontSize: 14, padding: '12px 14px' }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Offer Target */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: 8, background: 'rgba(240,165,0,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+          }}>📊</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Set Your Offer Target</h3>
+        </div>
+        <p style={{ fontSize: 13, color: '#888', marginBottom: 16 }}>
+          How many offers will you commit to submitting during your 30-day sprint?
+        </p>
+
+        <div style={{
+          padding: 16, borderRadius: 12,
+          background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.15)',
+          marginBottom: 20,
+        }}>
+          <p style={{ color: '#f0a500', fontSize: 13, fontWeight: 600, margin: 0 }}>
+            Top operators commit to 50+ offers in 30 days. The more you submit, the higher your chances of closing.
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <input
+            type="number"
+            min="1"
+            value={offerCommitment}
+            onChange={e => setOfferCommitment(e.target.value)}
+            placeholder="50"
+            style={{
+              width: 120, fontSize: 32, fontWeight: 700, textAlign: 'center',
+              padding: '12px 16px', borderRadius: 12,
+              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
+              color: '#fff',
+            }}
+          />
+          <span style={{ fontSize: 16, color: '#888', fontWeight: 600 }}>offers in 30 days</span>
+        </div>
+
+        {hasValidOffer && (
+          <p style={{ fontSize: 13, color: '#666', marginTop: 12, marginBottom: 0 }}>
+            That's roughly <strong style={{ color: '#ccc' }}>
+              {Math.ceil(parseInt(offerCommitment) / 30)} offers per day
+            </strong>. You've got this.
+          </p>
+        )}
+      </div>
+
       {/* Social Media Handles */}
       <div className="card" style={{ marginBottom: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
@@ -771,6 +1037,84 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
           Add at least one handle. You can update these later in your Profile.
         </p>
         <SocialHandlesInput handles={handles} onChange={setHandles} />
+      </div>
+
+      {/* Stakes Declaration */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+          }}>🔥</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Declare Your Stakes</h3>
+        </div>
+        <p style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>
+          What will it cost you if you DON'T complete UC30?
+        </p>
+        <p style={{ fontSize: 12, color: '#666', lineHeight: 1.6, marginBottom: 16 }}>
+          Write out what you lose by not following through.
+          We'll show this back to you on tough days as a reminder of why you started.
+        </p>
+        <textarea
+          value={stakesDeclaration}
+          onChange={e => setStakesDeclaration(e.target.value)}
+          placeholder={"What happens if you quit? What stays the same? What opportunity do you lose?\n\nExample: \"If I don't finish UC30, I'll waste another year talking about real estate instead of doing it. My family won't see me step up. I'll still be stuck wondering 'what if' while other operators are closing deals.\""}
+          rows={5}
+          style={{
+            width: '100%', padding: '14px 16px', fontSize: 14, borderRadius: 10,
+            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+            color: '#eee', resize: 'vertical', fontFamily: "'DM Sans', sans-serif",
+            lineHeight: 1.7, boxSizing: 'border-box',
+          }}
+        />
+      </div>
+
+      {/* Commitment Confirmation */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: 8, background: 'rgba(72,199,142,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+          }}>✊</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Confirm Your Commitment</h3>
+        </div>
+
+        <div style={{
+          padding: 16, borderRadius: 12,
+          background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.15)',
+          marginBottom: 20,
+        }}>
+          <p style={{ color: '#ccc', fontSize: 14, lineHeight: 1.8, margin: 0, fontStyle: 'italic' }}>
+            "I commit to completing all daily standards for 30 consecutive days.
+            I understand that if I fall behind, I will restart with the next cohort.
+            I am ready to execute."
+          </p>
+        </div>
+
+        <label
+          style={{
+            display: 'flex', alignItems: 'flex-start', gap: 12, padding: '16px 18px',
+            background: committed ? 'rgba(72,199,142,0.06)' : 'rgba(255,255,255,0.03)',
+            border: `1px solid ${committed ? 'rgba(72,199,142,0.2)' : 'rgba(255,255,255,0.08)'}`,
+            borderRadius: 12, cursor: 'pointer',
+            transition: 'all 0.2s',
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={committed}
+            onChange={e => setCommitted(e.target.checked)}
+            style={{ marginTop: 3, accentColor: '#48c78e', width: 20, height: 20, cursor: 'pointer' }}
+          />
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: committed ? '#48c78e' : '#ccc' }}>
+              I Commit
+            </div>
+            <div style={{ fontSize: 13, color: '#666', marginTop: 4 }}>
+              I'm ready to execute for 30 consecutive days
+            </div>
+          </div>
+        </label>
       </div>
 
       {/* Proof Submission (optional) */}
@@ -807,15 +1151,15 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
       {/* Submit */}
       <button
         className="btn-primary"
-        style={{ width: '100%', padding: '14px 24px', fontSize: 16 }}
+        style={{ width: '100%', padding: '14px 24px', fontSize: 16, opacity: missingFields.length > 0 ? 0.5 : 1 }}
         onClick={handleComplete}
-        disabled={saving || !hasValidHandle}
+        disabled={saving || missingFields.length > 0}
       >
-        {saving ? 'Saving...' : 'Complete Getting Started →'}
+        {saving ? 'Activating...' : 'Activate & Start UC30'}
       </button>
-      {!hasValidHandle && (
+      {missingFields.length > 0 && (
         <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 8 }}>
-          Enter at least one social media handle to continue
+          Complete the following to continue: {missingFields.join(', ')}
         </p>
       )}
     </div>
@@ -892,6 +1236,83 @@ function NextCohortCountdown({ nextCohortDate }) {
             The next cohort is starting now!
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// ── Compliance Cards (Participant Dashboard) ───────────────
+function ComplianceCards({ calendarDay, existingDailySubmission, complianceSettings, user }) {
+  const dailyMins = { ...COMP_DAILY_DEFAULTS, ...complianceSettings?.dailyMinimums };
+  const weeklyMins = { ...DEFAULT_WEEKLY_MINIMUMS, ...complianceSettings?.weeklyMinimums };
+  const enforcement = { ...DEFAULT_ENFORCEMENT, ...complianceSettings?.enforcement };
+
+  const currentDay = Math.max(1, Math.min(calendarDay || 1, 30));
+  const currentWeek = getWeekNumber(currentDay);
+  const { start: weekStart } = getWeekRange(currentWeek);
+  const dayInWeek = currentDay - weekStart + 1;
+  const totalDaysInWeek = getWeekDayCount(currentWeek);
+
+  const [deadlineMs, setDeadlineMs] = useState(() => getTimeUntilDeadline(enforcement));
+
+  useEffect(() => {
+    const timer = setInterval(() => setDeadlineMs(getTimeUntilDeadline(enforcement)), 1000);
+    return () => clearInterval(timer);
+  }, [enforcement.timezone, enforcement.daily_deadline_hour]);
+
+  const hours = Math.floor(deadlineMs / (1000 * 60 * 60));
+  const minutes = Math.floor((deadlineMs % (1000 * 60 * 60)) / (1000 * 60));
+  const deadlineUrgent = hours < 2;
+
+  const todaySubmitted = !!existingDailySubmission;
+  const todayMet = existingDailySubmission?.met_daily_minimum ?? null;
+
+  return (
+    <div className="fade-up" style={{ marginBottom: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+        {/* Daily Status */}
+        <div style={{
+          padding: '14px 18px', borderRadius: 12,
+          background: todaySubmitted
+            ? (todayMet ? 'rgba(72,199,142,0.06)' : 'rgba(233,69,96,0.06)')
+            : 'rgba(255,255,255,0.03)',
+          border: `1px solid ${todaySubmitted ? (todayMet ? 'rgba(72,199,142,0.15)' : 'rgba(233,69,96,0.15)') : 'rgba(255,255,255,0.08)'}`,
+        }}>
+          <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>
+            Day {currentDay} Status
+          </div>
+          {todaySubmitted ? (
+            <div style={{ fontSize: 14, fontWeight: 600, color: todayMet ? '#48c78e' : '#e94560' }}>
+              {todayMet ? 'Submitted & Met Minimums' : 'Submitted — Below Minimums'}
+            </div>
+          ) : (
+            <>
+              <div style={{ fontSize: 14, fontWeight: 600, color: deadlineUrgent ? '#e94560' : '#f0a500' }}>
+                Not Yet Submitted
+              </div>
+              <div style={{ fontSize: 12, color: deadlineUrgent ? '#e94560' : '#888', marginTop: 4 }}>
+                {hours}h {minutes}m until deadline
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Weekly Progress */}
+        <div style={{
+          padding: '14px 18px', borderRadius: 12,
+          background: 'rgba(83,52,131,0.06)',
+          border: '1px solid rgba(83,52,131,0.15)',
+        }}>
+          <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>
+            Week {currentWeek} Progress
+          </div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: '#c9a0ff' }}>
+            Day {dayInWeek} of {totalDaysInWeek}
+          </div>
+          <div style={{ fontSize: 12, color: '#888', marginTop: 4 }}>
+            {totalDaysInWeek - dayInWeek} day{totalDaysInWeek - dayInWeek !== 1 ? 's' : ''} remaining this week
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -10,16 +10,58 @@
  * - referral-program (share CTA)
  */
 
-const STRIPE_LINK = import.meta.env.VITE_STRIPE_PAYMENT_LINK || '';
+import { useState } from 'react';
+import { supabase } from '../utils/supabaseClient';
+
+const SUPABASE_FUNCTION_URL = import.meta.env.VITE_SUPABASE_FUNCTION_URL || '';
 
 export default function LandingPageV2({ onGoToLogin, landingContent }) {
   const c = { ...DEFAULTS, ...landingContent };
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
-  const handleGetStarted = () => {
-    if (STRIPE_LINK) {
-      window.location.href = STRIPE_LINK;
-    } else {
+  const [checkoutError, setCheckoutError] = useState(null);
+
+  const handleGetStarted = async () => {
+    if (!SUPABASE_FUNCTION_URL) {
       onGoToLogin('register');
+      return;
+    }
+
+    // Check if user is logged in
+    const { data: { user } } = supabase ? await supabase.auth.getUser() : { data: { user: null } };
+
+    if (!user) {
+      onGoToLogin('register');
+      return;
+    }
+
+    setCheckoutLoading(true);
+    setCheckoutError(null);
+    try {
+      const origin = window.location.origin;
+      const res = await fetch(`${SUPABASE_FUNCTION_URL}/create-checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          supabase_user_id: user.id,
+          email: user.email,
+          success_url: `${origin}/?success=true`,
+          cancel_url: `${origin}/`,
+          tolt_referral: window.tolt_referral || null,
+        }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error('Checkout error:', data.error);
+        setCheckoutError('Unable to start checkout. Please try again or contact support.');
+        setCheckoutLoading(false);
+      }
+    } catch (err) {
+      console.error('Checkout error:', err);
+      setCheckoutError('Unable to start checkout. Please try again or contact support.');
+      setCheckoutLoading(false);
     }
   };
 
@@ -82,8 +124,9 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
             className="btn-primary"
             style={{ padding: '8px 20px', fontSize: 13 }}
             onClick={handleGetStarted}
+            disabled={checkoutLoading}
           >
-            Join Now
+            {checkoutLoading ? 'Loading…' : 'Join Now'}
           </button>
         </div>
       </nav>
@@ -127,14 +170,24 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
             className="btn-primary"
             style={{ padding: '18px 44px', fontSize: 18, fontWeight: 700 }}
             onClick={handleGetStarted}
+            disabled={checkoutLoading}
           >
-            Start My 30-Day Challenge
+            {checkoutLoading ? 'Loading…' : 'Start My 30-Day Challenge'}
           </button>
         </div>
 
         <p style={{ color: '#555', fontSize: 13, marginBottom: 48 }}>
           One-time investment. 1-year access. Unlimited cohort re-runs.
         </p>
+        {checkoutError && (
+          <div style={{
+            padding: '12px 20px', borderRadius: 10,
+            background: 'rgba(233,69,96,0.1)', border: '1px solid rgba(233,69,96,0.3)',
+            color: '#e94560', fontSize: 14, maxWidth: 500, margin: '0 auto 48px',
+          }}>
+            {checkoutError}
+          </div>
+        )}
       </section>
 
       {/* ── Social Proof Bar — bandwagon + authority ──── */}
@@ -417,8 +470,9 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
             className="btn-primary"
             style={{ padding: '18px 44px', fontSize: 18, fontWeight: 700, width: '100%', maxWidth: 340 }}
             onClick={handleGetStarted}
+            disabled={checkoutLoading}
           >
-            Join the Challenge — $997
+            {checkoutLoading ? 'Loading…' : 'Join the Challenge — $997'}
           </button>
 
           {/* Daily cost reframe */}
@@ -472,8 +526,9 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
             className="btn-primary"
             style={{ padding: '18px 52px', fontSize: 18, fontWeight: 700, marginBottom: 12 }}
             onClick={handleGetStarted}
+            disabled={checkoutLoading}
           >
-            Start My 30-Day Challenge
+            {checkoutLoading ? 'Loading…' : 'Start My 30-Day Challenge'}
           </button>
           <p style={{ color: '#555', fontSize: 13 }}>
             One-time investment. 1-year access with unlimited re-runs.
@@ -486,7 +541,15 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
         borderTop: '1px solid rgba(255,255,255,0.06)', padding: '24px',
         textAlign: 'center', fontSize: 13, color: '#444',
       }}>
-        UC30 — 30-Day First Deal Challenge
+        <div>UC30 — 30-Day First Deal Challenge</div>
+        <a
+          href="/affiliates"
+          style={{ color: '#444', textDecoration: 'none', fontSize: 12, marginTop: 8, display: 'inline-block' }}
+          onMouseEnter={e => e.currentTarget.style.color = '#888'}
+          onMouseLeave={e => e.currentTarget.style.color = '#444'}
+        >
+          Affiliate Program
+        </a>
       </footer>
 
       {/* Pulse animation for the urgency dot */}
@@ -501,7 +564,6 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
 }
 
 // ── FAQ Accordion Item ──────────────────────────────
-import { useState } from 'react';
 
 function FAQItem({ question, answer }) {
   const [open, setOpen] = useState(false);

@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard';
 import AdminDashboard from './components/AdminDashboard';
 import OnboardingFlow from './components/OnboardingFlow';
 import ActivationPhase from './components/ActivationPhase';
+import AffiliatePage from './components/AffiliatePage';
 
 export default function App() {
   const {
@@ -62,7 +63,6 @@ export default function App() {
     banCommunityUser,
     dismissCommunityWarning,
     completeOnboarding,
-    completeActivation,
     skoolLink,
     setSkoolLink,
     dailyMinimumsOverrides,
@@ -77,6 +77,18 @@ export default function App() {
     getUploadUrl,
     getContactsForParticipant,
     navigate,
+    // Compliance system
+    complianceSettings,
+    removalReason,
+    setRemovalReason,
+    getDailySubmissions,
+    getAllDailySubmissions,
+    getDailySubmission,
+    getRemovalLog,
+    setComplianceDailyMinimums,
+    setComplianceWeeklyMinimums,
+    setComplianceEnforcement,
+    completeActivation,
   } = useAppState();
 
   // CRM contacts for current user (loaded on login)
@@ -101,11 +113,22 @@ export default function App() {
   // Check for Stripe success redirect
   const [authMode, setAuthMode] = useState(null);
   const [viewAsUser, setViewAsUser] = useState(null);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentFailed, setPaymentFailed] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('paid') === 'true' || params.get('success') === 'true') {
-      setAuthMode('register');
+      // If user is already logged in, show success message instead of register form
+      if (user) {
+        setPaymentSuccess(true);
+      } else {
+        setAuthMode('register');
+      }
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+    if (params.get('payment_failed') === 'true') {
+      setPaymentFailed(true);
       window.history.replaceState({}, '', window.location.pathname);
     }
     // If returning from a password reset link, show login screen
@@ -128,6 +151,11 @@ export default function App() {
         </div>
       </div>
     );
+  }
+
+  // Affiliate page — accessible to anyone, no auth required
+  if (window.location.pathname.replace(/\/+$/, '') === '/affiliates') {
+    return <AffiliatePage />;
   }
 
   // Not logged in
@@ -175,6 +203,63 @@ export default function App() {
     );
   }
 
+  // Payment success screen (shown after Stripe checkout redirect for logged-in users)
+  if (paymentSuccess) {
+    return (
+      <div style={{
+        minHeight: '100vh', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', padding: 20,
+      }}>
+        <div style={{ maxWidth: 480, textAlign: 'center' }}>
+          <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#e94560', marginBottom: 16 }}>
+            UC30
+          </div>
+          <div className="card" style={{ padding: 36 }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>&#10003;</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 12 }}>Payment Received!</div>
+            <p style={{ color: '#888', fontSize: 14, lineHeight: 1.6, marginBottom: 8 }}>
+              Welcome to the UC30 Challenge. Your 1-year access is now active.
+            </p>
+            <p style={{ color: '#666', fontSize: 13, lineHeight: 1.5, marginBottom: 24 }}>
+              A confirmation email has been sent to your inbox from Stripe.
+            </p>
+            <button className="btn-primary" style={{ padding: '14px 40px', fontSize: 16 }}
+              onClick={() => setPaymentSuccess(false)}>
+              Go to Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Payment failed notification (shown when user returns after failed payment or revoked access)
+  if (paymentFailed) {
+    return (
+      <div style={{
+        minHeight: '100vh', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', padding: 20,
+      }}>
+        <div style={{ maxWidth: 480, textAlign: 'center' }}>
+          <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#e94560', marginBottom: 16 }}>
+            UC30
+          </div>
+          <div className="card" style={{ padding: 36 }}>
+            <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 12, color: '#e94560' }}>Payment Issue</div>
+            <p style={{ color: '#888', fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>
+              We were unable to process your payment. Please update your payment method
+              or contact support at <strong>support@uc30.com</strong> for help.
+            </p>
+            <button className="btn-primary" style={{ padding: '14px 40px', fontSize: 16, marginBottom: 12 }}
+              onClick={() => setPaymentFailed(false)}>
+              Continue to Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Check if non-admin user's access has expired
   const accessExpired = !user.isAdmin && user.accessExpiresAt && new Date(user.accessExpiresAt) < new Date();
   if (accessExpired) {
@@ -197,6 +282,66 @@ export default function App() {
           </div>
         </div>
       </div>
+    );
+  }
+
+  // Show removal screen if enforcement check failed
+  if (removalReason && !user.isAdmin) {
+    const reasonLabels = {
+      missed_deadline: 'Missed Daily Deadline',
+      failed_daily_minimum: 'Did Not Meet Daily Minimums',
+      failed_weekly_minimum: 'Did Not Meet Weekly Minimums',
+      manual: 'Removed by Admin',
+    };
+    return (
+      <div style={{
+        minHeight: '100vh', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', padding: 20,
+      }}>
+        <div style={{ maxWidth: 520, textAlign: 'center' }}>
+          <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#e94560', marginBottom: 16 }}>
+            UC30
+          </div>
+          <div className="card" style={{ padding: 36 }}>
+            <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#e94560' }}>
+              Removed from Cohort
+            </div>
+            <div style={{
+              display: 'inline-block', padding: '6px 14px', borderRadius: 8, fontSize: 13,
+              background: 'rgba(233,69,96,0.1)', color: '#e94560', fontWeight: 600, marginBottom: 16,
+            }}>
+              {reasonLabels[removalReason.reason] || removalReason.reason}
+            </div>
+            <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7, marginBottom: 8 }}>
+              {removalReason.details}
+            </p>
+            <p style={{ color: '#666', fontSize: 13, lineHeight: 1.6, marginBottom: 24 }}>
+              Your 1-year access is still active. You can rejoin a future cohort and
+              pick up where you left off. The strict accountability is what makes
+              this program work — when you're ready to commit again, we'll be here.
+            </p>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+              <button className="btn-primary" style={{ padding: '12px 28px' }}
+                onClick={() => setRemovalReason(null)}>
+                Continue to Dashboard
+              </button>
+              <button className="btn-secondary" style={{ padding: '12px 28px' }} onClick={logout}>
+                Log Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Activation Phase gate — non-admin users who haven't completed activation
+  if (!user.isAdmin && !user.activationCompleted) {
+    return (
+      <ActivationPhase
+        user={user}
+        onComplete={completeActivation}
+      />
     );
   }
 
@@ -310,13 +455,14 @@ export default function App() {
         getContactsForParticipant={getContactsForParticipant}
         getUploads={getUploads}
         getUploadUrl={getUploadUrl}
+        complianceSettings={complianceSettings}
+        onSetComplianceDailyMinimums={setComplianceDailyMinimums}
+        onSetComplianceWeeklyMinimums={setComplianceWeeklyMinimums}
+        onSetComplianceEnforcement={setComplianceEnforcement}
+        getAllDailySubmissions={getAllDailySubmissions}
+        getRemovalLog={getRemovalLog}
       />
     );
-  }
-
-  // Show Activation Phase for new non-admin users (replaces old onboarding)
-  if (!user.isAdmin && !user.activationCompleted && !user.onboardingCompleted) {
-    return <ActivationPhase user={user} onComplete={completeActivation} skoolLink={skoolLink || 'https://www.skool.com/cds-collective'} />;
   }
 
   return (
@@ -355,6 +501,8 @@ export default function App() {
       getFollowUpsByContact={getFollowUpsByContact}
       getUploadUrl={getUploadUrl}
       contacts={userContacts}
+      complianceSettings={complianceSettings}
+      getDailySubmission={getDailySubmission}
     />
   );
 }
