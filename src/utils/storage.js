@@ -497,8 +497,16 @@ function toDbRow(user) {
   if (user.communityBanned) row.community_banned = true;
   if (user.communityWarnings?.length > 0) row.community_warnings = user.communityWarnings;
   // Activation Phase fields
+  if (user.marketResearchConfirmed) row.market_research_confirmed = true;
+  if (user.marketResearchConfirmedAt) row.market_research_confirmed_at = user.marketResearchConfirmedAt;
+  if (user.capitalConfirmation) row.capital_confirmation = user.capitalConfirmation;
   if (user.offerCommitment != null) row.offer_commitment = user.offerCommitment;
+  if (user.offerCommitmentSetAt) row.offer_commitment_set_at = user.offerCommitmentSetAt;
   if (user.stakesDeclaration) row.stakes_declaration = user.stakesDeclaration;
+  if (user.stakesDeclarationSetAt) row.stakes_declaration_set_at = user.stakesDeclarationSetAt;
+  if (user.theirWhy) row.their_why = user.theirWhy;
+  if (user.theirWhySetAt) row.their_why_set_at = user.theirWhySetAt;
+  if (user.notificationPreferences) row.notification_preferences = user.notificationPreferences;
   if (user.activationCompleted) row.activation_completed = true;
   if (user.activationCompletedAt) row.activation_completed_at = user.activationCompletedAt;
   // Guarantee tracking
@@ -539,8 +547,16 @@ function toDbUpdateRow(updates) {
   if (updates.communityBanned !== undefined) row.community_banned = updates.communityBanned;
   if (updates.communityWarnings !== undefined) row.community_warnings = updates.communityWarnings;
   // Activation Phase fields
+  if (updates.marketResearchConfirmed !== undefined) row.market_research_confirmed = updates.marketResearchConfirmed;
+  if (updates.marketResearchConfirmedAt !== undefined) row.market_research_confirmed_at = updates.marketResearchConfirmedAt;
+  if (updates.capitalConfirmation !== undefined) row.capital_confirmation = updates.capitalConfirmation;
   if (updates.offerCommitment !== undefined) row.offer_commitment = updates.offerCommitment;
+  if (updates.offerCommitmentSetAt !== undefined) row.offer_commitment_set_at = updates.offerCommitmentSetAt;
   if (updates.stakesDeclaration !== undefined) row.stakes_declaration = updates.stakesDeclaration;
+  if (updates.stakesDeclarationSetAt !== undefined) row.stakes_declaration_set_at = updates.stakesDeclarationSetAt;
+  if (updates.theirWhy !== undefined) row.their_why = updates.theirWhy;
+  if (updates.theirWhySetAt !== undefined) row.their_why_set_at = updates.theirWhySetAt;
+  if (updates.notificationPreferences !== undefined) row.notification_preferences = updates.notificationPreferences;
   if (updates.activationCompleted !== undefined) row.activation_completed = updates.activationCompleted;
   if (updates.activationCompletedAt !== undefined) row.activation_completed_at = updates.activationCompletedAt;
   // Guarantee tracking
@@ -589,8 +605,16 @@ function fromDbRow(row) {
     communityBanned: row.community_banned || false,
     communityWarnings: row.community_warnings || [],
     // Activation Phase fields
+    marketResearchConfirmed: row.market_research_confirmed || false,
+    marketResearchConfirmedAt: row.market_research_confirmed_at || null,
+    capitalConfirmation: row.capital_confirmation || null,
     offerCommitment: row.offer_commitment || null,
+    offerCommitmentSetAt: row.offer_commitment_set_at || null,
     stakesDeclaration: row.stakes_declaration || null,
+    stakesDeclarationSetAt: row.stakes_declaration_set_at || null,
+    theirWhy: row.their_why || null,
+    theirWhySetAt: row.their_why_set_at || null,
+    notificationPreferences: row.notification_preferences || null,
     activationCompleted: row.activation_completed || false,
     activationCompletedAt: row.activation_completed_at || null,
     // Guarantee tracking
@@ -917,8 +941,16 @@ export function createNewUser(firstName, lastName, email, authId) {
     communityBanned: false,
     communityWarnings: [],
     // Activation Phase
+    marketResearchConfirmed: false,
+    marketResearchConfirmedAt: null,
+    capitalConfirmation: null,
     offerCommitment: null,
+    offerCommitmentSetAt: null,
     stakesDeclaration: null,
+    stakesDeclarationSetAt: null,
+    theirWhy: null,
+    theirWhySetAt: null,
+    notificationPreferences: null,
     activationCompleted: false,
     activationCompletedAt: null,
     // Guarantee tracking
