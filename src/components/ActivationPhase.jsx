@@ -65,7 +65,8 @@ export default function ActivationPhase({ user, onComplete }) {
           {step === 2 && <MarketResearchStep onNext={goNext} onBack={goBack} onSave={onComplete} />}
           {step === 3 && <BuyBoxStep onNext={goNext} onBack={goBack} onSave={onComplete} existingBuyBox={user?.buyBox} />}
           {step === 4 && <CapitalConfirmationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingCapital={user?.capitalConfirmation} />}
-          {step >= 5 && step <= 8 && <PlaceholderStep step={step} onNext={goNext} onBack={goBack} />}
+          {step === 5 && <OfferCommitmentStep onNext={goNext} onBack={goBack} onSave={onComplete} existingCommitment={user?.offerCommitment} />}
+          {step >= 6 && step <= 8 && <PlaceholderStep step={step} onNext={goNext} onBack={goBack} />}
           {step === 9 && <PlaceholderStep step={step} onNext={() => {}} onBack={goBack} isFinal />}
         </div>
       </div>
@@ -666,10 +667,163 @@ function CapitalConfirmationStep({ onNext, onBack, onSave, existingCapital }) {
   );
 }
 
-// ── Placeholder for steps 5–9 (built in later updates) ─────
+// ── Step 5: Offer Commitment ─────────────────────────────
+const OFFER_BENCHMARKS = [
+  { value: 30, label: '30 offers', tier: 'Minimum Operator', color: '255,255,255' },
+  { value: 45, label: '45 offers', tier: 'Strong Operator', color: '72,199,142' },
+  { value: 60, label: '60+ offers', tier: 'Elite Operator', color: '240,165,0' },
+];
+
+function OfferCommitmentStep({ onNext, onBack, onSave, existingCommitment }) {
+  const [count, setCount] = useState(existingCommitment || '');
+  const [saving, setSaving] = useState(false);
+
+  const numericCount = typeof count === 'number' ? count : parseInt(count, 10);
+  const isValid = !isNaN(numericCount) && numericCount >= 30;
+  const activeBenchmark = OFFER_BENCHMARKS.find(b => b.value === numericCount);
+
+  const handleInput = (val) => {
+    const cleaned = val.replace(/[^0-9]/g, '');
+    setCount(cleaned === '' ? '' : parseInt(cleaned, 10));
+  };
+
+  const handleNext = async () => {
+    if (!isValid) return;
+    setSaving(true);
+    await onSave({
+      offerCommitment: numericCount,
+      offerCommitmentSetAt: new Date().toISOString(),
+    });
+    setSaving(false);
+    onNext();
+  };
+
+  return (
+    <div>
+      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 12 }}>
+        Set Your Offer Commitment
+      </h1>
+
+      <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, marginBottom: 28 }}>
+        UC30 operators submit a minimum of 30 offers over 30 days. But top operators go
+        way beyond that. How many offers are you committing to?
+      </p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 28 }}>
+        {OFFER_BENCHMARKS.map(({ value, label, tier, color }) => {
+          const isSelected = numericCount === value;
+          const isGold = color === '240,165,0';
+          return (
+            <button
+              key={value}
+              onClick={() => setCount(value)}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                width: '100%', padding: '18px 20px', borderRadius: 12,
+                cursor: 'pointer', transition: 'all 0.15s',
+                fontFamily: "'DM Sans', sans-serif",
+                background: isSelected
+                  ? `rgba(${color}, ${isGold ? 0.08 : 0.06})`
+                  : 'rgba(255,255,255,0.03)',
+                border: isSelected
+                  ? `1px solid rgba(${color}, ${isGold ? 0.35 : 0.2})`
+                  : '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              <div style={{ textAlign: 'left' }}>
+                <div style={{
+                  fontSize: 16, fontWeight: isSelected ? 700 : 500,
+                  color: isSelected ? `rgb(${color})` : '#ccc',
+                  transition: 'color 0.15s',
+                }}>
+                  {label}
+                </div>
+                <div style={{
+                  fontSize: 13, marginTop: 2,
+                  color: isSelected ? `rgba(${color}, 0.7)` : '#666',
+                  fontWeight: isGold && isSelected ? 600 : 400,
+                }}>
+                  {tier}
+                </div>
+              </div>
+              <div style={{
+                width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+                border: isSelected ? `2px solid rgb(${color})` : '2px solid rgba(255,255,255,0.15)',
+                background: isSelected ? `rgb(${color})` : 'transparent',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'all 0.15s',
+              }}>
+                {isSelected && (
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: isGold ? '#1a1a2e' : '#fff' }} />
+                )}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      <div style={{ textAlign: 'center', marginBottom: 8 }}>
+        <label style={{ fontSize: 13, color: '#777', fontWeight: 500 }}>
+          Or enter a custom number
+        </label>
+      </div>
+      <input
+        type="text"
+        inputMode="numeric"
+        value={count === '' ? '' : count}
+        onChange={e => handleInput(e.target.value)}
+        placeholder="30"
+        style={{
+          display: 'block', width: 140, margin: '0 auto 8px',
+          textAlign: 'center', fontSize: 36, fontWeight: 700,
+          padding: '12px 16px', borderRadius: 12,
+          background: 'rgba(255,255,255,0.04)',
+          border: isValid
+            ? '1px solid rgba(72,199,142,0.25)'
+            : count !== '' && !isValid
+              ? '1px solid rgba(233,69,96,0.3)'
+              : '1px solid rgba(255,255,255,0.1)',
+          color: '#eee', fontFamily: "'DM Sans', sans-serif",
+        }}
+      />
+
+      {count !== '' && !isValid && (
+        <p style={{ textAlign: 'center', fontSize: 12, color: '#e94560', marginBottom: 4 }}>
+          Minimum commitment is 30 offers.
+        </p>
+      )}
+
+      <p style={{
+        textAlign: 'center', fontSize: 13, color: '#666', lineHeight: 1.6,
+        marginBottom: 32, marginTop: 12,
+      }}>
+        The more offers you put in, the faster you'll get a property under contract.
+      </p>
+
+      <div style={{ display: 'flex', gap: 12 }}>
+        <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
+          Back
+        </button>
+        <button
+          className="btn-primary"
+          style={{
+            flex: 1, padding: '14px 24px',
+            opacity: isValid ? 1 : 0.4,
+            pointerEvents: isValid ? 'auto' : 'none',
+          }}
+          onClick={handleNext}
+          disabled={!isValid || saving}
+        >
+          {saving ? 'Saving...' : 'Continue'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Placeholder for steps 6–9 (built in later updates) ─────
 function PlaceholderStep({ step, onNext, onBack, isFinal }) {
   const labels = {
-    5: 'Offer Commitment',
     6: 'Declare Your Stakes',
     7: 'Your Why',
     8: 'Daily Notification Preferences',
