@@ -68,7 +68,7 @@ export default function ActivationPhase({ user, onComplete }) {
           {step === 5 && <OfferCommitmentStep onNext={goNext} onBack={goBack} onSave={onComplete} existingCommitment={user?.offerCommitment} />}
           {step === 6 && <StakesDeclarationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingStakes={user?.stakesDeclaration} />}
           {step === 7 && <TheirWhyStep onNext={goNext} onBack={goBack} onSave={onComplete} existingWhy={user?.theirWhy} />}
-          {step === 8 && <PlaceholderStep step={step} onNext={goNext} onBack={goBack} />}
+          {step === 8 && <NotificationPrefsStep onNext={goNext} onBack={goBack} onSave={onComplete} existingPrefs={user?.notificationPreferences} />}
           {step === 9 && <PlaceholderStep step={step} onNext={() => {}} onBack={goBack} isFinal />}
         </div>
       </div>
@@ -1008,10 +1008,241 @@ function TheirWhyStep({ onNext, onBack, onSave, existingWhy }) {
   );
 }
 
-// ── Placeholder for steps 8–9 (built in later updates) ─────
+// ── Step 8: Daily Notification Preferences ───────────────
+const TIME_PRESETS = [
+  { label: 'Morning', time: '08:00', display: '8 AM' },
+  { label: 'Afternoon', time: '12:00', display: '12 PM' },
+  { label: 'Evening', time: '18:00', display: '6 PM' },
+  { label: 'Night', time: '21:00', display: '9 PM' },
+];
+
+const HOURS = Array.from({ length: 12 }, (_, i) => i + 1);
+
+function NotificationPrefsStep({ onNext, onBack, onSave, existingPrefs }) {
+  const detectedTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const [selectedTime, setSelectedTime] = useState(existingPrefs?.dailyReminderTime || '18:00');
+  const [isCustom, setIsCustom] = useState(() => {
+    const saved = existingPrefs?.dailyReminderTime;
+    return saved ? !TIME_PRESETS.some(p => p.time === saved) : false;
+  });
+  const [customHour, setCustomHour] = useState(() => {
+    const h = parseInt((existingPrefs?.dailyReminderTime || '18:00').split(':')[0], 10);
+    return h === 0 ? 12 : h > 12 ? h - 12 : h;
+  });
+  const [customPeriod, setCustomPeriod] = useState(() => {
+    const h = parseInt((existingPrefs?.dailyReminderTime || '18:00').split(':')[0], 10);
+    return h >= 12 ? 'PM' : 'AM';
+  });
+  const [timezone, setTimezone] = useState(existingPrefs?.timezone || detectedTz);
+  const [showTzPicker, setShowTzPicker] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const toTimeString = (hour, period) => {
+    let h = hour;
+    if (period === 'AM' && h === 12) h = 0;
+    if (period === 'PM' && h !== 12) h += 12;
+    return `${String(h).padStart(2, '0')}:00`;
+  };
+
+  const selectPreset = (time) => {
+    setSelectedTime(time);
+    setIsCustom(false);
+    const h = parseInt(time.split(':')[0], 10);
+    setCustomHour(h === 0 ? 12 : h > 12 ? h - 12 : h);
+    setCustomPeriod(h >= 12 ? 'PM' : 'AM');
+  };
+
+  const enableCustom = () => {
+    setIsCustom(true);
+    setSelectedTime(toTimeString(customHour, customPeriod));
+  };
+
+  const updateCustom = (hour, period) => {
+    setCustomHour(hour);
+    setCustomPeriod(period);
+    setSelectedTime(toTimeString(hour, period));
+    setIsCustom(true);
+  };
+
+  const handleNext = async () => {
+    setSaving(true);
+    await onSave({
+      notificationPreferences: {
+        dailyReminderTime: selectedTime,
+        timezone,
+        enabled: true,
+      },
+    });
+    setSaving(false);
+    onNext();
+  };
+
+  const activePreset = TIME_PRESETS.find(p => p.time === selectedTime);
+  const selectStyle = {
+    fontSize: 16, fontWeight: 600, padding: '10px 14px', borderRadius: 8,
+    background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
+    color: '#eee', fontFamily: "'DM Sans', sans-serif",
+    appearance: 'none', WebkitAppearance: 'none',
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`,
+    backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center',
+    paddingRight: 32, cursor: 'pointer',
+  };
+
+  return (
+    <div>
+      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 12 }}>
+        Set Your Daily Reminder
+      </h1>
+
+      <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, marginBottom: 28 }}>
+        When do you want to be reminded to complete your daily standards? Pick a time
+        that works with your schedule.
+      </p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
+        {TIME_PRESETS.map(({ label, time, display }) => {
+          const isActive = !isCustom && selectedTime === time;
+          return (
+            <button
+              key={time}
+              onClick={() => selectPreset(time)}
+              style={{
+                padding: '16px 14px', borderRadius: 12, cursor: 'pointer',
+                textAlign: 'center', transition: 'all 0.15s',
+                fontFamily: "'DM Sans', sans-serif",
+                background: isActive ? 'rgba(72,199,142,0.08)' : 'rgba(255,255,255,0.03)',
+                border: isActive ? '1px solid rgba(72,199,142,0.25)' : '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              <div style={{
+                fontSize: 18, fontWeight: 700,
+                color: isActive ? '#48c78e' : '#ccc',
+                transition: 'color 0.15s',
+              }}>
+                {display}
+              </div>
+              <div style={{
+                fontSize: 12, marginTop: 2,
+                color: isActive ? 'rgba(72,199,142,0.7)' : '#666',
+              }}>
+                {label}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      <button
+        onClick={enableCustom}
+        style={{
+          display: 'block', width: '100%', padding: '14px', borderRadius: 12,
+          textAlign: 'center', cursor: 'pointer', marginBottom: 20,
+          fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500,
+          transition: 'all 0.15s',
+          background: isCustom ? 'rgba(72,199,142,0.08)' : 'rgba(255,255,255,0.03)',
+          border: isCustom ? '1px solid rgba(72,199,142,0.25)' : '1px solid rgba(255,255,255,0.08)',
+          color: isCustom ? '#48c78e' : '#888',
+        }}
+      >
+        Custom Time
+      </button>
+
+      {isCustom && (
+        <div style={{
+          display: 'flex', gap: 10, justifyContent: 'center',
+          marginBottom: 20, alignItems: 'center',
+        }}>
+          <select
+            value={customHour}
+            onChange={e => updateCustom(Number(e.target.value), customPeriod)}
+            style={selectStyle}
+          >
+            {HOURS.map(h => (
+              <option key={h} value={h}>{h}</option>
+            ))}
+          </select>
+          <span style={{ fontSize: 20, color: '#555', fontWeight: 700 }}>:</span>
+          <span style={{ fontSize: 16, color: '#888', fontWeight: 600 }}>00</span>
+          <select
+            value={customPeriod}
+            onChange={e => updateCustom(customHour, e.target.value)}
+            style={selectStyle}
+          >
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
+          </select>
+        </div>
+      )}
+
+      <div style={{
+        padding: '14px 18px', borderRadius: 10, marginBottom: 8,
+        background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <div>
+          <span style={{ fontSize: 12, color: '#666', display: 'block', marginBottom: 2 }}>Timezone</span>
+          <span style={{ fontSize: 14, color: '#bbb', fontWeight: 500 }}>
+            {timezone.replace(/_/g, ' ')}
+          </span>
+        </div>
+        <button
+          onClick={() => setShowTzPicker(!showTzPicker)}
+          style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            fontSize: 12, color: '#48c78e', fontWeight: 600,
+            fontFamily: "'DM Sans', sans-serif", padding: '4px 8px',
+          }}
+        >
+          {showTzPicker ? 'Done' : 'Change'}
+        </button>
+      </div>
+
+      {showTzPicker && (
+        <select
+          value={timezone}
+          onChange={e => { setTimezone(e.target.value); setShowTzPicker(false); }}
+          style={{
+            width: '100%', fontSize: 14, padding: '10px 14px', borderRadius: 8,
+            marginBottom: 8, background: 'rgba(255,255,255,0.06)',
+            border: '1px solid rgba(255,255,255,0.12)',
+            color: '#eee', fontFamily: "'DM Sans', sans-serif",
+          }}
+        >
+          {[
+            'America/New_York', 'America/Chicago', 'America/Denver',
+            'America/Los_Angeles', 'America/Phoenix', 'America/Anchorage',
+            'Pacific/Honolulu', 'America/Puerto_Rico',
+          ].map(tz => (
+            <option key={tz} value={tz}>{tz.replace(/_/g, ' ')}</option>
+          ))}
+        </select>
+      )}
+
+      <p style={{ fontSize: 13, color: '#555', marginTop: 12, marginBottom: 32 }}>
+        You can change this anytime in your settings.
+      </p>
+
+      <div style={{ display: 'flex', gap: 12 }}>
+        <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
+          Back
+        </button>
+        <button
+          className="btn-primary"
+          style={{ flex: 1, padding: '14px 24px' }}
+          onClick={handleNext}
+          disabled={saving}
+        >
+          {saving ? 'Saving...' : 'Continue'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Placeholder for step 9 (built in later update) ─────
 function PlaceholderStep({ step, onNext, onBack, isFinal }) {
   const labels = {
-    8: 'Daily Notification Preferences',
     9: 'Commitment & Completion',
   };
 
