@@ -64,7 +64,8 @@ export default function ActivationPhase({ user, onComplete }) {
           {step === 1 && <WelcomeStep firstName={user?.firstName} onBegin={goNext} />}
           {step === 2 && <MarketResearchStep onNext={goNext} onBack={goBack} onSave={onComplete} />}
           {step === 3 && <BuyBoxStep onNext={goNext} onBack={goBack} onSave={onComplete} existingBuyBox={user?.buyBox} />}
-          {step >= 4 && step <= 8 && <PlaceholderStep step={step} onNext={goNext} onBack={goBack} />}
+          {step === 4 && <CapitalConfirmationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingCapital={user?.capitalConfirmation} />}
+          {step >= 5 && step <= 8 && <PlaceholderStep step={step} onNext={goNext} onBack={goBack} />}
           {step === 9 && <PlaceholderStep step={step} onNext={() => {}} onBack={goBack} isFinal />}
         </div>
       </div>
@@ -551,10 +552,123 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
   );
 }
 
-// ── Placeholder for steps 4–9 (built in later updates) ─────
+// ── Step 4: Access to Capital Confirmation ───────────────
+const CAPITAL_OPTIONS = [
+  { key: 'cash', label: 'I have cash available' },
+  { key: 'hard_money_lender', label: 'I have a hard money lender identified' },
+  { key: 'conventional', label: 'I have conventional pre-approval' },
+  { key: 'dscr', label: 'I have a DSCR lender identified' },
+  { key: 'jv_partner', label: 'I have a JV partner / private money source' },
+  { key: 'seller_finance', label: "I'm pursuing seller financing (no lender needed)" },
+  { key: 'working_on_it', label: "I'm still working on this" },
+];
+
+function CapitalConfirmationStep({ onNext, onBack, onSave, existingCapital }) {
+  const [selected, setSelected] = useState(existingCapital?.type || '');
+  const [saving, setSaving] = useState(false);
+
+  const handleNext = async () => {
+    if (!selected) return;
+    setSaving(true);
+    await onSave({
+      capitalConfirmation: {
+        type: selected,
+        confirmedAt: new Date().toISOString(),
+      },
+    });
+    setSaving(false);
+    onNext();
+  };
+
+  return (
+    <div>
+      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 12 }}>
+        Confirm Your Access to Capital
+      </h1>
+
+      <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, marginBottom: 28 }}>
+        UC30 is an execution sprint. To get a property under contract in 30 days, you need
+        to be able to actually close. Select the financing option that best describes your situation.
+      </p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
+        {CAPITAL_OPTIONS.map(({ key, label }) => {
+          const isSelected = selected === key;
+          return (
+            <button
+              key={key}
+              onClick={() => setSelected(key)}
+              style={{
+                display: 'block', width: '100%', textAlign: 'left',
+                padding: '16px 20px', borderRadius: 12, fontSize: 15,
+                fontWeight: isSelected ? 600 : 400,
+                fontFamily: "'DM Sans', sans-serif",
+                cursor: 'pointer', transition: 'all 0.15s',
+                background: isSelected ? 'rgba(72,199,142,0.08)' : 'rgba(255,255,255,0.03)',
+                color: isSelected ? '#48c78e' : '#bbb',
+                border: isSelected ? '1px solid rgba(72,199,142,0.25)' : '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                <div style={{
+                  width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+                  border: isSelected ? '2px solid #48c78e' : '2px solid rgba(255,255,255,0.15)',
+                  background: isSelected ? '#48c78e' : 'transparent',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'all 0.15s',
+                }}>
+                  {isSelected && (
+                    <div style={{
+                      width: 8, height: 8, borderRadius: '50%', background: '#fff',
+                    }} />
+                  )}
+                </div>
+                <span>{label}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {selected === 'working_on_it' && (
+        <div style={{
+          padding: '16px 20px', borderRadius: 12, marginBottom: 24,
+          background: 'rgba(240,165,0,0.06)', border: '1px solid rgba(240,165,0,0.18)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+            <span style={{ fontSize: 16, flexShrink: 0, marginTop: 1 }}>⚠️</span>
+            <p style={{ color: '#f0a500', fontSize: 14, lineHeight: 1.7, margin: 0 }}>
+              We strongly recommend having financing in place before Day 1. UC30 moves
+              fast — you don't want to find the right deal and not be able to close.
+            </p>
+          </div>
+        </div>
+      )}
+
+      <div style={{ display: 'flex', gap: 12 }}>
+        <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
+          Back
+        </button>
+        <button
+          className="btn-primary"
+          style={{
+            flex: 1, padding: '14px 24px',
+            opacity: selected ? 1 : 0.4,
+            pointerEvents: selected ? 'auto' : 'none',
+          }}
+          onClick={handleNext}
+          disabled={!selected || saving}
+        >
+          {saving ? 'Saving...' : 'Continue'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Placeholder for steps 5–9 (built in later updates) ─────
 function PlaceholderStep({ step, onNext, onBack, isFinal }) {
   const labels = {
-    4: 'Access to Capital',
     5: 'Offer Commitment',
     6: 'Declare Your Stakes',
     7: 'Your Why',
