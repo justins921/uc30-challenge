@@ -1297,14 +1297,7 @@ export function useAppState() {
   // ── Activation Phase ─────────────────────────────────────
   const completeActivation = useCallback(async (activationData) => {
     if (!user) return { error: 'Not logged in.' };
-    const updates = {
-      offerCommitment: activationData.offerCommitment || null,
-      stakesDeclaration: activationData.stakesDeclaration || null,
-      commitmentDeclaredAt: activationData.commitmentDeclaredAt || new Date().toISOString(),
-      activationCompleted: true,
-      activationCompletedAt: activationData.activationCompletedAt || new Date().toISOString(),
-      onboardingCompleted: true,
-    };
+    const updates = { ...activationData };
     const updatedUser = { ...user, ...updates };
     if (isSupabaseEnabled) {
       await storage.updateParticipant(user.id, updates);
