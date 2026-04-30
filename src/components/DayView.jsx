@@ -195,19 +195,33 @@ export default function DayView({
         <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.taskDescription}</p>
       </div>
 
-      {/* Stakes Reminder */}
-      {canSubmit && user.stakesDeclaration && (
+      {/* Motivation Reminder */}
+      {canSubmit && (user.stakesDeclaration || user.theirWhy) && (
         <div style={{
           marginBottom: 24, padding: '16px 20px', borderRadius: 12,
-          background: 'linear-gradient(135deg, rgba(233,69,96,0.04), rgba(240,165,0,0.04))',
-          border: '1px solid rgba(233,69,96,0.1)',
+          background: 'linear-gradient(135deg, rgba(233,69,96,0.04), rgba(72,199,142,0.04))',
+          border: '1px solid rgba(255,255,255,0.06)',
         }}>
-          <div style={{ fontSize: 12, color: '#e94560', fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-            Remember why you started
-          </div>
-          <p style={{ fontSize: 14, color: '#aaa', lineHeight: 1.7, margin: 0, fontStyle: 'italic' }}>
-            "{user.stakesDeclaration}"
-          </p>
+          {user.theirWhy && (
+            <div style={{ marginBottom: user.stakesDeclaration ? 14 : 0 }}>
+              <div style={{ fontSize: 11, color: '#48c78e', fontWeight: 600, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                Your why
+              </div>
+              <p style={{ fontSize: 14, color: '#aaa', lineHeight: 1.7, margin: 0, fontStyle: 'italic' }}>
+                "{user.theirWhy}"
+              </p>
+            </div>
+          )}
+          {user.stakesDeclaration && (
+            <div>
+              <div style={{ fontSize: 11, color: '#e94560', fontWeight: 600, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                What's at stake
+              </div>
+              <p style={{ fontSize: 14, color: '#aaa', lineHeight: 1.7, margin: 0, fontStyle: 'italic' }}>
+                "{user.stakesDeclaration}"
+              </p>
+            </div>
+          )}
         </div>
       )}
 

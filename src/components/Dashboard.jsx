@@ -101,8 +101,8 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           <p style={{ color: '#888', lineHeight: 1.7, marginBottom: 24 }}>
             You missed a daily submission and were removed from this run.
           </p>
-          {/* Stakes Declaration Reminder */}
-          {user.stakesDeclaration && (
+          {/* Motivation Reminder */}
+          {(user.stakesDeclaration || user.theirWhy) && (
             <div style={{
               padding: '16px 20px', borderRadius: 12, marginBottom: 24,
               background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.12)',
@@ -111,10 +111,17 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
               <div style={{ fontSize: 12, color: '#e94560', fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>
                 You wrote this during activation
               </div>
-              <p style={{ fontSize: 14, color: '#ccc', lineHeight: 1.7, margin: 0, fontStyle: 'italic' }}>
-                "{user.stakesDeclaration}"
-              </p>
-              <p style={{ fontSize: 13, color: '#888', marginTop: 10, marginBottom: 0 }}>
+              {user.stakesDeclaration && (
+                <p style={{ fontSize: 14, color: '#ccc', lineHeight: 1.7, margin: '0 0 10px', fontStyle: 'italic' }}>
+                  "{user.stakesDeclaration}"
+                </p>
+              )}
+              {user.theirWhy && (
+                <p style={{ fontSize: 14, color: '#48c78e', lineHeight: 1.7, margin: '0 0 10px', fontStyle: 'italic' }}>
+                  "{user.theirWhy}"
+                </p>
+              )}
+              <p style={{ fontSize: 13, color: '#888', marginTop: 4, marginBottom: 0 }}>
                 Come back stronger in the next cohort.
               </p>
             </div>
@@ -213,17 +220,17 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           <ProgressBanner user={user} cohortStartDate={cohortStartDate} calendarDay={calendarDay} />
         )}
 
-        {/* Stakes nudge when user hasn't submitted today */}
-        {cohortActive && !userCompletedToday && user.stakesDeclaration && (tab === 'timeline' || tab === 'day') && (
+        {/* Motivation nudge when user hasn't submitted today */}
+        {cohortActive && !userCompletedToday && (user.stakesDeclaration || user.theirWhy) && (tab === 'timeline' || tab === 'day') && (
           <div className="fade-up" style={{
             padding: '12px 18px', borderRadius: 12, marginBottom: 16,
-            background: 'linear-gradient(135deg, rgba(233,69,96,0.04), rgba(240,165,0,0.04))',
-            border: '1px solid rgba(233,69,96,0.08)',
+            background: 'linear-gradient(135deg, rgba(233,69,96,0.04), rgba(72,199,142,0.04))',
+            border: '1px solid rgba(255,255,255,0.06)',
             display: 'flex', alignItems: 'flex-start', gap: 10,
           }}>
             <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>*</span>
             <p style={{ fontSize: 13, color: '#999', lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>
-              "{user.stakesDeclaration}"
+              "{user.theirWhy || user.stakesDeclaration}"
             </p>
           </div>
         )}

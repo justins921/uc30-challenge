@@ -69,7 +69,7 @@ export default function ActivationPhase({ user, onComplete }) {
           {step === 6 && <StakesDeclarationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingStakes={user?.stakesDeclaration} />}
           {step === 7 && <TheirWhyStep onNext={goNext} onBack={goBack} onSave={onComplete} existingWhy={user?.theirWhy} />}
           {step === 8 && <NotificationPrefsStep onNext={goNext} onBack={goBack} onSave={onComplete} existingPrefs={user?.notificationPreferences} />}
-          {step === 9 && <PlaceholderStep step={step} onNext={() => {}} onBack={goBack} isFinal />}
+          {step === 9 && <CommitmentStep user={user} onBack={goBack} onSave={onComplete} />}
         </div>
       </div>
     </div>
@@ -1240,29 +1240,140 @@ function NotificationPrefsStep({ onNext, onBack, onSave, existingPrefs }) {
   );
 }
 
-// ── Placeholder for step 9 (built in later update) ─────
-function PlaceholderStep({ step, onNext, onBack, isFinal }) {
-  const labels = {
-    9: 'Commitment & Completion',
+// ── Step 9: Commitment Confirmation & Completion ─────────
+const CAPITAL_LABELS = {
+  cash: 'Cash available',
+  hard_money_lender: 'Hard money lender',
+  conventional: 'Conventional pre-approval',
+  dscr: 'DSCR lender',
+  jv_partner: 'JV partner / private money',
+  seller_finance: 'Seller financing',
+  working_on_it: 'Still working on this',
+};
+
+function CommitmentStep({ user, onBack, onSave }) {
+  const [saving, setSaving] = useState(false);
+  const [done, setDone] = useState(false);
+
+  const bb = user?.buyBox || {};
+  const cap = user?.capitalConfirmation;
+  const notifPrefs = user?.notificationPreferences;
+
+  const formatTime = (t) => {
+    if (!t) return '';
+    const h = parseInt(t.split(':')[0], 10);
+    if (h === 0) return '12:00 AM';
+    if (h === 12) return '12:00 PM';
+    return h > 12 ? `${h - 12}:00 PM` : `${h}:00 AM`;
   };
 
+  const handleCommit = async () => {
+    setSaving(true);
+    await onSave({
+      activationCompleted: true,
+      activationCompletedAt: new Date().toISOString(),
+      commitmentDeclaredAt: new Date().toISOString(),
+    });
+    setSaving(false);
+    setDone(true);
+  };
+
+  if (done) {
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <div style={{
+          width: 72, height: 72, borderRadius: '50%', margin: '0 auto 24px',
+          background: 'rgba(72,199,142,0.15)', border: '2px solid rgba(72,199,142,0.3)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#48c78e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 12, color: '#48c78e' }}>
+          You're Activated.
+        </h1>
+        <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, maxWidth: 400, margin: '0 auto 32px' }}>
+          Your operator profile is locked in. When your cohort begins, you'll hit the ground running.
+        </p>
+        <p style={{ color: '#666', fontSize: 13, marginBottom: 32 }}>
+          Loading your dashboard...
+        </p>
+      </div>
+    );
+  }
+
+  const summaryRow = (label, value) => (
+    <div style={{
+      display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+      padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)',
+    }}>
+      <span style={{ fontSize: 13, color: '#777', flexShrink: 0, marginRight: 12 }}>{label}</span>
+      <span style={{ fontSize: 14, color: '#ddd', fontWeight: 500, textAlign: 'right' }}>{value || '—'}</span>
+    </div>
+  );
+
   return (
-    <div style={{ textAlign: 'center' }}>
-      <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 12 }}>
-        Step {step}: {labels[step]}
-      </h2>
-      <p style={{ color: '#666', fontSize: 14, marginBottom: 32 }}>
-        This step will be built in a later update.
+    <div>
+      <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>
+        You're Ready, Operator.
+      </h1>
+      <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7, marginBottom: 28 }}>
+        Review your setup below. If anything needs changing, use the Back button.
       </p>
-      <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-        <button className="btn-secondary" onClick={onBack} style={{ padding: '12px 28px' }}>
+
+      {/* Summary */}
+      <div style={{
+        padding: '20px 22px', borderRadius: 14, marginBottom: 24,
+        background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+      }}>
+        {summaryRow('Market', (bb.markets || []).join(', '))}
+        {summaryRow('Property Types', (bb.propertyTypes || []).join(', '))}
+        {summaryRow('Price Range',
+          bb.priceMin || bb.priceMax
+            ? `$${bb.priceMin ? Number(bb.priceMin).toLocaleString() : '—'} – $${bb.priceMax ? Number(bb.priceMax).toLocaleString() : '—'}`
+            : ''
+        )}
+        {summaryRow('Strategy', (bb.strategies || []).join(', '))}
+        {summaryRow('Capital', cap ? CAPITAL_LABELS[cap.type] || cap.type : '')}
+        {summaryRow('Offer Commitment', user?.offerCommitment ? `${user.offerCommitment} offers` : '')}
+        {summaryRow('Daily Reminder',
+          notifPrefs
+            ? `${formatTime(notifPrefs.dailyReminderTime)} (${(notifPrefs.timezone || '').replace(/_/g, ' ')})`
+            : ''
+        )}
+      </div>
+
+      {/* Commitment Statement */}
+      <div style={{
+        padding: '20px 22px', borderRadius: 14, marginBottom: 32,
+        background: 'rgba(233,69,96,0.03)', border: '1px solid rgba(233,69,96,0.1)',
+      }}>
+        <p style={{
+          fontSize: 15, color: '#ccc', lineHeight: 1.8, margin: 0, fontStyle: 'italic',
+        }}>
+          "I commit to completing all daily standards for 30 consecutive days. I understand
+          that if I fall behind, I will restart with the next cohort."
+        </p>
+      </div>
+
+      {/* Actions */}
+      <div style={{ display: 'flex', gap: 12 }}>
+        <button className="btn-secondary" onClick={onBack} style={{ padding: '16px 24px' }}>
           Back
         </button>
-        {!isFinal && (
-          <button className="btn-primary" onClick={onNext} style={{ padding: '12px 28px' }}>
-            Next
-          </button>
-        )}
+        <button
+          className="btn-primary"
+          style={{
+            flex: 1, padding: '18px 24px', fontSize: 18, fontWeight: 700,
+            letterSpacing: 0.3,
+            background: 'linear-gradient(135deg, #e94560, #c81d4e)',
+          }}
+          onClick={handleCommit}
+          disabled={saving}
+        >
+          {saving ? 'Activating...' : 'I Commit'}
+        </button>
       </div>
     </div>
   );
