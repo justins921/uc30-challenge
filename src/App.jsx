@@ -6,6 +6,7 @@ import LoginScreen from './components/LoginScreen';
 import Dashboard from './components/Dashboard';
 import AdminDashboard from './components/AdminDashboard';
 import OnboardingFlow from './components/OnboardingFlow';
+import ActivationPhase from './components/ActivationPhase';
 import AffiliatePage from './components/AffiliatePage';
 
 export default function App() {
@@ -87,6 +88,7 @@ export default function App() {
     setComplianceDailyMinimums,
     setComplianceWeeklyMinimums,
     setComplianceEnforcement,
+    completeActivation,
   } = useAppState();
 
   // CRM contacts for current user (loaded on login)
@@ -330,6 +332,16 @@ export default function App() {
           </div>
         </div>
       </div>
+    );
+  }
+
+  // Activation Phase gate — non-admin users who haven't completed activation
+  if (!user.isAdmin && !user.activationCompleted) {
+    return (
+      <ActivationPhase
+        user={user}
+        onComplete={completeActivation}
+      />
     );
   }
 
