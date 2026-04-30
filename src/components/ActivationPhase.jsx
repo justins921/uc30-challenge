@@ -66,7 +66,8 @@ export default function ActivationPhase({ user, onComplete }) {
           {step === 3 && <BuyBoxStep onNext={goNext} onBack={goBack} onSave={onComplete} existingBuyBox={user?.buyBox} />}
           {step === 4 && <CapitalConfirmationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingCapital={user?.capitalConfirmation} />}
           {step === 5 && <OfferCommitmentStep onNext={goNext} onBack={goBack} onSave={onComplete} existingCommitment={user?.offerCommitment} />}
-          {step >= 6 && step <= 8 && <PlaceholderStep step={step} onNext={goNext} onBack={goBack} />}
+          {step === 6 && <StakesDeclarationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingStakes={user?.stakesDeclaration} />}
+          {step >= 7 && step <= 8 && <PlaceholderStep step={step} onNext={goNext} onBack={goBack} />}
           {step === 9 && <PlaceholderStep step={step} onNext={() => {}} onBack={goBack} isFinal />}
         </div>
       </div>
@@ -821,10 +822,102 @@ function OfferCommitmentStep({ onNext, onBack, onSave, existingCommitment }) {
   );
 }
 
-// ── Placeholder for steps 6–9 (built in later updates) ─────
+// ── Step 6: Declare Your Stakes ──────────────────────────
+function StakesDeclarationStep({ onNext, onBack, onSave, existingStakes }) {
+  const [text, setText] = useState(existingStakes || '');
+  const [saving, setSaving] = useState(false);
+
+  const isValid = text.trim().length >= 20;
+
+  const handleNext = async () => {
+    if (!isValid) return;
+    setSaving(true);
+    await onSave({
+      stakesDeclaration: text.trim(),
+      stakesDeclarationSetAt: new Date().toISOString(),
+    });
+    setSaving(false);
+    onNext();
+  };
+
+  return (
+    <div>
+      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 12 }}>
+        Declare Your Stakes
+      </h1>
+
+      <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, marginBottom: 28 }}>
+        What will it cost you — financially, personally, professionally — if you don't
+        complete UC30 and don't get a deal under contract?
+      </p>
+
+      <textarea
+        value={text}
+        onChange={e => setText(e.target.value)}
+        rows={6}
+        style={{
+          width: '100%', fontSize: 15, lineHeight: 1.8,
+          padding: '16px 18px', borderRadius: 12, resize: 'vertical',
+          background: 'rgba(255,255,255,0.03)',
+          border: `1px solid ${text.length > 0 && !isValid ? 'rgba(233,69,96,0.2)' : 'rgba(255,255,255,0.08)'}`,
+          color: '#e8e6e3', fontFamily: "'DM Sans', sans-serif",
+          minHeight: 160,
+        }}
+        placeholder="Write honestly — this comes back to you on the tough days..."
+      />
+
+      {text.length > 0 && !isValid && (
+        <p style={{ fontSize: 12, color: '#e94560', marginTop: 6, marginBottom: 0 }}>
+          Keep going — write at least a couple sentences.
+        </p>
+      )}
+
+      <div style={{
+        marginTop: 20, marginBottom: 32, padding: '16px 18px',
+        borderRadius: 10, background: 'rgba(255,255,255,0.02)',
+        borderLeft: '3px solid rgba(255,255,255,0.06)',
+      }}>
+        <p style={{ fontSize: 12, color: '#555', marginBottom: 10, fontWeight: 600, letterSpacing: 0.5, textTransform: 'uppercase' }}>
+          Others have written things like:
+        </p>
+        {[
+          'Another year of paying rent instead of building equity…',
+          "My family won't see me take the leap…",
+          "I'll still be stuck in my W-2 a year from now…",
+        ].map((hint, i) => (
+          <p key={i} style={{
+            fontSize: 13, color: '#444', fontStyle: 'italic', lineHeight: 1.7,
+            margin: 0, padding: '3px 0',
+          }}>
+            "{hint}"
+          </p>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', gap: 12 }}>
+        <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
+          Back
+        </button>
+        <button
+          className="btn-primary"
+          style={{
+            flex: 1, padding: '14px 24px',
+            opacity: isValid ? 1 : 0.4,
+            pointerEvents: isValid ? 'auto' : 'none',
+          }}
+          onClick={handleNext}
+          disabled={!isValid || saving}
+        >
+          {saving ? 'Saving...' : 'Continue'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Placeholder for steps 7–9 (built in later updates) ─────
 function PlaceholderStep({ step, onNext, onBack, isFinal }) {
   const labels = {
-    6: 'Declare Your Stakes',
     7: 'Your Why',
     8: 'Daily Notification Preferences',
     9: 'Commitment & Completion',
