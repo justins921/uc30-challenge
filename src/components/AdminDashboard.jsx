@@ -169,14 +169,20 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
           <h1 style={{ fontSize: 28, fontWeight: 700 }}>
             Challenge Control Center
           </h1>
+        </div>
+
+        {/* Preview Activation Flow */}
+        <div style={{ marginBottom: 24 }}>
           <button
             onClick={() => setPreviewActivation(true)}
             style={{
-              padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
-              background: 'rgba(233,69,96,0.08)', border: '1px solid rgba(233,69,96,0.2)',
+              width: '100%', padding: '14px 20px', borderRadius: 12, fontSize: 14, fontWeight: 600,
+              background: 'rgba(233,69,96,0.06)', border: '1px solid rgba(233,69,96,0.15)',
               color: '#e94560', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             }}
           >
+            <span style={{ fontSize: 16 }}>👁️</span>
             Preview Activation Flow
           </button>
         </div>
