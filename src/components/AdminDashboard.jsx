@@ -3,6 +3,7 @@ import Header from './Header';
 import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DEFAULT_DAILY_MINIMUMS, checkOfferBuffer, OFFER_BUFFER } from '../data/challengeDays';
 import { INDICATOR_KEYS, INDICATOR_LABELS, INDICATOR_SHORT_LABELS, INDICATOR_COLORS, UC_POINT_VALUES, calculateUCPoints } from '../data/ucPoints';
 import { AttachmentLink } from './DayView';
+import ActivationPhase from './ActivationPhase';
 import { LANDING_DEFAULTS } from './LandingPage';
 import Footer from './Footer';
 import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT, checkWeeklyCompliance, getWeekNumber, getWeekRange, getWeekDayCount, calculateAtRisk, getNowInTimezone } from '../data/compliance';
@@ -113,10 +114,44 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
     return t;
   });
 
+  const [previewActivation, setPreviewActivation] = useState(false);
+
   const handleTabChange = (newTab) => {
     setTab(newTab);
     setSelectedParticipant(null);
   };
+
+  if (previewActivation) {
+    return (
+      <div style={{ position: 'relative' }}>
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+          background: 'rgba(233,69,96,0.95)', padding: '10px 20px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: 1, textTransform: 'uppercase' }}>
+            Admin Preview Mode
+          </span>
+          <button
+            onClick={() => setPreviewActivation(false)}
+            style={{
+              background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)',
+              color: '#fff', padding: '6px 16px', borderRadius: 6, fontSize: 13,
+              fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+            }}
+          >
+            Exit Preview
+          </button>
+        </div>
+        <div style={{ paddingTop: 44 }}>
+          <ActivationPhase
+            user={{ ...user, activationCompleted: false }}
+            onComplete={async () => {}}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: '100vh' }}>
@@ -130,9 +165,21 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
       />
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
-        <h1 className="fade-up" style={{ fontSize: 28, fontWeight: 700, marginBottom: 32 }}>
-          Challenge Control Center
-        </h1>
+        <div className="fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32, flexWrap: 'wrap', gap: 12 }}>
+          <h1 style={{ fontSize: 28, fontWeight: 700 }}>
+            Challenge Control Center
+          </h1>
+          <button
+            onClick={() => setPreviewActivation(true)}
+            style={{
+              padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+              background: 'rgba(233,69,96,0.08)', border: '1px solid rgba(233,69,96,0.2)',
+              color: '#e94560', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+            }}
+          >
+            Preview Activation Flow
+          </button>
+        </div>
 
         {/* Cohort Settings */}
         <CohortSettings
