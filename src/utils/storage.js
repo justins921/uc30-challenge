@@ -417,6 +417,49 @@ const supabaseStorage = {
     return data || [];
   },
 
+  // ── Quiz Attempts ──────────────────────────────────────────────
+  async addQuizAttempt(attempt) {
+    const row = {
+      id: attempt.id,
+      participant_id: attempt.participantId,
+      day_number: attempt.dayNumber,
+      scenario_id: attempt.scenarioId,
+      attempt_number: attempt.attemptNumber,
+      answers: attempt.answers,
+      correct: attempt.correct,
+    };
+    const { data, error } = await supabase
+      .from('quiz_attempts')
+      .insert(row)
+      .select()
+      .single();
+    if (error) { console.error('addQuizAttempt error:', error); return null; }
+    return data;
+  },
+
+  async getQuizAttempts(participantId, dayNumber) {
+    const { data, error } = await supabase
+      .from('quiz_attempts')
+      .select('*')
+      .eq('participant_id', participantId)
+      .eq('day_number', dayNumber)
+      .order('created_at', { ascending: true });
+    if (error) { console.error('getQuizAttempts error:', error); return []; }
+    return data || [];
+  },
+
+  async getQuizAttemptsByScenario(participantId, dayNumber, scenarioId) {
+    const { data, error } = await supabase
+      .from('quiz_attempts')
+      .select('*')
+      .eq('participant_id', participantId)
+      .eq('day_number', dayNumber)
+      .eq('scenario_id', scenarioId)
+      .order('created_at', { ascending: true });
+    if (error) { console.error('getQuizAttemptsByScenario error:', error); return []; }
+    return data || [];
+  },
+
   // ── Removal Log ─────────────────────────────────────────────────
   async addRemovalLog(entry) {
     const { data, error } = await supabase
@@ -863,6 +906,43 @@ const localStorageFallback = {
   getAllDailySubmissions() {
     try { return JSON.parse(localStorage.getItem('uc30_daily_submissions') || '[]'); } catch { return []; }
   },
+
+  // ── Quiz Attempts (localStorage fallback) ───────────────────────
+  addQuizAttempt(attempt) {
+    try {
+      const attempts = JSON.parse(localStorage.getItem('uc30_quiz_attempts') || '[]');
+      const record = {
+        id: attempt.id,
+        participant_id: attempt.participantId,
+        day_number: attempt.dayNumber,
+        scenario_id: attempt.scenarioId,
+        attempt_number: attempt.attemptNumber,
+        answers: attempt.answers,
+        correct: attempt.correct,
+        created_at: new Date().toISOString(),
+      };
+      attempts.push(record);
+      localStorage.setItem('uc30_quiz_attempts', JSON.stringify(attempts));
+      return record;
+    } catch { return null; }
+  },
+  getQuizAttempts(participantId, dayNumber) {
+    try {
+      const attempts = JSON.parse(localStorage.getItem('uc30_quiz_attempts') || '[]');
+      return attempts
+        .filter(a => a.participant_id === participantId && a.day_number === dayNumber)
+        .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    } catch { return []; }
+  },
+  getQuizAttemptsByScenario(participantId, dayNumber, scenarioId) {
+    try {
+      const attempts = JSON.parse(localStorage.getItem('uc30_quiz_attempts') || '[]');
+      return attempts
+        .filter(a => a.participant_id === participantId && a.day_number === dayNumber && a.scenario_id === scenarioId)
+        .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    } catch { return []; }
+  },
+
   addRemovalLog(entry) {
     try {
       const log = JSON.parse(localStorage.getItem('uc30_removal_log') || '[]');
