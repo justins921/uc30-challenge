@@ -77,6 +77,9 @@ export default function App() {
     getUploadUrl,
     getContactsForParticipant,
     navigate,
+    // Quiz system
+    getQuizAttempts,
+    addQuizAttempt,
     // Compliance system
     complianceSettings,
     removalReason,
@@ -503,6 +506,8 @@ export default function App() {
       contacts={userContacts}
       complianceSettings={complianceSettings}
       getDailySubmission={getDailySubmission}
+      getQuizAttempts={getQuizAttempts}
+      addQuizAttempt={addQuizAttempt}
     />
   );
 }

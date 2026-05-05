@@ -1,11 +1,13 @@
 import { useState, useMemo, useEffect } from 'react';
 import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum } from '../data/challengeDays';
 import { COMPLIANCE_METRICS, checkDailyCompliance, getTimeUntilDeadline, DEFAULT_DAILY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
+import QuizSection from './QuizSection';
 
 export default function DayView({
   day, user, onSubmit, onBack, contentOverrides, customPhases,
   complianceSettings, existingDailySubmission,
   onAddContact, onAddFollowUp, onUploadFile, contacts: initialContacts, getUploadUrl,
+  quizAttempts, onQuizAttempt,
 }) {
   const [submitted, setSubmitted] = useState(false);
 
@@ -57,6 +59,12 @@ export default function DayView({
 
   const canSubmit = !isComplete && !submitted && isCurrentOrPast;
   const isUpdate = !!existingDailySubmission;
+
+  // ── Quiz gate ────────────────────────────────────────────────
+  const hasRequiredQuiz = !isPost30 && dayData.quiz?.required && dayData.quiz.scenarios?.length > 0;
+  const quizAlreadyPassed = hasRequiredQuiz && (quizAttempts || []).length > 0 &&
+    dayData.quiz.scenarios.every(s => (quizAttempts || []).some(a => a.scenario_id === s.id && a.correct));
+  const [quizPassed, setQuizPassed] = useState(quizAlreadyPassed || isComplete);
 
   // ── Handlers ──────────────────────────────────────────────────
   const setMetric = (key, value) => {
@@ -195,6 +203,32 @@ export default function DayView({
         <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.taskDescription}</p>
       </div>
 
+      {/* Quiz Section */}
+      {hasRequiredQuiz && canSubmit && !quizPassed && (
+        <QuizSection
+          quiz={dayData.quiz}
+          participantId={user.id}
+          dayNumber={day}
+          existingAttempts={quizAttempts || []}
+          onAttempt={onQuizAttempt}
+          onQuizComplete={() => setQuizPassed(true)}
+        />
+      )}
+
+      {/* Locked submission notice */}
+      {hasRequiredQuiz && canSubmit && !quizPassed && (
+        <div style={{
+          padding: '20px', borderRadius: 12, marginBottom: 24,
+          background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+          textAlign: 'center', opacity: 0.6,
+        }}>
+          <div style={{ fontSize: 20, marginBottom: 8 }}>🔒</div>
+          <p style={{ fontSize: 14, color: '#888', margin: 0 }}>
+            Complete the check-for-understanding above to unlock your daily submissions.
+          </p>
+        </div>
+      )}
+
       {/* Motivation Reminder */}
       {canSubmit && (user.stakesDeclaration || user.theirWhy) && (
         <div style={{
@@ -230,7 +264,7 @@ export default function DayView({
         <SubmissionComplete submission={existingSubmission} />
       ) : submitted ? (
         <SubmissionSuccess day={day} isUpdate={isUpdate} />
-      ) : canSubmit ? (
+      ) : canSubmit && (!hasRequiredQuiz || quizPassed) ? (
         <>
           {/* ── 7-Metric Entry Form ── */}
           <div className="card" style={{ marginBottom: 24 }}>

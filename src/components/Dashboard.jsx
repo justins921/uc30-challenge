@@ -73,10 +73,11 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
   const [existingDailySubmission, setExistingDailySubmission] = useState(null);
+  const [quizAttempts, setQuizAttempts] = useState([]);
 
   const calendarDay = getCalendarDay(cohortStartDate);
 
@@ -87,6 +88,14 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
       setExistingDailySubmission(sub || null);
     })();
   }, [calendarDay, user?.id, user?.currentDay]);
+
+  useEffect(() => {
+    if (!getQuizAttempts || !user?.id || !selectedDay) { setQuizAttempts([]); return; }
+    (async () => {
+      const attempts = await getQuizAttempts(user.id, selectedDay);
+      setQuizAttempts(attempts || []);
+    })();
+  }, [selectedDay, user?.id]);
 
   // Removed/paused state
   if (!user.isActive) {
@@ -288,6 +297,12 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             getUploadUrl={getUploadUrl}
             complianceSettings={complianceSettings}
             existingDailySubmission={existingDailySubmission}
+            quizAttempts={quizAttempts}
+            onQuizAttempt={async (attempt) => {
+              await addQuizAttempt(attempt);
+              const updated = await getQuizAttempts(user.id, selectedDay);
+              setQuizAttempts(updated || []);
+            }}
           />
         )}
         {tab === 'community' && (

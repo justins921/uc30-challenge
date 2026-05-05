@@ -1465,6 +1465,14 @@ export function useAppState() {
     return Promise.resolve(storage.getRemovalLog(participantId));
   }, []);
 
+  const getQuizAttempts = useCallback(async (participantId, dayNumber) => {
+    return Promise.resolve(storage.getQuizAttempts(participantId, dayNumber));
+  }, []);
+
+  const addQuizAttempt = useCallback(async (attempt) => {
+    return Promise.resolve(storage.addQuizAttempt(attempt));
+  }, []);
+
   const setComplianceDailyMinimums = useCallback(async (minimums) => {
     await Promise.resolve(storage.setComplianceDailyMinimums(minimums));
     setComplianceSettingsState(prev => ({ ...prev, dailyMinimums: minimums }));
@@ -1559,6 +1567,9 @@ export function useAppState() {
     getUploadUrl,
     getFollowUpsByContact,
     getContactsForParticipant,
+    // Quiz system
+    getQuizAttempts,
+    addQuizAttempt,
     // Compliance system
     complianceSettings,
     removalReason,
