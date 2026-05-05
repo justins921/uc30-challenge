@@ -2183,10 +2183,11 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{dayData.title}</div>
-                    <div style={{ fontSize: 12, color: '#555', display: 'flex', gap: 10 }}>
+                    <div style={{ fontSize: 12, color: '#555', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                       {dayData.videoUrl && <span style={{ color: '#48c78e' }}>Video set</span>}
                       {dayData.downloads?.length > 0 && <span style={{ color: '#533483' }}>{dayData.downloads.length} resource{dayData.downloads.length !== 1 ? 's' : ''}</span>}
                       {dayData.transcript && <span style={{ color: '#666' }}>Transcript</span>}
+                      {dayData.quiz?.scenarios?.length > 0 && <span style={{ color: '#f0a500' }}>Quiz ({dayData.quiz.scenarios.length})</span>}
                     </div>
                   </div>
                   {hasOverrides && (
@@ -2466,6 +2467,13 @@ function DayEditor({ dayNum, contentOverrides, onSave, onBack }) {
   const [newDlName, setNewDlName] = useState('');
   const [newDlUrl, setNewDlUrl] = useState('');
 
+  const defaultQuiz = defaults.quiz || null;
+  const existingQuiz = existing.quiz !== undefined ? existing.quiz : defaultQuiz;
+  const [quizEnabled, setQuizEnabled] = useState(!!existingQuiz);
+  const [quizRequired, setQuizRequired] = useState(existingQuiz?.required ?? true);
+  const [quizScenarios, setQuizScenarios] = useState(existingQuiz?.scenarios || []);
+  const [editingScenarioIdx, setEditingScenarioIdx] = useState(null);
+
   const handleSave = () => {
     const overrides = {};
     if (title !== defaults.title) overrides.title = title;
@@ -2473,6 +2481,13 @@ function DayEditor({ dayNum, contentOverrides, onSave, onBack }) {
     if (videoUrl !== (defaults.videoUrl || '')) overrides.videoUrl = videoUrl || null;
     if (transcript !== (defaults.transcript || '')) overrides.transcript = transcript || null;
     if (JSON.stringify(downloads) !== JSON.stringify(defaults.downloads || [])) overrides.downloads = downloads;
+    if (!isGettingStarted) {
+      if (quizEnabled && quizScenarios.length > 0) {
+        overrides.quiz = { required: quizRequired, scenarios: quizScenarios };
+      } else if (defaultQuiz && !quizEnabled) {
+        overrides.quiz = null;
+      }
+    }
     onSave(dayNum, Object.keys(overrides).length > 0 ? overrides : undefined);
   };
 
@@ -2629,6 +2644,110 @@ function DayEditor({ dayNum, contentOverrides, onSave, onBack }) {
         </label>
       </div>
 
+      {/* Quiz Section (challenge days only) */}
+      {!isGettingStarted && (
+        <div className="card" style={{ marginBottom: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: quizEnabled ? 16 : 0 }}>
+            <label style={{ ...labelStyle, marginBottom: 0 }}>Quiz / Check for Understanding</label>
+            <button
+              onClick={() => setQuizEnabled(!quizEnabled)}
+              style={{
+                padding: '6px 14px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                background: quizEnabled ? 'rgba(72,199,142,0.1)' : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${quizEnabled ? 'rgba(72,199,142,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                color: quizEnabled ? '#48c78e' : '#666',
+                fontFamily: "'DM Sans', sans-serif",
+              }}
+            >
+              {quizEnabled ? 'Enabled' : 'Disabled'}
+            </button>
+          </div>
+
+          {quizEnabled && (
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                <label style={{ fontSize: 12, color: '#888' }}>
+                  <input
+                    type="checkbox"
+                    checked={quizRequired}
+                    onChange={e => setQuizRequired(e.target.checked)}
+                    style={{ marginRight: 6 }}
+                  />
+                  Required (blocks day completion until passed)
+                </label>
+              </div>
+
+              {editingScenarioIdx !== null ? (
+                <ScenarioEditor
+                  scenario={quizScenarios[editingScenarioIdx]}
+                  onSave={(updated) => {
+                    const newScenarios = [...quizScenarios];
+                    newScenarios[editingScenarioIdx] = updated;
+                    setQuizScenarios(newScenarios);
+                    setEditingScenarioIdx(null);
+                  }}
+                  onCancel={() => setEditingScenarioIdx(null)}
+                />
+              ) : (
+                <div>
+                  {quizScenarios.length > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
+                      {quizScenarios.map((s, i) => (
+                        <div key={s.id} style={{
+                          display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px',
+                          background: 'rgba(255,255,255,0.03)', borderRadius: 8,
+                          border: '1px solid rgba(255,255,255,0.06)',
+                        }}>
+                          <span style={{ fontSize: 13, color: '#f0a500', fontWeight: 700, width: 20 }}>{i + 1}</span>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ fontSize: 13, fontWeight: 600, color: '#ccc' }}>{s.title || 'Untitled Scenario'}</div>
+                            <div style={{ fontSize: 11, color: '#555' }}>
+                              {s.inputs?.length || 0} input{(s.inputs?.length || 0) !== 1 ? 's' : ''} · {s.maxAttempts || 3} attempts
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => setEditingScenarioIdx(i)}
+                            style={{ background: 'none', border: 'none', color: '#f0a500', cursor: 'pointer', fontSize: 12, fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => setQuizScenarios(quizScenarios.filter((_, idx) => idx !== i))}
+                            style={{ background: 'none', border: 'none', color: '#e94560', cursor: 'pointer', fontSize: 16, padding: '0 4px' }}
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    className="btn-secondary"
+                    onClick={() => {
+                      const newScenario = {
+                        id: `scenario_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+                        title: '',
+                        description: '',
+                        image: '',
+                        maxAttempts: 3,
+                        explanationOnFail: '',
+                        explanationImage: '',
+                        inputs: [{ id: `input_${Date.now()}`, label: '', type: 'number', correctAnswer: '', tolerance: 0, unit: '' }],
+                      };
+                      setQuizScenarios([...quizScenarios, newScenario]);
+                      setEditingScenarioIdx(quizScenarios.length);
+                    }}
+                    style={{ padding: '8px 16px', fontSize: 12 }}
+                  >
+                    + Add Scenario
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Actions */}
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         <button className="btn-primary" onClick={handleSave} style={{ padding: '12px 28px' }}>
@@ -2642,6 +2761,155 @@ function DayEditor({ dayNum, contentOverrides, onSave, onBack }) {
         <button className="btn-secondary" onClick={onBack} style={{ padding: '12px 20px' }}>
           Cancel
         </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Scenario Editor ─────────────────────────────────────────
+function ScenarioEditor({ scenario, onSave, onCancel }) {
+  const [title, setTitle] = useState(scenario.title || '');
+  const [description, setDescription] = useState(scenario.description || '');
+  const [image, setImage] = useState(scenario.image || '');
+  const [maxAttempts, setMaxAttempts] = useState(scenario.maxAttempts || 3);
+  const [explanationOnFail, setExplanationOnFail] = useState(scenario.explanationOnFail || '');
+  const [explanationImage, setExplanationImage] = useState(scenario.explanationImage || '');
+  const [inputs, setInputs] = useState(scenario.inputs || []);
+
+  const labelStyle = { fontSize: 12, color: '#888', fontWeight: 600, marginBottom: 6, display: 'block', textTransform: 'uppercase', letterSpacing: 0.5 };
+
+  const updateInput = (idx, field, value) => {
+    const updated = [...inputs];
+    updated[idx] = { ...updated[idx], [field]: value };
+    setInputs(updated);
+  };
+
+  const addInput = () => {
+    setInputs([...inputs, {
+      id: `input_${Date.now()}_${Math.random().toString(36).slice(2, 4)}`,
+      label: '', type: 'number', correctAnswer: '', tolerance: 0, unit: '',
+    }]);
+  };
+
+  const removeInput = (idx) => {
+    setInputs(inputs.filter((_, i) => i !== idx));
+  };
+
+  const handleSave = () => {
+    onSave({
+      ...scenario,
+      title,
+      description,
+      image: image || undefined,
+      maxAttempts,
+      explanationOnFail: explanationOnFail || undefined,
+      explanationImage: explanationImage || undefined,
+      inputs: inputs.map(inp => ({
+        ...inp,
+        correctAnswer: inp.type === 'number' ? parseFloat(inp.correctAnswer) || 0 : inp.correctAnswer,
+        tolerance: inp.type === 'number' ? (parseFloat(inp.tolerance) || 0) : undefined,
+        unit: inp.unit || undefined,
+      })),
+    });
+  };
+
+  return (
+    <div style={{ border: '1px solid rgba(240,165,0,0.2)', borderRadius: 10, padding: 16, background: 'rgba(240,165,0,0.02)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 700, color: '#f0a500' }}>Edit Scenario</h4>
+        <button onClick={onCancel} style={{ background: 'none', border: 'none', color: '#888', cursor: 'pointer', fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>Cancel</button>
+      </div>
+
+      <div style={{ marginBottom: 12 }}>
+        <label style={labelStyle}>Title</label>
+        <input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Calculate ARV" style={{ width: '100%', fontSize: 14, marginBottom: 0 }} />
+      </div>
+
+      <div style={{ marginBottom: 12 }}>
+        <label style={labelStyle}>Description</label>
+        <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3} placeholder="Describe the scenario..." style={{ width: '100%', fontSize: 14, resize: 'vertical', marginBottom: 0 }} />
+      </div>
+
+      <div style={{ marginBottom: 12 }}>
+        <label style={labelStyle}>Scenario Image URL (optional)</label>
+        <input value={image} onChange={e => setImage(e.target.value)} placeholder="https://..." style={{ width: '100%', fontSize: 14, marginBottom: 0 }} />
+      </div>
+
+      <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+        <div style={{ flex: 1 }}>
+          <label style={labelStyle}>Max Attempts</label>
+          <input type="number" value={maxAttempts} onChange={e => setMaxAttempts(parseInt(e.target.value) || 3)} min={1} max={10} style={{ width: '100%', fontSize: 14, marginBottom: 0 }} />
+        </div>
+      </div>
+
+      {/* Answer Inputs */}
+      <div style={{ marginBottom: 16 }}>
+        <label style={labelStyle}>Answer Inputs</label>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {inputs.map((inp, i) => (
+            <div key={inp.id} style={{ padding: 12, borderRadius: 8, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ display: 'flex', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
+                <input
+                  value={inp.label}
+                  onChange={e => updateInput(i, 'label', e.target.value)}
+                  placeholder="Label (e.g. After Repair Value)"
+                  style={{ flex: 2, minWidth: 140, fontSize: 13, padding: '8px 10px', marginBottom: 0 }}
+                />
+                <select
+                  value={inp.type}
+                  onChange={e => updateInput(i, 'type', e.target.value)}
+                  style={{ fontSize: 13, padding: '8px 10px', marginBottom: 0, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#ccc' }}
+                >
+                  <option value="number">Number</option>
+                  <option value="text">Text</option>
+                </select>
+                <button onClick={() => removeInput(i)} style={{ background: 'none', border: 'none', color: '#e94560', cursor: 'pointer', fontSize: 16, padding: '0 6px' }}>×</button>
+              </div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <input
+                  value={inp.correctAnswer}
+                  onChange={e => updateInput(i, 'correctAnswer', e.target.value)}
+                  placeholder="Correct answer"
+                  style={{ flex: 1, minWidth: 100, fontSize: 13, padding: '8px 10px', marginBottom: 0 }}
+                />
+                {inp.type === 'number' && (
+                  <input
+                    value={inp.tolerance || ''}
+                    onChange={e => updateInput(i, 'tolerance', e.target.value)}
+                    placeholder="Tolerance (±)"
+                    style={{ width: 100, fontSize: 13, padding: '8px 10px', marginBottom: 0 }}
+                  />
+                )}
+                <select
+                  value={inp.unit || ''}
+                  onChange={e => updateInput(i, 'unit', e.target.value)}
+                  style={{ fontSize: 13, padding: '8px 10px', marginBottom: 0, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#ccc' }}
+                >
+                  <option value="">No unit</option>
+                  <option value="$">$ (dollar)</option>
+                  <option value="%">% (percent)</option>
+                </select>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button onClick={addInput} className="btn-secondary" style={{ marginTop: 8, padding: '6px 14px', fontSize: 12 }}>+ Add Input</button>
+      </div>
+
+      {/* Explanation on fail */}
+      <div style={{ marginBottom: 12 }}>
+        <label style={labelStyle}>Explanation on Fail (optional)</label>
+        <textarea value={explanationOnFail} onChange={e => setExplanationOnFail(e.target.value)} rows={2} placeholder="Shown when all attempts are exhausted..." style={{ width: '100%', fontSize: 14, resize: 'vertical', marginBottom: 0 }} />
+      </div>
+
+      <div style={{ marginBottom: 16 }}>
+        <label style={labelStyle}>Explanation Image URL (optional)</label>
+        <input value={explanationImage} onChange={e => setExplanationImage(e.target.value)} placeholder="https://..." style={{ width: '100%', fontSize: 14, marginBottom: 0 }} />
+      </div>
+
+      <div style={{ display: 'flex', gap: 10 }}>
+        <button className="btn-primary" onClick={handleSave} style={{ padding: '10px 24px', fontSize: 13 }}>Save Scenario</button>
+        <button className="btn-secondary" onClick={onCancel} style={{ padding: '10px 18px', fontSize: 13 }}>Cancel</button>
       </div>
     </div>
   );
