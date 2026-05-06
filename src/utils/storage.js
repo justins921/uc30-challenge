@@ -534,6 +534,7 @@ function toDbRow(user) {
   if (user.profilePicture) row.profile_picture = user.profilePicture;
   if (user.socialHandles && Object.keys(user.socialHandles).length > 0) row.social_handles = user.socialHandles;
   if (user.gettingStartedCompleted) row.getting_started_completed = true;
+  if (user.getClear) row.get_clear = user.getClear;
   if (user.buyBox) row.buy_box = user.buyBox;
   if (user.commitmentDeclaredAt) row.commitment_declared_at = user.commitmentDeclaredAt;
   if (user.onboardingCompleted) row.onboarding_completed = true;
@@ -584,6 +585,7 @@ function toDbUpdateRow(updates) {
   if (updates.socialHandles !== undefined) row.social_handles = updates.socialHandles;
   if (updates.gettingStartedCompleted !== undefined) row.getting_started_completed = updates.gettingStartedCompleted;
   if (updates.ucPoints !== undefined) row.uc_points = updates.ucPoints;
+  if (updates.getClear !== undefined) row.get_clear = updates.getClear;
   if (updates.buyBox !== undefined) row.buy_box = updates.buyBox;
   if (updates.commitmentDeclaredAt !== undefined) row.commitment_declared_at = updates.commitmentDeclaredAt;
   if (updates.onboardingCompleted !== undefined) row.onboarding_completed = updates.onboardingCompleted;
@@ -642,6 +644,7 @@ function fromDbRow(row) {
     profilePicture: row.profile_picture || null,
     socialHandles: row.social_handles || {},
     gettingStartedCompleted: row.getting_started_completed || false,
+    getClear: row.get_clear || null,
     buyBox: row.buy_box || null,
     commitmentDeclaredAt: row.commitment_declared_at || null,
     onboardingCompleted: row.onboarding_completed || false,
@@ -1015,6 +1018,7 @@ export function createNewUser(firstName, lastName, email, authId) {
     profilePicture: null,
     socialHandles: {},
     gettingStartedCompleted: false,
+    getClear: null,
     buyBox: {
       markets: [],
       zipCodes: [],
