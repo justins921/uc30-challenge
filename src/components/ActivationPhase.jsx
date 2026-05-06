@@ -1765,7 +1765,7 @@ function CommitmentStep({ user, onBack, onSave }) {
   return (
     <div>
       <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>
-        You're Ready, Operator.
+        You're Ready, {user?.firstName || 'Operator'}.
       </h1>
       <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7, marginBottom: 28 }}>
         Review your setup below. If anything needs changing, use the Back button.
