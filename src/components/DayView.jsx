@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum, DAILY_MINIMUMS, getWeekNumber, getWeeklyOfferTarget, getWeekDayRange } from '../data/challengeDays';
+import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum, DAILY_MINIMUMS, VETERAN_DAILY_MINIMUMS, getWeekNumber, getWeeklyOfferTarget, getWeekDayRange } from '../data/challengeDays';
 import { COMPLIANCE_METRICS, checkDailyCompliance, getTimeUntilDeadline, DEFAULT_DAILY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
 import QuizSection from './QuizSection';
 import { CONTACT_GROUPS } from './ContactsCRM';
@@ -15,9 +15,13 @@ export default function DayView({
 }) {
   const [submitted, setSubmitted] = useState(false);
 
+  // ── Training bypass for repeat users ─────────────────────────
+  const trainingAlreadyDone = (user.trainingCompletedDays || []).includes(day);
+  const [trainingExpanded, setTrainingExpanded] = useState(!trainingAlreadyDone);
+
   // ── Metric state (the 6 compliance metrics) ──────────────────
   const [metrics, setMetrics] = useState({
-    training_completed: existingDailySubmission?.training_completed || false,
+    training_completed: existingDailySubmission?.training_completed || trainingAlreadyDone || false,
     properties_analyzed: existingDailySubmission?.properties_analyzed || 0,
     arsenal_contacts: existingDailySubmission?.arsenal_contacts || 0,
     target_contacts: existingDailySubmission?.target_contacts || 0,
@@ -38,7 +42,9 @@ export default function DayView({
     : (dayColors && dayColors[day]) || CATEGORY_COLORS[dayData.category] || { accent: '#888', label: '' };
 
   // ── Compliance settings (per-day minimums from challengeDays.js) ──
-  const perDayMins = (!isPost30 && DAILY_MINIMUMS[day]) || DEFAULT_DAILY_MINIMUMS;
+  const isVeteran = (user.cohortAttempt || 1) >= 2;
+  const baseMinimumsTable = isVeteran ? VETERAN_DAILY_MINIMUMS : DAILY_MINIMUMS;
+  const perDayMins = (!isPost30 && baseMinimumsTable[day]) || DEFAULT_DAILY_MINIMUMS;
   const dailyMins = { ...perDayMins, ...complianceSettings?.dailyMinimums };
   const enforcement = { ...DEFAULT_ENFORCEMENT, ...complianceSettings?.enforcement };
 
@@ -185,7 +191,8 @@ export default function DayView({
   const hasRequiredQuiz = !isPost30 && dayData.quiz?.required && dayData.quiz.scenarios?.length > 0;
   const quizAlreadyPassed = hasRequiredQuiz && (quizAttempts || []).length > 0 &&
     dayData.quiz.scenarios.every(s => (quizAttempts || []).some(a => a.scenario_id === s.id && a.correct));
-  const [quizPassed, setQuizPassed] = useState(quizAlreadyPassed || isComplete);
+  const quizBypassForVeteran = hasRequiredQuiz && (user.cohortAttempt || 1) >= 2 && trainingAlreadyDone;
+  const [quizPassed, setQuizPassed] = useState(quizAlreadyPassed || quizBypassForVeteran || isComplete);
 
   // ── Handlers ──────────────────────────────────────────────────
   const setMetric = (key, value) => {
@@ -325,14 +332,36 @@ export default function DayView({
         </div>
       )}
 
+      {/* Veteran Minimums Badge */}
+      {isVeteran && !isPost30 && (
+        <div style={{
+          marginBottom: 16, display: 'inline-flex', alignItems: 'center', gap: 8,
+          padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 700,
+          background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.2)', color: '#a855f7',
+        }}>
+          VETERAN MINIMUMS — Cohort #{user.cohortAttempt || 2}
+        </div>
+      )}
+
       {/* Training Content */}
       {dayData.trainingContent && (
         <div className="card" style={{ marginBottom: 24 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: trainingExpanded ? 12 : 0, cursor: trainingAlreadyDone ? 'pointer' : 'default' }}
+            onClick={trainingAlreadyDone ? () => setTrainingExpanded(!trainingExpanded) : undefined}>
             <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(83,52,131,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📚</div>
-            <h3 style={{ fontSize: 16, fontWeight: 700 }}>Training Content</h3>
+            <h3 style={{ fontSize: 16, fontWeight: 700, flex: 1 }}>Training Content</h3>
+            {trainingAlreadyDone && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 11, padding: '3px 10px', borderRadius: 6, background: 'rgba(72,199,142,0.1)', color: '#48c78e', fontWeight: 700 }}>
+                  PREVIOUSLY COMPLETED
+                </span>
+                <span style={{ fontSize: 14, color: '#666', transform: trainingExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>▼</span>
+              </div>
+            )}
           </div>
-          <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.trainingContent}</p>
+          {trainingExpanded && (
+            <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.trainingContent}</p>
+          )}
         </div>
       )}
 
@@ -347,18 +376,36 @@ export default function DayView({
 
       {/* Quiz Section */}
       {hasRequiredQuiz && canSubmit && !quizPassed && (
-        <QuizSection
-          quiz={dayData.quiz}
-          participantId={user.id}
-          dayNumber={day}
-          existingAttempts={quizAttempts || []}
-          onAttempt={onQuizAttempt}
-          onQuizComplete={() => setQuizPassed(true)}
-        />
+        <>
+          {quizBypassForVeteran ? null : (
+            <QuizSection
+              quiz={dayData.quiz}
+              participantId={user.id}
+              dayNumber={day}
+              existingAttempts={quizAttempts || []}
+              onAttempt={onQuizAttempt}
+              onQuizComplete={() => setQuizPassed(true)}
+            />
+          )}
+        </>
+      )}
+
+      {/* Quiz bypass notice for veterans */}
+      {hasRequiredQuiz && canSubmit && quizBypassForVeteran && quizPassed && (
+        <div style={{
+          padding: '14px 20px', borderRadius: 12, marginBottom: 24,
+          background: 'rgba(168,85,247,0.04)', border: '1px solid rgba(168,85,247,0.15)',
+          display: 'flex', alignItems: 'center', gap: 10,
+        }}>
+          <span style={{ fontSize: 16 }}>✓</span>
+          <span style={{ fontSize: 13, color: '#a855f7', fontWeight: 600 }}>
+            Quiz bypassed — you passed this in a previous cohort
+          </span>
+        </div>
       )}
 
       {/* Locked submission notice */}
-      {hasRequiredQuiz && canSubmit && !quizPassed && (
+      {hasRequiredQuiz && canSubmit && !quizPassed && !quizBypassForVeteran && (
         <div style={{
           padding: '20px', borderRadius: 12, marginBottom: 24,
           background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',

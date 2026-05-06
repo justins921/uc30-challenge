@@ -267,6 +267,46 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           <UCPointsBanner ucPoints={user.ucPoints || calculateUCPoints(user.metrics)} />
         )}
 
+        {/* UC Graduate Badge */}
+        {!showPracticeDay && (user.ucGraduateCount || 0) > 0 && (tab === 'timeline' || tab === 'stats' || tab === 'pipeline') && (
+          <div className="fade-up" style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '14px 20px', marginBottom: 16,
+            background: 'linear-gradient(135deg, rgba(240,165,0,0.08), rgba(168,85,247,0.06))',
+            border: '1px solid rgba(240,165,0,0.2)',
+            borderRadius: 12,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: 18 }}>🎓</span>
+              <div>
+                <div style={{ fontSize: 12, color: '#f0a500', textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: 700 }}>
+                  UC Graduate
+                </div>
+                <div style={{ fontSize: 11, color: '#888' }}>
+                  {user.ucGraduateCount} cohort{user.ucGraduateCount !== 1 ? 's' : ''} completed
+                </div>
+              </div>
+            </div>
+            <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#f0a500' }}>
+              x{user.ucGraduateCount}
+            </div>
+          </div>
+        )}
+
+        {/* Veteran Minimums Indicator */}
+        {!showPracticeDay && (user.cohortAttempt || 1) >= 2 && cohortActive && (tab === 'timeline' || tab === 'day') && (
+          <div className="fade-up" style={{
+            display: 'flex', alignItems: 'center', gap: 10,
+            padding: '10px 16px', marginBottom: 16,
+            background: 'rgba(168,85,247,0.06)',
+            border: '1px solid rgba(168,85,247,0.15)',
+            borderRadius: 10, fontSize: 12, color: '#a855f7', fontWeight: 600,
+          }}>
+            <span style={{ fontSize: 14 }}>⚡</span>
+            Veteran Minimums Active — No ramp-up period, sustained standards from Day 1
+          </div>
+        )}
+
         {/* Lifetime Offers Counter */}
         {!showPracticeDay && (user.lifetimeOffersSubmitted || 0) > 0 && (
           <div className="fade-up" style={{

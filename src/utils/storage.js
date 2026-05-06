@@ -601,6 +601,11 @@ function toDbRow(user) {
   if (user.pipelineMode !== undefined) row.pipeline_mode = user.pipelineMode;
   if (user.pipelineModeStreak !== undefined) row.pipeline_mode_streak = user.pipelineModeStreak;
   if (user.pipelineModeActivatedAt) row.pipeline_mode_activated_at = user.pipelineModeActivatedAt;
+  // Repeat Cohort / Graduate tracking
+  if (user.trainingCompletedDays) row.training_completed_days = user.trainingCompletedDays;
+  if (user.cohortHistory) row.cohort_history = user.cohortHistory;
+  if (user.ucGraduateCount != null) row.uc_graduate_count = user.ucGraduateCount;
+  if (user.propertiesUnderContract != null) row.properties_under_contract = user.propertiesUnderContract;
   return row;
 }
 
@@ -659,6 +664,11 @@ function toDbUpdateRow(updates) {
   if (updates.pipelineMode !== undefined) row.pipeline_mode = updates.pipelineMode;
   if (updates.pipelineModeStreak !== undefined) row.pipeline_mode_streak = updates.pipelineModeStreak;
   if (updates.pipelineModeActivatedAt !== undefined) row.pipeline_mode_activated_at = updates.pipelineModeActivatedAt;
+  // Repeat Cohort / Graduate tracking
+  if (updates.trainingCompletedDays !== undefined) row.training_completed_days = updates.trainingCompletedDays;
+  if (updates.cohortHistory !== undefined) row.cohort_history = updates.cohortHistory;
+  if (updates.ucGraduateCount !== undefined) row.uc_graduate_count = updates.ucGraduateCount;
+  if (updates.propertiesUnderContract !== undefined) row.properties_under_contract = updates.propertiesUnderContract;
   return row;
 }
 
@@ -724,6 +734,11 @@ function fromDbRow(row) {
     pipelineMode: row.pipeline_mode || false,
     pipelineModeStreak: row.pipeline_mode_streak || 0,
     pipelineModeActivatedAt: row.pipeline_mode_activated_at || null,
+    // Repeat Cohort / Graduate tracking
+    trainingCompletedDays: row.training_completed_days || [],
+    cohortHistory: row.cohort_history || [],
+    ucGraduateCount: row.uc_graduate_count || 0,
+    propertiesUnderContract: row.properties_under_contract || 0,
   };
 }
 
@@ -1140,5 +1155,10 @@ export function createNewUser(firstName, lastName, email, authId) {
     pipelineMode: false,
     pipelineModeStreak: 0,
     pipelineModeActivatedAt: null,
+    // Repeat Cohort / Graduate tracking
+    trainingCompletedDays: [],
+    cohortHistory: [],
+    ucGraduateCount: 0,
+    propertiesUnderContract: 0,
   };
 }

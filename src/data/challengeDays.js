@@ -615,6 +615,18 @@ export const DAILY_MINIMUMS = {
 // Backward compat alias
 export const DEFAULT_DAILY_MINIMUMS = DAILY_MINIMUMS;
 
+// Veteran minimums — no Week 1 ramp-up for repeat users (cohortAttempt >= 2)
+// Uses Week 3 levels (days 1-21) and Week 4 levels (days 22-30)
+export const VETERAN_DAILY_MINIMUMS = Object.fromEntries(
+  Array.from({ length: 30 }, (_, i) => {
+    const day = i + 1;
+    return [day, day <= 21
+      ? { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 }
+      : { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
+    ];
+  })
+);
+
 // Weekly offer targets (per week, not cumulative across weeks)
 export const WEEKLY_OFFER_TARGETS = {
   1: 3,
@@ -655,12 +667,14 @@ export const POST_30_MINIMUMS = {
 };
 
 // Get the daily minimums for a specific day, merging admin overrides
-export function getDailyMinimums(dayNum, adminOverrides = {}) {
+export function getDailyMinimums(dayNum, adminOverrides = {}, cohortAttempt = 1) {
   if (dayNum > 30) return POST_30_MINIMUMS;
-  const defaults = DAILY_MINIMUMS[dayNum] || DAILY_MINIMUMS[1];
+  const base = cohortAttempt >= 2
+    ? (VETERAN_DAILY_MINIMUMS[dayNum] || VETERAN_DAILY_MINIMUMS[1])
+    : (DAILY_MINIMUMS[dayNum] || DAILY_MINIMUMS[1]);
   const override = adminOverrides[dayNum];
-  if (override) return { ...defaults, ...override };
-  return defaults;
+  if (override) return { ...base, ...override };
+  return base;
 }
 
 // ── Post-Day-30 Operator Mode ────────────────────────────────

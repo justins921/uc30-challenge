@@ -1556,6 +1556,15 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
             label={`Cohort Attempt #${p.cohortAttempt || 1}`}
             color="#888"
           />
+          {(p.cohortAttempt || 1) >= 2 && (
+            <StatusBadge label="Veteran Minimums" color="#a855f7" />
+          )}
+          {(p.ucGraduateCount || 0) > 0 && (
+            <StatusBadge label={`UC Graduate x${p.ucGraduateCount}`} color="#f0a500" />
+          )}
+          {p.pipelineMode && (
+            <StatusBadge label="Pipeline Mode" color="#6366f1" />
+          )}
           <StatusBadge
             label={p.refundEligible !== false ? 'Refund Eligible' : 'Not Refund Eligible'}
             color={p.refundEligible !== false ? '#48c78e' : '#e94560'}
@@ -1574,11 +1583,49 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
               color="#f0a500"
             />
           )}
+          {(p.trainingCompletedDays || []).length > 0 && (
+            <StatusBadge
+              label={`${(p.trainingCompletedDays || []).length}/30 Training Days`}
+              color="#48c78e"
+            />
+          )}
         </div>
         {p.stakesDeclaration && (
           <div style={{ marginTop: 12, padding: '10px 14px', borderRadius: 8, background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.1)' }}>
             <div style={{ fontSize: 11, color: '#666', fontWeight: 600, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 }}>Stakes Declaration</div>
             <p style={{ fontSize: 13, color: '#aaa', lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>"{p.stakesDeclaration}"</p>
+          </div>
+        )}
+        {/* Cohort History */}
+        {(p.cohortHistory || []).length > 0 && (
+          <div style={{ marginTop: 12 }}>
+            <div style={{ fontSize: 11, color: '#666', fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Cohort History</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {(p.cohortHistory || []).map((h, i) => (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px',
+                  borderRadius: 8, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+                  fontSize: 12,
+                }}>
+                  <span style={{
+                    padding: '2px 8px', borderRadius: 4, fontWeight: 700, fontSize: 11,
+                    background: h.result === 'completed' ? 'rgba(72,199,142,0.1)' : 'rgba(233,69,96,0.1)',
+                    color: h.result === 'completed' ? '#48c78e' : '#e94560',
+                  }}>
+                    #{h.cohortAttempt}
+                  </span>
+                  <span style={{ color: h.result === 'completed' ? '#48c78e' : '#e94560', fontWeight: 600 }}>
+                    {h.result === 'completed' ? 'Completed' : 'Failed'}
+                  </span>
+                  <span style={{ color: '#666' }}>
+                    {h.daysCompleted || 0} days completed
+                  </span>
+                  <span style={{ color: '#555', marginLeft: 'auto', fontSize: 11 }}>
+                    {h.completedAt ? new Date(h.completedAt).toLocaleDateString() : h.removedAt ? new Date(h.removedAt).toLocaleDateString() : ''}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

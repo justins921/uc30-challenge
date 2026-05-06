@@ -70,7 +70,17 @@ export function useAppState() {
 
     const now = new Date().toISOString();
     for (const p of removals) {
-      const updates = { isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now };
+      const historyEntry = {
+        cohortAttempt: p.cohortAttempt || 1,
+        result: 'failed',
+        removedAt: now,
+        daysCompleted: (p.completedDays || []).length,
+        lastDay: p.currentDay || 1,
+      };
+      const updates = {
+        isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now,
+        cohortHistory: [...(p.cohortHistory || []), historyEntry],
+      };
       if ((p.cohortAttempt || 1) === 1) updates.refundEligible = false;
       if (isSupabaseEnabled) {
         await storage.updateParticipant(p.id, updates);
@@ -87,7 +97,18 @@ export function useAppState() {
       try { await Promise.resolve(storage.setCohortStats(stats)); } catch {}
       const currentUser = user;
       if (currentUser && removals.find(r => r.id === currentUser.id)) {
-        const updatedUser = { ...currentUser, isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now, refundEligible: (currentUser.cohortAttempt || 1) === 1 ? false : currentUser.refundEligible };
+        const historyEntry = {
+          cohortAttempt: currentUser.cohortAttempt || 1,
+          result: 'failed',
+          removedAt: now,
+          daysCompleted: (currentUser.completedDays || []).length,
+          lastDay: currentUser.currentDay || 1,
+        };
+        const updatedUser = {
+          ...currentUser, isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now,
+          refundEligible: (currentUser.cohortAttempt || 1) === 1 ? false : currentUser.refundEligible,
+          cohortHistory: [...(currentUser.cohortHistory || []), historyEntry],
+        };
         setUser(updatedUser);
         storage.setUser(updatedUser);
       }
@@ -95,7 +116,17 @@ export function useAppState() {
       const updatedParticipants = currentParticipants.map(p => {
         const removed = removals.find(r => r.id === p.id);
         if (!removed) return p;
-        const updates = { isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now };
+        const historyEntry = {
+          cohortAttempt: p.cohortAttempt || 1,
+          result: 'failed',
+          removedAt: now,
+          daysCompleted: (p.completedDays || []).length,
+          lastDay: p.currentDay || 1,
+        };
+        const updates = {
+          isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now,
+          cohortHistory: [...(p.cohortHistory || []), historyEntry],
+        };
         if ((p.cohortAttempt || 1) === 1) updates.refundEligible = false;
         return { ...p, ...updates };
       });
@@ -893,6 +924,12 @@ export function useAppState() {
     const lifetimeOffersDelta = proof.lifetimeOffersDelta || 0;
     const lifetimeOffersSubmitted = (user.lifetimeOffersSubmitted || 0) + lifetimeOffersDelta;
 
+    // Track training completion permanently for repeat cohort bypass
+    let trainingCompletedDays = [...(user.trainingCompletedDays || [])];
+    if (dayMetrics.training_completed && !isPost30 && !trainingCompletedDays.includes(dayNum)) {
+      trainingCompletedDays.push(dayNum);
+    }
+
     const updates = {
       currentDay: dayNum + 1,
       completedDays: [...user.completedDays, dayNum],
@@ -900,6 +937,7 @@ export function useAppState() {
       metrics: updatedMetrics,
       ucPoints,
       lifetimeOffersSubmitted,
+      trainingCompletedDays,
     };
 
     const updatedUser = { ...user, ...updates };
@@ -953,15 +991,26 @@ export function useAppState() {
       emailChallengeCompleted(user.email, user.firstName);
     }
 
-    // Mark first cohort completed if they finish day 30 on attempt 1
-    if (dayNum === 30 && (user.cohortAttempt || 1) === 1) {
-      const guaranteeUpdates = { firstCohortCompleted: true };
-      const guaranteeUser = { ...updatedUser, ...guaranteeUpdates };
+    // Day 30 completion: graduate tracking + cohort history
+    if (dayNum === 30) {
+      const gradUpdates = {
+        ucGraduateCount: (updatedUser.ucGraduateCount || 0) + 1,
+        cohortHistory: [...(updatedUser.cohortHistory || []), {
+          cohortAttempt: user.cohortAttempt || 1,
+          result: 'completed',
+          completedAt: new Date().toISOString(),
+          daysCompleted: updatedUser.completedDays.length,
+          finalMetrics: { ...updatedMetrics },
+          ucPoints,
+        }],
+      };
+      if ((user.cohortAttempt || 1) === 1) gradUpdates.firstCohortCompleted = true;
+      const graduateUser = { ...updatedUser, ...gradUpdates };
       if (isSupabaseEnabled) {
-        await storage.updateParticipant(user.id, guaranteeUpdates);
+        await storage.updateParticipant(user.id, gradUpdates);
       }
-      setUser(guaranteeUser);
-      storage.setUser(guaranteeUser);
+      setUser(graduateUser);
+      storage.setUser(graduateUser);
     }
   }, [user, participants, persist]);
 
@@ -969,7 +1018,17 @@ export function useAppState() {
   const removeParticipant = useCallback(async (participantId) => {
     const removed = participants.find(p => p.id === participantId);
     const now = new Date().toISOString();
-    const updates = { isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now };
+    const historyEntry = removed ? {
+      cohortAttempt: removed.cohortAttempt || 1,
+      result: 'failed',
+      removedAt: now,
+      daysCompleted: (removed.completedDays || []).length,
+      lastDay: removed.currentDay || 1,
+    } : null;
+    const updates = {
+      isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now,
+      ...(historyEntry ? { cohortHistory: [...(removed.cohortHistory || []), historyEntry] } : {}),
+    };
     if (removed && (removed.cohortAttempt || 1) === 1) {
       updates.refundEligible = false;
     }
@@ -1472,6 +1531,7 @@ export function useAppState() {
       pipelineMode: false,
       pipelineModeActivatedAt: null,
     };
+    // trainingCompletedDays, metrics, CRM data, ucPoints are intentionally NOT reset
 
     const updatedUser = { ...user, ...updates };
     if (isSupabaseEnabled) {
@@ -1512,7 +1572,18 @@ export function useAppState() {
 
     if (result) {
       const now = new Date().toISOString();
-      const updates = { isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now };
+      const historyEntry = {
+        cohortAttempt: participant.cohortAttempt || 1,
+        result: 'failed',
+        removedAt: now,
+        reason: result.reason,
+        daysCompleted: (participant.completedDays || []).length,
+        lastDay: participant.currentDay || 1,
+      };
+      const updates = {
+        isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now,
+        cohortHistory: [...(participant.cohortHistory || []), historyEntry],
+      };
       if ((participant.cohortAttempt || 1) === 1) updates.refundEligible = false;
 
       if (isSupabaseEnabled) {
