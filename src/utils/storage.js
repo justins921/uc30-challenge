@@ -8,6 +8,22 @@
 // 2. Create a new project
 // 3. Run the SQL in supabase-setup.sql (base schema)
 // 4. Run the SQL in supabase-auth-migration.sql (auth + RLS)
+
+// ── Follow-up date calculation ──────────────────────────────────────
+export function calculateFollowUpDate(interval) {
+  if (!interval || interval === 'never') return null;
+  const d = new Date();
+  switch (interval) {
+    case '2_days': d.setDate(d.getDate() + 2); break;
+    case '1_week': d.setDate(d.getDate() + 7); break;
+    case '2_weeks': d.setDate(d.getDate() + 14); break;
+    case '1_month': d.setMonth(d.getMonth() + 1); break;
+    case '3_months': d.setMonth(d.getMonth() + 3); break;
+    case '6_months': d.setMonth(d.getMonth() + 6); break;
+    default: return null;
+  }
+  return d.toISOString();
+}
 // 5. Copy your project URL and anon key into .env
 
 import { supabase } from './supabaseClient';
@@ -850,6 +866,16 @@ const localStorageFallback = {
   },
   getContactsForParticipant(participantId) {
     return this.getContacts(participantId);
+  },
+  updateContact(contactId, updates) {
+    try {
+      const contacts = JSON.parse(localStorage.getItem('uc30_contacts') || '[]');
+      const idx = contacts.findIndex(c => c.id === contactId);
+      if (idx === -1) return null;
+      contacts[idx] = { ...contacts[idx], ...updates };
+      localStorage.setItem('uc30_contacts', JSON.stringify(contacts));
+      return contacts[idx];
+    } catch { return null; }
   },
 
   // ── CRM: Follow-Ups (localStorage fallback) ───────────────────

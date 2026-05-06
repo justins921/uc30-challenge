@@ -3,6 +3,7 @@ import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayCo
 import { COMPLIANCE_METRICS, checkDailyCompliance, getTimeUntilDeadline, DEFAULT_DAILY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
 import QuizSection from './QuizSection';
 import { CONTACT_GROUPS } from './ContactsCRM';
+import { calculateFollowUpDate } from '../utils/storage';
 
 const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500' };
 
@@ -75,62 +76,98 @@ export default function DayView({
   const [contactNotes, setContactNotes] = useState('');
   const [contactSaving, setContactSaving] = useState(false);
   const [duplicateContact, setDuplicateContact] = useState(null);
+  const [contactFollowUpInterval, setContactFollowUpInterval] = useState('');
+  const [targetOutcome, setTargetOutcome] = useState('');
   const [followUpContactId, setFollowUpContactId] = useState('');
   const [followUpNotes, setFollowUpNotes] = useState('');
   const [followUpSaving, setFollowUpSaving] = useState(false);
+  const [followUpInterval, setFollowUpInterval] = useState('');
+  const [followUpReclassify, setFollowUpReclassify] = useState('');
 
   useEffect(() => {
     if (initialContacts) setContactList(initialContacts);
   }, [initialContacts]);
 
+  const resetContactForm = () => {
+    setContactName(''); setContactPhone(''); setContactEmail('');
+    setContactGroup('target'); setContactProperty(''); setContactNotes('');
+    setContactFollowUpInterval(''); setTargetOutcome('');
+    setDuplicateContact(null); setShowContactForm(false);
+  };
+
   const handleAddContact = async (force) => {
     if (!contactName.trim()) return;
+    if (!contactFollowUpInterval) return;
+    if (contactGroup === 'target' && !targetOutcome) return;
     if (!force) {
       const dup = contactList.find(c => c.name?.toLowerCase() === contactName.trim().toLowerCase());
-      if (dup) {
-        setDuplicateContact(dup);
-        return;
-      }
+      if (dup) { setDuplicateContact(dup); return; }
     }
     setContactSaving(true);
     setDuplicateContact(null);
+
+    const now = new Date().toISOString();
+    let finalGroup = contactGroup;
+    let pipelineStatus = 'new';
+    if (contactGroup === 'target') {
+      if (targetOutcome === 'target_property') pipelineStatus = 'target_property';
+      else if (targetOutcome === 'dead') pipelineStatus = 'dead';
+      else if (targetOutcome === 'arsenal') { finalGroup = 'arsenal'; pipelineStatus = 'new'; }
+    }
+
     const result = await onAddContact({
       name: contactName.trim(),
       phone: contactPhone.trim() || null,
       email: contactEmail.trim() || null,
-      contact_group: contactGroup,
+      contact_group: finalGroup,
       property: contactGroup === 'target' ? (contactProperty.trim() || null) : null,
       notes: contactNotes.trim() || null,
       day_added: day,
+      pipeline_status: pipelineStatus,
+      follow_up_interval: contactFollowUpInterval,
+      follow_up_date: calculateFollowUpDate(contactFollowUpInterval),
+      last_contact_date: now,
     });
     if (result?.success && result.contact) {
       setContactList(prev => [result.contact, ...prev]);
     }
     setContactSaving(false);
-    setContactName(''); setContactPhone(''); setContactEmail('');
-    setContactGroup('target'); setContactProperty(''); setContactNotes('');
-    setShowContactForm(false);
+    resetContactForm();
   };
 
   const handleGoToFollowUp = (contact) => {
-    setDuplicateContact(null);
-    setShowContactForm(false);
-    setContactName(''); setContactPhone(''); setContactEmail('');
-    setContactGroup('target'); setContactProperty(''); setContactNotes('');
+    resetContactForm();
     setFollowUpContactId(contact.id);
+    setFollowUpInterval('');
+    setFollowUpReclassify('');
     setShowFollowUpForm(true);
   };
 
   const handleAddFollowUp = async () => {
-    if (!followUpContactId || !followUpNotes.trim()) return;
+    if (!followUpContactId || !followUpNotes.trim() || !followUpInterval) return;
     setFollowUpSaving(true);
+    const now = new Date().toISOString();
+    const contactUpdates = {
+      follow_up_interval: followUpInterval,
+      follow_up_date: calculateFollowUpDate(followUpInterval),
+      last_contact_date: now,
+    };
+    if (followUpReclassify && followUpReclassify !== 'keep') {
+      contactUpdates.pipeline_status = followUpReclassify;
+      contactUpdates.reclassified_at = now;
+      if (followUpReclassify === 'dead') {
+        contactUpdates.follow_up_interval = followUpInterval;
+        contactUpdates.follow_up_date = calculateFollowUpDate(followUpInterval);
+      }
+    }
     await onAddFollowUp({
       contact_id: followUpContactId,
       notes: followUpNotes.trim(),
       day_number: day,
-    });
+    }, contactUpdates);
+    setContactList(prev => prev.map(c => c.id === followUpContactId ? { ...c, ...contactUpdates } : c));
     setFollowUpSaving(false);
-    setFollowUpContactId(''); setFollowUpNotes('');
+    setFollowUpContactId(''); setFollowUpNotes(''); setFollowUpInterval(''); setFollowUpReclassify('');
     setShowFollowUpForm(false);
   };
 
@@ -498,6 +535,8 @@ export default function DayView({
           {/* ── Suggested Follow-Ups ── */}
           <SuggestedFollowUps contacts={contactList} onSelect={(contact) => {
             setFollowUpContactId(contact.id);
+            setFollowUpInterval('');
+            setFollowUpReclassify('');
             setShowFollowUpForm(true);
             setShowContactForm(false);
           }} />
@@ -515,7 +554,7 @@ export default function DayView({
                   style={{ flex: 1, padding: '10px 16px', fontSize: 13, minWidth: 140 }}>
                   + New Contact
                 </button>
-                <button className="btn-secondary" onClick={() => setShowFollowUpForm(true)}
+                <button className="btn-secondary" onClick={() => { setShowFollowUpForm(true); setFollowUpInterval(''); setFollowUpReclassify(''); }}
                   disabled={contactList.length === 0}
                   style={{ flex: 1, padding: '10px 16px', fontSize: 13, minWidth: 140, opacity: contactList.length === 0 ? 0.4 : 1 }}>
                   + Log Follow-Up
@@ -543,7 +582,7 @@ export default function DayView({
                 <div style={{ fontSize: 12, color: '#888', fontWeight: 600, marginBottom: 6 }}>Group</div>
                 <div style={{ display: 'flex', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
                   {CONTACT_GROUPS.map(g => (
-                    <button key={g.value} onClick={() => setContactGroup(g.value)} style={{
+                    <button key={g.value} onClick={() => { setContactGroup(g.value); setTargetOutcome(''); setContactFollowUpInterval(''); }} style={{
                       padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: contactGroup === g.value ? 600 : 400,
                       cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
                       background: contactGroup === g.value ? `${g.color}20` : 'rgba(255,255,255,0.04)',
@@ -555,7 +594,6 @@ export default function DayView({
                   ))}
                 </div>
 
-                {/* Property field for Target Contacts */}
                 {contactGroup === 'target' && (
                   <input value={contactProperty} onChange={e => setContactProperty(e.target.value)}
                     placeholder="Property/Opportunity * (e.g. 123 Main St, Phoenix AZ)"
@@ -568,17 +606,64 @@ export default function DayView({
                   style={{ width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 12, resize: 'vertical',
                   borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
 
-                {/* Duplicate warning */}
+                {/* Target Contact — Outcome Classification */}
+                {contactGroup === 'target' && (
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontSize: 12, color: '#e94560', fontWeight: 600, marginBottom: 6 }}>Outcome *</div>
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                      {[
+                        { value: 'target_property', label: 'Target Property', desc: "They're interested", color: '#e94560' },
+                        { value: 'dead', label: 'Dead Contact', desc: 'Not interested', color: '#666' },
+                        { value: 'arsenal', label: 'Move to Arsenal', desc: 'Good relationship, no deal', color: '#f0a500' },
+                      ].map(o => (
+                        <button key={o.value} onClick={() => { setTargetOutcome(o.value); setContactFollowUpInterval(''); }}
+                          style={{
+                            padding: '8px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                            fontFamily: "'DM Sans', sans-serif", border: 'none', textAlign: 'left',
+                            background: targetOutcome === o.value ? `${o.color}15` : 'rgba(255,255,255,0.04)',
+                            color: targetOutcome === o.value ? o.color : '#888',
+                            outline: targetOutcome === o.value ? `1px solid ${o.color}40` : '1px solid rgba(255,255,255,0.06)',
+                          }}>
+                          <div style={{ fontWeight: 600 }}>{o.label}</div>
+                          <div style={{ fontSize: 10, opacity: 0.7, marginTop: 2 }}>{o.desc}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Follow-Up Interval (mandatory) */}
+                {(contactGroup === 'arsenal' || targetOutcome) && (
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontSize: 12, color: '#48c78e', fontWeight: 600, marginBottom: 6 }}>Schedule Follow-Up *</div>
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                      {(targetOutcome === 'dead'
+                        ? [{ value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }, { value: '6_months', label: '6 Months' }, { value: 'never', label: 'Never' }]
+                        : [{ value: '2_days', label: '2 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }]
+                      ).map(opt => (
+                        <button key={opt.value} onClick={() => setContactFollowUpInterval(opt.value)}
+                          style={{
+                            padding: '7px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                            fontFamily: "'DM Sans', sans-serif", border: 'none',
+                            background: contactFollowUpInterval === opt.value ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.04)',
+                            color: contactFollowUpInterval === opt.value ? '#48c78e' : '#888',
+                            outline: contactFollowUpInterval === opt.value ? '1px solid rgba(72,199,142,0.3)' : '1px solid rgba(255,255,255,0.06)',
+                            fontWeight: contactFollowUpInterval === opt.value ? 600 : 400,
+                          }}>
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {duplicateContact && (
                   <div style={{
                     padding: '12px 14px', borderRadius: 8, marginBottom: 12,
                     background: 'rgba(240,165,0,0.06)', border: '1px solid rgba(240,165,0,0.2)',
                   }}>
                     <div style={{ fontSize: 13, color: '#f0a500', fontWeight: 600, marginBottom: 8 }}>
-                      You already have a contact named "{duplicateContact.name}" in your {CONTACT_GROUPS.find(g => g.value === (duplicateContact.contact_group || 'target'))?.label || 'contacts'}.
-                    </div>
-                    <div style={{ fontSize: 12, color: '#888', marginBottom: 10 }}>
-                      Would you like to add a follow-up note to them instead?
+                      You already have a contact named "{duplicateContact.name}".
                     </div>
                     <div style={{ display: 'flex', gap: 8 }}>
                       <button className="btn-primary" onClick={() => handleGoToFollowUp(duplicateContact)}
@@ -593,17 +678,23 @@ export default function DayView({
                   </div>
                 )}
 
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <button className="btn-primary" onClick={() => handleAddContact(false)}
-                    disabled={!contactName.trim() || contactSaving}
-                    style={{ padding: '10px 20px', fontSize: 13, opacity: contactName.trim() ? 1 : 0.4 }}>
-                    {contactSaving ? 'Saving...' : 'Add Contact'}
-                  </button>
-                  <button className="btn-secondary" onClick={() => { setShowContactForm(false); setDuplicateContact(null); }}
-                    style={{ padding: '10px 16px', fontSize: 13 }}>
-                    Cancel
-                  </button>
-                </div>
+                {(() => {
+                  const canAdd = contactName.trim() && contactFollowUpInterval
+                    && (contactGroup === 'arsenal' || (targetOutcome && (contactGroup !== 'target' || contactProperty.trim())));
+                  return (
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button className="btn-primary" onClick={() => handleAddContact(false)}
+                        disabled={!canAdd || contactSaving}
+                        style={{ padding: '10px 20px', fontSize: 13, opacity: canAdd ? 1 : 0.4 }}>
+                        {contactSaving ? 'Saving...' : 'Add Contact'}
+                      </button>
+                      <button className="btn-secondary" onClick={resetContactForm}
+                        style={{ padding: '10px 16px', fontSize: 13 }}>
+                        Cancel
+                      </button>
+                    </div>
+                  );
+                })()}
               </div>
             )}
 
@@ -612,21 +703,28 @@ export default function DayView({
               <div style={{ padding: 16, borderRadius: 10, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
                 <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 14 }}>Log Follow-Up</div>
 
-                <select value={followUpContactId} onChange={e => setFollowUpContactId(e.target.value)}
+                <select value={followUpContactId} onChange={e => { setFollowUpContactId(e.target.value); setFollowUpInterval(''); setFollowUpReclassify(''); }}
                   style={{ width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 10, borderRadius: 8,
                   background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#ccc' }}>
                   <option value="">Select a contact...</option>
-                  {CONTACT_GROUPS.map(g => {
-                    const gc = groupedContacts[g.value] || [];
-                    if (gc.length === 0) return null;
+                  {(() => {
+                    const arsenal = (contactList || []).filter(c => c.contact_group === 'arsenal');
+                    const targetProps = (contactList || []).filter(c => c.contact_group === 'target' && c.pipeline_status !== 'dead');
+                    const dead = (contactList || []).filter(c => c.pipeline_status === 'dead');
                     return (
-                      <optgroup key={g.value} label={`── ${g.label} ──`}>
-                        {gc.map(c => (
-                          <option key={c.id} value={c.id}>{c.name}{c.property ? ` — ${c.property}` : ''}</option>
-                        ))}
-                      </optgroup>
+                      <>
+                        {arsenal.length > 0 && <optgroup label="── Arsenal Contacts ──">
+                          {arsenal.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                        </optgroup>}
+                        {targetProps.length > 0 && <optgroup label="── Target Properties ──">
+                          {targetProps.map(c => <option key={c.id} value={c.id}>{c.name}{c.property ? ` — ${c.property}` : ''}</option>)}
+                        </optgroup>}
+                        {dead.length > 0 && <optgroup label="── Dead Contacts ──">
+                          {dead.map(c => <option key={c.id} value={c.id}>{c.name}{c.property ? ` — ${c.property}` : ''}</option>)}
+                        </optgroup>}
+                      </>
                     );
-                  })}
+                  })()}
                 </select>
 
                 <textarea value={followUpNotes} onChange={e => setFollowUpNotes(e.target.value)}
@@ -634,10 +732,67 @@ export default function DayView({
                   style={{ width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 12, resize: 'vertical',
                   borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
 
+                {/* Next follow-up schedule (mandatory) */}
+                {followUpContactId && (() => {
+                  const selContact = (contactList || []).find(c => c.id === followUpContactId);
+                  const isDead = selContact?.pipeline_status === 'dead';
+                  const isTargetProp = selContact?.contact_group === 'target' && selContact?.pipeline_status !== 'dead';
+                  const intervals = isDead
+                    ? [{ value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }, { value: '6_months', label: '6 Months' }, { value: 'never', label: 'Never' }]
+                    : [{ value: '2_days', label: '2 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }];
+                  return (
+                    <>
+                      <div style={{ fontSize: 12, color: '#48c78e', fontWeight: 600, marginBottom: 6 }}>Next Follow-Up *</div>
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+                        {intervals.map(opt => (
+                          <button key={opt.value} onClick={() => setFollowUpInterval(opt.value)}
+                            style={{
+                              padding: '7px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                              fontFamily: "'DM Sans', sans-serif", border: 'none',
+                              background: followUpInterval === opt.value ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.04)',
+                              color: followUpInterval === opt.value ? '#48c78e' : '#888',
+                              outline: followUpInterval === opt.value ? '1px solid rgba(72,199,142,0.3)' : '1px solid rgba(255,255,255,0.06)',
+                              fontWeight: followUpInterval === opt.value ? 600 : 400,
+                            }}>
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Reclassify option for target properties */}
+                      {isTargetProp && (
+                        <>
+                          <div style={{ fontSize: 12, color: '#c9a0ff', fontWeight: 600, marginBottom: 6 }}>Update Status</div>
+                          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+                            {[
+                              { value: 'keep', label: 'Still Active', color: '#888' },
+                              { value: 'under_contract', label: 'Under Contract', color: '#f0a500' },
+                              { value: 'closed', label: 'Deal Closed', color: '#48c78e' },
+                              { value: 'dead', label: 'Gone Dead', color: '#e94560' },
+                            ].map(opt => (
+                              <button key={opt.value} onClick={() => setFollowUpReclassify(opt.value)}
+                                style={{
+                                  padding: '7px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                                  fontFamily: "'DM Sans', sans-serif", border: 'none',
+                                  background: followUpReclassify === opt.value ? `${opt.color}15` : 'rgba(255,255,255,0.04)',
+                                  color: followUpReclassify === opt.value ? opt.color : '#888',
+                                  outline: followUpReclassify === opt.value ? `1px solid ${opt.color}40` : '1px solid rgba(255,255,255,0.06)',
+                                  fontWeight: followUpReclassify === opt.value ? 600 : 400,
+                                }}>
+                                {opt.label}
+                              </button>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </>
+                  );
+                })()}
+
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button className="btn-primary" onClick={handleAddFollowUp}
-                    disabled={!followUpContactId || !followUpNotes.trim() || followUpSaving}
-                    style={{ padding: '10px 20px', fontSize: 13, opacity: followUpContactId && followUpNotes.trim() ? 1 : 0.4 }}>
+                    disabled={!followUpContactId || !followUpNotes.trim() || !followUpInterval || followUpSaving}
+                    style={{ padding: '10px 20px', fontSize: 13, opacity: followUpContactId && followUpNotes.trim() && followUpInterval ? 1 : 0.4 }}>
                     {followUpSaving ? 'Saving...' : 'Log Follow-Up'}
                   </button>
                   <button className="btn-secondary" onClick={() => setShowFollowUpForm(false)}

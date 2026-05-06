@@ -1348,7 +1348,7 @@ export function useAppState() {
     return Promise.resolve(storage.getContacts(id));
   }, [user]);
 
-  const addFollowUp = useCallback(async (followUpData) => {
+  const addFollowUp = useCallback(async (followUpData, contactUpdates) => {
     if (!user) return { error: 'Not logged in.' };
     const followUp = {
       id: `followup_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
@@ -1357,6 +1357,9 @@ export function useAppState() {
     };
     const saved = await Promise.resolve(storage.addFollowUp(followUp));
     if (!saved) return { error: 'Failed to save follow-up.' };
+    if (contactUpdates && followUpData.contact_id) {
+      await Promise.resolve(storage.updateContact(followUpData.contact_id, contactUpdates));
+    }
     return { success: true, followUp: saved };
   }, [user]);
 
