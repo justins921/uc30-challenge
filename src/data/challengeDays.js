@@ -12,6 +12,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null, // Chandler: Add video URL
     transcript: null, // Chandler: Add transcript
     downloads: [], // Chandler: Add downloadable resources
+    quiz: null, // Optional: quiz scenarios for this day
   },
   {
     day: 2,
@@ -22,6 +23,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 3,
@@ -32,6 +34,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 4,
@@ -42,6 +45,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 5,
@@ -52,6 +56,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 6,
@@ -62,6 +67,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 7,
@@ -72,6 +78,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 8,
@@ -82,6 +89,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 9,
@@ -92,6 +100,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 10,
@@ -102,6 +111,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 11,
@@ -112,6 +122,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 12,
@@ -122,6 +133,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 13,
@@ -132,6 +144,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 14,
@@ -142,6 +155,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 15,
@@ -152,6 +166,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 16,
@@ -162,6 +177,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 17,
@@ -172,6 +188,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 18,
@@ -182,6 +199,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 19,
@@ -192,6 +210,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 20,
@@ -202,6 +221,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 21,
@@ -212,6 +232,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 22,
@@ -222,6 +243,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 23,
@@ -232,6 +254,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 24,
@@ -242,6 +265,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 25,
@@ -252,6 +276,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 26,
@@ -262,6 +287,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 27,
@@ -272,6 +298,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 28,
@@ -282,6 +309,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 29,
@@ -292,6 +320,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
   {
     day: 30,
@@ -302,6 +331,7 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
+    quiz: null,
   },
 ];
 
@@ -338,8 +368,8 @@ export function getDayContent(dayNum, overrides = {}) {
   return {
     ...defaults,
     ...dayOverride,
-    // Merge downloads: use override if present, else default
     downloads: dayOverride.downloads !== undefined ? dayOverride.downloads : (defaults.downloads || []),
+    quiz: dayOverride.quiz !== undefined ? dayOverride.quiz : (defaults.quiz || null),
   };
 }
 

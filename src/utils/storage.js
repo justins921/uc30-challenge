@@ -238,6 +238,13 @@ const supabaseStorage = {
   },
   async setSkoolLink(link) { await this._setSetting('skool_link', link); },
 
+  async getPracticeDaySettings() {
+    const val = await this._getSetting('practice_day_settings');
+    if (val) { try { localStorage.setItem('uc30_practice_day_settings', JSON.stringify(val)); } catch {} }
+    return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_practice_day_settings')) || {}; } catch { return {}; } })();
+  },
+  async setPracticeDaySettings(settings) { await this._setSetting('practice_day_settings', settings); },
+
   // ── CRM: Contacts ────────────────────────────────────────────
   async addContact(contact) {
     const { data, error } = await supabase
@@ -417,6 +424,49 @@ const supabaseStorage = {
     return data || [];
   },
 
+  // ── Quiz Attempts ──────────────────────────────────────────────
+  async addQuizAttempt(attempt) {
+    const row = {
+      id: attempt.id,
+      participant_id: attempt.participantId,
+      day_number: attempt.dayNumber,
+      scenario_id: attempt.scenarioId,
+      attempt_number: attempt.attemptNumber,
+      answers: attempt.answers,
+      correct: attempt.correct,
+    };
+    const { data, error } = await supabase
+      .from('quiz_attempts')
+      .insert(row)
+      .select()
+      .single();
+    if (error) { console.error('addQuizAttempt error:', error); return null; }
+    return data;
+  },
+
+  async getQuizAttempts(participantId, dayNumber) {
+    const { data, error } = await supabase
+      .from('quiz_attempts')
+      .select('*')
+      .eq('participant_id', participantId)
+      .eq('day_number', dayNumber)
+      .order('created_at', { ascending: true });
+    if (error) { console.error('getQuizAttempts error:', error); return []; }
+    return data || [];
+  },
+
+  async getQuizAttemptsByScenario(participantId, dayNumber, scenarioId) {
+    const { data, error } = await supabase
+      .from('quiz_attempts')
+      .select('*')
+      .eq('participant_id', participantId)
+      .eq('day_number', dayNumber)
+      .eq('scenario_id', scenarioId)
+      .order('created_at', { ascending: true });
+    if (error) { console.error('getQuizAttemptsByScenario error:', error); return []; }
+    return data || [];
+  },
+
   // ── Removal Log ─────────────────────────────────────────────────
   async addRemovalLog(entry) {
     const { data, error } = await supabase
@@ -491,6 +541,7 @@ function toDbRow(user) {
   if (user.profilePicture) row.profile_picture = user.profilePicture;
   if (user.socialHandles && Object.keys(user.socialHandles).length > 0) row.social_handles = user.socialHandles;
   if (user.gettingStartedCompleted) row.getting_started_completed = true;
+  if (user.getClear) row.get_clear = user.getClear;
   if (user.buyBox) row.buy_box = user.buyBox;
   if (user.commitmentDeclaredAt) row.commitment_declared_at = user.commitmentDeclaredAt;
   if (user.onboardingCompleted) row.onboarding_completed = true;
@@ -509,6 +560,8 @@ function toDbRow(user) {
   if (user.notificationPreferences) row.notification_preferences = user.notificationPreferences;
   if (user.activationCompleted) row.activation_completed = true;
   if (user.activationCompletedAt) row.activation_completed_at = user.activationCompletedAt;
+  if (user.practiceDayCompleted) row.practice_day_completed = true;
+  if (user.practiceDayCompletedAt) row.practice_day_completed_at = user.practiceDayCompletedAt;
   // Guarantee tracking
   if (user.cohortAttempt != null) row.cohort_attempt = user.cohortAttempt;
   if (user.refundEligible !== undefined) row.refund_eligible = user.refundEligible;
@@ -541,6 +594,7 @@ function toDbUpdateRow(updates) {
   if (updates.socialHandles !== undefined) row.social_handles = updates.socialHandles;
   if (updates.gettingStartedCompleted !== undefined) row.getting_started_completed = updates.gettingStartedCompleted;
   if (updates.ucPoints !== undefined) row.uc_points = updates.ucPoints;
+  if (updates.getClear !== undefined) row.get_clear = updates.getClear;
   if (updates.buyBox !== undefined) row.buy_box = updates.buyBox;
   if (updates.commitmentDeclaredAt !== undefined) row.commitment_declared_at = updates.commitmentDeclaredAt;
   if (updates.onboardingCompleted !== undefined) row.onboarding_completed = updates.onboardingCompleted;
@@ -559,6 +613,8 @@ function toDbUpdateRow(updates) {
   if (updates.notificationPreferences !== undefined) row.notification_preferences = updates.notificationPreferences;
   if (updates.activationCompleted !== undefined) row.activation_completed = updates.activationCompleted;
   if (updates.activationCompletedAt !== undefined) row.activation_completed_at = updates.activationCompletedAt;
+  if (updates.practiceDayCompleted !== undefined) row.practice_day_completed = updates.practiceDayCompleted;
+  if (updates.practiceDayCompletedAt !== undefined) row.practice_day_completed_at = updates.practiceDayCompletedAt;
   // Guarantee tracking
   if (updates.cohortAttempt !== undefined) row.cohort_attempt = updates.cohortAttempt;
   if (updates.refundEligible !== undefined) row.refund_eligible = updates.refundEligible;
@@ -599,6 +655,7 @@ function fromDbRow(row) {
     profilePicture: row.profile_picture || null,
     socialHandles: row.social_handles || {},
     gettingStartedCompleted: row.getting_started_completed || false,
+    getClear: row.get_clear || null,
     buyBox: row.buy_box || null,
     commitmentDeclaredAt: row.commitment_declared_at || null,
     onboardingCompleted: row.onboarding_completed || false,
@@ -617,6 +674,8 @@ function fromDbRow(row) {
     notificationPreferences: row.notification_preferences || null,
     activationCompleted: row.activation_completed || false,
     activationCompletedAt: row.activation_completed_at || null,
+    practiceDayCompleted: row.practice_day_completed || false,
+    practiceDayCompletedAt: row.practice_day_completed_at || null,
     // Guarantee tracking
     cohortAttempt: row.cohort_attempt || 1,
     refundEligible: row.refund_eligible !== false,
@@ -743,6 +802,12 @@ const localStorageFallback = {
   setSkoolLink(link) {
     try { localStorage.setItem('uc30_skool_link', JSON.stringify(link)); } catch {}
   },
+  getPracticeDaySettings() {
+    try { return JSON.parse(localStorage.getItem('uc30_practice_day_settings')) || {}; } catch { return {}; }
+  },
+  setPracticeDaySettings(settings) {
+    try { localStorage.setItem('uc30_practice_day_settings', JSON.stringify(settings)); } catch {}
+  },
 
   // ── CRM: Contacts (localStorage fallback) ─────────────────────
   addContact(contact) {
@@ -863,6 +928,43 @@ const localStorageFallback = {
   getAllDailySubmissions() {
     try { return JSON.parse(localStorage.getItem('uc30_daily_submissions') || '[]'); } catch { return []; }
   },
+
+  // ── Quiz Attempts (localStorage fallback) ───────────────────────
+  addQuizAttempt(attempt) {
+    try {
+      const attempts = JSON.parse(localStorage.getItem('uc30_quiz_attempts') || '[]');
+      const record = {
+        id: attempt.id,
+        participant_id: attempt.participantId,
+        day_number: attempt.dayNumber,
+        scenario_id: attempt.scenarioId,
+        attempt_number: attempt.attemptNumber,
+        answers: attempt.answers,
+        correct: attempt.correct,
+        created_at: new Date().toISOString(),
+      };
+      attempts.push(record);
+      localStorage.setItem('uc30_quiz_attempts', JSON.stringify(attempts));
+      return record;
+    } catch { return null; }
+  },
+  getQuizAttempts(participantId, dayNumber) {
+    try {
+      const attempts = JSON.parse(localStorage.getItem('uc30_quiz_attempts') || '[]');
+      return attempts
+        .filter(a => a.participant_id === participantId && a.day_number === dayNumber)
+        .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    } catch { return []; }
+  },
+  getQuizAttemptsByScenario(participantId, dayNumber, scenarioId) {
+    try {
+      const attempts = JSON.parse(localStorage.getItem('uc30_quiz_attempts') || '[]');
+      return attempts
+        .filter(a => a.participant_id === participantId && a.day_number === dayNumber && a.scenario_id === scenarioId)
+        .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    } catch { return []; }
+  },
+
   addRemovalLog(entry) {
     try {
       const log = JSON.parse(localStorage.getItem('uc30_removal_log') || '[]');
@@ -935,7 +1037,31 @@ export function createNewUser(firstName, lastName, email, authId) {
     profilePicture: null,
     socialHandles: {},
     gettingStartedCompleted: false,
-    buyBox: null,
+    getClear: null,
+    buyBox: {
+      markets: [],
+      zipCodes: [],
+      propertyTypes: [],
+      yearBuiltMin: null,
+      yearBuiltMax: null,
+      bedroomsMin: null,
+      bedroomsMax: null,
+      bathroomsMin: null,
+      bathroomsMax: null,
+      priceMin: null,
+      priceMax: null,
+      downPayment: null,
+      strategies: [],
+      conditionTolerance: null,
+      financingTypes: [],
+      returnRequirements: {
+        minCashOnCash: null,
+        minCapRate: null,
+        minCashFlowPerUnit: null,
+        minIRR: null,
+      },
+      additionalNotes: '',
+    },
     commitmentDeclaredAt: null,
     onboardingCompleted: false,
     communityBanned: false,
@@ -953,6 +1079,8 @@ export function createNewUser(firstName, lastName, email, authId) {
     notificationPreferences: null,
     activationCompleted: false,
     activationCompletedAt: null,
+    practiceDayCompleted: false,
+    practiceDayCompletedAt: null,
     // Guarantee tracking
     cohortAttempt: 1,
     refundEligible: true,

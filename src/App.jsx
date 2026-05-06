@@ -65,6 +65,8 @@ export default function App() {
     completeOnboarding,
     skoolLink,
     setSkoolLink,
+    practiceDaySettings,
+    setPracticeDaySettings,
     dailyMinimumsOverrides,
     setDailyMinimums,
     addContact,
@@ -77,6 +79,9 @@ export default function App() {
     getUploadUrl,
     getContactsForParticipant,
     navigate,
+    // Quiz system
+    getQuizAttempts,
+    addQuizAttempt,
     // Compliance system
     complianceSettings,
     removalReason,
@@ -452,6 +457,8 @@ export default function App() {
         onSetDailyMinimums={setDailyMinimums}
         skoolLink={skoolLink}
         onSetSkoolLink={setSkoolLink}
+        practiceDaySettings={practiceDaySettings}
+        onSetPracticeDaySettings={setPracticeDaySettings}
         getContactsForParticipant={getContactsForParticipant}
         getUploads={getUploads}
         getUploadUrl={getUploadUrl}
@@ -493,6 +500,8 @@ export default function App() {
       participants={participants}
       dailyMinimumsOverrides={dailyMinimumsOverrides}
       skoolLink={skoolLink}
+      practiceDaySettings={practiceDaySettings}
+      onCompletePracticeDay={completeActivation}
       onAddContact={handleAddContact}
       onAddFollowUp={addFollowUp}
       onUploadFile={uploadFile}
@@ -503,6 +512,8 @@ export default function App() {
       contacts={userContacts}
       complianceSettings={complianceSettings}
       getDailySubmission={getDailySubmission}
+      getQuizAttempts={getQuizAttempts}
+      addQuizAttempt={addQuizAttempt}
     />
   );
 }

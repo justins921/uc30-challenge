@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const TOTAL_STEPS = 9;
+const TOTAL_STEPS = 10;
 
 export default function ActivationPhase({ user, onComplete }) {
   const [step, setStep] = useState(1);
@@ -63,13 +63,14 @@ export default function ActivationPhase({ user, onComplete }) {
         <div key={stepKey} className="fade-up" style={{ width: '100%', maxWidth: 560 }}>
           {step === 1 && <WelcomeStep firstName={user?.firstName} onBegin={goNext} />}
           {step === 2 && <MarketResearchStep onNext={goNext} onBack={goBack} onSave={onComplete} />}
-          {step === 3 && <BuyBoxStep onNext={goNext} onBack={goBack} onSave={onComplete} existingBuyBox={user?.buyBox} />}
-          {step === 4 && <CapitalConfirmationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingCapital={user?.capitalConfirmation} />}
-          {step === 5 && <OfferCommitmentStep onNext={goNext} onBack={goBack} onSave={onComplete} existingCommitment={user?.offerCommitment} />}
-          {step === 6 && <StakesDeclarationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingStakes={user?.stakesDeclaration} />}
-          {step === 7 && <TheirWhyStep onNext={goNext} onBack={goBack} onSave={onComplete} existingWhy={user?.theirWhy} />}
-          {step === 8 && <NotificationPrefsStep onNext={goNext} onBack={goBack} onSave={onComplete} existingPrefs={user?.notificationPreferences} />}
-          {step === 9 && <CommitmentStep user={user} onBack={goBack} onSave={onComplete} />}
+          {step === 3 && <GetClearStep onNext={goNext} onBack={goBack} onSave={onComplete} existing={user?.getClear} />}
+          {step === 4 && <BuyBoxStep onNext={goNext} onBack={goBack} onSave={onComplete} existingBuyBox={user?.buyBox} />}
+          {step === 5 && <CapitalConfirmationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingCapital={user?.capitalConfirmation} />}
+          {step === 6 && <OfferCommitmentStep onNext={goNext} onBack={goBack} onSave={onComplete} existingCommitment={user?.offerCommitment} />}
+          {step === 7 && <StakesDeclarationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingStakes={user?.stakesDeclaration} />}
+          {step === 8 && <TheirWhyStep onNext={goNext} onBack={goBack} onSave={onComplete} existingWhy={user?.theirWhy} />}
+          {step === 9 && <NotificationPrefsStep onNext={goNext} onBack={goBack} onSave={onComplete} existingPrefs={user?.notificationPreferences} />}
+          {step === 10 && <CommitmentStep user={user} onBack={goBack} onSave={onComplete} />}
         </div>
       </div>
     </div>
@@ -253,9 +254,316 @@ function MarketResearchStep({ onNext, onBack, onSave }) {
   );
 }
 
-// ── Step 3: Buy Box Setup ─────────────────────────────────
+// ── Step 3: Get Clear ─────────────────────────────────────
+const KEY_INDICATORS = ['Cash Flow', 'Appreciation', 'Equity', 'Tax Benefits', 'All of the Above'];
+const FINANCING_OPTIONS = ['DSCR', 'Seller Finance', 'Conventional', 'Hard Money', 'Cash', 'Other'];
+
+function GetClearStep({ onNext, onBack, onSave, existing }) {
+  const gc = existing || {};
+  const fp = gc.financialPlan || {};
+  const [destination, setDestination] = useState(gc.destination || '');
+  const [keyIndicator, setKeyIndicator] = useState(gc.keyIndicator || '');
+  const [whereAmINow, setWhereAmINow] = useState(gc.whereAmINow || '');
+  const [whereIWantToBe, setWhereIWantToBe] = useState(gc.whereIWantToBe || '');
+  const [gap, setGap] = useState(gc.gap || '');
+  const [timeFrameValue, setTimeFrameValue] = useState(gc.timeFrame?.value || '');
+  const [timeFrameUnit, setTimeFrameUnit] = useState(gc.timeFrame?.unit || 'years');
+
+  const [yearlyCashFlow, setYearlyCashFlow] = useState(fp.yearlyCashFlow || '');
+  const [yearlyInvestment, setYearlyInvestment] = useState(fp.yearlyInvestment || '');
+  const [returnPercent, setReturnPercent] = useState(fp.returnPercent || '');
+  const [timePeriod, setTimePeriod] = useState(fp.timePeriod || '');
+  const [propertiesPerYear, setPropertiesPerYear] = useState(fp.propertiesPerYear || '');
+  const [propertyType, setPropertyType] = useState(fp.propertyType || 'properties');
+  const [propertyValue, setPropertyValue] = useState(fp.propertyValue || '');
+  const [downPaymentPercent, setDownPaymentPercent] = useState(fp.downPaymentPercent || '');
+  const [downPaymentSource, setDownPaymentSource] = useState(fp.downPaymentSource || '');
+  const [financingPercent, setFinancingPercent] = useState(fp.financingPercent || '');
+  const [financingType, setFinancingType] = useState(fp.financingType || '');
+  const [autoCalced, setAutoCalced] = useState({});
+
+  const [whyImportant, setWhyImportant] = useState(gc.whyImportant || '');
+  const [saving, setSaving] = useState(false);
+
+  // Auto-calculations
+  const numOrNull = (v) => { const n = parseFloat(v); return isNaN(n) ? null : n; };
+
+  const doAutoCalc = () => {
+    const calced = {};
+    const cf = numOrNull(yearlyCashFlow);
+    const ret = numOrNull(returnPercent);
+    const inv = numOrNull(yearlyInvestment);
+    const pv = numOrNull(propertyValue);
+    const dp = numOrNull(downPaymentPercent);
+    const ppyr = numOrNull(propertiesPerYear);
+
+    if (cf && ret && ret > 0 && !yearlyInvestment) {
+      const calc = Math.round(cf / (ret / 100));
+      setYearlyInvestment(calc);
+      calced.yearlyInvestment = true;
+    }
+    if (dp && !financingPercent) {
+      setFinancingPercent(String(100 - parseFloat(dp)));
+      calced.financingPercent = true;
+    } else if (numOrNull(financingPercent) && !downPaymentPercent) {
+      setDownPaymentPercent(String(100 - parseFloat(financingPercent)));
+      calced.downPaymentPercent = true;
+    }
+    if (pv && ppyr && !yearlyInvestment && !calced.yearlyInvestment) {
+      setYearlyInvestment(Math.round(pv * ppyr));
+      calced.yearlyInvestment = true;
+    }
+    setAutoCalced(calced);
+  };
+
+  const canProceed = destination.trim() && whyImportant.trim();
+
+  const handleNext = async () => {
+    if (!canProceed) return;
+    setSaving(true);
+    await onSave({
+      getClear: {
+        destination: destination.trim(),
+        keyIndicator: keyIndicator || null,
+        whereAmINow: whereAmINow.trim() || null,
+        whereIWantToBe: whereIWantToBe.trim() || null,
+        gap: gap.trim() || null,
+        timeFrame: timeFrameValue ? { value: parseInt(timeFrameValue), unit: timeFrameUnit } : null,
+        financialPlan: {
+          yearlyCashFlow: numOrNull(yearlyCashFlow),
+          yearlyInvestment: numOrNull(yearlyInvestment),
+          returnPercent: numOrNull(returnPercent),
+          timePeriod: numOrNull(timePeriod),
+          propertiesPerYear: numOrNull(propertiesPerYear),
+          propertyType,
+          propertyValue: numOrNull(propertyValue),
+          downPaymentPercent: numOrNull(downPaymentPercent),
+          downPaymentSource: downPaymentSource.trim() || null,
+          financingPercent: numOrNull(financingPercent),
+          financingType: financingType || null,
+        },
+        whyImportant: whyImportant.trim(),
+      },
+    });
+    setSaving(false);
+    onNext();
+  };
+
+  const inputStyle = {
+    fontSize: 14, padding: '10px 14px', borderRadius: 8,
+    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+    color: '#eee', fontFamily: "'DM Sans', sans-serif", width: '100%',
+  };
+  const inlineInput = (value, setter, placeholder, opts = {}) => {
+    const isCalced = autoCalced[opts.calcKey];
+    return (
+      <input
+        value={value}
+        onChange={e => { setter(opts.parse ? opts.parse(e.target.value) : e.target.value); if (isCalced) setAutoCalced(prev => ({ ...prev, [opts.calcKey]: false })); }}
+        onBlur={doAutoCalc}
+        placeholder={placeholder}
+        inputMode={opts.inputMode || 'text'}
+        style={{
+          display: 'inline-block', width: opts.width || 100, fontSize: 16, fontWeight: 600,
+          padding: '6px 10px', borderRadius: 6, textAlign: 'center',
+          background: isCalced ? 'rgba(72,199,142,0.08)' : 'rgba(255,255,255,0.06)',
+          border: `1px solid ${isCalced ? 'rgba(72,199,142,0.25)' : 'rgba(255,255,255,0.12)'}`,
+          color: isCalced ? '#48c78e' : '#eee', fontFamily: "'DM Sans', sans-serif",
+          verticalAlign: 'middle',
+        }}
+      />
+    );
+  };
+  const numParse = (v) => v.replace(/[^\d.]/g, '');
+
+  const sectionGap = { marginBottom: 36 };
+  const labelStyle = { fontSize: 13, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 8 };
+  const chipStyle = (selected) => ({
+    padding: '9px 16px', borderRadius: 8, fontSize: 13, fontWeight: selected ? 600 : 400,
+    cursor: 'pointer', userSelect: 'none', transition: 'all 0.15s',
+    fontFamily: "'DM Sans', sans-serif", border: 'none',
+    background: selected ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.04)',
+    color: selected ? '#e94560' : '#888',
+    outline: selected ? '1px solid rgba(233,69,96,0.3)' : '1px solid rgba(255,255,255,0.08)',
+  });
+
+  return (
+    <div>
+      <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 6 }}>Get Clear</h1>
+      <p style={{ color: '#888', fontSize: 15, lineHeight: 1.7, marginBottom: 36 }}>
+        Begin with the end in mind.
+      </p>
+
+      {/* ── Section 1: Define Your Destination ── */}
+      <div style={sectionGap}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+          <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>🎯</div>
+          <h2 style={{ fontSize: 18, fontWeight: 700 }}>Define Your Destination</h2>
+        </div>
+
+        <label style={labelStyle}>
+          What do you want real estate to do for you? <span style={{ color: '#e94560' }}>*</span>
+        </label>
+        <textarea
+          value={destination}
+          onChange={e => setDestination(e.target.value)}
+          rows={4}
+          placeholder="Financial freedom, replace my W-2 income, build generational wealth..."
+          style={{ ...inputStyle, resize: 'vertical' }}
+        />
+      </div>
+
+      {/* ── Section 2: Quantify The Goal ── */}
+      <div style={sectionGap}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+          <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(240,165,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📊</div>
+          <h2 style={{ fontSize: 18, fontWeight: 700 }}>Quantify The Goal</h2>
+        </div>
+
+        <div style={{ marginBottom: 20 }}>
+          <label style={labelStyle}>What is the key indicator?</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {KEY_INDICATORS.map(ki => (
+              <button key={ki} onClick={() => setKeyIndicator(keyIndicator === ki ? '' : ki)}
+                style={chipStyle(keyIndicator === ki)}>
+                {ki}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Where am I now?</label>
+          <input value={whereAmINow} onChange={e => setWhereAmINow(e.target.value)}
+            placeholder="e.g. $0 in real estate, $50k saved"
+            style={inputStyle} />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Where do I want to be?</label>
+          <input value={whereIWantToBe} onChange={e => setWhereIWantToBe(e.target.value)}
+            placeholder="e.g. $5,000/mo in passive cash flow"
+            style={inputStyle} />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>What is the gap?</label>
+          <input value={gap} onChange={e => setGap(e.target.value)}
+            placeholder="e.g. $5,000/mo"
+            style={inputStyle} />
+        </div>
+
+        <div style={{ marginBottom: 24 }}>
+          <label style={labelStyle}>What is the time frame to close the gap?</label>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            <input value={timeFrameValue} onChange={e => setTimeFrameValue(e.target.value.replace(/\D/g, ''))}
+              placeholder="5" inputMode="numeric"
+              style={{ ...inputStyle, width: 80, textAlign: 'center' }} />
+            <select value={timeFrameUnit} onChange={e => setTimeFrameUnit(e.target.value)}
+              style={{ fontSize: 14, padding: '10px 14px', borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#ccc' }}>
+              <option value="years">years</option>
+              <option value="months">months</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Mad-libs financial plan */}
+        <div style={{
+          padding: '24px 20px', borderRadius: 14,
+          background: 'linear-gradient(135deg, rgba(233,69,96,0.04), rgba(240,165,0,0.04))',
+          border: '1px solid rgba(255,255,255,0.06)',
+          marginBottom: 8,
+        }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: '#f0a500', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 16 }}>
+            My Financial Plan
+          </div>
+
+          <p style={{ fontSize: 15, color: '#ccc', lineHeight: 2.6, margin: 0 }}>
+            I will have ${inlineInput(yearlyCashFlow, setYearlyCashFlow, '60,000', { inputMode: 'numeric', parse: numParse, calcKey: 'yearlyCashFlow' })} in yearly cash flow.
+            This will require ${inlineInput(yearlyInvestment, setYearlyInvestment, '150,000', { inputMode: 'numeric', parse: numParse, calcKey: 'yearlyInvestment' })} to be invested yearly
+            at a {inlineInput(returnPercent, setReturnPercent, '8', { width: 60, inputMode: 'decimal', parse: numParse, calcKey: 'returnPercent' })}% return
+            over a {inlineInput(timePeriod, setTimePeriod, '5', { width: 50, inputMode: 'numeric', parse: numParse, calcKey: 'timePeriod' })} year time period.
+          </p>
+
+          <p style={{ fontSize: 15, color: '#ccc', lineHeight: 2.6, margin: '16px 0 0' }}>
+            I will do this by purchasing {inlineInput(propertiesPerYear, setPropertiesPerYear, '3', { width: 50, inputMode: 'numeric', parse: numParse, calcKey: 'propertiesPerYear' })}{' '}
+            <select value={propertyType} onChange={e => setPropertyType(e.target.value)}
+              style={{ fontSize: 14, fontWeight: 600, padding: '6px 10px', borderRadius: 6, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#eee', verticalAlign: 'middle' }}>
+              <option value="properties">properties</option>
+              <option value="units">units</option>
+            </select>{' '}
+            per year with a value of ${inlineInput(propertyValue, setPropertyValue, '200,000', { inputMode: 'numeric', parse: numParse, calcKey: 'propertyValue' })} using{' '}
+            {inlineInput(downPaymentPercent, setDownPaymentPercent, '20', { width: 50, inputMode: 'decimal', parse: numParse, calcKey: 'downPaymentPercent' })}% as a down payment
+            from {inlineInput(downPaymentSource, setDownPaymentSource, 'personal savings', { width: 140, calcKey: 'downPaymentSource' })} and financing{' '}
+            {inlineInput(financingPercent, setFinancingPercent, '80', { width: 50, inputMode: 'decimal', parse: numParse, calcKey: 'financingPercent' })}% using{' '}
+            <select value={financingType} onChange={e => setFinancingType(e.target.value)}
+              style={{ fontSize: 14, fontWeight: 600, padding: '6px 10px', borderRadius: 6, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#eee', verticalAlign: 'middle' }}>
+              <option value="">Select...</option>
+              {FINANCING_OPTIONS.map(f => <option key={f} value={f}>{f}</option>)}
+            </select>.
+          </p>
+
+          {Object.values(autoCalced).some(Boolean) && (
+            <p style={{ fontSize: 11, color: '#48c78e', marginTop: 12, marginBottom: 0 }}>
+              Green values were auto-calculated. You can override them.
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '12px 0 36px' }} />
+
+      {/* ── Section 3: Why Is This Goal Important ── */}
+      <div style={sectionGap}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+          <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(72,199,142,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>💡</div>
+          <h2 style={{ fontSize: 18, fontWeight: 700 }}>Why Is This Goal Important To Me?</h2>
+        </div>
+
+        <label style={labelStyle}>
+          Why does this financial destination matter to you? <span style={{ color: '#e94560' }}>*</span>
+        </label>
+        <textarea
+          value={whyImportant}
+          onChange={e => setWhyImportant(e.target.value)}
+          rows={4}
+          placeholder="Because I want my kids to see that there's a better way..."
+          style={{ ...inputStyle, resize: 'vertical' }}
+        />
+      </div>
+
+      {/* Navigation */}
+      <div style={{ display: 'flex', gap: 12 }}>
+        <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
+          Back
+        </button>
+        <button
+          className="btn-primary"
+          style={{
+            flex: 1, padding: '14px 24px',
+            opacity: canProceed ? 1 : 0.4,
+            pointerEvents: canProceed ? 'auto' : 'none',
+          }}
+          onClick={handleNext}
+          disabled={!canProceed || saving}
+        >
+          {saving ? 'Saving...' : 'Continue'}
+        </button>
+      </div>
+
+      {!canProceed && (
+        <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 10 }}>
+          {!destination.trim() ? 'Define your destination' : 'Explain why this goal matters'} to continue.
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ── Step 4: Buy Box Setup ─────────────────────────────────
 const PROPERTY_TYPES = ['SFR', 'Duplex', 'Triplex/4-Plex', 'Small Multifamily (5-20 units)', 'Apartments (20+)', 'Commercial', 'Storage', 'Land'];
-const STRATEGIES = ['Buy & Hold', 'BRRRR', 'Flip', 'Wholesale', 'Seller Finance', 'Short-Term Rental', 'Section 8'];
+const STRATEGIES = ['Buy & Hold', 'BRRRR', 'Flip', 'Wholesale', 'Seller Finance', 'Short-Term Rental', 'Section 8', 'Subto/Wrap'];
 const CONDITIONS = ['Turnkey', 'Light Rehab', 'Heavy Rehab', 'Any'];
 const FINANCING_TYPES = ['Conventional', 'DSCR', 'Hard Money', 'Seller Finance', 'Cash', 'JV/Partnership', 'Other'];
 
@@ -271,15 +579,29 @@ function parseCurrency(str) {
 
 function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
   const bb = existingBuyBox || {};
+  const bbReturn = bb.returnRequirements || {};
   const [markets, setMarkets] = useState(bb.markets || []);
   const [marketInput, setMarketInput] = useState('');
+  const [zipCodes, setZipCodes] = useState(bb.zipCodes || []);
+  const [zipInput, setZipInput] = useState('');
   const [propertyTypes, setPropertyTypes] = useState(bb.propertyTypes || []);
+  const [yearBuiltMin, setYearBuiltMin] = useState(bb.yearBuiltMin || '');
+  const [yearBuiltMax, setYearBuiltMax] = useState(bb.yearBuiltMax || '');
+  const [bedroomsMin, setBedroomsMin] = useState(bb.bedroomsMin || '');
+  const [bedroomsMax, setBedroomsMax] = useState(bb.bedroomsMax || '');
+  const [bathroomsMin, setBathroomsMin] = useState(bb.bathroomsMin || '');
+  const [bathroomsMax, setBathroomsMax] = useState(bb.bathroomsMax || '');
+  const [conditionTolerance, setConditionTolerance] = useState(bb.conditionTolerance || '');
   const [priceMin, setPriceMin] = useState(bb.priceMin || '');
   const [priceMax, setPriceMax] = useState(bb.priceMax || '');
   const [downPayment, setDownPayment] = useState(bb.downPayment || '');
   const [strategies, setStrategies] = useState(bb.strategies || []);
-  const [conditionTolerance, setConditionTolerance] = useState(bb.conditionTolerance || '');
   const [financingTypes, setFinancingTypes] = useState(bb.financingTypes || []);
+  const [minCashOnCash, setMinCashOnCash] = useState(bbReturn.minCashOnCash || '');
+  const [minCapRate, setMinCapRate] = useState(bbReturn.minCapRate || '');
+  const [minCashFlowPerUnit, setMinCashFlowPerUnit] = useState(bbReturn.minCashFlowPerUnit || '');
+  const [minIRR, setMinIRR] = useState(bbReturn.minIRR || '');
+  const [additionalNotes, setAdditionalNotes] = useState(bb.additionalNotes || '');
   const [saving, setSaving] = useState(false);
 
   const addMarket = () => {
@@ -292,11 +614,28 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
 
   const removeMarket = (m) => setMarkets(markets.filter(x => x !== m));
 
+  const addZip = () => {
+    const trimmed = zipInput.trim();
+    if (trimmed && !zipCodes.includes(trimmed)) {
+      setZipCodes([...zipCodes, trimmed]);
+      setZipInput('');
+    }
+  };
+
+  const removeZip = (z) => setZipCodes(zipCodes.filter(x => x !== z));
+
   const toggleChip = (list, setList, val) => {
     setList(list.includes(val) ? list.filter(x => x !== val) : [...list, val]);
   };
 
-  const canProceed = markets.length > 0 && propertyTypes.length > 0;
+  const hasReturnReq = !!(
+    (minCashOnCash && parseFloat(minCashOnCash) > 0) ||
+    (minCapRate && parseFloat(minCapRate) > 0) ||
+    (minCashFlowPerUnit && parseFloat(minCashFlowPerUnit) > 0) ||
+    (minIRR && parseFloat(minIRR) > 0)
+  );
+
+  const canProceed = markets.length > 0 && propertyTypes.length > 0 && hasReturnReq;
 
   const handleNext = async () => {
     if (!canProceed) return;
@@ -304,13 +643,27 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
     await onSave({
       buyBox: {
         markets,
+        zipCodes,
         propertyTypes,
+        yearBuiltMin: yearBuiltMin ? parseInt(yearBuiltMin) : null,
+        yearBuiltMax: yearBuiltMax ? parseInt(yearBuiltMax) : null,
+        bedroomsMin: bedroomsMin ? parseInt(bedroomsMin) : null,
+        bedroomsMax: bedroomsMax ? parseInt(bedroomsMax) : null,
+        bathroomsMin: bathroomsMin ? parseInt(bathroomsMin) : null,
+        bathroomsMax: bathroomsMax ? parseInt(bathroomsMax) : null,
+        conditionTolerance: conditionTolerance || null,
         priceMin: priceMin || null,
         priceMax: priceMax || null,
         downPayment: downPayment || null,
         strategies,
-        conditionTolerance: conditionTolerance || null,
         financingTypes,
+        returnRequirements: {
+          minCashOnCash: minCashOnCash ? parseFloat(minCashOnCash) : null,
+          minCapRate: minCapRate ? parseFloat(minCapRate) : null,
+          minCashFlowPerUnit: minCashFlowPerUnit ? parseFloat(minCashFlowPerUnit) : null,
+          minIRR: minIRR ? parseFloat(minIRR) : null,
+        },
+        additionalNotes: additionalNotes.trim() || '',
       },
     });
     setSaving(false);
@@ -328,6 +681,24 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
 
   const sectionGap = { marginBottom: 28 };
   const labelStyle = { fontSize: 13, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 8 };
+  const inputStyle = {
+    width: '100%', fontSize: 14, padding: '10px 14px', borderRadius: 8,
+    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+    color: '#eee', fontFamily: "'DM Sans', sans-serif",
+  };
+  const tagChip = (text, onRemove, color = '233,69,96') => (
+    <span key={text} style={{
+      display: 'inline-flex', alignItems: 'center', gap: 6,
+      padding: '5px 10px 5px 12px', borderRadius: 6, fontSize: 13,
+      background: `rgba(${color}, 0.1)`, color: `rgb(${color})`, fontWeight: 500,
+    }}>
+      {text}
+      <button onClick={onRemove} style={{
+        background: 'none', border: 'none', color: `rgb(${color})`, cursor: 'pointer',
+        fontSize: 16, padding: 0, lineHeight: 1, fontFamily: "'DM Sans', sans-serif", opacity: 0.6,
+      }}>&times;</button>
+    </span>
+  );
 
   return (
     <div>
@@ -338,7 +709,7 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
         Set your investment criteria so you're ready to act on Day 1. Keep it focused — you can always refine later.
       </p>
 
-      {/* 1. Location */}
+      {/* 1. Target Market(s) */}
       <div style={sectionGap}>
         <label style={labelStyle}>
           Target Market(s) <span style={{ color: '#e94560' }}>*</span>
@@ -349,48 +720,45 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
             onChange={e => setMarketInput(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addMarket(); } }}
             placeholder="e.g. Phoenix, AZ"
-            style={{
-              flex: 1, fontSize: 14, padding: '10px 14px', borderRadius: 8,
-              background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-              color: '#eee', fontFamily: "'DM Sans', sans-serif",
-            }}
+            style={{ ...inputStyle, flex: 1, width: 'auto' }}
           />
-          <button
-            onClick={addMarket}
-            disabled={!marketInput.trim()}
-            style={{
-              padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
-              background: marketInput.trim() ? 'rgba(233,69,96,0.12)' : 'rgba(255,255,255,0.04)',
-              color: marketInput.trim() ? '#e94560' : '#555',
-              border: marketInput.trim() ? '1px solid rgba(233,69,96,0.25)' : '1px solid rgba(255,255,255,0.08)',
-              cursor: marketInput.trim() ? 'pointer' : 'default',
-              fontFamily: "'DM Sans', sans-serif",
-            }}
-          >
-            Add
-          </button>
+          <button onClick={addMarket} disabled={!marketInput.trim()} style={{
+            padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+            background: marketInput.trim() ? 'rgba(233,69,96,0.12)' : 'rgba(255,255,255,0.04)',
+            color: marketInput.trim() ? '#e94560' : '#555',
+            border: marketInput.trim() ? '1px solid rgba(233,69,96,0.25)' : '1px solid rgba(255,255,255,0.08)',
+            cursor: marketInput.trim() ? 'pointer' : 'default', fontFamily: "'DM Sans', sans-serif",
+          }}>Add</button>
         </div>
         {markets.length > 0 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
+            {markets.map(m => tagChip(m, () => removeMarket(m)))}
+          </div>
+        )}
+
+        <label style={{ ...labelStyle, marginTop: 6, fontSize: 12, color: '#777' }}>
+          Specific Zip Codes (optional)
+        </label>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+          <input
+            value={zipInput}
+            onChange={e => setZipInput(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addZip(); } }}
+            placeholder="e.g. 85001"
+            inputMode="numeric"
+            style={{ ...inputStyle, flex: 1, width: 'auto' }}
+          />
+          <button onClick={addZip} disabled={!zipInput.trim()} style={{
+            padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+            background: zipInput.trim() ? 'rgba(83,52,131,0.12)' : 'rgba(255,255,255,0.04)',
+            color: zipInput.trim() ? '#c9a0ff' : '#555',
+            border: zipInput.trim() ? '1px solid rgba(83,52,131,0.25)' : '1px solid rgba(255,255,255,0.08)',
+            cursor: zipInput.trim() ? 'pointer' : 'default', fontFamily: "'DM Sans', sans-serif",
+          }}>Add</button>
+        </div>
+        {zipCodes.length > 0 && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {markets.map(m => (
-              <span key={m} style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                padding: '5px 10px 5px 12px', borderRadius: 6, fontSize: 13,
-                background: 'rgba(233,69,96,0.1)', color: '#e94560', fontWeight: 500,
-              }}>
-                {m}
-                <button
-                  onClick={() => removeMarket(m)}
-                  style={{
-                    background: 'none', border: 'none', color: '#e94560', cursor: 'pointer',
-                    fontSize: 16, padding: 0, lineHeight: 1, fontFamily: "'DM Sans', sans-serif",
-                    opacity: 0.6,
-                  }}
-                >
-                  &times;
-                </button>
-              </span>
-            ))}
+            {zipCodes.map(z => tagChip(z, () => removeZip(z), '83,52,131'))}
           </div>
         )}
       </div>
@@ -400,7 +768,7 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
         <label style={labelStyle}>
           Property Type(s) <span style={{ color: '#e94560' }}>*</span>
         </label>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
           {PROPERTY_TYPES.map(pt => (
             <button key={pt} onClick={() => toggleChip(propertyTypes, setPropertyTypes, pt)}
               style={chipStyle(propertyTypes.includes(pt), '233,69,96')}>
@@ -408,69 +776,51 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
             </button>
           ))}
         </div>
-      </div>
 
-      {/* 3. Deal Size */}
-      <div style={sectionGap}>
-        <label style={labelStyle}>Purchase Price Range</label>
+        <label style={{ ...labelStyle, fontSize: 12, color: '#777' }}>Year Built Range (optional)</label>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
           <div>
-            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Min ($)</span>
-            <input
-              value={priceMin ? formatCurrency(priceMin) : ''}
-              onChange={e => setPriceMin(parseCurrency(e.target.value))}
-              placeholder="100,000"
-              inputMode="numeric"
-              style={{
-                width: '100%', fontSize: 14, padding: '10px 14px', borderRadius: 8,
-                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-                color: '#eee', fontFamily: "'DM Sans', sans-serif",
-              }}
-            />
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Min</span>
+            <input value={yearBuiltMin} onChange={e => setYearBuiltMin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+              placeholder="1980" inputMode="numeric" style={inputStyle} />
           </div>
           <div>
-            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Max ($)</span>
-            <input
-              value={priceMax ? formatCurrency(priceMax) : ''}
-              onChange={e => setPriceMax(parseCurrency(e.target.value))}
-              placeholder="300,000"
-              inputMode="numeric"
-              style={{
-                width: '100%', fontSize: 14, padding: '10px 14px', borderRadius: 8,
-                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-                color: '#eee', fontFamily: "'DM Sans', sans-serif",
-              }}
-            />
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Max</span>
+            <input value={yearBuiltMax} onChange={e => setYearBuiltMax(e.target.value.replace(/\D/g, '').slice(0, 4))}
+              placeholder="2020" inputMode="numeric" style={inputStyle} />
           </div>
         </div>
-        <label style={labelStyle}>Down Payment / Cash Available</label>
-        <input
-          value={downPayment ? formatCurrency(downPayment) : ''}
-          onChange={e => setDownPayment(parseCurrency(e.target.value))}
-          placeholder="50,000"
-          inputMode="numeric"
-          style={{
-            width: '100%', fontSize: 14, padding: '10px 14px', borderRadius: 8,
-            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-            color: '#eee', fontFamily: "'DM Sans', sans-serif",
-          }}
-        />
-      </div>
 
-      {/* 4. Strategy */}
-      <div style={sectionGap}>
-        <label style={labelStyle}>Investment Strategy</label>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {STRATEGIES.map(s => (
-            <button key={s} onClick={() => toggleChip(strategies, setStrategies, s)}
-              style={chipStyle(strategies.includes(s), '240,165,0')}>
-              {s}
-            </button>
-          ))}
+        <label style={{ ...labelStyle, fontSize: 12, color: '#777' }}>Bedrooms</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Min</span>
+            <input value={bedroomsMin} onChange={e => setBedroomsMin(e.target.value.replace(/\D/g, ''))}
+              placeholder="2" inputMode="numeric" style={inputStyle} />
+          </div>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Max</span>
+            <input value={bedroomsMax} onChange={e => setBedroomsMax(e.target.value.replace(/\D/g, ''))}
+              placeholder="4" inputMode="numeric" style={inputStyle} />
+          </div>
+        </div>
+
+        <label style={{ ...labelStyle, fontSize: 12, color: '#777' }}>Bathrooms</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Min</span>
+            <input value={bathroomsMin} onChange={e => setBathroomsMin(e.target.value.replace(/[^\d.]/g, ''))}
+              placeholder="1" inputMode="decimal" style={inputStyle} />
+          </div>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Max</span>
+            <input value={bathroomsMax} onChange={e => setBathroomsMax(e.target.value.replace(/[^\d.]/g, ''))}
+              placeholder="3" inputMode="decimal" style={inputStyle} />
+          </div>
         </div>
       </div>
 
-      {/* 5. Condition Tolerance */}
+      {/* 3. Condition Tolerance */}
       <div style={sectionGap}>
         <label style={labelStyle}>Condition Tolerance</label>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -478,6 +828,39 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
             <button key={c} onClick={() => setConditionTolerance(conditionTolerance === c ? '' : c)}
               style={chipStyle(conditionTolerance === c, '83,52,131')}>
               {c}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. Deal Size */}
+      <div style={sectionGap}>
+        <label style={labelStyle}>Purchase Price Range</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Min ($)</span>
+            <input value={priceMin ? formatCurrency(priceMin) : ''} onChange={e => setPriceMin(parseCurrency(e.target.value))}
+              placeholder="100,000" inputMode="numeric" style={inputStyle} />
+          </div>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Max ($)</span>
+            <input value={priceMax ? formatCurrency(priceMax) : ''} onChange={e => setPriceMax(parseCurrency(e.target.value))}
+              placeholder="300,000" inputMode="numeric" style={inputStyle} />
+          </div>
+        </div>
+        <label style={labelStyle}>Down Payment / Cash Available</label>
+        <input value={downPayment ? formatCurrency(downPayment) : ''} onChange={e => setDownPayment(parseCurrency(e.target.value))}
+          placeholder="50,000" inputMode="numeric" style={inputStyle} />
+      </div>
+
+      {/* 5. Investment Strategy */}
+      <div style={sectionGap}>
+        <label style={labelStyle}>Investment Strategy</label>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          {STRATEGIES.map(s => (
+            <button key={s} onClick={() => toggleChip(strategies, setStrategies, s)}
+              style={chipStyle(strategies.includes(s), '240,165,0')}>
+              {s}
             </button>
           ))}
         </div>
@@ -496,7 +879,72 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
         </div>
       </div>
 
-      {/* PDF download card */}
+      {/* 7. Return Requirements */}
+      <div style={sectionGap}>
+        <label style={labelStyle}>
+          Return Requirements <span style={{ color: '#e94560' }}>*</span>
+        </label>
+        <p style={{ fontSize: 12, color: hasReturnReq ? '#666' : '#f0a500', marginBottom: 14, marginTop: -2 }}>
+          Fill out at least one.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <span style={{ fontSize: 12, color: '#777', display: 'block', marginBottom: 4 }}>Minimum Cash-on-Cash Return</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input value={minCashOnCash} onChange={e => setMinCashOnCash(e.target.value.replace(/[^\d.]/g, ''))}
+                placeholder="8" inputMode="decimal" style={{ ...inputStyle, flex: 1 }} />
+              <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>%</span>
+            </div>
+          </div>
+          <div>
+            <span style={{ fontSize: 12, color: '#777', display: 'block', marginBottom: 4 }}>Minimum Cap Rate</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input value={minCapRate} onChange={e => setMinCapRate(e.target.value.replace(/[^\d.]/g, ''))}
+                placeholder="6" inputMode="decimal" style={{ ...inputStyle, flex: 1 }} />
+              <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>%</span>
+            </div>
+          </div>
+          <div>
+            <span style={{ fontSize: 12, color: '#777', display: 'block', marginBottom: 4 }}>Minimum Cash Flow Per Unit ($/mo)</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>$</span>
+              <input value={minCashFlowPerUnit} onChange={e => setMinCashFlowPerUnit(e.target.value.replace(/[^\d.]/g, ''))}
+                placeholder="200" inputMode="decimal" style={{ ...inputStyle, flex: 1 }} />
+              <span style={{ fontSize: 12, color: '#555' }}>/mo</span>
+            </div>
+          </div>
+          <div>
+            <span style={{ fontSize: 12, color: '#777', display: 'block', marginBottom: 4 }}>Minimum IRR</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input value={minIRR} onChange={e => setMinIRR(e.target.value.replace(/[^\d.]/g, ''))}
+                placeholder="15" inputMode="decimal" style={{ ...inputStyle, flex: 1 }} />
+              <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>%</span>
+            </div>
+          </div>
+        </div>
+        {!hasReturnReq && (
+          <p style={{ fontSize: 12, color: '#e94560', marginTop: 10, marginBottom: 0 }}>
+            Please fill out at least one return requirement.
+          </p>
+        )}
+      </div>
+
+      {/* 8. Additional Notes */}
+      <div style={sectionGap}>
+        <label style={labelStyle}>Additional Notes</label>
+        <p style={{ fontSize: 12, color: '#666', marginBottom: 10, marginTop: -2, lineHeight: 1.6 }}>
+          The more specific your buy box is, the more clear you will be when it's time to pull the trigger. Add any additional details to clarify the exact property you're looking for.
+        </p>
+        <textarea
+          value={additionalNotes}
+          onChange={e => setAdditionalNotes(e.target.value)}
+          rows={4}
+          placeholder="Looking for properties near good school districts, prefer corner lots, no HOA..."
+          style={{ ...inputStyle, resize: 'vertical' }}
+        />
+      </div>
+
+      {/* 9. PDF download card */}
       <a
         href="/buy-box-worksheet.html"
         target="_blank"
@@ -546,9 +994,9 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
         </button>
       </div>
 
-      {!canProceed && (markets.length === 0 || propertyTypes.length === 0) && (
+      {!canProceed && (
         <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 10 }}>
-          Add at least one market and select at least one property type to continue.
+          {markets.length === 0 ? 'Add at least one market' : propertyTypes.length === 0 ? 'Select at least one property type' : 'Fill out at least one return requirement'} to continue.
         </p>
       )}
     </div>
@@ -1255,6 +1703,7 @@ function CommitmentStep({ user, onBack, onSave }) {
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
 
+  const gc = user?.getClear || {};
   const bb = user?.buyBox || {};
   const cap = user?.capitalConfirmation;
   const notifPrefs = user?.notificationPreferences;
@@ -1316,7 +1765,7 @@ function CommitmentStep({ user, onBack, onSave }) {
   return (
     <div>
       <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>
-        You're Ready, Operator.
+        You're Ready, {user?.firstName || 'Operator'}.
       </h1>
       <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7, marginBottom: 28 }}>
         Review your setup below. If anything needs changing, use the Back button.
@@ -1327,6 +1776,8 @@ function CommitmentStep({ user, onBack, onSave }) {
         padding: '20px 22px', borderRadius: 14, marginBottom: 24,
         background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
       }}>
+        {summaryRow('Goal', gc.destination ? (gc.destination.length > 60 ? gc.destination.slice(0, 60) + '...' : gc.destination) : '')}
+        {summaryRow('Key Indicator', gc.keyIndicator || '')}
         {summaryRow('Market', (bb.markets || []).join(', '))}
         {summaryRow('Property Types', (bb.propertyTypes || []).join(', '))}
         {summaryRow('Price Range',

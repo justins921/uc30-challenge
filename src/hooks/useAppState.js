@@ -25,6 +25,7 @@ export function useAppState() {
   const [cohortStats, setCohortStatsState] = useState({ active: 0, total: 0 });
   const [dailyMinimumsOverrides, setDailyMinimumsOverridesState] = useState({});
   const [skoolLink, setSkoolLinkState] = useState(null);
+  const [practiceDaySettings, setPracticeDaySettingsState] = useState({});
   // Compliance system state
   const [complianceSettings, setComplianceSettingsState] = useState({ dailyMinimums: null, weeklyMinimums: null, enforcement: null });
   const [removalReason, setRemovalReason] = useState(null); // set if enforcement check fails on login
@@ -200,6 +201,9 @@ export function useAppState() {
 
       const skool = await Promise.resolve(storage.getSkoolLink());
       if (skool) setSkoolLinkState(skool);
+
+      const pdSettings = await Promise.resolve(storage.getPracticeDaySettings());
+      if (pdSettings) setPracticeDaySettingsState(pdSettings);
 
       const compSettings = await Promise.resolve(storage.getComplianceSettings());
       if (compSettings) setComplianceSettingsState(compSettings);
@@ -1319,6 +1323,12 @@ export function useAppState() {
     setSkoolLinkState(link);
   }, []);
 
+  // ── Practice Day Settings (admin) ───────────────────────
+  const setPracticeDaySettings = useCallback(async (settings) => {
+    await Promise.resolve(storage.setPracticeDaySettings(settings));
+    setPracticeDaySettingsState(settings);
+  }, []);
+
   // ── Daily Minimums (admin) ──────────────────────────────
   const setDailyMinimums = useCallback(async (minimums) => {
     await Promise.resolve(storage.setDailyMinimums(minimums));
@@ -1465,6 +1475,14 @@ export function useAppState() {
     return Promise.resolve(storage.getRemovalLog(participantId));
   }, []);
 
+  const getQuizAttempts = useCallback(async (participantId, dayNumber) => {
+    return Promise.resolve(storage.getQuizAttempts(participantId, dayNumber));
+  }, []);
+
+  const addQuizAttempt = useCallback(async (attempt) => {
+    return Promise.resolve(storage.addQuizAttempt(attempt));
+  }, []);
+
   const setComplianceDailyMinimums = useCallback(async (minimums) => {
     await Promise.resolve(storage.setComplianceDailyMinimums(minimums));
     setComplianceSettingsState(prev => ({ ...prev, dailyMinimums: minimums }));
@@ -1548,6 +1566,8 @@ export function useAppState() {
     completeActivation,
     skoolLink,
     setSkoolLink,
+    practiceDaySettings,
+    setPracticeDaySettings,
     dailyMinimumsOverrides,
     setDailyMinimums,
     addContact,
@@ -1559,6 +1579,9 @@ export function useAppState() {
     getUploadUrl,
     getFollowUpsByContact,
     getContactsForParticipant,
+    // Quiz system
+    getQuizAttempts,
+    addQuizAttempt,
     // Compliance system
     complianceSettings,
     removalReason,
