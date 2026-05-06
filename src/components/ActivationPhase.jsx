@@ -255,7 +255,7 @@ function MarketResearchStep({ onNext, onBack, onSave }) {
 
 // ── Step 3: Buy Box Setup ─────────────────────────────────
 const PROPERTY_TYPES = ['SFR', 'Duplex', 'Triplex/4-Plex', 'Small Multifamily (5-20 units)', 'Apartments (20+)', 'Commercial', 'Storage', 'Land'];
-const STRATEGIES = ['Buy & Hold', 'BRRRR', 'Flip', 'Wholesale', 'Seller Finance', 'Short-Term Rental', 'Section 8'];
+const STRATEGIES = ['Buy & Hold', 'BRRRR', 'Flip', 'Wholesale', 'Seller Finance', 'Short-Term Rental', 'Section 8', 'Subto/Wrap'];
 const CONDITIONS = ['Turnkey', 'Light Rehab', 'Heavy Rehab', 'Any'];
 const FINANCING_TYPES = ['Conventional', 'DSCR', 'Hard Money', 'Seller Finance', 'Cash', 'JV/Partnership', 'Other'];
 
@@ -271,15 +271,29 @@ function parseCurrency(str) {
 
 function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
   const bb = existingBuyBox || {};
+  const bbReturn = bb.returnRequirements || {};
   const [markets, setMarkets] = useState(bb.markets || []);
   const [marketInput, setMarketInput] = useState('');
+  const [zipCodes, setZipCodes] = useState(bb.zipCodes || []);
+  const [zipInput, setZipInput] = useState('');
   const [propertyTypes, setPropertyTypes] = useState(bb.propertyTypes || []);
+  const [yearBuiltMin, setYearBuiltMin] = useState(bb.yearBuiltMin || '');
+  const [yearBuiltMax, setYearBuiltMax] = useState(bb.yearBuiltMax || '');
+  const [bedroomsMin, setBedroomsMin] = useState(bb.bedroomsMin || '');
+  const [bedroomsMax, setBedroomsMax] = useState(bb.bedroomsMax || '');
+  const [bathroomsMin, setBathroomsMin] = useState(bb.bathroomsMin || '');
+  const [bathroomsMax, setBathroomsMax] = useState(bb.bathroomsMax || '');
+  const [conditionTolerance, setConditionTolerance] = useState(bb.conditionTolerance || '');
   const [priceMin, setPriceMin] = useState(bb.priceMin || '');
   const [priceMax, setPriceMax] = useState(bb.priceMax || '');
   const [downPayment, setDownPayment] = useState(bb.downPayment || '');
   const [strategies, setStrategies] = useState(bb.strategies || []);
-  const [conditionTolerance, setConditionTolerance] = useState(bb.conditionTolerance || '');
   const [financingTypes, setFinancingTypes] = useState(bb.financingTypes || []);
+  const [minCashOnCash, setMinCashOnCash] = useState(bbReturn.minCashOnCash || '');
+  const [minCapRate, setMinCapRate] = useState(bbReturn.minCapRate || '');
+  const [minCashFlowPerUnit, setMinCashFlowPerUnit] = useState(bbReturn.minCashFlowPerUnit || '');
+  const [minIRR, setMinIRR] = useState(bbReturn.minIRR || '');
+  const [additionalNotes, setAdditionalNotes] = useState(bb.additionalNotes || '');
   const [saving, setSaving] = useState(false);
 
   const addMarket = () => {
@@ -292,11 +306,28 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
 
   const removeMarket = (m) => setMarkets(markets.filter(x => x !== m));
 
+  const addZip = () => {
+    const trimmed = zipInput.trim();
+    if (trimmed && !zipCodes.includes(trimmed)) {
+      setZipCodes([...zipCodes, trimmed]);
+      setZipInput('');
+    }
+  };
+
+  const removeZip = (z) => setZipCodes(zipCodes.filter(x => x !== z));
+
   const toggleChip = (list, setList, val) => {
     setList(list.includes(val) ? list.filter(x => x !== val) : [...list, val]);
   };
 
-  const canProceed = markets.length > 0 && propertyTypes.length > 0;
+  const hasReturnReq = !!(
+    (minCashOnCash && parseFloat(minCashOnCash) > 0) ||
+    (minCapRate && parseFloat(minCapRate) > 0) ||
+    (minCashFlowPerUnit && parseFloat(minCashFlowPerUnit) > 0) ||
+    (minIRR && parseFloat(minIRR) > 0)
+  );
+
+  const canProceed = markets.length > 0 && propertyTypes.length > 0 && hasReturnReq;
 
   const handleNext = async () => {
     if (!canProceed) return;
@@ -304,13 +335,27 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
     await onSave({
       buyBox: {
         markets,
+        zipCodes,
         propertyTypes,
+        yearBuiltMin: yearBuiltMin ? parseInt(yearBuiltMin) : null,
+        yearBuiltMax: yearBuiltMax ? parseInt(yearBuiltMax) : null,
+        bedroomsMin: bedroomsMin ? parseInt(bedroomsMin) : null,
+        bedroomsMax: bedroomsMax ? parseInt(bedroomsMax) : null,
+        bathroomsMin: bathroomsMin ? parseInt(bathroomsMin) : null,
+        bathroomsMax: bathroomsMax ? parseInt(bathroomsMax) : null,
+        conditionTolerance: conditionTolerance || null,
         priceMin: priceMin || null,
         priceMax: priceMax || null,
         downPayment: downPayment || null,
         strategies,
-        conditionTolerance: conditionTolerance || null,
         financingTypes,
+        returnRequirements: {
+          minCashOnCash: minCashOnCash ? parseFloat(minCashOnCash) : null,
+          minCapRate: minCapRate ? parseFloat(minCapRate) : null,
+          minCashFlowPerUnit: minCashFlowPerUnit ? parseFloat(minCashFlowPerUnit) : null,
+          minIRR: minIRR ? parseFloat(minIRR) : null,
+        },
+        additionalNotes: additionalNotes.trim() || '',
       },
     });
     setSaving(false);
@@ -328,6 +373,24 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
 
   const sectionGap = { marginBottom: 28 };
   const labelStyle = { fontSize: 13, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 8 };
+  const inputStyle = {
+    width: '100%', fontSize: 14, padding: '10px 14px', borderRadius: 8,
+    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+    color: '#eee', fontFamily: "'DM Sans', sans-serif",
+  };
+  const tagChip = (text, onRemove, color = '233,69,96') => (
+    <span key={text} style={{
+      display: 'inline-flex', alignItems: 'center', gap: 6,
+      padding: '5px 10px 5px 12px', borderRadius: 6, fontSize: 13,
+      background: `rgba(${color}, 0.1)`, color: `rgb(${color})`, fontWeight: 500,
+    }}>
+      {text}
+      <button onClick={onRemove} style={{
+        background: 'none', border: 'none', color: `rgb(${color})`, cursor: 'pointer',
+        fontSize: 16, padding: 0, lineHeight: 1, fontFamily: "'DM Sans', sans-serif", opacity: 0.6,
+      }}>&times;</button>
+    </span>
+  );
 
   return (
     <div>
@@ -338,7 +401,7 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
         Set your investment criteria so you're ready to act on Day 1. Keep it focused — you can always refine later.
       </p>
 
-      {/* 1. Location */}
+      {/* 1. Target Market(s) */}
       <div style={sectionGap}>
         <label style={labelStyle}>
           Target Market(s) <span style={{ color: '#e94560' }}>*</span>
@@ -349,48 +412,45 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
             onChange={e => setMarketInput(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addMarket(); } }}
             placeholder="e.g. Phoenix, AZ"
-            style={{
-              flex: 1, fontSize: 14, padding: '10px 14px', borderRadius: 8,
-              background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-              color: '#eee', fontFamily: "'DM Sans', sans-serif",
-            }}
+            style={{ ...inputStyle, flex: 1, width: 'auto' }}
           />
-          <button
-            onClick={addMarket}
-            disabled={!marketInput.trim()}
-            style={{
-              padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
-              background: marketInput.trim() ? 'rgba(233,69,96,0.12)' : 'rgba(255,255,255,0.04)',
-              color: marketInput.trim() ? '#e94560' : '#555',
-              border: marketInput.trim() ? '1px solid rgba(233,69,96,0.25)' : '1px solid rgba(255,255,255,0.08)',
-              cursor: marketInput.trim() ? 'pointer' : 'default',
-              fontFamily: "'DM Sans', sans-serif",
-            }}
-          >
-            Add
-          </button>
+          <button onClick={addMarket} disabled={!marketInput.trim()} style={{
+            padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+            background: marketInput.trim() ? 'rgba(233,69,96,0.12)' : 'rgba(255,255,255,0.04)',
+            color: marketInput.trim() ? '#e94560' : '#555',
+            border: marketInput.trim() ? '1px solid rgba(233,69,96,0.25)' : '1px solid rgba(255,255,255,0.08)',
+            cursor: marketInput.trim() ? 'pointer' : 'default', fontFamily: "'DM Sans', sans-serif",
+          }}>Add</button>
         </div>
         {markets.length > 0 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
+            {markets.map(m => tagChip(m, () => removeMarket(m)))}
+          </div>
+        )}
+
+        <label style={{ ...labelStyle, marginTop: 6, fontSize: 12, color: '#777' }}>
+          Specific Zip Codes (optional)
+        </label>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+          <input
+            value={zipInput}
+            onChange={e => setZipInput(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addZip(); } }}
+            placeholder="e.g. 85001"
+            inputMode="numeric"
+            style={{ ...inputStyle, flex: 1, width: 'auto' }}
+          />
+          <button onClick={addZip} disabled={!zipInput.trim()} style={{
+            padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+            background: zipInput.trim() ? 'rgba(83,52,131,0.12)' : 'rgba(255,255,255,0.04)',
+            color: zipInput.trim() ? '#c9a0ff' : '#555',
+            border: zipInput.trim() ? '1px solid rgba(83,52,131,0.25)' : '1px solid rgba(255,255,255,0.08)',
+            cursor: zipInput.trim() ? 'pointer' : 'default', fontFamily: "'DM Sans', sans-serif",
+          }}>Add</button>
+        </div>
+        {zipCodes.length > 0 && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {markets.map(m => (
-              <span key={m} style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                padding: '5px 10px 5px 12px', borderRadius: 6, fontSize: 13,
-                background: 'rgba(233,69,96,0.1)', color: '#e94560', fontWeight: 500,
-              }}>
-                {m}
-                <button
-                  onClick={() => removeMarket(m)}
-                  style={{
-                    background: 'none', border: 'none', color: '#e94560', cursor: 'pointer',
-                    fontSize: 16, padding: 0, lineHeight: 1, fontFamily: "'DM Sans', sans-serif",
-                    opacity: 0.6,
-                  }}
-                >
-                  &times;
-                </button>
-              </span>
-            ))}
+            {zipCodes.map(z => tagChip(z, () => removeZip(z), '83,52,131'))}
           </div>
         )}
       </div>
@@ -400,7 +460,7 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
         <label style={labelStyle}>
           Property Type(s) <span style={{ color: '#e94560' }}>*</span>
         </label>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
           {PROPERTY_TYPES.map(pt => (
             <button key={pt} onClick={() => toggleChip(propertyTypes, setPropertyTypes, pt)}
               style={chipStyle(propertyTypes.includes(pt), '233,69,96')}>
@@ -408,69 +468,51 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
             </button>
           ))}
         </div>
-      </div>
 
-      {/* 3. Deal Size */}
-      <div style={sectionGap}>
-        <label style={labelStyle}>Purchase Price Range</label>
+        <label style={{ ...labelStyle, fontSize: 12, color: '#777' }}>Year Built Range (optional)</label>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
           <div>
-            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Min ($)</span>
-            <input
-              value={priceMin ? formatCurrency(priceMin) : ''}
-              onChange={e => setPriceMin(parseCurrency(e.target.value))}
-              placeholder="100,000"
-              inputMode="numeric"
-              style={{
-                width: '100%', fontSize: 14, padding: '10px 14px', borderRadius: 8,
-                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-                color: '#eee', fontFamily: "'DM Sans', sans-serif",
-              }}
-            />
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Min</span>
+            <input value={yearBuiltMin} onChange={e => setYearBuiltMin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+              placeholder="1980" inputMode="numeric" style={inputStyle} />
           </div>
           <div>
-            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Max ($)</span>
-            <input
-              value={priceMax ? formatCurrency(priceMax) : ''}
-              onChange={e => setPriceMax(parseCurrency(e.target.value))}
-              placeholder="300,000"
-              inputMode="numeric"
-              style={{
-                width: '100%', fontSize: 14, padding: '10px 14px', borderRadius: 8,
-                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-                color: '#eee', fontFamily: "'DM Sans', sans-serif",
-              }}
-            />
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Max</span>
+            <input value={yearBuiltMax} onChange={e => setYearBuiltMax(e.target.value.replace(/\D/g, '').slice(0, 4))}
+              placeholder="2020" inputMode="numeric" style={inputStyle} />
           </div>
         </div>
-        <label style={labelStyle}>Down Payment / Cash Available</label>
-        <input
-          value={downPayment ? formatCurrency(downPayment) : ''}
-          onChange={e => setDownPayment(parseCurrency(e.target.value))}
-          placeholder="50,000"
-          inputMode="numeric"
-          style={{
-            width: '100%', fontSize: 14, padding: '10px 14px', borderRadius: 8,
-            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-            color: '#eee', fontFamily: "'DM Sans', sans-serif",
-          }}
-        />
-      </div>
 
-      {/* 4. Strategy */}
-      <div style={sectionGap}>
-        <label style={labelStyle}>Investment Strategy</label>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {STRATEGIES.map(s => (
-            <button key={s} onClick={() => toggleChip(strategies, setStrategies, s)}
-              style={chipStyle(strategies.includes(s), '240,165,0')}>
-              {s}
-            </button>
-          ))}
+        <label style={{ ...labelStyle, fontSize: 12, color: '#777' }}>Bedrooms</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Min</span>
+            <input value={bedroomsMin} onChange={e => setBedroomsMin(e.target.value.replace(/\D/g, ''))}
+              placeholder="2" inputMode="numeric" style={inputStyle} />
+          </div>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Max</span>
+            <input value={bedroomsMax} onChange={e => setBedroomsMax(e.target.value.replace(/\D/g, ''))}
+              placeholder="4" inputMode="numeric" style={inputStyle} />
+          </div>
+        </div>
+
+        <label style={{ ...labelStyle, fontSize: 12, color: '#777' }}>Bathrooms</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Min</span>
+            <input value={bathroomsMin} onChange={e => setBathroomsMin(e.target.value.replace(/[^\d.]/g, ''))}
+              placeholder="1" inputMode="decimal" style={inputStyle} />
+          </div>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Max</span>
+            <input value={bathroomsMax} onChange={e => setBathroomsMax(e.target.value.replace(/[^\d.]/g, ''))}
+              placeholder="3" inputMode="decimal" style={inputStyle} />
+          </div>
         </div>
       </div>
 
-      {/* 5. Condition Tolerance */}
+      {/* 3. Condition Tolerance */}
       <div style={sectionGap}>
         <label style={labelStyle}>Condition Tolerance</label>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -478,6 +520,39 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
             <button key={c} onClick={() => setConditionTolerance(conditionTolerance === c ? '' : c)}
               style={chipStyle(conditionTolerance === c, '83,52,131')}>
               {c}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. Deal Size */}
+      <div style={sectionGap}>
+        <label style={labelStyle}>Purchase Price Range</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Min ($)</span>
+            <input value={priceMin ? formatCurrency(priceMin) : ''} onChange={e => setPriceMin(parseCurrency(e.target.value))}
+              placeholder="100,000" inputMode="numeric" style={inputStyle} />
+          </div>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Max ($)</span>
+            <input value={priceMax ? formatCurrency(priceMax) : ''} onChange={e => setPriceMax(parseCurrency(e.target.value))}
+              placeholder="300,000" inputMode="numeric" style={inputStyle} />
+          </div>
+        </div>
+        <label style={labelStyle}>Down Payment / Cash Available</label>
+        <input value={downPayment ? formatCurrency(downPayment) : ''} onChange={e => setDownPayment(parseCurrency(e.target.value))}
+          placeholder="50,000" inputMode="numeric" style={inputStyle} />
+      </div>
+
+      {/* 5. Investment Strategy */}
+      <div style={sectionGap}>
+        <label style={labelStyle}>Investment Strategy</label>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          {STRATEGIES.map(s => (
+            <button key={s} onClick={() => toggleChip(strategies, setStrategies, s)}
+              style={chipStyle(strategies.includes(s), '240,165,0')}>
+              {s}
             </button>
           ))}
         </div>
@@ -496,7 +571,72 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
         </div>
       </div>
 
-      {/* PDF download card */}
+      {/* 7. Return Requirements */}
+      <div style={sectionGap}>
+        <label style={labelStyle}>
+          Return Requirements <span style={{ color: '#e94560' }}>*</span>
+        </label>
+        <p style={{ fontSize: 12, color: hasReturnReq ? '#666' : '#f0a500', marginBottom: 14, marginTop: -2 }}>
+          Fill out at least one.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <span style={{ fontSize: 12, color: '#777', display: 'block', marginBottom: 4 }}>Minimum Cash-on-Cash Return</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input value={minCashOnCash} onChange={e => setMinCashOnCash(e.target.value.replace(/[^\d.]/g, ''))}
+                placeholder="8" inputMode="decimal" style={{ ...inputStyle, flex: 1 }} />
+              <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>%</span>
+            </div>
+          </div>
+          <div>
+            <span style={{ fontSize: 12, color: '#777', display: 'block', marginBottom: 4 }}>Minimum Cap Rate</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input value={minCapRate} onChange={e => setMinCapRate(e.target.value.replace(/[^\d.]/g, ''))}
+                placeholder="6" inputMode="decimal" style={{ ...inputStyle, flex: 1 }} />
+              <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>%</span>
+            </div>
+          </div>
+          <div>
+            <span style={{ fontSize: 12, color: '#777', display: 'block', marginBottom: 4 }}>Minimum Cash Flow Per Unit ($/mo)</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>$</span>
+              <input value={minCashFlowPerUnit} onChange={e => setMinCashFlowPerUnit(e.target.value.replace(/[^\d.]/g, ''))}
+                placeholder="200" inputMode="decimal" style={{ ...inputStyle, flex: 1 }} />
+              <span style={{ fontSize: 12, color: '#555' }}>/mo</span>
+            </div>
+          </div>
+          <div>
+            <span style={{ fontSize: 12, color: '#777', display: 'block', marginBottom: 4 }}>Minimum IRR</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input value={minIRR} onChange={e => setMinIRR(e.target.value.replace(/[^\d.]/g, ''))}
+                placeholder="15" inputMode="decimal" style={{ ...inputStyle, flex: 1 }} />
+              <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>%</span>
+            </div>
+          </div>
+        </div>
+        {!hasReturnReq && (
+          <p style={{ fontSize: 12, color: '#e94560', marginTop: 10, marginBottom: 0 }}>
+            Please fill out at least one return requirement.
+          </p>
+        )}
+      </div>
+
+      {/* 8. Additional Notes */}
+      <div style={sectionGap}>
+        <label style={labelStyle}>Additional Notes</label>
+        <p style={{ fontSize: 12, color: '#666', marginBottom: 10, marginTop: -2, lineHeight: 1.6 }}>
+          The more specific your buy box is, the more clear you will be when it's time to pull the trigger. Add any additional details to clarify the exact property you're looking for.
+        </p>
+        <textarea
+          value={additionalNotes}
+          onChange={e => setAdditionalNotes(e.target.value)}
+          rows={4}
+          placeholder="Looking for properties near good school districts, prefer corner lots, no HOA..."
+          style={{ ...inputStyle, resize: 'vertical' }}
+        />
+      </div>
+
+      {/* 9. PDF download card */}
       <a
         href="/buy-box-worksheet.html"
         target="_blank"
@@ -546,9 +686,9 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
         </button>
       </div>
 
-      {!canProceed && (markets.length === 0 || propertyTypes.length === 0) && (
+      {!canProceed && (
         <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 10 }}>
-          Add at least one market and select at least one property type to continue.
+          {markets.length === 0 ? 'Add at least one market' : propertyTypes.length === 0 ? 'Select at least one property type' : 'Fill out at least one return requirement'} to continue.
         </p>
       )}
     </div>

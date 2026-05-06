@@ -12,6 +12,7 @@ import { calculateUCPoints } from '../data/ucPoints';
 import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT, checkWeeklyCompliance, getWeekNumber, getWeekRange, getWeekDayCount, calculateAtRisk, getTimeUntilDeadline } from '../data/compliance';
 import CommunityBoard from './CommunityBoard';
 import ContactsCRM from './ContactsCRM';
+import MyBuyBox from './MyBuyBox';
 import Footer from './Footer';
 
 const TABS = [
@@ -19,6 +20,7 @@ const TABS = [
   { id: 'leaderboard', label: 'Leaderboard' },
   { id: 'crm', label: 'Contacts' },
   { id: 'community', label: 'Community' },
+  { id: 'buybox', label: 'My Buy Box' },
   { id: 'submissions', label: 'My Submissions' },
   { id: 'stats', label: 'Operator Stats' },
   { id: 'support', label: 'Support' },
@@ -328,6 +330,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             getFollowUpsByContact={getFollowUpsByContact}
           />
         )}
+        {tab === 'buybox' && <MyBuyBox user={user} />}
         {tab === 'submissions' && <SubmissionsView user={user} />}
         {tab === 'stats' && <StatsView user={user} />}
         {tab === 'support' && (
