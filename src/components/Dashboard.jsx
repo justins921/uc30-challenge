@@ -76,7 +76,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt, practiceDaySettings, onCompletePracticeDay }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onUpdateContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt, practiceDaySettings, onCompletePracticeDay }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
   const [existingDailySubmission, setExistingDailySubmission] = useState(null);
@@ -243,6 +243,27 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           <UCPointsBanner ucPoints={user.ucPoints || calculateUCPoints(user.metrics)} />
         )}
 
+        {/* Lifetime Offers Counter */}
+        {!showPracticeDay && (user.lifetimeOffersSubmitted || 0) > 0 && (
+          <div className="fade-up" style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '14px 20px', marginBottom: 16,
+            background: 'linear-gradient(135deg, rgba(233,69,96,0.06), rgba(233,69,96,0.02))',
+            border: '1px solid rgba(233,69,96,0.12)',
+            borderRadius: 12,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: 16 }}>📝</span>
+              <div style={{ fontSize: 12, color: '#e94560', textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: 600 }}>
+                Offers to Contract
+              </div>
+            </div>
+            <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#e94560' }}>
+              {(user.lifetimeOffersSubmitted || 0).toLocaleString()}
+            </div>
+          </div>
+        )}
+
         {!showPracticeDay && cohortActive && cohortStats && cohortStats.total > 0 && (
           <CohortStatsBanner active={cohortStats.active} total={cohortStats.total} />
         )}
@@ -347,6 +368,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             user={user}
             getContacts={getContacts}
             getFollowUpsByContact={getFollowUpsByContact}
+            onUpdateContact={onUpdateContact}
           />
         )}
         {!showPracticeDay && tab === 'buybox' && <MyBuyBox user={user} />}
@@ -731,7 +753,7 @@ function socialHandlesToObject(arr) {
 
 // ── Buy Box Constants ────────────────────────────────────
 const PROPERTY_TYPES = ['SFR', 'Multifamily', 'Commercial', 'Land', 'Mixed-Use'];
-const STRATEGIES = ['Flip', 'BRRRR', 'Buy & Hold Rental', 'Wholesale', 'Subject-To', 'Seller Finance'];
+const STRATEGIES = ['Buy & Hold', 'BRRRR', 'Seller Finance', 'Short-Term Rental', 'Section 8', 'Subto/Wrap'];
 
 // ── Getting Started Section ──────────────────────────────
 function GettingStartedSection({ user, onComplete, contentOverrides }) {

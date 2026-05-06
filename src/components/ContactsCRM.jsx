@@ -1,16 +1,22 @@
 import { useState, useEffect, useMemo } from 'react';
 
 const CONTACT_GROUPS = [
-  { value: 'target', label: 'Target Contacts', color: '#e94560', desc: 'Deal sources — agents, wholesalers, property managers, sellers' },
-  { value: 'arsenal', label: 'Arsenal Contacts', color: '#f0a500', desc: 'Broader network — investors, mentors, peers, meetup contacts' },
-  { value: 'team', label: 'My Team', color: '#48c78e', desc: 'Service providers — lenders, attorneys, inspectors, contractors' },
+  { value: 'target', label: 'Target Contacts', color: '#e94560', desc: 'Deal sources — property owners, sellers, listing agents tied to specific properties' },
+  { value: 'arsenal', label: 'Arsenal Contacts', color: '#f0a500', desc: 'Ecosystem relationships — property managers, lenders, contractors, investors, wholesalers' },
 ];
 
 export { CONTACT_GROUPS };
 
-const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500', team: '#48c78e' };
+const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500' };
 
-export default function ContactsCRM({ user, getContacts, getFollowUpsByContact }) {
+const TARGET_STATUSES = [
+  { value: 'new', label: 'New', color: '#888' },
+  { value: 'warm', label: 'Warm', color: '#f0a500' },
+  { value: 'follow_up', label: 'Follow Up', color: '#6b8afd' },
+  { value: 'dead', label: 'Dead', color: '#555' },
+];
+
+export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, onUpdateContact }) {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState(null);
@@ -68,7 +74,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact }
     <div className="fade-up">
       <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Contacts</h2>
       <p style={{ fontSize: 13, color: '#888', marginBottom: 24 }}>
-        Your deal sources, network, and service providers. All contacts added from your daily submissions.
+        Your target contacts and arsenal network. All contacts added from your daily submissions.
       </p>
 
       {/* Group Stats */}
@@ -121,7 +127,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact }
           </div>
         </div>
       ) : groupFilter !== 'all' ? (
-        <ContactList contacts={filtered} expandedId={expandedId} expandedFollowUps={expandedFollowUps} onExpand={handleExpand} />
+        <ContactList contacts={filtered} expandedId={expandedId} expandedFollowUps={expandedFollowUps} onExpand={handleExpand} onUpdateContact={onUpdateContact} onContactUpdated={(id, updates) => setContacts(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c))} />
       ) : (
         CONTACT_GROUPS.map(g => {
           const groupContacts = filtered.filter(c => (c.contact_group || 'target') === g.value);
@@ -134,7 +140,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact }
                 <span style={{ fontSize: 11, color: '#555' }}>({groupContacts.length})</span>
                 <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
               </div>
-              <ContactList contacts={groupContacts} expandedId={expandedId} expandedFollowUps={expandedFollowUps} onExpand={handleExpand} />
+              <ContactList contacts={groupContacts} expandedId={expandedId} expandedFollowUps={expandedFollowUps} onExpand={handleExpand} onUpdateContact={onUpdateContact} onContactUpdated={(id, updates) => setContacts(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c))} />
             </div>
           );
         })
@@ -143,7 +149,14 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact }
   );
 }
 
-function ContactList({ contacts, expandedId, expandedFollowUps, onExpand }) {
+function ContactList({ contacts, expandedId, expandedFollowUps, onExpand, onUpdateContact, onContactUpdated }) {
+  const handleStatusChange = async (contact, newStatus) => {
+    if (onUpdateContact) {
+      await onUpdateContact(contact.id, { status: newStatus });
+    }
+    if (onContactUpdated) onContactUpdated(contact.id, { status: newStatus });
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       {contacts.map(contact => {
@@ -151,6 +164,8 @@ function ContactList({ contacts, expandedId, expandedFollowUps, onExpand }) {
         const fups = expandedFollowUps[contact.id] || [];
         const group = CONTACT_GROUPS.find(g => g.value === contact.contact_group) || CONTACT_GROUPS[0];
         const color = group.color;
+        const isTarget = contact.contact_group === 'target';
+        const statusObj = TARGET_STATUSES.find(s => s.value === (contact.status || 'new')) || TARGET_STATUSES[0];
 
         return (
           <div key={contact.id} className="card" style={{
@@ -174,9 +189,16 @@ function ContactList({ contacts, expandedId, expandedFollowUps, onExpand }) {
                   <span style={{
                     fontSize: 10, padding: '2px 6px', borderRadius: 4, fontWeight: 700,
                     background: `${color}15`, color,
-                  }}>{group.label.replace(' Contacts', '').replace('My ', '')}</span>
+                  }}>{group.label.replace(' Contacts', '')}</span>
+                  {isTarget && (
+                    <span style={{
+                      fontSize: 10, padding: '2px 6px', borderRadius: 4, fontWeight: 600,
+                      background: `${statusObj.color}15`, color: statusObj.color,
+                    }}>{statusObj.label}</span>
+                  )}
                 </div>
                 <div style={{ fontSize: 12, color: '#666', marginTop: 2, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                  {contact.property && <span style={{ color: '#e94560' }}>📍 {contact.property}</span>}
                   {contact.phone && <span>📞 {contact.phone}</span>}
                   {contact.email && <span>✉ {contact.email}</span>}
                   {contact.day_added && <span>Day {contact.day_added}</span>}
@@ -187,6 +209,25 @@ function ContactList({ contacts, expandedId, expandedFollowUps, onExpand }) {
 
             {isExpanded && (
               <div style={{ padding: '0 18px 16px', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+                {/* Status chips for Target Contacts */}
+                {isTarget && (
+                  <div style={{ marginTop: 12, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    {TARGET_STATUSES.map(s => (
+                      <button key={s.value}
+                        onClick={(e) => { e.stopPropagation(); handleStatusChange(contact, s.value); }}
+                        style={{
+                          padding: '5px 12px', borderRadius: 6, fontSize: 11, fontWeight: 600,
+                          cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
+                          background: (contact.status || 'new') === s.value ? `${s.color}20` : 'rgba(255,255,255,0.04)',
+                          color: (contact.status || 'new') === s.value ? s.color : '#666',
+                          outline: (contact.status || 'new') === s.value ? `1px solid ${s.color}40` : '1px solid rgba(255,255,255,0.06)',
+                        }}>
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
                 {contact.notes && (
                   <div style={{ marginTop: 12, padding: '10px 14px', background: 'rgba(255,255,255,0.02)', borderRadius: 8, fontSize: 13, color: '#aaa', lineHeight: 1.6 }}>
                     <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Notes:</span>

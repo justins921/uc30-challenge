@@ -900,12 +900,16 @@ export function useAppState() {
     // Recalculate total UC Points from cumulative metrics
     const ucPoints = calculateUCPoints(updatedMetrics);
 
+    const lifetimeOffersDelta = proof.lifetimeOffersDelta || 0;
+    const lifetimeOffersSubmitted = (user.lifetimeOffersSubmitted || 0) + lifetimeOffersDelta;
+
     const updates = {
       currentDay: dayNum + 1,
       completedDays: [...user.completedDays, dayNum],
       submissions: [...user.submissions, submission],
       metrics: updatedMetrics,
       ucPoints,
+      lifetimeOffersSubmitted,
     };
 
     const updatedUser = { ...user, ...updates };
@@ -940,7 +944,6 @@ export function useAppState() {
         target_contacts: proof.complianceMetrics.target_contacts || 0,
         follow_ups: proof.complianceMetrics.follow_ups || 0,
         offers_submitted: proof.complianceMetrics.offers_submitted || 0,
-        properties_under_contract: proof.complianceMetrics.properties_under_contract || 0,
         met_daily_minimum: compResult.met,
         proof_text: proof.text || null,
       };
@@ -1395,6 +1398,10 @@ export function useAppState() {
     return Promise.resolve(storage.getFollowUpsByContact(contactId));
   }, []);
 
+  const updateContact = useCallback(async (contactId, updates) => {
+    return Promise.resolve(storage.updateContact(contactId, updates));
+  }, []);
+
   // Admin: get contacts for any participant
   const getContactsForParticipant = useCallback(async (participantId) => {
     return Promise.resolve(storage.getContactsForParticipant(participantId));
@@ -1571,6 +1578,7 @@ export function useAppState() {
     dailyMinimumsOverrides,
     setDailyMinimums,
     addContact,
+    updateContact,
     getContacts,
     addFollowUp,
     getFollowUps,

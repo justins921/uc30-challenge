@@ -298,7 +298,9 @@ function GetClearStep({ onNext, onBack, onSave, existing }) {
     const ppyr = numOrNull(propertiesPerYear);
 
     if (cf && ret && ret > 0 && !yearlyInvestment) {
-      const calc = Math.round(cf / (ret / 100));
+      const tp = numOrNull(timePeriod);
+      const totalInvestment = cf / (ret / 100);
+      const calc = Math.round(tp && tp > 0 ? totalInvestment / tp : totalInvestment);
       setYearlyInvestment(calc);
       calced.yearlyInvestment = true;
     }
@@ -563,7 +565,7 @@ function GetClearStep({ onNext, onBack, onSave, existing }) {
 
 // ── Step 4: Buy Box Setup ─────────────────────────────────
 const PROPERTY_TYPES = ['SFR', 'Duplex', 'Triplex/4-Plex', 'Small Multifamily (5-20 units)', 'Apartments (20+)', 'Commercial', 'Storage', 'Land'];
-const STRATEGIES = ['Buy & Hold', 'BRRRR', 'Flip', 'Wholesale', 'Seller Finance', 'Short-Term Rental', 'Section 8', 'Subto/Wrap'];
+const STRATEGIES = ['Buy & Hold', 'BRRRR', 'Seller Finance', 'Short-Term Rental', 'Section 8', 'Subto/Wrap'];
 const CONDITIONS = ['Turnkey', 'Light Rehab', 'Heavy Rehab', 'Any'];
 const FINANCING_TYPES = ['Conventional', 'DSCR', 'Hard Money', 'Seller Finance', 'Cash', 'JV/Partnership', 'Other'];
 

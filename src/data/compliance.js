@@ -6,13 +6,12 @@
 // ── Metric definitions ───────────────────────────────────────────
 
 export const COMPLIANCE_METRICS = [
-  { id: 'training_completed', label: 'Training Completed', type: 'boolean', icon: '🎓' },
-  { id: 'properties_analyzed', label: 'Properties Analyzed', type: 'count', icon: '🏠' },
+  { id: 'training_completed', label: 'Training Completed', type: 'boolean', icon: '📚' },
+  { id: 'properties_analyzed', label: 'Properties Analyzed', type: 'count', icon: '🔍' },
   { id: 'arsenal_contacts', label: 'Arsenal Contacts', type: 'count', icon: '🤝' },
   { id: 'target_contacts', label: 'Target Contacts', type: 'count', icon: '🎯' },
   { id: 'follow_ups', label: 'Follow-Ups', type: 'count', icon: '📞' },
   { id: 'offers_submitted', label: 'Offers Submitted', type: 'count', icon: '📝' },
-  { id: 'properties_under_contract', label: 'Properties Under Contract', type: 'count', icon: '🔑' },
 ];
 
 export const METRIC_IDS = COMPLIANCE_METRICS.map(m => m.id);
@@ -26,7 +25,6 @@ export const DEFAULT_DAILY_MINIMUMS = {
   target_contacts: 1,
   follow_ups: 1,
   offers_submitted: 0,
-  properties_under_contract: 0,
 };
 
 export const DEFAULT_WEEKLY_MINIMUMS = {
@@ -36,7 +34,6 @@ export const DEFAULT_WEEKLY_MINIMUMS = {
   target_contacts: 5,
   follow_ups: 5,
   offers_submitted: 1,
-  properties_under_contract: 0,
 };
 
 export const DEFAULT_ENFORCEMENT = {

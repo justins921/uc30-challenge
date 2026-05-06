@@ -4,7 +4,7 @@ import { COMPLIANCE_METRICS, checkDailyCompliance, getTimeUntilDeadline, DEFAULT
 import QuizSection from './QuizSection';
 import { CONTACT_GROUPS } from './ContactsCRM';
 
-const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500', team: '#48c78e' };
+const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500' };
 
 export default function DayView({
   day, user, onSubmit, onBack, contentOverrides, customPhases,
@@ -14,7 +14,7 @@ export default function DayView({
 }) {
   const [submitted, setSubmitted] = useState(false);
 
-  // ── Metric state (the 7 compliance metrics) ──────────────────
+  // ── Metric state (the 6 compliance metrics) ──────────────────
   const [metrics, setMetrics] = useState({
     training_completed: existingDailySubmission?.training_completed || false,
     properties_analyzed: existingDailySubmission?.properties_analyzed || 0,
@@ -22,7 +22,6 @@ export default function DayView({
     target_contacts: existingDailySubmission?.target_contacts || 0,
     follow_ups: existingDailySubmission?.follow_ups || 0,
     offers_submitted: existingDailySubmission?.offers_submitted || 0,
-    properties_under_contract: existingDailySubmission?.properties_under_contract || 0,
   });
   const [proofText, setProofText] = useState(existingDailySubmission?.proof_text || '');
 
@@ -71,6 +70,7 @@ export default function DayView({
   const [contactPhone, setContactPhone] = useState('');
   const [contactEmail, setContactEmail] = useState('');
   const [contactGroup, setContactGroup] = useState('target');
+  const [contactProperty, setContactProperty] = useState('');
   const [contactNotes, setContactNotes] = useState('');
   const [contactSaving, setContactSaving] = useState(false);
   const [duplicateContact, setDuplicateContact] = useState(null);
@@ -98,6 +98,7 @@ export default function DayView({
       phone: contactPhone.trim() || null,
       email: contactEmail.trim() || null,
       contact_group: contactGroup,
+      property: contactGroup === 'target' ? (contactProperty.trim() || null) : null,
       notes: contactNotes.trim() || null,
       day_added: day,
     });
@@ -106,7 +107,7 @@ export default function DayView({
     }
     setContactSaving(false);
     setContactName(''); setContactPhone(''); setContactEmail('');
-    setContactGroup('target'); setContactNotes('');
+    setContactGroup('target'); setContactProperty(''); setContactNotes('');
     setShowContactForm(false);
   };
 
@@ -114,7 +115,7 @@ export default function DayView({
     setDuplicateContact(null);
     setShowContactForm(false);
     setContactName(''); setContactPhone(''); setContactEmail('');
-    setContactGroup('target'); setContactNotes('');
+    setContactGroup('target'); setContactProperty(''); setContactNotes('');
     setFollowUpContactId(contact.id);
     setShowFollowUpForm(true);
   };
@@ -133,7 +134,7 @@ export default function DayView({
   };
 
   const groupedContacts = useMemo(() => {
-    const groups = { target: [], arsenal: [], team: [] };
+    const groups = { target: [], arsenal: [] };
     (contactList || []).forEach(c => {
       const g = c.contact_group || 'target';
       if (groups[g]) groups[g].push(c);
@@ -154,11 +155,15 @@ export default function DayView({
   };
 
   const handleSubmit = () => {
+    const newOffers = metrics.offers_submitted || 0;
+    const prevOffers = existingDailySubmission?.offers_submitted || 0;
+    const offerDelta = newOffers - prevOffers;
     onSubmit(day, {
       text: proofText || buildProofSummary(metrics),
       dayMetrics: metrics,
       complianceMetrics: metrics,
       metDailyMinimum: compliance.met,
+      lifetimeOffersDelta: offerDelta > 0 ? offerDelta : 0,
     });
     setSubmitted(true);
   };
@@ -348,7 +353,7 @@ export default function DayView({
         <SubmissionSuccess day={day} isUpdate={isUpdate} />
       ) : canSubmit && (!hasRequiredQuiz || quizPassed) ? (
         <>
-          {/* ── 7-Metric Entry Form ── */}
+          {/* ── 6-Metric Entry Form ── */}
           <div className="card" style={{ marginBottom: 24 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
               <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📊</div>
@@ -371,80 +376,113 @@ export default function DayView({
                 const isRequired = isBool ? !!required : (typeof required === 'number' && required > 0);
 
                 return (
-                  <div key={metric.id} style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '12px 16px', borderRadius: 10,
-                    background: met ? 'rgba(72,199,142,0.04)' : 'rgba(255,255,255,0.02)',
-                    border: `1px solid ${met ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.06)'}`,
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1 }}>
-                      <span style={{ fontSize: 18 }}>{metric.icon}</span>
-                      <div>
-                        <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>{metric.label}</div>
-                        {isRequired && (
-                          <div style={{ fontSize: 11, color: met ? '#48c78e' : '#e94560', fontWeight: 600 }}>
-                            {isBool ? 'Required' : `Min: ${required}`}
-                            {met && ' ✓'}
-                          </div>
-                        )}
-                        {!isRequired && (
-                          <div style={{ fontSize: 11, color: '#555' }}>Optional</div>
-                        )}
+                  <div key={metric.id}>
+                    <div style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '12px 16px', borderRadius: 10,
+                      background: met ? 'rgba(72,199,142,0.04)' : 'rgba(255,255,255,0.02)',
+                      border: `1px solid ${met ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.06)'}`,
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1 }}>
+                        <span style={{ fontSize: 18 }}>{metric.icon}</span>
+                        <div>
+                          <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>{metric.label}</div>
+                          {isRequired && (
+                            <div style={{ fontSize: 11, color: met ? '#48c78e' : '#e94560', fontWeight: 600 }}>
+                              {isBool ? 'Required' : `Min: ${required}`}
+                              {met && ' ✓'}
+                            </div>
+                          )}
+                          {!isRequired && (
+                            <div style={{ fontSize: 11, color: '#555' }}>Optional</div>
+                          )}
+                        </div>
                       </div>
-                    </div>
 
-                    {isBool ? (
-                      <button
-                        onClick={() => setMetric(metric.id, !value)}
+                      {isBool ? (
+                        <button
+                          onClick={() => setMetric(metric.id, !value)}
+                          style={{
+                            padding: '10px 24px', borderRadius: 8, fontSize: 14, fontWeight: 700,
+                            cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                            border: value ? '1px solid rgba(72,199,142,0.3)' : '1px solid rgba(255,255,255,0.1)',
+                            background: value ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.04)',
+                            color: value ? '#48c78e' : '#888',
+                          }}
+                        >
+                          {value ? '✓ Done' : 'Mark Done'}
+                        </button>
+                      ) : (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <button
+                            onClick={() => setMetric(metric.id, Math.max(0, (value || 0) - 1))}
+                            style={{
+                              width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
+                              border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                              color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            }}
+                          >-</button>
+                          <input
+                            type="number"
+                            min="0"
+                            value={value || 0}
+                            onChange={e => setMetric(metric.id, Math.max(0, parseInt(e.target.value) || 0))}
+                            style={{
+                              width: 56, textAlign: 'center', fontSize: 18, fontWeight: 700,
+                              padding: '6px', borderRadius: 6,
+                              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                              color: '#fff',
+                            }}
+                          />
+                          <button
+                            onClick={() => setMetric(metric.id, (value || 0) + 1)}
+                            style={{
+                              width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
+                              border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                              color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            }}
+                          >+</button>
+                        </div>
+                      )}
+                    </div>
+                    {/* Add Contact button for arsenal/target metrics */}
+                    {(metric.id === 'arsenal_contacts' || metric.id === 'target_contacts') && (value || 0) > 0 && !showContactForm && (
+                      <button onClick={() => { setContactGroup(metric.id === 'arsenal_contacts' ? 'arsenal' : 'target'); setShowContactForm(true); }}
                         style={{
-                          padding: '8px 20px', borderRadius: 8, fontSize: 13, fontWeight: 700,
-                          cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                          border: value ? '1px solid rgba(72,199,142,0.3)' : '1px solid rgba(255,255,255,0.1)',
-                          background: value ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.04)',
-                          color: value ? '#48c78e' : '#888',
-                        }}
-                      >
-                        {value ? '✓ Done' : 'Mark Done'}
+                          marginTop: 6, marginLeft: 44, padding: '5px 12px', borderRadius: 6, fontSize: 11,
+                          fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                          border: 'none', background: `${GROUP_COLORS[metric.id === 'arsenal_contacts' ? 'arsenal' : 'target']}15`,
+                          color: GROUP_COLORS[metric.id === 'arsenal_contacts' ? 'arsenal' : 'target'],
+                        }}>
+                        + Add to CRM
                       </button>
-                    ) : (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <button
-                          onClick={() => setMetric(metric.id, Math.max(0, (value || 0) - 1))}
-                          style={{
-                            width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
-                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
-                            color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          }}
-                        >-</button>
-                        <input
-                          type="number"
-                          min="0"
-                          value={value || 0}
-                          onChange={e => setMetric(metric.id, Math.max(0, parseInt(e.target.value) || 0))}
-                          style={{
-                            width: 56, textAlign: 'center', fontSize: 18, fontWeight: 700,
-                            padding: '6px', borderRadius: 6,
-                            background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
-                            color: '#fff',
-                          }}
-                        />
-                        <button
-                          onClick={() => setMetric(metric.id, (value || 0) + 1)}
-                          style={{
-                            width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
-                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
-                            color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          }}
-                        >+</button>
-                      </div>
                     )}
                   </div>
                 );
               })}
             </div>
+
+            {/* Lifetime Offers Counter */}
+            <div style={{
+              marginTop: 16, padding: '12px 16px', borderRadius: 10,
+              background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.12)',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}>
+              <div style={{ fontSize: 13, color: '#f0a500', fontWeight: 600 }}>Offers to Contract</div>
+              <div className="mono" style={{ fontSize: 20, fontWeight: 700, color: '#f0a500' }}>
+                {(user.lifetimeOffersSubmitted || 0) + Math.max(0, (metrics.offers_submitted || 0) - (existingDailySubmission?.offers_submitted || 0))}
+              </div>
+            </div>
           </div>
+
+          {/* ── Suggested Follow-Ups ── */}
+          <SuggestedFollowUps contacts={contactList} onSelect={(contact) => {
+            setFollowUpContactId(contact.id);
+            setShowFollowUpForm(true);
+            setShowContactForm(false);
+          }} />
 
           {/* ── Add Contact / Follow-Up ── */}
           <div className="card" style={{ marginBottom: 24 }}>
@@ -498,6 +536,14 @@ export default function DayView({
                     </button>
                   ))}
                 </div>
+
+                {/* Property field for Target Contacts */}
+                {contactGroup === 'target' && (
+                  <input value={contactProperty} onChange={e => setContactProperty(e.target.value)}
+                    placeholder="Property/Opportunity * (e.g. 123 Main St, Phoenix AZ)"
+                    style={{ width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 10, borderRadius: 8,
+                    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(233,69,96,0.15)', color: '#eee' }} />
+                )}
 
                 <textarea value={contactNotes} onChange={e => setContactNotes(e.target.value)}
                   placeholder="Notes about this contact..." rows={2}
@@ -558,7 +604,7 @@ export default function DayView({
                     return (
                       <optgroup key={g.value} label={`── ${g.label} ──`}>
                         {gc.map(c => (
-                          <option key={c.id} value={c.id}>{c.name}</option>
+                          <option key={c.id} value={c.id}>{c.name}{c.property ? ` — ${c.property}` : ''}</option>
                         ))}
                       </optgroup>
                     );
@@ -598,8 +644,20 @@ export default function DayView({
               placeholder="Describe your day's work, paste links, or summarize results..."
               style={{ marginBottom: 16 }} />
 
+            {/* Training gate */}
+            {!metrics.training_completed && (
+              <div style={{
+                padding: '12px 16px', borderRadius: 8, marginBottom: 16, textAlign: 'center',
+                background: 'rgba(240,165,0,0.06)', border: '1px solid rgba(240,165,0,0.15)',
+              }}>
+                <div style={{ fontSize: 13, color: '#f0a500', fontWeight: 600 }}>
+                  Complete today's training to unlock your daily submission.
+                </div>
+              </div>
+            )}
+
             {/* Compliance status summary */}
-            {!compliance.met && compliance.failures.length > 0 && (
+            {metrics.training_completed && !compliance.met && compliance.failures.length > 0 && (
               <div style={{
                 padding: '12px 16px', borderRadius: 8, marginBottom: 16,
                 background: 'rgba(233,69,96,0.06)', border: '1px solid rgba(233,69,96,0.15)',
@@ -614,11 +672,12 @@ export default function DayView({
             )}
 
             <button className="btn-primary" onClick={handleSubmit}
-              style={{ width: '100%', opacity: compliance.met ? 1 : 0.7 }}>
-              {isUpdate ? 'Update' : 'Submit'} Day {day} {compliance.met ? '✓' : '(below minimums)'}
+              disabled={!metrics.training_completed}
+              style={{ width: '100%', opacity: !metrics.training_completed ? 0.4 : compliance.met ? 1 : 0.7 }}>
+              {isUpdate ? 'Update' : 'Submit'} Day {day} {metrics.training_completed && compliance.met ? '✓' : metrics.training_completed ? '(below minimums)' : ''}
             </button>
 
-            {!compliance.met && (
+            {metrics.training_completed && !compliance.met && (
               <p style={{ fontSize: 12, color: '#f0a500', textAlign: 'center', marginTop: 8 }}>
                 You can still submit, but failing to meet daily minimums may result in removal.
               </p>
@@ -655,8 +714,60 @@ function buildProofSummary(metrics) {
   if (metrics.target_contacts) parts.push(`${metrics.target_contacts} target contacts`);
   if (metrics.follow_ups) parts.push(`${metrics.follow_ups} follow-ups`);
   if (metrics.offers_submitted) parts.push(`${metrics.offers_submitted} offers submitted`);
-  if (metrics.properties_under_contract) parts.push(`${metrics.properties_under_contract} under contract`);
   return parts.join(', ') || 'Daily submission';
+}
+
+function SuggestedFollowUps({ contacts, onSelect }) {
+  const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  const suggestions = (contacts || [])
+    .filter(c => {
+      const status = c.status || 'new';
+      if (status !== 'follow_up' && status !== 'warm') return false;
+      const lastContact = new Date(c.last_follow_up_at || c.created_at).getTime();
+      return (now - lastContact) >= THREE_DAYS;
+    })
+    .sort((a, b) => new Date(a.last_follow_up_at || a.created_at) - new Date(b.last_follow_up_at || b.created_at))
+    .slice(0, 5);
+
+  if (suggestions.length === 0) return null;
+
+  return (
+    <div style={{
+      marginBottom: 24, padding: '16px 20px', borderRadius: 12,
+      background: 'rgba(83,52,131,0.04)', border: '1px solid rgba(83,52,131,0.12)',
+    }}>
+      <div style={{ fontSize: 13, fontWeight: 600, color: '#c9a0ff', marginBottom: 10 }}>
+        Suggested Follow-Ups
+      </div>
+      {suggestions.map(c => {
+        const daysAgo = Math.floor((now - new Date(c.last_follow_up_at || c.created_at).getTime()) / (24 * 60 * 60 * 1000));
+        const group = CONTACT_GROUPS.find(g => g.value === c.contact_group) || CONTACT_GROUPS[0];
+        return (
+          <div key={c.id} onClick={() => onSelect(c)} style={{
+            display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 8,
+            cursor: 'pointer', marginBottom: 4,
+            background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)',
+          }}>
+            <div style={{
+              width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
+              background: `${group.color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 11, fontWeight: 700, color: group.color,
+            }}>{c.name?.charAt(0).toUpperCase()}</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: '#ddd' }}>
+                {c.name}{c.property ? ` — ${c.property}` : ''}
+              </div>
+              <div style={{ fontSize: 11, color: '#666' }}>
+                Last contact {daysAgo} day{daysAgo !== 1 ? 's' : ''} ago
+              </div>
+            </div>
+            <span style={{ fontSize: 11, color: '#c9a0ff', fontWeight: 600 }}>Follow up</span>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 function SubmissionComplete({ submission }) {

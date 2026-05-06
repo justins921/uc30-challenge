@@ -293,6 +293,17 @@ const supabaseStorage = {
     return data || [];
   },
 
+  async updateContact(contactId, updates) {
+    const { data, error } = await supabase
+      .from('contacts')
+      .update(updates)
+      .eq('id', contactId)
+      .select()
+      .single();
+    if (error) { console.error('updateContact error:', error); return null; }
+    return data;
+  },
+
   // ── CRM: Follow-Ups ──────────────────────────────────────────
   async addFollowUp(followUp) {
     const { data, error } = await supabase
@@ -537,6 +548,7 @@ function toDbRow(user) {
     access_expires_at: user.accessExpiresAt || null,
   };
   if (user.ucPoints !== undefined) row.uc_points = user.ucPoints;
+  if (user.lifetimeOffersSubmitted !== undefined) row.lifetime_offers_submitted = user.lifetimeOffersSubmitted;
   // Only include profile_picture if it has a value (column may not exist yet)
   if (user.profilePicture) row.profile_picture = user.profilePicture;
   if (user.socialHandles && Object.keys(user.socialHandles).length > 0) row.social_handles = user.socialHandles;
@@ -594,6 +606,7 @@ function toDbUpdateRow(updates) {
   if (updates.socialHandles !== undefined) row.social_handles = updates.socialHandles;
   if (updates.gettingStartedCompleted !== undefined) row.getting_started_completed = updates.gettingStartedCompleted;
   if (updates.ucPoints !== undefined) row.uc_points = updates.ucPoints;
+  if (updates.lifetimeOffersSubmitted !== undefined) row.lifetime_offers_submitted = updates.lifetimeOffersSubmitted;
   if (updates.getClear !== undefined) row.get_clear = updates.getClear;
   if (updates.buyBox !== undefined) row.buy_box = updates.buyBox;
   if (updates.commitmentDeclaredAt !== undefined) row.commitment_declared_at = updates.commitmentDeclaredAt;
@@ -643,11 +656,11 @@ function fromDbRow(row) {
     completedDays: row.completed_days || [],
     submissions: row.submissions || [],
     metrics: {
-      propertiesAnalyzed: 0, offersSubmitted: 0, dealSourcesActivated: 0,
-      counteroffers: 0, followUps: 0, propertiesUnderContract: 0,
-      socialMediaPosts: 0,
+      trainingCompleted: 0, propertiesAnalyzed: 0, arsenalContacts: 0,
+      targetContacts: 0, followUps: 0, offersSubmitted: 0,
       ...(row.metrics || {}),
     },
+    lifetimeOffersSubmitted: row.lifetime_offers_submitted || 0,
     ucPoints: row.uc_points || 0,
     removedAt: row.removed_at,
     reactivatedAt: row.reactivated_at || null,
@@ -1023,14 +1036,14 @@ export function createNewUser(firstName, lastName, email, authId) {
     completedDays: [],
     submissions: [],
     metrics: {
+      trainingCompleted: 0,
       propertiesAnalyzed: 0,
-      offersSubmitted: 0,
-      dealSourcesActivated: 0,
-      counteroffers: 0,
+      arsenalContacts: 0,
+      targetContacts: 0,
       followUps: 0,
-      propertiesUnderContract: 0,
-      socialMediaPosts: 0,
+      offersSubmitted: 0,
     },
+    lifetimeOffersSubmitted: 0,
     ucPoints: 0,
     removedAt: null,
     accessExpiresAt: null,

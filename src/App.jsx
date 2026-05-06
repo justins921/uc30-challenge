@@ -70,6 +70,7 @@ export default function App() {
     dailyMinimumsOverrides,
     setDailyMinimums,
     addContact,
+    updateContact,
     getContacts,
     addFollowUp,
     getFollowUps,
@@ -503,6 +504,7 @@ export default function App() {
       practiceDaySettings={practiceDaySettings}
       onCompletePracticeDay={completeActivation}
       onAddContact={handleAddContact}
+      onUpdateContact={updateContact}
       onAddFollowUp={addFollowUp}
       onUploadFile={uploadFile}
       getContacts={getContacts}
