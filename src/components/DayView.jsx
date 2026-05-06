@@ -10,7 +10,7 @@ const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500' };
 export default function DayView({
   day, user, onSubmit, onBack, contentOverrides, customPhases,
   complianceSettings, existingDailySubmission,
-  onAddContact, onAddFollowUp, onUploadFile, contacts: initialContacts, getUploadUrl,
+  onAddContact, onAddFollowUp, onUpdateContact, onUploadFile, contacts: initialContacts, getUploadUrl,
   quizAttempts, onQuizAttempt,
 }) {
   const [submitted, setSubmitted] = useState(false);
@@ -532,14 +532,36 @@ export default function DayView({
             </div>
           </div>
 
-          {/* ── Suggested Follow-Ups ── */}
-          <SuggestedFollowUps contacts={contactList} onSelect={(contact) => {
-            setFollowUpContactId(contact.id);
-            setFollowUpInterval('');
-            setFollowUpReclassify('');
-            setShowFollowUpForm(true);
-            setShowContactForm(false);
-          }} />
+          {/* ── Due Follow-Ups ── */}
+          <DueFollowUps
+            contacts={contactList}
+            onFollowUp={(contact) => {
+              setFollowUpContactId(contact.id);
+              setFollowUpInterval('');
+              setFollowUpReclassify('');
+              setFollowUpNotes('');
+              setShowFollowUpForm(true);
+              setShowContactForm(false);
+            }}
+            onSnooze={async (contact, days) => {
+              const newDate = new Date();
+              newDate.setDate(newDate.getDate() + days);
+              const updates = { follow_up_date: newDate.toISOString() };
+              if (onUpdateContact) await onUpdateContact(contact.id, updates);
+              setContactList(prev => prev.map(c => c.id === contact.id ? { ...c, ...updates } : c));
+            }}
+            onMarkDead={async (contact, interval) => {
+              const now = new Date().toISOString();
+              const updates = {
+                pipeline_status: 'dead',
+                reclassified_at: now,
+                follow_up_interval: interval,
+                follow_up_date: calculateFollowUpDate(interval),
+              };
+              if (onUpdateContact) await onUpdateContact(contact.id, updates);
+              setContactList(prev => prev.map(c => c.id === contact.id ? { ...c, ...updates } : c));
+            }}
+          />
 
           {/* ── Add Contact / Follow-Up ── */}
           <div className="card" style={{ marginBottom: 24 }}>
@@ -956,55 +978,201 @@ function buildProofSummary(metrics) {
   return parts.join(', ') || 'Daily submission';
 }
 
-function SuggestedFollowUps({ contacts, onSelect }) {
-  const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
-  const now = Date.now();
-  const suggestions = (contacts || [])
-    .filter(c => {
-      const status = c.status || 'new';
-      if (status !== 'follow_up' && status !== 'warm') return false;
-      const lastContact = new Date(c.last_follow_up_at || c.created_at).getTime();
-      return (now - lastContact) >= THREE_DAYS;
-    })
-    .sort((a, b) => new Date(a.last_follow_up_at || a.created_at) - new Date(b.last_follow_up_at || b.created_at))
-    .slice(0, 5);
+function DueFollowUps({ contacts, onFollowUp, onSnooze, onMarkDead }) {
+  const [snoozeOpenId, setSnoozeOpenId] = useState(null);
+  const [markDeadId, setMarkDeadId] = useState(null);
 
-  if (suggestions.length === 0) return null;
+  const now = new Date();
+  const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+
+  const dueContacts = (contacts || [])
+    .filter(c => {
+      if (!c.follow_up_date || c.follow_up_interval === 'never') return false;
+      return new Date(c.follow_up_date) <= todayEnd;
+    })
+    .sort((a, b) => new Date(a.follow_up_date) - new Date(b.follow_up_date));
+
+  if (dueContacts.length === 0) {
+    return (
+      <div style={{
+        marginBottom: 24, padding: '16px 20px', borderRadius: 12,
+        background: 'rgba(72,199,142,0.04)', border: '1px solid rgba(72,199,142,0.12)',
+        textAlign: 'center',
+      }}>
+        <div style={{ fontSize: 13, color: '#48c78e', fontWeight: 600 }}>
+          No follow-ups due today. Keep building your pipeline!
+        </div>
+      </div>
+    );
+  }
+
+  const overdue = dueContacts.filter(c => new Date(c.follow_up_date) < new Date(now.getFullYear(), now.getMonth(), now.getDate()));
+  const dueToday = dueContacts.filter(c => new Date(c.follow_up_date) >= new Date(now.getFullYear(), now.getMonth(), now.getDate()));
 
   return (
-    <div style={{
-      marginBottom: 24, padding: '16px 20px', borderRadius: 12,
-      background: 'rgba(83,52,131,0.04)', border: '1px solid rgba(83,52,131,0.12)',
-    }}>
-      <div style={{ fontSize: 13, fontWeight: 600, color: '#c9a0ff', marginBottom: 10 }}>
-        Suggested Follow-Ups
+    <div style={{ marginBottom: 24 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+        <div style={{ width: 28, height: 28, borderRadius: 8, background: overdue.length > 0 ? 'rgba(233,69,96,0.15)' : 'rgba(240,165,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📋</div>
+        <h3 style={{ fontSize: 16, fontWeight: 700 }}>Today's Follow-Ups</h3>
+        <span className="mono" style={{ fontSize: 12, color: overdue.length > 0 ? '#e94560' : '#f0a500', fontWeight: 700 }}>
+          ({dueContacts.length})
+        </span>
       </div>
-      {suggestions.map(c => {
-        const daysAgo = Math.floor((now - new Date(c.last_follow_up_at || c.created_at).getTime()) / (24 * 60 * 60 * 1000));
-        const group = CONTACT_GROUPS.find(g => g.value === c.contact_group) || CONTACT_GROUPS[0];
-        return (
-          <div key={c.id} onClick={() => onSelect(c)} style={{
-            display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 8,
-            cursor: 'pointer', marginBottom: 4,
-            background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)',
-          }}>
-            <div style={{
-              width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
-              background: `${group.color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 11, fontWeight: 700, color: group.color,
-            }}>{c.name?.charAt(0).toUpperCase()}</div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: '#ddd' }}>
-                {c.name}{c.property ? ` — ${c.property}` : ''}
-              </div>
-              <div style={{ fontSize: 11, color: '#666' }}>
-                Last contact {daysAgo} day{daysAgo !== 1 ? 's' : ''} ago
-              </div>
-            </div>
-            <span style={{ fontSize: 11, color: '#c9a0ff', fontWeight: 600 }}>Follow up</span>
+
+      {overdue.length > 0 && overdue.map(c => (
+        <DueFollowUpCard key={c.id} contact={c} type="overdue" now={now}
+          onFollowUp={onFollowUp} onSnooze={onSnooze} onMarkDead={onMarkDead}
+          snoozeOpen={snoozeOpenId === c.id} markDeadOpen={markDeadId === c.id}
+          onToggleSnooze={() => setSnoozeOpenId(snoozeOpenId === c.id ? null : c.id)}
+          onToggleMarkDead={() => setMarkDeadId(markDeadId === c.id ? null : c.id)}
+        />
+      ))}
+
+      {dueToday.length > 0 && dueToday.map(c => (
+        <DueFollowUpCard key={c.id} contact={c} type="today" now={now}
+          onFollowUp={onFollowUp} onSnooze={onSnooze} onMarkDead={onMarkDead}
+          snoozeOpen={snoozeOpenId === c.id} markDeadOpen={markDeadId === c.id}
+          onToggleSnooze={() => setSnoozeOpenId(snoozeOpenId === c.id ? null : c.id)}
+          onToggleMarkDead={() => setMarkDeadId(markDeadId === c.id ? null : c.id)}
+        />
+      ))}
+    </div>
+  );
+}
+
+function DueFollowUpCard({ contact, type, now, onFollowUp, onSnooze, onMarkDead, snoozeOpen, markDeadOpen, onToggleSnooze, onToggleMarkDead }) {
+  const isOverdue = type === 'overdue';
+  const diffDays = Math.floor((now - new Date(contact.follow_up_date)) / (1000 * 60 * 60 * 24));
+  const isTarget = contact.contact_group === 'target' && contact.pipeline_status !== 'dead';
+  const groupLabel = contact.contact_group === 'arsenal' ? 'Arsenal' : contact.pipeline_status === 'dead' ? 'Dead' : 'Target Property';
+  const groupColor = contact.contact_group === 'arsenal' ? '#f0a500' : contact.pipeline_status === 'dead' ? '#666' : '#e94560';
+
+  const accentColor = isOverdue ? '#e94560' : '#f0a500';
+
+  return (
+    <div className="card" style={{
+      marginBottom: 8, padding: '14px 18px',
+      borderColor: `${accentColor}30`,
+      background: isOverdue ? 'rgba(233,69,96,0.04)' : 'rgba(240,165,0,0.03)',
+    }}>
+      {/* Badge */}
+      <div style={{
+        display: 'inline-flex', alignItems: 'center', gap: 6,
+        padding: '3px 10px', borderRadius: 6, marginBottom: 10,
+        background: `${accentColor}15`, fontSize: 11, fontWeight: 700, color: accentColor,
+      }}>
+        {isOverdue ? `OVERDUE — ${diffDays} day${diffDays !== 1 ? 's' : ''}` : 'DUE TODAY'}
+      </div>
+
+      {/* Contact info */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+        <div style={{
+          width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
+          background: `${groupColor}20`, border: `1px solid ${groupColor}30`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 14, fontWeight: 700, color: groupColor,
+        }}>
+          {contact.name?.charAt(0).toUpperCase()}
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 15, fontWeight: 600, color: '#ddd' }}>{contact.name}</span>
+            <span style={{
+              fontSize: 10, padding: '2px 6px', borderRadius: 4, fontWeight: 700,
+              background: `${groupColor}15`, color: groupColor,
+            }}>{groupLabel}</span>
           </div>
-        );
-      })}
+          {contact.property && (
+            <div style={{ fontSize: 13, color: '#e94560', marginTop: 2 }}>📍 {contact.property}</div>
+          )}
+          <div style={{ fontSize: 12, color: '#666', marginTop: 4, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            {contact.phone && <span>📞 {contact.phone}</span>}
+            {contact.email && <span>✉ {contact.email}</span>}
+          </div>
+          {contact.last_contact_date && (
+            <div style={{ fontSize: 11, color: '#555', marginTop: 4 }}>
+              Last contact: {new Date(contact.last_contact_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
+        <button onClick={() => onFollowUp(contact)} style={{
+          padding: '7px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+          cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+          border: 'none', background: 'rgba(72,199,142,0.15)', color: '#48c78e',
+        }}>
+          Follow Up
+        </button>
+        <div style={{ position: 'relative' }}>
+          <button onClick={onToggleSnooze} style={{
+            padding: '7px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+            cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+            border: 'none', background: 'rgba(255,255,255,0.06)', color: '#888',
+          }}>
+            Snooze ▾
+          </button>
+          {snoozeOpen && (
+            <div style={{
+              position: 'absolute', top: '100%', left: 0, marginTop: 4, zIndex: 10,
+              background: '#1a1a2e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8,
+              overflow: 'hidden', minWidth: 120, boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+            }}>
+              {[{ days: 1, label: '+1 day' }, { days: 3, label: '+3 days' }, { days: 7, label: '+1 week' }].map(opt => (
+                <button key={opt.days} onClick={() => { onSnooze(contact, opt.days); onToggleSnooze(); }}
+                  style={{
+                    display: 'block', width: '100%', padding: '8px 14px', fontSize: 12,
+                    cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                    border: 'none', borderBottom: '1px solid rgba(255,255,255,0.04)',
+                    background: 'transparent', color: '#ccc', textAlign: 'left',
+                  }}>
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        {isTarget && (
+          <div style={{ position: 'relative' }}>
+            <button onClick={onToggleMarkDead} style={{
+              padding: '7px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+              cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+              border: 'none', background: 'rgba(255,255,255,0.04)', color: '#666',
+            }}>
+              Mark Dead
+            </button>
+            {markDeadOpen && (
+              <div style={{
+                position: 'absolute', top: '100%', left: 0, marginTop: 4, zIndex: 10,
+                background: '#1a1a2e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8,
+                overflow: 'hidden', minWidth: 140, boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+              }}>
+                <div style={{ padding: '6px 14px', fontSize: 10, color: '#666', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  Set long-term follow-up:
+                </div>
+                {[
+                  { value: '1_month', label: '1 Month' },
+                  { value: '3_months', label: '3 Months' },
+                  { value: '6_months', label: '6 Months' },
+                  { value: 'never', label: 'Never' },
+                ].map(opt => (
+                  <button key={opt.value} onClick={() => { onMarkDead(contact, opt.value); onToggleMarkDead(); }}
+                    style={{
+                      display: 'block', width: '100%', padding: '8px 14px', fontSize: 12,
+                      cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                      border: 'none', borderBottom: '1px solid rgba(255,255,255,0.04)',
+                      background: 'transparent', color: '#ccc', textAlign: 'left',
+                    }}>
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

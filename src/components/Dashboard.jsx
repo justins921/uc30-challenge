@@ -286,6 +286,13 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           </div>
         )}
 
+        {/* Follow-Up Reminder Badge */}
+        {!showPracticeDay && cohortActive && (tab === 'timeline' || tab === 'day') && (
+          <FollowUpBadge contacts={contacts} onGoToDay={() => {
+            if (calendarDay && calendarDay >= 1) handleSelectDay(Math.min(calendarDay, user.currentDay));
+          }} />
+        )}
+
         {/* Compliance Cards */}
         {!showPracticeDay && cohortActive && (tab === 'timeline' || tab === 'day') && complianceSettings && (
           <ComplianceCards
@@ -334,6 +341,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             dailyMinimumsOverrides={dailyMinimumsOverrides}
             onAddContact={onAddContact}
             onAddFollowUp={onAddFollowUp}
+            onUpdateContact={onUpdateContact}
             onUploadFile={onUploadFile}
             contacts={contacts}
             getUploadUrl={getUploadUrl}
@@ -1441,6 +1449,55 @@ function ComplianceCards({ calendarDay, existingDailySubmission, complianceSetti
             </div>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+function FollowUpBadge({ contacts, onGoToDay }) {
+  const now = new Date();
+  const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  const due = (contacts || []).filter(c => {
+    if (!c.follow_up_date || c.follow_up_interval === 'never') return false;
+    return new Date(c.follow_up_date) <= todayEnd;
+  });
+
+  if (due.length === 0) return null;
+
+  const overdueCount = due.filter(c => new Date(c.follow_up_date) < todayStart).length;
+  const dueTodayCount = due.length - overdueCount;
+  const hasOverdue = overdueCount > 0;
+
+  return (
+    <div className="fade-up" onClick={onGoToDay} style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '12px 20px', marginBottom: 16, cursor: 'pointer',
+      background: hasOverdue ? 'rgba(233,69,96,0.06)' : 'rgba(240,165,0,0.06)',
+      border: `1px solid ${hasOverdue ? 'rgba(233,69,96,0.15)' : 'rgba(240,165,0,0.15)'}`,
+      borderRadius: 12,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{ fontSize: 16 }}>📋</span>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: hasOverdue ? '#e94560' : '#f0a500' }}>
+            {hasOverdue
+              ? `${overdueCount} overdue follow-up${overdueCount !== 1 ? 's' : ''}${dueTodayCount > 0 ? `, ${dueTodayCount} due today` : ''}`
+              : `${dueTodayCount} follow-up${dueTodayCount !== 1 ? 's' : ''} due today`}
+          </div>
+          <div style={{ fontSize: 11, color: '#666', marginTop: 2 }}>
+            Tap to view your daily page
+          </div>
+        </div>
+      </div>
+      <div style={{
+        minWidth: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: hasOverdue ? 'rgba(233,69,96,0.2)' : 'rgba(240,165,0,0.2)',
+        color: hasOverdue ? '#e94560' : '#f0a500', fontSize: 14, fontWeight: 700,
+        fontFamily: "'DM Mono', monospace",
+      }}>
+        {due.length}
       </div>
     </div>
   );
