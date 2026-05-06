@@ -67,7 +67,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink, getContactsForParticipant, getUploads, getUploadUrl, complianceSettings, onSetComplianceDailyMinimums, onSetComplianceWeeklyMinimums, onSetComplianceEnforcement, getAllDailySubmissions, getRemovalLog }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink, practiceDaySettings, onSetPracticeDaySettings, getContactsForParticipant, getUploads, getUploadUrl, complianceSettings, onSetComplianceDailyMinimums, onSetComplianceWeeklyMinimums, onSetComplianceEnforcement, getAllDailySubmissions, getRemovalLog }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -300,6 +300,8 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onSetLandingVersion={onSetLandingVersion}
             dailyMinimumsOverrides={dailyMinimumsOverrides || {}}
             onSetDailyMinimums={onSetDailyMinimums}
+            practiceDaySettings={practiceDaySettings}
+            onSetPracticeDaySettings={onSetPracticeDaySettings}
           />
         )}
         {tab === 'support' && (
@@ -2020,11 +2022,15 @@ function DailyMinimumsEditor({ overrides, onSave, onBack }) {
   );
 }
 
-function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, dailyMinimumsOverrides, onSetDailyMinimums }) {
+function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, dailyMinimumsOverrides, onSetDailyMinimums, practiceDaySettings, onSetPracticeDaySettings }) {
   const [editingDay, setEditingDay] = useState(null);
   const [editingPhases, setEditingPhases] = useState(false);
   const [editingLanding, setEditingLanding] = useState(false);
   const [editingMinimums, setEditingMinimums] = useState(false);
+  const [pdVideoUrl, setPdVideoUrl] = useState(practiceDaySettings?.practice_day_video || '');
+  const [pdCalcUrl, setPdCalcUrl] = useState(practiceDaySettings?.rental_calculator_url || '');
+  const [pdSaving, setPdSaving] = useState(false);
+  const [pdSaved, setPdSaved] = useState(false);
 
   if (editingLanding) {
     return (
@@ -2113,6 +2119,71 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
           Edit Phases
         </button>
       </div>
+      {/* Practice Day Settings */}
+      <div className="card" style={{
+        marginBottom: 20, padding: '20px 24px',
+        background: 'rgba(83,52,131,0.04)', border: '1px solid rgba(83,52,131,0.15)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+          <span style={{ fontSize: 18 }}>🏋️</span>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: '#c9a0ff' }}>Practice Day Settings</div>
+            <p style={{ color: '#888', fontSize: 12, margin: '2px 0 0' }}>
+              Configure resources shown during the pre-Day-1 practice walkthrough.
+            </p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div>
+            <label style={{ fontSize: 12, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 6 }}>
+              Practice Day Video URL
+            </label>
+            <input
+              value={pdVideoUrl}
+              onChange={e => { setPdVideoUrl(e.target.value); setPdSaved(false); }}
+              placeholder="https://www.youtube.com/embed/..."
+              style={{ width: '100%', fontSize: 13, padding: '10px 14px' }}
+            />
+            <p style={{ fontSize: 11, color: '#555', marginTop: 4, marginBottom: 0 }}>
+              Embed URL for the intro/training video shown during practice mode.
+            </p>
+          </div>
+          <div>
+            <label style={{ fontSize: 12, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 6 }}>
+              Rental Calculator Download URL
+            </label>
+            <input
+              value={pdCalcUrl}
+              onChange={e => { setPdCalcUrl(e.target.value); setPdSaved(false); }}
+              placeholder="https://drive.google.com/..."
+              style={{ width: '100%', fontSize: 13, padding: '10px 14px' }}
+            />
+            <p style={{ fontSize: 11, color: '#555', marginTop: 4, marginBottom: 0 }}>
+              Link to the CDS Rental Calculator spreadsheet or file.
+            </p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button
+              className="btn-secondary"
+              style={{ padding: '8px 18px', fontSize: 12, color: '#c9a0ff', borderColor: 'rgba(83,52,131,0.3)' }}
+              disabled={pdSaving}
+              onClick={async () => {
+                setPdSaving(true);
+                await onSetPracticeDaySettings({
+                  practice_day_video: pdVideoUrl.trim() || null,
+                  rental_calculator_url: pdCalcUrl.trim() || null,
+                });
+                setPdSaving(false);
+                setPdSaved(true);
+              }}
+            >
+              {pdSaving ? 'Saving...' : 'Save Practice Day Settings'}
+            </button>
+            {pdSaved && <span style={{ fontSize: 12, color: '#48c78e', fontWeight: 600 }}>Saved</span>}
+          </div>
+        </div>
+      </div>
+
       {/* Getting Started */}
       <div style={{ marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>

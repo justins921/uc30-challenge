@@ -13,6 +13,7 @@ import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFA
 import CommunityBoard from './CommunityBoard';
 import ContactsCRM from './ContactsCRM';
 import MyBuyBox from './MyBuyBox';
+import PracticeDay from './PracticeDay';
 import Footer from './Footer';
 
 const TABS = [
@@ -75,11 +76,12 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt, practiceDaySettings, onCompletePracticeDay }) {
   const [tab, setTab] = useState('timeline');
   const [selectedDay, setSelectedDay] = useState(null);
   const [existingDailySubmission, setExistingDailySubmission] = useState(null);
   const [quizAttempts, setQuizAttempts] = useState([]);
+  const [showPracticeDay, setShowPracticeDay] = useState(false);
 
   const calendarDay = getCalendarDay(cohortStartDate);
 
@@ -219,20 +221,37 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
       />
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
+        {/* Practice Day */}
+        {showPracticeDay && (
+          <PracticeDay
+            user={user}
+            practiceDaySettings={practiceDaySettings}
+            onComplete={async () => {
+              if (onCompletePracticeDay) {
+                await onCompletePracticeDay({
+                  practiceDayCompleted: true,
+                  practiceDayCompletedAt: new Date().toISOString(),
+                });
+              }
+            }}
+            onBack={() => setShowPracticeDay(false)}
+          />
+        )}
+
         {/* UC Points Score */}
-        {(tab === 'timeline' || tab === 'day') && (
+        {!showPracticeDay && (tab === 'timeline' || tab === 'day') && (
           <UCPointsBanner ucPoints={user.ucPoints || calculateUCPoints(user.metrics)} />
         )}
 
-        {cohortActive && cohortStats && cohortStats.total > 0 && (
+        {!showPracticeDay && cohortActive && cohortStats && cohortStats.total > 0 && (
           <CohortStatsBanner active={cohortStats.active} total={cohortStats.total} />
         )}
-        {cohortActive && (tab === 'timeline' || tab === 'day') && (
+        {!showPracticeDay && cohortActive && (tab === 'timeline' || tab === 'day') && (
           <ProgressBanner user={user} cohortStartDate={cohortStartDate} calendarDay={calendarDay} />
         )}
 
         {/* Motivation nudge when user hasn't submitted today */}
-        {cohortActive && !userCompletedToday && (user.stakesDeclaration || user.theirWhy) && (tab === 'timeline' || tab === 'day') && (
+        {!showPracticeDay && cohortActive && !userCompletedToday && (user.stakesDeclaration || user.theirWhy) && (tab === 'timeline' || tab === 'day') && (
           <div className="fade-up" style={{
             padding: '12px 18px', borderRadius: 12, marginBottom: 16,
             background: 'linear-gradient(135deg, rgba(233,69,96,0.04), rgba(72,199,142,0.04))',
@@ -247,7 +266,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         )}
 
         {/* Compliance Cards */}
-        {cohortActive && (tab === 'timeline' || tab === 'day') && complianceSettings && (
+        {!showPracticeDay && cohortActive && (tab === 'timeline' || tab === 'day') && complianceSettings && (
           <ComplianceCards
             calendarDay={calendarDay}
             existingDailySubmission={existingDailySubmission}
@@ -257,12 +276,12 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         )}
 
         {/* Cohort countdown when pre-cohort */}
-        {cohortStartDate && !cohortActive && (tab === 'timeline' || tab === 'day') && (
-          <CohortCountdown cohortStartDate={cohortStartDate} />
+        {!showPracticeDay && cohortStartDate && !cohortActive && (tab === 'timeline' || tab === 'day') && (
+          <CohortCountdown cohortStartDate={cohortStartDate} user={user} onLaunchPracticeDay={() => setShowPracticeDay(true)} />
         )}
 
         {/* Countdown + Live Call — only on Timeline/Day views when cohort is active */}
-        {cohortActive && (tab === 'timeline' || tab === 'day') && (
+        {!showPracticeDay && cohortActive && (tab === 'timeline' || tab === 'day') && (
           <>
             {userCompletedToday && (
               <NextDayCountdown calendarDay={calendarDay} />
@@ -272,10 +291,10 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         )}
 
         {/* Tab Content */}
-        {tab === 'timeline' && (
+        {!showPracticeDay && tab === 'timeline' && (
           <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} contentOverrides={contentOverrides} customPhases={customPhases} cohortStartDate={cohortStartDate} />
         )}
-        {tab === 'day' && selectedDay === 'getting_started' && (
+        {!showPracticeDay && tab === 'day' && selectedDay === 'getting_started' && (
           <div style={{ maxWidth: 720, margin: '0 auto' }}>
             <button className="btn-secondary" onClick={handleBackToTimeline} style={{ marginBottom: 24, padding: '8px 20px', fontSize: 13 }}>
               ← Back to Timeline
@@ -283,7 +302,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             <GettingStartedSection user={user} onComplete={async (...args) => { await onCompleteGettingStarted(...args); handleBackToTimeline(); }} contentOverrides={contentOverrides} />
           </div>
         )}
-        {tab === 'day' && selectedDay && selectedDay !== 'getting_started' && (
+        {!showPracticeDay && tab === 'day' && selectedDay && selectedDay !== 'getting_started' && (
           <DayView
             day={selectedDay}
             user={user}
@@ -307,7 +326,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             }}
           />
         )}
-        {tab === 'community' && (
+        {!showPracticeDay && tab === 'community' && (
           <CommunityBoard
             user={user}
             posts={communityPosts}
@@ -320,20 +339,20 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             onDismissWarning={onDismissCommunityWarning}
           />
         )}
-        {tab === 'leaderboard' && (
+        {!showPracticeDay && tab === 'leaderboard' && (
           <Leaderboard participants={participants || []} currentUserId={user.id} />
         )}
-        {tab === 'crm' && (
+        {!showPracticeDay && tab === 'crm' && (
           <ContactsCRM
             user={user}
             getContacts={getContacts}
             getFollowUpsByContact={getFollowUpsByContact}
           />
         )}
-        {tab === 'buybox' && <MyBuyBox user={user} />}
-        {tab === 'submissions' && <SubmissionsView user={user} />}
-        {tab === 'stats' && <StatsView user={user} />}
-        {tab === 'support' && (
+        {!showPracticeDay && tab === 'buybox' && <MyBuyBox user={user} />}
+        {!showPracticeDay && tab === 'submissions' && <SubmissionsView user={user} />}
+        {!showPracticeDay && tab === 'stats' && <StatsView user={user} />}
+        {!showPracticeDay && tab === 'support' && (
           <UserSupport
             user={user}
             onSubmitTicket={onSubmitTicket}
@@ -342,7 +361,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             supportTickets={supportTickets}
           />
         )}
-        {tab === 'profile' && (
+        {!showPracticeDay && tab === 'profile' && (
           <UserProfile
             user={user}
             onUpdateProfile={onUpdateProfile}
@@ -403,7 +422,7 @@ function UpcomingCallBanner({ calls }) {
 }
 
 // ── Countdown: Cohort hasn't started ────────────────────────
-function CohortCountdown({ cohortStartDate }) {
+function CohortCountdown({ cohortStartDate, user, onLaunchPracticeDay }) {
   const [timeLeft, setTimeLeft] = useState(null);
 
   useEffect(() => {
@@ -450,7 +469,7 @@ function CohortCountdown({ cohortStartDate }) {
         </div>
       )}
 
-      <div className="card" style={{ padding: 24, textAlign: 'left', maxWidth: 400, margin: '0 auto' }}>
+      <div className="card" style={{ padding: 24, textAlign: 'left', maxWidth: 400, margin: '0 auto', marginBottom: 20 }}>
         <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>You're activated. Use this time to:</h3>
         <ul style={{ color: '#888', fontSize: 14, lineHeight: 2, listStyle: 'none', padding: 0 }}>
           <li>✅ Complete the Getting Started section</li>
@@ -458,6 +477,45 @@ function CohortCountdown({ cohortStartDate }) {
           <li>✅ Research properties in your target area</li>
           <li>✅ Get ready to submit offers on Day 1</li>
         </ul>
+      </div>
+
+      {/* Practice Day Card */}
+      <div
+        onClick={user?.practiceDayCompleted ? undefined : onLaunchPracticeDay}
+        style={{
+          maxWidth: 400, margin: '0 auto', padding: '20px 24px', borderRadius: 14,
+          background: user?.practiceDayCompleted
+            ? 'rgba(72,199,142,0.06)' : 'linear-gradient(135deg, rgba(240,165,0,0.08), rgba(240,165,0,0.03))',
+          border: `1px solid ${user?.practiceDayCompleted ? 'rgba(72,199,142,0.2)' : 'rgba(240,165,0,0.25)'}`,
+          cursor: user?.practiceDayCompleted ? 'default' : 'pointer',
+          display: 'flex', alignItems: 'center', gap: 16,
+          transition: 'all 0.2s',
+        }}
+      >
+        <div style={{
+          width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+          background: user?.practiceDayCompleted ? 'rgba(72,199,142,0.15)' : 'rgba(240,165,0,0.15)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
+        }}>
+          {user?.practiceDayCompleted ? '✓' : '🏋️'}
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{
+            fontSize: 14, fontWeight: 700,
+            color: user?.practiceDayCompleted ? '#48c78e' : '#f0a500',
+            marginBottom: 4,
+          }}>
+            {user?.practiceDayCompleted ? 'Practice Run Complete' : 'Take a Practice Run'}
+          </div>
+          <div style={{ fontSize: 12, color: '#888', lineHeight: 1.5 }}>
+            {user?.practiceDayCompleted
+              ? 'You\'re ready for Day 1.'
+              : 'Learn how the daily submission works before Day 1.'}
+          </div>
+        </div>
+        {!user?.practiceDayCompleted && (
+          <div style={{ color: '#f0a500', fontSize: 18, flexShrink: 0, fontWeight: 700 }}>›</div>
+        )}
       </div>
     </div>
   );

@@ -238,6 +238,13 @@ const supabaseStorage = {
   },
   async setSkoolLink(link) { await this._setSetting('skool_link', link); },
 
+  async getPracticeDaySettings() {
+    const val = await this._getSetting('practice_day_settings');
+    if (val) { try { localStorage.setItem('uc30_practice_day_settings', JSON.stringify(val)); } catch {} }
+    return val || (() => { try { return JSON.parse(localStorage.getItem('uc30_practice_day_settings')) || {}; } catch { return {}; } })();
+  },
+  async setPracticeDaySettings(settings) { await this._setSetting('practice_day_settings', settings); },
+
   // ── CRM: Contacts ────────────────────────────────────────────
   async addContact(contact) {
     const { data, error } = await supabase
@@ -553,6 +560,8 @@ function toDbRow(user) {
   if (user.notificationPreferences) row.notification_preferences = user.notificationPreferences;
   if (user.activationCompleted) row.activation_completed = true;
   if (user.activationCompletedAt) row.activation_completed_at = user.activationCompletedAt;
+  if (user.practiceDayCompleted) row.practice_day_completed = true;
+  if (user.practiceDayCompletedAt) row.practice_day_completed_at = user.practiceDayCompletedAt;
   // Guarantee tracking
   if (user.cohortAttempt != null) row.cohort_attempt = user.cohortAttempt;
   if (user.refundEligible !== undefined) row.refund_eligible = user.refundEligible;
@@ -604,6 +613,8 @@ function toDbUpdateRow(updates) {
   if (updates.notificationPreferences !== undefined) row.notification_preferences = updates.notificationPreferences;
   if (updates.activationCompleted !== undefined) row.activation_completed = updates.activationCompleted;
   if (updates.activationCompletedAt !== undefined) row.activation_completed_at = updates.activationCompletedAt;
+  if (updates.practiceDayCompleted !== undefined) row.practice_day_completed = updates.practiceDayCompleted;
+  if (updates.practiceDayCompletedAt !== undefined) row.practice_day_completed_at = updates.practiceDayCompletedAt;
   // Guarantee tracking
   if (updates.cohortAttempt !== undefined) row.cohort_attempt = updates.cohortAttempt;
   if (updates.refundEligible !== undefined) row.refund_eligible = updates.refundEligible;
@@ -663,6 +674,8 @@ function fromDbRow(row) {
     notificationPreferences: row.notification_preferences || null,
     activationCompleted: row.activation_completed || false,
     activationCompletedAt: row.activation_completed_at || null,
+    practiceDayCompleted: row.practice_day_completed || false,
+    practiceDayCompletedAt: row.practice_day_completed_at || null,
     // Guarantee tracking
     cohortAttempt: row.cohort_attempt || 1,
     refundEligible: row.refund_eligible !== false,
@@ -788,6 +801,12 @@ const localStorageFallback = {
   },
   setSkoolLink(link) {
     try { localStorage.setItem('uc30_skool_link', JSON.stringify(link)); } catch {}
+  },
+  getPracticeDaySettings() {
+    try { return JSON.parse(localStorage.getItem('uc30_practice_day_settings')) || {}; } catch { return {}; }
+  },
+  setPracticeDaySettings(settings) {
+    try { localStorage.setItem('uc30_practice_day_settings', JSON.stringify(settings)); } catch {}
   },
 
   // ── CRM: Contacts (localStorage fallback) ─────────────────────
@@ -1060,6 +1079,8 @@ export function createNewUser(firstName, lastName, email, authId) {
     notificationPreferences: null,
     activationCompleted: false,
     activationCompletedAt: null,
+    practiceDayCompleted: false,
+    practiceDayCompletedAt: null,
     // Guarantee tracking
     cohortAttempt: 1,
     refundEligible: true,
