@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum } from '../data/challengeDays';
+import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum, DAILY_MINIMUMS, getWeekNumber, getWeeklyOfferTarget, getWeekDayRange } from '../data/challengeDays';
 import { COMPLIANCE_METRICS, checkDailyCompliance, getTimeUntilDeadline, DEFAULT_DAILY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
 import QuizSection from './QuizSection';
 import { CONTACT_GROUPS } from './ContactsCRM';
@@ -36,8 +36,9 @@ export default function DayView({
     ? { accent: '#f0a500', label: 'Operator Mode' }
     : (dayColors && dayColors[day]) || CATEGORY_COLORS[dayData.category] || { accent: '#888', label: '' };
 
-  // ── Compliance settings ───────────────────────────────────────
-  const dailyMins = { ...DEFAULT_DAILY_MINIMUMS, ...complianceSettings?.dailyMinimums };
+  // ── Compliance settings (per-day minimums from challengeDays.js) ──
+  const perDayMins = (!isPost30 && DAILY_MINIMUMS[day]) || DEFAULT_DAILY_MINIMUMS;
+  const dailyMins = { ...perDayMins, ...complianceSettings?.dailyMinimums };
   const enforcement = { ...DEFAULT_ENFORCEMENT, ...complianceSettings?.enforcement };
 
   // ── Deadline countdown ────────────────────────────────────────
@@ -187,6 +188,9 @@ export default function DayView({
         <h1 style={{ fontSize: 32, fontWeight: 700, lineHeight: 1.2, marginBottom: 4 }}>
           {dayData.title}
         </h1>
+        {dayData.caption && (
+          <p style={{ fontSize: 14, color: '#888', marginTop: 4, marginBottom: 0 }}>{dayData.caption}</p>
+        )}
         {isComplete && (
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -197,6 +201,9 @@ export default function DayView({
           </div>
         )}
       </div>
+
+      {/* Weekly Offer Tracker */}
+      {!isPost30 && <WeeklyOfferTracker day={day} user={user} currentOffers={metrics.offers_submitted || 0} existingOffers={existingDailySubmission?.offers_submitted || 0} />}
 
       {/* Deadline Countdown (shown when submission area is visible) */}
       {canSubmit && timeLeft > 0 && (
@@ -278,6 +285,17 @@ export default function DayView({
               📎 {dl.name}
             </a>
           ))}
+        </div>
+      )}
+
+      {/* Training Content */}
+      {dayData.trainingContent && (
+        <div className="card" style={{ marginBottom: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(83,52,131,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📚</div>
+            <h3 style={{ fontSize: 16, fontWeight: 700 }}>Training Content</h3>
+          </div>
+          <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.trainingContent}</p>
         </div>
       )}
 
@@ -705,6 +723,72 @@ export default function DayView({
 }
 
 // ── Helpers ───────────────────────────────────────────────────────
+
+function WeeklyOfferTracker({ day, user, currentOffers, existingOffers }) {
+  const weekNum = getWeekNumber(day);
+  const target = getWeeklyOfferTarget(day);
+  const { start, end } = getWeekDayRange(weekNum);
+  const daysLeftInWeek = Math.max(0, end - day);
+
+  let weeklyOffers = 0;
+  (user.submissions || []).forEach(s => {
+    if (s.day >= start && s.day <= end && s.day !== day) {
+      weeklyOffers += s.dayMetrics?.offers_submitted || 0;
+    }
+  });
+  weeklyOffers += currentOffers;
+
+  const pct = target > 0 ? Math.min(100, Math.round((weeklyOffers / target) * 100)) : 100;
+  const daysElapsed = day - start + 1;
+  const totalDays = end - start + 1;
+  const expectedPct = Math.round((daysElapsed / totalDays) * 100);
+  const status = pct >= expectedPct ? 'green' : pct >= expectedPct * 0.5 ? 'amber' : 'red';
+  const statusColor = status === 'green' ? '#48c78e' : status === 'amber' ? '#f0a500' : '#e94560';
+
+  if (target <= 0) return null;
+
+  return (
+    <div className="card" style={{
+      marginBottom: 24, padding: '18px 20px',
+      background: `rgba(${status === 'green' ? '72,199,142' : status === 'amber' ? '240,165,0' : '233,69,96'},0.04)`,
+      border: `1px solid rgba(${status === 'green' ? '72,199,142' : status === 'amber' ? '240,165,0' : '233,69,96'},0.15)`,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+        <div>
+          <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>
+            Week {weekNum} Offer Target
+          </div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: statusColor }}>
+            {weeklyOffers} <span style={{ fontSize: 14, fontWeight: 400, color: '#888' }}>/ {target} minimum</span>
+          </div>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <div style={{ fontSize: 11, color: '#888' }}>Days left this week</div>
+          <div className="mono" style={{ fontSize: 20, fontWeight: 700, color: '#ccc' }}>{daysLeftInWeek}</div>
+        </div>
+      </div>
+      <div style={{
+        height: 8, borderRadius: 4, background: 'rgba(255,255,255,0.06)', overflow: 'hidden',
+      }}>
+        <div style={{
+          height: '100%', borderRadius: 4, background: statusColor,
+          width: `${pct}%`, transition: 'width 0.3s',
+        }} />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
+        <span style={{ fontSize: 11, color: '#666' }}>{pct}% of weekly target</span>
+        {weeklyOffers < target && daysLeftInWeek > 0 && (
+          <span style={{ fontSize: 11, color: statusColor, fontWeight: 600 }}>
+            Need {target - weeklyOffers} more in {daysLeftInWeek} day{daysLeftInWeek !== 1 ? 's' : ''}
+          </span>
+        )}
+        {weeklyOffers >= target && (
+          <span style={{ fontSize: 11, color: '#48c78e', fontWeight: 600 }}>Target met!</span>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function buildProofSummary(metrics) {
   const parts = [];

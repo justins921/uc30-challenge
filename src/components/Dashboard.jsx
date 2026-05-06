@@ -7,7 +7,7 @@ import SubmissionsView from './SubmissionsView';
 import StatsView from './StatsView';
 import Leaderboard from './Leaderboard';
 import UserProfile, { UserSupport } from './UserProfile';
-import { getGettingStartedContent } from '../data/challengeDays';
+import { getGettingStartedContent, getWeekNumber as getChallengeWeekNumber, getWeeklyOfferTarget, getWeekDayRange } from '../data/challengeDays';
 import { calculateUCPoints } from '../data/ucPoints';
 import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT, checkWeeklyCompliance, getWeekNumber, getWeekRange, getWeekDayCount, calculateAtRisk, getTimeUntilDeadline } from '../data/compliance';
 import CommunityBoard from './CommunityBoard';
@@ -1341,15 +1341,21 @@ function NextCohortCountdown({ nextCohortDate }) {
 
 // ── Compliance Cards (Participant Dashboard) ───────────────
 function ComplianceCards({ calendarDay, existingDailySubmission, complianceSettings, user }) {
-  const dailyMins = { ...COMP_DAILY_DEFAULTS, ...complianceSettings?.dailyMinimums };
-  const weeklyMins = { ...DEFAULT_WEEKLY_MINIMUMS, ...complianceSettings?.weeklyMinimums };
   const enforcement = { ...DEFAULT_ENFORCEMENT, ...complianceSettings?.enforcement };
 
   const currentDay = Math.max(1, Math.min(calendarDay || 1, 30));
-  const currentWeek = getWeekNumber(currentDay);
-  const { start: weekStart } = getWeekRange(currentWeek);
+  const currentWeek = getChallengeWeekNumber(currentDay);
+  const { start: weekStart, end: weekEnd } = getWeekDayRange(currentWeek);
   const dayInWeek = currentDay - weekStart + 1;
-  const totalDaysInWeek = getWeekDayCount(currentWeek);
+  const totalDaysInWeek = weekEnd - weekStart + 1;
+  const weeklyTarget = getWeeklyOfferTarget(currentDay);
+
+  let weeklyOffers = 0;
+  (user.submissions || []).forEach(s => {
+    if (s.day >= weekStart && s.day <= weekEnd) {
+      weeklyOffers += s.dayMetrics?.offers_submitted || 0;
+    }
+  });
 
   const [deadlineMs, setDeadlineMs] = useState(() => getTimeUntilDeadline(enforcement));
 
@@ -1365,9 +1371,12 @@ function ComplianceCards({ calendarDay, existingDailySubmission, complianceSetti
   const todaySubmitted = !!existingDailySubmission;
   const todayMet = existingDailySubmission?.met_daily_minimum ?? null;
 
+  const offerPct = weeklyTarget > 0 ? Math.min(100, Math.round((weeklyOffers / weeklyTarget) * 100)) : 100;
+  const offerColor = weeklyOffers >= weeklyTarget ? '#48c78e' : offerPct >= 50 ? '#f0a500' : '#e94560';
+
   return (
     <div className="fade-up" style={{ marginBottom: 16 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
         {/* Daily Status */}
         <div style={{
           padding: '14px 18px', borderRadius: 12,
@@ -1411,6 +1420,27 @@ function ComplianceCards({ calendarDay, existingDailySubmission, complianceSetti
             {totalDaysInWeek - dayInWeek} day{totalDaysInWeek - dayInWeek !== 1 ? 's' : ''} remaining this week
           </div>
         </div>
+
+        {/* Weekly Offers */}
+        {weeklyTarget > 0 && (
+          <div style={{
+            padding: '14px 18px', borderRadius: 12,
+            background: `rgba(${weeklyOffers >= weeklyTarget ? '72,199,142' : '240,165,0'},0.06)`,
+            border: `1px solid rgba(${weeklyOffers >= weeklyTarget ? '72,199,142' : '240,165,0'},0.15)`,
+          }}>
+            <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>
+              Week {currentWeek} Offers
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: offerColor }}>
+              {weeklyOffers} / {weeklyTarget} minimum
+            </div>
+            <div style={{
+              marginTop: 6, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.06)', overflow: 'hidden',
+            }}>
+              <div style={{ height: '100%', borderRadius: 2, background: offerColor, width: `${offerPct}%`, transition: 'width 0.3s' }} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

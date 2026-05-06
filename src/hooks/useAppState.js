@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { storage, createNewUser, isSupabaseEnabled } from '../utils/storage';
 import { supabase } from '../utils/supabaseClient';
-import { CHALLENGE_DAYS, POST_30_TASK, DEFAULT_DAILY_MINIMUMS as LEGACY_DAILY_MINIMUMS, OFFER_BUFFER } from '../data/challengeDays';
+import { CHALLENGE_DAYS, POST_30_TASK } from '../data/challengeDays';
 import { calculateUCPoints } from '../data/ucPoints';
 import { checkDailyCompliance, checkEnforcement, DEFAULT_DAILY_MINIMUMS as COMPLIANCE_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
 import { hashPassword } from '../utils/crypto';
@@ -65,16 +65,7 @@ export function useAppState() {
         removals.push(p);
         continue;
       }
-      // New check: offer buffer rule
-      // Check if user's cumulative offers have fallen too far behind
-      const completedDay = p.currentDay - 1; // last completed day
-      if (completedDay >= 1 && completedDay <= 30) {
-        const offerTarget = DEFAULT_DAILY_MINIMUMS[completedDay]?.offersCumulative || completedDay;
-        const cumulativeOffers = p.metrics?.offersSubmitted || 0;
-        if (cumulativeOffers < offerTarget - OFFER_BUFFER) {
-          removals.push(p);
-        }
-      }
+      // Weekly offer enforcement is handled separately via weekly compliance checks
     }
 
     for (const p of removals) {

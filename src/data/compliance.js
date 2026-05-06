@@ -18,12 +18,13 @@ export const METRIC_IDS = COMPLIANCE_METRICS.map(m => m.id);
 
 // ── Default settings (used when DB settings are missing) ────────
 
+// Week 1 defaults — used as fallback when no per-day minimums are provided
 export const DEFAULT_DAILY_MINIMUMS = {
   training_completed: true,
-  properties_analyzed: 1,
+  properties_analyzed: 2,
   arsenal_contacts: 1,
-  target_contacts: 1,
-  follow_ups: 1,
+  target_contacts: 3,
+  follow_ups: 0,
   offers_submitted: 0,
 };
 
