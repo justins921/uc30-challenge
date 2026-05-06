@@ -68,9 +68,9 @@ export function useAppState() {
       // Weekly offer enforcement is handled separately via weekly compliance checks
     }
 
+    const now = new Date().toISOString();
     for (const p of removals) {
-      const updates = { isActive: false, removedAt: new Date().toISOString() };
-      // First cohort attempt → lose refund eligibility
+      const updates = { isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now };
       if ((p.cohortAttempt || 1) === 1) updates.refundEligible = false;
       if (isSupabaseEnabled) {
         await storage.updateParticipant(p.id, updates);
@@ -82,13 +82,12 @@ export function useAppState() {
     if (removals.length > 0 && isSupabaseEnabled) {
       const fresh = await storage.getParticipants();
       setParticipants(fresh || []);
-      // Update stored cohort stats so non-admin users see correct counts
       const na = (fresh || []).filter(p => !p.isAdmin);
       const stats = { active: na.filter(p => p.isActive).length, total: na.length };
       try { await Promise.resolve(storage.setCohortStats(stats)); } catch {}
       const currentUser = user;
       if (currentUser && removals.find(r => r.id === currentUser.id)) {
-        const updatedUser = { ...currentUser, isActive: false, removedAt: new Date().toISOString(), refundEligible: (currentUser.cohortAttempt || 1) === 1 ? false : currentUser.refundEligible };
+        const updatedUser = { ...currentUser, isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now, refundEligible: (currentUser.cohortAttempt || 1) === 1 ? false : currentUser.refundEligible };
         setUser(updatedUser);
         storage.setUser(updatedUser);
       }
@@ -96,7 +95,7 @@ export function useAppState() {
       const updatedParticipants = currentParticipants.map(p => {
         const removed = removals.find(r => r.id === p.id);
         if (!removed) return p;
-        const updates = { isActive: false, removedAt: new Date().toISOString() };
+        const updates = { isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now };
         if ((p.cohortAttempt || 1) === 1) updates.refundEligible = false;
         return { ...p, ...updates };
       });
@@ -969,8 +968,8 @@ export function useAppState() {
   // ── Admin Actions ────────────────────────────────────
   const removeParticipant = useCallback(async (participantId) => {
     const removed = participants.find(p => p.id === participantId);
-    const updates = { isActive: false, removedAt: new Date().toISOString() };
-    // If this is their first cohort attempt, they lose refund eligibility
+    const now = new Date().toISOString();
+    const updates = { isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now };
     if (removed && (removed.cohortAttempt || 1) === 1) {
       updates.refundEligible = false;
     }
@@ -1032,6 +1031,8 @@ export function useAppState() {
       reactivatedAt: new Date().toISOString(),
       currentDay,
       cohortAttempt: (existing?.cohortAttempt || 1) + 1,
+      pipelineMode: false,
+      pipelineModeActivatedAt: null,
     };
 
     if (isSupabaseEnabled) {
@@ -1401,6 +1402,97 @@ export function useAppState() {
     return Promise.resolve(storage.getContactsForParticipant(participantId));
   }, []);
 
+  // ── Pipeline Mode ────────────────────────────────────────────
+  const submitPipelineDay = useCallback(async (dayMetrics) => {
+    if (!user) return { error: 'Not logged in.' };
+    if (!user.pipelineMode) return { error: 'Not in pipeline mode.' };
+
+    const now = new Date().toISOString();
+    const today = now.split('T')[0];
+    const alreadySubmittedToday = (user.submissions || []).some(s =>
+      s.timestamp?.startsWith(today) && s.day === 'pipeline'
+    );
+
+    const submission = {
+      day: 'pipeline',
+      title: 'Pipeline Mode Activity',
+      timestamp: now,
+      proof: buildPipelineProofSummary(dayMetrics),
+      status: 'completed',
+      dayMetrics,
+    };
+
+    const updatedMetrics = { ...user.metrics };
+    for (const [key, val] of Object.entries(dayMetrics)) {
+      if (val > 0) updatedMetrics[key] = (updatedMetrics[key] || 0) + val;
+    }
+    const ucPoints = calculateUCPoints(updatedMetrics);
+
+    const streak = alreadySubmittedToday
+      ? (user.pipelineModeStreak || 0)
+      : (user.pipelineModeStreak || 0) + 1;
+
+    const lifetimeOffersDelta = dayMetrics.offers_submitted || 0;
+
+    const updates = {
+      submissions: [...(user.submissions || []), submission],
+      metrics: updatedMetrics,
+      ucPoints,
+      pipelineModeStreak: streak,
+      lifetimeOffersSubmitted: (user.lifetimeOffersSubmitted || 0) + lifetimeOffersDelta,
+    };
+
+    const updatedUser = { ...user, ...updates };
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(user.id, updates);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === user.id ? updatedUser : p
+      );
+      setParticipants(updatedParticipants);
+      persist(updatedUser, updatedParticipants);
+    }
+    setUser(updatedUser);
+    storage.setUser(updatedUser);
+    return { success: true };
+  }, [user, participants, persist]);
+
+  const activateNextCohort = useCallback(async () => {
+    if (!user) return { error: 'Not logged in.' };
+    if (!user.pipelineMode) return { error: 'Not in pipeline mode.' };
+
+    const now = new Date().toISOString();
+    const updates = {
+      isActive: true,
+      removedAt: null,
+      reactivatedAt: now,
+      currentDay: 1,
+      completedDays: [],
+      cohortAttempt: (user.cohortAttempt || 1) + 1,
+      pipelineMode: false,
+      pipelineModeActivatedAt: null,
+    };
+
+    const updatedUser = { ...user, ...updates };
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(user.id, updates);
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+      await updateCohortStats(allParticipants || []);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === user.id ? updatedUser : p
+      );
+      setParticipants(updatedParticipants);
+      persist(updatedUser, updatedParticipants);
+      await updateCohortStats(updatedParticipants);
+    }
+    setUser(updatedUser);
+    storage.setUser(updatedUser);
+    setCurrentView('dashboard');
+    return { success: true };
+  }, [user, participants, persist, updateCohortStats]);
+
   // ── Compliance System ─────────────────────────────────────
   const runEnforcementCheck = useCallback(async (participant) => {
     if (!participant || participant.isAdmin || !participant.isActive) return null;
@@ -1419,15 +1511,14 @@ export function useAppState() {
     });
 
     if (result) {
-      // Remove the participant
-      const updates = { isActive: false, removedAt: new Date().toISOString() };
+      const now = new Date().toISOString();
+      const updates = { isActive: false, removedAt: now, pipelineMode: true, pipelineModeActivatedAt: now };
       if ((participant.cohortAttempt || 1) === 1) updates.refundEligible = false;
 
       if (isSupabaseEnabled) {
         await storage.updateParticipant(participant.id, updates);
       }
 
-      // Log the removal
       storage.addRemovalLog({
         participant_id: participant.id,
         auth_id: participant.authId || null,
@@ -1596,5 +1687,18 @@ export function useAppState() {
     setComplianceWeeklyMinimums,
     setComplianceEnforcement,
     runEnforcementCheck,
+    // Pipeline Mode
+    submitPipelineDay,
+    activateNextCohort,
   };
+}
+
+function buildPipelineProofSummary(metrics) {
+  const parts = [];
+  if (metrics.properties_analyzed) parts.push(`${metrics.properties_analyzed} properties analyzed`);
+  if (metrics.arsenal_contacts) parts.push(`${metrics.arsenal_contacts} arsenal contacts`);
+  if (metrics.target_contacts) parts.push(`${metrics.target_contacts} target contacts`);
+  if (metrics.follow_ups) parts.push(`${metrics.follow_ups} follow-ups`);
+  if (metrics.offers_submitted) parts.push(`${metrics.offers_submitted} offers submitted`);
+  return parts.join(', ') || 'Pipeline mode activity';
 }

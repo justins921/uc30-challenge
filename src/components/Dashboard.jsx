@@ -28,6 +28,15 @@ const TABS = [
   { id: 'profile', label: 'Profile' },
 ];
 
+const PIPELINE_TABS = [
+  { id: 'pipeline', label: 'Daily Activity' },
+  { id: 'crm', label: 'Contacts' },
+  { id: 'submissions', label: 'My Submissions' },
+  { id: 'stats', label: 'Operator Stats' },
+  { id: 'support', label: 'Support' },
+  { id: 'profile', label: 'Profile' },
+];
+
 function getEasternDate() {
   // Get the current date in Eastern timezone
   const eastern = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
@@ -76,8 +85,8 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onUpdateContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt, practiceDaySettings, onCompletePracticeDay }) {
-  const [tab, setTab] = useState('timeline');
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onUpdateContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt, practiceDaySettings, onCompletePracticeDay, onSubmitPipelineDay, onActivateNextCohort }) {
+  const [tab, setTab] = useState(user.pipelineMode && !user.isActive ? 'pipeline' : 'timeline');
   const [selectedDay, setSelectedDay] = useState(null);
   const [existingDailySubmission, setExistingDailySubmission] = useState(null);
   const [quizAttempts, setQuizAttempts] = useState([]);
@@ -101,8 +110,8 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
     })();
   }, [selectedDay, user?.id]);
 
-  // Removed/paused state
-  if (!user.isActive) {
+  // Removed/paused state — non-pipeline (legacy: no continued access)
+  if (!user.isActive && !user.pipelineMode) {
     return (
       <div style={{
         minHeight: '100vh', display: 'flex', alignItems: 'center',
@@ -114,7 +123,6 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           <p style={{ color: '#888', lineHeight: 1.7, marginBottom: 24 }}>
             You missed a daily submission and were removed from this run.
           </p>
-          {/* Motivation Reminder */}
           {(user.stakesDeclaration || user.theirWhy) && (
             <div style={{
               padding: '16px 20px', borderRadius: 12, marginBottom: 24,
@@ -152,7 +160,8 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
     );
   }
 
-  const cohortActive = cohortStartDate && calendarDay !== null && calendarDay >= 1;
+  const isPipelineMode = !user.isActive && user.pipelineMode;
+  const cohortActive = !isPipelineMode && cohortStartDate && calendarDay !== null && calendarDay >= 1;
 
   // Community notification: show dot when there are posts/comments newer than last visit
   const [communityLastSeen, setCommunityLastSeen] = useState(() => {
@@ -212,7 +221,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         user={user}
         currentTab={tab === 'day' ? 'timeline' : tab}
         onTabChange={handleTabChange}
-        tabs={(cohortActive ? TABS : TABS.filter(t => t.id !== 'community')).map(t => {
+        tabs={(isPipelineMode ? PIPELINE_TABS : cohortActive ? TABS : TABS.filter(t => t.id !== 'community')).map(t => {
           if (t.id === 'community' && hasCommunityNotification && tab !== 'community') return { ...t, hasNotification: true };
           if (t.id === 'support' && hasSupportNotification && tab !== 'support') return { ...t, hasNotification: true };
           return t;
@@ -238,8 +247,23 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           />
         )}
 
+        {/* Pipeline Mode Banner */}
+        {isPipelineMode && tab === 'pipeline' && (
+          <PipelineModeBanner
+            user={user}
+            nextCohortDate={nextCohortDate}
+            contacts={contacts}
+            onActivateNextCohort={onActivateNextCohort}
+          />
+        )}
+
+        {/* Pipeline Mode Follow-Up Badge */}
+        {isPipelineMode && tab === 'pipeline' && (
+          <FollowUpBadge contacts={contacts} onGoToDay={() => {}} />
+        )}
+
         {/* UC Points Score */}
-        {!showPracticeDay && (tab === 'timeline' || tab === 'day') && (
+        {!showPracticeDay && (tab === 'timeline' || tab === 'day' || tab === 'pipeline') && (
           <UCPointsBanner ucPoints={user.ucPoints || calculateUCPoints(user.metrics)} />
         )}
 
@@ -303,8 +327,8 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           />
         )}
 
-        {/* Cohort countdown when pre-cohort */}
-        {!showPracticeDay && cohortStartDate && !cohortActive && (tab === 'timeline' || tab === 'day') && (
+        {/* Cohort countdown when pre-cohort (not in pipeline mode) */}
+        {!showPracticeDay && !isPipelineMode && cohortStartDate && !cohortActive && (tab === 'timeline' || tab === 'day') && (
           <CohortCountdown cohortStartDate={cohortStartDate} user={user} onLaunchPracticeDay={() => setShowPracticeDay(true)} />
         )}
 
@@ -318,8 +342,20 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
           </>
         )}
 
+        {/* Pipeline Mode: Daily Activity */}
+        {!showPracticeDay && tab === 'pipeline' && isPipelineMode && (
+          <PipelineDailyActivity
+            user={user}
+            onSubmitPipelineDay={onSubmitPipelineDay}
+            onAddContact={onAddContact}
+            onAddFollowUp={onAddFollowUp}
+            onUpdateContact={onUpdateContact}
+            contacts={contacts}
+          />
+        )}
+
         {/* Tab Content */}
-        {!showPracticeDay && tab === 'timeline' && (
+        {!showPracticeDay && tab === 'timeline' && !isPipelineMode && (
           <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} contentOverrides={contentOverrides} customPhases={customPhases} cohortStartDate={cohortStartDate} />
         )}
         {!showPracticeDay && tab === 'day' && selectedDay === 'getting_started' && (
@@ -1498,6 +1534,204 @@ function FollowUpBadge({ contacts, onGoToDay }) {
         fontFamily: "'DM Mono', monospace",
       }}>
         {due.length}
+      </div>
+    </div>
+  );
+}
+
+function PipelineModeBanner({ user, nextCohortDate, contacts, onActivateNextCohort }) {
+  const [activating, setActivating] = useState(false);
+  const cohortNum = (user.cohortAttempt || 1) + 1;
+  const contactCount = (contacts || []).length;
+  const totalProps = user.metrics?.propertiesAnalyzed || 0;
+  const totalOffers = user.lifetimeOffersSubmitted || 0;
+  const streak = user.pipelineModeStreak || 0;
+
+  const canActivate = nextCohortDate && (() => {
+    const nowEastern = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+    const start = new Date(nextCohortDate + 'T00:00:00');
+    return nowEastern >= start;
+  })();
+
+  const handleActivate = async () => {
+    setActivating(true);
+    await onActivateNextCohort();
+    setActivating(false);
+  };
+
+  return (
+    <div className="fade-up" style={{ marginBottom: 20 }}>
+      {/* Pipeline Mode header */}
+      <div style={{
+        padding: '20px 24px', borderRadius: 14, marginBottom: 16,
+        background: 'linear-gradient(135deg, rgba(107,138,253,0.08), rgba(83,52,131,0.06))',
+        border: '1px solid rgba(107,138,253,0.2)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+          <span style={{
+            fontSize: 11, padding: '3px 10px', borderRadius: 6, fontWeight: 700,
+            background: 'rgba(107,138,253,0.15)', color: '#6b8afd',
+            textTransform: 'uppercase', letterSpacing: 1,
+          }}>Pipeline Mode</span>
+          <span style={{
+            fontSize: 11, padding: '3px 10px', borderRadius: 6, fontWeight: 600,
+            background: 'rgba(201,160,255,0.1)', color: '#c9a0ff',
+          }}>Preparing for Cohort {cohortNum}</span>
+        </div>
+        <p style={{ fontSize: 14, color: '#bbb', lineHeight: 1.7, margin: 0 }}>
+          Keep building your contacts and pipeline — you'll have a head start when your next cohort begins{nextCohortDate ? ` on ${new Date(nextCohortDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}` : ''}.
+        </p>
+      </div>
+
+      {/* Stats row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 10, marginBottom: 16 }}>
+        {streak > 0 && (
+          <div className="card" style={{ textAlign: 'center', padding: '12px 8px' }}>
+            <div className="mono" style={{ fontSize: 22, fontWeight: 700, color: '#6b8afd' }}>{streak}</div>
+            <div style={{ fontSize: 10, color: '#888' }}>Day Streak</div>
+          </div>
+        )}
+        <div className="card" style={{ textAlign: 'center', padding: '12px 8px' }}>
+          <div className="mono" style={{ fontSize: 22, fontWeight: 700, color: '#c9a0ff' }}>{contactCount}</div>
+          <div style={{ fontSize: 10, color: '#888' }}>Contacts</div>
+        </div>
+        <div className="card" style={{ textAlign: 'center', padding: '12px 8px' }}>
+          <div className="mono" style={{ fontSize: 22, fontWeight: 700, color: '#48c78e' }}>{totalProps}</div>
+          <div style={{ fontSize: 10, color: '#888' }}>Properties</div>
+        </div>
+        {totalOffers > 0 && (
+          <div className="card" style={{ textAlign: 'center', padding: '12px 8px' }}>
+            <div className="mono" style={{ fontSize: 22, fontWeight: 700, color: '#e94560' }}>{totalOffers}</div>
+            <div style={{ fontSize: 10, color: '#888' }}>Offers</div>
+          </div>
+        )}
+      </div>
+
+      {/* Next cohort activation */}
+      {canActivate ? (
+        <div style={{
+          padding: '20px 24px', borderRadius: 14,
+          background: 'linear-gradient(135deg, rgba(72,199,142,0.08), rgba(72,199,142,0.03))',
+          border: '1px solid rgba(72,199,142,0.2)', textAlign: 'center',
+        }}>
+          <div style={{ fontSize: 18, fontWeight: 700, color: '#48c78e', marginBottom: 8 }}>
+            Your next cohort starts today!
+          </div>
+          <p style={{ fontSize: 13, color: '#aaa', marginBottom: 16, lineHeight: 1.6 }}>
+            You've built up {contactCount} contact{contactCount !== 1 ? 's' : ''} and analyzed {totalProps} properties. Time to put it all to work.
+          </p>
+          <button className="btn-primary" onClick={handleActivate} disabled={activating}
+            style={{ padding: '12px 32px', fontSize: 15 }}>
+            {activating ? 'Activating...' : 'Activate & Start Cohort'}
+          </button>
+        </div>
+      ) : nextCohortDate ? (
+        <NextCohortCountdown nextCohortDate={nextCohortDate} />
+      ) : null}
+    </div>
+  );
+}
+
+function PipelineDailyActivity({ user, onSubmitPipelineDay, onAddContact, onAddFollowUp, onUpdateContact, contacts }) {
+  const [metrics, setMetrics] = useState({
+    properties_analyzed: 0,
+    arsenal_contacts: 0,
+    target_contacts: 0,
+    follow_ups: 0,
+    offers_submitted: 0,
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const setMetric = (key, value) => setMetrics(prev => ({ ...prev, [key]: value }));
+
+  const hasActivity = Object.values(metrics).some(v => v > 0);
+
+  const handleSubmit = async () => {
+    if (!hasActivity) return;
+    await onSubmitPipelineDay(metrics);
+    setSubmitted(true);
+  };
+
+  if (submitted) {
+    return (
+      <div className="card scale-in" style={{ borderColor: 'rgba(107,138,253,0.3)', textAlign: 'center', padding: 40 }}>
+        <div style={{ fontSize: 48, marginBottom: 12 }}>🔄</div>
+        <h3 style={{ fontSize: 20, fontWeight: 700, color: '#6b8afd', marginBottom: 8 }}>Activity Logged!</h3>
+        <p style={{ color: '#888', fontSize: 14 }}>
+          Pipeline streak: {(user.pipelineModeStreak || 0) + 1} day{(user.pipelineModeStreak || 0) + 1 !== 1 ? 's' : ''}. Keep building momentum.
+        </p>
+      </div>
+    );
+  }
+
+  const PIPELINE_METRICS = [
+    { id: 'properties_analyzed', label: 'Properties Analyzed', icon: '🏠' },
+    { id: 'arsenal_contacts', label: 'Arsenal Contacts', icon: '⚡' },
+    { id: 'target_contacts', label: 'Target Contacts', icon: '🎯' },
+    { id: 'follow_ups', label: 'Follow-Ups', icon: '📞' },
+    { id: 'offers_submitted', label: 'Offers Submitted', icon: '📝' },
+  ];
+
+  return (
+    <div className="fade-up" style={{ maxWidth: 720, margin: '0 auto' }}>
+      <div className="card" style={{ marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+          <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(107,138,253,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📊</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Daily Activity</h3>
+          <span style={{
+            fontSize: 10, padding: '2px 8px', borderRadius: 4, fontWeight: 700,
+            background: 'rgba(107,138,253,0.1)', color: '#6b8afd',
+          }}>NO MINIMUMS</span>
+        </div>
+        <p style={{ fontSize: 13, color: '#666', marginBottom: 16 }}>
+          Log your activity to build your streak and stats. No minimums — do as much or as little as you want.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {PIPELINE_METRICS.map(metric => {
+            const value = metrics[metric.id];
+            return (
+              <div key={metric.id} style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '12px 16px', borderRadius: 10,
+                background: value > 0 ? 'rgba(107,138,253,0.04)' : 'rgba(255,255,255,0.02)',
+                border: `1px solid ${value > 0 ? 'rgba(107,138,253,0.15)' : 'rgba(255,255,255,0.06)'}`,
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{ fontSize: 18 }}>{metric.icon}</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>{metric.label}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <button onClick={() => setMetric(metric.id, Math.max(0, (value || 0) - 1))}
+                    style={{
+                      width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
+                      border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                      color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>-</button>
+                  <input type="number" min="0" value={value || 0}
+                    onChange={e => setMetric(metric.id, Math.max(0, parseInt(e.target.value) || 0))}
+                    style={{
+                      width: 56, textAlign: 'center', fontSize: 18, fontWeight: 700, padding: '6px', borderRadius: 6,
+                      background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff',
+                    }} />
+                  <button onClick={() => setMetric(metric.id, (value || 0) + 1)}
+                    style={{
+                      width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
+                      border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                      color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>+</button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <button className="btn-primary" onClick={handleSubmit} disabled={!hasActivity}
+          style={{ width: '100%', marginTop: 20, opacity: hasActivity ? 1 : 0.4 }}>
+          Log Activity
+        </button>
       </div>
     </div>
   );

@@ -95,6 +95,8 @@ export default function App() {
     setComplianceWeeklyMinimums,
     setComplianceEnforcement,
     completeActivation,
+    submitPipelineDay,
+    activateNextCohort,
   } = useAppState();
 
   // CRM contacts for current user (loaded on login)
@@ -516,6 +518,8 @@ export default function App() {
       getDailySubmission={getDailySubmission}
       getQuizAttempts={getQuizAttempts}
       addQuizAttempt={addQuizAttempt}
+      onSubmitPipelineDay={submitPipelineDay}
+      onActivateNextCohort={activateNextCohort}
     />
   );
 }

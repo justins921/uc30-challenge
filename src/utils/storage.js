@@ -597,6 +597,10 @@ function toDbRow(user) {
   // Stripe payment tracking
   if (user.stripeCustomerId) row.stripe_customer_id = user.stripeCustomerId;
   if (user.stripeSubscriptionId) row.stripe_subscription_id = user.stripeSubscriptionId;
+  // Pipeline Mode
+  if (user.pipelineMode !== undefined) row.pipeline_mode = user.pipelineMode;
+  if (user.pipelineModeStreak !== undefined) row.pipeline_mode_streak = user.pipelineModeStreak;
+  if (user.pipelineModeActivatedAt) row.pipeline_mode_activated_at = user.pipelineModeActivatedAt;
   return row;
 }
 
@@ -651,6 +655,10 @@ function toDbUpdateRow(updates) {
   // Stripe payment tracking
   if (updates.stripeCustomerId !== undefined) row.stripe_customer_id = updates.stripeCustomerId;
   if (updates.stripeSubscriptionId !== undefined) row.stripe_subscription_id = updates.stripeSubscriptionId;
+  // Pipeline Mode
+  if (updates.pipelineMode !== undefined) row.pipeline_mode = updates.pipelineMode;
+  if (updates.pipelineModeStreak !== undefined) row.pipeline_mode_streak = updates.pipelineModeStreak;
+  if (updates.pipelineModeActivatedAt !== undefined) row.pipeline_mode_activated_at = updates.pipelineModeActivatedAt;
   return row;
 }
 
@@ -712,6 +720,10 @@ function fromDbRow(row) {
     // Stripe payment tracking
     stripeCustomerId: row.stripe_customer_id || null,
     stripeSubscriptionId: row.stripe_subscription_id || null,
+    // Pipeline Mode (post-failure continued access)
+    pipelineMode: row.pipeline_mode || false,
+    pipelineModeStreak: row.pipeline_mode_streak || 0,
+    pipelineModeActivatedAt: row.pipeline_mode_activated_at || null,
   };
 }
 
@@ -1124,5 +1136,9 @@ export function createNewUser(firstName, lastName, email, authId) {
     cohortAttempt: 1,
     refundEligible: true,
     firstCohortCompleted: false,
+    // Pipeline Mode (post-failure continued access)
+    pipelineMode: false,
+    pipelineModeStreak: 0,
+    pipelineModeActivatedAt: null,
   };
 }
