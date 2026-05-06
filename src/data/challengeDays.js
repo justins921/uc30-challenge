@@ -1,24 +1,79 @@
+// ── Pre-Launch Days (before Day 1) ───────────────────────────────
+export const PRE_DAYS = [
+  {
+    day: -3,
+    title: "Your Foundation",
+    caption: "Define your why, understand active vs passive income, and reverse engineer your financial goals.",
+    taskDescription: "",
+    trainingContent: "Your Why + Active vs Passive Income + Reverse Engineer Your Financial Goals",
+    category: "prelaunch",
+    weekNumber: 0,
+    weekTitle: "PRE-LAUNCH",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: null,
+  },
+  {
+    day: -2,
+    title: "Your Market and Buy Box",
+    caption: "Lock in your target market, define your buy box, and research market rents.",
+    taskDescription: "",
+    trainingContent: "How to Select Your Market + Market Research + Define Your Buy Box",
+    category: "prelaunch",
+    weekNumber: 0,
+    weekTitle: "PRE-LAUNCH",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: null,
+  },
+  {
+    day: -1,
+    title: "Your Team and Tools",
+    caption: "Build your team, confirm financing, declare your stakes, and run a practice submission.",
+    taskDescription: "",
+    trainingContent: "Build Your Team + Financing Overview + How UC30 Works",
+    category: "prelaunch",
+    weekNumber: 0,
+    weekTitle: "PRE-LAUNCH",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: null,
+  },
+];
+
 // ── 30-Day Sprint Content ────────────────────────────────────────
-// Each day has: title, taskDescription, category, proofType
+// Each day has: title, caption, taskDescription, category, weekNumber, weekTitle, proofType
 // Chandler: Replace video URLs, transcripts, and downloadable resources per day
 
 export const CHALLENGE_DAYS = [
+  // ── Week 1: Build the Foundation (Days 1-7) ──
   {
     day: 1,
     title: "Define Your Buy Box",
+    caption: "",
     taskDescription: "Define the exact property criteria you'll target: location, price range, property type, and minimum ROI. Submit a screenshot of your written buy box criteria.",
+    trainingContent: "",
     category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
     proofType: "screenshot",
-    videoUrl: null, // Chandler: Add video URL
-    transcript: null, // Chandler: Add transcript
-    downloads: [], // Chandler: Add downloadable resources
-    quiz: null, // Optional: quiz scenarios for this day
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: null,
   },
   {
     day: 2,
     title: "Set Up Deal-Finding Tools",
+    caption: "",
     taskDescription: "Set up at least 2 deal-finding platforms (Zillow, PropStream, BatchLeads, etc.). Submit screenshots showing your active accounts and search filters configured.",
+    trainingContent: "",
     category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
@@ -28,8 +83,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 3,
     title: "Analyze Your First 5 Properties",
+    caption: "",
     taskDescription: "Run numbers on 5 properties using the 70% rule or your preferred analysis method. Submit your completed analysis spreadsheet or screenshots.",
+    trainingContent: "",
     category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
     proofType: "spreadsheet",
     videoUrl: null,
     transcript: null,
@@ -39,8 +98,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 4,
     title: "Build Your Cash Buyers List",
+    caption: "",
     taskDescription: "Find and organize at least 20 potential cash buyers. Submit your buyer list with names and contact methods.",
+    trainingContent: "",
     category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -50,8 +113,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 5,
     title: "Activate 10 Deal Sources",
+    caption: "",
     taskDescription: "Reach out to 10 agents, PMs, wholesalers, or direct sellers in your target market. Submit screenshots of your outreach messages or call log.",
+    trainingContent: "",
     category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
@@ -61,8 +128,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 6,
     title: "Submit Your First Offer",
+    caption: "",
     taskDescription: "Write and submit a real offer on a property. Submit the offer document or screenshot of submission confirmation.",
-    category: "action",
+    trainingContent: "",
+    category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -72,19 +143,28 @@ export const CHALLENGE_DAYS = [
   {
     day: 7,
     title: "Follow Up on Yesterday's Offer",
+    caption: "",
     taskDescription: "Follow up on yesterday's offer and document the response. Submit screenshot of follow-up communication.",
-    category: "action",
+    trainingContent: "",
+    category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
     quiz: null,
   },
+  // ── Week 2: Build the Pipeline (Days 8-14) ──
   {
     day: 8,
     title: "Analyze 10 More Properties",
+    caption: "",
     taskDescription: "Analyze 10 properties today with full financial breakdowns. Submit your analysis spreadsheet.",
-    category: "action",
+    trainingContent: "",
+    category: "pipeline",
+    weekNumber: 2,
+    weekTitle: "BUILD THE PIPELINE",
     proofType: "spreadsheet",
     videoUrl: null,
     transcript: null,
@@ -94,8 +174,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 9,
     title: "Make 3 New Offers",
+    caption: "",
     taskDescription: "Submit 3 new offers on different properties. Submit offer confirmations or documents.",
-    category: "action",
+    trainingContent: "",
+    category: "pipeline",
+    weekNumber: 2,
+    weekTitle: "BUILD THE PIPELINE",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -105,8 +189,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 10,
     title: "Build Your Contractor Network",
+    caption: "",
     taskDescription: "Find and contact 5 contractors for estimates. Submit your contractor contact list with specialties.",
-    category: "action",
+    trainingContent: "",
+    category: "pipeline",
+    weekNumber: 2,
+    weekTitle: "BUILD THE PIPELINE",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -116,8 +204,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 11,
     title: "Driving for Dollars Session",
+    caption: "",
     taskDescription: "Spend 1 hour driving target neighborhoods and identify 5 distressed properties. Submit photos and addresses.",
-    category: "action",
+    trainingContent: "",
+    category: "pipeline",
+    weekNumber: 2,
+    weekTitle: "BUILD THE PIPELINE",
     proofType: "photo",
     videoUrl: null,
     transcript: null,
@@ -127,8 +219,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 12,
     title: "Submit 5 Offers Today",
+    caption: "",
     taskDescription: "Submit 5 real offers today — volume is key. Submit all offer confirmations.",
-    category: "action",
+    trainingContent: "",
+    category: "pipeline",
+    weekNumber: 2,
+    weekTitle: "BUILD THE PIPELINE",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -138,8 +234,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 13,
     title: "Review & Adjust Your Buy Box",
+    caption: "",
     taskDescription: "Review your results so far and adjust your buy box if needed. Submit updated criteria and reasoning.",
-    category: "action",
+    trainingContent: "",
+    category: "pipeline",
+    weekNumber: 2,
+    weekTitle: "BUILD THE PIPELINE",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -149,19 +249,28 @@ export const CHALLENGE_DAYS = [
   {
     day: 14,
     title: "Activate New Deal Sources",
+    caption: "",
     taskDescription: "Contact at least 3 private lenders, wholesalers, or new deal sources. Submit communication screenshots.",
-    category: "action",
+    trainingContent: "",
+    category: "pipeline",
+    weekNumber: 2,
+    weekTitle: "BUILD THE PIPELINE",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
     quiz: null,
   },
+  // ── Week 3: Apply Pressure (Days 15-21) ──
   {
     day: 15,
     title: "Negotiate a Counter-Offer",
+    caption: "",
     taskDescription: "If you have a counter-offer, negotiate it. If not, follow up on all pending. Submit documentation.",
-    category: "action",
+    trainingContent: "",
+    category: "pressure",
+    weekNumber: 3,
+    weekTitle: "APPLY PRESSURE",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -171,8 +280,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 16,
     title: "Analyze a Commercial Property",
+    caption: "",
     taskDescription: "Analyze at least 1 commercial or multifamily property. Submit your analysis.",
-    category: "momentum",
+    trainingContent: "",
+    category: "pressure",
+    weekNumber: 3,
+    weekTitle: "APPLY PRESSURE",
     proofType: "spreadsheet",
     videoUrl: null,
     transcript: null,
@@ -182,8 +295,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 17,
     title: "Submit Your Boldest Offer Yet",
+    caption: "",
     taskDescription: "Submit your most aggressive offer yet on your best lead. Submit the offer.",
-    category: "momentum",
+    trainingContent: "",
+    category: "pressure",
+    weekNumber: 3,
+    weekTitle: "APPLY PRESSURE",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -193,8 +310,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 18,
     title: "Follow Up Blitz Day",
+    caption: "",
     taskDescription: "Follow up on EVERY pending offer and outreach. Submit a log of all follow-ups.",
-    category: "momentum",
+    trainingContent: "",
+    category: "pressure",
+    weekNumber: 3,
+    weekTitle: "APPLY PRESSURE",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
@@ -204,8 +325,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 19,
     title: "Network with 5 Investors",
+    caption: "",
     taskDescription: "Connect with 5 local investors via meetups, social media, or calls. Submit proof of outreach.",
-    category: "momentum",
+    trainingContent: "",
+    category: "pressure",
+    weekNumber: 3,
+    weekTitle: "APPLY PRESSURE",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
@@ -215,8 +340,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 20,
     title: "Resubmit Rejected Offers Higher",
+    caption: "",
     taskDescription: "Take your best rejected offers and resubmit with better terms. Submit updated offers.",
-    category: "momentum",
+    trainingContent: "",
+    category: "pressure",
+    weekNumber: 3,
+    weekTitle: "APPLY PRESSURE",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -226,19 +355,28 @@ export const CHALLENGE_DAYS = [
   {
     day: 21,
     title: "Direct Mail Campaign Launch",
+    caption: "",
     taskDescription: "Prepare and send direct mail to at least 20 property owners. Submit proof of mailing.",
-    category: "momentum",
+    trainingContent: "",
+    category: "pressure",
+    weekNumber: 3,
+    weekTitle: "APPLY PRESSURE",
     proofType: "photo",
     videoUrl: null,
     transcript: null,
     downloads: [],
     quiz: null,
   },
+  // ── Week 4: Full Sprint (Days 22-30) ──
   {
     day: 22,
     title: "Analyze Multifamily Properties",
+    caption: "",
     taskDescription: "Analyze at least 3 multifamily properties. Submit your analysis.",
-    category: "momentum",
+    trainingContent: "",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
     proofType: "spreadsheet",
     videoUrl: null,
     transcript: null,
@@ -248,8 +386,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 23,
     title: "Submit 10 Offers Today",
+    caption: "",
     taskDescription: "Submit 10 offers today — this is your push day. Submit all confirmations.",
-    category: "momentum",
+    trainingContent: "",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -259,8 +401,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 24,
     title: "Door Knock 20 Properties",
+    caption: "",
     taskDescription: "Door knock or drop letters at 20 properties. Submit your route log and photos.",
-    category: "momentum",
+    trainingContent: "",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
     proofType: "photo",
     videoUrl: null,
     transcript: null,
@@ -270,8 +416,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 25,
     title: "Negotiate Inspection Terms",
+    caption: "",
     taskDescription: "If you have a deal progressing, negotiate inspection terms. Otherwise submit 5 offers. Submit documentation.",
-    category: "momentum",
+    trainingContent: "",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -281,8 +431,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 26,
     title: "Lock Down Your Title Company",
+    caption: "",
     taskDescription: "Confirm your title company or closing attorney is ready. Submit confirmation of relationship.",
-    category: "closing",
+    trainingContent: "",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -292,8 +446,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 27,
     title: "Final Offer Push - 15 Offers",
+    caption: "",
     taskDescription: "Final push — submit 15 offers. This is where deals happen. Submit all confirmations.",
-    category: "closing",
+    trainingContent: "",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -303,8 +461,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 28,
     title: "Follow Up on All Active Offers",
+    caption: "",
     taskDescription: "Follow up on every single active offer with urgency. Submit complete follow-up log.",
-    category: "closing",
+    trainingContent: "",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
@@ -314,8 +476,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 29,
     title: "Negotiate to Contract",
+    caption: "",
     taskDescription: "Negotiate your best lead to a signed contract. Submit the signed contract or latest negotiation.",
-    category: "closing",
+    trainingContent: "",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -325,8 +491,12 @@ export const CHALLENGE_DAYS = [
   {
     day: 30,
     title: "Close & Celebrate",
+    caption: "",
     taskDescription: "Celebrate getting your first deal under contract! Submit your contract or victory documentation.",
-    category: "closing",
+    trainingContent: "",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
     proofType: "document",
     videoUrl: null,
     transcript: null,
@@ -336,10 +506,10 @@ export const CHALLENGE_DAYS = [
 ];
 
 export const DEFAULT_PHASES = [
-  { label: "Foundation", days: [1, 2, 3, 4, 5], color: "#e94560" },
-  { label: "Action Phase", days: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15], color: "#0f3460" },
-  { label: "Momentum", days: [16, 17, 18, 19, 20, 21, 22, 23, 24, 25], color: "#533483" },
-  { label: "Closing", days: [26, 27, 28, 29, 30], color: "#e94560" },
+  { label: "Build the Foundation", days: [1, 2, 3, 4, 5, 6, 7], color: "#48c78e", weekNumber: 1 },
+  { label: "Build the Pipeline", days: [8, 9, 10, 11, 12, 13, 14], color: "#d4a843", weekNumber: 2 },
+  { label: "Apply Pressure", days: [15, 16, 17, 18, 19, 20, 21], color: "#b85c38", weekNumber: 3 },
+  { label: "Full Sprint", days: [22, 23, 24, 25, 26, 27, 28, 29, 30], color: "#e94560", weekNumber: 4 },
 ];
 
 // Kept for backward compatibility
@@ -364,6 +534,7 @@ export function getCategoryColors(phases) {
 // Merge defaults with admin overrides
 export function getDayContent(dayNum, overrides = {}) {
   const defaults = CHALLENGE_DAYS[dayNum - 1];
+  if (!defaults) return { day: dayNum, title: '', caption: '', taskDescription: '', trainingContent: '', category: 'foundation', weekNumber: getWeekNumber(dayNum), weekTitle: '', videoUrl: null, transcript: null, downloads: [], quiz: null };
   const dayOverride = overrides[dayNum] || {};
   return {
     ...defaults,
@@ -374,10 +545,11 @@ export function getDayContent(dayNum, overrides = {}) {
 }
 
 export const CATEGORY_COLORS = {
-  foundation: { accent: "#e94560", label: "Foundation" },
-  action: { accent: "#0f3460", label: "Action Phase" },
-  momentum: { accent: "#533483", label: "Momentum" },
-  closing: { accent: "#e94560", label: "Closing" },
+  prelaunch: { accent: "#c9a0ff", label: "Pre-Launch" },
+  foundation: { accent: "#48c78e", label: "Build the Foundation" },
+  pipeline: { accent: "#d4a843", label: "Build the Pipeline" },
+  pressure: { accent: "#b85c38", label: "Apply Pressure" },
+  sprint: { accent: "#e94560", label: "Full Sprint" },
   continuation: { accent: "#f0a500", label: "Operator Mode" },
 };
 
@@ -402,81 +574,107 @@ export function getGettingStartedContent(overrides = {}) {
   };
 }
 
-// ── Default Daily Minimums (admin-configurable) ──────────────
-// Chandler's finalized chart: 5 properties/day, 1 deal source/day,
-// cumulative offer target = day number, follow-ups scale 1→2→3.
-// Offers are tracked CUMULATIVELY — offersCumulative is the running target.
-export const DEFAULT_DAILY_MINIMUMS = {
-  1:  { propertiesAnalyzed: 5, offersCumulative: 1,  dealSourcesActivated: 1, followUps: 1 },
-  2:  { propertiesAnalyzed: 5, offersCumulative: 2,  dealSourcesActivated: 1, followUps: 1 },
-  3:  { propertiesAnalyzed: 5, offersCumulative: 3,  dealSourcesActivated: 1, followUps: 1 },
-  4:  { propertiesAnalyzed: 5, offersCumulative: 4,  dealSourcesActivated: 1, followUps: 1 },
-  5:  { propertiesAnalyzed: 5, offersCumulative: 5,  dealSourcesActivated: 1, followUps: 1 },
-  6:  { propertiesAnalyzed: 5, offersCumulative: 6,  dealSourcesActivated: 1, followUps: 2 },
-  7:  { propertiesAnalyzed: 5, offersCumulative: 7,  dealSourcesActivated: 1, followUps: 2 },
-  8:  { propertiesAnalyzed: 5, offersCumulative: 8,  dealSourcesActivated: 1, followUps: 2 },
-  9:  { propertiesAnalyzed: 5, offersCumulative: 9,  dealSourcesActivated: 1, followUps: 2 },
-  10: { propertiesAnalyzed: 5, offersCumulative: 10, dealSourcesActivated: 1, followUps: 2 },
-  11: { propertiesAnalyzed: 5, offersCumulative: 11, dealSourcesActivated: 1, followUps: 3 },
-  12: { propertiesAnalyzed: 5, offersCumulative: 12, dealSourcesActivated: 1, followUps: 3 },
-  13: { propertiesAnalyzed: 5, offersCumulative: 13, dealSourcesActivated: 1, followUps: 3 },
-  14: { propertiesAnalyzed: 5, offersCumulative: 14, dealSourcesActivated: 1, followUps: 3 },
-  15: { propertiesAnalyzed: 5, offersCumulative: 15, dealSourcesActivated: 1, followUps: 3 },
-  16: { propertiesAnalyzed: 5, offersCumulative: 16, dealSourcesActivated: 1, followUps: 3 },
-  17: { propertiesAnalyzed: 5, offersCumulative: 17, dealSourcesActivated: 1, followUps: 3 },
-  18: { propertiesAnalyzed: 5, offersCumulative: 18, dealSourcesActivated: 1, followUps: 3 },
-  19: { propertiesAnalyzed: 5, offersCumulative: 19, dealSourcesActivated: 1, followUps: 3 },
-  20: { propertiesAnalyzed: 5, offersCumulative: 20, dealSourcesActivated: 1, followUps: 3 },
-  21: { propertiesAnalyzed: 5, offersCumulative: 21, dealSourcesActivated: 1, followUps: 3 },
-  22: { propertiesAnalyzed: 5, offersCumulative: 22, dealSourcesActivated: 1, followUps: 3 },
-  23: { propertiesAnalyzed: 5, offersCumulative: 23, dealSourcesActivated: 1, followUps: 3 },
-  24: { propertiesAnalyzed: 5, offersCumulative: 24, dealSourcesActivated: 1, followUps: 3 },
-  25: { propertiesAnalyzed: 5, offersCumulative: 25, dealSourcesActivated: 1, followUps: 3 },
-  26: { propertiesAnalyzed: 5, offersCumulative: 26, dealSourcesActivated: 1, followUps: 3 },
-  27: { propertiesAnalyzed: 5, offersCumulative: 27, dealSourcesActivated: 1, followUps: 3 },
-  28: { propertiesAnalyzed: 5, offersCumulative: 28, dealSourcesActivated: 1, followUps: 3 },
-  29: { propertiesAnalyzed: 5, offersCumulative: 29, dealSourcesActivated: 1, followUps: 3 },
-  30: { propertiesAnalyzed: 5, offersCumulative: 30, dealSourcesActivated: 1, followUps: 3 },
+// ── Finalized Daily Minimums (per-day, matching compliance metric IDs) ──
+export const DAILY_MINIMUMS = {
+  // Week 1 — Build the Foundation
+  1:  { training_completed: true, properties_analyzed: 2, arsenal_contacts: 1, target_contacts: 3, follow_ups: 0 },
+  2:  { training_completed: true, properties_analyzed: 2, arsenal_contacts: 1, target_contacts: 3, follow_ups: 0 },
+  3:  { training_completed: true, properties_analyzed: 2, arsenal_contacts: 1, target_contacts: 3, follow_ups: 0 },
+  4:  { training_completed: true, properties_analyzed: 2, arsenal_contacts: 1, target_contacts: 3, follow_ups: 0 },
+  5:  { training_completed: true, properties_analyzed: 2, arsenal_contacts: 1, target_contacts: 3, follow_ups: 0 },
+  6:  { training_completed: true, properties_analyzed: 2, arsenal_contacts: 1, target_contacts: 3, follow_ups: 0 },
+  7:  { training_completed: true, properties_analyzed: 2, arsenal_contacts: 1, target_contacts: 3, follow_ups: 0 },
+  // Week 2 — Build the Pipeline
+  8:  { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
+  9:  { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
+  10: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
+  11: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
+  12: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
+  13: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
+  14: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
+  // Week 3 — Apply Pressure
+  15: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
+  16: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
+  17: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
+  18: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
+  19: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
+  20: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
+  21: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
+  // Week 4 — Full Sprint
+  22: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
+  23: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
+  24: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
+  25: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
+  26: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
+  27: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
+  28: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
+  29: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
+  30: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
 };
 
-// Buffer rule: users are removed if cumulative offers < target - OFFER_BUFFER
-export const OFFER_BUFFER = 3;
+// Backward compat alias
+export const DEFAULT_DAILY_MINIMUMS = DAILY_MINIMUMS;
+
+// Veteran minimums — no Week 1 ramp-up for repeat users (cohortAttempt >= 2)
+// Uses Week 3 levels (days 1-21) and Week 4 levels (days 22-30)
+export const VETERAN_DAILY_MINIMUMS = Object.fromEntries(
+  Array.from({ length: 30 }, (_, i) => {
+    const day = i + 1;
+    return [day, day <= 21
+      ? { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 }
+      : { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
+    ];
+  })
+);
+
+// Weekly offer targets (per week, not cumulative across weeks)
+export const WEEKLY_OFFER_TARGETS = {
+  1: 3,
+  2: 10,
+  3: 12,
+  4: 15,
+};
+
+// Helper: get which week a day falls in (1-4 for days 1-30, 4 for post-30)
+export function getWeekNumber(dayNumber) {
+  if (dayNumber <= 7) return 1;
+  if (dayNumber <= 14) return 2;
+  if (dayNumber <= 21) return 3;
+  return 4;
+}
+
+// Helper: get the weekly offer target for a given day
+export function getWeeklyOfferTarget(dayNumber) {
+  return WEEKLY_OFFER_TARGETS[getWeekNumber(dayNumber)] || 0;
+}
+
+// Helper: get the day range for a week
+export function getWeekDayRange(weekNumber) {
+  if (weekNumber === 1) return { start: 1, end: 7 };
+  if (weekNumber === 2) return { start: 8, end: 14 };
+  if (weekNumber === 3) return { start: 15, end: 21 };
+  return { start: 22, end: 30 };
+}
 
 // Post-30 "Operator Mode" reduced minimums
 export const POST_30_MINIMUMS = {
-  propertiesAnalyzed: 1,
-  offersPerWeek: 2,        // 2 offers per rolling 7-day window (not daily)
-  dealSourcesActivated: 0, // no minimum, but still earns points
-  followUps: 1,
+  training_completed: false,
+  properties_analyzed: 1,
+  arsenal_contacts: 0,
+  target_contacts: 0,
+  follow_ups: 1,
+  offers_submitted: 0,
 };
 
 // Get the daily minimums for a specific day, merging admin overrides
-export function getDailyMinimums(dayNum, adminOverrides = {}) {
+export function getDailyMinimums(dayNum, adminOverrides = {}, cohortAttempt = 1) {
   if (dayNum > 30) return POST_30_MINIMUMS;
-  const defaults = DEFAULT_DAILY_MINIMUMS[dayNum] || DEFAULT_DAILY_MINIMUMS[1];
+  const base = cohortAttempt >= 2
+    ? (VETERAN_DAILY_MINIMUMS[dayNum] || VETERAN_DAILY_MINIMUMS[1])
+    : (DAILY_MINIMUMS[dayNum] || DAILY_MINIMUMS[1]);
   const override = adminOverrides[dayNum];
-  if (override) return { ...defaults, ...override };
-  return defaults;
-}
-
-// Get cumulative offer target for a given day
-export function getOfferTarget(dayNum) {
-  if (dayNum > 30) return 30; // post-30: target stays at 30
-  return DEFAULT_DAILY_MINIMUMS[dayNum]?.offersCumulative || dayNum;
-}
-
-// Check if user is within offer buffer (returns { safe, behind, buffer })
-export function checkOfferBuffer(dayNum, cumulativeOffers) {
-  const target = getOfferTarget(dayNum);
-  const behind = Math.max(0, target - cumulativeOffers);
-  return {
-    target,
-    current: cumulativeOffers,
-    behind,
-    buffer: OFFER_BUFFER - behind,
-    safe: behind <= OFFER_BUFFER,
-    status: behind === 0 ? 'green' : behind <= 2 ? 'yellow' : 'red',
-  };
+  if (override) return { ...base, ...override };
+  return base;
 }
 
 // ── Post-Day-30 Operator Mode ────────────────────────────────
@@ -488,8 +686,25 @@ export const POST_30_TASK = {
   proofType: "screenshot",
 };
 
-// Get day data for any day number (1-30 from sprint, 31+ from Operator Mode)
+// Get pre-day content by day number (-3, -2, -1)
+export function getPreDayContent(dayNum, overrides = {}) {
+  const preDay = PRE_DAYS.find(p => p.day === dayNum);
+  if (!preDay) return null;
+  const key = `pre_${Math.abs(dayNum)}`;
+  const dayOverride = overrides[key] || {};
+  return {
+    ...preDay,
+    ...dayOverride,
+    downloads: dayOverride.downloads !== undefined ? dayOverride.downloads : (preDay.downloads || []),
+    quiz: dayOverride.quiz !== undefined ? dayOverride.quiz : (preDay.quiz || null),
+  };
+}
+
+// Get day data for any day number (negative = pre-day, 1-30 from sprint, 31+ from Operator Mode)
 export function getDayDataForNum(dayNum, overrides = {}) {
+  if (dayNum < 0) {
+    return getPreDayContent(dayNum, overrides) || { ...POST_30_TASK, day: dayNum };
+  }
   if (dayNum <= 30) {
     return getDayContent(dayNum, overrides);
   }

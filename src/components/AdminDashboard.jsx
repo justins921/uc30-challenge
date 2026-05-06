@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Header from './Header';
-import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DEFAULT_DAILY_MINIMUMS, checkOfferBuffer, OFFER_BUFFER } from '../data/challengeDays';
+import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DAILY_MINIMUMS, getWeekNumber as getChallengeWeek, getWeeklyOfferTarget } from '../data/challengeDays';
 import { INDICATOR_KEYS, INDICATOR_LABELS, INDICATOR_SHORT_LABELS, INDICATOR_COLORS, UC_POINT_VALUES, calculateUCPoints } from '../data/ucPoints';
 import { AttachmentLink } from './DayView';
 import ActivationPhase from './ActivationPhase';
@@ -1353,9 +1353,10 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
   const [crmExpanded, setCrmExpanded] = useState(false);
   const p = participant;
 
-  // Offer tracking
+  // Offer tracking (weekly)
   const currentDay = p.currentDay || 1;
-  const offerStatus = currentDay <= 30 ? checkOfferBuffer(currentDay, p.metrics?.offersSubmitted || 0) : null;
+  const weekNum = currentDay <= 30 ? getChallengeWeek(currentDay) : null;
+  const weeklyTarget = weekNum ? getWeeklyOfferTarget(currentDay) : null;
 
   const handleLoadCrm = async () => {
     if (crmContacts !== null) { setCrmExpanded(!crmExpanded); return; }
@@ -1555,6 +1556,15 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
             label={`Cohort Attempt #${p.cohortAttempt || 1}`}
             color="#888"
           />
+          {(p.cohortAttempt || 1) >= 2 && (
+            <StatusBadge label="Veteran Minimums" color="#a855f7" />
+          )}
+          {(p.ucGraduateCount || 0) > 0 && (
+            <StatusBadge label={`UC Graduate x${p.ucGraduateCount}`} color="#f0a500" />
+          )}
+          {p.pipelineMode && (
+            <StatusBadge label="Pipeline Mode" color="#6366f1" />
+          )}
           <StatusBadge
             label={p.refundEligible !== false ? 'Refund Eligible' : 'Not Refund Eligible'}
             color={p.refundEligible !== false ? '#48c78e' : '#e94560'}
@@ -1573,11 +1583,49 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
               color="#f0a500"
             />
           )}
+          {(p.trainingCompletedDays || []).length > 0 && (
+            <StatusBadge
+              label={`${(p.trainingCompletedDays || []).length}/30 Training Days`}
+              color="#48c78e"
+            />
+          )}
         </div>
         {p.stakesDeclaration && (
           <div style={{ marginTop: 12, padding: '10px 14px', borderRadius: 8, background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.1)' }}>
             <div style={{ fontSize: 11, color: '#666', fontWeight: 600, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 }}>Stakes Declaration</div>
             <p style={{ fontSize: 13, color: '#aaa', lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>"{p.stakesDeclaration}"</p>
+          </div>
+        )}
+        {/* Cohort History */}
+        {(p.cohortHistory || []).length > 0 && (
+          <div style={{ marginTop: 12 }}>
+            <div style={{ fontSize: 11, color: '#666', fontWeight: 600, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Cohort History</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {(p.cohortHistory || []).map((h, i) => (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px',
+                  borderRadius: 8, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+                  fontSize: 12,
+                }}>
+                  <span style={{
+                    padding: '2px 8px', borderRadius: 4, fontWeight: 700, fontSize: 11,
+                    background: h.result === 'completed' ? 'rgba(72,199,142,0.1)' : 'rgba(233,69,96,0.1)',
+                    color: h.result === 'completed' ? '#48c78e' : '#e94560',
+                  }}>
+                    #{h.cohortAttempt}
+                  </span>
+                  <span style={{ color: h.result === 'completed' ? '#48c78e' : '#e94560', fontWeight: 600 }}>
+                    {h.result === 'completed' ? 'Completed' : 'Failed'}
+                  </span>
+                  <span style={{ color: '#666' }}>
+                    {h.daysCompleted || 0} days completed
+                  </span>
+                  <span style={{ color: '#555', marginLeft: 'auto', fontSize: 11 }}>
+                    {h.completedAt ? new Date(h.completedAt).toLocaleDateString() : h.removedAt ? new Date(h.removedAt).toLocaleDateString() : ''}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -1632,34 +1680,27 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
         </div>
       </div>
 
-      {/* Offer Tracking */}
-      {offerStatus && (
+      {/* Offer Tracking (Weekly) */}
+      {weeklyTarget && weeklyTarget > 0 && (
         <div className="card" style={{ marginBottom: 24 }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Offer Tracking</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Week {weekNum} Offer Tracking</h3>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 12 }}>
             <div style={{ textAlign: 'center' }}>
-              <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: '#fff' }}>{offerStatus.target}</div>
-              <div style={{ fontSize: 11, color: '#888' }}>Day {currentDay} Target</div>
+              <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: '#fff' }}>{weeklyTarget}</div>
+              <div style={{ fontSize: 11, color: '#888' }}>Weekly Target</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: offerStatus.status === 'green' ? '#48c78e' : offerStatus.status === 'yellow' ? '#f0a500' : '#e94560' }}>
-                {offerStatus.current}
+              <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: '#f0a500' }}>
+                {p.metrics?.offersSubmitted || 0}
               </div>
-              <div style={{ fontSize: 11, color: '#888' }}>Cumulative Offers</div>
+              <div style={{ fontSize: 11, color: '#888' }}>Total Offers</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: offerStatus.buffer <= 0 ? '#e94560' : offerStatus.buffer <= 1 ? '#f0a500' : '#48c78e' }}>
-                {Math.max(0, offerStatus.buffer)}
+              <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: '#c9a0ff' }}>
+                {p.lifetimeOffersSubmitted || 0}
               </div>
-              <div style={{ fontSize: 11, color: '#888' }}>Buffer Remaining</div>
+              <div style={{ fontSize: 11, color: '#888' }}>Lifetime Offers</div>
             </div>
-          </div>
-          <div style={{
-            padding: '8px 14px', borderRadius: 6, fontSize: 12, fontWeight: 600,
-            background: offerStatus.status === 'red' ? 'rgba(233,69,96,0.1)' : offerStatus.status === 'yellow' ? 'rgba(240,165,0,0.1)' : 'rgba(72,199,142,0.1)',
-            color: offerStatus.status === 'red' ? '#e94560' : offerStatus.status === 'yellow' ? '#f0a500' : '#48c78e',
-          }}>
-            {offerStatus.status === 'red' ? 'DANGER — Will be removed if they fall further behind' : offerStatus.status === 'yellow' ? 'WARNING — Close to removal threshold' : 'On track'}
           </div>
         </div>
       )}
@@ -1927,13 +1968,19 @@ function SubmissionsTab({ nonAdmin, onVerifySubmissionSocial }) {
 
 // ── Content Management Tab ──────────────────────────────────
 // ── Daily Minimums Editor ──────────────────────────────────
-const DAILY_MIN_KEYS = ['propertiesAnalyzed', 'offersSubmitted', 'dealSourcesActivated', 'counteroffers', 'followUps'];
+const DAILY_MIN_KEYS = ['properties_analyzed', 'arsenal_contacts', 'target_contacts', 'follow_ups'];
+const DAILY_MIN_LABELS = {
+  properties_analyzed: 'Properties',
+  arsenal_contacts: 'Arsenal',
+  target_contacts: 'Target',
+  follow_ups: 'Follow-Ups',
+};
 
 function DailyMinimumsEditor({ overrides, onSave, onBack }) {
   const [values, setValues] = useState(() => {
     const v = {};
     for (let d = 1; d <= 30; d++) {
-      const defaults = DEFAULT_DAILY_MINIMUMS[d] || {};
+      const defaults = DAILY_MINIMUMS[d] || {};
       const over = overrides[d] || {};
       v[d] = {};
       DAILY_MIN_KEYS.forEach(k => {
@@ -1952,10 +1999,9 @@ function DailyMinimumsEditor({ overrides, onSave, onBack }) {
   };
 
   const handleSave = () => {
-    // Only store overrides that differ from defaults
     const result = {};
     for (let d = 1; d <= 30; d++) {
-      const defaults = DEFAULT_DAILY_MINIMUMS[d] || {};
+      const defaults = DAILY_MINIMUMS[d] || {};
       const hasChange = DAILY_MIN_KEYS.some(k => (values[d][k] || 0) !== (defaults[k] || 0));
       if (hasChange) {
         result[d] = values[d];
@@ -1972,7 +2018,7 @@ function DailyMinimumsEditor({ overrides, onSave, onBack }) {
       <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Daily Standards Editor</h2>
       <p style={{ color: '#888', fontSize: 13, marginBottom: 24 }}>
         Set the minimum required count for each indicator on each day of the sprint.
-        Counteroffers minimum is typically 0 (cannot force receiving counteroffers).
+        Training is always required. Offers are tracked as weekly targets.
       </p>
 
       <div style={{ overflowX: 'auto', marginBottom: 24 }}>
@@ -1981,8 +2027,8 @@ function DailyMinimumsEditor({ overrides, onSave, onBack }) {
             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
               <th style={{ padding: '8px 6px', textAlign: 'left', color: '#888', fontWeight: 600 }}>Day</th>
               {DAILY_MIN_KEYS.map(k => (
-                <th key={k} style={{ padding: '8px 6px', textAlign: 'center', color: INDICATOR_COLORS[k], fontWeight: 600 }}>
-                  {INDICATOR_SHORT_LABELS[k]}
+                <th key={k} style={{ padding: '8px 6px', textAlign: 'center', color: '#ccc', fontWeight: 600 }}>
+                  {DAILY_MIN_LABELS[k]}
                 </th>
               ))}
             </tr>
@@ -2531,7 +2577,9 @@ function DayEditor({ dayNum, contentOverrides, onSave, onBack }) {
   const existing = contentOverrides[dayNum] || {};
 
   const [title, setTitle] = useState(existing.title || defaults.title);
+  const [caption, setCaption] = useState(existing.caption || defaults.caption || '');
   const [taskDescription, setTaskDescription] = useState(existing.taskDescription || defaults.taskDescription);
+  const [trainingContent, setTrainingContent] = useState(existing.trainingContent || defaults.trainingContent || '');
   const [videoUrl, setVideoUrl] = useState(existing.videoUrl || defaults.videoUrl || '');
   const [transcript, setTranscript] = useState(existing.transcript || defaults.transcript || '');
   const [downloads, setDownloads] = useState(existing.downloads || defaults.downloads || []);
@@ -2548,7 +2596,9 @@ function DayEditor({ dayNum, contentOverrides, onSave, onBack }) {
   const handleSave = () => {
     const overrides = {};
     if (title !== defaults.title) overrides.title = title;
+    if (caption !== (defaults.caption || '')) overrides.caption = caption;
     if (taskDescription !== defaults.taskDescription) overrides.taskDescription = taskDescription;
+    if (trainingContent !== (defaults.trainingContent || '')) overrides.trainingContent = trainingContent;
     if (videoUrl !== (defaults.videoUrl || '')) overrides.videoUrl = videoUrl || null;
     if (transcript !== (defaults.transcript || '')) overrides.transcript = transcript || null;
     if (JSON.stringify(downloads) !== JSON.stringify(defaults.downloads || [])) overrides.downloads = downloads;
@@ -2614,6 +2664,19 @@ function DayEditor({ dayNum, contentOverrides, onSave, onBack }) {
         <input value={title} onChange={e => setTitle(e.target.value)} style={inputStyle} />
       </div>
 
+      {/* Caption */}
+      {!isGettingStarted && (
+        <div className="card" style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Caption</label>
+          <input
+            value={caption}
+            onChange={e => setCaption(e.target.value)}
+            placeholder="Short subtitle shown on the timeline card"
+            style={inputStyle}
+          />
+        </div>
+      )}
+
       {/* Task Description */}
       <div className="card" style={{ marginBottom: 16 }}>
         <label style={labelStyle}>Task Description</label>
@@ -2624,6 +2687,20 @@ function DayEditor({ dayNum, contentOverrides, onSave, onBack }) {
           style={{ ...inputStyle, resize: 'vertical' }}
         />
       </div>
+
+      {/* Training Content */}
+      {!isGettingStarted && (
+        <div className="card" style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Training Content Description</label>
+          <textarea
+            value={trainingContent}
+            onChange={e => setTrainingContent(e.target.value)}
+            rows={3}
+            placeholder="Describe what training topics are covered in this day's video..."
+            style={{ ...inputStyle, resize: 'vertical' }}
+          />
+        </div>
+      )}
 
       {/* Video URL */}
       <div className="card" style={{ marginBottom: 16 }}>

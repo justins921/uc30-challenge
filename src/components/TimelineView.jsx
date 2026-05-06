@@ -157,6 +157,11 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
                   }}>
                     {isLocked ? '██████████████' : dayData.title}
                   </div>
+                  {!isLocked && dayData.caption && (
+                    <div style={{ fontSize: 11, color: '#666', lineHeight: 1.3, marginTop: 4 }}>
+                      {dayData.caption}
+                    </div>
+                  )}
                 </div>
               );
             })}

@@ -8,6 +8,22 @@
 // 2. Create a new project
 // 3. Run the SQL in supabase-setup.sql (base schema)
 // 4. Run the SQL in supabase-auth-migration.sql (auth + RLS)
+
+// ── Follow-up date calculation ──────────────────────────────────────
+export function calculateFollowUpDate(interval) {
+  if (!interval || interval === 'never') return null;
+  const d = new Date();
+  switch (interval) {
+    case '2_days': d.setDate(d.getDate() + 2); break;
+    case '1_week': d.setDate(d.getDate() + 7); break;
+    case '2_weeks': d.setDate(d.getDate() + 14); break;
+    case '1_month': d.setMonth(d.getMonth() + 1); break;
+    case '3_months': d.setMonth(d.getMonth() + 3); break;
+    case '6_months': d.setMonth(d.getMonth() + 6); break;
+    default: return null;
+  }
+  return d.toISOString();
+}
 // 5. Copy your project URL and anon key into .env
 
 import { supabase } from './supabaseClient';
@@ -293,6 +309,17 @@ const supabaseStorage = {
     return data || [];
   },
 
+  async updateContact(contactId, updates) {
+    const { data, error } = await supabase
+      .from('contacts')
+      .update(updates)
+      .eq('id', contactId)
+      .select()
+      .single();
+    if (error) { console.error('updateContact error:', error); return null; }
+    return data;
+  },
+
   // ── CRM: Follow-Ups ──────────────────────────────────────────
   async addFollowUp(followUp) {
     const { data, error } = await supabase
@@ -537,6 +564,7 @@ function toDbRow(user) {
     access_expires_at: user.accessExpiresAt || null,
   };
   if (user.ucPoints !== undefined) row.uc_points = user.ucPoints;
+  if (user.lifetimeOffersSubmitted !== undefined) row.lifetime_offers_submitted = user.lifetimeOffersSubmitted;
   // Only include profile_picture if it has a value (column may not exist yet)
   if (user.profilePicture) row.profile_picture = user.profilePicture;
   if (user.socialHandles && Object.keys(user.socialHandles).length > 0) row.social_handles = user.socialHandles;
@@ -569,6 +597,15 @@ function toDbRow(user) {
   // Stripe payment tracking
   if (user.stripeCustomerId) row.stripe_customer_id = user.stripeCustomerId;
   if (user.stripeSubscriptionId) row.stripe_subscription_id = user.stripeSubscriptionId;
+  // Pipeline Mode
+  if (user.pipelineMode !== undefined) row.pipeline_mode = user.pipelineMode;
+  if (user.pipelineModeStreak !== undefined) row.pipeline_mode_streak = user.pipelineModeStreak;
+  if (user.pipelineModeActivatedAt) row.pipeline_mode_activated_at = user.pipelineModeActivatedAt;
+  // Repeat Cohort / Graduate tracking
+  if (user.trainingCompletedDays) row.training_completed_days = user.trainingCompletedDays;
+  if (user.cohortHistory) row.cohort_history = user.cohortHistory;
+  if (user.ucGraduateCount != null) row.uc_graduate_count = user.ucGraduateCount;
+  if (user.propertiesUnderContract != null) row.properties_under_contract = user.propertiesUnderContract;
   return row;
 }
 
@@ -594,6 +631,7 @@ function toDbUpdateRow(updates) {
   if (updates.socialHandles !== undefined) row.social_handles = updates.socialHandles;
   if (updates.gettingStartedCompleted !== undefined) row.getting_started_completed = updates.gettingStartedCompleted;
   if (updates.ucPoints !== undefined) row.uc_points = updates.ucPoints;
+  if (updates.lifetimeOffersSubmitted !== undefined) row.lifetime_offers_submitted = updates.lifetimeOffersSubmitted;
   if (updates.getClear !== undefined) row.get_clear = updates.getClear;
   if (updates.buyBox !== undefined) row.buy_box = updates.buyBox;
   if (updates.commitmentDeclaredAt !== undefined) row.commitment_declared_at = updates.commitmentDeclaredAt;
@@ -622,6 +660,15 @@ function toDbUpdateRow(updates) {
   // Stripe payment tracking
   if (updates.stripeCustomerId !== undefined) row.stripe_customer_id = updates.stripeCustomerId;
   if (updates.stripeSubscriptionId !== undefined) row.stripe_subscription_id = updates.stripeSubscriptionId;
+  // Pipeline Mode
+  if (updates.pipelineMode !== undefined) row.pipeline_mode = updates.pipelineMode;
+  if (updates.pipelineModeStreak !== undefined) row.pipeline_mode_streak = updates.pipelineModeStreak;
+  if (updates.pipelineModeActivatedAt !== undefined) row.pipeline_mode_activated_at = updates.pipelineModeActivatedAt;
+  // Repeat Cohort / Graduate tracking
+  if (updates.trainingCompletedDays !== undefined) row.training_completed_days = updates.trainingCompletedDays;
+  if (updates.cohortHistory !== undefined) row.cohort_history = updates.cohortHistory;
+  if (updates.ucGraduateCount !== undefined) row.uc_graduate_count = updates.ucGraduateCount;
+  if (updates.propertiesUnderContract !== undefined) row.properties_under_contract = updates.propertiesUnderContract;
   return row;
 }
 
@@ -643,11 +690,11 @@ function fromDbRow(row) {
     completedDays: row.completed_days || [],
     submissions: row.submissions || [],
     metrics: {
-      propertiesAnalyzed: 0, offersSubmitted: 0, dealSourcesActivated: 0,
-      counteroffers: 0, followUps: 0, propertiesUnderContract: 0,
-      socialMediaPosts: 0,
+      trainingCompleted: 0, propertiesAnalyzed: 0, arsenalContacts: 0,
+      targetContacts: 0, followUps: 0, offersSubmitted: 0,
       ...(row.metrics || {}),
     },
+    lifetimeOffersSubmitted: row.lifetime_offers_submitted || 0,
     ucPoints: row.uc_points || 0,
     removedAt: row.removed_at,
     reactivatedAt: row.reactivated_at || null,
@@ -683,6 +730,15 @@ function fromDbRow(row) {
     // Stripe payment tracking
     stripeCustomerId: row.stripe_customer_id || null,
     stripeSubscriptionId: row.stripe_subscription_id || null,
+    // Pipeline Mode (post-failure continued access)
+    pipelineMode: row.pipeline_mode || false,
+    pipelineModeStreak: row.pipeline_mode_streak || 0,
+    pipelineModeActivatedAt: row.pipeline_mode_activated_at || null,
+    // Repeat Cohort / Graduate tracking
+    trainingCompletedDays: row.training_completed_days || [],
+    cohortHistory: row.cohort_history || [],
+    ucGraduateCount: row.uc_graduate_count || 0,
+    propertiesUnderContract: row.properties_under_contract || 0,
   };
 }
 
@@ -837,6 +893,16 @@ const localStorageFallback = {
   },
   getContactsForParticipant(participantId) {
     return this.getContacts(participantId);
+  },
+  updateContact(contactId, updates) {
+    try {
+      const contacts = JSON.parse(localStorage.getItem('uc30_contacts') || '[]');
+      const idx = contacts.findIndex(c => c.id === contactId);
+      if (idx === -1) return null;
+      contacts[idx] = { ...contacts[idx], ...updates };
+      localStorage.setItem('uc30_contacts', JSON.stringify(contacts));
+      return contacts[idx];
+    } catch { return null; }
   },
 
   // ── CRM: Follow-Ups (localStorage fallback) ───────────────────
@@ -1023,14 +1089,14 @@ export function createNewUser(firstName, lastName, email, authId) {
     completedDays: [],
     submissions: [],
     metrics: {
+      trainingCompleted: 0,
       propertiesAnalyzed: 0,
-      offersSubmitted: 0,
-      dealSourcesActivated: 0,
-      counteroffers: 0,
+      arsenalContacts: 0,
+      targetContacts: 0,
       followUps: 0,
-      propertiesUnderContract: 0,
-      socialMediaPosts: 0,
+      offersSubmitted: 0,
     },
+    lifetimeOffersSubmitted: 0,
     ucPoints: 0,
     removedAt: null,
     accessExpiresAt: null,
@@ -1085,5 +1151,14 @@ export function createNewUser(firstName, lastName, email, authId) {
     cohortAttempt: 1,
     refundEligible: true,
     firstCohortCompleted: false,
+    // Pipeline Mode (post-failure continued access)
+    pipelineMode: false,
+    pipelineModeStreak: 0,
+    pipelineModeActivatedAt: null,
+    // Repeat Cohort / Graduate tracking
+    trainingCompletedDays: [],
+    cohortHistory: [],
+    ucGraduateCount: 0,
+    propertiesUnderContract: 0,
   };
 }

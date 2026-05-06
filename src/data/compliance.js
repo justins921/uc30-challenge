@@ -6,27 +6,26 @@
 // ── Metric definitions ───────────────────────────────────────────
 
 export const COMPLIANCE_METRICS = [
-  { id: 'training_completed', label: 'Training Completed', type: 'boolean', icon: '🎓' },
-  { id: 'properties_analyzed', label: 'Properties Analyzed', type: 'count', icon: '🏠' },
+  { id: 'training_completed', label: 'Training Completed', type: 'boolean', icon: '📚' },
+  { id: 'properties_analyzed', label: 'Properties Analyzed', type: 'count', icon: '🔍' },
   { id: 'arsenal_contacts', label: 'Arsenal Contacts', type: 'count', icon: '🤝' },
   { id: 'target_contacts', label: 'Target Contacts', type: 'count', icon: '🎯' },
   { id: 'follow_ups', label: 'Follow-Ups', type: 'count', icon: '📞' },
   { id: 'offers_submitted', label: 'Offers Submitted', type: 'count', icon: '📝' },
-  { id: 'properties_under_contract', label: 'Properties Under Contract', type: 'count', icon: '🔑' },
 ];
 
 export const METRIC_IDS = COMPLIANCE_METRICS.map(m => m.id);
 
 // ── Default settings (used when DB settings are missing) ────────
 
+// Week 1 defaults — used as fallback when no per-day minimums are provided
 export const DEFAULT_DAILY_MINIMUMS = {
   training_completed: true,
-  properties_analyzed: 1,
+  properties_analyzed: 2,
   arsenal_contacts: 1,
-  target_contacts: 1,
-  follow_ups: 1,
+  target_contacts: 3,
+  follow_ups: 0,
   offers_submitted: 0,
-  properties_under_contract: 0,
 };
 
 export const DEFAULT_WEEKLY_MINIMUMS = {
@@ -36,7 +35,6 @@ export const DEFAULT_WEEKLY_MINIMUMS = {
   target_contacts: 5,
   follow_ups: 5,
   offers_submitted: 1,
-  properties_under_contract: 0,
 };
 
 export const DEFAULT_ENFORCEMENT = {

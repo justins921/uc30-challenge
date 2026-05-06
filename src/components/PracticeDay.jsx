@@ -1,13 +1,12 @@
 import { useState } from 'react';
 
 const PRACTICE_METRICS = [
-  { id: 'training_completed', label: 'Training Completed', type: 'boolean', icon: '🎓', tip: 'Mark this done after watching the daily training video.' },
-  { id: 'properties_analyzed', label: 'Properties Analyzed', type: 'count', icon: '🏠', tip: 'Enter how many properties you reviewed and ran numbers on today.' },
-  { id: 'arsenal_contacts', label: 'Arsenal Contacts', type: 'count', icon: '🤝', tip: 'Network contacts — other investors, mentors, meetup connections.' },
-  { id: 'target_contacts', label: 'Target Contacts', type: 'count', icon: '🎯', tip: 'Deal source contacts — agents, wholesalers, property managers, sellers.' },
-  { id: 'follow_ups', label: 'Follow-Ups', type: 'count', icon: '📞', tip: 'Select an existing contact and log what happened in the follow-up.' },
-  { id: 'offers_submitted', label: 'Offers Submitted', type: 'count', icon: '📝', tip: 'Enter how many offers you submitted today.' },
-  { id: 'properties_under_contract', label: 'Properties Under Contract', type: 'count', icon: '🔑', tip: 'Properties you have under contract.' },
+  { id: 'training_completed', label: 'Training Completed', type: 'boolean', icon: '📚', tip: 'Mark this done after watching the daily training video. Must be completed before you can submit.' },
+  { id: 'properties_analyzed', label: 'Properties Analyzed', type: 'count', icon: '🔍', tip: 'Properties reviewed with full analysis — asking price, taxes, insurance, financing, vacancy, expenses, CapEx, PM costs.' },
+  { id: 'arsenal_contacts', label: 'Arsenal Contacts', type: 'count', icon: '🤝', tip: 'Ecosystem outreach — property managers, lenders, contractors, agents, wholesalers, fellow investors.' },
+  { id: 'target_contacts', label: 'Target Contacts', type: 'count', icon: '🎯', tip: 'Direct outreach to a specific property owner, seller, or listing agent about a specific property.' },
+  { id: 'follow_ups', label: 'Follow-Ups', type: 'count', icon: '📞', tip: 'Second or subsequent outreach to anyone already in your pipeline.' },
+  { id: 'offers_submitted', label: 'Offers Submitted', type: 'count', icon: '📝', tip: 'Formal written offers, LOIs, or counteroffers delivered on specific properties.' },
 ];
 
 const PRACTICE_QUIZ = {
@@ -26,7 +25,7 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
   const [currentGuide, setCurrentGuide] = useState(0);
   const [metrics, setMetrics] = useState({
     training_completed: false, properties_analyzed: 0, arsenal_contacts: 0,
-    target_contacts: 0, follow_ups: 0, offers_submitted: 0, properties_under_contract: 0,
+    target_contacts: 0, follow_ups: 0, offers_submitted: 0,
   });
   const [proofText, setProofText] = useState('');
   const [submitted, setSubmitted] = useState(false);
