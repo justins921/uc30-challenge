@@ -2,6 +2,9 @@ import { useState, useMemo, useEffect } from 'react';
 import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum } from '../data/challengeDays';
 import { COMPLIANCE_METRICS, checkDailyCompliance, getTimeUntilDeadline, DEFAULT_DAILY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
 import QuizSection from './QuizSection';
+import { CONTACT_GROUPS } from './ContactsCRM';
+
+const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500', team: '#48c78e' };
 
 export default function DayView({
   day, user, onSubmit, onBack, contentOverrides, customPhases,
@@ -59,6 +62,85 @@ export default function DayView({
 
   const canSubmit = !isComplete && !submitted && isCurrentOrPast;
   const isUpdate = !!existingDailySubmission;
+
+  // ── Contact & Follow-up state ────────────────────────────────
+  const [contactList, setContactList] = useState(initialContacts || []);
+  const [showContactForm, setShowContactForm] = useState(false);
+  const [showFollowUpForm, setShowFollowUpForm] = useState(false);
+  const [contactName, setContactName] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactGroup, setContactGroup] = useState('target');
+  const [contactNotes, setContactNotes] = useState('');
+  const [contactSaving, setContactSaving] = useState(false);
+  const [duplicateContact, setDuplicateContact] = useState(null);
+  const [followUpContactId, setFollowUpContactId] = useState('');
+  const [followUpNotes, setFollowUpNotes] = useState('');
+  const [followUpSaving, setFollowUpSaving] = useState(false);
+
+  useEffect(() => {
+    if (initialContacts) setContactList(initialContacts);
+  }, [initialContacts]);
+
+  const handleAddContact = async (force) => {
+    if (!contactName.trim()) return;
+    if (!force) {
+      const dup = contactList.find(c => c.name?.toLowerCase() === contactName.trim().toLowerCase());
+      if (dup) {
+        setDuplicateContact(dup);
+        return;
+      }
+    }
+    setContactSaving(true);
+    setDuplicateContact(null);
+    const result = await onAddContact({
+      name: contactName.trim(),
+      phone: contactPhone.trim() || null,
+      email: contactEmail.trim() || null,
+      contact_group: contactGroup,
+      notes: contactNotes.trim() || null,
+      day_added: day,
+    });
+    if (result?.success && result.contact) {
+      setContactList(prev => [result.contact, ...prev]);
+    }
+    setContactSaving(false);
+    setContactName(''); setContactPhone(''); setContactEmail('');
+    setContactGroup('target'); setContactNotes('');
+    setShowContactForm(false);
+  };
+
+  const handleGoToFollowUp = (contact) => {
+    setDuplicateContact(null);
+    setShowContactForm(false);
+    setContactName(''); setContactPhone(''); setContactEmail('');
+    setContactGroup('target'); setContactNotes('');
+    setFollowUpContactId(contact.id);
+    setShowFollowUpForm(true);
+  };
+
+  const handleAddFollowUp = async () => {
+    if (!followUpContactId || !followUpNotes.trim()) return;
+    setFollowUpSaving(true);
+    await onAddFollowUp({
+      contact_id: followUpContactId,
+      notes: followUpNotes.trim(),
+      day_number: day,
+    });
+    setFollowUpSaving(false);
+    setFollowUpContactId(''); setFollowUpNotes('');
+    setShowFollowUpForm(false);
+  };
+
+  const groupedContacts = useMemo(() => {
+    const groups = { target: [], arsenal: [], team: [] };
+    (contactList || []).forEach(c => {
+      const g = c.contact_group || 'target';
+      if (groups[g]) groups[g].push(c);
+      else groups.target.push(c);
+    });
+    return groups;
+  }, [contactList]);
 
   // ── Quiz gate ────────────────────────────────────────────────
   const hasRequiredQuiz = !isPost30 && dayData.quiz?.required && dayData.quiz.scenarios?.length > 0;
@@ -362,6 +444,145 @@ export default function DayView({
                 );
               })}
             </div>
+          </div>
+
+          {/* ── Add Contact / Follow-Up ── */}
+          <div className="card" style={{ marginBottom: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+              <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(72,199,142,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>🤝</div>
+              <h3 style={{ fontSize: 16, fontWeight: 700 }}>Contacts & Follow-Ups</h3>
+            </div>
+
+            {!showContactForm && !showFollowUpForm && (
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <button className="btn-secondary" onClick={() => setShowContactForm(true)}
+                  style={{ flex: 1, padding: '10px 16px', fontSize: 13, minWidth: 140 }}>
+                  + New Contact
+                </button>
+                <button className="btn-secondary" onClick={() => setShowFollowUpForm(true)}
+                  disabled={contactList.length === 0}
+                  style={{ flex: 1, padding: '10px 16px', fontSize: 13, minWidth: 140, opacity: contactList.length === 0 ? 0.4 : 1 }}>
+                  + Log Follow-Up
+                </button>
+              </div>
+            )}
+
+            {/* ── New Contact Form ── */}
+            {showContactForm && (
+              <div style={{ padding: 16, borderRadius: 10, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 14 }}>New Contact</div>
+
+                <input value={contactName} onChange={e => setContactName(e.target.value)}
+                  placeholder="Name *" style={{ width: '100%', fontSize: 14, padding: '10px 14px', marginBottom: 10,
+                  borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
+                  <input value={contactPhone} onChange={e => setContactPhone(e.target.value)}
+                    placeholder="Phone" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
+                    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+                  <input value={contactEmail} onChange={e => setContactEmail(e.target.value)}
+                    placeholder="Email" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
+                    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+                </div>
+
+                <div style={{ fontSize: 12, color: '#888', fontWeight: 600, marginBottom: 6 }}>Group</div>
+                <div style={{ display: 'flex', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
+                  {CONTACT_GROUPS.map(g => (
+                    <button key={g.value} onClick={() => setContactGroup(g.value)} style={{
+                      padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: contactGroup === g.value ? 600 : 400,
+                      cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
+                      background: contactGroup === g.value ? `${g.color}20` : 'rgba(255,255,255,0.04)',
+                      color: contactGroup === g.value ? g.color : '#888',
+                      outline: contactGroup === g.value ? `1px solid ${g.color}40` : '1px solid rgba(255,255,255,0.08)',
+                    }}>
+                      {g.label}
+                    </button>
+                  ))}
+                </div>
+
+                <textarea value={contactNotes} onChange={e => setContactNotes(e.target.value)}
+                  placeholder="Notes about this contact..." rows={2}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 12, resize: 'vertical',
+                  borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+
+                {/* Duplicate warning */}
+                {duplicateContact && (
+                  <div style={{
+                    padding: '12px 14px', borderRadius: 8, marginBottom: 12,
+                    background: 'rgba(240,165,0,0.06)', border: '1px solid rgba(240,165,0,0.2)',
+                  }}>
+                    <div style={{ fontSize: 13, color: '#f0a500', fontWeight: 600, marginBottom: 8 }}>
+                      You already have a contact named "{duplicateContact.name}" in your {CONTACT_GROUPS.find(g => g.value === (duplicateContact.contact_group || 'target'))?.label || 'contacts'}.
+                    </div>
+                    <div style={{ fontSize: 12, color: '#888', marginBottom: 10 }}>
+                      Would you like to add a follow-up note to them instead?
+                    </div>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button className="btn-primary" onClick={() => handleGoToFollowUp(duplicateContact)}
+                        style={{ padding: '8px 16px', fontSize: 12 }}>
+                        Go to Follow-Up
+                      </button>
+                      <button className="btn-secondary" onClick={() => handleAddContact(true)}
+                        style={{ padding: '8px 16px', fontSize: 12 }}>
+                        Add Anyway
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button className="btn-primary" onClick={() => handleAddContact(false)}
+                    disabled={!contactName.trim() || contactSaving}
+                    style={{ padding: '10px 20px', fontSize: 13, opacity: contactName.trim() ? 1 : 0.4 }}>
+                    {contactSaving ? 'Saving...' : 'Add Contact'}
+                  </button>
+                  <button className="btn-secondary" onClick={() => { setShowContactForm(false); setDuplicateContact(null); }}
+                    style={{ padding: '10px 16px', fontSize: 13 }}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* ── Follow-Up Form ── */}
+            {showFollowUpForm && (
+              <div style={{ padding: 16, borderRadius: 10, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 14 }}>Log Follow-Up</div>
+
+                <select value={followUpContactId} onChange={e => setFollowUpContactId(e.target.value)}
+                  style={{ width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 10, borderRadius: 8,
+                  background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#ccc' }}>
+                  <option value="">Select a contact...</option>
+                  {CONTACT_GROUPS.map(g => {
+                    const gc = groupedContacts[g.value] || [];
+                    if (gc.length === 0) return null;
+                    return (
+                      <optgroup key={g.value} label={`── ${g.label} ──`}>
+                        {gc.map(c => (
+                          <option key={c.id} value={c.id}>{c.name}</option>
+                        ))}
+                      </optgroup>
+                    );
+                  })}
+                </select>
+
+                <textarea value={followUpNotes} onChange={e => setFollowUpNotes(e.target.value)}
+                  placeholder="What happened in this follow-up?" rows={3}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 12, resize: 'vertical',
+                  borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button className="btn-primary" onClick={handleAddFollowUp}
+                    disabled={!followUpContactId || !followUpNotes.trim() || followUpSaving}
+                    style={{ padding: '10px 20px', fontSize: 13, opacity: followUpContactId && followUpNotes.trim() ? 1 : 0.4 }}>
+                    {followUpSaving ? 'Saving...' : 'Log Follow-Up'}
+                  </button>
+                  <button className="btn-secondary" onClick={() => setShowFollowUpForm(false)}
+                    style={{ padding: '10px 16px', fontSize: 13 }}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* ── Proof Text + Submit ── */}
