@@ -118,23 +118,49 @@ If you don't feel confident or decisive about your criteria yet, go back and fin
         {
           id: 'day1_property1',
           title: 'Property 1 Analysis',
-          description: `Analyze the property below. Plug the information into the CDS Rental Calculator and determine the Cash on Cash Return. Review the property analysis PDF if you're unclear on the inputs.
-
-Purchase Price: $600,000
-Costs to Make Rent Ready: $0 (Turn Key)
-Down Payment: 25%
-Closing Costs: 2%
-Years to Payoff: 30
-Interest Rate: 6.5%
-Rents: $6,000/mo (4 units × $1,500/unit)
-Other Income: $0
-Vacancy Rate: 6%
-Maintenance & CapEx: 12%
-Management: 8%
-Utilities: $0
-Additional Expenses: $0
-Insurance: $1,000/yr
-Taxes: $4,000/yr`,
+          description: `Analyze the property below. Plug the information into the CDS Rental Calculator and determine the Cash on Cash Return.`,
+          propertyListing: {
+            title: '4-Unit Multifamily — Turn Key',
+            price: '$600,000',
+            badges: ['Multifamily', '4 Units', 'Turn Key'],
+            highlights: [
+              { icon: '🏠', label: 'Units', value: '4' },
+              { icon: '💰', label: 'Rent', value: '$6,000/mo' },
+              { icon: '📍', label: 'Condition', value: 'Turn Key' },
+            ],
+            sections: [
+              {
+                heading: 'Purchase & Financing',
+                rows: [
+                  { label: 'Purchase Price', value: '$600,000' },
+                  { label: 'Costs to Make Rent Ready', value: '$0' },
+                  { label: 'Down Payment', value: '25%' },
+                  { label: 'Closing Costs', value: '2%' },
+                  { label: 'Years to Payoff', value: '30' },
+                  { label: 'Interest Rate', value: '6.5%' },
+                ],
+              },
+              {
+                heading: 'Income',
+                rows: [
+                  { label: 'Rents', value: '$6,000/mo', detail: '4 units x $1,500' },
+                  { label: 'Other Income', value: '$0' },
+                ],
+              },
+              {
+                heading: 'Expenses',
+                rows: [
+                  { label: 'Vacancy Rate', value: '6%' },
+                  { label: 'Maintenance & CapEx', value: '12%' },
+                  { label: 'Management', value: '8%' },
+                  { label: 'Utilities', value: '$0' },
+                  { label: 'Additional Expenses', value: '$0' },
+                  { label: 'Insurance', value: '$1,000/yr' },
+                  { label: 'Taxes', value: '$4,000/yr' },
+                ],
+              },
+            ],
+          },
           maxAttempts: 3,
           showExplanationOnPass: true,
           explanationOnFail: 'Make sure you entered all the property data correctly into the CDS Rental Calculator. Double-check each field against the values above.',

@@ -267,7 +267,11 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
         </p>
       </div>
 
-      {scenario.image && (
+      {scenario.propertyListing && (
+        <PropertyListingCard listing={scenario.propertyListing} />
+      )}
+
+      {scenario.image && !scenario.propertyListing && (
         <img
           src={scenario.image}
           alt={scenario.title}
@@ -346,6 +350,102 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
       >
         {saving ? 'Checking...' : 'Check Answer'}
       </button>
+    </div>
+  );
+}
+
+function PropertyListingCard({ listing }) {
+  return (
+    <div style={{
+      borderRadius: 12, overflow: 'hidden', marginBottom: 20,
+      border: '1px solid rgba(255,255,255,0.1)',
+      background: 'rgba(255,255,255,0.02)',
+    }}>
+      {/* Hero / Header */}
+      <div style={{
+        padding: '20px 18px 16px',
+        background: 'linear-gradient(135deg, rgba(83,52,131,0.15) 0%, rgba(233,69,96,0.08) 100%)',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 11, color: '#c9a0ff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>
+              Practice Property
+            </div>
+            <h4 style={{ fontSize: 17, fontWeight: 700, color: '#eee', margin: '0 0 8px' }}>
+              {listing.title}
+            </h4>
+            {listing.badges && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {listing.badges.map((b, i) => (
+                  <span key={i} style={{
+                    fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 6,
+                    background: 'rgba(255,255,255,0.06)', color: '#aaa',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                  }}>{b}</span>
+                ))}
+              </div>
+            )}
+          </div>
+          <div style={{ textAlign: 'right', flexShrink: 0 }}>
+            <div style={{ fontSize: 22, fontWeight: 700, color: '#48c78e' }}>
+              {listing.price}
+            </div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>Asking Price</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Highlight Stats */}
+      {listing.highlights && (
+        <div style={{
+          display: 'grid', gridTemplateColumns: `repeat(${listing.highlights.length}, 1fr)`,
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+        }}>
+          {listing.highlights.map((h, i) => (
+            <div key={i} style={{
+              padding: '12px 14px', textAlign: 'center',
+              borderRight: i < listing.highlights.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+            }}>
+              <div style={{ fontSize: 16, marginBottom: 4 }}>{h.icon}</div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: '#eee' }}>{h.value}</div>
+              <div style={{ fontSize: 10, color: '#888', marginTop: 2, textTransform: 'uppercase', letterSpacing: 0.5 }}>{h.label}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Detail Sections */}
+      {listing.sections && listing.sections.map((section, si) => (
+        <div key={si}>
+          <div style={{
+            padding: '8px 14px',
+            background: si === 0 ? 'rgba(83,52,131,0.08)' : si === 1 ? 'rgba(72,199,142,0.06)' : 'rgba(233,69,96,0.05)',
+            borderBottom: '1px solid rgba(255,255,255,0.04)',
+            borderTop: si > 0 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+          }}>
+            <div style={{
+              fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1,
+              color: si === 0 ? '#c9a0ff' : si === 1 ? '#48c78e' : '#e94560',
+            }}>{section.heading}</div>
+          </div>
+          {section.rows.map((row, ri) => (
+            <div key={ri} style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '8px 14px',
+              borderBottom: ri < section.rows.length - 1 ? '1px solid rgba(255,255,255,0.03)' : 'none',
+            }}>
+              <span style={{ fontSize: 13, color: '#999' }}>{row.label}</span>
+              <div style={{ textAlign: 'right' }}>
+                <span style={{ fontSize: 14, fontWeight: 600, color: '#eee' }}>{row.value}</span>
+                {row.detail && (
+                  <div style={{ fontSize: 11, color: '#666', marginTop: 1 }}>{row.detail}</div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   );
 }
