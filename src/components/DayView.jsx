@@ -457,9 +457,43 @@ export default function DayView({
         <SubmissionSuccess day={day} isUpdate={isUpdate} />
       ) : null}
 
-      {/* ═══ POST-SUBMISSION ACTIVITIES ═══ */}
+      {/* ═══ DUE FOLLOW-UPS (always visible on completed/submitted days) ═══ */}
       {(submitted || (isComplete && existingSubmission)) && (
         <div style={{ marginTop: 24 }}>
+          <DueFollowUps
+            contacts={contactList}
+            onFollowUp={(contact) => {
+              setFollowUpContactId(contact.id);
+              setFollowUpInterval('');
+              setFollowUpReclassify('');
+              setFollowUpNotes('');
+              setShowFollowUpForm(true);
+              setShowPostSubmit(true);
+            }}
+            onSnooze={async (contact, days) => {
+              const newDate = new Date();
+              newDate.setDate(newDate.getDate() + days);
+              const updates = { follow_up_date: newDate.toISOString() };
+              if (onUpdateContact) await onUpdateContact(contact.id, updates);
+              setContactList(prev => prev.map(c => c.id === contact.id ? { ...c, ...updates } : c));
+            }}
+            onMarkDead={async (contact, interval) => {
+              const now = new Date().toISOString();
+              const updates = {
+                pipeline_status: 'dead', reclassified_at: now,
+                follow_up_interval: interval,
+                follow_up_date: calculateFollowUpDate(interval),
+              };
+              if (onUpdateContact) await onUpdateContact(contact.id, updates);
+              setContactList(prev => prev.map(c => c.id === contact.id ? { ...c, ...updates } : c));
+            }}
+          />
+        </div>
+      )}
+
+      {/* ═══ POST-SUBMISSION ACTIVITIES ═══ */}
+      {(submitted || (isComplete && existingSubmission)) && (
+        <div style={{ marginTop: 16 }}>
           {!showPostSubmit ? (
             <button
               onClick={() => setShowPostSubmit(true)}
