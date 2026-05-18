@@ -9,17 +9,81 @@ const PRACTICE_METRICS = [
   { id: 'offers_submitted', label: 'Offers Submitted', type: 'count', icon: '📝', tip: 'Formal written offers, LOIs, or counteroffers delivered on specific properties.' },
 ];
 
-const PRACTICE_QUIZ = {
-  required: true,
-  scenarios: [{
-    id: 'practice_q1',
-    title: 'Quick Practice Question',
-    description: 'A property has an ARV (After Repair Value) of $200,000 and needs $30,000 in repairs. If you want to buy at 70% of ARV minus repairs, what should your maximum offer be?',
-    maxAttempts: 3,
-    explanationOnFail: 'The formula is: (ARV × 70%) − Repairs = ($200,000 × 0.70) − $30,000 = $140,000 − $30,000 = $110,000',
-    inputs: [{ id: 'practice_offer', label: 'Maximum Offer Price', type: 'number', correctAnswer: 110000, tolerance: 1000, unit: '$' }],
-  }],
+const PROPERTY_DATA = {
+  purchasePrice: '$250,000',
+  downPaymentPct: '25%',
+  downPaymentAmt: '$62,500',
+  yearsToPayoff: '30',
+  interestRate: '6%',
+  costsToMakeRentReady: '$0',
+  closingCostsPct: '2%',
+  closingCostsAmt: '$3,750',
+  rents: '$2,600/mo',
+  otherIncome: '$0',
+  vacancyRate: '6%',
+  maintenance: '12%',
+  management: '8%',
+  utilities: '$0',
+  additionalExpenses: '$0',
+  insurance: '$1,000/yr',
+  taxes: '$2,000/yr',
 };
+
+const QUIZ_QUESTIONS = [
+  {
+    id: 'coc_return',
+    question: 'What is the Cash on Cash Return?',
+    options: ['8.52%', '10.52%', '12.18%', '6.97%'],
+    correctIndex: 1,
+  },
+  {
+    id: 'cap_rate',
+    question: 'What is the Cap Rate?',
+    options: ['10.52%', '6.97%', '8.18%', '12.00%'],
+    correctIndex: 2,
+  },
+  {
+    id: 'yearly_cash_flow',
+    question: 'What is the Yearly Cash Flow?',
+    options: ['$8,180.00', '$5,200.00', '$10,520.00', '$6,972.51'],
+    correctIndex: 3,
+  },
+  {
+    id: 'worth_purchasing',
+    question: 'Is this property worth purchasing if your desired Cash on Cash return is 12%?',
+    options: ['Yes', 'No'],
+    correctIndex: 1,
+  },
+];
+
+const CHEAT_SHEET_INPUT = [
+  { label: 'Purchase Price', value: '$250,000' },
+  { label: 'Down Payment', value: '25% ($62,500)' },
+  { label: 'Years to Payoff', value: '30' },
+  { label: 'Interest Rate', value: '6%' },
+  { label: 'Costs to Make Rent Ready', value: '$0' },
+  { label: 'Closing Costs', value: '2% ($3,750)' },
+  { label: 'Rents', value: '$2,600/mo' },
+  { label: 'Other Income', value: '$0/mo' },
+  { label: 'Vacancy Rate', value: '6%' },
+  { label: 'Maintenance', value: '12%' },
+  { label: 'Management', value: '8%' },
+  { label: 'Utilities', value: '$0/mo' },
+  { label: 'Additional Expenses', value: '$0/mo' },
+  { label: 'Insurance', value: '$1,000/yr' },
+  { label: 'Taxes', value: '$2,000/yr' },
+];
+
+const CHEAT_SHEET_RETURNS = [
+  { label: 'Cash on Cash Return', value: '10.52%', highlight: true },
+  { label: 'Cap Rate', value: '8.18%', highlight: true },
+  { label: 'Monthly Cash Flow', value: '$581.04' },
+  { label: 'Yearly Cash Flow', value: '$6,972.51', highlight: true },
+  { label: 'Monthly Income', value: '$2,600.00' },
+  { label: 'Monthly Expenses', value: '$2,018.96' },
+  { label: 'Total Capital Required', value: '$66,250' },
+  { label: 'NOI (Net Operating Income)', value: '$20,432.00' },
+];
 
 export default function PracticeDay({ user, practiceDaySettings, onComplete, onBack }) {
   const [currentGuide, setCurrentGuide] = useState(0);
@@ -29,10 +93,12 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
   });
   const [proofText, setProofText] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [quizAnswer, setQuizAnswer] = useState('');
-  const [quizResult, setQuizResult] = useState(null);
-  const [quizAttempts, setQuizAttempts] = useState(0);
+
+  // Quiz state
+  const [answers, setAnswers] = useState({});
+  const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [quizPassed, setQuizPassed] = useState(false);
+  const [showCheatSheets, setShowCheatSheets] = useState(false);
 
   const videoUrl = practiceDaySettings?.practice_day_video || null;
   const calculatorUrl = practiceDaySettings?.rental_calculator_url || null;
@@ -41,22 +107,28 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
 
   const GUIDE_STEPS = [
     { id: 'video', title: 'Daily Training Video', icon: '🎬' },
-    { id: 'quiz', title: 'Check for Understanding', icon: '📝' },
+    { id: 'quiz', title: 'Rental Property Analysis', icon: '📊' },
     { id: 'metrics', title: 'Daily Activity Log', icon: '📊' },
     { id: 'submit', title: 'Submit Your Day', icon: '📤' },
   ];
 
   const handleCheckQuiz = () => {
-    const num = parseFloat(quizAnswer.replace(/[^0-9.]/g, ''));
-    const correct = !isNaN(num) && Math.abs(num - 110000) <= 1000;
-    const newAttempts = quizAttempts + 1;
-    setQuizAttempts(newAttempts);
-    setQuizResult(correct ? 'correct' : 'wrong');
-    if (correct) setQuizPassed(true);
-    if (!correct && newAttempts < 3) {
-      setTimeout(() => { setQuizResult(null); setQuizAnswer(''); }, 2000);
+    const allCorrect = QUIZ_QUESTIONS.every(q => answers[q.id] === q.correctIndex);
+    setQuizSubmitted(true);
+    if (allCorrect) {
+      setQuizPassed(true);
+    } else {
+      setShowCheatSheets(true);
     }
   };
+
+  const handleRetryQuiz = () => {
+    setAnswers({});
+    setQuizSubmitted(false);
+    setShowCheatSheets(false);
+  };
+
+  const allQuestionsAnswered = QUIZ_QUESTIONS.every(q => answers[q.id] !== undefined);
 
   const handlePracticeSubmit = async () => {
     setSubmitted(true);
@@ -119,7 +191,7 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
         ))}
       </div>
 
-      {/* ═══ GUIDE STEP 1: VIDEO ═══ */}
+      {/* GUIDE STEP 1: VIDEO */}
       {currentGuide === 0 && (
         <div className="scale-in">
           <Tooltip text="Each day starts with a training video from Chandler. Watch it before doing anything else." />
@@ -152,76 +224,283 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
         </div>
       )}
 
-      {/* ═══ GUIDE STEP 2: QUIZ ═══ */}
+      {/* GUIDE STEP 2: RENTAL PROPERTY ANALYSIS QUIZ */}
       {currentGuide === 1 && (
         <div className="scale-in">
-          <Tooltip text="After the video, you'll answer a few questions to make sure you understand the concept. You get 3 tries." />
-          <div className="card" style={{ marginBottom: 24 }}>
+          <Tooltip text="Use the property data below and the CDS Rental Calculator to answer the quiz questions. This is how you'll analyze properties during your sprint." />
+
+          {/* Property Data Card */}
+          <div className="card" style={{ marginBottom: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-              <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(240,165,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📝</div>
-              <h3 style={{ fontSize: 16, fontWeight: 700 }}>Check for Understanding</h3>
+              <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(83,52,131,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>🏠</div>
+              <h3 style={{ fontSize: 16, fontWeight: 700 }}>Rental Property Analysis</h3>
             </div>
 
-            <p style={{ fontSize: 14, color: '#bbb', lineHeight: 1.7, marginBottom: 16 }}>
-              {PRACTICE_QUIZ.scenarios[0].description}
+            <p style={{ fontSize: 13, color: '#bbb', lineHeight: 1.7, marginBottom: 16 }}>
+              Review the property details below, then plug them into the{' '}
+              {calculatorUrl ? (
+                <a href={calculatorUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#c9a0ff', textDecoration: 'underline' }}>
+                  CDS Rental Calculator
+                </a>
+              ) : (
+                <span style={{ color: '#c9a0ff' }}>CDS Rental Calculator</span>
+              )}{' '}
+              to answer the questions that follow.
             </p>
 
-            {quizPassed ? (
-              <div style={{ padding: '20px', borderRadius: 12, textAlign: 'center', background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.2)' }}>
-                <div style={{ fontSize: 24, marginBottom: 6 }}>✓</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: '#48c78e' }}>Correct! $110,000</div>
+            <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
+              {/* Purchase & Financing Section */}
+              <div style={{ padding: '10px 14px', background: 'rgba(83,52,131,0.12)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#c9a0ff', textTransform: 'uppercase', letterSpacing: 1 }}>Purchase & Financing</div>
               </div>
-            ) : quizAttempts >= 3 ? (
-              <div style={{ padding: '16px', borderRadius: 12, background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.12)' }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#e94560', marginBottom: 8 }}>Here's how to get it right:</div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0' }}>
-                  <span style={{ fontSize: 13, color: '#aaa' }}>Maximum Offer Price</span>
-                  <span style={{ fontSize: 14, fontWeight: 700, color: '#48c78e' }}>$110,000</span>
+              <DataRow label="Purchase Price" value={PROPERTY_DATA.purchasePrice} />
+              <DataRow label="Down Payment" value={`${PROPERTY_DATA.downPaymentPct} (${PROPERTY_DATA.downPaymentAmt})`} />
+              <DataRow label="Years to Payoff" value={PROPERTY_DATA.yearsToPayoff} />
+              <DataRow label="Interest Rate" value={PROPERTY_DATA.interestRate} />
+              <DataRow label="Costs to Make Rent Ready" value={PROPERTY_DATA.costsToMakeRentReady} />
+              <DataRow label="Closing Costs" value={`${PROPERTY_DATA.closingCostsPct} (${PROPERTY_DATA.closingCostsAmt})`} last />
+
+              {/* Income Section */}
+              <div style={{ padding: '10px 14px', background: 'rgba(72,199,142,0.08)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#48c78e', textTransform: 'uppercase', letterSpacing: 1 }}>Income</div>
+              </div>
+              <DataRow label="Rents" value={PROPERTY_DATA.rents} />
+              <DataRow label="Other Income" value={PROPERTY_DATA.otherIncome} last />
+
+              {/* Expenses Section */}
+              <div style={{ padding: '10px 14px', background: 'rgba(233,69,96,0.08)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#e94560', textTransform: 'uppercase', letterSpacing: 1 }}>Expenses</div>
+              </div>
+              <DataRow label="Vacancy Rate" value={PROPERTY_DATA.vacancyRate} />
+              <DataRow label="Maintenance" value={PROPERTY_DATA.maintenance} />
+              <DataRow label="Management" value={PROPERTY_DATA.management} />
+              <DataRow label="Utilities" value={PROPERTY_DATA.utilities} />
+              <DataRow label="Additional Expenses" value={PROPERTY_DATA.additionalExpenses} />
+              <DataRow label="Insurance" value={PROPERTY_DATA.insurance} />
+              <DataRow label="Taxes" value={PROPERTY_DATA.taxes} last />
+            </div>
+          </div>
+
+          {/* Calculator Link */}
+          {calculatorUrl && (
+            <a href={calculatorUrl} target="_blank" rel="noopener noreferrer" style={{
+              display: 'flex', alignItems: 'center', gap: 14,
+              padding: '14px 18px', borderRadius: 12, marginBottom: 20,
+              background: 'linear-gradient(135deg, rgba(83,52,131,0.12), rgba(83,52,131,0.04))',
+              border: '1px solid rgba(83,52,131,0.25)', textDecoration: 'none',
+            }}>
+              <div style={{
+                width: 36, height: 36, borderRadius: 8, flexShrink: 0,
+                background: 'rgba(83,52,131,0.2)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16,
+              }}>📊</div>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: '#c9a0ff' }}>
+                  Open CDS Rental Calculator
                 </div>
-                <p style={{ fontSize: 13, color: '#bbb', lineHeight: 1.6, marginTop: 10, marginBottom: 0 }}>
-                  {PRACTICE_QUIZ.scenarios[0].explanationOnFail}
-                </p>
+                <div style={{ fontSize: 12, color: '#888' }}>
+                  Plug in the property data above to find the answers
+                </div>
+              </div>
+            </a>
+          )}
+
+          {/* Quiz Questions */}
+          <div className="card" style={{ marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+              <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(240,165,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📝</div>
+              <h3 style={{ fontSize: 16, fontWeight: 700 }}>Answer the Questions Below</h3>
+            </div>
+
+            {quizPassed ? (
+              <div style={{ padding: '24px', borderRadius: 12, textAlign: 'center', background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.2)' }}>
+                <div style={{ fontSize: 32, marginBottom: 8 }}>✓</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: '#48c78e', marginBottom: 4 }}>All Correct!</div>
+                <div style={{ fontSize: 13, color: '#888' }}>Great job analyzing this property.</div>
               </div>
             ) : (
-              <div>
-                <label style={{ fontSize: 12, color: '#888', fontWeight: 600, display: 'block', marginBottom: 6 }}>
-                  Maximum Offer Price
-                </label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                  <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>$</span>
-                  <input value={quizAnswer} onChange={e => setQuizAnswer(e.target.value)}
-                    placeholder="0" inputMode="numeric"
-                    style={{
-                      flex: 1, fontSize: 16, padding: '12px 14px', borderRadius: 8,
-                      background: quizResult === 'wrong' ? 'rgba(233,69,96,0.06)' : 'rgba(255,255,255,0.04)',
-                      border: `1px solid ${quizResult === 'wrong' ? 'rgba(233,69,96,0.3)' : 'rgba(255,255,255,0.1)'}`,
-                      color: '#eee', fontFamily: "'DM Sans', sans-serif",
-                    }} />
-                  {quizResult === 'wrong' && <span style={{ color: '#e94560', fontWeight: 700 }}>✗</span>}
-                </div>
-                {quizResult === 'wrong' && (
-                  <p style={{ fontSize: 12, color: '#e94560', marginBottom: 12 }}>
-                    Incorrect — try again (Attempt {quizAttempts} of 3)
-                  </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                {QUIZ_QUESTIONS.map((q, qi) => {
+                  const selected = answers[q.id];
+                  const isCorrect = quizSubmitted && selected === q.correctIndex;
+                  const isWrong = quizSubmitted && selected !== undefined && selected !== q.correctIndex;
+                  return (
+                    <div key={q.id}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd', marginBottom: 10 }}>
+                        {qi + 1}. {q.question}
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {q.options.map((opt, oi) => {
+                          const isSelected = selected === oi;
+                          const showCorrect = quizSubmitted && oi === q.correctIndex;
+                          const showWrong = quizSubmitted && isSelected && oi !== q.correctIndex;
+                          return (
+                            <button
+                              key={oi}
+                              onClick={() => {
+                                if (!quizSubmitted) setAnswers(prev => ({ ...prev, [q.id]: oi }));
+                              }}
+                              style={{
+                                display: 'flex', alignItems: 'center', gap: 10,
+                                padding: '10px 14px', borderRadius: 8, cursor: quizSubmitted ? 'default' : 'pointer',
+                                fontSize: 14, textAlign: 'left',
+                                fontFamily: "'DM Sans', sans-serif",
+                                background: showCorrect
+                                  ? 'rgba(72,199,142,0.1)'
+                                  : showWrong
+                                    ? 'rgba(233,69,96,0.08)'
+                                    : isSelected
+                                      ? 'rgba(240,165,0,0.1)'
+                                      : 'rgba(255,255,255,0.03)',
+                                border: showCorrect
+                                  ? '1px solid rgba(72,199,142,0.4)'
+                                  : showWrong
+                                    ? '1px solid rgba(233,69,96,0.3)'
+                                    : isSelected
+                                      ? '1px solid rgba(240,165,0,0.4)'
+                                      : '1px solid rgba(255,255,255,0.08)',
+                                color: showCorrect ? '#48c78e' : showWrong ? '#e94560' : isSelected ? '#f0a500' : '#bbb',
+                                transition: 'all 0.15s',
+                              }}
+                            >
+                              <span style={{
+                                width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: 11, fontWeight: 700,
+                                background: showCorrect
+                                  ? 'rgba(72,199,142,0.2)'
+                                  : showWrong
+                                    ? 'rgba(233,69,96,0.15)'
+                                    : isSelected
+                                      ? 'rgba(240,165,0,0.2)'
+                                      : 'rgba(255,255,255,0.06)',
+                                color: showCorrect ? '#48c78e' : showWrong ? '#e94560' : isSelected ? '#f0a500' : '#666',
+                              }}>
+                                {showCorrect ? '✓' : showWrong ? '✗' : String.fromCharCode(65 + oi)}
+                              </span>
+                              <span style={{ fontWeight: isSelected || showCorrect ? 600 : 400 }}>{opt}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {isWrong && (
+                        <div style={{ fontSize: 12, color: '#e94560', marginTop: 6, paddingLeft: 4 }}>
+                          Incorrect — the correct answer is {q.options[q.correctIndex]}
+                        </div>
+                      )}
+                      {isCorrect && (
+                        <div style={{ fontSize: 12, color: '#48c78e', marginTop: 6, paddingLeft: 4 }}>
+                          Correct!
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {!quizSubmitted && (
+                  <button
+                    className="btn-primary"
+                    onClick={handleCheckQuiz}
+                    disabled={!allQuestionsAnswered}
+                    style={{ width: '100%', padding: '14px', opacity: allQuestionsAnswered ? 1 : 0.4 }}
+                  >
+                    Check Answers
+                  </button>
                 )}
-                <button className="btn-primary" onClick={handleCheckQuiz}
-                  disabled={!quizAnswer.trim()}
-                  style={{ width: '100%', opacity: quizAnswer.trim() ? 1 : 0.4 }}>
-                  Check Answer
-                </button>
+
+                {quizSubmitted && !quizPassed && (
+                  <div style={{
+                    padding: '16px', borderRadius: 12, marginTop: 4,
+                    background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.15)',
+                    textAlign: 'center',
+                  }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#e94560', marginBottom: 6 }}>
+                      Not quite — review the cheat sheets below and try again.
+                    </div>
+                    <div style={{ fontSize: 12, color: '#888' }}>
+                      Make sure you've entered all the property data correctly into the calculator.
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
+
+          {/* Cheat Sheets — shown on failure */}
+          {showCheatSheets && !quizPassed && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 20 }}>
+              {/* Cheat Sheet 1: Calculator Input */}
+              <div className="card" style={{ border: '1px solid rgba(83,52,131,0.25)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+                  <div style={{ width: 24, height: 24, borderRadius: 6, background: 'rgba(83,52,131,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>📋</div>
+                  <h4 style={{ fontSize: 14, fontWeight: 700, color: '#c9a0ff', margin: 0 }}>Cheat Sheet: Calculator Inputs</h4>
+                </div>
+                <p style={{ fontSize: 12, color: '#888', marginBottom: 12, lineHeight: 1.5 }}>
+                  Make sure each field in the CDS Rental Calculator matches these values exactly:
+                </p>
+                <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  {CHEAT_SHEET_INPUT.map((row, i) => (
+                    <div key={i} style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      padding: '8px 12px',
+                      background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent',
+                      borderBottom: i < CHEAT_SHEET_INPUT.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                    }}>
+                      <span style={{ fontSize: 12, color: '#999' }}>{row.label}</span>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: '#ddd', fontFamily: "'DM Mono', monospace" }}>{row.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Cheat Sheet 2: Returns Analysis */}
+              <div className="card" style={{ border: '1px solid rgba(72,199,142,0.2)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+                  <div style={{ width: 24, height: 24, borderRadius: 6, background: 'rgba(72,199,142,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>📈</div>
+                  <h4 style={{ fontSize: 14, fontWeight: 700, color: '#48c78e', margin: 0 }}>Cheat Sheet: Returns Analysis</h4>
+                </div>
+                <p style={{ fontSize: 12, color: '#888', marginBottom: 12, lineHeight: 1.5 }}>
+                  If entered correctly, the calculator should show these results:
+                </p>
+                <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  {CHEAT_SHEET_RETURNS.map((row, i) => (
+                    <div key={i} style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      padding: '8px 12px',
+                      background: row.highlight ? 'rgba(72,199,142,0.04)' : i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent',
+                      borderBottom: i < CHEAT_SHEET_RETURNS.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                    }}>
+                      <span style={{ fontSize: 12, color: row.highlight ? '#48c78e' : '#999' }}>{row.label}</span>
+                      <span style={{
+                        fontSize: 13, fontFamily: "'DM Mono', monospace",
+                        fontWeight: row.highlight ? 700 : 600,
+                        color: row.highlight ? '#48c78e' : '#ddd',
+                      }}>{row.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                className="btn-primary"
+                onClick={handleRetryQuiz}
+                style={{ width: '100%', padding: '14px 24px' }}
+              >
+                Try Again
+              </button>
+            </div>
+          )}
+
           <div style={{ display: 'flex', gap: 10 }}>
             <button className="btn-secondary" onClick={() => setCurrentGuide(0)} style={{ padding: '14px 20px' }}>Back</button>
             <button className="btn-primary" onClick={() => setCurrentGuide(2)} style={{ flex: 1, padding: '14px 24px' }}>
-              {quizPassed || quizAttempts >= 3 ? 'Next' : 'Skip for now'}
+              {quizPassed ? 'Next' : 'Skip for now'}
             </button>
           </div>
         </div>
       )}
 
-      {/* ═══ GUIDE STEP 3: METRICS ═══ */}
+      {/* GUIDE STEP 3: METRICS */}
       {currentGuide === 2 && (
         <div className="scale-in">
           <Tooltip text="This is where you log your daily activity. Each metric has a minimum requirement — meet them all to stay in the sprint." />
@@ -285,7 +564,7 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
         </div>
       )}
 
-      {/* ═══ GUIDE STEP 4: SUBMIT ═══ */}
+      {/* GUIDE STEP 4: SUBMIT */}
       {currentGuide === 3 && (
         <div className="scale-in">
           <Tooltip text="Once you've met all daily minimums, hit Submit to lock in your progress. You must submit before the deadline each day." />
@@ -332,7 +611,7 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
         </div>
       )}
 
-      {/* ── Pre-Day 1 Resources (always visible below guide) ── */}
+      {/* Pre-Day 1 Resources (always visible below guide) */}
       <div style={{ marginTop: 40, borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 32 }}>
         <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Pre-Day 1 Resources</h3>
 
@@ -372,6 +651,19 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
           Before your sprint begins, we recommend watching the video above and running 2-3 practice analyses in the calculator. The more comfortable you are with the tool, the faster you'll move on Day 1.
         </p>
       </div>
+    </div>
+  );
+}
+
+function DataRow({ label, value, last }) {
+  return (
+    <div style={{
+      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      padding: '8px 14px',
+      borderBottom: last ? 'none' : '1px solid rgba(255,255,255,0.04)',
+    }}>
+      <span style={{ fontSize: 13, color: '#999' }}>{label}</span>
+      <span style={{ fontSize: 14, fontWeight: 600, color: '#eee', fontFamily: "'DM Mono', monospace" }}>{value}</span>
     </div>
   );
 }
