@@ -76,6 +76,7 @@ export default function DayView({
   const [contactList, setContactList] = useState(initialContacts || []);
   const [showContactForm, setShowContactForm] = useState(false);
   const [showFollowUpForm, setShowFollowUpForm] = useState(false);
+  const [inlineContactFor, setInlineContactFor] = useState(null); // 'arsenal' | 'target' | null
   const [contactName, setContactName] = useState('');
   const [contactPhone, setContactPhone] = useState('');
   const [contactEmail, setContactEmail] = useState('');
@@ -571,16 +572,17 @@ export default function DayView({
                         >+</button>
                       </div>
                     </div>
-                    {!showContactForm && (
-                      <button onClick={() => { setContactGroup('arsenal'); setShowContactForm(true); }}
-                        style={{
-                          marginTop: 6, marginLeft: 44, padding: '5px 12px', borderRadius: 6, fontSize: 11,
-                          fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                          border: 'none', background: 'rgba(240,165,0,0.1)', color: '#f0a500',
-                        }}>
-                        + Add to CRM
-                      </button>
-                    )}
+                    <InlineAddContact
+                      group="arsenal"
+                      isOpen={inlineContactFor === 'arsenal'}
+                      onToggle={(g) => setInlineContactFor(prev => prev === g ? null : g)}
+                      onAddContact={onAddContact}
+                      contactList={contactList}
+                      setContactList={setContactList}
+                      onAutoIncrement={() => setMetric('arsenal_contacts', (metrics.arsenal_contacts || 0) + 1)}
+                      calculateFollowUpDate={calculateFollowUpDate}
+                      day={day}
+                    />
                   </div>
 
                   {/* Target Contacts */}
@@ -624,16 +626,17 @@ export default function DayView({
                         >+</button>
                       </div>
                     </div>
-                    {!showContactForm && (
-                      <button onClick={() => { setContactGroup('target'); setShowContactForm(true); }}
-                        style={{
-                          marginTop: 6, marginLeft: 44, padding: '5px 12px', borderRadius: 6, fontSize: 11,
-                          fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                          border: 'none', background: 'rgba(233,69,96,0.1)', color: '#e94560',
-                        }}>
-                        + Add to CRM
-                      </button>
-                    )}
+                    <InlineAddContact
+                      group="target"
+                      isOpen={inlineContactFor === 'target'}
+                      onToggle={(g) => setInlineContactFor(prev => prev === g ? null : g)}
+                      onAddContact={onAddContact}
+                      contactList={contactList}
+                      setContactList={setContactList}
+                      onAutoIncrement={() => setMetric('target_contacts', (metrics.target_contacts || 0) + 1)}
+                      calculateFollowUpDate={calculateFollowUpDate}
+                      day={day}
+                    />
                   </div>
 
                   {/* Properties Analyzed */}
@@ -982,17 +985,19 @@ export default function DayView({
                         </div>
                       )}
                     </div>
-                    {/* Add Contact button for arsenal/target metrics */}
-                    {(metric.id === 'arsenal_contacts' || metric.id === 'target_contacts') && (value || 0) > 0 && !showContactForm && (
-                      <button onClick={() => { setContactGroup(metric.id === 'arsenal_contacts' ? 'arsenal' : 'target'); setShowContactForm(true); }}
-                        style={{
-                          marginTop: 6, marginLeft: 44, padding: '5px 12px', borderRadius: 6, fontSize: 11,
-                          fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                          border: 'none', background: `${GROUP_COLORS[metric.id === 'arsenal_contacts' ? 'arsenal' : 'target']}15`,
-                          color: GROUP_COLORS[metric.id === 'arsenal_contacts' ? 'arsenal' : 'target'],
-                        }}>
-                        + Add to CRM
-                      </button>
+                    {/* Inline Add Contact for arsenal/target */}
+                    {(metric.id === 'arsenal_contacts' || metric.id === 'target_contacts') && (
+                      <InlineAddContact
+                        group={metric.id === 'arsenal_contacts' ? 'arsenal' : 'target'}
+                        isOpen={inlineContactFor === (metric.id === 'arsenal_contacts' ? 'arsenal' : 'target')}
+                        onToggle={(group) => setInlineContactFor(prev => prev === group ? null : group)}
+                        onAddContact={onAddContact}
+                        contactList={contactList}
+                        setContactList={setContactList}
+                        onAutoIncrement={() => setMetric(metric.id, (metrics[metric.id] || 0) + 1)}
+                        calculateFollowUpDate={calculateFollowUpDate}
+                        day={day}
+                      />
                     )}
                   </div>
                 );
@@ -1375,6 +1380,188 @@ export default function DayView({
             : 'Submit before the daily deadline or you will be removed from this run'}
         </div>
       )}
+    </div>
+  );
+}
+
+// ── Inline Add Contact ───────────────────────────────────────────
+
+function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, setContactList, onAutoIncrement, calculateFollowUpDate, day }) {
+  const color = group === 'arsenal' ? '#f0a500' : '#e94560';
+  const label = group === 'arsenal' ? 'Arsenal Contact' : 'Target Contact';
+
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [property, setProperty] = useState('');
+  const [notes, setNotes] = useState('');
+  const [followUp, setFollowUp] = useState('');
+  const [targetOutcome, setTargetOutcome] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [justAdded, setJustAdded] = useState(null);
+
+  const resetForm = () => {
+    setName(''); setPhone(''); setEmail(''); setProperty('');
+    setNotes(''); setFollowUp(''); setTargetOutcome(''); setJustAdded(null);
+  };
+
+  const canSave = name.trim() && followUp
+    && (group === 'arsenal' || targetOutcome);
+
+  const handleSave = async () => {
+    if (!canSave) return;
+    setSaving(true);
+
+    let finalGroup = group;
+    let pipelineStatus = 'new';
+    if (group === 'target') {
+      if (targetOutcome === 'target_property') pipelineStatus = 'target_property';
+      else if (targetOutcome === 'dead') pipelineStatus = 'dead';
+      else if (targetOutcome === 'arsenal') { finalGroup = 'arsenal'; pipelineStatus = 'new'; }
+    }
+
+    const now = new Date().toISOString();
+    const result = await onAddContact({
+      name: name.trim(),
+      phone: phone.trim() || null,
+      email: email.trim() || null,
+      contact_group: finalGroup,
+      property: group === 'target' ? (property.trim() || null) : null,
+      notes: notes.trim() || null,
+      day_added: day,
+      pipeline_status: pipelineStatus,
+      follow_up_interval: followUp,
+      follow_up_date: calculateFollowUpDate(followUp),
+      last_contact_date: now,
+    });
+
+    if (result?.success && result.contact) {
+      setContactList(prev => [result.contact, ...prev]);
+      onAutoIncrement();
+      setJustAdded(name.trim());
+      setName(''); setPhone(''); setEmail(''); setProperty('');
+      setNotes(''); setFollowUp(''); setTargetOutcome('');
+    }
+    setSaving(false);
+  };
+
+  if (!isOpen) {
+    return (
+      <button onClick={() => { resetForm(); onToggle(group); }}
+        style={{
+          marginTop: 6, marginLeft: 44, padding: '6px 14px', borderRadius: 6, fontSize: 12,
+          fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+          border: 'none', background: `${color}15`, color,
+        }}>
+        + Add {label}
+      </button>
+    );
+  }
+
+  return (
+    <div style={{
+      marginTop: 8, marginLeft: 0, padding: 14, borderRadius: 10,
+      background: 'rgba(255,255,255,0.02)', border: `1px solid ${color}25`,
+    }}>
+      {justAdded && (
+        <div style={{
+          padding: '8px 12px', borderRadius: 8, marginBottom: 10, fontSize: 12, fontWeight: 600,
+          background: 'rgba(72,199,142,0.08)', border: '1px solid rgba(72,199,142,0.2)', color: '#48c78e',
+        }}>
+          ✓ Added "{justAdded}" — add another or tap Done
+        </div>
+      )}
+
+      <div style={{ fontSize: 13, fontWeight: 600, color, marginBottom: 10 }}>
+        New {label}
+      </div>
+
+      <input value={name} onChange={e => setName(e.target.value)}
+        placeholder="Name *"
+        style={{
+          width: '100%', fontSize: 14, padding: '10px 12px', marginBottom: 8, borderRadius: 8,
+          background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee',
+        }} />
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 8 }}>
+        <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="Phone"
+          style={{ fontSize: 13, padding: '8px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+        <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email"
+          style={{ fontSize: 13, padding: '8px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+      </div>
+
+      {group === 'target' && (
+        <input value={property} onChange={e => setProperty(e.target.value)}
+          placeholder="Property address *"
+          style={{
+            width: '100%', fontSize: 13, padding: '8px 10px', marginBottom: 8, borderRadius: 8,
+            background: 'rgba(255,255,255,0.04)', border: `1px solid ${color}20`, color: '#eee',
+          }} />
+      )}
+
+      <textarea value={notes} onChange={e => setNotes(e.target.value)}
+        placeholder="Notes..." rows={2}
+        style={{
+          width: '100%', fontSize: 13, padding: '8px 10px', marginBottom: 10, resize: 'vertical',
+          borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee',
+        }} />
+
+      {group === 'target' && (
+        <div style={{ marginBottom: 10 }}>
+          <div style={{ fontSize: 11, color: '#e94560', fontWeight: 600, marginBottom: 5 }}>Outcome *</div>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {[
+              { value: 'target_property', label: 'Target Property', color: '#e94560' },
+              { value: 'dead', label: 'Dead', color: '#666' },
+              { value: 'arsenal', label: 'Move to Arsenal', color: '#f0a500' },
+            ].map(o => (
+              <button key={o.value} onClick={() => setTargetOutcome(o.value)} style={{
+                padding: '5px 12px', borderRadius: 6, fontSize: 11, fontWeight: targetOutcome === o.value ? 600 : 400,
+                cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
+                background: targetOutcome === o.value ? `${o.color}20` : 'rgba(255,255,255,0.04)',
+                color: targetOutcome === o.value ? o.color : '#888',
+                outline: targetOutcome === o.value ? `1px solid ${o.color}40` : '1px solid rgba(255,255,255,0.08)',
+              }}>{o.label}</button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div style={{ marginBottom: 12 }}>
+        <div style={{ fontSize: 11, color: '#888', fontWeight: 600, marginBottom: 5 }}>Follow-up Interval *</div>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {['3_days', '1_week', '2_weeks', '1_month', '3_months'].map(interval => {
+            const labels = { '3_days': '3 Days', '1_week': '1 Week', '2_weeks': '2 Weeks', '1_month': '1 Month', '3_months': '3 Months' };
+            return (
+              <button key={interval} onClick={() => setFollowUp(interval)} style={{
+                padding: '5px 10px', borderRadius: 6, fontSize: 11, fontWeight: followUp === interval ? 600 : 400,
+                cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
+                background: followUp === interval ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.04)',
+                color: followUp === interval ? '#48c78e' : '#888',
+                outline: followUp === interval ? '1px solid rgba(72,199,142,0.3)' : '1px solid rgba(255,255,255,0.08)',
+              }}>{labels[interval]}</button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button onClick={() => { resetForm(); onToggle(group); }}
+          style={{
+            padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+            cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#888',
+          }}>Done</button>
+        <button onClick={handleSave} disabled={!canSave || saving}
+          style={{
+            flex: 1, padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+            cursor: canSave ? 'pointer' : 'default', fontFamily: "'DM Sans', sans-serif",
+            border: 'none', background: canSave ? `${color}20` : 'rgba(255,255,255,0.04)',
+            color: canSave ? color : '#555', opacity: saving ? 0.6 : 1,
+          }}>
+          {saving ? 'Saving...' : `Add ${label}`}
+        </button>
+      </div>
     </div>
   );
 }
