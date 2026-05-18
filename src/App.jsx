@@ -121,6 +121,7 @@ export default function App() {
   // Check for Stripe success redirect
   const [authMode, setAuthMode] = useState(null);
   const [viewAsUser, setViewAsUser] = useState(null);
+  const [participantMode, setParticipantMode] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentFailed, setPaymentFailed] = useState(false);
 
@@ -343,17 +344,36 @@ export default function App() {
     );
   }
 
-  // Activation Phase gate — non-admin users who haven't completed activation
-  if (!user.isAdmin && !user.activationCompleted) {
+  // Activation Phase gate — non-admin users (or admins in participant mode) who haven't completed activation
+  if ((!user.isAdmin || participantMode) && !user.activationCompleted) {
     return (
-      <ActivationPhase
-        user={user}
-        onComplete={completeActivation}
-      />
+      <>
+        {user.isAdmin && participantMode && (
+          <div style={{
+            position: 'sticky', top: 0, zIndex: 200,
+            background: 'rgba(72,199,142,0.95)', padding: '8px 20px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#000' }}>
+              Participant Mode — Taking the course as a participant
+            </span>
+            <button onClick={() => setParticipantMode(false)} style={{
+              fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
+              border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.15)',
+              color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
+            }}>Back to Admin</button>
+          </div>
+        )}
+        <ActivationPhase
+          user={user}
+          onComplete={completeActivation}
+          onSaveExit={user.isAdmin && participantMode ? () => setParticipantMode(false) : undefined}
+        />
+      </>
     );
   }
 
-  if (currentView === 'admin' && user.isAdmin) {
+  if (currentView === 'admin' && user.isAdmin && !participantMode) {
     // Impersonation: show Dashboard as selected user
     if (viewAsUser) {
       const impersonated = participants.find(p => p.id === viewAsUser);
@@ -471,14 +491,32 @@ export default function App() {
         onSetComplianceEnforcement={setComplianceEnforcement}
         getAllDailySubmissions={getAllDailySubmissions}
         getRemovalLog={getRemovalLog}
+        onSwitchToParticipant={() => setParticipantMode(true)}
       />
     );
   }
 
   return (
+    <>
+    {user.isAdmin && participantMode && (
+      <div style={{
+        position: 'sticky', top: 0, zIndex: 200,
+        background: 'rgba(72,199,142,0.95)', padding: '8px 20px',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
+      }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: '#000' }}>
+          Participant Mode — Taking the course as a participant
+        </span>
+        <button onClick={() => setParticipantMode(false)} style={{
+          fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
+          border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.15)',
+          color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
+        }}>Back to Admin</button>
+      </div>
+    )}
     <Dashboard
       user={user}
-      onLogout={logout}
+      onLogout={user.isAdmin && participantMode ? () => setParticipantMode(false) : logout}
       onSubmit={submitDay}
       cohortStartDate={cohortStartDate}
       nextCohortDate={nextCohortDate}
@@ -522,5 +560,6 @@ export default function App() {
       onSubmitPipelineDay={submitPipelineDay}
       onActivateNextCohort={activateNextCohort}
     />
+    </>
   );
 }
