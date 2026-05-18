@@ -178,6 +178,24 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
             {scenario.title} — passed
           </div>
         </div>
+
+        {scenario.showExplanationOnPass && (scenario.explanationOnFail || scenario.explanationImage || scenario.cheatSheets) && (
+          <div style={{ marginTop: 16 }}>
+            {scenario.cheatSheets && scenario.cheatSheets.map((sheet, si) => (
+              <CheatSheet key={si} sheet={sheet} />
+            ))}
+            {scenario.explanationOnFail && !scenario.cheatSheets && (
+              <p style={{ fontSize: 14, color: '#bbb', lineHeight: 1.7, marginTop: 8 }}>
+                {scenario.explanationOnFail}
+              </p>
+            )}
+            {scenario.explanationImage && (
+              <img src={scenario.explanationImage} alt="Reference"
+                style={{ display: 'block', width: '100%', borderRadius: 8, marginTop: 12, border: '1px solid rgba(255,255,255,0.08)' }} />
+            )}
+          </div>
+        )}
+
         <button className="btn-primary" onClick={onComplete} style={{ width: '100%', marginTop: 16 }}>
           Continue
         </button>
@@ -209,7 +227,11 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
             </div>
           ))}
 
-          {scenario.explanationOnFail && (
+          {scenario.cheatSheets && scenario.cheatSheets.map((sheet, si) => (
+            <CheatSheet key={si} sheet={sheet} style={{ marginTop: 12 }} />
+          ))}
+
+          {scenario.explanationOnFail && !scenario.cheatSheets && (
             <p style={{ fontSize: 14, color: '#bbb', lineHeight: 1.7, marginTop: 14, marginBottom: 0 }}>
               {scenario.explanationOnFail}
             </p>
@@ -324,6 +346,40 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
       >
         {saving ? 'Checking...' : 'Check Answer'}
       </button>
+    </div>
+  );
+}
+
+function CheatSheet({ sheet, style }) {
+  const borderColor = sheet.color === 'green' ? 'rgba(72,199,142,0.2)' : 'rgba(83,52,131,0.25)';
+  const headerColor = sheet.color === 'green' ? '#48c78e' : '#c9a0ff';
+  const headerBg = sheet.color === 'green' ? 'rgba(72,199,142,0.15)' : 'rgba(83,52,131,0.15)';
+  const icon = sheet.color === 'green' ? '📈' : '📋';
+
+  return (
+    <div style={{
+      borderRadius: 10, overflow: 'hidden', marginTop: 12,
+      border: `1px solid ${borderColor}`, ...style,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: headerBg }}>
+        <span style={{ fontSize: 14 }}>{icon}</span>
+        <span style={{ fontSize: 13, fontWeight: 700, color: headerColor }}>{sheet.title}</span>
+      </div>
+      {sheet.rows.map((row, i) => (
+        <div key={i} style={{
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          padding: '7px 14px',
+          background: row.highlight ? 'rgba(72,199,142,0.04)' : i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent',
+          borderBottom: i < sheet.rows.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+        }}>
+          <span style={{ fontSize: 12, color: row.highlight ? '#48c78e' : '#999' }}>{row.label}</span>
+          <span style={{
+            fontSize: 13, fontFamily: "'DM Mono', monospace",
+            fontWeight: row.highlight ? 700 : 600,
+            color: row.highlight ? '#48c78e' : '#ddd',
+          }}>{row.value}</span>
+        </div>
+      ))}
     </div>
   );
 }

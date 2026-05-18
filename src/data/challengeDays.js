@@ -52,10 +52,59 @@ export const CHALLENGE_DAYS = [
   // ── Week 1: Build the Foundation (Days 1-7) ──
   {
     day: 1,
-    title: "Define Your Buy Box",
+    title: "Analysis",
     caption: "",
-    taskDescription: "Define the exact property criteria you'll target: location, price range, property type, and minimum ROI. Submit a screenshot of your written buy box criteria.",
-    trainingContent: "",
+    taskDescription: "",
+    trainingContent: `Now that you've seen the proper way to analyze a rental property, you'll be given three practice properties to analyze. After each analysis, answer the questions provided.
+
+You can cheat your way through this, but if you don't truly understand how to analyze a property, you'll be in trouble when it's time to do it for real.
+
+Once you've analyzed the three practice properties, it's time to start analyzing real deals. This can feel overwhelming at first, but the process is simple: gather the correct information, plug in the numbers, and evaluate the deal. Then adjust the purchase price to determine what price would make the property worth buying.
+
+The more you do this, the easier and more natural it becomes.
+
+After that, it's time to connect with your first Arsenal Contact and your first Target Contact.
+
+Arsenal Contacts are people you build relationships with so they bring you deals in the future. Target Contacts are tied to properties you are actively pursuing right now. Often, Target Contacts eventually become Arsenal Contacts because they may have future opportunities as well.
+
+Your goal is to continuously grow your pipeline by:
+
+• Adding more Arsenal Contacts
+• Finding more Target Properties
+• Staying top of mind with all contacts
+• Turning Target Properties into properties under contract
+
+For Day 1, your Arsenal Contact should be a realtor.
+
+If possible, connect with a realtor you already know and trust. Explain your buy box and your real estate investing goals. Make sure they understand that if they bring you a property that meets your criteria, you are ready to buy.
+
+Next, hop on sites like Realtor.com or Zillow and search for properties that could fit your buy box at the right price. Analyze those properties, then reach out to the listing agents.
+
+Use these conversations as an opportunity to build relationships and create more Arsenal Contacts while also showing interest in the property as a Target Property. Build rapport with the realtor so they become invested in helping you.
+
+Explain that if you can make the numbers work, you are a serious buyer. Let them know that if the seller is willing to help structure a deal that fits your criteria, you're ready to move forward. Also explain that even if this particular property doesn't work out, you would love future off-market or pocket listing opportunities that match your buy box.
+
+Before calling, make sure you've already analyzed the property so you understand the numbers and can ask intelligent questions about:
+
+• Current rents
+• Market rents
+• Renovations needed
+• Expenses
+• Vacancy
+• Deferred maintenance
+• Any other information needed to properly evaluate the deal
+
+You are not going to do these calls perfectly at first, so don't get overwhelmed. The more calls you make, the more you learn, and the better you get. The more humble, confident, and professional you are with agents, the more invested they'll become in helping you reach your goals.
+
+Some agents may ask you to sign an agreement to work exclusively with them. In most cases, you should only do this for a specific property they brought to you.
+
+You want agents motivated to bring you new deals. You do not want to limit your ability to have multiple agents actively searching for opportunities that fit your criteria.
+
+The more agents who understand your buy box and believe you are a serious buyer, the more likely you are to receive great opportunities. If you consistently stay top of mind and agents trust that you will actually perform when the right deal appears, your chances of finding strong deals increase dramatically.
+
+This is why it is critical to know exactly what you're looking for and to be ready to act when someone brings it to you.
+
+If you don't feel confident or decisive about your criteria yet, go back and fine-tune your buy box until you do. You know exactly what you're looking for, you will find it!`,
     category: "foundation",
     weekNumber: 1,
     weekTitle: "BUILD THE FOUNDATION",
@@ -63,7 +112,83 @@ export const CHALLENGE_DAYS = [
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day1_property1',
+          title: 'Property 1 Analysis',
+          description: `Analyze the property below. Plug the information into the CDS Rental Calculator and determine the Cash on Cash Return. Review the property analysis PDF if you're unclear on the inputs.
+
+Purchase Price: $600,000
+Costs to Make Rent Ready: $0 (Turn Key)
+Down Payment: 25%
+Closing Costs: 2%
+Years to Payoff: 30
+Interest Rate: 6.5%
+Rents: $6,000/mo (4 units × $1,500/unit)
+Other Income: $0
+Vacancy Rate: 6%
+Maintenance & CapEx: 12%
+Management: 8%
+Utilities: $0
+Additional Expenses: $0
+Insurance: $1,000/yr
+Taxes: $4,000/yr`,
+          maxAttempts: 3,
+          showExplanationOnPass: true,
+          explanationOnFail: 'Make sure you entered all the property data correctly into the CDS Rental Calculator. Double-check each field against the values above.',
+          cheatSheets: [
+            {
+              title: 'Calculator Inputs',
+              color: 'purple',
+              rows: [
+                { label: 'Purchase Price', value: '$600,000' },
+                { label: 'Costs to Make Rent Ready', value: '$0' },
+                { label: 'Down Payment', value: '25% ($150,000)' },
+                { label: 'Closing Costs', value: '2% ($9,000)' },
+                { label: 'Years to Payoff', value: '30' },
+                { label: 'Interest Rate', value: '6.5%' },
+                { label: 'Rents', value: '$6,000/mo' },
+                { label: 'Other Income', value: '$0' },
+                { label: 'Vacancy', value: '6% (-$360)' },
+                { label: 'Maintenance', value: '12% (-$8,121.60)' },
+                { label: 'Management', value: '8% (-$5,414.40)' },
+                { label: 'Utilities', value: '$0' },
+                { label: 'Additional Expenses', value: '$0' },
+                { label: 'Insurance', value: '$1,000/yr' },
+                { label: 'Taxes', value: '$4,000/yr' },
+              ],
+            },
+            {
+              title: 'Returns Analysis',
+              color: 'green',
+              rows: [
+                { label: 'Purchase Price', value: '$600,000' },
+                { label: 'Total Capital Required', value: '$159,000.00' },
+                { label: 'Net Operating Income', value: '$49,144.00' },
+                { label: 'Debt Service', value: '$34,131.67' },
+                { label: 'Cash on Cash Return', value: '9.44%', highlight: true },
+                { label: 'Cap Rate', value: '8.19%', highlight: true },
+                { label: 'Cashflow', value: '$15,012.33', highlight: true },
+                { label: 'Principal Paydown', value: '$5,029.76' },
+                { label: 'Total Return on Investment', value: '$20,042.09 (12.61%)' },
+              ],
+            },
+          ],
+          inputs: [
+            {
+              id: 'coc_return',
+              label: 'Cash on Cash Return',
+              type: 'number',
+              correctAnswer: 9.44,
+              tolerance: 0.05,
+              unit: '%',
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 2,
