@@ -29,6 +29,8 @@ export default function DayView({
     offers_submitted: existingDailySubmission?.offers_submitted || 0,
   });
   const [proofText, setProofText] = useState(existingDailySubmission?.proof_text || '');
+  const [showPostSubmit, setShowPostSubmit] = useState(false);
+  const [postSubmitSaving, setPostSubmitSaving] = useState(false);
 
   // ── Day Data ──────────────────────────────────────────────────
   const isPost30 = day > 30;
@@ -453,7 +455,404 @@ export default function DayView({
         <SubmissionComplete submission={existingSubmission} />
       ) : submitted ? (
         <SubmissionSuccess day={day} isUpdate={isUpdate} />
-      ) : canSubmit && (!hasRequiredQuiz || quizPassed) ? (
+      ) : null}
+
+      {/* ═══ POST-SUBMISSION ACTIVITIES ═══ */}
+      {(submitted || (isComplete && existingSubmission)) && (
+        <div style={{ marginTop: 24 }}>
+          {!showPostSubmit ? (
+            <button
+              onClick={() => setShowPostSubmit(true)}
+              className="btn-secondary"
+              style={{
+                width: '100%', padding: '14px 20px', fontSize: 14, fontWeight: 600,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                border: '1px solid rgba(240,165,0,0.2)', background: 'rgba(240,165,0,0.04)',
+                color: '#f0a500', borderRadius: 12, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif",
+              }}
+            >
+              + Add More Activities
+            </button>
+          ) : (
+            <>
+              {/* ── Metric Adjustments ── */}
+              <div className="card" style={{ marginBottom: 24 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(240,165,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📊</div>
+                    <h3 style={{ fontSize: 16, fontWeight: 700 }}>Add More Activities</h3>
+                  </div>
+                  <button
+                    onClick={() => setShowPostSubmit(false)}
+                    style={{
+                      padding: '4px 10px', borderRadius: 6, fontSize: 12,
+                      border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.04)',
+                      color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                    }}
+                  >
+                    Collapse
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {/* Arsenal Contacts */}
+                  <div>
+                    <div style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '12px 16px', borderRadius: 10,
+                      background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ fontSize: 18 }}>🤝</span>
+                        <div>
+                          <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>Arsenal Contacts</div>
+                          <div style={{ fontSize: 11, color: '#f0a500', fontWeight: 600 }}>Current: {metrics.arsenal_contacts || 0}</div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <button
+                          onClick={() => setMetric('arsenal_contacts', Math.max(0, (metrics.arsenal_contacts || 0) - 1))}
+                          style={{
+                            width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
+                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                            color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}
+                        >-</button>
+                        <div className="mono" style={{
+                          width: 56, textAlign: 'center', fontSize: 18, fontWeight: 700,
+                          padding: '6px', color: '#fff',
+                        }}>
+                          {metrics.arsenal_contacts || 0}
+                        </div>
+                        <button
+                          onClick={() => setMetric('arsenal_contacts', (metrics.arsenal_contacts || 0) + 1)}
+                          style={{
+                            width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
+                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                            color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}
+                        >+</button>
+                      </div>
+                    </div>
+                    {!showContactForm && (
+                      <button onClick={() => { setContactGroup('arsenal'); setShowContactForm(true); }}
+                        style={{
+                          marginTop: 6, marginLeft: 44, padding: '5px 12px', borderRadius: 6, fontSize: 11,
+                          fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                          border: 'none', background: 'rgba(240,165,0,0.1)', color: '#f0a500',
+                        }}>
+                        + Add to CRM
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Target Contacts */}
+                  <div>
+                    <div style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '12px 16px', borderRadius: 10,
+                      background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ fontSize: 18 }}>🎯</span>
+                        <div>
+                          <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>Target Contacts</div>
+                          <div style={{ fontSize: 11, color: '#e94560', fontWeight: 600 }}>Current: {metrics.target_contacts || 0}</div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <button
+                          onClick={() => setMetric('target_contacts', Math.max(0, (metrics.target_contacts || 0) - 1))}
+                          style={{
+                            width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
+                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                            color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}
+                        >-</button>
+                        <div className="mono" style={{
+                          width: 56, textAlign: 'center', fontSize: 18, fontWeight: 700,
+                          padding: '6px', color: '#fff',
+                        }}>
+                          {metrics.target_contacts || 0}
+                        </div>
+                        <button
+                          onClick={() => setMetric('target_contacts', (metrics.target_contacts || 0) + 1)}
+                          style={{
+                            width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
+                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                            color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}
+                        >+</button>
+                      </div>
+                    </div>
+                    {!showContactForm && (
+                      <button onClick={() => { setContactGroup('target'); setShowContactForm(true); }}
+                        style={{
+                          marginTop: 6, marginLeft: 44, padding: '5px 12px', borderRadius: 6, fontSize: 11,
+                          fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                          border: 'none', background: 'rgba(233,69,96,0.1)', color: '#e94560',
+                        }}>
+                        + Add to CRM
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Properties Analyzed */}
+                  <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '12px 16px', borderRadius: 10,
+                    background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <span style={{ fontSize: 18 }}>🏠</span>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>Properties Analyzed</div>
+                        <div style={{ fontSize: 11, color: '#888', fontWeight: 600 }}>Current: {metrics.properties_analyzed || 0}</div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <button
+                        onClick={() => setMetric('properties_analyzed', Math.max(0, (metrics.properties_analyzed || 0) - 1))}
+                        style={{
+                          width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
+                          border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                          color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}
+                      >-</button>
+                      <div className="mono" style={{
+                        width: 56, textAlign: 'center', fontSize: 18, fontWeight: 700,
+                        padding: '6px', color: '#fff',
+                      }}>
+                        {metrics.properties_analyzed || 0}
+                      </div>
+                      <button
+                        onClick={() => setMetric('properties_analyzed', (metrics.properties_analyzed || 0) + 1)}
+                        style={{
+                          width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
+                          border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                          color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}
+                      >+</button>
+                    </div>
+                  </div>
+
+                  {/* Offers Submitted */}
+                  <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '12px 16px', borderRadius: 10,
+                    background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <span style={{ fontSize: 18 }}>📝</span>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>Offers Submitted</div>
+                        <div style={{ fontSize: 11, color: '#888', fontWeight: 600 }}>Current: {metrics.offers_submitted || 0}</div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <button
+                        onClick={() => setMetric('offers_submitted', Math.max(0, (metrics.offers_submitted || 0) - 1))}
+                        style={{
+                          width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
+                          border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                          color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}
+                      >-</button>
+                      <div className="mono" style={{
+                        width: 56, textAlign: 'center', fontSize: 18, fontWeight: 700,
+                        padding: '6px', color: '#fff',
+                      }}>
+                        {metrics.offers_submitted || 0}
+                      </div>
+                      <button
+                        onClick={() => setMetric('offers_submitted', (metrics.offers_submitted || 0) + 1)}
+                        style={{
+                          width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
+                          border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                          color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}
+                      >+</button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Inline Contact Form (reuses existing state) */}
+                {showContactForm && (
+                  <div style={{ marginTop: 16, padding: 16, borderRadius: 10, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 14 }}>New Contact</div>
+
+                    <input value={contactName} onChange={e => setContactName(e.target.value)}
+                      placeholder="Name *" style={{ width: '100%', fontSize: 14, padding: '10px 14px', marginBottom: 10,
+                      borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
+                      <input value={contactPhone} onChange={e => setContactPhone(e.target.value)}
+                        placeholder="Phone" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
+                        background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+                      <input value={contactEmail} onChange={e => setContactEmail(e.target.value)}
+                        placeholder="Email" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
+                        background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+                    </div>
+
+                    <div style={{ fontSize: 12, color: '#888', fontWeight: 600, marginBottom: 6 }}>Group</div>
+                    <div style={{ display: 'flex', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
+                      {CONTACT_GROUPS.map(g => (
+                        <button key={g.value} onClick={() => { setContactGroup(g.value); setTargetOutcome(''); setContactFollowUpInterval(''); }} style={{
+                          padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: contactGroup === g.value ? 600 : 400,
+                          cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
+                          background: contactGroup === g.value ? `${g.color}20` : 'rgba(255,255,255,0.04)',
+                          color: contactGroup === g.value ? g.color : '#888',
+                          outline: contactGroup === g.value ? `1px solid ${g.color}40` : '1px solid rgba(255,255,255,0.08)',
+                        }}>
+                          {g.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    {contactGroup === 'target' && (
+                      <input value={contactProperty} onChange={e => setContactProperty(e.target.value)}
+                        placeholder="Property/Opportunity * (e.g. 123 Main St, Phoenix AZ)"
+                        style={{ width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 10, borderRadius: 8,
+                        background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(233,69,96,0.15)', color: '#eee' }} />
+                    )}
+
+                    <textarea value={contactNotes} onChange={e => setContactNotes(e.target.value)}
+                      placeholder="Notes about this contact..." rows={2}
+                      style={{ width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 12, resize: 'vertical',
+                      borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+
+                    {contactGroup === 'target' && (
+                      <div style={{ marginBottom: 12 }}>
+                        <div style={{ fontSize: 12, color: '#e94560', fontWeight: 600, marginBottom: 6 }}>Outcome *</div>
+                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                          {[
+                            { value: 'target_property', label: 'Target Property', desc: "They're interested", color: '#e94560' },
+                            { value: 'dead', label: 'Dead Contact', desc: 'Not interested', color: '#666' },
+                            { value: 'arsenal', label: 'Move to Arsenal', desc: 'Good relationship, no deal', color: '#f0a500' },
+                          ].map(o => (
+                            <button key={o.value} onClick={() => { setTargetOutcome(o.value); setContactFollowUpInterval(''); }}
+                              style={{
+                                padding: '8px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                                fontFamily: "'DM Sans', sans-serif", border: 'none', textAlign: 'left',
+                                background: targetOutcome === o.value ? `${o.color}15` : 'rgba(255,255,255,0.04)',
+                                color: targetOutcome === o.value ? o.color : '#888',
+                                outline: targetOutcome === o.value ? `1px solid ${o.color}40` : '1px solid rgba(255,255,255,0.06)',
+                              }}>
+                              <div style={{ fontWeight: 600 }}>{o.label}</div>
+                              <div style={{ fontSize: 10, opacity: 0.7, marginTop: 2 }}>{o.desc}</div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {(contactGroup === 'arsenal' || targetOutcome) && (
+                      <div style={{ marginBottom: 12 }}>
+                        <div style={{ fontSize: 12, color: '#48c78e', fontWeight: 600, marginBottom: 6 }}>Schedule Follow-Up *</div>
+                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                          {(targetOutcome === 'dead'
+                            ? [{ value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }, { value: '6_months', label: '6 Months' }, { value: 'never', label: 'Never' }]
+                            : [{ value: '2_days', label: '2 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }]
+                          ).map(opt => (
+                            <button key={opt.value} onClick={() => setContactFollowUpInterval(opt.value)}
+                              style={{
+                                padding: '7px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                                fontFamily: "'DM Sans', sans-serif", border: 'none',
+                                background: contactFollowUpInterval === opt.value ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.04)',
+                                color: contactFollowUpInterval === opt.value ? '#48c78e' : '#888',
+                                outline: contactFollowUpInterval === opt.value ? '1px solid rgba(72,199,142,0.3)' : '1px solid rgba(255,255,255,0.06)',
+                                fontWeight: contactFollowUpInterval === opt.value ? 600 : 400,
+                              }}>
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {duplicateContact && (
+                      <div style={{
+                        padding: '12px 14px', borderRadius: 8, marginBottom: 12,
+                        background: 'rgba(240,165,0,0.06)', border: '1px solid rgba(240,165,0,0.2)',
+                      }}>
+                        <div style={{ fontSize: 13, color: '#f0a500', fontWeight: 600, marginBottom: 8 }}>
+                          You already have a contact named "{duplicateContact.name}".
+                        </div>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <button className="btn-primary" onClick={() => handleGoToFollowUp(duplicateContact)}
+                            style={{ padding: '8px 16px', fontSize: 12 }}>
+                            Go to Follow-Up
+                          </button>
+                          <button className="btn-secondary" onClick={() => handleAddContact(true)}
+                            style={{ padding: '8px 16px', fontSize: 12 }}>
+                            Add Anyway
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {(() => {
+                      const canAdd = contactName.trim() && contactFollowUpInterval
+                        && (contactGroup === 'arsenal' || (targetOutcome && (contactGroup !== 'target' || contactProperty.trim())));
+                      return (
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <button className="btn-primary" onClick={() => handleAddContact(false)}
+                            disabled={!canAdd || contactSaving}
+                            style={{ padding: '10px 20px', fontSize: 13, opacity: canAdd ? 1 : 0.4 }}>
+                            {contactSaving ? 'Saving...' : 'Add Contact'}
+                          </button>
+                          <button className="btn-secondary" onClick={resetContactForm}
+                            style={{ padding: '10px 16px', fontSize: 13 }}>
+                            Cancel
+                          </button>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* Save Updates Button */}
+                <button
+                  className="btn-primary"
+                  disabled={postSubmitSaving}
+                  onClick={async () => {
+                    setPostSubmitSaving(true);
+                    const newOffers = metrics.offers_submitted || 0;
+                    const prevOffers = existingDailySubmission?.offers_submitted || 0;
+                    const offerDelta = newOffers - prevOffers;
+                    await onSubmit(day, {
+                      text: proofText || buildProofSummary(metrics),
+                      dayMetrics: metrics,
+                      complianceMetrics: metrics,
+                      metDailyMinimum: compliance.met,
+                      lifetimeOffersDelta: offerDelta > 0 ? offerDelta : 0,
+                    });
+                    setPostSubmitSaving(false);
+                    setShowPostSubmit(false);
+                  }}
+                  style={{
+                    width: '100%', marginTop: 16, padding: '14px 20px', fontSize: 14,
+                    fontWeight: 700,
+                  }}
+                >
+                  {postSubmitSaving ? 'Saving...' : 'Save Updates'}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* ═══ PRE-SUBMISSION FORM ═══ */}
+      {!submitted && !(isComplete && existingSubmission) && canSubmit && (!hasRequiredQuiz || quizPassed) ? (
         <>
           {/* ── 6-Metric Entry Form ── */}
           <div className="card" style={{ marginBottom: 24 }}>

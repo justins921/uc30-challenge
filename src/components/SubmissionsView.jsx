@@ -1,6 +1,6 @@
 import { AttachmentLink } from './DayView';
 
-export default function SubmissionsView({ user }) {
+export default function SubmissionsView({ user, onEditDay }) {
   if (user.submissions.length === 0) {
     return (
       <div className="fade-up" style={{ textAlign: 'center', padding: 60 }}>
@@ -17,7 +17,6 @@ export default function SubmissionsView({ user }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {user.submissions.slice().reverse().map((sub, i) => (
           <div key={i} className="card" style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-            {/* Day number badge */}
             <div className="mono" style={{
               width: 44, height: 44, borderRadius: 12,
               background: 'rgba(72,199,142,0.1)', border: '1px solid rgba(72,199,142,0.2)',
@@ -27,7 +26,6 @@ export default function SubmissionsView({ user }) {
               {sub.day}
             </div>
 
-            {/* Content */}
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -41,17 +39,39 @@ export default function SubmissionsView({ user }) {
               <p style={{ color: '#888', fontSize: 13, lineHeight: 1.6, wordBreak: 'break-word' }}>
                 {sub.proof}
               </p>
+              {sub.dayMetrics && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 6 }}>
+                  {Object.entries(sub.dayMetrics).filter(([, v]) => v).map(([key, val]) => (
+                    <span key={key} style={{
+                      fontSize: 10, padding: '2px 8px', borderRadius: 4,
+                      background: 'rgba(72,199,142,0.08)', color: '#48c78e', fontWeight: 600,
+                    }}>
+                      {typeof val === 'boolean' ? `${key.replace(/_/g, ' ')} ✓` : `${val} ${key.replace(/_/g, ' ')}`}
+                    </span>
+                  ))}
+                </div>
+              )}
               {sub.fileName && (
                 <AttachmentLink fileName={sub.fileName} fileData={sub.fileData} />
               )}
             </div>
 
-            {/* Status badge */}
-            <div style={{
-              fontSize: 11, color: '#48c78e', background: 'rgba(72,199,142,0.1)',
-              padding: '4px 10px', borderRadius: 6, fontWeight: 600, flexShrink: 0,
-            }}>
-              Verified
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 0, alignItems: 'flex-end' }}>
+              <div style={{
+                fontSize: 11, color: '#48c78e', background: 'rgba(72,199,142,0.1)',
+                padding: '4px 10px', borderRadius: 6, fontWeight: 600,
+              }}>
+                Verified
+              </div>
+              {onEditDay && typeof sub.day === 'number' && (
+                <button onClick={() => onEditDay(sub.day)} style={{
+                  fontSize: 11, color: '#888', background: 'rgba(255,255,255,0.04)',
+                  padding: '4px 10px', borderRadius: 6, fontWeight: 600, cursor: 'pointer',
+                  border: '1px solid rgba(255,255,255,0.08)', fontFamily: "'DM Sans', sans-serif",
+                }}>
+                  Edit Day
+                </button>
+              )}
             </div>
           </div>
         ))}

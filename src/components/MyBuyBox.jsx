@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import jsPDF from 'jspdf';
 
 function fmt$(val) {
@@ -161,19 +162,358 @@ function generatePDF(user, bb) {
   doc.save(`${name.replace(/\s+/g, '_')}_Buy_Box.pdf`);
 }
 
-export default function MyBuyBox({ user }) {
+const PROPERTY_TYPES = ['Single Family', 'Multi-Family (2-4)', 'Multi-Family (5+)', 'Condo/Townhouse', 'Mobile Home', 'Land'];
+const STRATEGIES = ['Buy & Hold', 'BRRRR', 'Fix & Flip', 'Wholesale', 'Short-Term Rental', 'Section 8', 'Seller Finance', 'Subject-To'];
+const FINANCING = ['Conventional', 'FHA', 'VA', 'DSCR', 'Hard Money', 'Private Money', 'Seller Financing', 'Cash', 'Portfolio Loan'];
+const CONDITIONS = ['Turn-key only', 'Light rehab', 'Moderate rehab', 'Heavy rehab / gut'];
+
+function parseCurrency(str) {
+  const num = parseInt(String(str).replace(/[^0-9]/g, ''), 10);
+  return isNaN(num) ? '' : num;
+}
+
+function EditableChipList({ items, setItems, options, color = '#e94560', allowCustom = false, customPlaceholder = 'Add custom...' }) {
+  const [customInput, setCustomInput] = useState('');
+  const toggle = (val) => setItems(items.includes(val) ? items.filter(x => x !== val) : [...items, val]);
+  const addCustom = () => {
+    const trimmed = customInput.trim();
+    if (trimmed && !items.includes(trimmed)) {
+      setItems([...items, trimmed]);
+      setCustomInput('');
+    }
+  };
+  return (
+    <div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+        {options.map(opt => (
+          <button key={opt} onClick={() => toggle(opt)} style={{
+            padding: '6px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+            fontFamily: "'DM Sans', sans-serif", border: 'none',
+            background: items.includes(opt) ? `${color}25` : 'rgba(255,255,255,0.04)',
+            color: items.includes(opt) ? color : '#888',
+          }}>{opt}</button>
+        ))}
+      </div>
+      {allowCustom && (
+        <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+          <input placeholder={customPlaceholder} value={customInput}
+            onChange={e => setCustomInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && addCustom()}
+            style={{ flex: 1, fontSize: 12, padding: '8px 10px' }} />
+          <button onClick={addCustom} style={{
+            padding: '8px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+            fontFamily: "'DM Sans', sans-serif", border: 'none',
+            background: `${color}15`, color,
+          }}>Add</button>
+        </div>
+      )}
+      {items.filter(i => !options.includes(i)).length > 0 && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 6 }}>
+          {items.filter(i => !options.includes(i)).map(i => (
+            <span key={i} onClick={() => toggle(i)} style={{
+              padding: '4px 10px', borderRadius: 6, fontSize: 11, cursor: 'pointer',
+              background: `${color}25`, color, fontWeight: 600,
+            }}>{i} ✕</span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function MyBuyBox({ user, onUpdateUser }) {
   const bb = user?.buyBox || {};
   const ret = bb.returnRequirements || {};
   const isEmpty = !bb.markets?.length && !bb.propertyTypes?.length;
 
-  if (isEmpty) {
+  const [editing, setEditing] = useState(isEmpty && !!onUpdateUser);
+  const [saving, setSaving] = useState(false);
+
+  const [markets, setMarkets] = useState(bb.markets || []);
+  const [marketInput, setMarketInput] = useState('');
+  const [zipCodes, setZipCodes] = useState(bb.zipCodes || []);
+  const [zipInput, setZipInput] = useState('');
+  const [propertyTypes, setPropertyTypes] = useState(bb.propertyTypes || []);
+  const [yearBuiltMin, setYearBuiltMin] = useState(bb.yearBuiltMin || '');
+  const [yearBuiltMax, setYearBuiltMax] = useState(bb.yearBuiltMax || '');
+  const [bedroomsMin, setBedroomsMin] = useState(bb.bedroomsMin || '');
+  const [bedroomsMax, setBedroomsMax] = useState(bb.bedroomsMax || '');
+  const [bathroomsMin, setBathroomsMin] = useState(bb.bathroomsMin || '');
+  const [bathroomsMax, setBathroomsMax] = useState(bb.bathroomsMax || '');
+  const [conditionTolerance, setConditionTolerance] = useState(bb.conditionTolerance || '');
+  const [priceMin, setPriceMin] = useState(bb.priceMin || '');
+  const [priceMax, setPriceMax] = useState(bb.priceMax || '');
+  const [downPayment, setDownPayment] = useState(bb.downPayment || '');
+  const [strategies, setStrategies] = useState(bb.strategies || []);
+  const [financingTypes, setFinancingTypes] = useState(bb.financingTypes || []);
+  const [minCashOnCash, setMinCashOnCash] = useState(ret.minCashOnCash || '');
+  const [minCapRate, setMinCapRate] = useState(ret.minCapRate || '');
+  const [minCashFlowPerUnit, setMinCashFlowPerUnit] = useState(ret.minCashFlowPerUnit || '');
+  const [minIRR, setMinIRR] = useState(ret.minIRR || '');
+  const [additionalNotes, setAdditionalNotes] = useState(bb.additionalNotes || '');
+
+  const addMarket = () => {
+    const trimmed = marketInput.trim();
+    if (trimmed && !markets.includes(trimmed)) { setMarkets([...markets, trimmed]); setMarketInput(''); }
+  };
+  const addZip = () => {
+    const trimmed = zipInput.trim();
+    if (trimmed && !zipCodes.includes(trimmed)) { setZipCodes([...zipCodes, trimmed]); setZipInput(''); }
+  };
+
+  const resetToSaved = () => {
+    const s = user?.buyBox || {};
+    const r = s.returnRequirements || {};
+    setMarkets(s.markets || []); setZipCodes(s.zipCodes || []);
+    setPropertyTypes(s.propertyTypes || []);
+    setYearBuiltMin(s.yearBuiltMin || ''); setYearBuiltMax(s.yearBuiltMax || '');
+    setBedroomsMin(s.bedroomsMin || ''); setBedroomsMax(s.bedroomsMax || '');
+    setBathroomsMin(s.bathroomsMin || ''); setBathroomsMax(s.bathroomsMax || '');
+    setConditionTolerance(s.conditionTolerance || '');
+    setPriceMin(s.priceMin || ''); setPriceMax(s.priceMax || '');
+    setDownPayment(s.downPayment || '');
+    setStrategies(s.strategies || []); setFinancingTypes(s.financingTypes || []);
+    setMinCashOnCash(r.minCashOnCash || ''); setMinCapRate(r.minCapRate || '');
+    setMinCashFlowPerUnit(r.minCashFlowPerUnit || ''); setMinIRR(r.minIRR || '');
+    setAdditionalNotes(s.additionalNotes || '');
+    setEditing(false);
+  };
+
+  const handleSave = async () => {
+    if (!onUpdateUser) return;
+    setSaving(true);
+    await onUpdateUser({
+      buyBox: {
+        markets, zipCodes, propertyTypes,
+        yearBuiltMin: yearBuiltMin ? parseInt(yearBuiltMin) : null,
+        yearBuiltMax: yearBuiltMax ? parseInt(yearBuiltMax) : null,
+        bedroomsMin: bedroomsMin ? parseInt(bedroomsMin) : null,
+        bedroomsMax: bedroomsMax ? parseInt(bedroomsMax) : null,
+        bathroomsMin: bathroomsMin ? parseInt(bathroomsMin) : null,
+        bathroomsMax: bathroomsMax ? parseInt(bathroomsMax) : null,
+        conditionTolerance: conditionTolerance || null,
+        priceMin: priceMin || null, priceMax: priceMax || null,
+        downPayment: downPayment || null,
+        strategies, financingTypes,
+        returnRequirements: {
+          minCashOnCash: minCashOnCash ? parseFloat(minCashOnCash) : null,
+          minCapRate: minCapRate ? parseFloat(minCapRate) : null,
+          minCashFlowPerUnit: minCashFlowPerUnit ? parseFloat(minCashFlowPerUnit) : null,
+          minIRR: minIRR ? parseFloat(minIRR) : null,
+        },
+        additionalNotes: additionalNotes || null,
+      },
+    });
+    setSaving(false);
+    setEditing(false);
+  };
+
+  if (isEmpty && !editing) {
     return (
       <div className="card" style={{ textAlign: 'center', padding: '48px 24px' }}>
         <div style={{ fontSize: 40, marginBottom: 12 }}>📋</div>
         <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>No Buy Box Yet</h3>
-        <p style={{ color: '#888', fontSize: 14 }}>
-          Complete the activation phase to set up your buy box.
+        <p style={{ color: '#888', fontSize: 14, marginBottom: 16 }}>
+          Complete the activation phase to set up your buy box, or create one now.
         </p>
+        {onUpdateUser && (
+          <button className="btn-primary" onClick={() => setEditing(true)} style={{ padding: '10px 24px', fontSize: 13 }}>
+            Create Buy Box
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  if (editing) {
+    return (
+      <div className="fade-up">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
+          <h2 style={{ fontSize: 22, fontWeight: 700 }}>Edit Buy Box</h2>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={resetToSaved} style={{
+              padding: '10px 20px', fontSize: 13, borderRadius: 8, cursor: 'pointer',
+              fontFamily: "'DM Sans', sans-serif", border: '1px solid rgba(255,255,255,0.1)',
+              background: 'transparent', color: '#888',
+            }}>Cancel</button>
+            <button className="btn-primary" onClick={handleSave} disabled={saving}
+              style={{ padding: '10px 20px', fontSize: 13, opacity: saving ? 0.5 : 1 }}>
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        </div>
+
+        <div className="card" style={{ marginBottom: 16 }}>
+          <Section title="Target Markets *">
+            <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
+              <input placeholder="Add a market (city, county, etc.)" value={marketInput}
+                onChange={e => setMarketInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && addMarket()}
+                style={{ flex: 1, fontSize: 13, padding: '10px 12px' }} />
+              <button onClick={addMarket} style={{
+                padding: '10px 16px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", border: 'none',
+                background: 'rgba(233,69,96,0.15)', color: '#e94560',
+              }}>Add</button>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {markets.map(m => (
+                <span key={m} onClick={() => setMarkets(markets.filter(x => x !== m))} style={{
+                  padding: '5px 12px', borderRadius: 6, fontSize: 13, cursor: 'pointer',
+                  background: 'rgba(233,69,96,0.15)', color: '#e94560', fontWeight: 500,
+                }}>{m} ✕</span>
+              ))}
+            </div>
+          </Section>
+
+          <Section title="Zip Codes">
+            <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
+              <input placeholder="Add zip code" value={zipInput}
+                onChange={e => setZipInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && addZip()}
+                style={{ flex: 1, fontSize: 13, padding: '10px 12px' }} />
+              <button onClick={addZip} style={{
+                padding: '10px 16px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", border: 'none',
+                background: 'rgba(131,52,131,0.15)', color: '#9b59b6',
+              }}>Add</button>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {zipCodes.map(z => (
+                <span key={z} onClick={() => setZipCodes(zipCodes.filter(x => x !== z))} style={{
+                  padding: '5px 12px', borderRadius: 6, fontSize: 13, cursor: 'pointer',
+                  background: 'rgba(131,52,131,0.15)', color: '#9b59b6', fontWeight: 500,
+                }}>{z} ✕</span>
+              ))}
+            </div>
+          </Section>
+
+          <Section title="Property Types *">
+            <EditableChipList items={propertyTypes} setItems={setPropertyTypes} options={PROPERTY_TYPES} />
+          </Section>
+
+          <Section title="Property Details">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 10 }}>
+              <div style={{ flex: '1 0 140px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Year Built Range</div>
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                  <input placeholder="Min" value={yearBuiltMin} onChange={e => setYearBuiltMin(e.target.value)}
+                    style={{ width: 80, fontSize: 13, padding: '8px 10px' }} />
+                  <span style={{ color: '#555' }}>–</span>
+                  <input placeholder="Max" value={yearBuiltMax} onChange={e => setYearBuiltMax(e.target.value)}
+                    style={{ width: 80, fontSize: 13, padding: '8px 10px' }} />
+                </div>
+              </div>
+              <div style={{ flex: '1 0 140px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Bedrooms</div>
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                  <input placeholder="Min" value={bedroomsMin} onChange={e => setBedroomsMin(e.target.value)}
+                    style={{ width: 60, fontSize: 13, padding: '8px 10px' }} />
+                  <span style={{ color: '#555' }}>–</span>
+                  <input placeholder="Max" value={bedroomsMax} onChange={e => setBedroomsMax(e.target.value)}
+                    style={{ width: 60, fontSize: 13, padding: '8px 10px' }} />
+                </div>
+              </div>
+              <div style={{ flex: '1 0 140px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Bathrooms</div>
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                  <input placeholder="Min" value={bathroomsMin} onChange={e => setBathroomsMin(e.target.value)}
+                    style={{ width: 60, fontSize: 13, padding: '8px 10px' }} />
+                  <span style={{ color: '#555' }}>–</span>
+                  <input placeholder="Max" value={bathroomsMax} onChange={e => setBathroomsMax(e.target.value)}
+                    style={{ width: 60, fontSize: 13, padding: '8px 10px' }} />
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Condition Tolerance</div>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {CONDITIONS.map(c => (
+                  <button key={c} onClick={() => setConditionTolerance(conditionTolerance === c ? '' : c)} style={{
+                    padding: '6px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                    fontFamily: "'DM Sans', sans-serif", border: 'none',
+                    background: conditionTolerance === c ? 'rgba(240,165,0,0.2)' : 'rgba(255,255,255,0.04)',
+                    color: conditionTolerance === c ? '#f0a500' : '#888',
+                  }}>{c}</button>
+                ))}
+              </div>
+            </div>
+          </Section>
+
+          <Section title="Deal Size">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+              <div style={{ flex: '1 0 120px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Price Min</div>
+                <input placeholder="$0" value={priceMin ? fmt$(priceMin) : ''}
+                  onChange={e => setPriceMin(parseCurrency(e.target.value))}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
+              </div>
+              <div style={{ flex: '1 0 120px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Price Max</div>
+                <input placeholder="$0" value={priceMax ? fmt$(priceMax) : ''}
+                  onChange={e => setPriceMax(parseCurrency(e.target.value))}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
+              </div>
+              <div style={{ flex: '1 0 120px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Down Payment Available</div>
+                <input placeholder="$0" value={downPayment ? fmt$(downPayment) : ''}
+                  onChange={e => setDownPayment(parseCurrency(e.target.value))}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
+              </div>
+            </div>
+          </Section>
+
+          <Section title="Investment Strategy">
+            <EditableChipList items={strategies} setItems={setStrategies} options={STRATEGIES} color="#f0a500" />
+          </Section>
+
+          <Section title="Financing">
+            <EditableChipList items={financingTypes} setItems={setFinancingTypes} options={FINANCING} color="#48c78e" />
+          </Section>
+
+          <Section title="Return Requirements *">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+              <div style={{ flex: '1 0 120px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Min Cash-on-Cash %</div>
+                <input type="number" placeholder="0" value={minCashOnCash} onChange={e => setMinCashOnCash(e.target.value)}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
+              </div>
+              <div style={{ flex: '1 0 120px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Min Cap Rate %</div>
+                <input type="number" placeholder="0" value={minCapRate} onChange={e => setMinCapRate(e.target.value)}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
+              </div>
+              <div style={{ flex: '1 0 120px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Min Cash Flow/Unit $/mo</div>
+                <input type="number" placeholder="0" value={minCashFlowPerUnit} onChange={e => setMinCashFlowPerUnit(e.target.value)}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
+              </div>
+              <div style={{ flex: '1 0 120px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Min IRR %</div>
+                <input type="number" placeholder="0" value={minIRR} onChange={e => setMinIRR(e.target.value)}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
+              </div>
+            </div>
+          </Section>
+
+          <Section title="Additional Notes">
+            <textarea placeholder="Any other criteria or notes..." value={additionalNotes}
+              onChange={e => setAdditionalNotes(e.target.value)} rows={3}
+              style={{ width: '100%', fontSize: 13, padding: '10px 12px', resize: 'vertical' }} />
+          </Section>
+        </div>
+
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+          <button onClick={resetToSaved} style={{
+            padding: '12px 24px', fontSize: 13, borderRadius: 8, cursor: 'pointer',
+            fontFamily: "'DM Sans', sans-serif", border: '1px solid rgba(255,255,255,0.1)',
+            background: 'transparent', color: '#888',
+          }}>Cancel</button>
+          <button className="btn-primary" onClick={handleSave} disabled={saving}
+            style={{ padding: '12px 24px', fontSize: 13, opacity: saving ? 0.5 : 1 }}>
+            {saving ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
       </div>
     );
   }
@@ -187,13 +527,22 @@ export default function MyBuyBox({ user }) {
             {user.firstName} {user.lastName}
           </p>
         </div>
-        <button
-          className="btn-primary"
-          onClick={() => generatePDF(user, bb)}
-          style={{ padding: '10px 20px', fontSize: 13 }}
-        >
-          Download PDF
-        </button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          {onUpdateUser && (
+            <button onClick={() => setEditing(true)} style={{
+              padding: '10px 20px', fontSize: 13, borderRadius: 8, cursor: 'pointer',
+              fontFamily: "'DM Sans', sans-serif", border: '1px solid rgba(255,255,255,0.1)',
+              background: 'rgba(255,255,255,0.04)', color: '#ccc', fontWeight: 600,
+            }}>Edit</button>
+          )}
+          <button
+            className="btn-primary"
+            onClick={() => generatePDF(user, bb)}
+            style={{ padding: '10px 20px', fontSize: 13 }}
+          >
+            Download PDF
+          </button>
+        </div>
       </div>
 
       <div className="card" style={{ marginBottom: 16 }}>

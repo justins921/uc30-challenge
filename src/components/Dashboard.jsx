@@ -85,7 +85,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onUpdateContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt, practiceDaySettings, onCompletePracticeDay, onSubmitPipelineDay, onActivateNextCohort }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onUpdateContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt, practiceDaySettings, onCompletePracticeDay, onSubmitPipelineDay, onActivateNextCohort, onUpdateUser }) {
   const [tab, setTab] = useState(user.pipelineMode && !user.isActive ? 'pipeline' : 'timeline');
   const [selectedDay, setSelectedDay] = useState(null);
   const [existingDailySubmission, setExistingDailySubmission] = useState(null);
@@ -453,10 +453,12 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             getContacts={getContacts}
             getFollowUpsByContact={getFollowUpsByContact}
             onUpdateContact={onUpdateContact}
+            onAddContact={onAddContact}
+            onAddFollowUp={onAddFollowUp}
           />
         )}
-        {!showPracticeDay && tab === 'buybox' && <MyBuyBox user={user} />}
-        {!showPracticeDay && tab === 'submissions' && <SubmissionsView user={user} />}
+        {!showPracticeDay && tab === 'buybox' && <MyBuyBox user={user} onUpdateUser={onUpdateUser} />}
+        {!showPracticeDay && tab === 'submissions' && <SubmissionsView user={user} onEditDay={(day) => handleSelectDay(day)} />}
         {!showPracticeDay && tab === 'stats' && <StatsView user={user} />}
         {!showPracticeDay && tab === 'support' && (
           <UserSupport

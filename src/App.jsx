@@ -505,6 +505,7 @@ export default function App() {
       skoolLink={skoolLink}
       practiceDaySettings={practiceDaySettings}
       onCompletePracticeDay={completeActivation}
+      onUpdateUser={completeActivation}
       onAddContact={handleAddContact}
       onUpdateContact={updateContact}
       onAddFollowUp={addFollowUp}
