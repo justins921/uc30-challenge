@@ -545,31 +545,20 @@ export default function DayView({
                           <div style={{ fontSize: 11, color: '#f0a500', fontWeight: 600 }}>Current: {metrics.arsenal_contacts || 0}</div>
                         </div>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {(metrics.arsenal_contacts || 0) > 0 && (
+                          <span style={{ fontSize: 14, fontWeight: 700, color: '#f0a500', minWidth: 24, textAlign: 'center' }}>{metrics.arsenal_contacts}</span>
+                        )}
                         <button
-                          onClick={() => setMetric('arsenal_contacts', Math.max(0, (metrics.arsenal_contacts || 0) - 1))}
+                          onClick={() => setInlineContactFor(prev => prev === 'arsenal' ? null : 'arsenal')}
                           style={{
-                            width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
-                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
-                            color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                            cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                            border: '1px solid rgba(240,165,0,0.4)',
+                            background: inlineContactFor === 'arsenal' ? 'rgba(240,165,0,0.2)' : 'rgba(240,165,0,0.1)',
+                            color: '#f0a500',
                           }}
-                        >-</button>
-                        <div className="mono" style={{
-                          width: 56, textAlign: 'center', fontSize: 18, fontWeight: 700,
-                          padding: '6px', color: '#fff',
-                        }}>
-                          {metrics.arsenal_contacts || 0}
-                        </div>
-                        <button
-                          onClick={() => setMetric('arsenal_contacts', (metrics.arsenal_contacts || 0) + 1)}
-                          style={{
-                            width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
-                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
-                            color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          }}
-                        >+</button>
+                        >+ Add</button>
                       </div>
                     </div>
                     <InlineAddContact
@@ -599,31 +588,20 @@ export default function DayView({
                           <div style={{ fontSize: 11, color: '#e94560', fontWeight: 600 }}>Current: {metrics.target_contacts || 0}</div>
                         </div>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {(metrics.target_contacts || 0) > 0 && (
+                          <span style={{ fontSize: 14, fontWeight: 700, color: '#e94560', minWidth: 24, textAlign: 'center' }}>{metrics.target_contacts}</span>
+                        )}
                         <button
-                          onClick={() => setMetric('target_contacts', Math.max(0, (metrics.target_contacts || 0) - 1))}
+                          onClick={() => setInlineContactFor(prev => prev === 'target' ? null : 'target')}
                           style={{
-                            width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
-                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
-                            color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                            cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                            border: '1px solid rgba(233,69,96,0.4)',
+                            background: inlineContactFor === 'target' ? 'rgba(233,69,96,0.2)' : 'rgba(233,69,96,0.1)',
+                            color: '#e94560',
                           }}
-                        >-</button>
-                        <div className="mono" style={{
-                          width: 56, textAlign: 'center', fontSize: 18, fontWeight: 700,
-                          padding: '6px', color: '#fff',
-                        }}>
-                          {metrics.target_contacts || 0}
-                        </div>
-                        <button
-                          onClick={() => setMetric('target_contacts', (metrics.target_contacts || 0) + 1)}
-                          style={{
-                            width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
-                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
-                            color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          }}
-                        >+</button>
+                        >+ Add</button>
                       </div>
                     </div>
                     <InlineAddContact
@@ -913,6 +891,10 @@ export default function DayView({
                   : (typeof required !== 'number' || required <= 0 || (value || 0) >= required);
                 const isRequired = isBool ? !!required : (typeof required === 'number' && required > 0);
 
+                const isContactMetric = metric.id === 'arsenal_contacts' || metric.id === 'target_contacts';
+                const contactMetricGroup = metric.id === 'arsenal_contacts' ? 'arsenal' : 'target';
+                const contactColor = metric.id === 'arsenal_contacts' ? '#f0a500' : '#e94560';
+
                 return (
                   <div key={metric.id}>
                     <div style={{
@@ -950,6 +932,27 @@ export default function DayView({
                         >
                           {value ? '✓ Done' : 'Mark Done'}
                         </button>
+                      ) : isContactMetric ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          {(value || 0) > 0 && (
+                            <span style={{
+                              fontSize: 14, fontWeight: 700, color: contactColor,
+                              minWidth: 24, textAlign: 'center',
+                            }}>{value}</span>
+                          )}
+                          <button
+                            onClick={() => setInlineContactFor(prev => prev === contactMetricGroup ? null : contactMetricGroup)}
+                            style={{
+                              padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                              cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                              border: `1px solid ${contactColor}40`,
+                              background: inlineContactFor === contactMetricGroup ? `${contactColor}20` : `${contactColor}10`,
+                              color: contactColor,
+                            }}
+                          >
+                            + Add
+                          </button>
+                        </div>
                       ) : (
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                           <button
@@ -985,12 +988,11 @@ export default function DayView({
                         </div>
                       )}
                     </div>
-                    {/* Inline Add Contact for arsenal/target */}
-                    {(metric.id === 'arsenal_contacts' || metric.id === 'target_contacts') && (
+                    {isContactMetric && (
                       <InlineAddContact
-                        group={metric.id === 'arsenal_contacts' ? 'arsenal' : 'target'}
-                        isOpen={inlineContactFor === (metric.id === 'arsenal_contacts' ? 'arsenal' : 'target')}
-                        onToggle={(group) => setInlineContactFor(prev => prev === group ? null : group)}
+                        group={contactMetricGroup}
+                        isOpen={inlineContactFor === contactMetricGroup}
+                        onToggle={(g) => setInlineContactFor(prev => prev === g ? null : g)}
                         onAddContact={onAddContact}
                         contactList={contactList}
                         setContactList={setContactList}
@@ -1445,18 +1447,7 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
     setSaving(false);
   };
 
-  if (!isOpen) {
-    return (
-      <button onClick={() => { resetForm(); onToggle(group); }}
-        style={{
-          marginTop: 6, marginLeft: 44, padding: '6px 14px', borderRadius: 6, fontSize: 12,
-          fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-          border: 'none', background: `${color}15`, color,
-        }}>
-        + Add {label}
-      </button>
-    );
-  }
+  if (!isOpen) return null;
 
   return (
     <div style={{
