@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 
 function checkAnswer(input, userValue) {
   if (input.type === 'multiple_choice') {
@@ -13,6 +13,7 @@ function checkAnswer(input, userValue) {
 }
 
 export default function QuizSection({ quiz, participantId, dayNumber, existingAttempts, onAttempt, onQuizComplete }) {
+  const containerRef = useRef(null);
   const scenarios = quiz?.scenarios || [];
 
   const scenarioStatus = useMemo(() => {
@@ -48,7 +49,9 @@ export default function QuizSection({ quiz, participantId, dayNumber, existingAt
   const handleScenarioComplete = () => {
     if (activeIndex < scenarios.length - 1) {
       setActiveIndex(activeIndex + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
     } else {
       onQuizComplete();
     }
@@ -57,7 +60,7 @@ export default function QuizSection({ quiz, participantId, dayNumber, existingAt
   if (scenarios.length === 0) return null;
 
   return (
-    <div className="card" style={{ marginBottom: 24 }}>
+    <div ref={containerRef} className="card" style={{ marginBottom: 24 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
         <div style={{
           width: 28, height: 28, borderRadius: 8, background: 'rgba(240,165,0,0.15)',
