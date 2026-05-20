@@ -747,7 +747,9 @@ Your goals today: begin the pre-approval process, ask questions about financing,
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
-    downloads: [],
+    downloads: [
+      { name: 'Submitting An Offer Checklist', url: '/offer-checklist.html' },
+    ],
     quiz: {
       required: true,
       scenarios: [
