@@ -1,6 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
 
 function checkAnswer(input, userValue) {
+  if (input.type === 'multiple_choice') {
+    return parseInt(userValue) === input.correctAnswer;
+  }
   if (input.type === 'number') {
     const num = parseFloat(userValue);
     if (isNaN(num)) return false;
@@ -163,6 +166,11 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
     }
   };
 
+  const allAnswered = scenario.inputs.every(i =>
+    i.type === 'multiple_choice' ? answers[i.id] !== '' : answers[i.id]?.trim()
+  );
+
+  // ── Passed state ──
   if (passed) {
     return (
       <div>
@@ -185,7 +193,7 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
               <CheatSheet key={si} sheet={sheet} />
             ))}
             {scenario.explanationOnFail && !scenario.cheatSheets && (
-              <p style={{ fontSize: 14, color: '#bbb', lineHeight: 1.7, marginTop: 8 }}>
+              <p style={{ fontSize: 14, color: '#bbb', lineHeight: 1.7, marginTop: 8, whiteSpace: 'pre-line' }}>
                 {scenario.explanationOnFail}
               </p>
             )}
@@ -203,6 +211,7 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
     );
   }
 
+  // ── Exhausted state ──
   if (exhausted) {
     return (
       <div>
@@ -222,7 +231,10 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
             }}>
               <span style={{ fontSize: 13, color: '#aaa' }}>{input.label}</span>
               <span style={{ fontSize: 14, fontWeight: 700, color: '#48c78e' }}>
-                {input.unit === '$' && '$'}{input.correctAnswer}{input.unit === '%' && '%'}
+                {input.type === 'multiple_choice'
+                  ? input.options[input.correctAnswer]
+                  : `${input.unit === '$' ? '$' : ''}${input.correctAnswer}${input.unit === '%' ? '%' : ''}`
+                }
               </span>
             </div>
           ))}
@@ -232,20 +244,14 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
           ))}
 
           {scenario.explanationOnFail && !scenario.cheatSheets && (
-            <p style={{ fontSize: 14, color: '#bbb', lineHeight: 1.7, marginTop: 14, marginBottom: 0 }}>
+            <p style={{ fontSize: 14, color: '#bbb', lineHeight: 1.7, marginTop: 14, marginBottom: 0, whiteSpace: 'pre-line' }}>
               {scenario.explanationOnFail}
             </p>
           )}
 
           {scenario.explanationImage && (
-            <img
-              src={scenario.explanationImage}
-              alt="Explanation"
-              style={{
-                display: 'block', width: '100%', borderRadius: 8, marginTop: 12,
-                border: '1px solid rgba(255,255,255,0.08)',
-              }}
-            />
+            <img src={scenario.explanationImage} alt="Explanation"
+              style={{ display: 'block', width: '100%', borderRadius: 8, marginTop: 12, border: '1px solid rgba(255,255,255,0.08)' }} />
           )}
         </div>
 
@@ -256,6 +262,7 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
     );
   }
 
+  // ── Active state ──
   return (
     <div>
       <div style={{ marginBottom: 16 }}>
@@ -271,21 +278,34 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
         <PropertyListingCard listing={scenario.propertyListing} />
       )}
 
+      {scenario.contentSections && (
+        <ContentSections sections={scenario.contentSections} />
+      )}
+
       {scenario.image && !scenario.propertyListing && (
-        <img
-          src={scenario.image}
-          alt={scenario.title}
-          style={{
-            display: 'block', width: '100%', borderRadius: 10, marginBottom: 16,
-            border: '1px solid rgba(255,255,255,0.08)',
-          }}
-        />
+        <img src={scenario.image} alt={scenario.title}
+          style={{ display: 'block', width: '100%', borderRadius: 10, marginBottom: 16, border: '1px solid rgba(255,255,255,0.08)' }} />
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 16 }}>
         {scenario.inputs.map(input => {
           const isCorrect = results?.[input.id] === true;
           const isWrong = results?.[input.id] === false;
+
+          if (input.type === 'multiple_choice') {
+            return (
+              <MultipleChoiceInput
+                key={input.id}
+                input={input}
+                selected={answers[input.id]}
+                onSelect={(idx) => setAnswer(input.id, String(idx))}
+                isCorrect={isCorrect}
+                isWrong={isWrong}
+                submitted={!!results}
+              />
+            );
+          }
+
           return (
             <div key={input.id}>
               <label style={{ fontSize: 13, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 6 }}>
@@ -296,23 +316,15 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
                   <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>$</span>
                 )}
                 <input
-                  type={input.type === 'number' ? 'text' : 'text'}
+                  type="text"
                   inputMode={input.type === 'number' ? 'decimal' : 'text'}
                   value={answers[input.id]}
                   onChange={e => setAnswer(input.id, e.target.value)}
                   disabled={isCorrect}
                   style={{
                     flex: 1, fontSize: 16, padding: '12px 14px', borderRadius: 8,
-                    background: isCorrect
-                      ? 'rgba(72,199,142,0.06)'
-                      : isWrong
-                        ? 'rgba(233,69,96,0.06)'
-                        : 'rgba(255,255,255,0.04)',
-                    border: `1px solid ${
-                      isCorrect ? 'rgba(72,199,142,0.3)'
-                        : isWrong ? 'rgba(233,69,96,0.3)'
-                          : 'rgba(255,255,255,0.1)'
-                    }`,
+                    background: isCorrect ? 'rgba(72,199,142,0.06)' : isWrong ? 'rgba(233,69,96,0.06)' : 'rgba(255,255,255,0.04)',
+                    border: `1px solid ${isCorrect ? 'rgba(72,199,142,0.3)' : isWrong ? 'rgba(233,69,96,0.3)' : 'rgba(255,255,255,0.1)'}`,
                     color: '#eee', fontFamily: "'DM Sans', sans-serif",
                   }}
                   placeholder={input.type === 'number' ? '0' : ''}
@@ -342,11 +354,8 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
       <button
         className="btn-primary"
         onClick={handleCheck}
-        disabled={saving || scenario.inputs.some(i => !answers[i.id]?.trim())}
-        style={{
-          width: '100%',
-          opacity: scenario.inputs.some(i => !answers[i.id]?.trim()) ? 0.4 : 1,
-        }}
+        disabled={saving || !allAnswered}
+        style={{ width: '100%', opacity: allAnswered ? 1 : 0.4 }}
       >
         {saving ? 'Checking...' : 'Check Answer'}
       </button>
@@ -354,14 +363,133 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
   );
 }
 
+// ── Multiple Choice Input ──
+
+function MultipleChoiceInput({ input, selected, onSelect, isCorrect, isWrong, submitted }) {
+  return (
+    <div>
+      <label style={{ fontSize: 13, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 8 }}>
+        {input.label}
+      </label>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {input.options.map((opt, oi) => {
+          const isSelected = String(oi) === selected;
+          const showCorrect = submitted && oi === input.correctAnswer;
+          const showWrong = submitted && isSelected && oi !== input.correctAnswer;
+          return (
+            <button
+              key={oi}
+              onClick={() => { if (!submitted) onSelect(oi); }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '10px 14px', borderRadius: 8, cursor: submitted ? 'default' : 'pointer',
+                fontSize: 14, textAlign: 'left', fontFamily: "'DM Sans', sans-serif",
+                background: showCorrect ? 'rgba(72,199,142,0.1)' : showWrong ? 'rgba(233,69,96,0.08)' : isSelected ? 'rgba(240,165,0,0.1)' : 'rgba(255,255,255,0.03)',
+                border: showCorrect ? '1px solid rgba(72,199,142,0.4)' : showWrong ? '1px solid rgba(233,69,96,0.3)' : isSelected ? '1px solid rgba(240,165,0,0.4)' : '1px solid rgba(255,255,255,0.08)',
+                color: showCorrect ? '#48c78e' : showWrong ? '#e94560' : isSelected ? '#f0a500' : '#bbb',
+                transition: 'all 0.15s',
+              }}
+            >
+              <span style={{
+                width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 11, fontWeight: 700,
+                background: showCorrect ? 'rgba(72,199,142,0.2)' : showWrong ? 'rgba(233,69,96,0.15)' : isSelected ? 'rgba(240,165,0,0.2)' : 'rgba(255,255,255,0.06)',
+                color: showCorrect ? '#48c78e' : showWrong ? '#e94560' : isSelected ? '#f0a500' : '#666',
+              }}>
+                {showCorrect ? '✓' : showWrong ? '✗' : String.fromCharCode(65 + oi)}
+              </span>
+              <span style={{ fontWeight: isSelected || showCorrect ? 600 : 400 }}>{opt}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Content Sections (case study data) ──
+
+function ContentSections({ sections }) {
+  return (
+    <div style={{ marginBottom: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {sections.map((section, si) => (
+        <div key={si}>
+          {section.heading && (
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#ddd', marginBottom: 8 }}>
+              {section.heading}
+            </div>
+          )}
+
+          {section.type === 'table' && (
+            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <div style={{
+                display: 'grid', gridTemplateColumns: section.columns.map(() => '1fr').join(' '),
+                background: 'rgba(255,255,255,0.06)', padding: '8px 12px', gap: 8,
+              }}>
+                {section.columns.map((col, ci) => (
+                  <div key={ci} style={{ fontSize: 11, fontWeight: 700, color: '#aaa', textTransform: 'uppercase' }}>{col}</div>
+                ))}
+              </div>
+              {section.rows.map((row, ri) => (
+                <div key={ri} style={{
+                  display: 'grid', gridTemplateColumns: section.columns.map(() => '1fr').join(' '),
+                  padding: '8px 12px', gap: 8,
+                  borderTop: '1px solid rgba(255,255,255,0.04)',
+                  background: ri % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent',
+                }}>
+                  {row.map((cell, ci) => (
+                    <div key={ci} style={{ fontSize: 13, color: ci === 0 ? '#ddd' : '#bbb' }}>{cell}</div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {section.type === 'quotes' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {section.items.map((item, qi) => (
+                <div key={qi} style={{
+                  padding: '10px 14px', borderRadius: 8,
+                  background: 'rgba(255,255,255,0.02)', borderLeft: '3px solid rgba(83,52,131,0.4)',
+                }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: '#c9a0ff', marginBottom: 4 }}>{item.source}</div>
+                  <div style={{ fontSize: 13, color: '#bbb', lineHeight: 1.6, fontStyle: 'italic' }}>{item.text}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {section.type === 'bullets' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+              {section.items.map((item, bi) => (
+                <div key={bi} style={{ display: 'flex', gap: 8, fontSize: 13, color: '#bbb', lineHeight: 1.6 }}>
+                  <span style={{ color: '#666', flexShrink: 0 }}>•</span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {section.type === 'text' && (
+            <p style={{ fontSize: 13, color: '#bbb', lineHeight: 1.7, margin: 0, whiteSpace: 'pre-line' }}>
+              {section.content}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Property Listing Card ──
+
 function PropertyListingCard({ listing }) {
   return (
     <div style={{
       borderRadius: 12, overflow: 'hidden', marginBottom: 20,
-      border: '1px solid rgba(255,255,255,0.1)',
-      background: 'rgba(255,255,255,0.02)',
+      border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)',
     }}>
-      {/* Hero / Header */}
       <div style={{
         padding: '20px 18px 16px',
         background: 'linear-gradient(135deg, rgba(83,52,131,0.15) 0%, rgba(233,69,96,0.08) 100%)',
@@ -372,31 +500,27 @@ function PropertyListingCard({ listing }) {
             <div style={{ fontSize: 11, color: '#c9a0ff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>
               Practice Property
             </div>
-            <h4 style={{ fontSize: 17, fontWeight: 700, color: '#eee', margin: '0 0 8px' }}>
-              {listing.title}
-            </h4>
+            <h4 style={{ fontSize: 17, fontWeight: 700, color: '#eee', margin: '0 0 8px' }}>{listing.title}</h4>
             {listing.badges && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                 {listing.badges.map((b, i) => (
                   <span key={i} style={{
                     fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 6,
-                    background: 'rgba(255,255,255,0.06)', color: '#aaa',
-                    border: '1px solid rgba(255,255,255,0.08)',
+                    background: 'rgba(255,255,255,0.06)', color: '#aaa', border: '1px solid rgba(255,255,255,0.08)',
                   }}>{b}</span>
                 ))}
               </div>
             )}
           </div>
-          <div style={{ textAlign: 'right', flexShrink: 0 }}>
-            <div style={{ fontSize: 22, fontWeight: 700, color: '#48c78e' }}>
-              {listing.price}
+          {listing.price && (
+            <div style={{ textAlign: 'right', flexShrink: 0 }}>
+              <div style={{ fontSize: 22, fontWeight: 700, color: '#48c78e' }}>{listing.price}</div>
+              <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>Asking Price</div>
             </div>
-            <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>Asking Price</div>
-          </div>
+          )}
         </div>
       </div>
 
-      {/* Highlight Stats */}
       {listing.highlights && (
         <div style={{
           display: 'grid', gridTemplateColumns: `repeat(${listing.highlights.length}, 1fr)`,
@@ -415,7 +539,6 @@ function PropertyListingCard({ listing }) {
         </div>
       )}
 
-      {/* Detail Sections */}
       {listing.sections && listing.sections.map((section, si) => (
         <div key={si}>
           <div style={{
@@ -438,9 +561,7 @@ function PropertyListingCard({ listing }) {
               <span style={{ fontSize: 13, color: '#999' }}>{row.label}</span>
               <div style={{ textAlign: 'right' }}>
                 <span style={{ fontSize: 14, fontWeight: 600, color: '#eee' }}>{row.value}</span>
-                {row.detail && (
-                  <div style={{ fontSize: 11, color: '#666', marginTop: 1 }}>{row.detail}</div>
-                )}
+                {row.detail && <div style={{ fontSize: 11, color: '#666', marginTop: 1 }}>{row.detail}</div>}
               </div>
             </div>
           ))}
@@ -449,6 +570,8 @@ function PropertyListingCard({ listing }) {
     </div>
   );
 }
+
+// ── Cheat Sheet ──
 
 function CheatSheet({ sheet, style }) {
   const borderColor = sheet.color === 'green' ? 'rgba(72,199,142,0.2)' : 'rgba(83,52,131,0.25)';

@@ -218,10 +218,104 @@ If you don't feel confident or decisive about your criteria yet, go back and fin
   },
   {
     day: 2,
-    title: "Set Up Deal-Finding Tools",
-    caption: "",
-    taskDescription: "Set up at least 2 deal-finding platforms (Zillow, PropStream, BatchLeads, etc.). Submit screenshots showing your active accounts and search filters configured.",
-    trainingContent: "",
+    title: "Analysis & Connection",
+    caption: "Inaccurate Income & Inaccurate Expenses",
+    taskDescription: "",
+    trainingContent: `Understanding Market Rents
+
+Your rent estimate is one of the MOST important numbers when analyzing a deal.
+
+If your rent estimate is wrong: your cash flow will be wrong, your returns will be wrong, and your investment decision may be wrong.
+
+The biggest mistake new investors make is assuming rents are higher than the market actually supports. When this happens, the deal is bad from the start. Nothing makes up for bad analysis.
+
+As you follow the steps below, you will learn how to determine what a property can ACTUALLY rent for. To do this properly, you MUST verify market rents using multiple sources and ALWAYS stay conservative.
+
+How To Understand Market Rents
+
+1. Recently Leased Comparable Properties (BEST SOURCE)
+Find properties that ACTUALLY rented recently. Use properties with similar bedrooms, bathrooms, square footage, condition, and location. Focus on properties leased within the last 30–90 days. Pay attention to how quickly the property rented — a property rented in 3 days is a much stronger comp than one sitting for 60 days.
+
+2. Call Local Property Managers
+Ask property managers what they believe the property would realistically rent for today. Good property managers understand current demand, tenant expectations, vacancy trends, and pricing pressure. Ask multiple managers so you can compare answers.
+
+Questions To Ask:
+• What would this realistically rent for?
+• How fast would it rent?
+• What upgrades would increase rent?
+• What tenant class would this attract?
+• What are current vacancy rates in this area?
+• What utilities are typically tenant-paid vs owner-paid?
+
+3. Check Active Rental Listings
+Use Zillow, Apartments.com, Facebook Marketplace, Rent.com, and Craigslist. Compare similar properties in the same area. DO NOT blindly trust asking rents. Pay attention to days on market, price drops, property condition, utilities included, parking, amenities, and updates/renovations. If listings sit for a long time, the market may not support that rent.
+
+4. Call Current Rental Listings
+Call landlords or leasing agents directly. Ask how much interest they are getting, how quickly rentals are moving, and whether they have recently lowered pricing. This gives real-time market feedback.
+
+5. Compare Nearby Rentals You Already Own (or Lean on a Local Investor/Mentor)
+If you already own rentals nearby, use your own data. You can also lean on experienced local investors or mentors.
+
+6. Use AI & Software Tools
+Tools like ChatGPT, Claude, Rentometer, Zillow Rent Zestimate, and property management software can provide helpful insight. However, these should NEVER be your only source of information.
+
+7. Be Conservative
+Never use unrealistic "best-case" rent numbers. Use rent numbers you are confident you can ACTUALLY achieve. Conservative underwriting protects you during market slowdowns.
+
+Quick Rules To Remember:
+• Never guess rents
+• Use multiple data sources
+• Compare similar properties only
+• Talk to real people in the market
+• Use conservative numbers
+• Verify rents BEFORE submitting offers
+• DO NOT buy a property unless you are confident in your rent analysis
+
+Understanding Expenses
+
+Real estate investors usually lose on analysis in TWO ways:
+#1. They estimate rents too high.
+#2. They estimate expenses too low.
+
+The older the property is, the higher your expenses will usually be. The lower the quality of the tenant base, the higher your expenses will usually be.
+
+Even if the property is newer, you believe management will be excellent, or you believe repairs will be minimal — DO NOT underwrite below realistic operating ranges. That is not good analysis — it is simply aggressive assumptions.
+
+Tips For Analyzing Expenses:
+
+1. Analyze Conservatively — If the deal still works using conservative numbers, it is probably a strong deal.
+
+2. Research The Property Thoroughly — Study the age of the property, deferred maintenance, tenant quality, location, crime, utility setup, and historical performance.
+
+3. Lean On Professionals — Talk to professionals who are NOT financially incentivized by you buying the property: property managers, contractors, insurance agents, or local operators.
+
+4. Use AI & Software For Insight — Tools like ChatGPT, Claude, calculators, and property analysis software can help identify realistic ranges and potential blind spots.
+
+5. Conservative Analysis Creates Safer Deals — It is ALWAYS better for actual expenses to come in lower than expected.
+
+Typical Expense Ranges:
+
+Vacancy: Conservative 5–8% | Typical 3–5% | Aggressive 1–3%
+Maintenance + Repairs: Conservative 5–10% | Typical 4–8% | Aggressive 2–4%
+CapEx Reserve: Conservative 5–10% | Typical 4–8% | Aggressive 2–4%
+Property Management: Conservative 8–12% | Typical 6–10% | Aggressive 2–5%
+Property Taxes: ONLY USE ACTUAL NUMBERS
+Insurance: ONLY USE ACTUAL NUMBERS
+Total Operating Expenses (Excl. Debt): Conservative 35–45% | Typical 30–40% | Aggressive 25–30%
+
+ALWAYS get exact property tax numbers and real insurance quotes before purchasing. Older properties generally require higher maintenance and CapEx reserves. Verify ALL numbers before submitting offers or removing contingencies.
+
+Reminder: Conservative analysis creates safer deals. Aggressive analysis increases the risk of making bad investments.
+
+Today's Suggested Arsenal Contact
+
+Connect with a local property manager to see if they know of any available deals or off-market opportunities.
+
+During the conversation: explain your real estate investing goals, let them know you are actively looking to purchase rental properties, and tell them you will likely need property management services in the future.
+
+This is also a great opportunity to evaluate their expertise. Ask them what they believe a property you are analyzing today would realistically rent for, how quickly they believe it would rent, and what tenant class they believe the property would attract.
+
+Building strong relationships with quality property managers can help you find deals, better understand local market conditions, improve your analysis, and build a stronger investing team.`,
     category: "foundation",
     weekNumber: 1,
     weekTitle: "BUILD THE FOUNDATION",
@@ -229,7 +323,265 @@ If you don't feel confident or decisive about your criteria yet, go back and fin
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day2_market_rent_sfh',
+          title: 'Scenario #1 — 3 Bed / 2 Bath Single Family Rental',
+          description: `Below is a real-world market rent analysis exercise. Use the information provided from recently leased comps, property manager feedback, active listings, calls to listings, and AI/software estimates.
+
+Your job is to determine the MOST realistic and conservative market rent. Choose the BEST answer based on the information provided.`,
+          propertyListing: {
+            title: '3 Bed / 2 Bath Single Family Rental',
+            badges: ['Single Family', '3/2', '1,520 SF', 'Idaho Falls, ID'],
+            highlights: [
+              { icon: '🛏️', label: 'Beds/Bath', value: '3/2' },
+              { icon: '📐', label: 'Sq Ft', value: '1,520' },
+              { icon: '🏗️', label: 'Built', value: '1998' },
+            ],
+            sections: [
+              {
+                heading: 'Property Details',
+                rows: [
+                  { label: 'Recently updated flooring and paint', value: '' },
+                  { label: '2-car garage', value: '' },
+                  { label: 'Clean B-class neighborhood', value: '' },
+                  { label: 'Tenant pays all utilities', value: '' },
+                ],
+              },
+            ],
+          },
+          contentSections: [
+            {
+              heading: 'The seller believes this property will rent for $2,450/month. Your job is to determine what the REALISTIC market rent likely is.',
+              type: 'text',
+              content: '',
+            },
+            {
+              heading: '1. Recently Leased Comparable Properties',
+              type: 'table',
+              columns: ['Property', 'Details', 'Leased Rent', 'Days on Market'],
+              rows: [
+                ['Comp #1', '3/2 — 1,480 SF — Similar updates', '$2,050', '6 Days'],
+                ['Comp #2', '3/2 — 1,560 SF — Slightly nicer kitchen', '$2,150', '12 Days'],
+                ['Comp #3', '3/2 — 1,500 SF — Similar condition', '$2,095', '8 Days'],
+                ['Comp #4', '3/2 — 1,620 SF — Slightly older finishes', '$1,995', '15 Days'],
+              ],
+            },
+            {
+              heading: '2. Property Manager Feedback',
+              type: 'quotes',
+              items: [
+                { source: 'Property Manager #1', text: '"I believe this would rent around $2,050–$2,100 pretty quickly."' },
+                { source: 'Property Manager #2', text: '"The market has softened slightly over the last 60 days. I would probably list at $2,150 but expect to land closer to $2,050–$2,100."' },
+                { source: 'Property Manager #3', text: '"If the property presents very clean, I think $2,100 is realistic. Above that may increase vacancy time."' },
+              ],
+            },
+            {
+              heading: '3. Active Rental Listings',
+              type: 'bullets',
+              items: [
+                'Similar 3/2 home listed at $2,250 has been active for 41 days.',
+                'Similar updated home listed at $2,095 rented in 5 days.',
+                'Another nearby home reduced pricing from $2,250 to $2,125 after sitting for 28 days.',
+              ],
+            },
+            {
+              heading: '4. Calls To Active Listings',
+              type: 'bullets',
+              items: [
+                'Leasing agent #1 stated they have had "very little activity" above $2,200.',
+                'Leasing agent #2 stated demand is strongest between $2,000–$2,100.',
+                'One landlord offered one month free parking and reduced deposit requirements to attract tenants at higher pricing.',
+              ],
+            },
+            {
+              heading: '5. AI & Software Estimates',
+              type: 'bullets',
+              items: [
+                'Zillow Rent Zestimate: $2,180',
+                'Rentometer Estimate: $2,070',
+                'ChatGPT Estimate Based On Market Data: $2,050–$2,125',
+              ],
+            },
+          ],
+          maxAttempts: 3,
+          explanationOnFail: `Why $2,100/month?
+
+• Recently leased comps consistently support ~$2,050–$2,150.
+• Property managers repeatedly supported ~$2,050–$2,100.
+• Active listings above $2,200 are sitting longer.
+• Real-time calls show weakening demand above $2,200.
+• Conservative analysis points toward ~$2,100 as the safest realistic rent estimate.`,
+          inputs: [
+            {
+              id: 'market_rent_sfh',
+              label: 'What is the MOST realistic and conservative market rent estimate?',
+              type: 'multiple_choice',
+              options: ['$2,450/month', '$2,275/month', '$2,100/month', '$1,850/month'],
+              correctAnswer: 2,
+            },
+          ],
+        },
+        {
+          id: 'day2_market_rent_4plex',
+          title: 'Scenario #2 — 4-Unit Apartment Complex',
+          description: `Below is a real-world market rent analysis exercise for a small multifamily property. Use the information provided to determine the MOST realistic market rent for EACH unit.`,
+          propertyListing: {
+            title: '4-Unit Apartment Complex',
+            badges: ['Multifamily', '4 Units', '2 Bed / 1 Bath Each', 'Idaho Falls, ID'],
+            highlights: [
+              { icon: '🏠', label: 'Units', value: '4' },
+              { icon: '🛏️', label: 'Each Unit', value: '2/1' },
+              { icon: '📐', label: 'Approx SF', value: '850' },
+            ],
+            sections: [
+              {
+                heading: 'Property Details',
+                rows: [
+                  { label: 'Built', value: '1985' },
+                  { label: 'Condition', value: 'Clean, slightly dated interiors' },
+                  { label: 'Amenities', value: 'Shared laundry room' },
+                  { label: 'Tenant pays', value: 'Electricity' },
+                  { label: 'Owner pays', value: 'Water/sewer/trash' },
+                ],
+              },
+              {
+                heading: 'Current Rent Roll',
+                rows: [
+                  { label: 'Unit 1', value: '$1,050/mo' },
+                  { label: 'Unit 2', value: '$1,075/mo' },
+                  { label: 'Unit 3', value: '$1,050/mo' },
+                  { label: 'Unit 4', value: '$1,100/mo' },
+                ],
+              },
+            ],
+          },
+          contentSections: [
+            {
+              heading: 'All four tenants are currently month-to-month. The seller claims the rents are "already at market." Your job is to determine whether the units are actually rented at market rates.',
+              type: 'text',
+              content: '',
+            },
+            {
+              heading: '1. Recently Leased Comparable Properties',
+              type: 'table',
+              columns: ['Property', 'Details', 'Leased Rent', 'Days on Market'],
+              rows: [
+                ['Comp #1', '2/1 — 840 SF — Similar condition', '$1,325', '5 Days'],
+                ['Comp #2', '2/1 — 860 SF — Slightly nicer flooring', '$1,375', '8 Days'],
+                ['Comp #3', '2/1 — 850 SF — Similar finishes', '$1,350', '4 Days'],
+                ['Comp #4', '2/1 — 870 SF — Similar location', '$1,300', '9 Days'],
+              ],
+            },
+            {
+              heading: '2. Property Manager Feedback',
+              type: 'quotes',
+              items: [
+                { source: 'Property Manager #1', text: '"Those current rents are definitely below market. I think these units would lease around $1,325–$1,375 today."' },
+                { source: 'Property Manager #2', text: '"Even with slightly dated interiors, demand for 2-bedroom units is very strong right now."' },
+                { source: 'Property Manager #3', text: '"I would likely list these around $1,350 and expect them to rent quickly."' },
+              ],
+            },
+            {
+              heading: '3. Active Rental Listings',
+              type: 'bullets',
+              items: [
+                'Similar nearby 2-bedroom unit listed at $1,350 rented in 6 days.',
+                'Another nearby unit listed at $1,395 received multiple applications in under one week.',
+                'Older competing unit listed at $1,250 rented within 3 days.',
+              ],
+            },
+            {
+              heading: '4. Calls To Active Listings',
+              type: 'bullets',
+              items: [
+                'Leasing agent #1 stated they currently have "extremely high demand" for 2-bedroom units.',
+                'Leasing agent #2 stated they raised pricing twice in the last 12 months.',
+                'One landlord stated they currently have waiting lists for similar units.',
+              ],
+            },
+            {
+              heading: '5. AI & Software Estimates',
+              type: 'bullets',
+              items: [
+                'Zillow Rent Zestimate: $1,365',
+                'Rentometer Estimate: $1,340',
+                'ChatGPT Estimate Based On Market Data: $1,325–$1,375',
+              ],
+            },
+          ],
+          maxAttempts: 3,
+          explanationOnFail: `Why $1,325–$1,375 per unit?
+
+• Recently leased comparable properties consistently support rents around $1,300–$1,375.
+• Property managers repeatedly confirmed the units are under-rented.
+• Active listings and leasing calls show very strong demand for 2-bedroom units.
+• AI/software estimates aligned closely with the comparable market data.
+• The current month-to-month tenants appear to be approximately $250–$300 below true market rent.`,
+          inputs: [
+            {
+              id: 'market_rent_4plex',
+              label: 'What is the MOST realistic market rent for EACH unit?',
+              type: 'multiple_choice',
+              options: ['$1,050–$1,100 per unit', '$1,150–$1,200 per unit', '$1,325–$1,375 per unit', '$1,500+ per unit'],
+              correctAnswer: 2,
+            },
+          ],
+        },
+        {
+          id: 'day2_top5',
+          title: 'Market Rent & Expense Analysis Questions',
+          description: 'Answer all 5 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Estimating rents too high is the biggest mistake — it makes every other number wrong.
+2. Recently leased comparable properties are the best indicator of true market rent.
+3. A listing sitting 45 days with price drops means the market does not support that rent.
+4. Always use conservative expense assumptions and verify with actual numbers.
+5. Conservative analysis helps avoid bad deals — aggressive analysis increases risk.`,
+          inputs: [
+            {
+              id: 'top5_q1',
+              label: '1. What is the BIGGEST mistake new real estate investors make when analyzing rental properties?',
+              type: 'multiple_choice',
+              options: ['Overestimating maintenance costs', 'Underestimating purchase price', 'Estimating rents too high', 'Using too much cash down'],
+              correctAnswer: 2,
+            },
+            {
+              id: 'top5_q2',
+              label: '2. Which source is generally considered the BEST indicator of true market rent?',
+              type: 'multiple_choice',
+              options: ['Zillow Rent Zestimate', 'What the seller says the property should rent for', 'Recently leased comparable properties', 'Active listings currently on the market'],
+              correctAnswer: 2,
+            },
+            {
+              id: 'top5_q3',
+              label: '3. A comparable rental property has been listed for 45 days at $2,400/month with multiple price drops. What is the MOST likely conclusion?',
+              type: 'multiple_choice',
+              options: ['The property is probably underpriced', 'The market likely does not support that rent', 'The property manager is doing a great job', 'You should use $2,400 as your market rent estimate'],
+              correctAnswer: 1,
+            },
+            {
+              id: 'top5_q4',
+              label: '4. Which of the following is the BEST approach when analyzing expenses?',
+              type: 'multiple_choice',
+              options: ['Use the lowest expense estimates possible to improve returns', 'Ignore CapEx if the property looks clean', 'Use conservative expense assumptions and verify actual numbers', 'Estimate taxes and insurance using online averages only'],
+              correctAnswer: 2,
+            },
+            {
+              id: 'top5_q5',
+              label: '5. Which statement BEST describes strong real estate underwriting?',
+              type: 'multiple_choice',
+              options: ['Aggressive analysis creates better deals', 'Conservative analysis helps avoid bad deals', 'Higher projected rents always mean higher returns', 'If current rents are low, they should always be used as market rent'],
+              correctAnswer: 1,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 3,
