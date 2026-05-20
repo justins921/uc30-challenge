@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Header from './Header';
 import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DAILY_MINIMUMS, getWeekNumber as getChallengeWeek, getWeeklyOfferTarget } from '../data/challengeDays';
 import { INDICATOR_KEYS, INDICATOR_LABELS, INDICATOR_SHORT_LABELS, INDICATOR_COLORS, UC_POINT_VALUES, calculateUCPoints } from '../data/ucPoints';
-import { AttachmentLink } from './DayView';
+import DayView, { AttachmentLink } from './DayView';
 import ActivationPhase from './ActivationPhase';
 import { LANDING_DEFAULTS } from './LandingPage';
 import Footer from './Footer';
@@ -115,11 +115,58 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
   });
 
   const [previewActivation, setPreviewActivation] = useState(false);
+  const [previewDay, setPreviewDay] = useState(null);
 
   const handleTabChange = (newTab) => {
     setTab(newTab);
     setSelectedParticipant(null);
   };
+
+  if (previewDay !== null) {
+    return (
+      <div style={{ position: 'relative' }}>
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+          background: 'rgba(83,52,131,0.95)', padding: '10px 20px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: 1, textTransform: 'uppercase' }}>
+            Admin Preview — Day {previewDay}
+          </span>
+          <button
+            onClick={() => setPreviewDay(null)}
+            style={{
+              background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)',
+              color: '#fff', padding: '6px 16px', borderRadius: 6, fontSize: 13,
+              fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+            }}
+          >
+            Exit Preview
+          </button>
+        </div>
+        <div style={{ paddingTop: 44, maxWidth: 700, margin: '0 auto', padding: '60px 20px 40px' }}>
+          <DayView
+            day={previewDay}
+            user={{ ...user, activationCompleted: true, cohortAttempt: 1 }}
+            onSubmit={async () => {}}
+            onBack={() => setPreviewDay(null)}
+            contentOverrides={contentOverrides}
+            customPhases={customPhases}
+            complianceSettings={complianceSettings}
+            existingDailySubmission={null}
+            onAddContact={async () => ({ success: true, contact: { id: 'preview_' + Date.now(), name: 'Preview Contact' } })}
+            onAddFollowUp={async () => {}}
+            onUpdateContact={async () => {}}
+            onUploadFile={async () => {}}
+            contacts={[]}
+            getUploadUrl={null}
+            quizAttempts={[]}
+            onQuizAttempt={async () => {}}
+          />
+        </div>
+      </div>
+    );
+  }
 
   if (previewActivation) {
     return (
@@ -178,12 +225,12 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
           )}
         </div>
 
-        {/* Preview Activation Flow */}
-        <div style={{ marginBottom: 24 }}>
+        {/* Admin Previews */}
+        <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
           <button
             onClick={() => setPreviewActivation(true)}
             style={{
-              width: '100%', padding: '14px 20px', borderRadius: 12, fontSize: 14, fontWeight: 600,
+              flex: 1, minWidth: 200, padding: '14px 20px', borderRadius: 12, fontSize: 14, fontWeight: 600,
               background: 'rgba(233,69,96,0.06)', border: '1px solid rgba(233,69,96,0.15)',
               color: '#e94560', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
@@ -192,6 +239,33 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             <span style={{ fontSize: 16 }}>👁️</span>
             Preview Activation Flow
           </button>
+          <div style={{
+            flex: 1, minWidth: 200, display: 'flex', alignItems: 'center', gap: 8,
+            padding: '8px 14px', borderRadius: 12,
+            background: 'rgba(83,52,131,0.06)', border: '1px solid rgba(83,52,131,0.15)',
+          }}>
+            <span style={{ fontSize: 16 }}>📋</span>
+            <span style={{ fontSize: 14, fontWeight: 600, color: '#c9a0ff', whiteSpace: 'nowrap' }}>Preview Day</span>
+            <select
+              value=""
+              onChange={(e) => { if (e.target.value) setPreviewDay(parseInt(e.target.value)); }}
+              style={{
+                flex: 1, fontSize: 14, padding: '8px 10px', borderRadius: 8,
+                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+                color: '#eee', fontFamily: "'DM Sans', sans-serif", cursor: 'pointer',
+              }}
+            >
+              <option value="" style={{ background: '#1a1a2e' }}>Select a day...</option>
+              {Array.from({ length: 30 }, (_, i) => {
+                const dayData = getDayContent(i + 1, contentOverrides);
+                return (
+                  <option key={i + 1} value={i + 1} style={{ background: '#1a1a2e' }}>
+                    Day {i + 1} — {dayData?.title || `Day ${i + 1}`}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
         </div>
 
         {/* Cohort Settings */}
