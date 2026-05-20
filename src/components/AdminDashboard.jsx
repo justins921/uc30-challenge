@@ -162,6 +162,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             getUploadUrl={null}
             quizAttempts={[]}
             onQuizAttempt={async () => {}}
+            isPreview
           />
         </div>
       </div>

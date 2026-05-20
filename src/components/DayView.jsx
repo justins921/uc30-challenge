@@ -11,7 +11,7 @@ export default function DayView({
   day, user, onSubmit, onBack, contentOverrides, customPhases,
   complianceSettings, existingDailySubmission,
   onAddContact, onAddFollowUp, onUpdateContact, onUploadFile, contacts: initialContacts, getUploadUrl,
-  quizAttempts, onQuizAttempt,
+  quizAttempts, onQuizAttempt, isPreview,
 }) {
   const [submitted, setSubmitted] = useState(false);
 
@@ -35,8 +35,8 @@ export default function DayView({
   // ── Day Data ──────────────────────────────────────────────────
   const isPost30 = day > 30;
   const dayData = isPost30 ? getDayDataForNum(day) : getDayContent(day, contentOverrides);
-  const isComplete = user.completedDays.includes(day);
-  const isCurrentOrPast = day <= user.currentDay;
+  const isComplete = isPreview ? false : user.completedDays.includes(day);
+  const isCurrentOrPast = isPreview ? true : day <= user.currentDay;
   const existingSubmission = user.submissions.find(s => s.day === day);
   const dayColors = customPhases ? getCategoryColors(getPhases(customPhases)) : null;
   const cat = isPost30
@@ -69,7 +69,7 @@ export default function DayView({
     return checkDailyCompliance(metrics, dailyMins);
   }, [metrics, dailyMins]);
 
-  const canSubmit = !isComplete && !submitted && isCurrentOrPast;
+  const canSubmit = isPreview || (!isComplete && !submitted && isCurrentOrPast);
   const isUpdate = !!existingDailySubmission;
 
   // ── Contact & Follow-up state ────────────────────────────────
