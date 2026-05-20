@@ -4,21 +4,35 @@
 <meta charset="UTF-8">
 <title>UC30 Challenge — QA Checklist</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
   @media print {
     body { font-size: 11px; }
-    .no-print { display: none; }
+    .no-print { display: none !important; }
     h1 { font-size: 18px; }
     h2 { font-size: 14px; break-after: avoid; }
     h3 { font-size: 12px; break-after: avoid; }
     ul { break-inside: avoid; }
+    .brand-uc30-badge { background: #c0354a !important; }
   }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     max-width: 800px;
     margin: 0 auto;
     padding: 24px;
     color: #1a1a1a;
     line-height: 1.5;
+  }
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 20px; margin-bottom: 24px;
+    border-bottom: 1px solid #ddd;
+  }
+  .brand-left { display: flex; align-items: center; gap: 12px; }
+  .brand-cds-mark svg { width: 36px; height: 36px; }
+  .brand-cds-text { font-size: 14px; font-weight: 700; color: #111; letter-spacing: 0.5px; line-height: 1.2; }
+  .brand-uc30-badge {
+    background: #e94560; color: #fff; font-size: 13px; font-weight: 700;
+    padding: 6px 14px; border-radius: 6px; letter-spacing: 2px;
   }
   h1 {
     text-align: center;
@@ -89,24 +103,33 @@
     content: "Notes:";
   }
   .print-btn {
-    display: block;
-    margin: 20px auto;
-    padding: 12px 32px;
-    font-size: 16px;
-    background: #1a1a1a;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+    display: inline-block; background: #e94560; color: #fff; border: none;
+    padding: 12px 28px; border-radius: 8px; font-size: 15px; font-weight: 600;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
   }
-  .print-btn:hover { background: #333; }
+  .print-btn:hover { opacity: 0.9; }
 </style>
 </head>
 <body>
 
-<button class="print-btn no-print" onclick="window.print()">Print This Checklist</button>
+<div class="no-print" style="margin-bottom: 24px;">
+  <button class="print-btn" onclick="window.print()">Download as PDF / Print</button>
+</div>
 
-<h1>UC30 Challenge — QA Checklist</h1>
+<div class="brand-header">
+  <div class="brand-left">
+    <div class="brand-cds-mark">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M45 10 C20 10, 5 30, 5 50 C5 70, 20 90, 45 90 L45 75 C28 75, 20 65, 20 50 C20 35, 28 25, 45 25 Z" fill="#e94560"/>
+        <path d="M55 10 C80 10, 95 30, 95 50 C95 70, 80 90, 55 90 L55 75 C72 75, 80 65, 80 50 C80 35, 72 25, 55 25 Z" fill="#222"/>
+      </svg>
+    </div>
+    <div class="brand-cds-text">CHANDLER<br/>DAVID SMITH</div>
+  </div>
+  <div class="brand-uc30-badge">UC30</div>
+</div>
+
+<h1>QA Checklist</h1>
 <p class="subtitle">Site: https://uc30.com &nbsp;|&nbsp; Date: _______________  &nbsp;|&nbsp; Tester: _______________</p>
 
 <!-- ============================================ -->
