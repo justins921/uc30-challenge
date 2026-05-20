@@ -585,18 +585,249 @@ Your job is to determine the MOST realistic and conservative market rent. Choose
   },
   {
     day: 3,
-    title: "Analyze Your First 5 Properties",
-    caption: "",
-    taskDescription: "Run numbers on 5 properties using the 70% rule or your preferred analysis method. Submit your completed analysis spreadsheet or screenshots.",
-    trainingContent: "",
+    title: "Financing & Offers",
+    caption: "Getting Pre-Approved & Submitting Your First Offer",
+    taskDescription: "",
+    trainingContent: `Why Financing Matters
+
+Many investors spend months analyzing deals but never take action because they are not pre-approved, do not understand financing, or are not ready to submit offers when opportunities appear.
+
+Great deals move FAST.
+
+If you are not financially prepared, you do not understand loan terms, or you cannot confidently submit offers, you will lose opportunities to investors who ARE ready.
+
+The goal of today is to understand financing, build your investing team, become pre-approved, and confidently submit your first offer.
+
+What Is A Pre-Approval?
+
+A pre-approval is a lender reviewing your income, debt, credit, assets, and financial situation to determine how much they may lend you, what loan terms you qualify for, and what your estimated payment could look like.
+
+A strong pre-approval makes sellers and realtors take you seriously.
+
+Why Getting Pre-Approved Is Important
+
+1. You Learn Your REAL Buying Power
+
+Many investors guess what they can afford. A lender helps determine realistic loan amounts, down payment requirements, cash reserves, and estimated monthly payments.
+
+2. You Can Move Quickly On Deals
+
+Good deals often move fast. If you are already pre-approved, you can submit offers quickly, compete more effectively, and avoid delays.
+
+3. Realtors Take You More Seriously
+
+Most good realtors do not want to spend weeks showing properties to buyers who cannot qualify. A pre-approval shows you are serious, financially prepared, and ready to buy.
+
+Types Of Financing To Understand
+
+Conventional Loans — Most common financing type. Usually requires 15–25% down for investment properties, good credit, stable income, and cash reserves. Often best for long-term rentals, duplexes, fourplexes, and stabilized properties.
+
+DSCR Loans (Debt Service Coverage Ratio) — Loans based primarily on property cash flow instead of personal income. Helpful for self-employed investors, scaling portfolios, and investors with strong cash-flowing properties.
+
+Seller Finance — The seller acts as the bank. Can help with lower down payments, flexible terms, lower closing costs, and easier qualification.
+
+Local Banks & Credit Unions — Sometimes provide more flexible underwriting, portfolio loans, and local market understanding. Especially valuable for small multifamily, value-add deals, and investors building relationships.
+
+What Lenders Usually Look At
+
+• Credit Score — Higher credit scores usually improve approval odds, interest rates, and loan options.
+• Debt-To-Income Ratio (DTI) — Lenders compare your monthly debts vs. your monthly income. Too much debt can reduce borrowing ability.
+• Cash Reserves — Many lenders want to see extra cash after closing, emergency reserves, and liquidity.
+• Income Stability — Lenders usually prefer stable employment, consistent income, and clean tax returns.
+
+Documents You Will Usually Need: driver's license, pay stubs, tax returns, bank statements, business returns (if self-employed), entity documents (sometimes), and rental property information (if already investing).
+
+Understanding Loan Terms
+
+Do NOT focus ONLY on purchase price or monthly payment. You must understand interest rate, loan length, down payment, closing costs, reserves, and total cash needed. A bad loan can destroy a good deal.
+
+Selecting The RIGHT Realtor
+
+Not all realtors are good investor realtors. Many agents specialize in retail home buyers, emotional purchases, or luxury sales. That does NOT mean they understand investing.
+
+You want a realtor who understands cash flow, understands investment analysis, works with investors regularly, understands rental demand, understands off-market opportunities, and can move FAST.
+
+Signs Of A Strong Investor Realtor:
+
+1. They Understand Investment Numbers — They should understand cash flow, cap rates, returns, rent analysis, and operating expenses. If they cannot discuss investment numbers confidently, that is a red flag.
+
+2. They Know Investors In The Market — Good investor agents often know landlords, wholesalers, property managers, contractors, and off-market sellers.
+
+3. They Respond Quickly — Speed matters in real estate. Slow communication loses deals.
+
+4. They Push Data, Not Emotion — Bad agents say "This house feels amazing." Good investor agents say "Here are the numbers."
+
+Questions To Ask Realtors:
+• Have you worked with investors before?
+• Do you own investment property personally?
+• What investors are active in this market?
+• What areas have strongest rental demand?
+• What areas should investors avoid?
+• What property types move quickly?
+• Do you know of off-market opportunities?
+• How many investment deals did you close last year?
+• What property managers do you recommend?
+• What lenders do investors use most in this market?
+
+Understanding Offers
+
+An offer is MUCH more than just price. Strong offers include purchase price, financing terms, earnest money, due diligence period, inspection contingency, financing contingency, closing timeline, seller concessions, and additional protections.
+
+The goal is NOT just getting under contract. The goal is controlling risk, protecting downside, and maintaining multiple exit options.
+
+How To Actually Submit An Offer
+
+Step 1. Analyze The Property First — Before submitting ANY offer: verify rents, estimate expenses conservatively, understand repairs, and confirm financing. Never submit emotional offers.
+
+Step 2. Discuss Strategy With Your Realtor — Before submitting: discuss pricing strategy, market competition, seller motivation, and contingency structure. Sometimes stronger terms matter more than price.
+
+Step 3. Determine Your Maximum Price — Know your ideal price, your walk-away price, and your maximum risk tolerance. Never negotiate emotionally.
+
+Step 4. Structure The Offer Properly — A strong offer balances competitiveness, flexibility, and protection. You want enough protection to safely exit the deal if financing changes, inspections reveal issues, numbers were inaccurate, or new information appears.
+
+Earnest Money Rules To Live By
+
+Earnest money shows the seller you are serious. BUT you NEVER want to unnecessarily risk losing it.
+
+Rule #1. Keep Earnest Money Reasonable — Do NOT overcommit earnest money. New investors often believe "more earnest money = stronger offer." Not always. Use reasonable amounts appropriate for deal size, market, and risk.
+
+Rule #2. NEVER Release Earnest Money Early — Do NOT release earnest money to the seller before inspections, due diligence, and financing protections are complete.
+
+Rule #3. Make Sure Earnest Money Is Protected During Contingencies — You want contractual outs during inspection periods, due diligence periods, financing contingencies, and appraisal contingencies when possible.
+
+Due Diligence & Inspection Rules
+
+Rule #1. NEVER Waive Inspections As A Beginner — Even if the market is competitive, the seller pressures you, or your realtor pushes you. Inspections protect you from major repairs, hidden damage, structural issues, plumbing problems, electrical issues, and bad assumptions.
+
+Rule #2. Give Yourself Enough Due Diligence Time — Rushing due diligence is dangerous. You need time to inspect the property, verify leases, verify expenses, confirm financing, and validate your analysis.
+
+Rule #3. Verify EVERYTHING — Do NOT trust seller statements, pro formas, rent estimates, or verbal claims. Verify rents, leases, utilities, taxes, insurance, repairs, and operating expenses.
+
+Rule #4. Maintain Financing Outs — Your contract should allow you an exit if financing changes, rates spike, loan terms change, or approval falls apart. Never remove financing protections too early.
+
+Common Offer Mistakes New Investors Make
+
+1. Overpaying Emotionally — Good deals are created through numbers, not excitement.
+2. Using Aggressive Assumptions — Never force a deal to work.
+3. Waiving Protections — Waiving inspections, financing contingencies, or due diligence protections can create catastrophic risk.
+4. Not Understanding Repair Costs — Small issues become very expensive quickly.
+5. Trusting Seller Numbers Blindly — Always independently verify everything.
+
+Strong Offer Principles
+
+Strong investors move quickly, analyze conservatively, negotiate professionally, protect downside risk, and submit LOTS of disciplined offers. You do NOT need every offer accepted. You simply need consistent action, disciplined underwriting, and enough quality offers.
+
+Quick Rules To Remember:
+• Get pre-approved BEFORE aggressively shopping
+• Build lender relationships early
+• Use investor-friendly realtors
+• Never buy emotionally
+• Verify ALL numbers independently
+• Protect your earnest money
+• NEVER waive inspections as a beginner
+• Maintain financing contingencies
+• Use conservative underwriting
+• Some offers SHOULD be rejected
+• Real estate is a numbers game
+
+Understanding Realtor & Lender Incentives
+
+Remember: Realtors usually get paid when deals close. Mortgage brokers usually get paid when loans close. This does NOT mean they are bad people. But you still must verify numbers yourself, analyze conservatively, and make decisions based on YOUR goals.
+
+Today's Suggested Arsenal Contact
+
+Connect with a lender, mortgage broker, or investor-friendly realtor. You should also explain your investing goals, what type of properties you want to buy, and what your long-term plans are.
+
+Strong lender and realtor relationships can help you move faster, improve deal flow, strengthen offers, and help you scale more efficiently.
+
+Your goals today: begin the pre-approval process, ask questions about financing, learn loan requirements, and start building relationships. SUBMIT YOUR FIRST OFFER!`,
     category: "foundation",
     weekNumber: 1,
     weekTitle: "BUILD THE FOUNDATION",
-    proofType: "spreadsheet",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day3_financing_offers',
+          title: 'Financing & Offers Quiz',
+          description: 'Answer all 5 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Getting pre-approved helps you understand your real buying power and move quickly on deals.
+2. You must understand the TOTAL loan structure and cash needed — not just monthly payment or interest rate alone.
+3. The inspection contingency protects buyers from hidden property issues like structural damage, plumbing, and electrical problems.
+4. Waiving protections and contingencies too early is one of the biggest mistakes — it creates catastrophic risk.
+5. The best realtor for investors understands investment analysis and rental properties, not just retail home sales.`,
+          inputs: [
+            {
+              id: 'day3_q1',
+              label: '1. Why is getting pre-approved important before submitting offers?',
+              type: 'multiple_choice',
+              options: [
+                'It guarantees the seller accepts your offer',
+                'It helps you understand your real buying power and move quickly',
+                'It eliminates closing costs',
+                'It removes the need for inspections',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day3_q2',
+              label: '2. What is one of the MOST important things to understand about a loan?',
+              type: 'multiple_choice',
+              options: [
+                'Only the monthly payment',
+                'Only the interest rate',
+                'Total loan structure and cash needed',
+                'The lender\'s logo',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day3_q3',
+              label: '3. Which contingency helps protect buyers from hidden property issues?',
+              type: 'multiple_choice',
+              options: [
+                'Financing contingency',
+                'Inspection contingency',
+                'Earnest money contingency',
+                'Closing contingency',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day3_q4',
+              label: '4. What is one of the biggest mistakes new investors make when submitting offers?',
+              type: 'multiple_choice',
+              options: [
+                'Using conservative assumptions',
+                'Protecting their earnest money',
+                'Waiving protections and contingencies too early',
+                'Asking too many questions',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day3_q5',
+              label: '5. What type of realtor is BEST for a real estate investor?',
+              type: 'multiple_choice',
+              options: [
+                'A realtor focused only on luxury homes',
+                'A realtor who mainly works with first-time retail buyers',
+                'A realtor who understands investment analysis and rental properties',
+                'Any realtor with the most Instagram followers',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 4,
