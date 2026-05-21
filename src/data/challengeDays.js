@@ -833,18 +833,273 @@ Your goals today: begin the pre-approval process, ask questions about financing,
   },
   {
     day: 4,
-    title: "Build Your Cash Buyers List",
-    caption: "",
-    taskDescription: "Find and organize at least 20 potential cash buyers. Submit your buyer list with names and contact methods.",
-    trainingContent: "",
+    title: "Creative Deal Structure",
+    caption: "Seller Finance, Negotiation & Structuring Win-Win Deals",
+    taskDescription: "",
+    trainingContent: `Why Creative Financing Matters
+
+Many investors believe the only way to buy real estate is 20–25% down, through a bank, with standard loan terms. That is NOT true.
+
+Creative financing can lower down payments, improve cash flow, lower interest rates, extend loan terms, reduce closing costs, and create opportunities that traditional financing cannot.
+
+Creative deal structure is one of the MOST powerful tools in real estate investing. But creative financing also creates additional risk if used improperly.
+
+The goal is NOT "creative at all costs." The goal is structuring SAFE deals, improving cash flow, reducing risk where possible, and creating WIN-WIN solutions.
+
+Why Off-Market Deals Matter
+
+Many of the BEST creative finance opportunities happen OFF market. Because many sellers do not want strangers walking through their property, do not want tenants disturbed, do not want to pay realtor commissions, want privacy, want flexibility, or want a simpler sale process.
+
+Off-market deals are often MUCH easier to negotiate creatively because there is less competition, sellers are often more flexible, and you can structure solutions directly with the seller.
+
+Benefits Of Off-Market Seller Finance Deals
+
+Benefits For The Buyer:
+• Less competition
+• More flexible negotiations
+• Lower closing costs
+• Potentially lower interest rates
+• Flexible down payments
+• More room for creative structure
+• Avoiding some bank fees and lender costs
+
+Traditional loans can easily add 1–3%+ in additional lender-related costs. Seller finance deals are often significantly cheaper to close.
+
+Benefits For The Seller:
+• Monthly income
+• Potential tax advantages
+• Flexible timing
+• Simpler transaction
+• No realtor commissions
+• Less disruption to tenants
+• Potentially higher sale prices
+• Faster and more flexible negotiations
+
+Good negotiation is NOT taking advantage of people. The BEST negotiations create solutions that genuinely help BOTH parties.
+
+How To Find Off-Market Seller Finance Opportunities
+
+1. Property Managers — Property managers often know tired landlords, struggling owners, aging investors, and owners considering selling.
+
+2. Realtors — Some realtors know expired listings, landlords open to creative terms, or sellers struggling to sell traditionally.
+
+3. Direct Outreach — Mailers, cold calling, texting, networking, driving for dollars, social media, and referrals.
+
+4. Networking With Investors — Many investors eventually burn out, want passive income, or want simpler ownership structures. Seller finance can solve those problems.
+
+What Is Seller Finance?
+
+Seller finance means the seller acts as the bank. Instead of getting all cash at closing, the seller agrees to receive payments over time. This allows buyers and sellers to negotiate down payments, interest rates, payment structure, loan terms, balloon payments, and other creative solutions.
+
+Why Sellers Accept Seller Finance
+
+Many beginners think "Why would a seller ever do this?" Because seller finance can solve REAL seller problems.
+
+Possible seller motivations: reducing taxes, creating monthly income, difficulty selling traditionally, wanting passive income, avoiding management headaches, avoiding realtor commissions, wanting higher sale prices, or needing flexible timing.
+
+Negotiation is NOT "taking advantage of people." Good negotiation is helping solve problems for BOTH sides.
+
+Creative Financing Is Negotiation
+
+Everything is negotiable: purchase price, interest rate, loan term, balloon payment, down payment, payment timing, repair credits, closing timeline, and even payment structure.
+
+The BEST creative deals help the seller, improve the buyer's cash flow, and reduce risk for both parties.
+
+The MOST Important Rule
+
+A creative deal does NOT magically make a bad property a good deal. You MUST still analyze conservatively, verify rents, verify expenses, and understand risk. Creative financing improves structure. It does NOT fix bad analysis.
+
+Understanding Down Payments
+
+Lower down payments improve cash-on-cash return, preserve liquidity, and allow faster scaling. BUT lower down payments also increase risk.
+
+The Danger Of Low Down Payments
+
+Many investors get excited because a low down payment + low interest rate = massive cash-on-cash returns. But that does NOT automatically mean the deal is safe.
+
+Example: 1% down payment, low interest rate, high leverage, and little reserves can become VERY dangerous if vacancy rises, repairs increase, rents soften, or the market shifts.
+
+Important Rule About Analysis
+
+Even if you negotiate 1% down, 5% down, or no money down, you should STILL analyze the property as if you invested at least 20% down. Why? Because you need to understand the REAL risk, the REAL leverage, and whether the deal is fundamentally strong. Creative financing can improve returns but it can also amplify risk.
+
+Understanding Interest Rates
+
+A lower interest rate lowers payments, improves cash flow, and improves debt coverage. Even small changes matter. Example: 3% seller finance vs. 7% bank financing can completely change monthly cash flow, cash-on-cash return, and long-term profitability.
+
+Understanding Loan Terms
+
+Longer loan terms lower payments, improve cash flow, and improve debt coverage. Shorter terms increase principal paydown but increase monthly payments. Sometimes longer terms create SAFER deals.
+
+What Is A Balloon Payment?
+
+A balloon payment means the loan is NOT fully paid off by the end of the agreement. Instead, a large remaining balance becomes due at a future date. Example: 30-year amortization, but the remaining balance is due in 5 years. This creates lower monthly payments initially but creates refinance or payoff pressure later.
+
+The Dangers Of Balloon Payments
+
+Balloon payments can become VERY dangerous if the market shifts, refinancing becomes difficult, interest rates rise, values decline, cash flow weakens, or analysis was incorrect. Many investors get into trouble because they only focus on today's payment, not the future balloon risk.
+
+Balloon Payment Rules To Live By
+
+1. NEVER Ignore The Balloon — You MUST have a realistic refinance plan, payoff strategy, or exit strategy.
+
+2. Stress Test Worst-Case Scenarios — Ask yourself: What if rates increase? What if values decline? What if rents soften? What if lending tightens?
+
+3. Longer Balloons Usually Reduce Risk — Generally a 10-year balloon is safer than a 3-year balloon. More time creates more flexibility.
+
+4. Strong Deals Matter MORE With Balloons — Weak deals become MUCH riskier when balloons exist.
+
+Interest-Free Principal Paydown Structures
+
+Sometimes sellers may agree to a down payment PLUS monthly principal payments with NO interest. Example: $50,000 down, $4,000/month principal-only payments, no interest for 5 years. This can massively improve cash flow, accelerate equity growth, and reduce interest expense.
+
+Risks Of Principal-Only Structures: These structures can still become dangerous if payments are too aggressive, reserves are too low, rents decline, or repairs rise unexpectedly. High cash-on-cash returns do NOT automatically equal low risk.
+
+Structuring Multiple Offers
+
+One of the BEST negotiation strategies is giving sellers MULTIPLE options. Instead of "take it or leave it," you create flexibility and collaboration.
+
+Example Creative Offer Structure:
+
+Option 1 – Higher Price / Better Terms: Purchase Price $520,000 — 5% interest, 10% down, 30-year amortization, 10-year balloon.
+
+Option 2 – Lower Price / Larger Down Payment: Purchase Price $485,000 — 6% interest, 25% down, 30-year amortization, no balloon.
+
+Option 3 – Principal-Only Structure: Purchase Price $500,000 — $60,000 down, principal-only payments for 5 years, refinance before maturity.
+
+Why Multiple Offers Work
+
+Multiple offers reduce pressure, create flexibility, help sellers feel involved, and increase chances of agreement. It also helps uncover what the seller values MOST. Some sellers prioritize price. Others prioritize monthly income, tax benefits, speed, or simplicity.
+
+Good Negotiation Principles
+
+Good negotiation is NOT manipulation, pressure, or "winning." The best negotiations solve problems, create flexibility, and improve outcomes for BOTH sides.
+
+Questions To Understand Seller Motivation:
+• Why are you selling?
+• What is most important to you?
+• Do you need cash now or income over time?
+• How flexible are you on timing?
+• What would make this deal work for you?
+• Are taxes a concern?
+• Would monthly income help you?
+
+The better you understand the seller, the better you can structure solutions.
+
+Common Creative Financing Mistakes
+
+1. Focusing ONLY On Cash Flow — Good monthly cash flow does NOT guarantee safety.
+2. Ignoring Balloon Risk — Many investors underestimate refinance risk.
+3. Using Low Down Payments Without Reserves — Leverage magnifies risk.
+4. Forcing Creative Structures On Bad Deals — Creative financing does NOT fix bad properties.
+5. Negotiating Without Understanding Seller Motivation — The best deals come from solving REAL problems.
+
+Quick Rules To Remember:
+• Creative financing improves structure — not bad deals
+• Analyze conservatively FIRST
+• Low down payments increase risk
+• Maintain strong reserves
+• Understand ALL balloon payment risks
+• Stress test refinance scenarios
+• Structure multiple options when negotiating
+• Find solutions that help BOTH buyer and seller
+• Never force a deal to work
+• Conservative analysis still matters MOST
+
+Today's Suggested Arsenal Contact
+
+Reach out to a seller, realtor, investor, property manager, or property owner and practice discussing seller finance, down payment flexibility, loan terms, or creative structures.
+
+Your goal is NOT to pressure people. Your goal is to understand seller problems and explore possible win-win solutions.
+
+The best negotiators listen carefully, understand motivations, and create flexible solutions.`,
     category: "foundation",
     weekNumber: 1,
     weekTitle: "BUILD THE FOUNDATION",
-    proofType: "document",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day4_creative_financing',
+          title: 'Creative Deal Structure Quiz',
+          description: 'Answer all 5 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Low down payment deals increase leverage and reduce your safety margin — if vacancy, repairs, or market conditions change, you have less cushion.
+2. Even with creative terms, analyzing at 20% down helps you understand the true strength and risk of the deal independent of financing.
+3. A balloon payment is a large remaining balance that becomes due at a future date, creating refinance or payoff pressure.
+4. The best negotiation strategy is structuring multiple options that solve seller problems — not pressure or single take-it-or-leave-it offers.
+5. Creative financing can improve returns but it can also increase risk — high cash-on-cash returns do NOT automatically mean low risk.`,
+          inputs: [
+            {
+              id: 'day4_q1',
+              label: '1. What is one of the BIGGEST dangers of low down payment creative financing deals?',
+              type: 'multiple_choice',
+              options: [
+                'Lower monthly payments',
+                'Increased leverage and reduced safety margin',
+                'Better cash flow',
+                'Longer amortization',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day4_q2',
+              label: '2. Why should you still analyze a property using at least 20% down assumptions?',
+              type: 'multiple_choice',
+              options: [
+                'To increase purchase price',
+                'To reduce realtor commissions',
+                'To understand the true strength and risk of the deal',
+                'To avoid negotiations',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day4_q3',
+              label: '3. What is a balloon payment?',
+              type: 'multiple_choice',
+              options: [
+                'A refundable earnest money deposit',
+                'A large payment due at a future date',
+                'A seller-paid repair credit',
+                'A property tax increase',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day4_q4',
+              label: '4. What is one of the BEST ways to negotiate creative financing?',
+              type: 'multiple_choice',
+              options: [
+                'Use pressure and urgency',
+                'Give the seller only one option',
+                'Structure multiple options that solve seller problems',
+                'Focus only on getting the lowest purchase price possible',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day4_q5',
+              label: '5. Which statement BEST describes strong creative financing?',
+              type: 'multiple_choice',
+              options: [
+                'High cash-on-cash returns always mean low risk',
+                'Creative financing can improve returns but also increase risk',
+                'Balloon payments are always safe',
+                'No-money-down deals eliminate downside risk',
+              ],
+              correctAnswer: 1,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 5,
