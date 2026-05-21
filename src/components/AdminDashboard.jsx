@@ -117,12 +117,27 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
   const [previewActivation, setPreviewActivation] = useState(false);
   const [previewDay, setPreviewDay] = useState(null);
 
+  // Preview session state — persists across day switches, resets on exit
+  const [previewContacts, setPreviewContacts] = useState([]);
+  const [previewSubmissions, setPreviewSubmissions] = useState([]);
+  const [previewCompletedDays, setPreviewCompletedDays] = useState([]);
+  const [previewQuizAttempts, setPreviewQuizAttempts] = useState([]);
+
+  const resetPreviewSession = () => {
+    setPreviewDay(null);
+    setPreviewContacts([]);
+    setPreviewSubmissions([]);
+    setPreviewCompletedDays([]);
+    setPreviewQuizAttempts([]);
+  };
+
   const handleTabChange = (newTab) => {
     setTab(newTab);
     setSelectedParticipant(null);
   };
 
   if (previewDay !== null) {
+    const previewExistingSub = previewSubmissions.find(s => s.day === previewDay) || null;
     return (
       <div style={{ position: 'relative' }}>
         <div style={{
@@ -130,38 +145,108 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
           background: 'rgba(83,52,131,0.95)', padding: '10px 20px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: 1, textTransform: 'uppercase' }}>
-            Admin Preview — Day {previewDay}
-          </span>
-          <button
-            onClick={() => setPreviewDay(null)}
-            style={{
-              background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)',
-              color: '#fff', padding: '6px 16px', borderRadius: 6, fontSize: 13,
-              fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-            }}
-          >
-            Exit Preview
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: 1, textTransform: 'uppercase' }}>
+              Admin Preview — Day {previewDay}
+            </span>
+            <select
+              value={previewDay}
+              onChange={e => setPreviewDay(parseInt(e.target.value))}
+              style={{
+                fontSize: 12, padding: '4px 8px', borderRadius: 4,
+                background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)',
+                color: '#fff', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+              }}
+            >
+              {Array.from({ length: 30 }, (_, i) => i + 1).map(d => (
+                <option key={d} value={d} style={{ color: '#000' }}>
+                  Day {d}{previewCompletedDays.includes(d) ? ' ✓' : ''}
+                </option>
+              ))}
+            </select>
+            {previewContacts.length > 0 && (
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)' }}>
+                {previewContacts.length} contacts | {previewCompletedDays.length} days done
+              </span>
+            )}
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {(previewContacts.length > 0 || previewCompletedDays.length > 0) && (
+              <button
+                onClick={() => { setPreviewContacts([]); setPreviewSubmissions([]); setPreviewCompletedDays([]); setPreviewQuizAttempts([]); }}
+                style={{
+                  background: 'rgba(233,69,96,0.3)', border: '1px solid rgba(233,69,96,0.5)',
+                  color: '#fff', padding: '6px 12px', borderRadius: 6, fontSize: 12,
+                  fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                }}
+              >Reset Session</button>
+            )}
+            <button
+              onClick={resetPreviewSession}
+              style={{
+                background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)',
+                color: '#fff', padding: '6px 16px', borderRadius: 6, fontSize: 13,
+                fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+              }}
+            >
+              Exit Preview
+            </button>
+          </div>
         </div>
         <div style={{ paddingTop: 44, maxWidth: 700, margin: '0 auto', padding: '60px 20px 40px' }}>
           <DayView
+            key={previewDay}
             day={previewDay}
-            user={{ ...user, activationCompleted: true, cohortAttempt: 1, completedDays: user.completedDays || [], submissions: user.submissions || [], currentDay: Math.max(previewDay, user.currentDay || 1), trainingCompletedDays: user.trainingCompletedDays || [] }}
-            onSubmit={async () => {}}
+            user={{
+              ...user,
+              activationCompleted: true,
+              cohortAttempt: 1,
+              completedDays: previewCompletedDays,
+              submissions: previewSubmissions,
+              currentDay: 30,
+              trainingCompletedDays: previewCompletedDays,
+            }}
+            onSubmit={async (day, data) => {
+              setPreviewSubmissions(prev => {
+                const existing = prev.findIndex(s => s.day === day);
+                const sub = { day, ...data, submittedAt: new Date().toISOString() };
+                if (existing >= 0) {
+                  const copy = [...prev];
+                  copy[existing] = sub;
+                  return copy;
+                }
+                return [...prev, sub];
+              });
+              setPreviewCompletedDays(prev => prev.includes(day) ? prev : [...prev, day]);
+            }}
             onBack={() => setPreviewDay(null)}
             contentOverrides={contentOverrides}
             customPhases={customPhases}
             complianceSettings={complianceSettings}
-            existingDailySubmission={null}
-            onAddContact={async (data) => ({ success: true, contact: { id: 'preview_' + Date.now(), created_at: new Date().toISOString(), ...data } })}
-            onAddFollowUp={async () => ({ success: true, followUp: { id: 'fu_' + Date.now() } })}
-            onUpdateContact={async () => {}}
+            existingDailySubmission={previewExistingSub}
+            onAddContact={async (data) => {
+              const contact = { id: 'preview_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6), created_at: new Date().toISOString(), ...data };
+              setPreviewContacts(prev => [contact, ...prev]);
+              return { success: true, contact };
+            }}
+            onAddFollowUp={async (followUpData, contactUpdates) => {
+              const followUp = { id: 'fu_' + Date.now(), created_at: new Date().toISOString(), ...followUpData };
+              if (contactUpdates) {
+                setPreviewContacts(prev => prev.map(c => c.id === followUpData.contact_id ? { ...c, ...contactUpdates } : c));
+              }
+              return { success: true, followUp };
+            }}
+            onUpdateContact={async (id, updates) => {
+              setPreviewContacts(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
+            }}
             onUploadFile={async () => {}}
-            contacts={[]}
+            contacts={previewContacts}
             getUploadUrl={null}
-            quizAttempts={[]}
-            onQuizAttempt={async (attempt) => attempt}
+            quizAttempts={previewQuizAttempts}
+            onQuizAttempt={async (attempt) => {
+              setPreviewQuizAttempts(prev => [...prev, attempt]);
+              return attempt;
+            }}
             isPreview
           />
         </div>
