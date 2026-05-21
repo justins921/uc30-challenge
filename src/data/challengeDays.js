@@ -1024,6 +1024,91 @@ The best negotiators listen carefully, understand motivations, and create flexib
       required: true,
       scenarios: [
         {
+          id: 'day4_property_analysis',
+          title: 'Cash on Cash Return Analysis',
+          description: 'Analyze the property below. Plug the information into the CDS Rental Calculator and answer both questions.',
+          propertyListing: {
+            title: 'Rental Property Analysis',
+            price: '$600,000',
+            badges: ['Investment Property', '25% Down', '7.5% Rate'],
+            highlights: [
+              { icon: '💰', label: 'Down Pmt', value: '$150,000' },
+              { icon: '🏠', label: 'Rent', value: '$6,000/mo' },
+              { icon: '📊', label: 'Loan', value: '30yr @ 7.5%' },
+            ],
+            sections: [
+              {
+                heading: 'Purchase & Financing',
+                rows: [
+                  { label: 'Purchase Price', value: '$600,000' },
+                  { label: 'Down Payment', value: '25% ($150,000)' },
+                  { label: 'Closing Costs', value: '2% ($9,000)' },
+                  { label: 'Costs to Make Rent Ready', value: '$0' },
+                  { label: 'Loan Term', value: '30 Years' },
+                  { label: 'Interest Rate', value: '7.5%' },
+                ],
+              },
+              {
+                heading: 'Income',
+                rows: [
+                  { label: 'Monthly Rents', value: '$6,000' },
+                  { label: 'Other Monthly Income', value: '$0' },
+                  { label: 'Vacancy', value: '6%' },
+                ],
+              },
+              {
+                heading: 'Expenses',
+                rows: [
+                  { label: 'Maintenance', value: '12%' },
+                  { label: 'Property Management', value: '8%' },
+                  { label: 'Insurance', value: '$2,000/yr' },
+                  { label: 'Property Taxes', value: '$6,000/yr' },
+                  { label: 'Utilities', value: '$0' },
+                  { label: 'Additional Expenses', value: '$0' },
+                ],
+              },
+            ],
+          },
+          maxAttempts: 3,
+          showExplanationOnPass: true,
+          explanationOnFail: 'Make sure you entered all the property data correctly into the CDS Rental Calculator. Double-check each field — especially the interest rate (7.5%), insurance ($2,000/yr), and taxes ($6,000/yr).',
+          cheatSheets: [
+            {
+              title: 'Returns Analysis',
+              color: 'green',
+              rows: [
+                { label: 'Total Capital Required', value: '$159,000' },
+                { label: 'Gross Rent', value: '$72,000/yr' },
+                { label: 'Vacancy (6%)', value: '-$4,320' },
+                { label: 'Maintenance (12%)', value: '-$8,121.60' },
+                { label: 'Management (8%)', value: '-$5,414.40' },
+                { label: 'Insurance', value: '-$2,000' },
+                { label: 'Property Taxes', value: '-$6,000' },
+                { label: 'Net Operating Income', value: '$46,144' },
+                { label: 'Debt Service (7.5%, 30yr)', value: '-$37,764' },
+                { label: 'Annual Cash Flow', value: '$8,380', highlight: true },
+                { label: 'Cash on Cash Return', value: '5.27%', highlight: true },
+              ],
+            },
+          ],
+          inputs: [
+            {
+              id: 'day4_coc',
+              label: 'What is the approximate cash-on-cash return for this property?',
+              type: 'multiple_choice',
+              options: ['10.29%', '5.27%', '6.74%', '8.30%'],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day4_rate_for_10',
+              label: 'Using the same inputs, what interest rate would make the cash-on-cash return above 10%?',
+              type: 'multiple_choice',
+              options: ['6%', '6.5%', '5.5%', '5.25%'],
+              correctAnswer: 3,
+            },
+          ],
+        },
+        {
           id: 'day4_creative_financing',
           title: 'Creative Deal Structure Quiz',
           description: 'Answer all 5 questions correctly to continue.',
