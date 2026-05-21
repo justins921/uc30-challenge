@@ -10,6 +10,16 @@
 // 4. Run the SQL in supabase-auth-migration.sql (auth + RLS)
 
 // ── Follow-up date calculation ──────────────────────────────────────
+export function validatePhone(phone) {
+  if (!phone || !phone.trim()) return { valid: true, formatted: null };
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length < 10 || digits.length > 11) {
+    return { valid: false, error: 'Phone number must be 10 digits (or 11 with country code)' };
+  }
+  const formatted = digits.replace(/^1?(\d{3})(\d{3})(\d{4})$/, '($1) $2-$3');
+  return { valid: true, formatted };
+}
+
 export function calculateFollowUpDate(interval) {
   if (!interval || interval === 'never') return null;
   const d = new Date();

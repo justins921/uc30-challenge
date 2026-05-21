@@ -3,7 +3,7 @@ import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayCo
 import { COMPLIANCE_METRICS, checkDailyCompliance, getTimeUntilDeadline, DEFAULT_DAILY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
 import QuizSection from './QuizSection';
 import { CONTACT_GROUPS } from './ContactsCRM';
-import { calculateFollowUpDate } from '../utils/storage';
+import { calculateFollowUpDate, validatePhone } from '../utils/storage';
 
 const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500' };
 
@@ -108,17 +108,23 @@ export default function DayView({
     if (initialContacts) setContactList(initialContacts);
   }, [initialContacts]);
 
+  const [contactPhoneError, setContactPhoneError] = useState('');
+
   const resetContactForm = () => {
     setContactName(''); setContactPhone(''); setContactEmail('');
     setContactGroup('target'); setContactProperty(''); setContactNotes('');
     setContactFollowUpInterval(''); setTargetOutcome('');
     setDuplicateContact(null); setShowContactForm(false);
+    setContactPhoneError('');
   };
 
   const handleAddContact = async (force) => {
     if (!contactName.trim()) return;
     if (!contactFollowUpInterval) return;
     if (contactGroup === 'target' && !targetOutcome) return;
+    const phoneCheck = validatePhone(contactPhone);
+    if (!phoneCheck.valid) { setContactPhoneError(phoneCheck.error); return; }
+    setContactPhoneError('');
     if (!force) {
       const dup = contactList.find(c => c.name?.toLowerCase() === contactName.trim().toLowerCase());
       if (dup) { setDuplicateContact(dup); return; }
@@ -138,7 +144,7 @@ export default function DayView({
 
     const result = await onAddContact({
       name: contactName.trim(),
-      phone: contactPhone.trim() || null,
+      phone: phoneCheck.formatted,
       email: contactEmail.trim() || null,
       contact_group: finalGroup,
       property: contactGroup === 'target' ? (contactProperty.trim() || null) : null,
@@ -157,7 +163,7 @@ export default function DayView({
     if (isBoth && result?.success) {
       const arsenalResult = await onAddContact({
         name: contactName.trim(),
-        phone: contactPhone.trim() || null,
+        phone: phoneCheck.formatted,
         email: contactEmail.trim() || null,
         contact_group: 'arsenal',
         property: null,
@@ -927,14 +933,15 @@ export default function DayView({
                     <input value={contactName} onChange={e => setContactName(e.target.value)}
                       placeholder="Name *" style={{ width: '100%', fontSize: 14, padding: '10px 14px', marginBottom: 10,
                       borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
-                      <input value={contactPhone} onChange={e => setContactPhone(e.target.value)}
-                        placeholder="Phone" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
-                        background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: contactPhoneError ? 4 : 10 }}>
+                      <input value={contactPhone} onChange={e => { setContactPhone(e.target.value); setContactPhoneError(''); }}
+                        placeholder="(208) 555-1234" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
+                        background: 'rgba(255,255,255,0.04)', border: contactPhoneError ? '1px solid rgba(233,69,96,0.5)' : '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
                       <input value={contactEmail} onChange={e => setContactEmail(e.target.value)}
                         placeholder="Email" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
                         background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
                     </div>
+                    {contactPhoneError && <div style={{ fontSize: 11, color: '#e94560', marginBottom: 10 }}>{contactPhoneError}</div>}
 
                     <div style={{ fontSize: 12, color: '#888', fontWeight: 600, marginBottom: 6 }}>Group</div>
                     <div style={{ display: 'flex', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
@@ -1586,14 +1593,15 @@ export default function DayView({
                 <input value={contactName} onChange={e => setContactName(e.target.value)}
                   placeholder="Name *" style={{ width: '100%', fontSize: 14, padding: '10px 14px', marginBottom: 10,
                   borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
-                  <input value={contactPhone} onChange={e => setContactPhone(e.target.value)}
-                    placeholder="Phone" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
-                    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: contactPhoneError ? 4 : 10 }}>
+                  <input value={contactPhone} onChange={e => { setContactPhone(e.target.value); setContactPhoneError(''); }}
+                    placeholder="(208) 555-1234" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
+                    background: 'rgba(255,255,255,0.04)', border: contactPhoneError ? '1px solid rgba(233,69,96,0.5)' : '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
                   <input value={contactEmail} onChange={e => setContactEmail(e.target.value)}
                     placeholder="Email" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
                     background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
                 </div>
+                {contactPhoneError && <div style={{ fontSize: 11, color: '#e94560', marginBottom: 10 }}>{contactPhoneError}</div>}
 
                 <div style={{ fontSize: 12, color: '#888', fontWeight: 600, marginBottom: 6 }}>Group</div>
                 <div style={{ display: 'flex', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
@@ -1926,10 +1934,12 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
   const [targetOutcome, setTargetOutcome] = useState('');
   const [saving, setSaving] = useState(false);
   const [justAdded, setJustAdded] = useState(null);
+  const [phoneError, setPhoneError] = useState('');
 
   const resetForm = () => {
     setName(''); setPhone(''); setEmail(''); setProperty('');
     setNotes(''); setFollowUp(''); setTargetOutcome(''); setJustAdded(null);
+    setPhoneError('');
   };
 
   const canSave = name.trim() && followUp
@@ -1937,6 +1947,9 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
 
   const handleSave = async () => {
     if (!canSave) return;
+    const phoneCheck = validatePhone(phone);
+    if (!phoneCheck.valid) { setPhoneError(phoneCheck.error); return; }
+    setPhoneError('');
     setSaving(true);
 
     let finalGroup = group;
@@ -1951,7 +1964,7 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
     const now = new Date().toISOString();
     const result = await onAddContact({
       name: name.trim(),
-      phone: phone.trim() || null,
+      phone: phoneCheck.formatted,
       email: email.trim() || null,
       contact_group: finalGroup,
       property: group === 'target' ? (property.trim() || null) : null,
@@ -1971,7 +1984,7 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
       if (isBoth) {
         const arsenalResult = await onAddContact({
           name: name.trim(),
-          phone: phone.trim() || null,
+          phone: phoneCheck.formatted,
           email: email.trim() || null,
           contact_group: 'arsenal',
           property: null,
@@ -2021,12 +2034,14 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
           background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee',
         }} />
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 8 }}>
-        <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="Phone"
-          style={{ fontSize: 13, padding: '8px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: phoneError ? 4 : 8 }}>
+        <input value={phone} onChange={e => { setPhone(e.target.value); setPhoneError(''); }} placeholder="(208) 555-1234"
+          style={{ fontSize: 13, padding: '8px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.04)',
+            border: phoneError ? '1px solid rgba(233,69,96,0.5)' : '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
         <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email"
           style={{ fontSize: 13, padding: '8px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
       </div>
+      {phoneError && <div style={{ fontSize: 11, color: '#e94560', marginBottom: 8 }}>{phoneError}</div>}
 
       {group === 'target' && (
         <input value={property} onChange={e => setProperty(e.target.value)}

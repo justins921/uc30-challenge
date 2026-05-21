@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { calculateFollowUpDate } from '../utils/storage';
+import { calculateFollowUpDate, validatePhone } from '../utils/storage';
 
 export const CONTACT_GROUPS = [
   { value: 'target', label: 'Target Contacts', color: '#e94560', desc: 'Deal sources — property owners, sellers, listing agents tied to specific properties' },
@@ -87,13 +87,14 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
   const [formAlsoArsenal, setFormAlsoArsenal] = useState(false);
   const [formArsenalFollowUp, setFormArsenalFollowUp] = useState('');
   const [formSaving, setFormSaving] = useState(false);
+  const [formPhoneError, setFormPhoneError] = useState('');
 
   const resetForm = () => {
     setFormName(''); setFormPhone(''); setFormEmail(''); setFormNotes('');
     setFormStreet(''); setFormCity(''); setFormState(''); setFormZip('');
     setFormPropertyDetails(''); setFormFollowUp(''); setFormArsenalFollowUp('');
     setFormAlsoProperty(false); setFormAlsoArsenal(false);
-    setShowAddForm(false);
+    setFormPhoneError(''); setShowAddForm(false);
   };
 
   useEffect(() => {
@@ -125,6 +126,10 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
     setContacts(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
   };
 
+  const onContactAdded = (newContact) => {
+    setContacts(prev => [newContact, ...prev]);
+  };
+
   const onFollowUpLogged = (contactId, followUp) => {
     setExpandedFollowUps(prev => ({
       ...prev,
@@ -137,13 +142,18 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
     const isArsenal = activeTab === 'arsenal';
     if (isArsenal && !formNotes.trim()) return;
 
+    const phoneCheck = validatePhone(formPhone);
+    if (!phoneCheck.valid) { setFormPhoneError(phoneCheck.error); return; }
+    setFormPhoneError('');
+    const formattedPhone = phoneCheck.formatted;
+
     setFormSaving(true);
     const now = new Date().toISOString();
 
     if (isArsenal) {
       const result = await onAddContact({
         name: formName.trim(),
-        phone: formPhone.trim() || null,
+        phone: formattedPhone,
         email: formEmail.trim() || null,
         contact_group: 'arsenal',
         property: null,
@@ -158,7 +168,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
         if (formAlsoProperty && formStreet.trim()) {
           const propAddr = [formStreet.trim(), formCity.trim(), formState.trim(), formZip.trim()].filter(Boolean).join(', ');
           const propResult = await onAddContact({
-            name: formName.trim(), phone: formPhone.trim() || null, email: formEmail.trim() || null,
+            name: formName.trim(), phone: formattedPhone, email: formEmail.trim() || null,
             contact_group: 'target', property: propAddr, notes: formPropertyDetails.trim() || null,
             pipeline_status: 'active',
             follow_up_interval: formArsenalFollowUp || '1_week',
@@ -173,7 +183,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
       const isDead = formFollowUp?.startsWith('dead_');
       const actualInterval = isDead ? formFollowUp.replace('dead_', '') : formFollowUp;
       const result = await onAddContact({
-        name: formName.trim(), phone: formPhone.trim() || null, email: formEmail.trim() || null,
+        name: formName.trim(), phone: formattedPhone, email: formEmail.trim() || null,
         contact_group: 'target', property: propAddr || null, notes: formNotes.trim() || null,
         pipeline_status: isDead ? 'dead' : 'active',
         follow_up_interval: actualInterval,
@@ -184,7 +194,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
         setContacts(prev => [result.contact, ...prev]);
         if (formAlsoArsenal && formArsenalFollowUp) {
           const arsenalResult = await onAddContact({
-            name: formName.trim(), phone: formPhone.trim() || null, email: formEmail.trim() || null,
+            name: formName.trim(), phone: formattedPhone, email: formEmail.trim() || null,
             contact_group: 'arsenal', property: null,
             notes: formPropertyDetails.trim() || 'Also added as arsenal contact',
             pipeline_status: 'new',
@@ -307,6 +317,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
         formAlsoArsenal={formAlsoArsenal} setFormAlsoArsenal={setFormAlsoArsenal}
         formArsenalFollowUp={formArsenalFollowUp} setFormArsenalFollowUp={setFormArsenalFollowUp}
         formSaving={formSaving}
+        formPhoneError={formPhoneError} setFormPhoneError={setFormPhoneError}
         onSave={handleAddFromCRM} onCancel={resetForm}
       />}
 
@@ -328,6 +339,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
                 onUpdateContact={onUpdateContact}
                 onContactUpdated={onContactUpdated}
                 onAddContact={onAddContact}
+                onContactAdded={onContactAdded}
                 onAddFollowUp={onAddFollowUp}
                 onFollowUpLogged={onFollowUpLogged}
                 user={user}
@@ -369,6 +381,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
                         onUpdateContact={onUpdateContact}
                         onContactUpdated={onContactUpdated}
                         onAddContact={onAddContact}
+                        onContactAdded={onContactAdded}
                         onAddFollowUp={onAddFollowUp}
                         onFollowUpLogged={onFollowUpLogged}
                         user={user}
@@ -386,7 +399,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
 }
 
 /* ═══ Add Contact Form ═══ */
-function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone, setFormPhone, formEmail, setFormEmail, formNotes, setFormNotes, formStreet, setFormStreet, formCity, setFormCity, formState, setFormState, formZip, setFormZip, formPropertyDetails, setFormPropertyDetails, formFollowUp, setFormFollowUp, formAlsoProperty, setFormAlsoProperty, formAlsoArsenal, setFormAlsoArsenal, formArsenalFollowUp, setFormArsenalFollowUp, formSaving, onSave, onCancel }) {
+function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone, setFormPhone, formEmail, setFormEmail, formNotes, setFormNotes, formStreet, setFormStreet, formCity, setFormCity, formState, setFormState, formZip, setFormZip, formPropertyDetails, setFormPropertyDetails, formFollowUp, setFormFollowUp, formAlsoProperty, setFormAlsoProperty, formAlsoArsenal, setFormAlsoArsenal, formArsenalFollowUp, setFormArsenalFollowUp, formSaving, formPhoneError, setFormPhoneError, onSave, onCancel }) {
   const isArsenal = activeTab === 'arsenal';
   const canSave = formName.trim() && formFollowUp && (isArsenal ? formNotes.trim() : true);
 
@@ -398,12 +411,14 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
 
       <input placeholder="Name *" value={formName} onChange={e => setFormName(e.target.value)}
         style={{ width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 10 }} />
-      <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
-        <input placeholder="Phone" value={formPhone} onChange={e => setFormPhone(e.target.value)}
-          style={{ flex: 1, fontSize: 13, padding: '10px 12px' }} />
+      <div style={{ display: 'flex', gap: 8, marginBottom: formPhoneError ? 4 : 10 }}>
+        <input placeholder="(208) 555-1234" value={formPhone}
+          onChange={e => { setFormPhone(e.target.value); if (setFormPhoneError) setFormPhoneError(''); }}
+          style={{ flex: 1, fontSize: 13, padding: '10px 12px', borderColor: formPhoneError ? 'rgba(233,69,96,0.5)' : undefined }} />
         <input placeholder="Email" value={formEmail} onChange={e => setFormEmail(e.target.value)}
           style={{ flex: 1, fontSize: 13, padding: '10px 12px' }} />
       </div>
+      {formPhoneError && <div style={{ fontSize: 11, color: '#e94560', marginBottom: 10 }}>{formPhoneError}</div>}
 
       {!isArsenal && (
         <>
@@ -553,7 +568,7 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
 }
 
 /* ═══ Arsenal Card ═══ */
-function ArsenalCard({ contact, linkedProperties, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onAddFollowUp, onFollowUpLogged, user }) {
+function ArsenalCard({ contact, linkedProperties, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, user }) {
   const overdue = isOverdue(contact.follow_up_date);
   const followUpText = formatFollowUpDate(contact.follow_up_date);
 
@@ -599,14 +614,14 @@ function ArsenalCard({ contact, linkedProperties, isExpanded, followUps, onExpan
       </div>
       {isExpanded && <ExpandedDetail contact={contact} followUps={followUps} color="#f0a500"
         onUpdateContact={onUpdateContact} onContactUpdated={onContactUpdated}
-        onAddContact={onAddContact} onAddFollowUp={onAddFollowUp}
+        onAddContact={onAddContact} onContactAdded={onContactAdded} onAddFollowUp={onAddFollowUp}
         onFollowUpLogged={onFollowUpLogged} user={user} />}
     </div>
   );
 }
 
 /* ═══ Target Property Card ═══ */
-function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onAddFollowUp, onFollowUpLogged, user }) {
+function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, user }) {
   const overdue = isOverdue(contact.follow_up_date);
   const followUpText = formatFollowUpDate(contact.follow_up_date);
   const statusInfo = STATUS_LABELS[contact.pipeline_status] || STATUS_LABELS.active;
@@ -659,14 +674,14 @@ function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdate
       </div>
       {isExpanded && <ExpandedDetail contact={contact} followUps={followUps} color={color}
         onUpdateContact={onUpdateContact} onContactUpdated={onContactUpdated}
-        onAddContact={onAddContact} onAddFollowUp={onAddFollowUp}
+        onAddContact={onAddContact} onContactAdded={onContactAdded} onAddFollowUp={onAddFollowUp}
         onFollowUpLogged={onFollowUpLogged} user={user} />}
     </div>
   );
 }
 
 /* ═══ Expanded Detail (Editable) ═══ */
-function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactUpdated, onAddContact, onAddFollowUp, onFollowUpLogged, user }) {
+function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, user }) {
   const statusInfo = STATUS_LABELS[contact.pipeline_status] || STATUS_LABELS.new;
   const isTarget = contact.contact_group === 'target';
 
@@ -679,6 +694,7 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
   const [editProperty, setEditProperty] = useState(contact.property || '');
   const [editStatus, setEditStatus] = useState(contact.pipeline_status || 'new');
   const [editInterval, setEditInterval] = useState(contact.follow_up_interval || 'never');
+  const [phoneError, setPhoneError] = useState('');
 
   const [showFollowUpForm, setShowFollowUpForm] = useState(false);
   const [followUpNotes, setFollowUpNotes] = useState('');
@@ -687,6 +703,7 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
 
   const [arsenalAdding, setArsenalAdding] = useState(false);
   const [arsenalAdded, setArsenalAdded] = useState(false);
+  const [celebration, setCelebration] = useState(null);
 
   const startEdit = () => {
     setEditName(contact.name || ''); setEditPhone(contact.phone || '');
@@ -698,9 +715,12 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
   };
 
   const saveEdit = async () => {
+    const phoneCheck = validatePhone(editPhone);
+    if (!phoneCheck.valid) { setPhoneError(phoneCheck.error); return; }
+    setPhoneError('');
     setSaving(true);
     const updates = {
-      name: editName.trim(), phone: editPhone.trim() || null,
+      name: editName.trim(), phone: phoneCheck.formatted,
       email: editEmail.trim() || null, notes: editNotes.trim() || null,
       follow_up_interval: editInterval,
       follow_up_date: calculateFollowUpDate(editInterval),
@@ -709,10 +729,15 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
       updates.property = editProperty.trim() || null;
       updates.pipeline_status = editStatus;
     }
+    const oldStatus = contact.pipeline_status;
     try {
       await onUpdateContact(contact.id, updates);
       onContactUpdated(contact.id, updates);
       setEditing(false);
+      if (isTarget && oldStatus !== editStatus && (editStatus === 'under_contract' || editStatus === 'closed')) {
+        setCelebration(editStatus);
+        setTimeout(() => setCelebration(null), 4000);
+      }
     } catch (e) { console.error('Failed to save:', e); }
     setSaving(false);
   };
@@ -728,7 +753,10 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
         follow_up_date: calculateFollowUpDate(contact.follow_up_interval || '1_week'),
         last_contact_date: new Date().toISOString(),
       });
-      if (result?.success) setArsenalAdded(true);
+      if (result?.success) {
+        setArsenalAdded(true);
+        if (result.contact && onContactAdded) onContactAdded(result.contact);
+      }
     } catch (e) { console.error('Failed to add to arsenal:', e); }
     setArsenalAdding(false);
   };
@@ -775,6 +803,31 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
 
   return (
     <div style={{ padding: '0 18px 16px', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+      {celebration && (
+        <div style={{
+          marginTop: 10, padding: '16px 20px', borderRadius: 10, textAlign: 'center',
+          background: celebration === 'closed'
+            ? 'linear-gradient(135deg, rgba(212,168,67,0.15), rgba(240,165,0,0.1))'
+            : 'linear-gradient(135deg, rgba(107,138,253,0.15), rgba(72,199,142,0.1))',
+          border: `1px solid ${celebration === 'closed' ? 'rgba(212,168,67,0.3)' : 'rgba(107,138,253,0.3)'}`,
+          animation: 'celebrationPulse 0.6s ease-in-out',
+        }}>
+          <div style={{ fontSize: 32, marginBottom: 6 }}>{celebration === 'closed' ? '🎉🏠💰' : '🎉📋✨'}</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: celebration === 'closed' ? '#d4a843' : '#6b8afd', marginBottom: 4 }}>
+            {celebration === 'closed' ? 'Deal Closed!' : 'Under Contract!'}
+          </div>
+          <div style={{ fontSize: 13, color: '#aaa' }}>
+            {celebration === 'closed' ? 'Congratulations on closing the deal!' : 'Congratulations — keep pushing to close!'}
+          </div>
+          <style>{`
+            @keyframes celebrationPulse {
+              0% { transform: scale(0.9); opacity: 0; }
+              50% { transform: scale(1.03); }
+              100% { transform: scale(1); opacity: 1; }
+            }
+          `}</style>
+        </div>
+      )}
       {/* Action buttons */}
       <div style={{ display: 'flex', gap: 8, marginTop: 10, marginBottom: 4, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
         {!editing && <button onClick={startEdit} style={actionBtn('rgba(255,255,255,0.06)', '#aaa')}>Edit</button>}
@@ -798,7 +851,10 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
             </div>
             <div style={{ flex: '1 1 140px' }}>
               <label style={{ fontSize: 11, color: '#666', marginBottom: 3, display: 'block' }}>Phone</label>
-              <input value={editPhone} onChange={e => setEditPhone(e.target.value)} style={inputStyle} />
+              <input value={editPhone} onChange={e => { setEditPhone(e.target.value); setPhoneError(''); }}
+                placeholder="(208) 555-1234"
+                style={{ ...inputStyle, borderColor: phoneError ? 'rgba(233,69,96,0.5)' : undefined }} />
+              {phoneError && <div style={{ fontSize: 11, color: '#e94560', marginTop: 3 }}>{phoneError}</div>}
             </div>
             <div style={{ flex: '1 1 180px' }}>
               <label style={{ fontSize: 11, color: '#666', marginBottom: 3, display: 'block' }}>Email</label>
