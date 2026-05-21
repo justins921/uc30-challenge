@@ -147,21 +147,21 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
         <div style={{ paddingTop: 44, maxWidth: 700, margin: '0 auto', padding: '60px 20px 40px' }}>
           <DayView
             day={previewDay}
-            user={{ ...user, activationCompleted: true, cohortAttempt: 1 }}
+            user={{ ...user, activationCompleted: true, cohortAttempt: 1, completedDays: user.completedDays || [], submissions: user.submissions || [], currentDay: Math.max(previewDay, user.currentDay || 1), trainingCompletedDays: user.trainingCompletedDays || [] }}
             onSubmit={async () => {}}
             onBack={() => setPreviewDay(null)}
             contentOverrides={contentOverrides}
             customPhases={customPhases}
             complianceSettings={complianceSettings}
             existingDailySubmission={null}
-            onAddContact={async () => ({ success: true, contact: { id: 'preview_' + Date.now(), name: 'Preview Contact' } })}
-            onAddFollowUp={async () => {}}
+            onAddContact={async (data) => ({ success: true, contact: { id: 'preview_' + Date.now(), created_at: new Date().toISOString(), ...data } })}
+            onAddFollowUp={async () => ({ success: true, followUp: { id: 'fu_' + Date.now() } })}
             onUpdateContact={async () => {}}
             onUploadFile={async () => {}}
             contacts={[]}
             getUploadUrl={null}
             quizAttempts={[]}
-            onQuizAttempt={async () => {}}
+            onQuizAttempt={async (attempt) => attempt}
             isPreview
           />
         </div>

@@ -135,10 +135,10 @@ export default function DayView({
     const now = new Date().toISOString();
     let finalGroup = contactGroup;
     let pipelineStatus = 'new';
-    const isBoth = targetOutcome === 'both';
+    const createArsenalToo = targetOutcome === 'both' || targetOutcome === 'dead_arsenal';
     if (contactGroup === 'target') {
-      if (targetOutcome === 'target_property' || isBoth) pipelineStatus = 'target_property';
-      else if (targetOutcome === 'dead') pipelineStatus = 'dead';
+      if (targetOutcome === 'target_property' || targetOutcome === 'both') pipelineStatus = 'target_property';
+      else if (targetOutcome === 'dead' || targetOutcome === 'dead_arsenal') pipelineStatus = 'dead';
       else if (targetOutcome === 'arsenal') { finalGroup = 'arsenal'; pipelineStatus = 'new'; }
     }
 
@@ -159,15 +159,14 @@ export default function DayView({
       setContactList(prev => [result.contact, ...prev]);
     }
 
-    // If 'both' selected, also create an arsenal contact
-    if (isBoth && result?.success) {
+    if (createArsenalToo && result?.success) {
       const arsenalResult = await onAddContact({
         name: contactName.trim(),
         phone: phoneCheck.formatted,
         email: contactEmail.trim() || null,
         contact_group: 'arsenal',
         property: null,
-        notes: contactNotes.trim() ? `[Also target property] ${contactNotes.trim()}` : '[Also target property]',
+        notes: contactNotes.trim() ? `[From target contact] ${contactNotes.trim()}` : '[From target contact]',
         day_added: day,
         pipeline_status: 'new',
         follow_up_interval: contactFollowUpInterval,
@@ -287,9 +286,6 @@ export default function DayView({
           </div>
         )}
       </div>
-
-      {/* Weekly Offer Tracker */}
-      {!isPost30 && <WeeklyOfferTracker day={day} user={user} currentOffers={metrics.offers_submitted || 0} existingOffers={existingDailySubmission?.offers_submitted || 0} />}
 
       {/* Deadline Countdown (shown when submission area is visible) */}
       {canSubmit && timeLeft > 0 && (
@@ -971,57 +967,14 @@ export default function DayView({
                       borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
 
                     {contactGroup === 'target' && (
-                      <div style={{ marginBottom: 12 }}>
-                        <div style={{ fontSize: 12, color: '#e94560', fontWeight: 600, marginBottom: 6 }}>Outcome *</div>
-                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                          {[
-                            { value: 'target_property', label: 'Target Property', desc: "They're interested", color: '#e94560' },
-                            { value: 'dead', label: 'Dead Contact', desc: 'Not interested', color: '#666' },
-                            { value: 'arsenal', label: 'Move to Arsenal', desc: 'Good relationship, no deal', color: '#f0a500' },
-                          ].map(o => {
-                            const isActive = targetOutcome === o.value
-                              || (o.value === 'target_property' && (targetOutcome === 'target_property' || targetOutcome === 'both'))
-                              || (o.value === 'arsenal' && (targetOutcome === 'arsenal' || targetOutcome === 'both'));
-                            return (
-                            <button key={o.value} onClick={() => {
-                              if (o.value === 'dead') {
-                                setTargetOutcome('dead');
-                              } else if (o.value === 'target_property') {
-                                if (targetOutcome === 'dead') setTargetOutcome('target_property');
-                                else if (targetOutcome === 'target_property') setTargetOutcome('');
-                                else if (targetOutcome === 'both') setTargetOutcome('arsenal');
-                                else if (targetOutcome === 'arsenal') setTargetOutcome('both');
-                                else setTargetOutcome('target_property');
-                              } else if (o.value === 'arsenal') {
-                                if (targetOutcome === 'dead') setTargetOutcome('arsenal');
-                                else if (targetOutcome === 'arsenal') setTargetOutcome('');
-                                else if (targetOutcome === 'both') setTargetOutcome('target_property');
-                                else if (targetOutcome === 'target_property') setTargetOutcome('both');
-                                else setTargetOutcome('arsenal');
-                              }
-                              setContactFollowUpInterval('');
-                            }}
-                              style={{
-                                padding: '8px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
-                                fontFamily: "'DM Sans', sans-serif", border: 'none', textAlign: 'left',
-                                background: isActive ? `${o.color}15` : 'rgba(255,255,255,0.04)',
-                                color: isActive ? o.color : '#888',
-                                outline: isActive ? `1px solid ${o.color}40` : '1px solid rgba(255,255,255,0.06)',
-                              }}>
-                              <div style={{ fontWeight: 600 }}>{o.label}</div>
-                              <div style={{ fontSize: 10, opacity: 0.7, marginTop: 2 }}>{o.desc}</div>
-                            </button>
-                            );
-                          })}
-                        </div>
-                      </div>
+                        <OutcomeSelector targetOutcome={targetOutcome} setTargetOutcome={setTargetOutcome} setFollowUpInterval={setContactFollowUpInterval} />
                     )}
 
                     {(contactGroup === 'arsenal' || targetOutcome) && (
                       <div style={{ marginBottom: 12 }}>
                         <div style={{ fontSize: 12, color: '#48c78e', fontWeight: 600, marginBottom: 6 }}>Schedule Follow-Up *</div>
                         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                          {(targetOutcome === 'dead'
+                          {(targetOutcome === 'dead' || targetOutcome === 'dead_arsenal'
                             ? [{ value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }, { value: '6_months', label: '6 Months' }, { value: 'never', label: 'Never' }]
                             : [{ value: '2_days', label: '2 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }]
                           ).map(opt => (
@@ -1632,50 +1585,7 @@ export default function DayView({
 
                 {/* Target Contact — Outcome Classification */}
                 {contactGroup === 'target' && (
-                  <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontSize: 12, color: '#e94560', fontWeight: 600, marginBottom: 6 }}>Outcome *</div>
-                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                      {[
-                        { value: 'target_property', label: 'Target Property', desc: "They're interested", color: '#e94560' },
-                        { value: 'dead', label: 'Dead Contact', desc: 'Not interested', color: '#666' },
-                        { value: 'arsenal', label: 'Move to Arsenal', desc: 'Good relationship, no deal', color: '#f0a500' },
-                      ].map(o => {
-                        const isActive = targetOutcome === o.value
-                          || (o.value === 'target_property' && (targetOutcome === 'target_property' || targetOutcome === 'both'))
-                          || (o.value === 'arsenal' && (targetOutcome === 'arsenal' || targetOutcome === 'both'));
-                        return (
-                        <button key={o.value} onClick={() => {
-                          if (o.value === 'dead') {
-                            setTargetOutcome('dead');
-                          } else if (o.value === 'target_property') {
-                            if (targetOutcome === 'dead') setTargetOutcome('target_property');
-                            else if (targetOutcome === 'target_property') setTargetOutcome('');
-                            else if (targetOutcome === 'both') setTargetOutcome('arsenal');
-                            else if (targetOutcome === 'arsenal') setTargetOutcome('both');
-                            else setTargetOutcome('target_property');
-                          } else if (o.value === 'arsenal') {
-                            if (targetOutcome === 'dead') setTargetOutcome('arsenal');
-                            else if (targetOutcome === 'arsenal') setTargetOutcome('');
-                            else if (targetOutcome === 'both') setTargetOutcome('target_property');
-                            else if (targetOutcome === 'target_property') setTargetOutcome('both');
-                            else setTargetOutcome('arsenal');
-                          }
-                          setContactFollowUpInterval('');
-                        }}
-                          style={{
-                            padding: '8px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
-                            fontFamily: "'DM Sans', sans-serif", border: 'none', textAlign: 'left',
-                            background: isActive ? `${o.color}15` : 'rgba(255,255,255,0.04)',
-                            color: isActive ? o.color : '#888',
-                            outline: isActive ? `1px solid ${o.color}40` : '1px solid rgba(255,255,255,0.06)',
-                          }}>
-                          <div style={{ fontWeight: 600 }}>{o.label}</div>
-                          <div style={{ fontSize: 10, opacity: 0.7, marginTop: 2 }}>{o.desc}</div>
-                        </button>
-                        );
-                      })}
-                    </div>
-                  </div>
+                    <OutcomeSelector targetOutcome={targetOutcome} setTargetOutcome={setTargetOutcome} setFollowUpInterval={setContactFollowUpInterval} />
                 )}
 
                 {/* Follow-Up Interval (mandatory) */}
@@ -1683,7 +1593,7 @@ export default function DayView({
                   <div style={{ marginBottom: 12 }}>
                     <div style={{ fontSize: 12, color: '#48c78e', fontWeight: 600, marginBottom: 6 }}>Schedule Follow-Up *</div>
                     <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                      {(targetOutcome === 'dead'
+                      {(targetOutcome === 'dead' || targetOutcome === 'dead_arsenal'
                         ? [{ value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }, { value: '6_months', label: '6 Months' }, { value: 'never', label: 'Never' }]
                         : [{ value: '2_days', label: '2 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }]
                       ).map(opt => (
@@ -1954,10 +1864,10 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
 
     let finalGroup = group;
     let pipelineStatus = 'new';
-    const isBoth = targetOutcome === 'both';
+    const createArsenalToo = targetOutcome === 'both' || targetOutcome === 'dead_arsenal';
     if (group === 'target') {
-      if (targetOutcome === 'target_property' || isBoth) pipelineStatus = 'target_property';
-      else if (targetOutcome === 'dead') pipelineStatus = 'dead';
+      if (targetOutcome === 'target_property' || targetOutcome === 'both') pipelineStatus = 'target_property';
+      else if (targetOutcome === 'dead' || targetOutcome === 'dead_arsenal') pipelineStatus = 'dead';
       else if (targetOutcome === 'arsenal') { finalGroup = 'arsenal'; pipelineStatus = 'new'; }
     }
 
@@ -1980,15 +1890,14 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
       setContactList(prev => [result.contact, ...prev]);
       onAutoIncrement();
 
-      // If 'both' selected, also create an arsenal contact
-      if (isBoth) {
+      if (createArsenalToo) {
         const arsenalResult = await onAddContact({
           name: name.trim(),
           phone: phoneCheck.formatted,
           email: email.trim() || null,
           contact_group: 'arsenal',
           property: null,
-          notes: notes.trim() ? `[Also target property] ${notes.trim()}` : '[Also target property]',
+          notes: notes.trim() ? `[From target contact] ${notes.trim()}` : '[From target contact]',
           day_added: day,
           pipeline_status: 'new',
           follow_up_interval: followUp,
@@ -2060,47 +1969,13 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
         }} />
 
       {group === 'target' && (
-        <div style={{ marginBottom: 10 }}>
-          <div style={{ fontSize: 11, color: '#e94560', fontWeight: 600, marginBottom: 5 }}>Outcome *</div>
-          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-            {[
-              { value: 'target_property', label: 'Target Property', color: '#e94560' },
-              { value: 'dead', label: 'Dead', color: '#666' },
-              { value: 'arsenal', label: 'Move to Arsenal', color: '#f0a500' },
-            ].map(o => (
-              <button key={o.value} onClick={() => {
-                if (o.value === 'dead') {
-                  setTargetOutcome('dead');
-                } else if (o.value === 'target_property') {
-                  if (targetOutcome === 'dead') setTargetOutcome('target_property');
-                  else if (targetOutcome === 'target_property') setTargetOutcome('');
-                  else if (targetOutcome === 'both') setTargetOutcome('arsenal');
-                  else if (targetOutcome === 'arsenal') setTargetOutcome('both');
-                  else setTargetOutcome('target_property');
-                } else if (o.value === 'arsenal') {
-                  if (targetOutcome === 'dead') setTargetOutcome('arsenal');
-                  else if (targetOutcome === 'arsenal') setTargetOutcome('');
-                  else if (targetOutcome === 'both') setTargetOutcome('target_property');
-                  else if (targetOutcome === 'target_property') setTargetOutcome('both');
-                  else setTargetOutcome('arsenal');
-                }
-                setFollowUp('');
-              }} style={{
-                padding: '5px 12px', borderRadius: 6, fontSize: 11, fontWeight: (targetOutcome === o.value || (o.value === 'target_property' && (targetOutcome === 'target_property' || targetOutcome === 'both')) || (o.value === 'arsenal' && (targetOutcome === 'arsenal' || targetOutcome === 'both'))) ? 600 : 400,
-                cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
-                background: (targetOutcome === o.value || (o.value === 'target_property' && (targetOutcome === 'target_property' || targetOutcome === 'both')) || (o.value === 'arsenal' && (targetOutcome === 'arsenal' || targetOutcome === 'both'))) ? `${o.color}20` : 'rgba(255,255,255,0.04)',
-                color: (targetOutcome === o.value || (o.value === 'target_property' && (targetOutcome === 'target_property' || targetOutcome === 'both')) || (o.value === 'arsenal' && (targetOutcome === 'arsenal' || targetOutcome === 'both'))) ? o.color : '#888',
-                outline: (targetOutcome === o.value || (o.value === 'target_property' && (targetOutcome === 'target_property' || targetOutcome === 'both')) || (o.value === 'arsenal' && (targetOutcome === 'arsenal' || targetOutcome === 'both'))) ? `1px solid ${o.color}40` : '1px solid rgba(255,255,255,0.08)',
-              }}>{o.label}</button>
-            ))}
-          </div>
-        </div>
+        <OutcomeSelector targetOutcome={targetOutcome} setTargetOutcome={setTargetOutcome} setFollowUpInterval={setFollowUp} compact />
       )}
 
       {(group === 'arsenal' || targetOutcome) && <div style={{ marginBottom: 12 }}>
         <div style={{ fontSize: 11, color: '#888', fontWeight: 600, marginBottom: 5 }}>Follow-up Interval *</div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          {(targetOutcome === 'dead'
+          {(targetOutcome === 'dead' || targetOutcome === 'dead_arsenal'
             ? [{ value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }, { value: '6_months', label: '6 Months' }, { value: 'never', label: 'Never' }]
             : targetOutcome === 'target_property' || targetOutcome === 'both'
             ? [{ value: '3_days', label: '3 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }]
@@ -2134,6 +2009,83 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
           {saving ? 'Saving...' : `Add ${label}`}
         </button>
       </div>
+    </div>
+  );
+}
+
+// ── Outcome Selector ────────────────────────────────────────────
+
+function OutcomeSelector({ targetOutcome, setTargetOutcome, setFollowUpInterval, compact }) {
+  const sz = compact ? 11 : 12;
+  const pad = compact ? '5px 12px' : '8px 14px';
+  const rad = compact ? 6 : 8;
+
+  const propertyOutcome = (targetOutcome === 'target_property' || targetOutcome === 'both') ? 'target_property'
+    : (targetOutcome === 'dead' || targetOutcome === 'dead_arsenal') ? 'dead' : '';
+  const alsoArsenal = targetOutcome === 'both' || targetOutcome === 'arsenal' || targetOutcome === 'dead_arsenal';
+
+  const handlePropertyOutcome = (value) => {
+    if (value === propertyOutcome) {
+      setTargetOutcome(alsoArsenal ? 'arsenal' : '');
+    } else if (value === 'target_property') {
+      setTargetOutcome(alsoArsenal ? 'both' : 'target_property');
+    } else {
+      setTargetOutcome(alsoArsenal ? 'dead_arsenal' : 'dead');
+    }
+    setFollowUpInterval('');
+  };
+
+  const handleArsenalToggle = () => {
+    if (alsoArsenal) {
+      setTargetOutcome(propertyOutcome || '');
+    } else {
+      if (propertyOutcome === 'target_property') setTargetOutcome('both');
+      else if (propertyOutcome === 'dead') setTargetOutcome('dead_arsenal');
+      else setTargetOutcome('arsenal');
+    }
+    setFollowUpInterval('');
+  };
+
+  const btnStyle = (active, color) => ({
+    padding: pad, borderRadius: rad, fontSize: sz, cursor: 'pointer',
+    fontFamily: "'DM Sans', sans-serif", border: 'none', textAlign: 'left',
+    background: active ? `${color}15` : 'rgba(255,255,255,0.04)',
+    color: active ? color : '#888',
+    outline: active ? `1px solid ${color}40` : '1px solid rgba(255,255,255,0.06)',
+    fontWeight: active ? 600 : 400,
+  });
+
+  return (
+    <div style={{ marginBottom: compact ? 10 : 12 }}>
+      <div style={{ fontSize: sz, color: '#e94560', fontWeight: 600, marginBottom: compact ? 5 : 6 }}>Property Outcome *</div>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
+        <button onClick={() => handlePropertyOutcome('target_property')} style={btnStyle(propertyOutcome === 'target_property', '#e94560')}>
+          {compact ? 'Target Property' : <><div style={{ fontWeight: 600 }}>Target Property</div><div style={{ fontSize: 10, opacity: 0.7, marginTop: 2 }}>They're interested</div></>}
+        </button>
+        <button onClick={() => handlePropertyOutcome('dead')} style={btnStyle(propertyOutcome === 'dead', '#666')}>
+          {compact ? 'Dead' : <><div style={{ fontWeight: 600 }}>Dead Contact</div><div style={{ fontSize: 10, opacity: 0.7, marginTop: 2 }}>Not interested</div></>}
+        </button>
+      </div>
+      <button onClick={handleArsenalToggle} style={{
+        display: 'flex', alignItems: 'center', gap: 8, width: '100%',
+        padding: compact ? '6px 12px' : '8px 14px', borderRadius: rad, cursor: 'pointer',
+        fontFamily: "'DM Sans', sans-serif", border: 'none', fontSize: sz,
+        background: alsoArsenal ? 'rgba(240,165,0,0.1)' : 'rgba(255,255,255,0.04)',
+        color: alsoArsenal ? '#f0a500' : '#888',
+        outline: alsoArsenal ? '1px solid rgba(240,165,0,0.3)' : '1px solid rgba(255,255,255,0.06)',
+      }}>
+        <div style={{
+          width: 16, height: 16, borderRadius: 4, flexShrink: 0,
+          border: alsoArsenal ? '2px solid #f0a500' : '2px solid rgba(255,255,255,0.2)',
+          background: alsoArsenal ? '#f0a500' : 'transparent',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 10, color: '#000', fontWeight: 700,
+        }}>{alsoArsenal ? '✓' : ''}</div>
+        <div>
+          <span style={{ fontWeight: 600 }}>Also add to Arsenal Contacts</span>
+          {!compact && <span style={{ fontSize: 10, opacity: 0.7, marginLeft: 6 }}>— keep building the relationship beyond this deal</span>}
+        </div>
+      </button>
     </div>
   );
 }
