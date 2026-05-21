@@ -93,6 +93,17 @@ export default function DayView({
   const [followUpInterval, setFollowUpInterval] = useState('');
   const [followUpReclassify, setFollowUpReclassify] = useState('');
 
+  // ── Offers & Under Contract state ────────────────────────────
+  const [offersSubmitted, setOffersSubmitted] = useState([]);
+  const [showOfferForm, setShowOfferForm] = useState(false);
+  const [offerContactId, setOfferContactId] = useState('');
+  const [offerPurchasePrice, setOfferPurchasePrice] = useState('');
+  const [offerNotes, setOfferNotes] = useState('');
+  const [underContract, setUnderContract] = useState([]);
+  const [showUnderContractForm, setShowUnderContractForm] = useState(false);
+  const [underContractContactId, setUnderContractContactId] = useState('');
+  const [showContractCelebration, setShowContractCelebration] = useState(false);
+
   useEffect(() => {
     if (initialContacts) setContactList(initialContacts);
   }, [initialContacts]);
@@ -118,8 +129,9 @@ export default function DayView({
     const now = new Date().toISOString();
     let finalGroup = contactGroup;
     let pipelineStatus = 'new';
+    const isBoth = targetOutcome === 'both';
     if (contactGroup === 'target') {
-      if (targetOutcome === 'target_property') pipelineStatus = 'target_property';
+      if (targetOutcome === 'target_property' || isBoth) pipelineStatus = 'target_property';
       else if (targetOutcome === 'dead') pipelineStatus = 'dead';
       else if (targetOutcome === 'arsenal') { finalGroup = 'arsenal'; pipelineStatus = 'new'; }
     }
@@ -140,6 +152,27 @@ export default function DayView({
     if (result?.success && result.contact) {
       setContactList(prev => [result.contact, ...prev]);
     }
+
+    // If 'both' selected, also create an arsenal contact
+    if (isBoth && result?.success) {
+      const arsenalResult = await onAddContact({
+        name: contactName.trim(),
+        phone: contactPhone.trim() || null,
+        email: contactEmail.trim() || null,
+        contact_group: 'arsenal',
+        property: null,
+        notes: contactNotes.trim() ? `[Also target property] ${contactNotes.trim()}` : '[Also target property]',
+        day_added: day,
+        pipeline_status: 'new',
+        follow_up_interval: contactFollowUpInterval,
+        follow_up_date: calculateFollowUpDate(contactFollowUpInterval),
+        last_contact_date: now,
+      });
+      if (arsenalResult?.success && arsenalResult.contact) {
+        setContactList(prev => [arsenalResult.contact, ...prev]);
+      }
+    }
+
     setContactSaving(false);
     resetContactForm();
   };
@@ -659,45 +692,231 @@ export default function DayView({
                   </div>
 
                   {/* Offers Submitted */}
-                  <div style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '12px 16px', borderRadius: 10,
-                    background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <span style={{ fontSize: 18 }}>📝</span>
+                  {(() => {
+                    const targetProperties = (contactList || []).filter(c => c.contact_group === 'target' && c.pipeline_status !== 'dead');
+                    return (
                       <div>
-                        <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>Offers Submitted</div>
-                        <div style={{ fontSize: 11, color: '#888', fontWeight: 600 }}>Current: {metrics.offers_submitted || 0}</div>
+                        <div style={{
+                          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                          padding: '12px 16px', borderRadius: 10,
+                          background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                            <span style={{ fontSize: 18 }}>📝</span>
+                            <div>
+                              <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>Offers Submitted</div>
+                              <div style={{ fontSize: 11, color: '#888', fontWeight: 600 }}>
+                                {offersSubmitted.length > 0 ? `${offersSubmitted.length} offer${offersSubmitted.length !== 1 ? 's' : ''} today` : `Current: ${metrics.offers_submitted || 0}`}
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => setShowOfferForm(!showOfferForm)}
+                            style={{
+                              padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                              cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                              border: '1px solid rgba(233,69,96,0.4)',
+                              background: showOfferForm ? 'rgba(233,69,96,0.2)' : 'rgba(233,69,96,0.1)',
+                              color: '#e94560',
+                            }}
+                          >+ Add Offer</button>
+                        </div>
+
+                        {showOfferForm && (
+                          <div style={{
+                            marginTop: 8, padding: 14, borderRadius: 10,
+                            background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(233,69,96,0.15)',
+                          }}>
+                            <div style={{ fontSize: 13, fontWeight: 600, color: '#e94560', marginBottom: 10 }}>New Offer</div>
+                            <select value={offerContactId} onChange={e => setOfferContactId(e.target.value)}
+                              style={{
+                                width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 10, borderRadius: 8,
+                                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#ccc',
+                              }}>
+                              <option value="">Select target property...</option>
+                              {targetProperties.map(c => (
+                                <option key={c.id} value={c.id}>{c.name}{c.property ? ` — ${c.property}` : ''}</option>
+                              ))}
+                            </select>
+                            <input type="text" value={offerPurchasePrice} onChange={e => setOfferPurchasePrice(e.target.value)}
+                              placeholder="Purchase price (e.g. $250,000)"
+                              style={{
+                                width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 10, borderRadius: 8,
+                                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee',
+                              }} />
+                            <textarea value={offerNotes} onChange={e => setOfferNotes(e.target.value)}
+                              placeholder="Notes / contingencies..." rows={2}
+                              style={{
+                                width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 10, resize: 'vertical',
+                                borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee',
+                              }} />
+                            <div style={{ display: 'flex', gap: 8 }}>
+                              <button disabled={!offerContactId}
+                                onClick={() => {
+                                  const contact = targetProperties.find(c => c.id === offerContactId);
+                                  setOffersSubmitted(prev => [...prev, {
+                                    contactId: offerContactId, contactName: contact?.name || '',
+                                    property: contact?.property || '', purchasePrice: offerPurchasePrice,
+                                    notes: offerNotes, timestamp: new Date().toISOString(),
+                                  }]);
+                                  setMetric('offers_submitted', (metrics.offers_submitted || 0) + 1);
+                                  setOfferContactId(''); setOfferPurchasePrice(''); setOfferNotes('');
+                                  setShowOfferForm(false);
+                                }}
+                                style={{
+                                  flex: 1, padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+                                  cursor: offerContactId ? 'pointer' : 'default', fontFamily: "'DM Sans', sans-serif",
+                                  border: 'none',
+                                  background: offerContactId ? 'rgba(233,69,96,0.2)' : 'rgba(255,255,255,0.04)',
+                                  color: offerContactId ? '#e94560' : '#555', opacity: offerContactId ? 1 : 0.4,
+                                }}>Submit Offer</button>
+                              <button onClick={() => setShowOfferForm(false)}
+                                style={{
+                                  padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                                  cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                                  border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#888',
+                                }}>Cancel</button>
+                            </div>
+                          </div>
+                        )}
+
+                        {offersSubmitted.length > 0 && (
+                          <div style={{ marginTop: 8 }}>
+                            {offersSubmitted.map((offer, i) => (
+                              <div key={i} style={{
+                                padding: '10px 14px', borderRadius: 8, marginBottom: 4,
+                                background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.1)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                              }}>
+                                <div>
+                                  <div style={{ fontSize: 13, fontWeight: 600, color: '#ddd' }}>
+                                    {offer.contactName}{offer.property ? ` — ${offer.property}` : ''}
+                                  </div>
+                                  {offer.purchasePrice && <div style={{ fontSize: 12, color: '#e94560', marginTop: 2 }}>{offer.purchasePrice}</div>}
+                                  {offer.notes && <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>{offer.notes}</div>}
+                                </div>
+                                <div style={{ fontSize: 11, color: '#555' }}>
+                                  {new Date(offer.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <button
-                        onClick={() => setMetric('offers_submitted', Math.max(0, (metrics.offers_submitted || 0) - 1))}
-                        style={{
-                          width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
-                          border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
-                          color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}
-                      >-</button>
-                      <div className="mono" style={{
-                        width: 56, textAlign: 'center', fontSize: 18, fontWeight: 700,
-                        padding: '6px', color: '#fff',
-                      }}>
-                        {metrics.offers_submitted || 0}
+                    );
+                  })()}
+
+                  {/* Properties Under Contract (post-submit) */}
+                  {(() => {
+                    const targetProperties = (contactList || []).filter(c => c.contact_group === 'target' && c.pipeline_status !== 'dead');
+                    return (
+                      <div>
+                        <div style={{
+                          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                          padding: '12px 16px', borderRadius: 10,
+                          background: 'rgba(72,199,142,0.04)', border: '1px solid rgba(72,199,142,0.12)',
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                            <span style={{ fontSize: 18 }}>🏆</span>
+                            <div>
+                              <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>Properties Under Contract</div>
+                              <div style={{ fontSize: 11, color: '#48c78e', fontWeight: 600 }}>
+                                {underContract.length > 0 ? `${underContract.length} propert${underContract.length !== 1 ? 'ies' : 'y'}` : 'None yet'}
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => setShowUnderContractForm(!showUnderContractForm)}
+                            style={{
+                              padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                              cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                              border: '1px solid rgba(72,199,142,0.4)',
+                              background: showUnderContractForm ? 'rgba(72,199,142,0.2)' : 'rgba(72,199,142,0.1)',
+                              color: '#48c78e',
+                            }}
+                          >+ Add</button>
+                        </div>
+
+                        {showUnderContractForm && (
+                          <div style={{
+                            marginTop: 8, padding: 14, borderRadius: 10,
+                            background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(72,199,142,0.15)',
+                          }}>
+                            <div style={{ fontSize: 13, fontWeight: 600, color: '#48c78e', marginBottom: 10 }}>Add Property Under Contract</div>
+                            <select value={underContractContactId} onChange={e => setUnderContractContactId(e.target.value)}
+                              style={{
+                                width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 10, borderRadius: 8,
+                                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#ccc',
+                              }}>
+                              <option value="">Select target property...</option>
+                              {targetProperties.map(c => (
+                                <option key={c.id} value={c.id}>{c.name}{c.property ? ` — ${c.property}` : ''}</option>
+                              ))}
+                            </select>
+                            <div style={{ display: 'flex', gap: 8 }}>
+                              <button disabled={!underContractContactId}
+                                onClick={() => {
+                                  const contact = targetProperties.find(c => c.id === underContractContactId);
+                                  setUnderContract(prev => [...prev, {
+                                    contactId: underContractContactId, contactName: contact?.name || '',
+                                    property: contact?.property || '', timestamp: new Date().toISOString(),
+                                  }]);
+                                  setUnderContractContactId(''); setShowUnderContractForm(false);
+                                  setShowContractCelebration(true);
+                                  setTimeout(() => setShowContractCelebration(false), 4000);
+                                }}
+                                style={{
+                                  flex: 1, padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+                                  cursor: underContractContactId ? 'pointer' : 'default', fontFamily: "'DM Sans', sans-serif",
+                                  border: 'none',
+                                  background: underContractContactId ? 'rgba(72,199,142,0.2)' : 'rgba(255,255,255,0.04)',
+                                  color: underContractContactId ? '#48c78e' : '#555', opacity: underContractContactId ? 1 : 0.4,
+                                }}>Confirm Under Contract</button>
+                              <button onClick={() => setShowUnderContractForm(false)}
+                                style={{
+                                  padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                                  cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                                  border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#888',
+                                }}>Cancel</button>
+                            </div>
+                          </div>
+                        )}
+
+                        {showContractCelebration && (
+                          <div style={{
+                            marginTop: 8, padding: '20px', borderRadius: 12, textAlign: 'center',
+                            background: 'linear-gradient(135deg, rgba(72,199,142,0.15), rgba(240,165,0,0.1))',
+                            border: '1px solid rgba(72,199,142,0.3)',
+                            animation: 'celebrationPulse 0.6s ease-in-out',
+                          }}>
+                            <div style={{ fontSize: 36, marginBottom: 8 }}>🎉🏆🎉</div>
+                            <div style={{ fontSize: 18, fontWeight: 700, color: '#48c78e', marginBottom: 4 }}>Congratulations!</div>
+                            <div style={{ fontSize: 14, color: '#aaa' }}>Property under contract! Keep pushing!</div>
+                          </div>
+                        )}
+
+                        {underContract.length > 0 && (
+                          <div style={{ marginTop: 8 }}>
+                            {underContract.map((uc, i) => (
+                              <div key={i} style={{
+                                padding: '10px 14px', borderRadius: 8, marginBottom: 4,
+                                background: 'rgba(72,199,142,0.04)', border: '1px solid rgba(72,199,142,0.1)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                              }}>
+                                <div style={{ fontSize: 13, fontWeight: 600, color: '#ddd' }}>
+                                  {uc.contactName}{uc.property ? ` — ${uc.property}` : ''}
+                                </div>
+                                <span style={{
+                                  fontSize: 10, padding: '3px 8px', borderRadius: 4,
+                                  background: 'rgba(72,199,142,0.15)', color: '#48c78e', fontWeight: 700,
+                                }}>UNDER CONTRACT</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                      <button
-                        onClick={() => setMetric('offers_submitted', (metrics.offers_submitted || 0) + 1)}
-                        style={{
-                          width: 32, height: 32, borderRadius: 6, fontSize: 18, fontWeight: 700,
-                          border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
-                          color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}
-                      >+</button>
-                    </div>
-                  </div>
+                    );
+                  })()}
                 </div>
 
                 {/* Inline Contact Form (reuses existing state) */}
@@ -752,19 +971,41 @@ export default function DayView({
                             { value: 'target_property', label: 'Target Property', desc: "They're interested", color: '#e94560' },
                             { value: 'dead', label: 'Dead Contact', desc: 'Not interested', color: '#666' },
                             { value: 'arsenal', label: 'Move to Arsenal', desc: 'Good relationship, no deal', color: '#f0a500' },
-                          ].map(o => (
-                            <button key={o.value} onClick={() => { setTargetOutcome(o.value); setContactFollowUpInterval(''); }}
+                          ].map(o => {
+                            const isActive = targetOutcome === o.value
+                              || (o.value === 'target_property' && (targetOutcome === 'target_property' || targetOutcome === 'both'))
+                              || (o.value === 'arsenal' && (targetOutcome === 'arsenal' || targetOutcome === 'both'));
+                            return (
+                            <button key={o.value} onClick={() => {
+                              if (o.value === 'dead') {
+                                setTargetOutcome('dead');
+                              } else if (o.value === 'target_property') {
+                                if (targetOutcome === 'dead') setTargetOutcome('target_property');
+                                else if (targetOutcome === 'target_property') setTargetOutcome('');
+                                else if (targetOutcome === 'both') setTargetOutcome('arsenal');
+                                else if (targetOutcome === 'arsenal') setTargetOutcome('both');
+                                else setTargetOutcome('target_property');
+                              } else if (o.value === 'arsenal') {
+                                if (targetOutcome === 'dead') setTargetOutcome('arsenal');
+                                else if (targetOutcome === 'arsenal') setTargetOutcome('');
+                                else if (targetOutcome === 'both') setTargetOutcome('target_property');
+                                else if (targetOutcome === 'target_property') setTargetOutcome('both');
+                                else setTargetOutcome('arsenal');
+                              }
+                              setContactFollowUpInterval('');
+                            }}
                               style={{
                                 padding: '8px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
                                 fontFamily: "'DM Sans', sans-serif", border: 'none', textAlign: 'left',
-                                background: targetOutcome === o.value ? `${o.color}15` : 'rgba(255,255,255,0.04)',
-                                color: targetOutcome === o.value ? o.color : '#888',
-                                outline: targetOutcome === o.value ? `1px solid ${o.color}40` : '1px solid rgba(255,255,255,0.06)',
+                                background: isActive ? `${o.color}15` : 'rgba(255,255,255,0.04)',
+                                color: isActive ? o.color : '#888',
+                                outline: isActive ? `1px solid ${o.color}40` : '1px solid rgba(255,255,255,0.06)',
                               }}>
                               <div style={{ fontWeight: 600 }}>{o.label}</div>
                               <div style={{ fontSize: 10, opacity: 0.7, marginTop: 2 }}>{o.desc}</div>
                             </button>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
                     )}
@@ -892,8 +1133,12 @@ export default function DayView({
                 const isRequired = isBool ? !!required : (typeof required === 'number' && required > 0);
 
                 const isContactMetric = metric.id === 'arsenal_contacts' || metric.id === 'target_contacts';
+                const isOfferMetric = metric.id === 'offers_submitted';
                 const contactMetricGroup = metric.id === 'arsenal_contacts' ? 'arsenal' : 'target';
                 const contactColor = metric.id === 'arsenal_contacts' ? '#f0a500' : '#e94560';
+
+                // Skip offers_submitted from the standard metric list — it's rendered separately below
+                if (isOfferMetric) return null;
 
                 return (
                   <div key={metric.id}>
@@ -1006,17 +1251,279 @@ export default function DayView({
               })}
             </div>
 
-            {/* Lifetime Offers Counter */}
-            <div style={{
-              marginTop: 16, padding: '12px 16px', borderRadius: 10,
-              background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.12)',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            }}>
-              <div style={{ fontSize: 13, color: '#f0a500', fontWeight: 600 }}>Offers to Contract</div>
-              <div className="mono" style={{ fontSize: 20, fontWeight: 700, color: '#f0a500' }}>
-                {(user.lifetimeOffersSubmitted || 0) + Math.max(0, (metrics.offers_submitted || 0) - (existingDailySubmission?.offers_submitted || 0))}
-              </div>
-            </div>
+            {/* Offers Submitted Section */}
+            {(() => {
+              const targetProperties = (contactList || []).filter(c => c.contact_group === 'target' && c.pipeline_status !== 'dead');
+              return (
+                <div style={{ marginTop: 16 }}>
+                  <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '12px 16px', borderRadius: 10,
+                    background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <span style={{ fontSize: 18 }}>📝</span>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>Offers Submitted</div>
+                        <div style={{ fontSize: 11, color: '#888', fontWeight: 600 }}>
+                          {offersSubmitted.length > 0 ? `${offersSubmitted.length} offer${offersSubmitted.length !== 1 ? 's' : ''} today` : 'No offers yet'}
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setShowOfferForm(!showOfferForm)}
+                      style={{
+                        padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                        cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                        border: '1px solid rgba(233,69,96,0.4)',
+                        background: showOfferForm ? 'rgba(233,69,96,0.2)' : 'rgba(233,69,96,0.1)',
+                        color: '#e94560',
+                      }}
+                    >+ Add Offer</button>
+                  </div>
+
+                  {showOfferForm && (
+                    <div style={{
+                      marginTop: 8, padding: 14, borderRadius: 10,
+                      background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(233,69,96,0.15)',
+                    }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#e94560', marginBottom: 10 }}>New Offer</div>
+
+                      <select value={offerContactId} onChange={e => setOfferContactId(e.target.value)}
+                        style={{
+                          width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 10, borderRadius: 8,
+                          background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#ccc',
+                        }}>
+                        <option value="">Select target property...</option>
+                        {targetProperties.map(c => (
+                          <option key={c.id} value={c.id}>{c.name}{c.property ? ` — ${c.property}` : ''}</option>
+                        ))}
+                      </select>
+
+                      <input
+                        type="text"
+                        value={offerPurchasePrice}
+                        onChange={e => setOfferPurchasePrice(e.target.value)}
+                        placeholder="Purchase price (e.g. $250,000)"
+                        style={{
+                          width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 10, borderRadius: 8,
+                          background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee',
+                        }}
+                      />
+
+                      <textarea
+                        value={offerNotes}
+                        onChange={e => setOfferNotes(e.target.value)}
+                        placeholder="Notes / contingencies..."
+                        rows={2}
+                        style={{
+                          width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 10, resize: 'vertical',
+                          borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee',
+                        }}
+                      />
+
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button
+                          disabled={!offerContactId}
+                          onClick={() => {
+                            const contact = targetProperties.find(c => c.id === offerContactId);
+                            setOffersSubmitted(prev => [...prev, {
+                              contactId: offerContactId,
+                              contactName: contact?.name || '',
+                              property: contact?.property || '',
+                              purchasePrice: offerPurchasePrice,
+                              notes: offerNotes,
+                              timestamp: new Date().toISOString(),
+                            }]);
+                            setMetric('offers_submitted', (metrics.offers_submitted || 0) + 1);
+                            setOfferContactId(''); setOfferPurchasePrice(''); setOfferNotes('');
+                            setShowOfferForm(false);
+                          }}
+                          style={{
+                            flex: 1, padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+                            cursor: offerContactId ? 'pointer' : 'default', fontFamily: "'DM Sans', sans-serif",
+                            border: 'none',
+                            background: offerContactId ? 'rgba(233,69,96,0.2)' : 'rgba(255,255,255,0.04)',
+                            color: offerContactId ? '#e94560' : '#555',
+                            opacity: offerContactId ? 1 : 0.4,
+                          }}
+                        >
+                          Submit Offer
+                        </button>
+                        <button onClick={() => setShowOfferForm(false)}
+                          style={{
+                            padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                            cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#888',
+                          }}>Cancel</button>
+                      </div>
+                    </div>
+                  )}
+
+                  {offersSubmitted.length > 0 && (
+                    <div style={{ marginTop: 8 }}>
+                      {offersSubmitted.map((offer, i) => (
+                        <div key={i} style={{
+                          padding: '10px 14px', borderRadius: 8, marginBottom: 4,
+                          background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.1)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        }}>
+                          <div>
+                            <div style={{ fontSize: 13, fontWeight: 600, color: '#ddd' }}>
+                              {offer.contactName}{offer.property ? ` — ${offer.property}` : ''}
+                            </div>
+                            {offer.purchasePrice && (
+                              <div style={{ fontSize: 12, color: '#e94560', marginTop: 2 }}>{offer.purchasePrice}</div>
+                            )}
+                            {offer.notes && (
+                              <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>{offer.notes}</div>
+                            )}
+                          </div>
+                          <div style={{ fontSize: 11, color: '#555' }}>
+                            {new Date(offer.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+
+            {/* Properties Under Contract */}
+            {(() => {
+              const targetProperties = (contactList || []).filter(c => c.contact_group === 'target' && c.pipeline_status !== 'dead');
+              return (
+                <div style={{ marginTop: 16 }}>
+                  <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '12px 16px', borderRadius: 10,
+                    background: 'rgba(72,199,142,0.04)', border: '1px solid rgba(72,199,142,0.12)',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <span style={{ fontSize: 18 }}>🏆</span>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>Properties Under Contract</div>
+                        <div style={{ fontSize: 11, color: '#48c78e', fontWeight: 600 }}>
+                          {underContract.length > 0 ? `${underContract.length} propert${underContract.length !== 1 ? 'ies' : 'y'}` : 'None yet'}
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setShowUnderContractForm(!showUnderContractForm)}
+                      style={{
+                        padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                        cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                        border: '1px solid rgba(72,199,142,0.4)',
+                        background: showUnderContractForm ? 'rgba(72,199,142,0.2)' : 'rgba(72,199,142,0.1)',
+                        color: '#48c78e',
+                      }}
+                    >+ Add</button>
+                  </div>
+
+                  {showUnderContractForm && (
+                    <div style={{
+                      marginTop: 8, padding: 14, borderRadius: 10,
+                      background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(72,199,142,0.15)',
+                    }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#48c78e', marginBottom: 10 }}>Add Property Under Contract</div>
+
+                      <select value={underContractContactId} onChange={e => setUnderContractContactId(e.target.value)}
+                        style={{
+                          width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 10, borderRadius: 8,
+                          background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#ccc',
+                        }}>
+                        <option value="">Select target property...</option>
+                        {targetProperties.map(c => (
+                          <option key={c.id} value={c.id}>{c.name}{c.property ? ` — ${c.property}` : ''}</option>
+                        ))}
+                      </select>
+
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button
+                          disabled={!underContractContactId}
+                          onClick={() => {
+                            const contact = targetProperties.find(c => c.id === underContractContactId);
+                            setUnderContract(prev => [...prev, {
+                              contactId: underContractContactId,
+                              contactName: contact?.name || '',
+                              property: contact?.property || '',
+                              timestamp: new Date().toISOString(),
+                            }]);
+                            setUnderContractContactId('');
+                            setShowUnderContractForm(false);
+                            setShowContractCelebration(true);
+                            setTimeout(() => setShowContractCelebration(false), 4000);
+                          }}
+                          style={{
+                            flex: 1, padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+                            cursor: underContractContactId ? 'pointer' : 'default', fontFamily: "'DM Sans', sans-serif",
+                            border: 'none',
+                            background: underContractContactId ? 'rgba(72,199,142,0.2)' : 'rgba(255,255,255,0.04)',
+                            color: underContractContactId ? '#48c78e' : '#555',
+                            opacity: underContractContactId ? 1 : 0.4,
+                          }}
+                        >
+                          Confirm Under Contract
+                        </button>
+                        <button onClick={() => setShowUnderContractForm(false)}
+                          style={{
+                            padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                            cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                            border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#888',
+                          }}>Cancel</button>
+                      </div>
+                    </div>
+                  )}
+
+                  {showContractCelebration && (
+                    <div style={{
+                      marginTop: 8, padding: '20px', borderRadius: 12, textAlign: 'center',
+                      background: 'linear-gradient(135deg, rgba(72,199,142,0.15), rgba(240,165,0,0.1))',
+                      border: '1px solid rgba(72,199,142,0.3)',
+                      animation: 'celebrationPulse 0.6s ease-in-out',
+                    }}>
+                      <div style={{ fontSize: 36, marginBottom: 8 }}>🎉🏆🎉</div>
+                      <div style={{ fontSize: 18, fontWeight: 700, color: '#48c78e', marginBottom: 4 }}>
+                        Congratulations!
+                      </div>
+                      <div style={{ fontSize: 14, color: '#aaa' }}>
+                        Property under contract! Keep pushing!
+                      </div>
+                      <style>{`
+                        @keyframes celebrationPulse {
+                          0% { transform: scale(0.9); opacity: 0; }
+                          50% { transform: scale(1.03); }
+                          100% { transform: scale(1); opacity: 1; }
+                        }
+                      `}</style>
+                    </div>
+                  )}
+
+                  {underContract.length > 0 && (
+                    <div style={{ marginTop: 8 }}>
+                      {underContract.map((uc, i) => (
+                        <div key={i} style={{
+                          padding: '10px 14px', borderRadius: 8, marginBottom: 4,
+                          background: 'rgba(72,199,142,0.04)', border: '1px solid rgba(72,199,142,0.1)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        }}>
+                          <div>
+                            <div style={{ fontSize: 13, fontWeight: 600, color: '#ddd' }}>
+                              {uc.contactName}{uc.property ? ` — ${uc.property}` : ''}
+                            </div>
+                          </div>
+                          <span style={{
+                            fontSize: 10, padding: '3px 8px', borderRadius: 4,
+                            background: 'rgba(72,199,142,0.15)', color: '#48c78e', fontWeight: 700,
+                          }}>UNDER CONTRACT</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
           </div>
 
           {/* ── Due Follow-Ups ── */}
@@ -1124,19 +1631,41 @@ export default function DayView({
                         { value: 'target_property', label: 'Target Property', desc: "They're interested", color: '#e94560' },
                         { value: 'dead', label: 'Dead Contact', desc: 'Not interested', color: '#666' },
                         { value: 'arsenal', label: 'Move to Arsenal', desc: 'Good relationship, no deal', color: '#f0a500' },
-                      ].map(o => (
-                        <button key={o.value} onClick={() => { setTargetOutcome(o.value); setContactFollowUpInterval(''); }}
+                      ].map(o => {
+                        const isActive = targetOutcome === o.value
+                          || (o.value === 'target_property' && (targetOutcome === 'target_property' || targetOutcome === 'both'))
+                          || (o.value === 'arsenal' && (targetOutcome === 'arsenal' || targetOutcome === 'both'));
+                        return (
+                        <button key={o.value} onClick={() => {
+                          if (o.value === 'dead') {
+                            setTargetOutcome('dead');
+                          } else if (o.value === 'target_property') {
+                            if (targetOutcome === 'dead') setTargetOutcome('target_property');
+                            else if (targetOutcome === 'target_property') setTargetOutcome('');
+                            else if (targetOutcome === 'both') setTargetOutcome('arsenal');
+                            else if (targetOutcome === 'arsenal') setTargetOutcome('both');
+                            else setTargetOutcome('target_property');
+                          } else if (o.value === 'arsenal') {
+                            if (targetOutcome === 'dead') setTargetOutcome('arsenal');
+                            else if (targetOutcome === 'arsenal') setTargetOutcome('');
+                            else if (targetOutcome === 'both') setTargetOutcome('target_property');
+                            else if (targetOutcome === 'target_property') setTargetOutcome('both');
+                            else setTargetOutcome('arsenal');
+                          }
+                          setContactFollowUpInterval('');
+                        }}
                           style={{
                             padding: '8px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
                             fontFamily: "'DM Sans', sans-serif", border: 'none', textAlign: 'left',
-                            background: targetOutcome === o.value ? `${o.color}15` : 'rgba(255,255,255,0.04)',
-                            color: targetOutcome === o.value ? o.color : '#888',
-                            outline: targetOutcome === o.value ? `1px solid ${o.color}40` : '1px solid rgba(255,255,255,0.06)',
+                            background: isActive ? `${o.color}15` : 'rgba(255,255,255,0.04)',
+                            color: isActive ? o.color : '#888',
+                            outline: isActive ? `1px solid ${o.color}40` : '1px solid rgba(255,255,255,0.06)',
                           }}>
                           <div style={{ fontWeight: 600 }}>{o.label}</div>
                           <div style={{ fontSize: 10, opacity: 0.7, marginTop: 2 }}>{o.desc}</div>
                         </button>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -1338,13 +1867,15 @@ export default function DayView({
               </div>
             )}
 
-            {/* Compliance status summary */}
-            {metrics.training_completed && !compliance.met && compliance.failures.length > 0 && (
+            {/* Compliance status summary — blocks submission */}
+            {!compliance.met && compliance.failures.length > 0 && (
               <div style={{
                 padding: '12px 16px', borderRadius: 8, marginBottom: 16,
                 background: 'rgba(233,69,96,0.06)', border: '1px solid rgba(233,69,96,0.15)',
               }}>
-                <div style={{ fontSize: 12, color: '#e94560', fontWeight: 700, marginBottom: 6 }}>Below daily minimums:</div>
+                <div style={{ fontSize: 12, color: '#e94560', fontWeight: 700, marginBottom: 6 }}>
+                  Submission blocked — meet all daily minimums:
+                </div>
                 {compliance.failures.map(f => (
                   <div key={f.metric} style={{ fontSize: 12, color: '#e94560', marginBottom: 2 }}>
                     • {f.label}: {f.actual} / {f.required}
@@ -1354,16 +1885,10 @@ export default function DayView({
             )}
 
             <button className="btn-primary" onClick={handleSubmit}
-              disabled={!metrics.training_completed}
-              style={{ width: '100%', opacity: !metrics.training_completed ? 0.4 : compliance.met ? 1 : 0.7 }}>
-              {isUpdate ? 'Update' : 'Submit'} Day {day} {metrics.training_completed && compliance.met ? '✓' : metrics.training_completed ? '(below minimums)' : ''}
+              disabled={!compliance.met}
+              style={{ width: '100%', opacity: compliance.met ? 1 : 0.4 }}>
+              {isUpdate ? 'Update' : 'Submit'} Day {day} {compliance.met ? '✓' : ''}
             </button>
-
-            {metrics.training_completed && !compliance.met && (
-              <p style={{ fontSize: 12, color: '#f0a500', textAlign: 'center', marginTop: 8 }}>
-                You can still submit, but failing to meet daily minimums may result in removal.
-              </p>
-            )}
           </div>
         </>
       ) : null}
@@ -1416,8 +1941,9 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
 
     let finalGroup = group;
     let pipelineStatus = 'new';
+    const isBoth = targetOutcome === 'both';
     if (group === 'target') {
-      if (targetOutcome === 'target_property') pipelineStatus = 'target_property';
+      if (targetOutcome === 'target_property' || isBoth) pipelineStatus = 'target_property';
       else if (targetOutcome === 'dead') pipelineStatus = 'dead';
       else if (targetOutcome === 'arsenal') { finalGroup = 'arsenal'; pipelineStatus = 'new'; }
     }
@@ -1440,6 +1966,27 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
     if (result?.success && result.contact) {
       setContactList(prev => [result.contact, ...prev]);
       onAutoIncrement();
+
+      // If 'both' selected, also create an arsenal contact
+      if (isBoth) {
+        const arsenalResult = await onAddContact({
+          name: name.trim(),
+          phone: phone.trim() || null,
+          email: email.trim() || null,
+          contact_group: 'arsenal',
+          property: null,
+          notes: notes.trim() ? `[Also target property] ${notes.trim()}` : '[Also target property]',
+          day_added: day,
+          pipeline_status: 'new',
+          follow_up_interval: followUp,
+          follow_up_date: calculateFollowUpDate(followUp),
+          last_contact_date: now,
+        });
+        if (arsenalResult?.success && arsenalResult.contact) {
+          setContactList(prev => [arsenalResult.contact, ...prev]);
+        }
+      }
+
       setJustAdded(name.trim());
       setName(''); setPhone(''); setEmail(''); setProperty('');
       setNotes(''); setFollowUp(''); setTargetOutcome('');
@@ -1506,35 +2053,54 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
               { value: 'dead', label: 'Dead', color: '#666' },
               { value: 'arsenal', label: 'Move to Arsenal', color: '#f0a500' },
             ].map(o => (
-              <button key={o.value} onClick={() => setTargetOutcome(o.value)} style={{
-                padding: '5px 12px', borderRadius: 6, fontSize: 11, fontWeight: targetOutcome === o.value ? 600 : 400,
+              <button key={o.value} onClick={() => {
+                if (o.value === 'dead') {
+                  setTargetOutcome('dead');
+                } else if (o.value === 'target_property') {
+                  if (targetOutcome === 'dead') setTargetOutcome('target_property');
+                  else if (targetOutcome === 'target_property') setTargetOutcome('');
+                  else if (targetOutcome === 'both') setTargetOutcome('arsenal');
+                  else if (targetOutcome === 'arsenal') setTargetOutcome('both');
+                  else setTargetOutcome('target_property');
+                } else if (o.value === 'arsenal') {
+                  if (targetOutcome === 'dead') setTargetOutcome('arsenal');
+                  else if (targetOutcome === 'arsenal') setTargetOutcome('');
+                  else if (targetOutcome === 'both') setTargetOutcome('target_property');
+                  else if (targetOutcome === 'target_property') setTargetOutcome('both');
+                  else setTargetOutcome('arsenal');
+                }
+                setFollowUp('');
+              }} style={{
+                padding: '5px 12px', borderRadius: 6, fontSize: 11, fontWeight: (targetOutcome === o.value || (o.value === 'target_property' && (targetOutcome === 'target_property' || targetOutcome === 'both')) || (o.value === 'arsenal' && (targetOutcome === 'arsenal' || targetOutcome === 'both'))) ? 600 : 400,
                 cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
-                background: targetOutcome === o.value ? `${o.color}20` : 'rgba(255,255,255,0.04)',
-                color: targetOutcome === o.value ? o.color : '#888',
-                outline: targetOutcome === o.value ? `1px solid ${o.color}40` : '1px solid rgba(255,255,255,0.08)',
+                background: (targetOutcome === o.value || (o.value === 'target_property' && (targetOutcome === 'target_property' || targetOutcome === 'both')) || (o.value === 'arsenal' && (targetOutcome === 'arsenal' || targetOutcome === 'both'))) ? `${o.color}20` : 'rgba(255,255,255,0.04)',
+                color: (targetOutcome === o.value || (o.value === 'target_property' && (targetOutcome === 'target_property' || targetOutcome === 'both')) || (o.value === 'arsenal' && (targetOutcome === 'arsenal' || targetOutcome === 'both'))) ? o.color : '#888',
+                outline: (targetOutcome === o.value || (o.value === 'target_property' && (targetOutcome === 'target_property' || targetOutcome === 'both')) || (o.value === 'arsenal' && (targetOutcome === 'arsenal' || targetOutcome === 'both'))) ? `1px solid ${o.color}40` : '1px solid rgba(255,255,255,0.08)',
               }}>{o.label}</button>
             ))}
           </div>
         </div>
       )}
 
-      <div style={{ marginBottom: 12 }}>
+      {(group === 'arsenal' || targetOutcome) && <div style={{ marginBottom: 12 }}>
         <div style={{ fontSize: 11, color: '#888', fontWeight: 600, marginBottom: 5 }}>Follow-up Interval *</div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          {['3_days', '1_week', '2_weeks', '1_month', '3_months'].map(interval => {
-            const labels = { '3_days': '3 Days', '1_week': '1 Week', '2_weeks': '2 Weeks', '1_month': '1 Month', '3_months': '3 Months' };
-            return (
-              <button key={interval} onClick={() => setFollowUp(interval)} style={{
-                padding: '5px 10px', borderRadius: 6, fontSize: 11, fontWeight: followUp === interval ? 600 : 400,
-                cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
-                background: followUp === interval ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.04)',
-                color: followUp === interval ? '#48c78e' : '#888',
-                outline: followUp === interval ? '1px solid rgba(72,199,142,0.3)' : '1px solid rgba(255,255,255,0.08)',
-              }}>{labels[interval]}</button>
-            );
-          })}
+          {(targetOutcome === 'dead'
+            ? [{ value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }, { value: '6_months', label: '6 Months' }, { value: 'never', label: 'Never' }]
+            : targetOutcome === 'target_property' || targetOutcome === 'both'
+            ? [{ value: '3_days', label: '3 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }]
+            : [{ value: '3_days', label: '3 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }, { value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }]
+          ).map(opt => (
+            <button key={opt.value} onClick={() => setFollowUp(opt.value)} style={{
+              padding: '5px 10px', borderRadius: 6, fontSize: 11, fontWeight: followUp === opt.value ? 600 : 400,
+              cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
+              background: followUp === opt.value ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.04)',
+              color: followUp === opt.value ? '#48c78e' : '#888',
+              outline: followUp === opt.value ? '1px solid rgba(72,199,142,0.3)' : '1px solid rgba(255,255,255,0.08)',
+            }}>{opt.label}</button>
+          ))}
         </div>
-      </div>
+      </div>}
 
       <div style={{ display: 'flex', gap: 8 }}>
         <button onClick={() => { resetForm(); onToggle(group); }}
