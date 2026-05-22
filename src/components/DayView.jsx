@@ -92,6 +92,11 @@ export default function DayView({
   const [followUpSaving, setFollowUpSaving] = useState(false);
   const [followUpInterval, setFollowUpInterval] = useState('');
   const [followUpReclassify, setFollowUpReclassify] = useState('');
+  const [inlineFollowUpId, setInlineFollowUpId] = useState(null);
+  const [inlineFollowUpNotes, setInlineFollowUpNotes] = useState('');
+  const [inlineFollowUpInterval, setInlineFollowUpInterval] = useState('');
+  const [inlineFollowUpSaving, setInlineFollowUpSaving] = useState(false);
+  const [completedFollowUps, setCompletedFollowUps] = useState([]);
 
   // ── Offers & Under Contract state ────────────────────────────
   const [offersSubmitted, setOffersSubmitted] = useState([]);
@@ -306,52 +311,37 @@ export default function DayView({
         </div>
       )}
 
-      {/* Video Player */}
-      {!isPost30 && <div className="card" style={{ marginBottom: 24, padding: 0, overflow: 'hidden' }}>
-        {dayData.videoUrl ? (
-          <div style={{ aspectRatio: '16/9', position: 'relative' }}>
-            <iframe
-              src={dayData.videoUrl}
-              style={{ width: '100%', height: '100%', border: 'none' }}
-              allow="accelerometer; autoplay; encrypted-media; gyroscope"
-              allowFullScreen
-              onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
-            />
-            <div style={{
-              display: 'none', position: 'absolute', inset: 0,
-              background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
-              alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12,
-            }}>
-              <div style={{ fontSize: 14, color: '#e94560', fontWeight: 600 }}>Video failed to load</div>
-              <button
-                className="btn-secondary"
-                style={{ padding: '8px 20px', fontSize: 13 }}
-                onClick={() => {
-                  const iframe = document.querySelector(`iframe[src="${dayData.videoUrl}"]`);
-                  if (iframe) { iframe.style.display = ''; iframe.nextSibling.style.display = 'none'; iframe.src = dayData.videoUrl; }
-                }}
-              >
-                Retry
-              </button>
-              <a href={dayData.videoUrl} target="_blank" rel="noopener" style={{ color: '#888', fontSize: 12, textDecoration: 'underline' }}>
-                Open video directly
-              </a>
-            </div>
-          </div>
-        ) : (
+      {/* Video Player — only show when a video URL exists */}
+      {!isPost30 && dayData.videoUrl && <div className="card" style={{ marginBottom: 24, padding: 0, overflow: 'hidden' }}>
+        <div style={{ aspectRatio: '16/9', position: 'relative' }}>
+          <iframe
+            src={dayData.videoUrl}
+            style={{ width: '100%', height: '100%', border: 'none' }}
+            allow="accelerometer; autoplay; encrypted-media; gyroscope"
+            allowFullScreen
+            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+          />
           <div style={{
+            display: 'none', position: 'absolute', inset: 0,
             background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
-            aspectRatio: '16/9', display: 'flex', alignItems: 'center',
-            justifyContent: 'center', flexDirection: 'column', gap: 12,
+            alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12,
           }}>
-            <div style={{
-              width: 72, height: 72, borderRadius: '50%',
-              background: 'rgba(233,69,96,0.2)', border: '2px solid rgba(233,69,96,0.4)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28,
-            }}>&#9654;</div>
-            <div style={{ fontSize: 13, color: '#888' }}>Day {day} Instructional Video</div>
+            <div style={{ fontSize: 14, color: '#e94560', fontWeight: 600 }}>Video failed to load</div>
+            <button
+              className="btn-secondary"
+              style={{ padding: '8px 20px', fontSize: 13 }}
+              onClick={() => {
+                const iframe = document.querySelector(`iframe[src="${dayData.videoUrl}"]`);
+                if (iframe) { iframe.style.display = ''; iframe.nextSibling.style.display = 'none'; iframe.src = dayData.videoUrl; }
+              }}
+            >
+              Retry
+            </button>
+            <a href={dayData.videoUrl} target="_blank" rel="noopener" style={{ color: '#888', fontSize: 12, textDecoration: 'underline' }}>
+              Open video directly
+            </a>
           </div>
-        )}
+        </div>
       </div>}
 
       {/* Downloads */}
@@ -808,6 +798,16 @@ export default function DayView({
                     );
                   })()}
 
+                  {/* Weekly Offer Tracker (post-submit) */}
+                  <div style={{ marginTop: 16, marginBottom: 16 }}>
+                    <WeeklyOfferTracker
+                      day={day}
+                      user={user}
+                      currentOffers={metrics.offers_submitted || 0}
+                      existingOffers={existingDailySubmission?.offers_submitted || 0}
+                    />
+                  </div>
+
                   {/* Properties Under Contract (post-submit) */}
                   {(() => {
                     const targetProperties = (contactList || []).filter(c => c.contact_group === 'target' && c.pipeline_status !== 'dead');
@@ -1094,11 +1094,12 @@ export default function DayView({
 
                 const isContactMetric = metric.id === 'arsenal_contacts' || metric.id === 'target_contacts';
                 const isOfferMetric = metric.id === 'offers_submitted';
+                const isFollowUpMetric = metric.id === 'follow_ups';
                 const contactMetricGroup = metric.id === 'arsenal_contacts' ? 'arsenal' : 'target';
                 const contactColor = metric.id === 'arsenal_contacts' ? '#f0a500' : '#e94560';
 
-                // Skip offers_submitted from the standard metric list — it's rendered separately below
-                if (isOfferMetric) return null;
+                // Skip offers_submitted and follow_ups — rendered as custom sections below
+                if (isOfferMetric || isFollowUpMetric) return null;
 
                 return (
                   <div key={metric.id}>
@@ -1210,6 +1211,189 @@ export default function DayView({
                 );
               })}
             </div>
+
+            {/* Follow-Ups Section */}
+            {(() => {
+              const now = new Date();
+              const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+              const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+              const dueContacts = (contactList || [])
+                .filter(c => {
+                  if (!c.follow_up_date || c.follow_up_interval === 'never') return false;
+                  if (completedFollowUps.includes(c.id)) return false;
+                  return new Date(c.follow_up_date) <= todayEnd;
+                })
+                .sort((a, b) => new Date(a.follow_up_date) - new Date(b.follow_up_date));
+              const overdueCount = dueContacts.filter(c => new Date(c.follow_up_date) < todayStart).length;
+              const followUpCount = metrics.follow_ups || 0;
+              const followUpMin = dailyMins.follow_ups || 0;
+              const followUpMet = followUpMin <= 0 || followUpCount >= followUpMin;
+
+              return (
+                <div style={{ marginTop: 16 }}>
+                  <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '12px 16px', borderRadius: 10,
+                    background: followUpMet ? 'rgba(72,199,142,0.04)' : 'rgba(255,255,255,0.02)',
+                    border: `1px solid ${followUpMet ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.06)'}`,
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <span style={{ fontSize: 18 }}>📞</span>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>Follow-Ups</div>
+                        <div style={{ fontSize: 11, color: followUpMet ? '#48c78e' : dueContacts.length > 0 ? '#e94560' : '#888', fontWeight: 600 }}>
+                          {followUpCount > 0 ? `${followUpCount} completed today` : dueContacts.length > 0 ? `${dueContacts.length} due${overdueCount > 0 ? ` (${overdueCount} overdue)` : ''}` : 'No follow-ups due'}
+                          {followUpMin > 0 && ` · Min: ${followUpMin}`}
+                          {followUpMet && followUpMin > 0 && ' ✓'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {dueContacts.length > 0 && (
+                    <div style={{ marginTop: 8 }}>
+                      {dueContacts.map(contact => {
+                        const isOverdue = new Date(contact.follow_up_date) < todayStart;
+                        const diffDays = Math.floor((now - new Date(contact.follow_up_date)) / (1000 * 60 * 60 * 24));
+                        const accentColor = isOverdue ? '#e94560' : '#f0a500';
+                        const groupColor = contact.contact_group === 'arsenal' ? '#f0a500' : contact.pipeline_status === 'dead' ? '#666' : '#e94560';
+                        const groupLabel = contact.contact_group === 'arsenal' ? 'Arsenal' : contact.pipeline_status === 'dead' ? 'Dead' : 'Target';
+                        const isExpanded = inlineFollowUpId === contact.id;
+                        const isDead = contact.pipeline_status === 'dead';
+
+                        return (
+                          <div key={contact.id} style={{
+                            marginBottom: 6, padding: '12px 16px', borderRadius: 10,
+                            background: isOverdue ? 'rgba(233,69,96,0.04)' : 'rgba(240,165,0,0.03)',
+                            border: `1px solid ${accentColor}25`,
+                          }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                              <div style={{
+                                width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
+                                background: `${groupColor}20`, border: `1px solid ${groupColor}30`,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: 13, fontWeight: 700, color: groupColor,
+                              }}>
+                                {contact.name?.charAt(0).toUpperCase()}
+                              </div>
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                                  <span style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>{contact.name}</span>
+                                  <span style={{
+                                    fontSize: 9, padding: '1px 5px', borderRadius: 3, fontWeight: 700,
+                                    background: `${groupColor}15`, color: groupColor,
+                                  }}>{groupLabel}</span>
+                                  <span style={{
+                                    fontSize: 9, padding: '1px 5px', borderRadius: 3, fontWeight: 700,
+                                    background: `${accentColor}15`, color: accentColor,
+                                  }}>{isOverdue ? `${diffDays}d overdue` : 'Due today'}</span>
+                                </div>
+                                {contact.property && <div style={{ fontSize: 12, color: '#e94560', marginTop: 1 }}>{contact.property}</div>}
+                                {contact.phone && <div style={{ fontSize: 11, color: '#666', marginTop: 1 }}>📞 {contact.phone}</div>}
+                              </div>
+                              <button
+                                onClick={() => {
+                                  if (isExpanded) { setInlineFollowUpId(null); setInlineFollowUpNotes(''); setInlineFollowUpInterval(''); }
+                                  else { setInlineFollowUpId(contact.id); setInlineFollowUpNotes(''); setInlineFollowUpInterval(''); }
+                                }}
+                                style={{
+                                  padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                                  cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                                  border: 'none', background: isExpanded ? 'rgba(72,199,142,0.2)' : 'rgba(72,199,142,0.1)',
+                                  color: '#48c78e', flexShrink: 0,
+                                }}>
+                                {isExpanded ? 'Cancel' : '✓ Follow Up'}
+                              </button>
+                            </div>
+
+                            {isExpanded && (
+                              <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                                <textarea
+                                  value={inlineFollowUpNotes}
+                                  onChange={e => setInlineFollowUpNotes(e.target.value)}
+                                  placeholder="What happened in this follow-up?"
+                                  rows={2}
+                                  style={{
+                                    width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 8, resize: 'vertical',
+                                    borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee',
+                                  }}
+                                />
+                                <div style={{ fontSize: 11, color: '#48c78e', fontWeight: 600, marginBottom: 4 }}>Next Follow-Up</div>
+                                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 10 }}>
+                                  {(isDead
+                                    ? [{ value: '1_month', label: '1 Mo' }, { value: '3_months', label: '3 Mo' }, { value: '6_months', label: '6 Mo' }, { value: 'never', label: 'Never' }]
+                                    : [{ value: '2_days', label: '2 Days' }, { value: '1_week', label: '1 Wk' }, { value: '2_weeks', label: '2 Wk' }]
+                                  ).map(opt => (
+                                    <button key={opt.value} onClick={() => setInlineFollowUpInterval(opt.value)}
+                                      style={{
+                                        padding: '5px 10px', borderRadius: 6, fontSize: 11, cursor: 'pointer',
+                                        fontFamily: "'DM Sans', sans-serif", border: 'none',
+                                        background: inlineFollowUpInterval === opt.value ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.04)',
+                                        color: inlineFollowUpInterval === opt.value ? '#48c78e' : '#888',
+                                        outline: inlineFollowUpInterval === opt.value ? '1px solid rgba(72,199,142,0.3)' : '1px solid rgba(255,255,255,0.06)',
+                                        fontWeight: inlineFollowUpInterval === opt.value ? 600 : 400,
+                                      }}>
+                                      {opt.label}
+                                    </button>
+                                  ))}
+                                </div>
+                                <button
+                                  disabled={!inlineFollowUpNotes.trim() || !inlineFollowUpInterval || inlineFollowUpSaving}
+                                  onClick={async () => {
+                                    setInlineFollowUpSaving(true);
+                                    const nowISO = new Date().toISOString();
+                                    const contactUpdates = {
+                                      follow_up_interval: inlineFollowUpInterval,
+                                      follow_up_date: calculateFollowUpDate(inlineFollowUpInterval),
+                                      last_contact_date: nowISO,
+                                    };
+                                    await onAddFollowUp({
+                                      contact_id: contact.id,
+                                      notes: inlineFollowUpNotes.trim(),
+                                      day_number: day,
+                                    }, contactUpdates);
+                                    setContactList(prev => prev.map(c => c.id === contact.id ? { ...c, ...contactUpdates } : c));
+                                    setCompletedFollowUps(prev => [...prev, contact.id]);
+                                    setMetric('follow_ups', (metrics.follow_ups || 0) + 1);
+                                    setInlineFollowUpId(null);
+                                    setInlineFollowUpNotes('');
+                                    setInlineFollowUpInterval('');
+                                    setInlineFollowUpSaving(false);
+                                  }}
+                                  style={{
+                                    padding: '8px 20px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                                    cursor: inlineFollowUpNotes.trim() && inlineFollowUpInterval ? 'pointer' : 'default',
+                                    fontFamily: "'DM Sans', sans-serif", border: 'none',
+                                    background: inlineFollowUpNotes.trim() && inlineFollowUpInterval ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.04)',
+                                    color: inlineFollowUpNotes.trim() && inlineFollowUpInterval ? '#48c78e' : '#555',
+                                    opacity: inlineFollowUpNotes.trim() && inlineFollowUpInterval ? 1 : 0.5,
+                                  }}>
+                                  {inlineFollowUpSaving ? 'Saving...' : '✓ Mark Complete'}
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {dueContacts.length === 0 && followUpCount === 0 && (
+                    <div style={{ marginTop: 6, padding: '8px 16px', borderRadius: 8, background: 'rgba(72,199,142,0.03)', textAlign: 'center' }}>
+                      <div style={{ fontSize: 12, color: '#48c78e' }}>No follow-ups due today</div>
+                    </div>
+                  )}
+
+                  {completedFollowUps.length > 0 && (
+                    <div style={{ marginTop: 6, padding: '8px 16px', borderRadius: 8, background: 'rgba(72,199,142,0.04)' }}>
+                      <div style={{ fontSize: 12, color: '#48c78e', fontWeight: 600 }}>
+                        ✓ {completedFollowUps.length} follow-up{completedFollowUps.length !== 1 ? 's' : ''} completed today
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Offers Submitted Section */}
             {(() => {
@@ -1350,6 +1534,16 @@ export default function DayView({
               );
             })()}
 
+            {/* Weekly Offer Tracker */}
+            <div style={{ marginTop: 16 }}>
+              <WeeklyOfferTracker
+                day={day}
+                user={user}
+                currentOffers={metrics.offers_submitted || 0}
+                existingOffers={existingDailySubmission?.offers_submitted || 0}
+              />
+            </div>
+
             {/* Properties Under Contract */}
             {(() => {
               const targetProperties = (contactList || []).filter(c => c.contact_group === 'target' && c.pipeline_status !== 'dead');
@@ -1486,37 +1680,6 @@ export default function DayView({
             })()}
           </div>
 
-          {/* ── Due Follow-Ups ── */}
-          <DueFollowUps
-            contacts={contactList}
-            onFollowUp={(contact) => {
-              setFollowUpContactId(contact.id);
-              setFollowUpInterval('');
-              setFollowUpReclassify('');
-              setFollowUpNotes('');
-              setShowFollowUpForm(true);
-              setShowContactForm(false);
-            }}
-            onSnooze={async (contact, days) => {
-              const newDate = new Date();
-              newDate.setDate(newDate.getDate() + days);
-              const updates = { follow_up_date: newDate.toISOString() };
-              if (onUpdateContact) await onUpdateContact(contact.id, updates);
-              setContactList(prev => prev.map(c => c.id === contact.id ? { ...c, ...updates } : c));
-            }}
-            onMarkDead={async (contact, interval) => {
-              const now = new Date().toISOString();
-              const updates = {
-                pipeline_status: 'dead',
-                reclassified_at: now,
-                follow_up_interval: interval,
-                follow_up_date: calculateFollowUpDate(interval),
-              };
-              if (onUpdateContact) await onUpdateContact(contact.id, updates);
-              setContactList(prev => prev.map(c => c.id === contact.id ? { ...c, ...updates } : c));
-            }}
-          />
-
           {/* ── Add Contact / Follow-Up ── */}
           <div className="card" style={{ marginBottom: 24 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
@@ -1547,8 +1710,8 @@ export default function DayView({
                   placeholder="Name *" style={{ width: '100%', fontSize: 14, padding: '10px 14px', marginBottom: 10,
                   borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: contactPhoneError ? 4 : 10 }}>
-                  <input value={contactPhone} onChange={e => { setContactPhone(e.target.value); setContactPhoneError(''); }}
-                    placeholder="(208) 555-1234" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
+                  <input type="tel" value={contactPhone} onChange={e => { setContactPhone(e.target.value); setContactPhoneError(''); }}
+                    placeholder="Phone # (required)" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
                     background: 'rgba(255,255,255,0.04)', border: contactPhoneError ? '1px solid rgba(233,69,96,0.5)' : '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
                   <input value={contactEmail} onChange={e => setContactEmail(e.target.value)}
                     placeholder="Email" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,

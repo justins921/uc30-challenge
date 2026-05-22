@@ -1490,13 +1490,6 @@ Focus LESS on "closing the deal." Focus MORE on building rapport, understanding 
     videoUrl: null,
     transcript: null,
     downloads: [],
-    videos: [
-      { title: 'How To Counter Offer Like An Investor' },
-      { title: 'Negotiating Through Realtors' },
-      { title: 'Negotiating Directly With Sellers' },
-      { title: 'Understanding Seller Motivation' },
-      { title: 'How To Stay Disciplined During Negotiations' },
-    ],
     quiz: {
       required: true,
       scenarios: [
@@ -1786,13 +1779,6 @@ Strong relationships with title companies can reduce stress, improve confidence,
     videoUrl: null,
     transcript: null,
     downloads: [],
-    videos: [
-      { title: 'How To Fill Out A For Sale By Owner Contract' },
-      { title: 'How Title Companies Help Close Deals' },
-      { title: 'Protecting Yourself During Due Diligence' },
-      { title: 'How To Build Trust With Sellers' },
-      { title: 'Common FSBO Mistakes To Avoid' },
-    ],
     quiz: {
       required: true,
       scenarios: [
