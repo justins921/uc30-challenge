@@ -1580,18 +1580,338 @@ Focus LESS on "closing the deal." Focus MORE on building rapport, understanding 
   },
   {
     day: 6,
-    title: "Submit Your First Offer",
-    caption: "",
-    taskDescription: "Write and submit a real offer on a property. Submit the offer document or screenshot of submission confirmation.",
-    trainingContent: "",
+    title: "For Sale By Owner Contracts & Closing",
+    caption: "How To Buy Real Estate Without Using Realtors",
+    taskDescription: "",
+    trainingContent: `Why Learning FSBO Matters
+
+Some of the BEST real estate deals happen directly with sellers, off market, and without agents involved.
+
+Many sellers do not want to pay commissions, want privacy, want simplicity, or prefer working directly with buyers.
+
+Learning how to confidently handle contracts, negotiations, title companies, inspections, earnest money, and closing can create opportunities most investors never pursue.
+
+Important Reminder
+
+Just because there is no realtor involved does NOT mean you should rush, skip protections, or trust everything blindly.
+
+In many ways, FSBO deals require MORE discipline and caution.
+
+You must verify everything, protect yourself contractually, and maintain strong due diligence protections.
+
+The MOST Important Rule
+
+NEVER remove your ability to exit the deal safely.
+
+Your contract should ALWAYS protect you if inspections reveal major issues, financing changes, title problems appear, leases are inaccurate, expenses were misrepresented, or the numbers no longer work.
+
+The goal is NOT "getting a deal at all costs." The goal is getting GOOD deals safely.
+
+Building Trust With Sellers
+
+When buying directly from sellers, trust matters tremendously.
+
+Sellers need confidence that you are legitimate, capable of closing, and easy to work with.
+
+Ways to build trust:
+
+• Provide a pre-approval letter
+• Provide proof of funds
+• Explain your relationship with your lender
+• Explain your relationship with the title company
+• Communicate professionally
+• Move quickly
+• Stay organized
+
+Professionalism builds confidence.
+
+Why Title Companies Matter
+
+A great title company can help guide the ENTIRE process.
+
+Many title companies regularly handle For Sale By Owner deals, seller finance deals, assignments, and creative financing transactions.
+
+Building a relationship with someone at a title company is extremely valuable.
+
+A good title company can help explain documents, coordinate signatures, manage earnest money, order title work, schedule closing, prepare settlement statements, and help both parties feel comfortable during the process.
+
+Find A Title Company Comfortable With FSBO Deals
+
+Not all title companies move quickly, understand investors, or handle creative deals well.
+
+Find one that works with investors regularly, understands seller finance, communicates clearly, and is willing to help guide the process.
+
+Strong title company relationships can make transactions MUCH smoother. On seller finance deals they can also help out with all of the back end to make sure automatic payments are set up and relationships stay positive with the seller. Some are even willing to collect and handle payments for property, taxes, and insurance.
+
+Important Sections Of A FSBO Contract
+
+Most purchase agreements contain similar sections. It is suggested that you use a "for sale by owner" agreement provided by the local title company you are going to use or a real estate lawyer. It's also important that you do research on your state and county. If you feel uneasy or uncertain, connect with a real estate lawyer or you can negotiate to pay a real estate agent a small fee to help with the process/transaction. With all of that being said, most title companies are very willing to help you understand a for sale by owner agreement and walk you through the process.
+
+You do NOT need to become an attorney. But you DO need to understand the major terms, the protections, and the deadlines.
+
+1. Buyer & Seller Information
+
+This section identifies who is buying, who is selling, and the legal names involved.
+
+Make sure names are correct, entities are correct, and ownership is verified.
+
+2. Property Description
+
+This identifies the address, legal description, parcel information (title company can get this for you), and included items.
+
+Make sure the correct property is listed and included items are clearly identified.
+
+Examples: appliances, sheds, equipment, or furniture.
+
+3. Purchase Price
+
+This states the agreed purchase price, financing structure, and payment terms.
+
+If seller financing exists, make sure terms are VERY clear.
+
+Examples: down payment, interest rate, amortization, balloon payment, payment dates, and maturity date.
+
+4. Earnest Money
+
+Earnest money shows seriousness, commitment, and intent to close. BUT you NEVER want to unnecessarily risk losing it.
+
+Earnest Money Rules:
+
+• Keep Earnest Money Reasonable — Do NOT overcommit.
+• NEVER Release Earnest Money Early — Do NOT release earnest money before inspections, financing approval, and due diligence are complete.
+• Make Sure Earnest Money Is Protected — Your contract should clearly protect earnest money during due diligence, inspections, financing contingencies, and title review.
+
+Earnest money can/should be somewhere between 1% and 5%. Some sellers might want larger earnest money but make sure it's protected as this could also be a red flag.
+
+5. Due Diligence Period (VERY IMPORTANT)
+
+This is one of the MOST important sections in the contract.
+
+Your due diligence period gives you time to inspect the property, verify leases, review expenses, review title work, verify financing, inspect units, review repairs, and confirm your analysis.
+
+This is your protection period.
+
+Due Diligence Rules:
+
+• NEVER Waive Due Diligence As A Beginner — This creates massive risk.
+• Give Yourself Enough Time (usually 15 days or more) — You need enough time to inspect thoroughly, get contractor bids, verify numbers, leases, utilities, and fully understand the property.
+• Maintain Contractual Outs — Your contract should allow you to exit the deal if major issues appear, financing changes, inspections fail, title problems exist, or the numbers no longer work.
+
+6. Financing Contingency
+
+This protects you if financing falls apart, loan terms change, rates increase, or approval fails.
+
+Never remove financing protections too early.
+
+7. Title & Ownership Review
+
+The title company will help verify ownership, liens, unpaid taxes, judgments, easements, and title issues.
+
+You NEVER want to buy title problems, lawsuits, or hidden liens.
+
+8. Closing Date
+
+This identifies when ownership transfers, documents are signed, and money changes hands.
+
+Be realistic with timelines.
+
+Step-By-Step FSBO Process
+
+Step 1. Negotiate Terms — Agree on price, financing, timing, contingencies, and major deal points.
+
+Step 2. Open Escrow With Title Company — The title company helps coordinate the process, holds earnest money, and begins title work.
+
+Step 3. Execute Due Diligence — During due diligence, inspect EVERYTHING, verify EVERYTHING, and confirm your analysis.
+
+Step 4. Finalize Financing — Work with lenders, title company, insurance, and seller.
+
+Step 5. Review Closing Documents — Review settlement statements, loan terms, prorations, and final numbers carefully.
+
+Step 6. Close The Deal — Sign documents. Fund the transaction. Receive ownership.
+
+Common FSBO Mistakes
+
+1. Trusting Verbal Statements — Verify EVERYTHING independently.
+2. Removing Protections Too Early — Keep due diligence, financing contingencies, and inspection protections active.
+3. Not Using A Title Company — Always use professionals.
+4. Rushing Due Diligence — Slow down and verify the numbers.
+5. Getting Emotional — Good deals still require discipline.
+
+Quick Rules To Remember
+
+• Always use a title company
+• Protect your earnest money
+• NEVER waive due diligence as a beginner
+• Verify ALL numbers independently
+• Build trust through professionalism
+• Use financing contingencies
+• Review seller finance terms carefully
+• Understand balloon payments fully
+• Never rush closing
+• Conservative analysis still matters MOST
+
+Top 10 Ways To Find For Sale By Owner & Off-Market Deals
+
+1. Facebook Marketplace — Many landlords and homeowners list properties directly on Facebook to avoid realtor commissions. Search "For Sale By Owner," "Investment Property," "Rental Property," "Handyman Special." You can also message sellers directly and begin building rapport immediately.
+
+2. Zillow "By Owner" Listings — Zillow has a specific "By Owner" filter. These sellers are often trying to avoid commissions, more flexible, and more open to negotiation or creative financing.
+
+3. Driving For Dollars — Drive neighborhoods looking for deferred maintenance, overgrown landscaping, boarded windows, vacant properties, or signs of landlord burnout. Write down addresses and contact owners directly.
+
+4. Property Managers — Property managers often know tired landlords, frustrated owners, or investors looking to sell quietly. Building strong property manager relationships can create massive opportunity.
+
+5. Networking With Local Investors — Many investors eventually get burned out, want passive income, want to retire, or want to simplify their portfolio. Networking events, meetups, and investor groups can uncover off-market opportunities.
+
+6. Direct Mail — Mail letters, postcards, or handwritten notes to targeted owners. Examples: absentee owners, landlords, vacant properties, or long-term owners. Simple outreach consistently creates opportunities over time.
+
+7. Craigslist — Many smaller landlords and older investors still use Craigslist. These sellers are often less institutional, less competitive, and easier to negotiate with directly.
+
+8. Referrals & Word Of Mouth — Tell friends, contractors, lenders, property managers, title companies, and other investors that you are actively buying. Many great deals come through relationships and referrals.
+
+9. Expired Listings — Properties that failed to sell on market can create motivated sellers. These sellers may become more flexible, more realistic, and more open to creative terms. Realtors can often help identify these opportunities.
+
+10. Cold Calling & Direct Outreach — Directly contact owners of rentals, distressed properties, vacant homes, or target properties. This can feel uncomfortable initially, but consistent outreach creates deal flow over time. The best investors often create opportunities instead of waiting for them.
+
+Today's Suggested Arsenal Contact
+
+Reach out to a title company, escrow officer, closing attorney, or investor-friendly lender.
+
+Your goal today: build relationships, understand the closing process, ask questions about contracts, and learn how transactions actually move from contract to closing. Try a new method of connecting with FSBO target contacts and find new target properties.
+
+Strong relationships with title companies can reduce stress, improve confidence, speed up closings, and help you safely navigate FSBO transactions.`,
     category: "foundation",
     weekNumber: 1,
     weekTitle: "BUILD THE FOUNDATION",
-    proofType: "document",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    videos: [
+      { title: 'How To Fill Out A For Sale By Owner Contract' },
+      { title: 'How Title Companies Help Close Deals' },
+      { title: 'Protecting Yourself During Due Diligence' },
+      { title: 'How To Build Trust With Sellers' },
+      { title: 'Common FSBO Mistakes To Avoid' },
+    ],
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day6_fsbo',
+          title: 'FSBO Contracts & Closing Quiz',
+          description: 'Answer all 8 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Due diligence protections are one of the most important protections in a FSBO contract — they give you time to verify everything and exit safely if needed.
+2. Title companies help coordinate closing and verify title work — they ensure ownership is clean and manage the closing process.
+3. Never release earnest money until inspections and due diligence are complete — releasing early creates unnecessary risk.
+4. Providing proof of funds and communicating professionally builds trust with sellers and shows you are a serious buyer.
+5. Removing protections too early is one of the biggest FSBO mistakes — always keep due diligence, financing, and inspection protections active.
+6. FSBO properties are attractive because sellers are often more flexible and/or motivated without agents involved.
+7. Driving for dollars means looking for distressed or neglected properties while driving neighborhoods.
+8. Property managers often know tired landlords or owners considering selling, making them a strong source of off-market deals.`,
+          inputs: [
+            {
+              id: 'day6_q1',
+              label: '1. What is one of the MOST important protections in a FSBO contract?',
+              type: 'multiple_choice',
+              options: [
+                'Large earnest money',
+                'Fast closing',
+                'Due diligence protections',
+                'Verbal agreements',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day6_q2',
+              label: '2. Why is a title company important during FSBO transactions?',
+              type: 'multiple_choice',
+              options: [
+                'They determine property value',
+                'They help coordinate closing and verify title work',
+                'They negotiate purchase price',
+                'They replace inspections',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day6_q3',
+              label: '3. What should you do before releasing earnest money?',
+              type: 'multiple_choice',
+              options: [
+                'Release it immediately to show seriousness',
+                'Wait until inspections and due diligence are complete',
+                'Skip inspections',
+                'Let the seller hold the money directly',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day6_q4',
+              label: '4. What is one way to build trust directly with sellers?',
+              type: 'multiple_choice',
+              options: [
+                'Pressure them emotionally',
+                'Avoid showing financial strength',
+                'Provide proof of funds and communicate professionally',
+                'Rush them into signing quickly',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day6_q5',
+              label: '5. What is one of the biggest FSBO mistakes investors make?',
+              type: 'multiple_choice',
+              options: [
+                'Using title companies',
+                'Verifying numbers carefully',
+                'Removing protections too early',
+                'Reviewing leases',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day6_q6',
+              label: '6. Why are For Sale By Owner properties often attractive to investors?',
+              type: 'multiple_choice',
+              options: [
+                'They always sell below market value',
+                'They usually require no due diligence',
+                'Sellers are often more flexible and/or motivated',
+                'Banks finance them automatically',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day6_q7',
+              label: '7. What is "Driving For Dollars"?',
+              type: 'multiple_choice',
+              options: [
+                'Driving to open houses every weekend',
+                'Looking for distressed or neglected properties while driving neighborhoods',
+                'Driving sellers to title companies',
+                'Touring luxury homes with realtors',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day6_q8',
+              label: '8. Why can property managers be a strong source of off-market deals?',
+              type: 'multiple_choice',
+              options: [
+                'They determine property taxes',
+                'They often know tired landlords or owners considering selling',
+                'They provide free financing',
+                'They automatically list all properties off market',
+              ],
+              correctAnswer: 1,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 7,
