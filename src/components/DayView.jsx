@@ -122,7 +122,7 @@ export default function DayView({
     if (!contactName.trim()) return;
     if (!contactFollowUpInterval) return;
     if (contactGroup === 'target' && !targetOutcome) return;
-    const phoneCheck = validatePhone(contactPhone);
+    const phoneCheck = validatePhone(contactPhone, { required: true });
     if (!phoneCheck.valid) { setContactPhoneError(phoneCheck.error); return; }
     setContactPhoneError('');
     if (!force) {
@@ -930,8 +930,8 @@ export default function DayView({
                       placeholder="Name *" style={{ width: '100%', fontSize: 14, padding: '10px 14px', marginBottom: 10,
                       borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: contactPhoneError ? 4 : 10 }}>
-                      <input value={contactPhone} onChange={e => { setContactPhone(e.target.value); setContactPhoneError(''); }}
-                        placeholder="(208) 555-1234" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
+                      <input type="tel" value={contactPhone} onChange={e => { setContactPhone(e.target.value); setContactPhoneError(''); }}
+                        placeholder="Phone # (required)" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
                         background: 'rgba(255,255,255,0.04)', border: contactPhoneError ? '1px solid rgba(233,69,96,0.5)' : '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
                       <input value={contactEmail} onChange={e => setContactEmail(e.target.value)}
                         placeholder="Email" style={{ fontSize: 13, padding: '8px 12px', borderRadius: 8,
@@ -1857,7 +1857,7 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
 
   const handleSave = async () => {
     if (!canSave) return;
-    const phoneCheck = validatePhone(phone);
+    const phoneCheck = validatePhone(phone, { required: true });
     if (!phoneCheck.valid) { setPhoneError(phoneCheck.error); return; }
     setPhoneError('');
     setSaving(true);
@@ -1944,7 +1944,7 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
         }} />
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: phoneError ? 4 : 8 }}>
-        <input value={phone} onChange={e => { setPhone(e.target.value); setPhoneError(''); }} placeholder="(208) 555-1234"
+        <input type="tel" value={phone} onChange={e => { setPhone(e.target.value); setPhoneError(''); }} placeholder="Phone # (required)"
           style={{ fontSize: 13, padding: '8px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.04)',
             border: phoneError ? '1px solid rgba(233,69,96,0.5)' : '1px solid rgba(255,255,255,0.1)', color: '#eee' }} />
         <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email"

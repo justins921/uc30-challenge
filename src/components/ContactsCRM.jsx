@@ -142,7 +142,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
     const isArsenal = activeTab === 'arsenal';
     if (isArsenal && !formNotes.trim()) return;
 
-    const phoneCheck = validatePhone(formPhone);
+    const phoneCheck = validatePhone(formPhone, { required: true });
     if (!phoneCheck.valid) { setFormPhoneError(phoneCheck.error); return; }
     setFormPhoneError('');
     const formattedPhone = phoneCheck.formatted;
@@ -412,7 +412,7 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
       <input placeholder="Name *" value={formName} onChange={e => setFormName(e.target.value)}
         style={{ width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 10 }} />
       <div style={{ display: 'flex', gap: 8, marginBottom: formPhoneError ? 4 : 10 }}>
-        <input placeholder="(208) 555-1234" value={formPhone}
+        <input type="tel" placeholder="Phone # (required)" value={formPhone}
           onChange={e => { setFormPhone(e.target.value); if (setFormPhoneError) setFormPhoneError(''); }}
           style={{ flex: 1, fontSize: 13, padding: '10px 12px', borderColor: formPhoneError ? 'rgba(233,69,96,0.5)' : undefined }} />
         <input placeholder="Email" value={formEmail} onChange={e => setFormEmail(e.target.value)}
@@ -715,7 +715,7 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
   };
 
   const saveEdit = async () => {
-    const phoneCheck = validatePhone(editPhone);
+    const phoneCheck = validatePhone(editPhone, { required: true });
     if (!phoneCheck.valid) { setPhoneError(phoneCheck.error); return; }
     setPhoneError('');
     setSaving(true);
@@ -851,8 +851,8 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
             </div>
             <div style={{ flex: '1 1 140px' }}>
               <label style={{ fontSize: 11, color: '#666', marginBottom: 3, display: 'block' }}>Phone</label>
-              <input value={editPhone} onChange={e => { setEditPhone(e.target.value); setPhoneError(''); }}
-                placeholder="(208) 555-1234"
+              <input type="tel" value={editPhone} onChange={e => { setEditPhone(e.target.value); setPhoneError(''); }}
+                placeholder="Phone # (required)"
                 style={{ ...inputStyle, borderColor: phoneError ? 'rgba(233,69,96,0.5)' : undefined }} />
               {phoneError && <div style={{ fontSize: 11, color: '#e94560', marginTop: 3 }}>{phoneError}</div>}
             </div>

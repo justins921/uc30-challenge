@@ -10,8 +10,11 @@
 // 4. Run the SQL in supabase-auth-migration.sql (auth + RLS)
 
 // ── Follow-up date calculation ──────────────────────────────────────
-export function validatePhone(phone) {
-  if (!phone || !phone.trim()) return { valid: true, formatted: null };
+export function validatePhone(phone, { required = false } = {}) {
+  if (!phone || !phone.trim()) {
+    if (required) return { valid: false, error: 'Phone number is required' };
+    return { valid: true, formatted: null };
+  }
   const digits = phone.replace(/\D/g, '');
   if (digits.length < 10 || digits.length > 11) {
     return { valid: false, error: 'Phone number must be 10 digits (or 11 with country code)' };
