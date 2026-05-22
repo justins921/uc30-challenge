@@ -1188,10 +1188,301 @@ The best negotiators listen carefully, understand motivations, and create flexib
   },
   {
     day: 5,
-    title: "Activate 10 Deal Sources",
-    caption: "",
-    taskDescription: "Reach out to 10 agents, PMs, wholesalers, or direct sellers in your target market. Submit screenshots of your outreach messages or call log.",
-    trainingContent: "",
+    title: "Counter Offers & Negotiation",
+    caption: "How To Negotiate Real Estate Deals (On-Market & Off-Market)",
+    taskDescription: "",
+    trainingContent: `Why Negotiation Matters
+
+Most investors focus only on finding deals. But GREAT investors understand negotiation creates deals.
+
+The difference between a bad deal and a great deal is often price, terms, interest rate, timing, seller motivation, or creative structure.
+
+Strong negotiation can improve cash flow, lower risk, improve returns, reduce money down, improve loan terms, and create opportunities other buyers never see.
+
+The Goal Of Negotiation
+
+The goal is NOT "winning," manipulating people, or pressuring sellers.
+
+The BEST negotiations solve problems, reduce stress, create trust, and create win-win solutions.
+
+If the seller feels respected, heard, and helped, you will often negotiate MUCH better deals.
+
+The Most Important Rule In Negotiation
+
+NEVER negotiate emotionally.
+
+Many investors fall in love with properties, ignore numbers, overpay, or abandon their criteria. This is dangerous.
+
+You MUST know your criteria, your maximum acceptable price, and your risk tolerance BEFORE negotiating.
+
+Your Highest Acceptable Price
+
+Before ANY negotiation you should already know the MAXIMUM price and terms you are willing to accept.
+
+This should be based on conservative analysis, realistic rents, realistic expenses, and your investment criteria.
+
+Important Negotiation Rule
+
+DO NOT go above your highest acceptable price. Even if you love the property, the seller pressures you, there are multiple offers, or emotions rise.
+
+Bad deals usually happen because people abandon discipline.
+
+Negotiating Through Realtors (On-Market Deals)
+
+On-market negotiations are usually faster, more competitive, and more structured.
+
+Your realtor becomes your voice during the negotiation. Because of this, it is extremely important that they understand your investing goals, understand your criteria, know your strengths as a buyer, and know how to gather information from the other side.
+
+A great realtor should not just "submit paperwork." They should actively help uncover seller motivation, position you as a strong buyer, explain your offer properly, and improve the chances of getting your offer accepted.
+
+Have Your Realtor Gather Information FIRST
+
+Before submitting offers or counter offers, your realtor should try to learn:
+
+• Why the seller is moving
+• How motivated they are
+• Whether they already bought another property
+• How long the property has been listed
+• Whether there are other offers
+• What terms matter most
+• Where flexibility may exist
+
+The more information you have, the stronger your negotiation becomes.
+
+Have Your Realtor Build YOU Up As A Buyer
+
+Your realtor should help position you as serious, qualified, professional, easy to work with, and capable of closing.
+
+This can include discussing your financing, proof of funds, reserves, lender strength, flexibility, closing speed, or investing experience.
+
+Sellers want certainty. The stronger and safer you appear as a buyer, the more negotiating power you often gain.
+
+Make Sure Your Realtor Explains The "Why" Behind Your Offer
+
+One of the biggest mistakes investors make is allowing offers to feel like random lowball offers.
+
+Instead, your realtor should help explain your analysis, repair concerns, market rents, financing realities, expenses, and investment criteria.
+
+You want the seller to understand your offer is thoughtful, calculated, and based on real numbers. This keeps sellers from becoming emotional or offended before negotiations even begin.
+
+Express Interest In The Property — While Staying Disciplined
+
+It is important for the seller to feel respected, appreciated, and that you genuinely like the property.
+
+However, your realtor should ALSO communicate that the property still has to work financially, meet your criteria, and make sense as an investment.
+
+The goal is balancing excitement with discipline.
+
+Have Your Realtor "Prime" The Seller Before Sending Offers
+
+Strong realtors often communicate with the listing agent BEFORE officially submitting offers.
+
+This allows them to prepare expectations, explain your reasoning, build rapport, and reduce emotional reactions.
+
+This can massively improve negotiations. Many negotiations fail because the seller feels insulted BEFORE understanding the reasoning behind the offer.
+
+Start Lower Than You Are Willing To End
+
+Sellers want to feel like they won something in the negotiation.
+
+It is extremely important that your initial offer gives you room to move during counter offers. Know the highest amount you are willing to pay and do NOT go above it — but start below it so you have room to negotiate.
+
+As you move, make the movement feel meaningful and difficult. If you are working through a realtor, make sure they communicate that your movement in price or terms was painful and carefully considered.
+
+Emotions always play a role in negotiation. The more the seller feels like they are winning, the more likely you are to get your offer accepted.
+
+Counter Offer Slowly & Strategically
+
+When negotiating, move slowly, make concessions carefully, and avoid large emotional jumps.
+
+You want your movement to feel thoughtful, intentional, and difficult.
+
+The more the seller feels they earned the movement, the more likely negotiations continue positively.
+
+Focus On Terms — Not Just Price
+
+Sometimes terms matter more than price.
+
+Examples: quicker closing, flexible timing, larger earnest money, seller finance, leasebacks, shorter inspections, or fewer contingencies.
+
+A great realtor helps identify what the seller values MOST.
+
+Understand Timing & Urgency
+
+Sometimes timing matters more than price.
+
+Examples: sellers already bought another property, vacant properties costing money, inherited properties, landlord burnout, pending foreclosures, partnership disputes, divorce, relocation, or properties sitting on market too long.
+
+The more urgency exists, the more flexibility often exists.
+
+Great negotiators identify pressure, timing, and pain points early in the process.
+
+Never Let Realtors Push You Outside Your Criteria
+
+Remember: realtors are often emotionally tied to getting deals closed. You MUST remain disciplined.
+
+Never overpay, abandon your analysis, or stretch beyond your criteria just to "win" the property.
+
+Good investors protect downside risk first.
+
+Step-By-Step Process For Negotiating Directly With Sellers
+
+Step 1. Gather Information BEFORE Negotiating
+
+You should understand current rents, number of units, bedrooms/bathrooms, property condition, taxes, insurance, market rents, location, utilities, and repair needs.
+
+Do NOT negotiate blindly. Analyze FIRST.
+
+Step 2. Build Rapport
+
+People sell to people they trust, like, and feel comfortable with.
+
+Be respectful, calm, friendly, and genuinely curious.
+
+Relationship Tips:
+
+• Find Common Ground — People naturally trust people similar to themselves.
+• Ask Questions & Listen — Good negotiators talk LESS and listen MORE. Listen for stress, frustrations, goals, and problems you can help solve.
+• Be Likable — Simple things matter: smile, slow down, maintain eye contact, use calm body language, and avoid sounding overly "salesy."
+
+Step 3. Build Value As A Buyer
+
+Sellers need confidence in YOU. You want to appear professional, capable, trustworthy, and easy to work with.
+
+Examples: pre-approval letter, proof of funds, relationship with title company, lender relationships, investment experience, or ability to close quickly.
+
+Step 4. Compliment The Property Genuinely
+
+Talk positively about the location, the landscaping, the management, the upkeep, or features you genuinely like.
+
+Use phrases like: "As long as the numbers work, I would absolutely love this property."
+
+BUT: be sincere. Fake flattery destroys trust.
+
+Step 5. Run The Numbers Together
+
+This is VERY powerful. Walk through rents, expenses, repairs, vacancy, financing, and returns.
+
+Show them why the numbers may not work at their asking price.
+
+This helps make negotiation feel logical instead of emotional.
+
+Important Negotiation Technique: Discourage The NUMBERS — Not The SELLER
+
+Never attack the seller, their intelligence, or their property.
+
+Instead, explain the numbers calmly.
+
+Examples:
+"At this price and financing structure, the property becomes difficult to cash flow."
+"I really like the property, but the current returns are tighter than I normally buy."
+
+Step 6. Present Multiple Solutions
+
+Do NOT corner sellers. Give options.
+
+Examples: lower price, seller finance, lower interest rate, larger down payment, longer amortization, principal-only payments, flexible timing, or subject-to structures.
+
+Never Corner Sellers — People become defensive when they feel trapped or embarrassed. Avoid making sellers feel stupid, attacking their asking price emotionally, aggressive pressure, or "take it or leave it" ultimatums too early.
+
+Instead, stay collaborative, give options, and help sellers feel involved in the solution. The more comfortable the seller feels, the better negotiations usually go.
+
+Example Negotiation Framing:
+"I really like the property and would love to find a way to make this work for both of us."
+
+This changes negotiation from conflict to collaboration.
+
+Step 7. Stay Patient
+
+The longer you can remain calm, patient, and disciplined, the stronger your negotiation position usually becomes.
+
+Emotion creates mistakes. Patience creates leverage.
+
+Step 8. Be Willing To Walk Away
+
+If you cannot buy the property within your criteria, you MUST be willing to walk away. Be extremely respectful when doing so.
+
+Many deals come together days, weeks, or even months later because the seller realizes you were serious about your bottom dollar and disciplined in your analysis.
+
+When walking away, make sure the seller understands the absolute maximum you can pay, that you genuinely tried to create a win-win solution, and that the deal simply does not work within your criteria at the current terms.
+
+Thank them for their time and professionalism, and make sure they know you are always interested if they decide they would like to revisit terms that make the deal work for both parties.
+
+Sometimes the strongest negotiation position is being willing to walk away professionally and respectfully.
+
+Final Tips & Tricks
+
+Emotional Triggers Sellers Often Care About
+
+Sometimes sellers care about avoiding realtor commissions, avoiding repairs, avoiding showings, speed, certainty, passive income, taxes, or simplicity.
+
+Your job is to understand what matters MOST.
+
+Understand Seller Emotions & Market Concerns
+
+Sometimes sellers have emotional concerns, frustrations, or fears that need to be respectfully brought to light during negotiations.
+
+The goal is NOT manipulation, pressure, or fear tactics. The goal is helping the seller realistically evaluate the market and understand why your offer may make sense.
+
+Potential market concerns that may influence sellers include:
+
+• High interest rates
+• Uncertain or shifting markets
+• Slowing buyer demand
+• Increasing vacancy
+• Rising expenses
+• Higher insurance costs
+• Increasing maintenance costs
+• Tenant problems
+• Difficult property management
+• Crime or neighborhood decline
+• Slowing or declining property values
+• Longer days on market
+• Price reductions on nearby listings
+• Difficulty refinancing
+• Tighter lending standards
+• Economic uncertainty
+• Fear of future market softening
+
+Sometimes sellers also feel emotional pressure from owning too many properties, burnout from management, difficult tenants, deferred maintenance, financial stress, life changes, divorce, retirement, relocation, or simply wanting simplicity.
+
+The key is to discuss these things calmly, respectfully, and logically. You never want the seller to feel attacked. You want them to feel understood, heard, and that you are trying to create a realistic solution that works for both parties.
+
+Never Lie During Negotiation
+
+Strong negotiation does NOT require dishonesty. Never fake offers, fake numbers, fake repair bids, fake financial hardship, or intentionally mislead sellers.
+
+Your reputation matters. The best negotiators stay honest, stay professional, and let the numbers do the work.
+
+Common Negotiation Mistakes
+
+1. Talking Too Much — Great negotiators listen more than they speak.
+2. Negotiating Emotionally — Emotion causes overpaying.
+3. Falling In Love With The Deal — No single property will change your life.
+4. Ignoring The Numbers — Never negotiate beyond your criteria.
+5. Being Aggressive Or Manipulative — Pressure destroys trust.
+6. Giving Away Your Maximum Too Early — Maintain flexibility. Make giving up price painful and hold on for as long as you can.
+
+Quick Rules To Remember
+
+• Analyze BEFORE negotiating
+• Know your highest acceptable price
+• Stay calm and patient
+• Use numbers — not emotion
+• Listen more than you speak
+• Understand seller motivation
+• Structure solutions, not pressure
+• Be willing to walk away
+• Protect your investment criteria
+• Solve problems for BOTH sides
+
+Today's Suggested Arsenal Contact
+
+Reach out to a For Sale By Owner seller, realtor, landlord, or off-market lead.
+
+Your goal today: practice conversation, ask questions, understand seller motivation, and practice discussing terms confidently.
+
+Focus LESS on "closing the deal." Focus MORE on building rapport, understanding problems, and practicing negotiation skills.`,
     category: "foundation",
     weekNumber: 1,
     weekTitle: "BUILD THE FOUNDATION",
@@ -1199,7 +1490,93 @@ The best negotiators listen carefully, understand motivations, and create flexib
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    videos: [
+      { title: 'How To Counter Offer Like An Investor' },
+      { title: 'Negotiating Through Realtors' },
+      { title: 'Negotiating Directly With Sellers' },
+      { title: 'Understanding Seller Motivation' },
+      { title: 'How To Stay Disciplined During Negotiations' },
+    ],
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day5_negotiation',
+          title: 'Counter Offers & Negotiation Quiz',
+          description: 'Answer all 5 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Negotiating emotionally is one of the biggest mistakes — it causes overpaying and poor decisions.
+2. Before negotiating, you should already know your highest acceptable price and criteria based on conservative analysis.
+3. The best way to negotiate directly with sellers is to understand their motivations and solve problems for both sides.
+4. During negotiation, you should discourage the NUMBERS — not the seller. Never attack the seller personally.
+5. Patience and discipline create the strongest long-term negotiation position.`,
+          inputs: [
+            {
+              id: 'day5_q1',
+              label: '1. What is one of the BIGGEST mistakes investors make during negotiation?',
+              type: 'multiple_choice',
+              options: [
+                'Listening too carefully',
+                'Negotiating emotionally',
+                'Asking questions',
+                'Staying patient',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day5_q2',
+              label: '2. Before negotiating, what should every investor already know?',
+              type: 'multiple_choice',
+              options: [
+                "The seller's favorite price",
+                'Their highest acceptable price and criteria',
+                "The neighbor's opinion",
+                'The appraised value only',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day5_q3',
+              label: '3. What is one of the BEST ways to negotiate directly with sellers?',
+              type: 'multiple_choice',
+              options: [
+                'Pressure them emotionally',
+                'Talk constantly',
+                'Understand their motivations and solve problems',
+                'Argue aggressively over price',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day5_q4',
+              label: '4. During negotiation, what should you discourage?',
+              type: 'multiple_choice',
+              options: [
+                'The seller personally',
+                'The property condition emotionally',
+                'The NUMBERS — not the seller',
+                'All communication',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day5_q5',
+              label: '5. What creates the strongest long-term negotiation position?',
+              type: 'multiple_choice',
+              options: [
+                'Desperation',
+                'Aggressive pressure',
+                'Patience and discipline',
+                'Overpaying quickly',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 6,
