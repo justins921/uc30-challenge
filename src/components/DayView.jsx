@@ -3,6 +3,7 @@ import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayCo
 import { COMPLIANCE_METRICS, checkDailyCompliance, getTimeUntilDeadline, DEFAULT_DAILY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
 import QuizSection from './QuizSection';
 import { CONTACT_GROUPS } from './ContactsCRM';
+import ReflectionDay from './ReflectionDay';
 import { calculateFollowUpDate, validatePhone } from '../utils/storage';
 
 const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500' };
@@ -371,8 +372,17 @@ export default function DayView({
         </div>
       )}
 
-      {/* Training Content */}
-      {dayData.trainingContent && (
+      {/* Reflection Day */}
+      {dayData.isReflectionDay && (
+        <ReflectionDay
+          day={day}
+          user={user}
+          onMarkTrainingComplete={() => setMetric('training_completed', true)}
+        />
+      )}
+
+      {/* Training Content (standard days) */}
+      {!dayData.isReflectionDay && dayData.trainingContent && (
         <div className="card" style={{ marginBottom: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: trainingExpanded ? 12 : 0, cursor: trainingAlreadyDone ? 'pointer' : 'default' }}
             onClick={trainingAlreadyDone ? () => setTrainingExpanded(!trainingExpanded) : undefined}>
@@ -394,13 +404,15 @@ export default function DayView({
       )}
 
       {/* Task Description */}
-      <div className="card" style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-          <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📋</div>
-          <h3 style={{ fontSize: 16, fontWeight: 700 }}>Today's Standards</h3>
+      {dayData.taskDescription && (
+        <div className="card" style={{ marginBottom: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📋</div>
+            <h3 style={{ fontSize: 16, fontWeight: 700 }}>Today's Standards</h3>
+          </div>
+          <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.taskDescription}</p>
         </div>
-        <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.taskDescription}</p>
-      </div>
+      )}
 
       {/* Quiz Section */}
       {hasRequiredQuiz && canSubmit && !quizPassed && (
