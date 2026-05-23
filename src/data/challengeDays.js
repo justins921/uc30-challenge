@@ -2087,11 +2087,10 @@ Strong relationships with title companies can reduce stress, improve confidence,
   },
   {
     day: 14,
-    title: "Reorganize & Recommit",
-    caption: "Week 2 Reflection — Assess, Adapt & Push Forward",
-    taskDescription: "",
+    title: "Activate New Deal Sources",
+    caption: "",
+    taskDescription: "Contact at least 3 private lenders, wholesalers, or new deal sources. Submit communication screenshots.",
     trainingContent: "",
-    isReflectionDay: true,
     category: "pipeline",
     weekNumber: 2,
     weekTitle: "BUILD THE PIPELINE",
@@ -2194,15 +2193,14 @@ Strong relationships with title companies can reduce stress, improve confidence,
   },
   {
     day: 21,
-    title: "Reorganize & Recommit",
-    caption: "Week 3 Reflection — Sharpen Your Edge",
-    taskDescription: "",
+    title: "Direct Mail Campaign Launch",
+    caption: "",
+    taskDescription: "Prepare and send direct mail to at least 20 property owners. Submit proof of mailing.",
     trainingContent: "",
-    isReflectionDay: true,
     category: "pressure",
     weekNumber: 3,
     weekTitle: "APPLY PRESSURE",
-    proofType: "screenshot",
+    proofType: "photo",
     videoUrl: null,
     transcript: null,
     downloads: [],
@@ -2301,11 +2299,10 @@ Strong relationships with title companies can reduce stress, improve confidence,
   },
   {
     day: 28,
-    title: "Reorganize & Recommit",
-    caption: "Week 4 Reflection — Final Push Assessment",
-    taskDescription: "",
+    title: "Follow Up on All Active Offers",
+    caption: "",
+    taskDescription: "Follow up on every single active offer with urgency. Submit complete follow-up log.",
     trainingContent: "",
-    isReflectionDay: true,
     category: "sprint",
     weekNumber: 4,
     weekTitle: "FULL SPRINT",
@@ -2433,7 +2430,7 @@ export const DAILY_MINIMUMS = {
   11: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
   12: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
   13: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
-  14: { training_completed: true, properties_analyzed: 0, arsenal_contacts: 0, target_contacts: 0, follow_ups: 0 },
+  14: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
   // Week 3 — Apply Pressure
   15: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
   16: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
@@ -2441,7 +2438,7 @@ export const DAILY_MINIMUMS = {
   18: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
   19: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
   20: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
-  21: { training_completed: true, properties_analyzed: 0, arsenal_contacts: 0, target_contacts: 0, follow_ups: 0 },
+  21: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
   // Week 4 — Full Sprint
   22: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
   23: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
@@ -2449,7 +2446,7 @@ export const DAILY_MINIMUMS = {
   25: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
   26: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
   27: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
-  28: { training_completed: true, properties_analyzed: 0, arsenal_contacts: 0, target_contacts: 0, follow_ups: 0 },
+  28: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
   29: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
   30: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
 };
@@ -2459,11 +2456,10 @@ export const DEFAULT_DAILY_MINIMUMS = DAILY_MINIMUMS;
 
 // Veteran minimums — no Week 1 ramp-up for repeat users (cohortAttempt >= 2)
 // Uses Week 3 levels (days 1-21) and Week 4 levels (days 22-30)
-const REFLECTION_DAYS = [7, 14, 21, 28];
 export const VETERAN_DAILY_MINIMUMS = Object.fromEntries(
   Array.from({ length: 30 }, (_, i) => {
     const day = i + 1;
-    if (REFLECTION_DAYS.includes(day)) return [day, { training_completed: true, properties_analyzed: 0, arsenal_contacts: 0, target_contacts: 0, follow_ups: 0 }];
+    if (day === 7) return [day, { training_completed: true, properties_analyzed: 0, arsenal_contacts: 0, target_contacts: 0, follow_ups: 0 }];
     return [day, day <= 21
       ? { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 }
       : { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
