@@ -23,7 +23,6 @@ export default function DayView({
 
   // ── Reflection Day (Days 7, 14, 21, 28 — always Sundays) ────
   const weekNum = getWeekNumber(day);
-  const isReflectionDay = dayData?.isReflectionDay === true;
 
   // ── Metric state (the 6 compliance metrics) ──────────────────
   const [metrics, setMetrics] = useState({
@@ -41,6 +40,7 @@ export default function DayView({
   // ── Day Data ──────────────────────────────────────────────────
   const isPost30 = day > 30;
   const dayData = isPost30 ? getDayDataForNum(day) : getDayContent(day, contentOverrides);
+  const isReflectionDay = dayData?.isReflectionDay === true;
   const isComplete = isPreview ? false : user.completedDays.includes(day);
   const isCurrentOrPast = isPreview ? true : day <= user.currentDay;
   const existingSubmission = user.submissions.find(s => s.day === day);
