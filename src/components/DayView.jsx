@@ -8,18 +8,6 @@ import { calculateFollowUpDate, validatePhone } from '../utils/storage';
 
 const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500' };
 
-// ── Rest Day Storage Helpers ──────────────────────────────────
-function getRestDayChoices(userId) {
-  try { return JSON.parse(localStorage.getItem(`uc30_rest_days_${userId}`) || '{}'); }
-  catch { return {}; }
-}
-function setRestDayChoice(userId, weekNum, dayNum) {
-  try {
-    const choices = getRestDayChoices(userId);
-    choices[weekNum] = dayNum;
-    localStorage.setItem(`uc30_rest_days_${userId}`, JSON.stringify(choices));
-  } catch {}
-}
 
 export default function DayView({
   day, user, onSubmit, onBack, contentOverrides, customPhases,
@@ -33,27 +21,9 @@ export default function DayView({
   const trainingAlreadyDone = (user.trainingCompletedDays || []).includes(day);
   const [trainingExpanded, setTrainingExpanded] = useState(!trainingAlreadyDone);
 
-  // ── Rest Day Picker (Weeks 2-4) ──────────────────────────────
+  // ── Reflection Day (Days 7, 14, 21, 28 — always Sundays) ────
   const weekNum = getWeekNumber(day);
-  const isFixedReflection = day === 7;
-  const [restDayChoices, setRestDayChoices] = useState(() => getRestDayChoices(user?.id));
-  const [showRestDayPicker, setShowRestDayPicker] = useState(false);
-
-  const chosenRestDay = restDayChoices[weekNum];
-  const isChosenRestDay = !isFixedReflection && weekNum >= 2 && chosenRestDay === day;
-  const needsRestDayPick = weekNum >= 2 && !chosenRestDay && !isPreview && day <= 30;
-
-  useEffect(() => {
-    if (needsRestDayPick) setShowRestDayPicker(true);
-  }, [needsRestDayPick]);
-
-  const handlePickRestDay = (pickedDay) => {
-    setRestDayChoice(user?.id, weekNum, pickedDay);
-    setRestDayChoices(prev => ({ ...prev, [weekNum]: pickedDay }));
-    setShowRestDayPicker(false);
-  };
-
-  const isReflectionDay = isFixedReflection || isChosenRestDay;
+  const isReflectionDay = dayData?.isReflectionDay === true;
 
   // ── Metric state (the 6 compliance metrics) ──────────────────
   const [metrics, setMetrics] = useState({
@@ -83,8 +53,7 @@ export default function DayView({
   const isVeteran = (user.cohortAttempt || 1) >= 2;
   const baseMinimumsTable = isVeteran ? VETERAN_DAILY_MINIMUMS : DAILY_MINIMUMS;
   const perDayMins = (!isPost30 && baseMinimumsTable[day]) || DEFAULT_DAILY_MINIMUMS;
-  const restDayMins = { training_completed: true, properties_analyzed: 0, arsenal_contacts: 0, target_contacts: 0, follow_ups: 0 };
-  const dailyMins = isChosenRestDay ? restDayMins : { ...perDayMins, ...complianceSettings?.dailyMinimums };
+  const dailyMins = { ...perDayMins, ...complianceSettings?.dailyMinimums };
   const enforcement = { ...DEFAULT_ENFORCEMENT, ...complianceSettings?.enforcement };
 
   // ── Deadline countdown ────────────────────────────────────────
@@ -313,11 +282,11 @@ export default function DayView({
           <span className="mono" style={{ fontSize: 11, color: '#555' }}>{isPost30 ? `DAY ${day}` : `DAY ${day}/30`}</span>
         </div>
         <h1 style={{ fontSize: 32, fontWeight: 700, lineHeight: 1.2, marginBottom: 4 }}>
-          {isChosenRestDay ? 'Reorganize & Recommit' : dayData.title}
+          {dayData.title}
         </h1>
-        {(isChosenRestDay || dayData.caption) && (
+        {dayData.caption && (
           <p style={{ fontSize: 14, color: '#888', marginTop: 4, marginBottom: 0 }}>
-            {isChosenRestDay ? `Week ${weekNum} Reflection — Self Assessment & Goal Setting` : dayData.caption}
+            {dayData.caption}
           </p>
         )}
         {isComplete && (
@@ -330,82 +299,6 @@ export default function DayView({
           </div>
         )}
       </div>
-
-      {/* Rest Day Picker Modal (Weeks 2-4) */}
-      {showRestDayPicker && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 1000,
-          background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: 20,
-        }}>
-          <div style={{
-            maxWidth: 420, width: '100%', borderRadius: 16,
-            background: '#1a1a2e', border: '1px solid rgba(168,85,247,0.2)',
-            padding: '28px 24px',
-          }}>
-            <div style={{ textAlign: 'center', marginBottom: 20 }}>
-              <div style={{ fontSize: 11, color: '#a855f7', fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>
-                WEEK {weekNum}
-              </div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: '#ddd', marginBottom: 8 }}>
-                Choose Your Rest Day
-              </div>
-              <div style={{ fontSize: 13, color: '#888', lineHeight: 1.6 }}>
-                Pick one day this week for reflection and goal-setting. No contacts will be required on your rest day.
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {(() => {
-                const { start, end } = getWeekDayRange(weekNum);
-                return Array.from({ length: end - start + 1 }, (_, i) => {
-                  const d = start + i;
-                  const dData = getDayContent(d, contentOverrides);
-                  const isAlreadyComplete = user.completedDays.includes(d);
-                  return (
-                    <button key={d}
-                      onClick={() => handlePickRestDay(d)}
-                      disabled={isAlreadyComplete}
-                      style={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                        padding: '12px 16px', borderRadius: 10, fontSize: 14,
-                        cursor: isAlreadyComplete ? 'default' : 'pointer',
-                        fontFamily: "'DM Sans', sans-serif",
-                        border: 'none',
-                        background: isAlreadyComplete ? 'rgba(255,255,255,0.02)' : 'rgba(168,85,247,0.06)',
-                        color: isAlreadyComplete ? '#555' : '#ccc',
-                        opacity: isAlreadyComplete ? 0.5 : 1,
-                      }}>
-                      <span>
-                        <span style={{ fontWeight: 700, color: isAlreadyComplete ? '#555' : '#a855f7', marginRight: 10 }}>Day {d}</span>
-                        {dData.title}
-                      </span>
-                      {isAlreadyComplete && <span style={{ fontSize: 11, color: '#48c78e' }}>Done</span>}
-                    </button>
-                  );
-                });
-              })()}
-            </div>
-
-            <div style={{ textAlign: 'center', marginTop: 16 }}>
-              <div style={{ fontSize: 11, color: '#666' }}>
-                Already-completed days cannot be selected as rest days
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Rest Day Badge (for chosen rest days in weeks 2-4) */}
-      {isChosenRestDay && !isFixedReflection && (
-        <div style={{
-          marginBottom: 16, display: 'inline-flex', alignItems: 'center', gap: 8,
-          padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 700,
-          background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.2)', color: '#a855f7',
-        }}>
-          REST DAY — Week {weekNum} Reflection
-        </div>
-      )}
 
       {/* Deadline Countdown (shown when submission area is visible) */}
       {canSubmit && timeLeft > 0 && (

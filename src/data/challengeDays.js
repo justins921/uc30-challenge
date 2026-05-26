@@ -2087,10 +2087,11 @@ Strong relationships with title companies can reduce stress, improve confidence,
   },
   {
     day: 14,
-    title: "Activate New Deal Sources",
-    caption: "",
-    taskDescription: "Contact at least 3 private lenders, wholesalers, or new deal sources. Submit communication screenshots.",
+    title: "Reorganize & Recommit",
+    caption: "Self Reflection, Momentum & Building Your Edge",
+    taskDescription: "",
     trainingContent: "",
+    isReflectionDay: true,
     category: "pipeline",
     weekNumber: 2,
     weekTitle: "BUILD THE PIPELINE",
@@ -2098,7 +2099,86 @@ Strong relationships with title companies can reduce stress, improve confidence,
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day14_reflection',
+          title: 'Weekly Reflection Quiz',
+          description: 'Answer all 5 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
+2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
+3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
+4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
+5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
+          inputs: [
+            {
+              id: 'day14_q1',
+              label: '1. What is one reason many investors fail to gain momentum?',
+              type: 'multiple_choice',
+              options: [
+                'They analyze too many deals',
+                'They become inconsistent and lose focus',
+                'They network too much',
+                'They build too many relationships',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day14_q2',
+              label: '2. What should influence your deal flow strategy the MOST?',
+              type: 'multiple_choice',
+              options: [
+                'What everyone else is doing',
+                'Your personal strengths and consistency',
+                'What sounds easiest',
+                'Which strategy requires the least effort',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day14_q3',
+              label: '3. Why is reviewing your buy box important?',
+              type: 'multiple_choice',
+              options: [
+                'Markets and goals can change as your knowledge improves',
+                'It guarantees better financing',
+                'It eliminates negotiation',
+                'It removes all investment risk',
+              ],
+              correctAnswer: 0,
+            },
+            {
+              id: 'day14_q4',
+              label: '4. What creates confidence in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'Waiting longer before taking action',
+                'Watching more videos only',
+                'Repetition, preparation, and experience',
+                'Finding perfect deals immediately',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day14_q5',
+              label: '5. What usually creates long-term success in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'One perfect deal',
+                'Aggressive risk taking',
+                'Consistency, discipline, and relationships',
+                'Buying the biggest property possible',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
   },
   // ── Week 3: Apply Pressure (Days 15-21) ──
   {
@@ -2193,18 +2273,98 @@ Strong relationships with title companies can reduce stress, improve confidence,
   },
   {
     day: 21,
-    title: "Direct Mail Campaign Launch",
-    caption: "",
-    taskDescription: "Prepare and send direct mail to at least 20 property owners. Submit proof of mailing.",
+    title: "Reorganize & Recommit",
+    caption: "Self Reflection, Momentum & Building Your Edge",
+    taskDescription: "",
     trainingContent: "",
+    isReflectionDay: true,
     category: "pressure",
     weekNumber: 3,
     weekTitle: "APPLY PRESSURE",
-    proofType: "photo",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day21_reflection',
+          title: 'Weekly Reflection Quiz',
+          description: 'Answer all 5 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
+2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
+3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
+4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
+5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
+          inputs: [
+            {
+              id: 'day21_q1',
+              label: '1. What is one reason many investors fail to gain momentum?',
+              type: 'multiple_choice',
+              options: [
+                'They analyze too many deals',
+                'They become inconsistent and lose focus',
+                'They network too much',
+                'They build too many relationships',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day21_q2',
+              label: '2. What should influence your deal flow strategy the MOST?',
+              type: 'multiple_choice',
+              options: [
+                'What everyone else is doing',
+                'Your personal strengths and consistency',
+                'What sounds easiest',
+                'Which strategy requires the least effort',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day21_q3',
+              label: '3. Why is reviewing your buy box important?',
+              type: 'multiple_choice',
+              options: [
+                'Markets and goals can change as your knowledge improves',
+                'It guarantees better financing',
+                'It eliminates negotiation',
+                'It removes all investment risk',
+              ],
+              correctAnswer: 0,
+            },
+            {
+              id: 'day21_q4',
+              label: '4. What creates confidence in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'Waiting longer before taking action',
+                'Watching more videos only',
+                'Repetition, preparation, and experience',
+                'Finding perfect deals immediately',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day21_q5',
+              label: '5. What usually creates long-term success in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'One perfect deal',
+                'Aggressive risk taking',
+                'Consistency, discipline, and relationships',
+                'Buying the biggest property possible',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
   },
   // ── Week 4: Full Sprint (Days 22-30) ──
   {
@@ -2299,10 +2459,11 @@ Strong relationships with title companies can reduce stress, improve confidence,
   },
   {
     day: 28,
-    title: "Follow Up on All Active Offers",
-    caption: "",
-    taskDescription: "Follow up on every single active offer with urgency. Submit complete follow-up log.",
+    title: "Reorganize & Recommit",
+    caption: "Self Reflection, Momentum & Building Your Edge",
+    taskDescription: "",
     trainingContent: "",
+    isReflectionDay: true,
     category: "sprint",
     weekNumber: 4,
     weekTitle: "FULL SPRINT",
@@ -2310,7 +2471,86 @@ Strong relationships with title companies can reduce stress, improve confidence,
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day28_reflection',
+          title: 'Weekly Reflection Quiz',
+          description: 'Answer all 5 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
+2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
+3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
+4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
+5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
+          inputs: [
+            {
+              id: 'day28_q1',
+              label: '1. What is one reason many investors fail to gain momentum?',
+              type: 'multiple_choice',
+              options: [
+                'They analyze too many deals',
+                'They become inconsistent and lose focus',
+                'They network too much',
+                'They build too many relationships',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day28_q2',
+              label: '2. What should influence your deal flow strategy the MOST?',
+              type: 'multiple_choice',
+              options: [
+                'What everyone else is doing',
+                'Your personal strengths and consistency',
+                'What sounds easiest',
+                'Which strategy requires the least effort',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day28_q3',
+              label: '3. Why is reviewing your buy box important?',
+              type: 'multiple_choice',
+              options: [
+                'Markets and goals can change as your knowledge improves',
+                'It guarantees better financing',
+                'It eliminates negotiation',
+                'It removes all investment risk',
+              ],
+              correctAnswer: 0,
+            },
+            {
+              id: 'day28_q4',
+              label: '4. What creates confidence in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'Waiting longer before taking action',
+                'Watching more videos only',
+                'Repetition, preparation, and experience',
+                'Finding perfect deals immediately',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day28_q5',
+              label: '5. What usually creates long-term success in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'One perfect deal',
+                'Aggressive risk taking',
+                'Consistency, discipline, and relationships',
+                'Buying the biggest property possible',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 29,
@@ -2430,7 +2670,7 @@ export const DAILY_MINIMUMS = {
   11: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
   12: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
   13: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
-  14: { training_completed: true, properties_analyzed: 3, arsenal_contacts: 1, target_contacts: 5, follow_ups: 2 },
+  14: { training_completed: true, properties_analyzed: 0, arsenal_contacts: 0, target_contacts: 0, follow_ups: 0 },
   // Week 3 — Apply Pressure
   15: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
   16: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
@@ -2438,7 +2678,7 @@ export const DAILY_MINIMUMS = {
   18: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
   19: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
   20: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
-  21: { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 },
+  21: { training_completed: true, properties_analyzed: 0, arsenal_contacts: 0, target_contacts: 0, follow_ups: 0 },
   // Week 4 — Full Sprint
   22: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
   23: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
@@ -2446,7 +2686,7 @@ export const DAILY_MINIMUMS = {
   25: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
   26: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
   27: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
-  28: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
+  28: { training_completed: true, properties_analyzed: 0, arsenal_contacts: 0, target_contacts: 0, follow_ups: 0 },
   29: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
   30: { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
 };
@@ -2459,7 +2699,7 @@ export const DEFAULT_DAILY_MINIMUMS = DAILY_MINIMUMS;
 export const VETERAN_DAILY_MINIMUMS = Object.fromEntries(
   Array.from({ length: 30 }, (_, i) => {
     const day = i + 1;
-    if (day === 7) return [day, { training_completed: true, properties_analyzed: 0, arsenal_contacts: 0, target_contacts: 0, follow_ups: 0 }];
+    if (day === 7 || day === 14 || day === 21 || day === 28) return [day, { training_completed: true, properties_analyzed: 0, arsenal_contacts: 0, target_contacts: 0, follow_ups: 0 }];
     return [day, day <= 21
       ? { training_completed: true, properties_analyzed: 5, arsenal_contacts: 2, target_contacts: 7, follow_ups: 5 }
       : { training_completed: true, properties_analyzed: 7, arsenal_contacts: 2, target_contacts: 10, follow_ups: 8 },
@@ -2494,6 +2734,16 @@ export function getWeekDayRange(weekNumber) {
   if (weekNumber === 2) return { start: 8, end: 14 };
   if (weekNumber === 3) return { start: 15, end: 21 };
   return { start: 22, end: 30 };
+}
+
+// Helper: get the cohort start date for a given month
+// Cohorts start on the first Monday of the first full Mon-Sun week of the month.
+export function getCohortStartDate(year, month) {
+  const firstOfMonth = new Date(year, month - 1, 1);
+  const dayOfWeek = firstOfMonth.getDay();
+  const daysUntilMonday = dayOfWeek === 0 ? 1 : dayOfWeek === 1 ? 0 : (8 - dayOfWeek);
+  const startDate = new Date(year, month - 1, 1 + daysUntilMonday);
+  return startDate.toISOString().split('T')[0];
 }
 
 // Post-30 "Operator Mode" reduced minimums

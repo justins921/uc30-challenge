@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Header from './Header';
-import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DAILY_MINIMUMS, getWeekNumber as getChallengeWeek, getWeeklyOfferTarget } from '../data/challengeDays';
+import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DAILY_MINIMUMS, getWeekNumber as getChallengeWeek, getWeeklyOfferTarget, getCohortStartDate } from '../data/challengeDays';
 import { INDICATOR_KEYS, INDICATOR_LABELS, INDICATOR_SHORT_LABELS, INDICATOR_COLORS, UC_POINT_VALUES, calculateUCPoints } from '../data/ucPoints';
 import DayView, { AttachmentLink } from './DayView';
 import ActivationPhase from './ActivationPhase';
@@ -610,6 +610,45 @@ function CohortSettings({ cohortStartDate, nextCohortDate, onSetCohortStartDate,
           </div>
         )}
       </div>
+
+      {/* Suggested start dates (first Monday of each month's first full week) */}
+      {editing && (
+        <div style={{ marginTop: 12, padding: '12px 16px', borderRadius: 10, background: 'rgba(72,199,142,0.04)', border: '1px solid rgba(72,199,142,0.1)' }}>
+          <div style={{ fontSize: 11, color: '#48c78e', fontWeight: 700, letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }}>
+            Suggested Start Dates (First Monday)
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            {(() => {
+              const now = new Date();
+              const suggestions = [];
+              for (let i = 0; i < 6; i++) {
+                const m = now.getMonth() + i;
+                const y = now.getFullYear() + Math.floor(m / 12);
+                const month = (m % 12) + 1;
+                const date = getCohortStartDate(y, month);
+                const label = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                suggestions.push({ date, label });
+              }
+              return suggestions.map(s => (
+                <button key={s.date}
+                  onClick={() => setDateValue(s.date)}
+                  style={{
+                    padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                    border: dateValue === s.date ? '1px solid #48c78e' : '1px solid rgba(255,255,255,0.08)',
+                    background: dateValue === s.date ? 'rgba(72,199,142,0.1)' : 'rgba(255,255,255,0.03)',
+                    color: dateValue === s.date ? '#48c78e' : '#aaa',
+                    cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                  }}>
+                  {s.label}
+                </button>
+              ));
+            })()}
+          </div>
+          <div style={{ fontSize: 11, color: '#666', marginTop: 6 }}>
+            Cohorts start on the first Monday of each month's first full week — guarantees 4 full Mon–Sun weeks.
+          </div>
+        </div>
+      )}
 
       {/* Next Cohort Date */}
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 16, paddingTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
