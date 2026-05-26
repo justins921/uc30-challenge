@@ -1997,18 +1997,327 @@ Strong relationships with title companies can reduce stress, improve confidence,
   // ── Week 2: Build the Pipeline (Days 8-14) ──
   {
     day: 8,
-    title: "Analyze 10 More Properties",
-    caption: "",
-    taskDescription: "Analyze 10 properties today with full financial breakdowns. Submit your analysis spreadsheet.",
-    trainingContent: "",
+    title: "Deal Flow Mastery",
+    caption: "How GREAT Investors Consistently Find Deals",
+    taskDescription: `Choose ONE primary deal flow strategy and ONE secondary strategy that fit your personality, strengths, schedule, and budget.
+
+Then reach out to Arsenal Contacts that will help you achieve these goals.
+
+Remember: consistent action creates momentum.`,
+    trainingContent: `Why Deal Flow Matters
+
+Deal flow is the lifeblood of real estate investing.
+
+Most investors fail NOT because they cannot analyze deals, negotiate, or raise money. They fail because they do not consistently FIND opportunities.
+
+The BEST investors understand: the more quality deal flow you generate, the more opportunities you create, and the better deals you eventually buy.
+
+Great investors do NOT wait for deals. They create deal flow intentionally.
+
+
+Important Truth About Deal Flow
+
+There is NO single "best" way to find deals.
+
+Different strategies work better for different people depending on: personality, skillset, market, consistency, and budget.
+
+The best strategy is usually the one you can execute CONSISTENTLY.
+
+
+1. Realtors & Brokers
+
+MLS Access
+The MLS gives access to listed properties, price reductions, days on market, and market data. Most beginners SHOULD start here because information is easier to access, contracts are standardized, and there is less complexity.
+
+Pocket Listings
+Pocket listings are deals not publicly marketed yet. Strong realtor relationships often create access to off-market opportunities, motivated sellers, and less competition.
+
+Expired Listings
+Expired listings are properties that failed to sell. These sellers are often frustrated, more flexible, and potentially open to creative solutions.
+
+
+2. Wholesalers
+
+Wholesalers put properties under contract and assign the contract to investors. This can create quick deal flow, off-market opportunities, and access to distressed properties.
+
+Assignment Deals — You purchase the contract rights directly from the wholesaler.
+Double Closings — The wholesaler closes on the property and immediately resells it.
+
+Important Rule About Wholesalers: Always verify repairs, rents, expenses, title, and ARV independently. Never blindly trust wholesale numbers.
+
+
+3. Online Platforms
+
+Zillow & Realtor.com — Great for MLS deals, FSBO listings, market research, and rent comps.
+
+Apartments.com & LoopNet — Excellent for multifamily, commercial, and investment-focused properties.
+
+Craigslist & Facebook Marketplace — Often attract smaller landlords, older investors, and sellers avoiding commissions. These can create surprisingly strong off-market opportunities.
+
+MLS Aggregators — Sites that combine listings from multiple sources can help increase visibility, speed, and analysis volume.
+
+
+4. Property Managers
+
+Property managers are one of the BEST sources of deal flow. Why? Because they often know tired landlords, frustrated owners, problem properties, retiring investors, and owners considering selling quietly.
+
+Best Ways To Use Property Managers: Build relationships by asking thoughtful questions, being professional, following up consistently, and proving you are serious. The stronger your reputation becomes, the more opportunities usually appear.
+
+
+5. Real Estate Investors
+
+Many deals come from other investors. Investors often sell because of burnout, partnerships, 1031 deadlines, life changes, management frustrations, or shifting priorities.
+
+Important Investor Categories:
+• Retiring Investors — Often open to seller finance, flexible timing, or simplified transactions.
+• Unhappy Landlords — Many landlords eventually become exhausted, frustrated, or overwhelmed. Pain creates opportunity.
+• 1031 Exchange Investors — These investors often operate under strict deadlines, pressure, and timing sensitivity.
+
+
+6. Direct-To-Owner Prospecting
+
+One of the MOST powerful deal flow methods. This means contacting owners directly before properties hit the market.
+
+Mailers — Simple letters or postcards sent to landlords, absentee owners, probate properties, or distressed owners. Consistency matters more than perfection.
+
+SMS & Texting — Direct outreach through text messaging. This works best when respectful, short, and non-pushy.
+
+Cold Calling — Directly calling owners. This can feel uncomfortable initially, but repetition builds confidence. Great for motivated sellers, distressed properties, and direct negotiation opportunities.
+
+Door Knocking — Physically visiting owners. Most people are NOT willing to do this consistently, which is why it can create opportunity.
+
+Driving For Dollars — Driving neighborhoods looking for deferred maintenance, vacant properties, overgrown landscaping, boarded windows, or signs of distress.
+
+Skip Tracing — Finding owner contact information through databases, software, or public records. Often paired with cold calling, texting, or direct mail.
+
+Pre-Foreclosures — Owners behind on payments may need speed, flexibility, or creative solutions. These situations require professionalism, empathy, and caution.
+
+Foreclosures — Bank-owned or distressed opportunities. Competition can be high, but strong opportunities still exist.
+
+Tax Liens — Properties with unpaid taxes. These owners may have financial distress, deferred maintenance, or motivation to sell.
+
+Probate — Inherited properties often create motivated sellers, out-of-state heirs, or simplified sale needs.
+
+Divorce Situations — Divorce often creates urgency, stress, and a need for fast resolution. Always approach these situations respectfully.
+
+Eviction-Heavy Landlords — Some landlords become overwhelmed by nonpaying tenants, property damage, or burnout. These owners can become motivated sellers.
+
+
+7. Networking & Relationships
+
+Relationships create opportunities. Many great deals NEVER hit the market.
+
+Local Meetups & REIAs — Excellent for networking, finding mentors, meeting investors, and building credibility.
+
+Masterminds & Groups — Higher-level groups often create partnerships, referrals, and private opportunities.
+
+Word Of Mouth & Referrals — Tell EVERYONE you buy real estate. Many deals come from friends, family, contractors, or local relationships.
+
+Contractors & Tradesmen — Contractors often know distressed owners, tired landlords, or properties needing work.
+
+Attorneys & CPAs — These professionals sometimes know clients dealing with probate, divorce, financial stress, or liquidation situations.
+
+Bankers & Lenders — Strong lender relationships can create referrals, investor introductions, and financing opportunities.
+
+Social Media — Posting deals, renovations, education, or investing content can create credibility, referrals, and inbound opportunities. Attention creates deal flow.
+
+
+8. Advertising & Marketing
+
+Marketing creates inbound opportunities.
+
+Social Media Ads — Facebook, Instagram, and Google ads can generate motivated seller leads, off-market opportunities, and inbound calls.
+
+Radio & TV — Higher-cost but powerful for building authority, credibility, and awareness.
+
+Billboards & Bandit Signs — Still effective in many markets. Visibility creates recognition, credibility, and inbound seller calls.
+
+SEO & Google Ads — Ranking locally for "sell my house fast" or investment-related searches can create extremely valuable inbound leads.
+
+Authority Content (YouTube, Instagram, TikTok) — Educational content can build trust, create referrals, attract sellers, and create inbound deal flow. Authority compounds over time.
+
+
+9. Public Records & Government Data
+
+Public records create opportunities most people ignore. Examples: code violations, evictions, probate filings, foreclosure filings, tax delinquency lists, and vacant property lists. These often uncover motivated owners, distressed properties, and off-market opportunities.
+
+
+10. Your Existing Network
+
+Never underestimate friends, coworkers, church groups, gyms, neighbors, or local relationships. Many people know someone struggling with a property, wanting to sell, or needing help. The more people know what you do, the more opportunities usually appear.
+
+
+The MOST Important Deal Flow Rule
+
+Consistency beats intensity.
+
+Many investors try one strategy briefly, get discouraged, and quit. Great investors consistently build relationships, consistently analyze deals, consistently market, and consistently follow up. Deal flow compounds over time.
+
+
+Quick Rules To Remember
+
+• Deal flow is the lifeblood of real estate.
+• Relationships create opportunities.
+• Consistency matters more than perfection.
+• Most great deals are CREATED.
+• Strong follow-up creates deals.
+• Different strategies fit different personalities.
+• Build trust before trying to close deals.
+• Volume creates opportunities.
+• Most sellers care about certainty and simplicity.
+• The more people know you buy real estate, the more opportunities appear.`,
     category: "pipeline",
     weekNumber: 2,
     weekTitle: "BUILD THE PIPELINE",
-    proofType: "spreadsheet",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day8_quiz',
+          title: 'Deal Flow Mastery Quiz',
+          description: 'Answer all 10 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Consistency and follow-up is the most important factor in successful deal flow.
+2. Property managers often know tired landlords and struggling owners.
+3. Off-market deals often have less competition and more flexibility.
+4. Driving for Dollars means driving neighborhoods looking for distressed properties.
+5. Relationships and opportunities compound over time — consistency matters.
+6. Strong networking means building long-term relationships and credibility.
+7. Expired listings create opportunity because sellers may become more flexible after failing to sell.
+8. Quitting strategies before momentum builds is one of the biggest beginner mistakes.
+9. The best deal flow strategy is the one you can execute consistently.
+10. Social media builds trust, authority, and inbound opportunities.`,
+          inputs: [
+            {
+              id: 'day8_q1',
+              label: '1. What is the MOST important factor in successful deal flow?',
+              type: 'multiple_choice',
+              options: [
+                'Finding one perfect marketing strategy',
+                'Consistency and follow-up',
+                'Spending the most money on advertising',
+                'Using every strategy at once',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day8_q2',
+              label: '2. Why are property managers such valuable deal flow sources?',
+              type: 'multiple_choice',
+              options: [
+                'They determine property values',
+                'They often know tired landlords and struggling owners',
+                'They control the MLS',
+                'They provide free financing',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day8_q3',
+              label: '3. What is one major advantage of off-market deals?',
+              type: 'multiple_choice',
+              options: [
+                'They always require no repairs',
+                'There is often less competition and more flexibility',
+                'Banks automatically approve financing',
+                'They eliminate due diligence',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day8_q4',
+              label: '4. What is "Driving For Dollars"?',
+              type: 'multiple_choice',
+              options: [
+                'Touring luxury properties with agents',
+                'Driving neighborhoods looking for distressed properties',
+                'Driving sellers to closing appointments',
+                'Looking at properties only online',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day8_q5',
+              label: '5. What is one reason consistency matters so much in deal flow?',
+              type: 'multiple_choice',
+              options: [
+                'Most deal flow strategies work instantly',
+                'Sellers usually respond immediately',
+                'Relationships and opportunities compound over time',
+                'You only need one week of marketing',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day8_q6',
+              label: '6. Which statement BEST describes strong networking?',
+              type: 'multiple_choice',
+              options: [
+                'Asking everyone for deals immediately',
+                'Building long-term relationships and credibility',
+                'Only talking to wealthy investors',
+                'Avoiding follow-up conversations',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day8_q7',
+              label: '7. Why can expired listings create opportunity?',
+              type: 'multiple_choice',
+              options: [
+                'They are always free properties',
+                'Sellers may become more flexible after failing to sell',
+                'Banks automatically discount them',
+                'They no longer require contracts',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day8_q8',
+              label: '8. What is one of the BIGGEST mistakes beginners make with deal flow?',
+              type: 'multiple_choice',
+              options: [
+                'Focusing on too few strategies',
+                'Being too consistent',
+                'Quitting strategies before momentum builds',
+                'Building too many relationships',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day8_q9',
+              label: '9. Which deal flow strategy is BEST?',
+              type: 'multiple_choice',
+              options: [
+                'The most expensive one',
+                'The one everyone else uses',
+                'The strategy you can execute consistently',
+                'Cold calling only',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day8_q10',
+              label: '10. Why is social media becoming a stronger deal flow tool?',
+              type: 'multiple_choice',
+              options: [
+                'It eliminates negotiations',
+                'It builds trust, authority, and inbound opportunities',
+                'It guarantees off-market deals',
+                'It replaces networking completely',
+              ],
+              correctAnswer: 1,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 9,
