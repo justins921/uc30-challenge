@@ -37,6 +37,10 @@ export default function DayView({
   const [showPostSubmit, setShowPostSubmit] = useState(false);
   const [postSubmitSaving, setPostSubmitSaving] = useState(false);
   const [calcOpen, setCalcOpen] = useState(false);
+  const [calcNotes, setCalcNotes] = useState('');
+  const [calcPropertyId, setCalcPropertyId] = useState('');
+  const [calcSaving, setCalcSaving] = useState(false);
+  const [calcSaved, setCalcSaved] = useState(false);
 
   // ── Day Data ──────────────────────────────────────────────────
   const isPost30 = day > 30;
@@ -704,40 +708,123 @@ export default function DayView({
                   </div>
 
                   {/* CDS Rental Calculator */}
-                  <div style={{
-                    borderRadius: 10,
-                    border: '1px solid rgba(233,69,96,0.2)',
-                    overflow: 'hidden',
-                  }}>
-                    <button
-                      onClick={() => setCalcOpen(!calcOpen)}
-                      style={{
-                        width: '100%', padding: '12px 16px',
-                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                        background: 'rgba(233,69,96,0.06)', border: 'none',
-                        cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <span style={{ fontSize: 18 }}>📊</span>
-                        <div style={{ textAlign: 'left' }}>
-                          <div style={{ fontSize: 14, fontWeight: 600, color: '#e94560' }}>CDS Rental Calculator</div>
-                          <div style={{ fontSize: 11, color: '#888' }}>Analyze a property</div>
-                        </div>
+                  {(() => {
+                    const targetProps = (contactList || []).filter(c => c.contact_group === 'target' && c.pipeline_status !== 'dead');
+                    return (
+                      <div style={{
+                        borderRadius: 10,
+                        border: '1px solid rgba(233,69,96,0.2)',
+                        overflow: 'hidden',
+                      }}>
+                        <button
+                          onClick={() => { setCalcOpen(!calcOpen); setCalcSaved(false); }}
+                          style={{
+                            width: '100%', padding: '12px 16px',
+                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                            background: 'rgba(233,69,96,0.06)', border: 'none',
+                            cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                            <span style={{ fontSize: 18 }}>📊</span>
+                            <div style={{ textAlign: 'left' }}>
+                              <div style={{ fontSize: 14, fontWeight: 600, color: '#e94560' }}>CDS Rental Calculator</div>
+                              <div style={{ fontSize: 11, color: '#888' }}>Analyze a property</div>
+                            </div>
+                          </div>
+                          <span style={{ fontSize: 12, color: '#888', transition: 'transform 0.2s', transform: calcOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
+                        </button>
+                        {calcOpen && (
+                          <>
+                            <iframe
+                              src="https://cds-rental-calc.web.app/"
+                              style={{
+                                width: '100%', height: 700, border: 'none',
+                                background: '#fff', display: 'block',
+                              }}
+                              title="CDS Rental Calculator"
+                            />
+                            <div style={{
+                              padding: '14px 16px',
+                              background: 'rgba(233,69,96,0.04)',
+                              borderTop: '1px solid rgba(233,69,96,0.15)',
+                            }}>
+                              <div style={{ fontSize: 13, fontWeight: 600, color: '#e94560', marginBottom: 10 }}>
+                                Save Analysis to a Property
+                              </div>
+                              <select
+                                value={calcPropertyId}
+                                onChange={e => setCalcPropertyId(e.target.value)}
+                                style={{
+                                  width: '100%', fontSize: 13, padding: '9px 12px', borderRadius: 8,
+                                  background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+                                  color: '#ccc', marginBottom: 8, fontFamily: "'DM Sans', sans-serif",
+                                }}
+                              >
+                                <option value="">Select target property...</option>
+                                {targetProps.map(c => (
+                                  <option key={c.id} value={c.id}>
+                                    {c.name}{c.property ? ` — ${c.property.split('|')[0]}` : ''}
+                                  </option>
+                                ))}
+                              </select>
+                              <textarea
+                                value={calcNotes}
+                                onChange={e => setCalcNotes(e.target.value)}
+                                placeholder="Paste your analysis results here (purchase price, rent, cash flow, cap rate, etc.)"
+                                rows={4}
+                                style={{
+                                  width: '100%', fontSize: 13, padding: '9px 12px', borderRadius: 8,
+                                  background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+                                  color: '#eee', resize: 'vertical', fontFamily: "'DM Sans', sans-serif",
+                                }}
+                              />
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
+                                <button
+                                  disabled={!calcPropertyId || !calcNotes.trim() || calcSaving}
+                                  onClick={async () => {
+                                    if (!calcPropertyId || !calcNotes.trim()) return;
+                                    setCalcSaving(true);
+                                    const contact = targetProps.find(c => c.id === calcPropertyId);
+                                    const existing = contact?.analysis_notes || [];
+                                    const entry = {
+                                      id: `analysis_${Date.now()}`,
+                                      text: calcNotes.trim(),
+                                      date: new Date().toISOString(),
+                                      day,
+                                    };
+                                    await onUpdateContact(calcPropertyId, {
+                                      analysis_notes: [...existing, entry],
+                                    });
+                                    setCalcNotes('');
+                                    setCalcSaving(false);
+                                    setCalcSaved(true);
+                                    setMetric('properties_analyzed', (metrics.properties_analyzed || 0) + 1);
+                                    setTimeout(() => setCalcSaved(false), 3000);
+                                  }}
+                                  style={{
+                                    padding: '9px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                                    cursor: (!calcPropertyId || !calcNotes.trim()) ? 'default' : 'pointer',
+                                    fontFamily: "'DM Sans', sans-serif", border: 'none',
+                                    background: (!calcPropertyId || !calcNotes.trim()) ? 'rgba(255,255,255,0.06)' : 'rgba(233,69,96,0.2)',
+                                    color: (!calcPropertyId || !calcNotes.trim()) ? '#555' : '#e94560',
+                                    opacity: calcSaving ? 0.5 : 1,
+                                  }}
+                                >
+                                  {calcSaving ? 'Saving...' : 'Save Analysis'}
+                                </button>
+                                {calcSaved && (
+                                  <span style={{ fontSize: 12, color: '#48c78e', fontWeight: 600 }}>
+                                    Saved! Properties analyzed +1
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </div>
-                      <span style={{ fontSize: 12, color: '#888', transition: 'transform 0.2s', transform: calcOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
-                    </button>
-                    {calcOpen && (
-                      <iframe
-                        src="https://cds-rental-calc.web.app/"
-                        style={{
-                          width: '100%', height: 700, border: 'none',
-                          background: '#fff', display: 'block',
-                        }}
-                        title="CDS Rental Calculator"
-                      />
-                    )}
-                  </div>
+                    );
+                  })()}
 
                   {/* Offers Submitted */}
                   {(() => {
@@ -1343,6 +1430,11 @@ export default function DayView({
                                 </div>
                                 {contact.property && <div style={{ fontSize: 12, color: '#e94560', marginTop: 1 }}>{contact.property}</div>}
                                 {contact.phone && <div style={{ fontSize: 11, color: '#666', marginTop: 1 }}>📞 {contact.phone}</div>}
+                                {contact.analysis_notes?.length > 0 && (
+                                  <div style={{ fontSize: 10, color: '#e94560', marginTop: 2 }}>
+                                    📊 {contact.analysis_notes.length} analysis{contact.analysis_notes.length !== 1 ? 'es' : ''}
+                                  </div>
+                                )}
                               </div>
                               <button
                                 onClick={() => {
@@ -2513,6 +2605,11 @@ function DueFollowUpCard({ contact, type, now, onFollowUp, onSnooze, onMarkDead,
           {contact.last_contact_date && (
             <div style={{ fontSize: 11, color: '#555', marginTop: 4 }}>
               Last contact: {new Date(contact.last_contact_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </div>
+          )}
+          {contact.analysis_notes?.length > 0 && (
+            <div style={{ marginTop: 6, fontSize: 11, color: '#e94560', fontWeight: 600 }}>
+              📊 {contact.analysis_notes.length} analysis{contact.analysis_notes.length !== 1 ? 'es' : ''} saved
             </div>
           )}
         </div>
