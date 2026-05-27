@@ -36,6 +36,7 @@ export default function DayView({
   const [proofText, setProofText] = useState(existingDailySubmission?.proof_text || '');
   const [showPostSubmit, setShowPostSubmit] = useState(false);
   const [postSubmitSaving, setPostSubmitSaving] = useState(false);
+  const [calcOpen, setCalcOpen] = useState(false);
 
   // ── Day Data ──────────────────────────────────────────────────
   const isPost30 = day > 30;
@@ -700,6 +701,42 @@ export default function DayView({
                         }}
                       >+</button>
                     </div>
+                  </div>
+
+                  {/* CDS Rental Calculator */}
+                  <div style={{
+                    borderRadius: 10,
+                    border: '1px solid rgba(233,69,96,0.2)',
+                    overflow: 'hidden',
+                  }}>
+                    <button
+                      onClick={() => setCalcOpen(!calcOpen)}
+                      style={{
+                        width: '100%', padding: '12px 16px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        background: 'rgba(233,69,96,0.06)', border: 'none',
+                        cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ fontSize: 18 }}>📊</span>
+                        <div style={{ textAlign: 'left' }}>
+                          <div style={{ fontSize: 14, fontWeight: 600, color: '#e94560' }}>CDS Rental Calculator</div>
+                          <div style={{ fontSize: 11, color: '#888' }}>Analyze a property</div>
+                        </div>
+                      </div>
+                      <span style={{ fontSize: 12, color: '#888', transition: 'transform 0.2s', transform: calcOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
+                    </button>
+                    {calcOpen && (
+                      <iframe
+                        src="https://cds-rental-calc.web.app/"
+                        style={{
+                          width: '100%', height: 700, border: 'none',
+                          background: '#fff', display: 'block',
+                        }}
+                        title="CDS Rental Calculator"
+                      />
+                    )}
                   </div>
 
                   {/* Offers Submitted */}
