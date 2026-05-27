@@ -752,6 +752,9 @@ export default function DayView({
                                 });
                                 setMetric('properties_analyzed', (metrics.properties_analyzed || 0) + 1);
                               }}
+                              onUploadAnalysis={onUploadFile ? async (propertyId, file, dayNum) => {
+                                return await onUploadFile(user.id, dayNum, 'analysis', file);
+                              } : null}
                             />
                           </div>
                         )}
@@ -1328,6 +1331,9 @@ export default function DayView({
                           });
                           setMetric('properties_analyzed', (metrics.properties_analyzed || 0) + 1);
                         }}
+                        onUploadAnalysis={onUploadFile ? async (propertyId, file, dayNum) => {
+                          return await onUploadFile(user.id, dayNum, 'analysis', file);
+                        } : null}
                       />
                     </div>
                   )}
