@@ -53,7 +53,7 @@ export default function DayView({
   const isVeteran = (user.cohortAttempt || 1) >= 2;
   const baseMinimumsTable = isVeteran ? VETERAN_DAILY_MINIMUMS : DAILY_MINIMUMS;
   const perDayMins = (!isPost30 && baseMinimumsTable[day]) || DEFAULT_DAILY_MINIMUMS;
-  const dailyMins = { ...perDayMins, ...complianceSettings?.dailyMinimums };
+  const dailyMins = { ...complianceSettings?.dailyMinimums, ...perDayMins };
   const enforcement = { ...DEFAULT_ENFORCEMENT, ...complianceSettings?.enforcement };
 
   // ── Deadline countdown ────────────────────────────────────────
@@ -974,10 +974,7 @@ export default function DayView({
                     </div>
 
                     {contactGroup === 'target' && (
-                      <input value={contactProperty} onChange={e => setContactProperty(e.target.value)}
-                        placeholder="Property/Opportunity * (e.g. 123 Main St, Phoenix AZ)"
-                        style={{ width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 10, borderRadius: 8,
-                        background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(233,69,96,0.15)', color: '#eee' }} />
+                      <AddressFields value={contactProperty} onChange={setContactProperty} borderColor="rgba(233,69,96,0.15)" />
                     )}
 
                     <textarea value={contactNotes} onChange={e => setContactNotes(e.target.value)}
@@ -1754,10 +1751,7 @@ export default function DayView({
                 </div>
 
                 {contactGroup === 'target' && (
-                  <input value={contactProperty} onChange={e => setContactProperty(e.target.value)}
-                    placeholder="Property/Opportunity * (e.g. 123 Main St, Phoenix AZ)"
-                    style={{ width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 10, borderRadius: 8,
-                    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(233,69,96,0.15)', color: '#eee' }} />
+                  <AddressFields value={contactProperty} onChange={setContactProperty} borderColor="rgba(233,69,96,0.15)" />
                 )}
 
                 <textarea value={contactNotes} onChange={e => setContactNotes(e.target.value)}
@@ -2135,12 +2129,7 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
       {phoneError && <div style={{ fontSize: 11, color: '#e94560', marginBottom: 8 }}>{phoneError}</div>}
 
       {group === 'target' && (
-        <input value={property} onChange={e => setProperty(e.target.value)}
-          placeholder="Property address *"
-          style={{
-            width: '100%', fontSize: 13, padding: '8px 10px', marginBottom: 8, borderRadius: 8,
-            background: 'rgba(255,255,255,0.04)', border: `1px solid ${color}20`, color: '#eee',
-          }} />
+        <AddressFields value={property} onChange={setProperty} borderColor={`${color}20`} />
       )}
 
       <textarea value={notes} onChange={e => setNotes(e.target.value)}
@@ -2196,6 +2185,28 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
 }
 
 // ── Outcome Selector ────────────────────────────────────────────
+
+function AddressFields({ value, onChange, borderColor = 'rgba(255,255,255,0.1)' }) {
+  const parts = (value || '').split('|');
+  const [street, city, state, zip] = [parts[0] || '', parts[1] || '', parts[2] || '', parts[3] || ''];
+  const update = (idx, val) => {
+    const p = [...parts];
+    while (p.length < 4) p.push('');
+    p[idx] = val;
+    onChange(p.join('|'));
+  };
+  const fStyle = { fontSize: 13, padding: '8px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: `1px solid ${borderColor}`, color: '#eee' };
+  return (
+    <div style={{ marginBottom: 10 }}>
+      <input value={street} onChange={e => update(0, e.target.value)} placeholder="Street *" style={{ ...fStyle, width: '100%', marginBottom: 6 }} />
+      <div style={{ display: 'flex', gap: 6 }}>
+        <input value={city} onChange={e => update(1, e.target.value)} placeholder="City" style={{ ...fStyle, flex: 2 }} />
+        <input value={state} onChange={e => update(2, e.target.value)} placeholder="State" style={{ ...fStyle, flex: 1 }} />
+        <input value={zip} onChange={e => update(3, e.target.value)} placeholder="Zip" style={{ ...fStyle, flex: 1 }} />
+      </div>
+    </div>
+  );
+}
 
 function OutcomeSelector({ targetOutcome, setTargetOutcome, setFollowUpInterval, compact }) {
   const sz = compact ? 11 : 12;

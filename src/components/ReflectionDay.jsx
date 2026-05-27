@@ -388,12 +388,19 @@ Your future portfolio will likely come from consistency, relationships, discipli
 
       {/* Sections */}
       {filteredSections.map((section, idx) => {
-        const isActive = idx <= currentSection;
-        if (!isActive) return (
+        const sectionComplete = section.questions
+          ? section.questions.every(q => answers[q.id]?.trim())
+          : section.grading
+          ? gradingDone
+          : true;
+        const isExpanded = idx === currentSection;
+        const isUnlocked = idx <= currentSection;
+
+        if (!isUnlocked) return (
           <div key={section.id} style={{
-            ...cardStyle, opacity: 0.4, cursor: 'pointer',
+            ...cardStyle, opacity: 0.4,
             border: '1px solid rgba(255,255,255,0.04)',
-          }} onClick={() => setCurrentSection(idx)}>
+          }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
                 width: 28, height: 28, borderRadius: '50%', background: 'rgba(255,255,255,0.04)',
@@ -405,16 +412,28 @@ Your future portfolio will likely come from consistency, relationships, discipli
           </div>
         );
 
-        const sectionComplete = section.questions
-          ? section.questions.every(q => answers[q.id]?.trim())
-          : section.grading
-          ? gradingDone
-          : true;
+        if (!isExpanded) return (
+          <div key={section.id} style={{
+            ...cardStyle, cursor: 'pointer',
+            border: '1px solid rgba(72,199,142,0.1)',
+          }} onClick={() => setCurrentSection(idx)}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 28, height: 28, borderRadius: '50%',
+                background: sectionComplete ? 'rgba(72,199,142,0.15)' : 'rgba(168,85,247,0.15)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 13, fontWeight: 700, color: sectionComplete ? '#48c78e' : '#a855f7',
+              }}>{sectionComplete ? '✓' : idx + 1}</div>
+              <span style={{ fontSize: 15, fontWeight: 600, color: sectionComplete ? '#48c78e' : '#ccc' }}>{section.title}</span>
+              <span style={{ fontSize: 11, color: '#666', marginLeft: 'auto' }}>tap to expand</span>
+            </div>
+          </div>
+        );
 
         return (
           <div key={section.id} style={{
             ...cardStyle,
-            border: idx === currentSection ? '1px solid rgba(168,85,247,0.2)' : cardStyle.border,
+            border: '1px solid rgba(168,85,247,0.2)',
           }}>
             {/* Section header */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
@@ -454,17 +473,17 @@ Your future portfolio will likely come from consistency, relationships, discipli
             {section.checkboxes && (
               <div style={{ marginBottom: 16 }}>
                 <div style={{ fontSize: 12, color: '#a855f7', fontWeight: 600, marginBottom: 8 }}>Select all that apply:</div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 6 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {section.checkboxes.map(cb => (
                     <label key={cb.id} style={{
-                      display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', borderRadius: 8, cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 8, cursor: 'pointer',
                       background: answers[cb.id] ? 'rgba(72,199,142,0.06)' : 'rgba(255,255,255,0.02)',
                       border: `1px solid ${answers[cb.id] ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.06)'}`,
                     }}>
                       <input type="checkbox" checked={!!answers[cb.id]}
                         onChange={e => set(cb.id, e.target.checked)}
-                        style={{ accentColor: '#48c78e' }} />
-                      <span style={{ fontSize: 13, color: answers[cb.id] ? '#48c78e' : '#aaa' }}>{cb.label}</span>
+                        style={{ accentColor: '#48c78e', flexShrink: 0, width: 18, height: 18 }} />
+                      <span style={{ fontSize: 14, color: answers[cb.id] ? '#48c78e' : '#aaa' }}>{cb.label}</span>
                     </label>
                   ))}
                 </div>
