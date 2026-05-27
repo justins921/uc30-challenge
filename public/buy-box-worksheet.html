@@ -12,9 +12,9 @@
     body { background: #fff; color: #111; padding: 20px; font-size: 11pt; }
     .no-print { display: none !important; }
     .brand-header { border-bottom-color: #ddd !important; }
-    .brand-cds-text { color: #111 !important; }
     .brand-uc30-badge { background: #c0354a !important; }
-    .cds-mark-dark { fill: #222 !important; }
+    .brand-logo-screen { display: none !important; }
+    .brand-logo-print { display: block !important; }
     h1 { color: #c0354a !important; }
     h2 { color: #333 !important; border-bottom-color: #ccc !important; }
     .field { border-bottom-color: #ccc !important; }
@@ -26,8 +26,8 @@
     border-bottom: 1px solid rgba(255,255,255,0.1);
   }
   .brand-left { display: flex; align-items: center; gap: 12px; }
-  .brand-cds-mark svg { width: 36px; height: 36px; }
-  .brand-cds-text { font-size: 14px; font-weight: 700; color: #eee; letter-spacing: 0.5px; line-height: 1.2; }
+  .brand-logo { height: 40px; }
+  .brand-logo-print { display: none; }
   .brand-uc30-badge {
     background: #e94560; color: #fff; font-size: 13px; font-weight: 700;
     padding: 6px 14px; border-radius: 6px; letter-spacing: 2px;
@@ -52,15 +52,8 @@
 
 <div class="brand-header">
   <div class="brand-left">
-    <div class="brand-cds-mark">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <defs><clipPath id="lh"><rect x="0" y="50" width="100" height="50"/></clipPath></defs>
-        <path d="M20 98 L72 98 Q98 98 98 72 L98 28 Q98 2 72 2 L30 2 A10 10 0 0 0 30 22 L72 22 Q80 22 80 28 L80 72 Q80 80 72 80 L20 80Z" class="cds-mark-dark" fill="#fff"/>
-        <path d="M80 2 L28 2 Q2 2 2 28 L2 72 Q2 98 28 98 L70 98 A10 10 0 0 0 70 78 L28 78 Q20 78 20 72 L20 28 Q20 20 28 20 L80 20Z" fill="#e94560"/>
-        <path d="M20 98 L72 98 Q98 98 98 72 L98 28 Q98 2 72 2 L30 2 A10 10 0 0 0 30 22 L72 22 Q80 22 80 28 L80 72 Q80 80 72 80 L20 80Z" class="cds-mark-dark" fill="#fff" clip-path="url(#lh)"/>
-      </svg>
-    </div>
-    <div class="brand-cds-text">CHANDLER<br/>DAVID SMITH</div>
+    <img src="cds-logo-light.png" class="brand-logo brand-logo-screen" alt="Chandler David Smith" />
+    <img src="cds-logo-dark.png" class="brand-logo brand-logo-print" alt="Chandler David Smith" />
   </div>
   <div class="brand-uc30-badge">UC30</div>
 </div>
