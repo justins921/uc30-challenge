@@ -492,6 +492,7 @@ export default function App() {
         getAllDailySubmissions={getAllDailySubmissions}
         getRemovalLog={getRemovalLog}
         onSwitchToParticipant={() => setParticipantMode(true)}
+        onCompleteActivation={completeActivation}
       />
     );
   }
