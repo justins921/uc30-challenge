@@ -280,42 +280,81 @@ function GetClearStep({ onNext, onBack, onSave, existing }) {
   const [downPaymentSource, setDownPaymentSource] = useState(fp.downPaymentSource || '');
   const [financingPercent, setFinancingPercent] = useState(fp.financingPercent || '');
   const [financingType, setFinancingType] = useState(fp.financingType || '');
-  const [autoCalced, setAutoCalced] = useState({});
+  const [calcFields, setCalcFields] = useState(new Set());
 
   const [whyImportant, setWhyImportant] = useState(gc.whyImportant || '');
   const [saving, setSaving] = useState(false);
 
-  // Auto-calculations
   const numOrNull = (v) => { const n = parseFloat(v); return isNaN(n) ? null : n; };
 
-  const doAutoCalc = () => {
-    const calced = {};
-    const cf = numOrNull(yearlyCashFlow);
-    const ret = numOrNull(returnPercent);
-    const inv = numOrNull(yearlyInvestment);
-    const pv = numOrNull(propertyValue);
-    const dp = numOrNull(downPaymentPercent);
-    const ppyr = numOrNull(propertiesPerYear);
+  const handleFieldChange = (field, rawValue) => {
+    const isText = field === 'downPaymentSource';
+    const value = isText ? rawValue : rawValue.replace(/[^\d.]/g, '');
 
-    if (cf && ret && ret > 0 && !yearlyInvestment) {
-      const tp = numOrNull(timePeriod);
-      const totalInvestment = cf / (ret / 100);
-      const calc = Math.round(tp && tp > 0 ? totalInvestment / tp : totalInvestment);
-      setYearlyInvestment(calc);
-      calced.yearlyInvestment = true;
+    const v = {
+      yearlyCashFlow, yearlyInvestment, returnPercent, timePeriod,
+      propertiesPerYear, propertyValue, downPaymentPercent, financingPercent,
+    };
+    v[field] = value;
+
+    const pos = (k) => { const x = parseFloat(v[k]); return isNaN(x) || x <= 0 ? null : x; };
+    const num = (k) => { const x = parseFloat(v[k]); return isNaN(x) ? null : x; };
+
+    const updates = {};
+    const calced = new Set();
+    const cf = pos('yearlyCashFlow');
+
+    const p1 = ['yearlyCashFlow', 'returnPercent', 'timePeriod', 'yearlyInvestment'];
+    if (p1.includes(field) && cf) {
+      if (field !== 'yearlyInvestment' && pos('returnPercent') && pos('timePeriod')) {
+        updates.yearlyInvestment = String(Math.round(cf / (pos('returnPercent') / 100) / pos('timePeriod')));
+        calced.add('yearlyInvestment');
+      } else if (field !== 'returnPercent' && pos('yearlyInvestment') && pos('timePeriod')) {
+        const r = cf / pos('yearlyInvestment') / pos('timePeriod') * 100;
+        if (r > 0) { updates.returnPercent = String(Math.round(r * 10) / 10); calced.add('returnPercent'); }
+      } else if (field !== 'timePeriod' && pos('yearlyInvestment') && pos('returnPercent')) {
+        const t = cf / (pos('returnPercent') / 100) / pos('yearlyInvestment');
+        if (t > 0) { updates.timePeriod = String(Math.round(t)); calced.add('timePeriod'); }
+      }
     }
-    if (dp && !financingPercent) {
-      setFinancingPercent(String(100 - parseFloat(dp)));
-      calced.financingPercent = true;
-    } else if (numOrNull(financingPercent) && !downPaymentPercent) {
-      setDownPaymentPercent(String(100 - parseFloat(financingPercent)));
-      calced.downPaymentPercent = true;
+
+    const yi = updates.yearlyInvestment ? parseFloat(updates.yearlyInvestment) : pos('yearlyInvestment');
+    if (yi) {
+      if (field === 'propertiesPerYear' && pos('propertiesPerYear')) {
+        updates.propertyValue = String(Math.round(yi / pos('propertiesPerYear')));
+        calced.add('propertyValue');
+      } else if (field === 'propertyValue' && pos('propertyValue')) {
+        const ppy = Math.round(yi / pos('propertyValue') * 10) / 10;
+        if (ppy > 0) { updates.propertiesPerYear = String(ppy); calced.add('propertiesPerYear'); }
+      } else if (p1.includes(field) && calced.has('yearlyInvestment')) {
+        if (pos('propertyValue')) {
+          const ppy = Math.round(yi / pos('propertyValue') * 10) / 10;
+          if (ppy > 0) { updates.propertiesPerYear = String(ppy); calced.add('propertiesPerYear'); }
+        } else if (pos('propertiesPerYear')) {
+          updates.propertyValue = String(Math.round(yi / pos('propertiesPerYear')));
+          calced.add('propertyValue');
+        }
+      }
     }
-    if (pv && ppyr && !yearlyInvestment && !calced.yearlyInvestment) {
-      setYearlyInvestment(Math.round(pv * ppyr));
-      calced.yearlyInvestment = true;
+
+    if (field === 'downPaymentPercent' && num('downPaymentPercent') != null) {
+      updates.financingPercent = String(100 - num('downPaymentPercent'));
+      calced.add('financingPercent');
+    } else if (field === 'financingPercent' && num('financingPercent') != null) {
+      updates.downPaymentPercent = String(100 - num('financingPercent'));
+      calced.add('downPaymentPercent');
     }
-    setAutoCalced(calced);
+
+    const setters = {
+      yearlyCashFlow: setYearlyCashFlow, yearlyInvestment: setYearlyInvestment,
+      returnPercent: setReturnPercent, timePeriod: setTimePeriod,
+      propertiesPerYear: setPropertiesPerYear, propertyValue: setPropertyValue,
+      downPaymentPercent: setDownPaymentPercent, financingPercent: setFinancingPercent,
+      downPaymentSource: setDownPaymentSource,
+    };
+    setters[field](value);
+    Object.entries(updates).forEach(([key, val]) => { if (key !== field) setters[key](val); });
+    setCalcFields(calced);
   };
 
   const canProceed = destination.trim() && whyImportant.trim();
@@ -356,13 +395,12 @@ function GetClearStep({ onNext, onBack, onSave, existing }) {
     background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
     color: '#eee', fontFamily: "'DM Sans', sans-serif", width: '100%',
   };
-  const inlineInput = (value, setter, placeholder, opts = {}) => {
-    const isCalced = autoCalced[opts.calcKey];
+  const inlineInput = (value, fieldName, placeholder, opts = {}) => {
+    const isCalced = calcFields.has(fieldName);
     return (
       <input
         value={value}
-        onChange={e => { setter(opts.parse ? opts.parse(e.target.value) : e.target.value); if (isCalced) setAutoCalced(prev => ({ ...prev, [opts.calcKey]: false })); }}
-        onBlur={doAutoCalc}
+        onChange={e => handleFieldChange(fieldName, e.target.value)}
         placeholder={placeholder}
         inputMode={opts.inputMode || 'text'}
         style={{
@@ -376,7 +414,6 @@ function GetClearStep({ onNext, onBack, onSave, existing }) {
       />
     );
   };
-  const numParse = (v) => v.replace(/[^\d.]/g, '');
 
   const sectionGap = { marginBottom: 36 };
   const labelStyle = { fontSize: 13, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 8 };
@@ -481,23 +518,23 @@ function GetClearStep({ onNext, onBack, onSave, existing }) {
           </div>
 
           <p style={{ fontSize: 15, color: '#ccc', lineHeight: 2.6, margin: 0 }}>
-            I will have ${inlineInput(yearlyCashFlow, setYearlyCashFlow, '60,000', { inputMode: 'numeric', parse: numParse, calcKey: 'yearlyCashFlow' })} in yearly cash flow.
-            This will require ${inlineInput(yearlyInvestment, setYearlyInvestment, '150,000', { inputMode: 'numeric', parse: numParse, calcKey: 'yearlyInvestment' })} to be invested yearly
-            at a {inlineInput(returnPercent, setReturnPercent, '8', { width: 60, inputMode: 'decimal', parse: numParse, calcKey: 'returnPercent' })}% return
-            over a {inlineInput(timePeriod, setTimePeriod, '5', { width: 50, inputMode: 'numeric', parse: numParse, calcKey: 'timePeriod' })} year time period.
+            I will have ${inlineInput(yearlyCashFlow, 'yearlyCashFlow', '60,000', { inputMode: 'numeric' })} in yearly cash flow.
+            This will require ${inlineInput(yearlyInvestment, 'yearlyInvestment', '150,000', { inputMode: 'numeric' })} to be invested yearly
+            at a {inlineInput(returnPercent, 'returnPercent', '8', { width: 60, inputMode: 'decimal' })}% return
+            over a {inlineInput(timePeriod, 'timePeriod', '5', { width: 50, inputMode: 'numeric' })} year time period.
           </p>
 
           <p style={{ fontSize: 15, color: '#ccc', lineHeight: 2.6, margin: '16px 0 0' }}>
-            I will do this by purchasing {inlineInput(propertiesPerYear, setPropertiesPerYear, '3', { width: 50, inputMode: 'numeric', parse: numParse, calcKey: 'propertiesPerYear' })}{' '}
+            I will do this by purchasing {inlineInput(propertiesPerYear, 'propertiesPerYear', '3', { width: 50, inputMode: 'numeric' })}{' '}
             <select value={propertyType} onChange={e => setPropertyType(e.target.value)}
               style={{ fontSize: 14, fontWeight: 600, padding: '6px 10px', borderRadius: 6, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#eee', verticalAlign: 'middle' }}>
               <option value="properties">properties</option>
               <option value="units">units</option>
             </select>{' '}
-            per year with a value of ${inlineInput(propertyValue, setPropertyValue, '200,000', { inputMode: 'numeric', parse: numParse, calcKey: 'propertyValue' })} using{' '}
-            {inlineInput(downPaymentPercent, setDownPaymentPercent, '20', { width: 50, inputMode: 'decimal', parse: numParse, calcKey: 'downPaymentPercent' })}% as a down payment
-            from {inlineInput(downPaymentSource, setDownPaymentSource, 'personal savings', { width: 140, calcKey: 'downPaymentSource' })} and financing{' '}
-            {inlineInput(financingPercent, setFinancingPercent, '80', { width: 50, inputMode: 'decimal', parse: numParse, calcKey: 'financingPercent' })}% using{' '}
+            per year with a value of ${inlineInput(propertyValue, 'propertyValue', '200,000', { inputMode: 'numeric' })} using{' '}
+            {inlineInput(downPaymentPercent, 'downPaymentPercent', '20', { width: 50, inputMode: 'decimal' })}% as a down payment
+            from {inlineInput(downPaymentSource, 'downPaymentSource', 'personal savings', { width: 140 })} and financing{' '}
+            {inlineInput(financingPercent, 'financingPercent', '80', { width: 50, inputMode: 'decimal' })}% using{' '}
             <select value={financingType} onChange={e => setFinancingType(e.target.value)}
               style={{ fontSize: 14, fontWeight: 600, padding: '6px 10px', borderRadius: 6, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#eee', verticalAlign: 'middle' }}>
               <option value="">Select...</option>
@@ -505,7 +542,7 @@ function GetClearStep({ onNext, onBack, onSave, existing }) {
             </select>.
           </p>
 
-          {Object.values(autoCalced).some(Boolean) && (
+          {calcFields.size > 0 && (
             <p style={{ fontSize: 11, color: '#48c78e', marginTop: 12, marginBottom: 0 }}>
               Green values were auto-calculated. You can override them.
             </p>
