@@ -1283,63 +1283,61 @@ export default function DayView({
                         day={day}
                       />
                     )}
+                    {metric.id === 'properties_analyzed' && (() => {
+                      const targetProps = (contactList || []).filter(c => c.contact_group === 'target' && c.pipeline_status !== 'dead');
+                      return (
+                        <div style={{ marginTop: 8, borderRadius: 10, border: '1px solid rgba(233,69,96,0.2)', overflow: 'hidden' }}>
+                          <button
+                            onClick={() => { setCalcOpen(!calcOpen); setCalcSaved(false); }}
+                            style={{
+                              width: '100%', padding: '10px 14px',
+                              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                              background: 'rgba(233,69,96,0.06)', border: 'none',
+                              cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                              <span style={{ fontSize: 16 }}>📊</span>
+                              <div style={{ textAlign: 'left' }}>
+                                <div style={{ fontSize: 13, fontWeight: 600, color: '#e94560' }}>CDS Rental Calculator</div>
+                                <div style={{ fontSize: 11, color: '#888' }}>Analyze a property & save to your pipeline</div>
+                              </div>
+                            </div>
+                            <span style={{ fontSize: 12, color: '#888', transition: 'transform 0.2s', transform: calcOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
+                          </button>
+                          {calcOpen && (
+                            <div style={{ padding: '14px 16px' }}>
+                              <RentalCalculator
+                                targetProperties={targetProps}
+                                day={day}
+                                metrics={metrics}
+                                onSaveAnalysis={async (propertyId, summary) => {
+                                  const contact = targetProps.find(c => c.id === propertyId);
+                                  const existing = contact?.analysis_notes || [];
+                                  const entry = {
+                                    id: `analysis_${Date.now()}`,
+                                    text: summary,
+                                    date: new Date().toISOString(),
+                                    day,
+                                  };
+                                  await onUpdateContact(propertyId, {
+                                    analysis_notes: [...existing, entry],
+                                  });
+                                  setMetric('properties_analyzed', (metrics.properties_analyzed || 0) + 1);
+                                }}
+                                onUploadAnalysis={onUploadFile ? async (propertyId, file, dayNum) => {
+                                  return await onUploadFile(user.id, dayNum, 'analysis', file);
+                                } : null}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                 );
               })}
             </div>
-
-            {/* CDS Rental Calculator — Pre-Submission */}
-            {(() => {
-              const targetProps = (contactList || []).filter(c => c.contact_group === 'target' && c.pipeline_status !== 'dead');
-              return (
-                <div style={{ marginTop: 16, borderRadius: 10, border: '1px solid rgba(233,69,96,0.2)', overflow: 'hidden' }}>
-                  <button
-                    onClick={() => { setCalcOpen(!calcOpen); setCalcSaved(false); }}
-                    style={{
-                      width: '100%', padding: '12px 16px',
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      background: 'rgba(233,69,96,0.06)', border: 'none',
-                      cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <span style={{ fontSize: 18 }}>📊</span>
-                      <div style={{ textAlign: 'left' }}>
-                        <div style={{ fontSize: 14, fontWeight: 600, color: '#e94560' }}>CDS Rental Calculator</div>
-                        <div style={{ fontSize: 11, color: '#888' }}>Analyze a property & save to your pipeline</div>
-                      </div>
-                    </div>
-                    <span style={{ fontSize: 12, color: '#888', transition: 'transform 0.2s', transform: calcOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
-                  </button>
-                  {calcOpen && (
-                    <div style={{ padding: '14px 16px' }}>
-                      <RentalCalculator
-                        targetProperties={targetProps}
-                        day={day}
-                        metrics={metrics}
-                        onSaveAnalysis={async (propertyId, summary) => {
-                          const contact = targetProps.find(c => c.id === propertyId);
-                          const existing = contact?.analysis_notes || [];
-                          const entry = {
-                            id: `analysis_${Date.now()}`,
-                            text: summary,
-                            date: new Date().toISOString(),
-                            day,
-                          };
-                          await onUpdateContact(propertyId, {
-                            analysis_notes: [...existing, entry],
-                          });
-                          setMetric('properties_analyzed', (metrics.properties_analyzed || 0) + 1);
-                        }}
-                        onUploadAnalysis={onUploadFile ? async (propertyId, file, dayNum) => {
-                          return await onUploadFile(user.id, dayNum, 'analysis', file);
-                        } : null}
-                      />
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
 
             {/* Follow-Ups Section */}
             {(() => {

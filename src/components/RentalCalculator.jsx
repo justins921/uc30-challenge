@@ -25,16 +25,20 @@ export default function RentalCalculator({ targetProperties, onSaveAnalysis, onU
   return (
     <div>
       {/* CDS Rental Calculator iframe */}
-      <iframe
-        src="https://cds-rental-calc.web.app/"
-        style={{
-          width: '100%', height: 700, border: 'none',
-          background: '#fff', display: 'block', borderRadius: 8,
-          marginBottom: 14,
-        }}
-        title="CDS Rental Calculator"
-        loading="lazy"
-      />
+      <div style={{
+        position: 'relative', width: '100%', overflow: 'hidden',
+        borderRadius: 8, marginBottom: 14, background: '#fff',
+      }}>
+        <iframe
+          src="https://cds-rental-calc.web.app/"
+          style={{
+            width: '100%', minHeight: 500, height: '80vh', maxHeight: 800,
+            border: 'none', display: 'block',
+          }}
+          title="CDS Rental Calculator"
+          loading="lazy"
+        />
+      </div>
 
       {/* Save analysis to a property */}
       <div style={{
