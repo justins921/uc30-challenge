@@ -2633,18 +2633,364 @@ Quick Rules To Remember
   },
   {
     day: 10,
-    title: "Build Your Contractor Network",
-    caption: "",
-    taskDescription: "Find and contact 5 contractors for estimates. Submit your contractor contact list with specialties.",
-    trainingContent: "",
+    title: "Speed & Momentum",
+    caption: "Speed Wins Deals",
+    taskDescription: `For every property you analyze today, determine your ideal purchase price, your maximum acceptable price, and the exact structure that would make it a DEFINITE buy.
+
+Then submit offers quickly, follow up immediately, and act on opportunities without hesitation.
+
+The goal today is faster execution, clearer decision making, and eliminating hesitation.
+
+Arsenal Activity: Reach out to realtor contacts, wholesalers, property managers, lenders, investors, or anyone you previously connected with that could bring future opportunities. Be aggressively clear on your buy box and that you are ready to close if someone brings you a deal that meets your criteria!`,
+    trainingContent: `Why Speed Matters
+
+Most investors lose deals because they hesitate, overthink, procrastinate, or wait for certainty.
+
+Meanwhile, great investors analyze quickly, act quickly, follow up quickly, and submit offers quickly.
+
+Speed creates opportunity. The faster you can analyze, make decisions, communicate, and submit offers, the faster you will gain confidence, create momentum, and get properties under contract.
+
+
+Most Investors Are NOT Losing To Smarter Investors
+
+They are losing to faster investors.
+
+In many markets, the investor who follows up first, submits first, calls first, or builds rapport first often wins.
+
+
+Analysis Should Lead To ACTION
+
+One of the biggest mistakes investors make is analyzing properties WITHOUT knowing what the analysis is supposed to accomplish.
+
+The goal of analysis is NOT to endlessly study deals. The goal is to determine whether the property is a buy, and EXACTLY what price or terms make it a buy.
+
+Analysis should create clarity, confidence, and action.
+
+
+Every Property Has A Price That Makes It A Buy
+
+This is an EXTREMELY important concept. Almost every property has a price or structure that would make it worth buying.
+
+Sometimes that price may be far below market, heavily discounted, creatively financed, or structured differently.
+
+But you should train yourself to think: "What price or structure makes this a GREAT deal?" NOT: "Would I buy this property emotionally?"
+
+
+You Are Buying NUMBERS — Not Emotions
+
+Many beginners wait for the perfect property, the perfect feeling, or emotional certainty.
+
+Strong investors understand you are buying cash flow, equity, opportunity, and returns.
+
+Some GREAT deals look ugly, need work, have problems, or feel uncomfortable initially. Your analysis should determine whether the property is a buy. Not emotion.
+
+
+Know EXACTLY What You Would Pay
+
+Strong investors know EXACTLY what they would pay, EXACTLY what terms work, and EXACTLY where they would walk away.
+
+This removes hesitation, confusion, and emotional decision making.
+
+You should be able to confidently say: "At THIS number or structure, I would absolutely buy this property."
+
+
+Your Analysis MUST Create A Maximum Price
+
+Your analysis should help determine the HIGHEST price you would pay while STILL making the deal safe, conservative, and profitable.
+
+This is one of the MOST important skills in real estate investing. Because once you know your maximum acceptable price, you can confidently submit offers, negotiate quickly, and move decisively.
+
+
+Important Clarification
+
+This does NOT mean you throw out random lowball offers with no reasoning.
+
+You still need accurate analysis, realistic rents, realistic expenses, repair estimates, financing understanding, and conservative underwriting.
+
+Strong investors move FAST because their analysis gives them confidence.
+
+
+Stop Living In The Gray Area
+
+Many investors stay stuck because they never fully define their buy box, their criteria, or their maximum price.
+
+This creates uncertainty, hesitation, and analysis paralysis.
+
+You should reach the point where your analysis clearly tells you: buy, negotiate, or walk away.
+
+The clearer your criteria become, the faster your execution becomes.
+
+
+Analysis Paralysis
+
+Analysis paralysis usually happens because people analyze properties WITHOUT confidence in their numbers, defined criteria, or a decision-making framework.
+
+They keep looking, analyzing, and studying WITHOUT actually deciding, offering, or acting.
+
+The goal is NOT to analyze forever. The goal is to analyze accurately enough to confidently act.
+
+
+Act IMMEDIATELY
+
+When you find a lead, see a property, think of a follow-up, or identify an opportunity — ACT.
+
+Immediately make the call, send the message, analyze the deal, submit the offer, or follow up.
+
+Most people lose opportunities because they delay action.
+
+
+Speed Creates Confidence
+
+Confidence does NOT come from waiting, thinking, or watching more videos.
+
+Confidence comes from repetition, volume, conversations, offers, negotiations, and execution.
+
+The more action you take, the more natural the process becomes.
+
+
+Fast Follow-Up Wins Deals
+
+Many deals are won simply because someone followed up faster and more consistently.
+
+Strong investors follow up quickly, stay organized, and remain top of mind.
+
+Sometimes sellers choose certainty, professionalism, and responsiveness over slightly higher offers.
+
+
+Momentum Creates Opportunity
+
+Once you begin analyzing daily, offering daily, talking daily, and following up daily, everything becomes easier — confidence improves, conversations improve, opportunities increase, and execution speeds up.
+
+Momentum compounds.
+
+
+Speed WITHOUT Emotion
+
+Moving quickly does NOT mean becoming reckless, emotional, or careless.
+
+You still need conservative analysis, discipline, and strong criteria.
+
+The goal is FAST and DISCIPLINED. Not FAST and EMOTIONAL.
+
+
+Practice Exercise
+
+For every property you analyze today, determine your ideal purchase price, your maximum acceptable price, and the exact structure that would make it a DEFINITE buy.
+
+Then ask yourself: "At what price or structure would I confidently buy this property TODAY?"
+
+The faster you can answer that question accurately, the faster you become as an investor.
+
+
+Signs You Are Becoming A Better Investor
+
+You analyze properties faster. You know your criteria clearly. You know your maximum price quickly. You submit offers confidently. You follow up consistently. You hesitate less. You act faster. You detach emotionally. You walk away more comfortably. You create more deal flow.
+
+
+Hold Strong To Your Criteria
+
+The goal is NOT to force deals to work. The goal is to buy GREAT deals that fit your criteria conservatively.
+
+If a property does NOT meet your criteria, be willing to walk away. But do it professionally and respectfully.
+
+Many deals come together later because sellers rethink the numbers, the market shifts, other buyers fall apart, or motivation increases over time.
+
+When walking away: thank the seller or agent, explain your reasoning respectfully, leave the door open, and continue following up professionally.
+
+Sometimes the investors who get the best deals are simply disciplined enough to walk away and consistent enough to follow up later.
+
+
+Quick Rules To Remember
+
+• Speed wins deals.
+• Analysis should lead to action.
+• Every property has a price that makes it a buy.
+• Know your maximum acceptable price.
+• Eliminate gray areas in your criteria.
+• Imperfect action beats perfect planning.
+• Fast follow-up creates opportunity.
+• Momentum compounds.
+• Confidence comes from repetition.
+• Move FAST — but stay disciplined.`,
     category: "pipeline",
     weekNumber: 2,
     weekTitle: "BUILD THE PIPELINE",
-    proofType: "document",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day10_calc',
+          title: '4-Plex Investment Analysis',
+          description: 'Use the CDS Rental Calculator to analyze this 4-plex and determine the purchase prices that hit each target return. All four units rent for $1,500/month ($6,000 total). Financing: 25% down, 2% closing costs, 6.5% interest, 30-year loan, 6% vacancy. Expenses: 12% maintenance, 8% management, $1,000/yr additional, $2,500/yr insurance, $6,000/yr taxes, tenant-paid utilities, $0 rent-ready costs.',
+          maxAttempts: 5,
+          explanationOnFail: 'Use the CDS Rental Calculator with the assumptions listed above. Adjust the purchase price until you hit the target cash-on-cash return. The answers are approximate ranges — you need to be close, not exact.',
+          inputs: [
+            {
+              id: 'day10_calc_10pct',
+              label: 'What purchase price produces a 10% cash-on-cash return?',
+              type: 'number',
+              correctAnswer: 535385,
+              tolerance: 200,
+              rangeLabel: '$535,300 - $535,470',
+              unit: '$',
+            },
+            {
+              id: 'day10_calc_12pct',
+              label: 'What purchase price produces a 12% cash-on-cash return?',
+              type: 'number',
+              correctAnswer: 503350,
+              tolerance: 200,
+              rangeLabel: '$503,200 - $503,500',
+              unit: '$',
+            },
+          ],
+        },
+        {
+          id: 'day10_quiz',
+          title: 'Speed & Momentum Quiz',
+          description: 'Answer all 10 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Investors miss deals because they hesitate and move too slowly.
+2. Analysis should help you determine your maximum acceptable price and terms.
+3. Confidence comes from repetition, volume, and execution.
+4. Analysis paralysis means analyzing without making decisions or taking action.
+5. Strong investors move faster because their analysis and criteria create confidence.
+6. Every property has a price or structure that can make it a buy.
+7. The longer investors hesitate, the more emotional and uncertain they become.
+8. When you identify a strong opportunity, act quickly and follow up immediately.
+9. Momentum comes from consistent action and repetition.
+10. Fast investors still use disciplined analysis and criteria.`,
+          inputs: [
+            {
+              id: 'day10_q1',
+              label: '1. What is one of the BIGGEST reasons investors miss deals?',
+              type: 'multiple_choice',
+              options: [
+                'They analyze too quickly',
+                'They hesitate and move too slowly',
+                'They follow up too much',
+                'They submit too many offers',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day10_q2',
+              label: '2. What should your analysis ultimately help you determine?',
+              type: 'multiple_choice',
+              options: [
+                'Whether the property looks exciting',
+                'What other investors might pay',
+                'Your maximum acceptable price and terms',
+                'Whether the seller likes you',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day10_q3',
+              label: '3. What usually creates confidence in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'Waiting until you feel ready',
+                'Watching more videos only',
+                'Repetition, volume, and execution',
+                'Finding perfect deals immediately',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day10_q4',
+              label: '4. What is "analysis paralysis"?',
+              type: 'multiple_choice',
+              options: [
+                'Analyzing properties carefully',
+                'Analyzing without making decisions or taking action',
+                'Moving too quickly on deals',
+                'Following up too aggressively',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day10_q5',
+              label: '5. Why do strong investors often move faster?',
+              type: 'multiple_choice',
+              options: [
+                'They ignore risk',
+                'They skip due diligence',
+                'Their analysis and criteria create confidence',
+                'They make emotional decisions',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day10_q6',
+              label: '6. What is one of the MOST important concepts in investing?',
+              type: 'multiple_choice',
+              options: [
+                'Every property should be purchased eventually',
+                'Every property has a price or structure that can make it a buy',
+                'Only off-market deals work',
+                'Expensive properties are always better',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day10_q7',
+              label: '7. What often happens the longer investors hesitate?',
+              type: 'multiple_choice',
+              options: [
+                'Their confidence increases',
+                'The deal usually improves',
+                'They become more emotional and uncertain',
+                'Sellers become more flexible automatically',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day10_q8',
+              label: '8. What should you do when you identify a strong opportunity?',
+              type: 'multiple_choice',
+              options: [
+                'Wait a few days to think about it',
+                'Delay contacting the seller',
+                'Act quickly and follow up immediately',
+                'Avoid submitting offers too fast',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day10_q9',
+              label: '9. What creates momentum in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'Watching educational content only',
+                'Consistent action and repetition',
+                'Waiting for perfect opportunities',
+                'Avoiding difficult conversations',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day10_q10',
+              label: '10. What is the difference between moving fast and moving emotionally?',
+              type: 'multiple_choice',
+              options: [
+                'There is no difference',
+                'Fast investors ignore numbers',
+                'Fast investors still use disciplined analysis and criteria',
+                'Emotional investors are usually more successful',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 11,

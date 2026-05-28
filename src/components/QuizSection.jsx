@@ -236,7 +236,7 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
               <span style={{ fontSize: 14, fontWeight: 700, color: '#48c78e' }}>
                 {input.type === 'multiple_choice'
                   ? input.options[input.correctAnswer]
-                  : `${input.unit === '$' ? '$' : ''}${input.correctAnswer}${input.unit === '%' ? '%' : ''}`
+                  : input.rangeLabel || `${input.unit === '$' ? '$' : ''}${input.correctAnswer}${input.unit === '%' ? '%' : ''}`
                 }
               </span>
             </div>
