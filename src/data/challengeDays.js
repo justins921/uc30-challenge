@@ -2824,10 +2824,53 @@ Quick Rules To Remember
       scenarios: [
         {
           id: 'day10_calc',
-          title: '4-Plex Investment Analysis',
-          description: 'Use the CDS Rental Calculator to analyze this 4-plex and determine the purchase prices that hit each target return. All four units rent for $1,500/month ($6,000 total). Financing: 25% down, 2% closing costs, 6.5% interest, 30-year loan, 6% vacancy. Expenses: 12% maintenance, 8% management, $1,000/yr additional, $2,500/yr insurance, $6,000/yr taxes, tenant-paid utilities, $0 rent-ready costs.',
+          title: '4-Plex Investment Opportunity',
+          description: 'All four units are currently occupied on month-to-month leases in a stable rental market.\n\nUse the CDS Rental Calculator to determine the EXACT purchase price that would produce each target cash-on-cash return.',
           maxAttempts: 5,
-          explanationOnFail: 'Use the CDS Rental Calculator with the assumptions listed above. Adjust the purchase price until you hit the target cash-on-cash return. The answers are approximate ranges — you need to be close, not exact.',
+          explanationOnFail: 'Use the CDS Rental Calculator with the assumptions shown above. Adjust the purchase price until you hit the target cash-on-cash return. The answers are approximate ranges — you need to be close, not exact.',
+          propertyListing: {
+            title: '4-Plex Investment Opportunity',
+            badges: ['4 Units', 'Month-to-Month Leases', 'Stable Market'],
+            highlights: [
+              { icon: '🏠', value: '4', label: 'Units' },
+              { icon: '💰', value: '$6,000', label: 'Monthly Rent' },
+              { icon: '📋', value: 'M-T-M', label: 'Lease Type' },
+            ],
+            sections: [
+              {
+                heading: 'Current Rental Income',
+                rows: [
+                  { label: 'Unit 1', value: '$1,500/mo' },
+                  { label: 'Unit 2', value: '$1,500/mo' },
+                  { label: 'Unit 3', value: '$1,500/mo' },
+                  { label: 'Unit 4', value: '$1,500/mo' },
+                  { label: 'Total Monthly Rent', value: '$6,000/mo' },
+                ],
+              },
+              {
+                heading: 'Financing Assumptions',
+                rows: [
+                  { label: 'Down Payment', value: '25%' },
+                  { label: 'Closing Costs', value: '2%' },
+                  { label: 'Interest Rate', value: '6.5%' },
+                  { label: 'Loan Amortization', value: '30 Years' },
+                  { label: 'Vacancy', value: '6%' },
+                ],
+              },
+              {
+                heading: 'Operating Expenses',
+                rows: [
+                  { label: 'Maintenance', value: '12%', detail: 'of gross rents' },
+                  { label: 'Property Management', value: '8%', detail: 'of gross rents' },
+                  { label: 'Additional Expenses', value: '$1,000/year' },
+                  { label: 'Insurance', value: '$2,500/year' },
+                  { label: 'Taxes', value: '$6,000/year' },
+                  { label: 'Utilities', value: 'Tenant Paid' },
+                  { label: 'Costs To Make Rent Ready', value: '$0' },
+                ],
+              },
+            ],
+          },
           inputs: [
             {
               id: 'day10_calc_10pct',
