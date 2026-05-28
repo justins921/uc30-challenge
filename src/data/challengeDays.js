@@ -2321,18 +2321,315 @@ Quick Rules To Remember
   },
   {
     day: 9,
-    title: "Make 3 New Offers",
-    caption: "",
-    taskDescription: "Submit 3 new offers on different properties. Submit offer confirmations or documents.",
-    trainingContent: "",
+    title: "Follow-Up Mastery",
+    caption: "The Fortune Is In The Follow-Up",
+    taskDescription: `Follow up with every warm seller lead, every rejected offer, and every property owner who previously showed interest.
+
+Your goal: stay top of mind, continue building trust, and remind them you are still interested if the deal makes sense at your price or terms.
+
+Arsenal Activity: Reach back out to realtors, wholesalers, property managers, lenders, investors, or anyone capable of bringing future opportunities. Focus on relationship building, professionalism, and positioning yourself as a strong buyer who is easy to work with and capable of closing. Build urgency in your desire to find a deal and close quickly if they bring you one! Convince them you are ready to act!`,
+    trainingContent: `Why Follow-Up Matters
+
+Most investors believe deals happen immediately, on the first call, or after the first offer.
+
+In reality, many GREAT deals happen days, weeks, months, or even YEARS later.
+
+Why? Because motivation changes, markets shift, sellers become frustrated, buyers fall apart, stress increases, and circumstances evolve.
+
+The investor who stays professional, stays patient, and stays top of mind often wins the deal later.
+
+
+Most Investors Quit Too Early
+
+One of the biggest mistakes investors make is giving up after one conversation, one rejected offer, or one "no."
+
+Many sellers initially say no, maybe later, I need more, or I'm not ready. That does NOT always mean the opportunity is dead.
+
+Sometimes it simply means wrong timing, not enough trust, not enough pain yet, or the wrong structure.
+
+
+"No" Often Means "Not Yet"
+
+Strong investors understand many deals are won through patience, consistency, and follow-up.
+
+A seller who says "I need more money" today may feel VERY differently 30 days later — after another buyer falls apart, after more stress, after more vacancy, after more repairs, or after more frustration.
+
+This is why follow-up matters so much.
+
+
+The Goal Of Follow-Up
+
+The goal is NOT pressure, desperation, manipulation, or constantly bothering people.
+
+The goal is to remain professional, helpful, respectful, and top of mind.
+
+You want people to think: "If I decide to sell… I should call YOU."
+
+
+Arsenal Contacts vs Target Contacts
+
+There are TWO major types of follow-up inside UC30:
+
+Arsenal Contacts — These are people who can bring you opportunities in the future. Examples: realtors, wholesalers, property managers, lenders, investors, contractors, attorneys, and other relationships. These people may NOT currently have a deal for you, but strong relationships with them can create deal flow later.
+
+Target Contacts — These are sellers, owners, or warm property leads connected to properties you are actively interested in buying. This includes sellers you already spoke with, people who rejected your offer, owners considering selling, or leads that showed SOME level of interest. These are active acquisition opportunities.
+
+
+Following Up With Arsenal Contacts
+
+The goal with Arsenal Contacts is relationship building and staying top of mind. You want these people to remember you, trust you, and WANT to bring deals to you.
+
+Build Yourself Up As A Buyer — Arsenal Contacts should view you as serious, professional, responsive, easy to work with, and capable of closing. You want them to feel bringing you deals will make THEIR life easier.
+
+Examples: you move quickly, communicate clearly, close reliably, understand investing, and do NOT waste time.
+
+People bring opportunities to buyers they trust. The more confidence they have in you as a buyer, the more deals they will bring you! Most importantly — you must know exactly what you're looking for and be willing to act when they bring it to you! Arsenal contacts can be destroyed if they bring you a good deal that meets your criteria, and you are unwilling or unable to take action.
+
+
+Great Follow-Up Is NOT Complicated
+
+Simple follow-up works. Examples: checking in, asking how business is going, asking if they have anything coming up, commenting on market conditions, or reminding them what type of deals you buy.
+
+The goal is consistency. NOT overwhelming people.
+
+
+Following Up With Target Contacts
+
+Target Contact follow-up is VERY important. These are often warm leads, almost-deals, or sellers who may become motivated later.
+
+Many investors lose deals because they disappear after the first rejected offer. Strong investors continue following up professionally.
+
+Make Sure Sellers Know You Are STILL Interested — If the property still works at your price or terms, make sure the seller knows you are still interested, still serious, and still ready to buy. Sometimes sellers simply need more time, more stress, more failed buyers, or more market pressure before becoming realistic.
+
+
+Follow-Up WITHOUT Damaging The Relationship
+
+One of the most important skills in investing is learning how to follow up WITHOUT sounding desperate, becoming annoying, or damaging trust.
+
+Good follow-up feels calm, confident, respectful, and low pressure.
+
+Be Helpful — Not Pushy. Strong investors focus on helping, problem solving, and creating certainty. NOT pressuring people emotionally.
+
+You want sellers and contacts to feel working with you would be smooth, easy, professional, and low stress.
+
+
+Use Market Reality Calmly & Professionally
+
+Sometimes it is appropriate to respectfully discuss rising interest rates, slowing markets, buyer uncertainty, increasing vacancy, higher expenses, insurance increases, repair costs, or difficult management situations.
+
+The goal is NOT fear tactics. The goal is helping sellers realistically evaluate the market, their stress, and the value of certainty.
+
+Position Yourself As The EASY Solution — Many sellers eventually choose simplicity, certainty, professionalism, and low stress over trying to squeeze every possible dollar out of a property. You want sellers to feel working with YOU makes life easier.
+
+
+Consistency Beats Intensity
+
+Many investors follow up aggressively for a few days, then disappear completely. Strong investors follow up consistently, professionally, and long term.
+
+Small consistent follow-up often beats sporadic intense follow-up.
+
+
+CRM Organization Matters
+
+As your lead volume grows, organization becomes critical. Track conversations, offers, follow-up dates, motivation, objections, and relationship notes.
+
+The better organized you become, the more deals you will eventually convert. UC30 makes it easy for you to schedule when to follow up and will even remind you when it is time to do so. Make sure that you select the shortest follow-up window that seems realistic. If you have a hot lead, follow up as soon as possible and consistently.
+
+
+Find Pain Points & Solve Problems
+
+One of the MOST important goals when following up with Target Contacts is identifying pain points, frustrations, stress, or problems that you may be able to help solve.
+
+Great investors do NOT just chase properties. They solve problems.
+
+Sometimes sellers are dealing with difficult tenants, deferred maintenance, vacancies, rising expenses, burnout, divorce, inheritance, relocation, management frustrations, financial pressure, or simply emotional exhaustion.
+
+Your job is NOT to pressure people, manipulate emotions, or force deals. Your job is to become anxiously engaged in helping find solutions that genuinely benefit both parties.
+
+When sellers feel understood, heard, respected, and helped, trust increases dramatically.
+
+Many GREAT deals happen because the seller feels like you actually care about solving the problem — not just buying the property. Sometimes the more focused you become on helping solve problems, the more deals naturally begin finding YOU.
+
+
+Follow-Up Creates Trust
+
+People naturally trust familiarity, consistency, and reliability. The more professionally someone hears from you over time, the more comfortable they usually become. Trust compounds.
+
+
+Stay Patient
+
+Many deals happen MUCH later than expected. Patience is a competitive advantage.
+
+Most investors quit too early, stop following up, or assume the deal is dead.
+
+Stay patient. Stay professional. Stay top of mind.
+
+
+Quick Rules To Remember
+
+• The fortune is in the follow-up.
+• "No" often means "not yet."
+• Stay top of mind professionally.
+• Follow up WITHOUT pressure.
+• Relationships create opportunities.
+• Trust compounds over time.
+• Consistency beats intensity.
+• Position yourself as the easy solution.
+• Strong follow-up builds deal flow.
+• Patience creates opportunities.
+• Focus on finding pain points and solving problems.`,
     category: "pipeline",
     weekNumber: 2,
     weekTitle: "BUILD THE PIPELINE",
-    proofType: "document",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day9_quiz',
+          title: 'Follow-Up Mastery Quiz',
+          description: 'Answer all 10 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Most investors lose deals by disappearing after the first conversation or rejected offer.
+2. "No" often means not yet — wrong timing or wrong structure.
+3. The primary goal of follow-up is to stay professional and top of mind.
+4. Arsenal Contacts are relationships capable of bringing future opportunities.
+5. Target Contacts are active property leads or sellers tied to deal opportunities.
+6. Consistency and professionalism create the best long-term follow-up results.
+7. Sellers should feel the process will be smooth and low stress.
+8. Deals happen later because motivation and circumstances change over time.
+9. Quitting too early is one of the biggest follow-up mistakes.
+10. Finding pain points and helping solve the seller's problems is key.`,
+          inputs: [
+            {
+              id: 'day9_q1',
+              label: '1. Why do many investors lose potential deals?',
+              type: 'multiple_choice',
+              options: [
+                'They analyze too many properties',
+                'They disappear after the first conversation or rejected offer',
+                'They follow up too professionally',
+                'They build too many relationships',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day9_q2',
+              label: '2. What does "No" often actually mean in real estate?',
+              type: 'multiple_choice',
+              options: [
+                'Never contact me again',
+                'The property is sold already',
+                'Not yet, wrong timing, or wrong structure',
+                'The seller hates investors',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day9_q3',
+              label: '3. What is the PRIMARY goal of follow-up?',
+              type: 'multiple_choice',
+              options: [
+                'Pressure people into selling',
+                'Stay professional and top of mind',
+                'Convince sellers emotionally',
+                'Constantly lower your offer price',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day9_q4',
+              label: '4. What is an Arsenal Contact?',
+              type: 'multiple_choice',
+              options: [
+                'A property currently under contract',
+                'A seller who accepted your offer',
+                'A relationship capable of bringing future opportunities',
+                'A bank-owned property',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day9_q5',
+              label: '5. What is a Target Contact?',
+              type: 'multiple_choice',
+              options: [
+                'A random networking contact',
+                'An active property lead or seller tied to a deal opportunity',
+                'A contractor referral only',
+                'A lender relationship',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day9_q6',
+              label: '6. What creates the BEST long-term follow-up results?',
+              type: 'multiple_choice',
+              options: [
+                'Aggressive pressure',
+                'Constant emotional persuasion',
+                'Consistency and professionalism',
+                'Calling sellers multiple times daily',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day9_q7',
+              label: '7. What should sellers feel when working with you?',
+              type: 'multiple_choice',
+              options: [
+                'Pressured',
+                'Manipulated',
+                'That the process will be smooth and low stress',
+                'Rushed emotionally',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day9_q8',
+              label: '8. Why do many deals happen later instead of immediately?',
+              type: 'multiple_choice',
+              options: [
+                'Sellers never make decisions quickly',
+                'Motivation and circumstances often change over time',
+                'Buyers should always wait 6 months',
+                'Realtors delay every deal intentionally',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day9_q9',
+              label: '9. What is one major mistake investors make with follow-up?',
+              type: 'multiple_choice',
+              options: [
+                'Being too organized',
+                'Following up too calmly',
+                'Quitting too early',
+                'Building too much trust',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day9_q10',
+              label: '10. What is one of the MOST important goals when following up with Target Contacts?',
+              type: 'multiple_choice',
+              options: [
+                'Convincing them to sell immediately through pressure',
+                'Finding pain points and helping solve the seller\'s problems',
+                'Constantly lowering your offer price',
+                'Avoiding conversations about stress or frustration',
+              ],
+              correctAnswer: 1,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 10,
