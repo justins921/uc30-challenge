@@ -3694,6 +3694,35 @@ Quick Rules To Remember
 8. Conventional loans are often the cheapest long-term financing.
 9. More leverage is not always better.
 10. Financing improves deals, but does not fix bad ones.`,
+    trainingIllustration: {
+      title: 'Why Real Estate (WITH DEBT)',
+      subtitle: '$140,000 Purchase Price (7% Loan)',
+      insertAfter: 'How Financing Can Accelerate Wealth',
+      columns: [
+        {
+          header: '1 Property (Cash)',
+          accent: '#888',
+          rows: [
+            { label: 'Appreciation', value: '$4,200', detail: '3%' },
+            { label: 'Principal Paydown', value: '$0', detail: '' },
+            { label: 'Cash Flow', value: '$20,077', detail: '14.4%' },
+            { label: 'Tax Benefits', value: '$25,000', detail: 'Year one' },
+          ],
+          total: '$49,277',
+        },
+        {
+          header: '4 Properties (Financed)',
+          accent: '#48c78e',
+          rows: [
+            { label: 'Appreciation', value: '$16,800', detail: '3% x 4' },
+            { label: 'Principal Paydown', value: '$4,320', detail: '' },
+            { label: 'Cash Flow', value: '$46,800', detail: '33% x 4' },
+            { label: 'Tax Benefits', value: '$100,000', detail: 'Year one' },
+          ],
+          total: '$167,920',
+        },
+      ],
+    },
     category: "pipeline",
     weekNumber: 2,
     weekTitle: "BUILD THE PIPELINE",

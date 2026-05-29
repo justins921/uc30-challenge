@@ -438,7 +438,36 @@ export default function DayView({
             )}
           </div>
           {trainingExpanded && (
-            <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.trainingContent}</p>
+            <>
+              {dayData.trainingIllustration ? (() => {
+                const ill = dayData.trainingIllustration;
+                const splitKey = ill.insertAfter;
+                let beforeText = dayData.trainingContent;
+                let afterText = null;
+                if (splitKey) {
+                  const idx = dayData.trainingContent.indexOf(splitKey);
+                  if (idx >= 0) {
+                    const sectionBreak = dayData.trainingContent.indexOf('\n\n\n', idx);
+                    if (sectionBreak >= 0) {
+                      beforeText = dayData.trainingContent.slice(0, sectionBreak);
+                      afterText = dayData.trainingContent.slice(sectionBreak).replace(/^\n+/, '');
+                    }
+                  }
+                }
+
+                return (
+                  <>
+                    <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{beforeText}</p>
+                    <FinancingComparisonCard illustration={ill} />
+                    {afterText && (
+                      <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{afterText}</p>
+                    )}
+                  </>
+                );
+              })() : (
+                <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.trainingContent}</p>
+              )}
+            </>
           )}
         </div>
       )}
@@ -2152,6 +2181,76 @@ export default function DayView({
 }
 
 // ── Inline Add Contact ───────────────────────────────────────────
+
+function FinancingComparisonCard({ illustration }) {
+  const { title, subtitle, columns } = illustration;
+  return (
+    <div style={{
+      margin: '24px 0', borderRadius: 12, overflow: 'hidden',
+      border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.3)',
+    }}>
+      <div style={{
+        padding: '20px 18px 16px', textAlign: 'center',
+        background: 'linear-gradient(135deg, rgba(83,52,131,0.2) 0%, rgba(72,199,142,0.1) 100%)',
+        borderBottom: '1px solid rgba(255,255,255,0.08)',
+      }}>
+        <div style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 4 }}>{title}</div>
+        <div style={{ fontSize: 14, fontWeight: 600, color: '#f0a500' }}>{subtitle}</div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+        {columns.map((col, ci) => (
+          <div key={ci} style={{
+            borderRight: ci === 0 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+          }}>
+            <div style={{
+              padding: '12px 14px', textAlign: 'center',
+              background: ci === 1 ? 'rgba(72,199,142,0.06)' : 'rgba(255,255,255,0.02)',
+              borderBottom: '1px solid rgba(255,255,255,0.06)',
+            }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: col.accent, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                {col.header}
+              </div>
+            </div>
+
+            {col.rows.map((row, ri) => (
+              <div key={ri} style={{
+                padding: '10px 14px',
+                borderBottom: '1px solid rgba(255,255,255,0.04)',
+              }}>
+                <div style={{ fontSize: 11, color: '#888', fontWeight: 600, marginBottom: 2 }}>{row.label}</div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                  <span style={{ fontSize: 15, fontWeight: 700, color: ci === 1 ? '#48c78e' : '#ccc' }}>{row.value}</span>
+                  {row.detail && <span style={{ fontSize: 11, color: '#666' }}>{row.detail}</span>}
+                </div>
+              </div>
+            ))}
+
+            <div style={{
+              padding: '14px 14px', textAlign: 'center',
+              background: ci === 1 ? 'rgba(72,199,142,0.08)' : 'rgba(255,255,255,0.03)',
+            }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: '#888', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Total Return</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: ci === 1 ? '#48c78e' : '#ccc' }}>{col.total}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        padding: '10px 14px', textAlign: 'center',
+        background: 'rgba(72,199,142,0.04)', borderTop: '1px solid rgba(255,255,255,0.06)',
+      }}>
+        <span style={{ fontSize: 12, fontWeight: 700, color: '#48c78e' }}>
+          {Math.round(parseInt(columns[1].total.replace(/[^0-9]/g, '')) / parseInt(columns[0].total.replace(/[^0-9]/g, '')) * 10) / 10}x total return with financing
+        </span>
+        <span style={{ fontSize: 12, color: '#666', marginLeft: 8 }}>
+          (+${(parseInt(columns[1].total.replace(/[^0-9]/g, '')) - parseInt(columns[0].total.replace(/[^0-9]/g, ''))).toLocaleString()})
+        </span>
+      </div>
+    </div>
+  );
+}
 
 function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, setContactList, onAutoIncrement, calculateFollowUpDate, day }) {
   const color = group === 'arsenal' ? '#f0a500' : '#e94560';
