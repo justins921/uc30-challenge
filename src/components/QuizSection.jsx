@@ -371,7 +371,7 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
 function MultipleChoiceInput({ input, selected, onSelect, isCorrect, isWrong, submitted }) {
   return (
     <div>
-      <label style={{ fontSize: 13, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 8 }}>
+      <label style={{ fontSize: 13, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 8, whiteSpace: 'pre-line' }}>
         {input.label}
       </label>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -407,6 +407,15 @@ function MultipleChoiceInput({ input, selected, onSelect, isCorrect, isWrong, su
           );
         })}
       </div>
+      {submitted && input.explanation && (
+        <div style={{
+          marginTop: 8, padding: '10px 14px', borderRadius: 8,
+          background: 'rgba(72,199,142,0.04)', borderLeft: '3px solid rgba(72,199,142,0.3)',
+        }}>
+          <div style={{ fontSize: 12, color: '#48c78e', fontWeight: 700, marginBottom: 4 }}>Why?</div>
+          <div style={{ fontSize: 13, color: '#aaa', lineHeight: 1.6 }}>{input.explanation}</div>
+        </div>
+      )}
     </div>
   );
 }

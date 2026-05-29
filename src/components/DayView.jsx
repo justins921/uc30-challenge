@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum, DAILY_MINIMUMS, VETERAN_DAILY_MINIMUMS, getWeekNumber, getWeeklyOfferTarget, getWeekDayRange } from '../data/challengeDays';
+import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum, getPreDayContent, DAILY_MINIMUMS, VETERAN_DAILY_MINIMUMS, getWeekNumber, getWeeklyOfferTarget, getWeekDayRange } from '../data/challengeDays';
 import { COMPLIANCE_METRICS, checkDailyCompliance, getTimeUntilDeadline, DEFAULT_DAILY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
 import QuizSection from './QuizSection';
 import { CONTACT_GROUPS } from './ContactsCRM';
@@ -42,7 +42,8 @@ export default function DayView({
 
   // ── Day Data ──────────────────────────────────────────────────
   const isPost30 = day > 30;
-  const dayData = isPost30 ? getDayDataForNum(day) : getDayContent(day, contentOverrides);
+  const isPreTraining = day <= 0;
+  const dayData = isPreTraining ? getPreDayContent(day, contentOverrides) : isPost30 ? getDayDataForNum(day) : getDayContent(day, contentOverrides);
   const isReflectionDay = dayData?.isReflectionDay === true;
   const isComplete = isPreview ? false : user.completedDays.includes(day);
   const isCurrentOrPast = isPreview ? true : day <= user.currentDay;
@@ -243,11 +244,17 @@ export default function DayView({
   }, [contactList]);
 
   // ── Quiz gate ────────────────────────────────────────────────
-  const hasRequiredQuiz = !isPost30 && dayData.quiz?.required && dayData.quiz.scenarios?.length > 0;
+  const hasRequiredQuiz = !isPost30 && dayData?.quiz?.required && dayData.quiz.scenarios?.length > 0;
   const quizAlreadyPassed = hasRequiredQuiz && (quizAttempts || []).length > 0 &&
     dayData.quiz.scenarios.every(s => (quizAttempts || []).some(a => a.scenario_id === s.id && a.correct));
   const quizBypassForVeteran = hasRequiredQuiz && (user.cohortAttempt || 1) >= 2 && trainingAlreadyDone;
   const [quizPassed, setQuizPassed] = useState(quizAlreadyPassed || quizBypassForVeteran || isComplete);
+
+  // ── Review Quiz (Day 12 non-standard structure) ──────────────
+  const hasReviewQuiz = dayData?.reviewQuiz?.scenarios?.length > 0;
+  const reviewQuizAlreadyPassed = hasReviewQuiz && (quizAttempts || []).length > 0 &&
+    dayData.reviewQuiz.scenarios.every(s => (quizAttempts || []).some(a => a.scenario_id === s.id && a.correct));
+  const [reviewQuizPassed, setReviewQuizPassed] = useState(reviewQuizAlreadyPassed || isComplete);
 
   // ── Handlers ──────────────────────────────────────────────────
   const setMetric = (key, value) => {
@@ -282,7 +289,7 @@ export default function DayView({
             {cat.label}
           </span>
           <span style={{ color: '#333' }}>•</span>
-          <span className="mono" style={{ fontSize: 11, color: '#555' }}>{isPost30 ? `DAY ${day}` : `DAY ${day}/30`}</span>
+          <span className="mono" style={{ fontSize: 11, color: '#555' }}>{isPreTraining ? 'PRE-TRAINING' : isPost30 ? `DAY ${day}` : `DAY ${day}/30`}</span>
         </div>
         <h1 style={{ fontSize: 32, fontWeight: 700, lineHeight: 1.2, marginBottom: 4 }}>
           {dayData.title}
@@ -304,7 +311,7 @@ export default function DayView({
       </div>
 
       {/* Deadline Countdown (shown when submission area is visible) */}
-      {canSubmit && timeLeft > 0 && (
+      {!isPreTraining && canSubmit && timeLeft > 0 && (
         <div className="card" style={{
           marginBottom: 24, padding: '16px 20px', textAlign: 'center',
           background: deadlineUrgent ? 'rgba(233,69,96,0.08)' : 'rgba(255,255,255,0.02)',
@@ -391,8 +398,31 @@ export default function DayView({
         />
       )}
 
-      {/* Training Content (standard days) */}
-      {!isReflectionDay && dayData.trainingContent && (
+      {/* Review Quiz (Day 12 non-standard: review quiz before training) */}
+      {hasReviewQuiz && canSubmit && (
+        <QuizSection
+          quiz={dayData.reviewQuiz}
+          participantId={user.id}
+          dayNumber={day}
+          existingAttempts={quizAttempts || []}
+          onAttempt={onQuizAttempt}
+          onQuizComplete={() => setReviewQuizPassed(true)}
+        />
+      )}
+
+      {/* Review Content (Day 12: key takeaways between review quiz and training) */}
+      {dayData?.reviewContent && reviewQuizPassed && (
+        <div className="card" style={{ marginBottom: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(72,199,142,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>✓</div>
+            <h3 style={{ fontSize: 16, fontWeight: 700 }}>Review Summary</h3>
+          </div>
+          <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.reviewContent}</p>
+        </div>
+      )}
+
+      {/* Training Content (standard days) — gated behind review quiz if one exists */}
+      {!isReflectionDay && dayData?.trainingContent && (!hasReviewQuiz || reviewQuizPassed) && (
         <div className="card" style={{ marginBottom: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: trainingExpanded ? 12 : 0, cursor: trainingAlreadyDone ? 'pointer' : 'default' }}
             onClick={trainingAlreadyDone ? () => setTrainingExpanded(!trainingExpanded) : undefined}>
@@ -413,8 +443,8 @@ export default function DayView({
         </div>
       )}
 
-      {/* Task Description */}
-      {dayData.taskDescription && (
+      {/* Task Description — gated behind review quiz if one exists */}
+      {dayData?.taskDescription && (!hasReviewQuiz || reviewQuizPassed) && (
         <div className="card" style={{ marginBottom: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
             <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📋</div>
@@ -424,8 +454,8 @@ export default function DayView({
         </div>
       )}
 
-      {/* Quiz Section */}
-      {hasRequiredQuiz && canSubmit && !quizPassed && (
+      {/* Quiz Section — gated behind review quiz if one exists */}
+      {hasRequiredQuiz && (!hasReviewQuiz || reviewQuizPassed) && canSubmit && !quizPassed && (
         <>
           {quizBypassForVeteran ? null : (
             <QuizSection
@@ -455,7 +485,7 @@ export default function DayView({
       )}
 
       {/* Locked submission notice */}
-      {hasRequiredQuiz && canSubmit && !quizPassed && !quizBypassForVeteran && (
+      {!isPreTraining && hasRequiredQuiz && canSubmit && !quizPassed && !quizBypassForVeteran && (
         <div style={{
           padding: '20px', borderRadius: 12, marginBottom: 24,
           background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
@@ -499,14 +529,14 @@ export default function DayView({
       )}
 
       {/* ═══ SUBMISSION AREA ═══ */}
-      {isComplete && existingSubmission ? (
+      {!isPreTraining && (isComplete && existingSubmission ? (
         <SubmissionComplete submission={existingSubmission} />
       ) : submitted ? (
         <SubmissionSuccess day={day} isUpdate={isUpdate} />
-      ) : null}
+      ) : null)}
 
       {/* ═══ DUE FOLLOW-UPS (always visible on completed/submitted days) ═══ */}
-      {(submitted || (isComplete && existingSubmission)) && (
+      {!isPreTraining && (submitted || (isComplete && existingSubmission)) && (
         <div style={{ marginTop: 24 }}>
           <DueFollowUps
             contacts={contactList}
@@ -540,7 +570,7 @@ export default function DayView({
       )}
 
       {/* ═══ POST-SUBMISSION ACTIVITIES ═══ */}
-      {(submitted || (isComplete && existingSubmission)) && (
+      {!isPreTraining && (submitted || (isComplete && existingSubmission)) && (
         <div style={{ marginTop: 16 }}>
           {!showPostSubmit ? (
             <button
@@ -1144,7 +1174,7 @@ export default function DayView({
       )}
 
       {/* ═══ PRE-SUBMISSION FORM ═══ */}
-      {!submitted && !(isComplete && existingSubmission) && canSubmit && (!hasRequiredQuiz || quizPassed) ? (
+      {!isPreTraining && !submitted && !(isComplete && existingSubmission) && canSubmit && (!hasRequiredQuiz || quizPassed) ? (
         <>
           {/* ── 6-Metric Entry Form ── */}
           <div className="card" style={{ marginBottom: 24 }}>
@@ -2104,7 +2134,7 @@ export default function DayView({
       ) : null}
 
       {/* Deadline Reminder */}
-      {canSubmit && (
+      {!isPreTraining && canSubmit && (
         <div style={{
           marginTop: 20, padding: '14px 20px',
           background: isPost30 ? 'rgba(240,165,0,0.06)' : 'rgba(233,69,96,0.06)',

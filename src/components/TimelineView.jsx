@@ -1,4 +1,4 @@
-import { getPhases, getDayContent, getGettingStartedContent, POST_30_TASK, getStreak } from '../data/challengeDays';
+import { getPhases, getDayContent, getGettingStartedContent, getPreDayContent, POST_30_TASK, getStreak } from '../data/challengeDays';
 
 export default function TimelineView({ user, onSelectDay, calendarDay, contentOverrides, customPhases, cohortStartDate }) {
   const phases = getPhases(customPhases);
@@ -64,6 +64,49 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
               {gsContent.title}
             </div>
           </div>
+
+          {/* Return Metrics 101 — pre-training card */}
+          {(() => {
+            const rmData = getPreDayContent(0, contentOverrides);
+            if (!rmData) return null;
+            const rmComplete = user.completedDays?.includes(0) || (user.preTrainingComplete || false);
+            const rmLocked = !user.gettingStartedCompleted;
+            return (
+              <div
+                onClick={() => !rmLocked && onSelectDay(0)}
+                className="card"
+                style={{
+                  cursor: rmLocked ? 'not-allowed' : 'pointer',
+                  opacity: rmLocked ? 0.5 : 1,
+                  borderColor: rmComplete ? 'rgba(72,199,142,0.3)' : rmLocked ? 'rgba(255,255,255,0.06)' : '#c9a0ff',
+                  position: 'relative',
+                  padding: '16px 16px 14px',
+                  overflow: 'hidden',
+                }}
+              >
+                {rmComplete && (
+                  <div style={{
+                    position: 'absolute', top: 12, right: 12, width: 22, height: 22,
+                    borderRadius: '50%', background: '#48c78e',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 12, color: 'white',
+                  }}>✓</div>
+                )}
+                <div className="mono" style={{
+                  fontSize: 11, color: '#c9a0ff', fontWeight: 700,
+                  letterSpacing: 1, marginBottom: 6,
+                }}>
+                  PRE-TRAINING
+                </div>
+                <div style={{
+                  fontSize: 13, fontWeight: 500, lineHeight: 1.4,
+                  color: rmComplete ? '#48c78e' : rmLocked ? '#666' : '#ccc',
+                }}>
+                  {rmData.title}
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </div>
 

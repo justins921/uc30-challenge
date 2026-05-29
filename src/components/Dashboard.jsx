@@ -103,7 +103,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
   }, [calendarDay, user?.id, user?.currentDay]);
 
   useEffect(() => {
-    if (!getQuizAttempts || !user?.id || !selectedDay) { setQuizAttempts([]); return; }
+    if (!getQuizAttempts || !user?.id || selectedDay === null || selectedDay === undefined) { setQuizAttempts([]); return; }
     (async () => {
       const attempts = await getQuizAttempts(user.id, selectedDay);
       setQuizAttempts(attempts || []);
@@ -406,7 +406,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             <GettingStartedSection user={user} onComplete={async (...args) => { await onCompleteGettingStarted(...args); handleBackToTimeline(); }} contentOverrides={contentOverrides} />
           </div>
         )}
-        {!showPracticeDay && tab === 'day' && selectedDay && selectedDay !== 'getting_started' && (
+        {!showPracticeDay && tab === 'day' && selectedDay !== null && selectedDay !== undefined && selectedDay !== 'getting_started' && (
           <DayView
             day={selectedDay}
             user={user}

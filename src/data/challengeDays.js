@@ -42,6 +42,242 @@ export const PRE_DAYS = [
     downloads: [],
     quiz: null,
   },
+  {
+    day: 0,
+    title: "Return Metrics 101",
+    caption: "Understand how investors actually make money before you start analyzing deals.",
+    taskDescription: "",
+    trainingContent: `Why Return Metrics Matter
+
+Before you start analyzing deals, you need to understand how investors make money.
+
+Many people think investors only make money through cash flow.
+
+That is not true.
+
+Real estate investors generally make money in four ways:
+
+1. Cash Flow
+2. Appreciation
+3. Principal Paydown
+4. Tax Benefits
+
+The best investments often provide all four.
+
+
+1. Cash Flow
+
+What Is It?
+Cash flow is the money left over after ALL expenses are paid.
+
+This includes:
+• Mortgage
+• Taxes
+• Insurance
+• Maintenance
+• Vacancy
+• Property Management
+• Other expenses
+
+Example
+Rent Collected: $2,000/month
+Expenses: $1,500/month
+Cash Flow: $500/month or $6,000/year
+
+Why It Matters
+Cash flow:
+• pays you today,
+• builds reserves,
+• reduces risk,
+• helps you buy more properties.
+
+
+2. Appreciation
+
+What Is It?
+Appreciation is when your property becomes more valuable.
+
+Example
+Purchase Price: $200,000
+Value One Year Later: $206,000
+Appreciation: $6,000
+
+Why It Matters
+Many investors become wealthy through appreciation over long periods of time.
+
+Important Rule
+Never buy a property ONLY because you think it will appreciate.
+
+
+3. Principal Paydown
+
+What Is It?
+Every mortgage payment usually pays:
+• Interest
+• Principal
+
+Principal reduces your loan balance.
+
+Example
+Loan Balance: $150,000
+After One Year: $146,000
+Principal Paid Down: $4,000
+
+Why It Matters
+Your tenants are helping pay off your property. This increases your equity.
+
+
+4. Tax Benefits
+
+What Are They?
+The government gives real estate investors tax advantages.
+
+Examples:
+• Depreciation
+• Expense Deductions
+• Cost Segregation
+
+Why It Matters
+These tax savings can dramatically increase your overall return.
+
+
+What Is Cash On Cash Return?
+
+Cash On Cash Return measures: How hard your invested money is working.
+
+Example
+Money Invested: $100,000
+Annual Cash Flow: $10,000
+Cash On Cash Return: 10%
+
+Why It Matters
+Most investors use Cash On Cash Return as one of their primary tools for comparing deals.
+
+
+What Is Cap Rate?
+
+Cap Rate measures how well a property performs BEFORE financing.
+
+Cap Rate helps investors compare:
+• properties,
+• markets,
+• opportunities.
+
+
+The Big Picture
+
+Great deals often create:
+• Cash Flow
+• Appreciation
+• Principal Paydown
+• Tax Benefits
+
+The goal is not to find a perfect property. The goal is to find properties that create strong returns while keeping risk under control.
+
+
+Quick Rules To Remember
+
+1. Cash Flow pays you today.
+2. Appreciation grows wealth over time.
+3. Principal Paydown builds equity.
+4. Tax Benefits increase returns.
+5. Cash On Cash Return measures how hard your money is working.
+6. Great investors focus on multiple return sources.
+7. Never buy a property based only on appreciation.`,
+    category: "prelaunch",
+    weekNumber: 0,
+    weekTitle: "PRE-LAUNCH",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'return_metrics_101',
+          title: 'Return Metrics 101 Quiz',
+          maxAttempts: 3,
+          description: 'Test your understanding of the four ways investors make money and the key return metrics.',
+          inputs: [
+            {
+              id: 'rm101_q1',
+              label: '1. What are the FOUR primary ways real estate investors make money?',
+              type: 'multiple_choice',
+              options: [
+                'Cash Flow, Appreciation, Principal Paydown, Tax Benefits',
+                'Cash Flow, Financing, Credit Scores, Appreciation',
+                'Appreciation, Property Management, Reserves, Vacancy',
+                'Cash Flow, Repairs, Equity, Interest Rates',
+              ],
+              correctAnswer: 0,
+            },
+            {
+              id: 'rm101_q2',
+              label: '2. What is Cash Flow?',
+              type: 'multiple_choice',
+              options: [
+                'The increase in a property\'s value over time',
+                'The amount of principal paid down on a loan each year',
+                'The money left over after all expenses, debt payments, and reserves are accounted for',
+                'The percentage return earned on the cash invested into a property',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'rm101_q3',
+              label: '3. What is Cash on Cash Return?',
+              type: 'multiple_choice',
+              options: [
+                'The percentage return earned on the actual cash you invested into a property, based on the property\'s annual cash flow',
+                'The percentage increase in the property\'s value each year',
+                'The percentage of the loan balance paid down each year',
+                'The percentage return earned from all sources including appreciation, principal paydown, and tax benefits',
+              ],
+              correctAnswer: 0,
+              explanation: 'Example: If you invest $100,000 and the property produces $10,000 of annual cash flow, Cash on Cash Return = 10%',
+            },
+            {
+              id: 'rm101_q4',
+              label: '4. What is Cap Rate?',
+              type: 'multiple_choice',
+              options: [
+                'The percentage return earned on your cash invested after financing',
+                'The percentage return a property produces before financing by comparing Net Operating Income (NOI) to the purchase price',
+                'The percentage increase in property value each year',
+                'The percentage of a loan that is paid down annually',
+              ],
+              correctAnswer: 1,
+              explanation: 'Example: If a property produces $20,000 in NOI and costs $250,000, Cap Rate = 8%. Cap Rate measures the property\'s performance before considering financing.',
+            },
+            {
+              id: 'rm101_q5',
+              label: '5. What is Principal Paydown?',
+              type: 'multiple_choice',
+              options: [
+                'The amount of appreciation earned each year',
+                'The reduction of your loan balance over time, which increases your equity in the property',
+                'The amount of cash flow remaining after expenses',
+                'The amount of taxes saved through depreciation',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'rm101_q6',
+              label: '6. What is the BIGGEST difference between Cap Rate and Cash on Cash Return?',
+              type: 'multiple_choice',
+              options: [
+                'Cap Rate includes financing while Cash on Cash Return ignores financing',
+                'Both metrics measure the exact same thing',
+                'Cap Rate measures property performance before financing, while Cash on Cash Return measures the return on the actual cash you invested after financing',
+                'Cash on Cash Return measures appreciation while Cap Rate measures cash flow',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
+  },
 ];
 
 // ── 30-Day Sprint Content ────────────────────────────────────────
@@ -3037,48 +3273,1358 @@ Quick Rules To Remember
   },
   {
     day: 11,
-    title: "Driving for Dollars Session",
-    caption: "",
-    taskDescription: "Spend 1 hour driving target neighborhoods and identify 5 distressed properties. Submit photos and addresses.",
-    trainingContent: "",
+    title: "Financing Mastery",
+    caption: "Understanding Every Major Type of Real Estate Financing",
+    taskDescription: `Today's Execution Challenge
+
+Call:
+• one conventional lender,
+• one DSCR lender,
+• one local bank or credit union.
+
+Ask:
+• What products do you offer?
+• What down payments are required?
+• What rates are typical?
+• What closing costs are typical?
+• What properties do you like financing?
+
+Your goal is to build lender relationships and understand your financing options before you need them.
+
+Today's Suggested Arsenal Activity
+
+Add at least one lender to your Arsenal Contacts.
+
+Build a relationship and clearly communicate:
+• your buy box,
+• your goals,
+• your experience level,
+• and the types of properties you are actively pursuing.
+
+The stronger your lender relationships become, the easier future acquisitions become.`,
+    trainingContent: `Why Financing Matters
+
+Many investors focus heavily on:
+• finding deals,
+• negotiating deals,
+• and analyzing deals.
+
+But financing can dramatically impact:
+• cash flow,
+• cash on cash return,
+• risk,
+• reserves,
+• scalability,
+• and long-term wealth creation.
+
+Two investors can buy the exact same property and produce completely different results simply because they used different financing.
+
+
+How Financing Can Accelerate Wealth
+
+Many new investors assume paying cash is always the safest and best option. While paying cash reduces risk, financing allows you to control more real estate with the same amount of money and can dramatically increase your total returns when used responsibly.
+
+A properly financed property can generate returns from cash flow, appreciation, principal paydown, and tax benefits while allowing you to preserve capital for reserves and additional investments. The goal is not to maximize debt, but to use financing strategically so that your money works across multiple assets instead of being tied up in a single property.
+
+The key is balance: use enough leverage to improve returns and accelerate growth, but maintain enough reserves and cash flow to protect yourself during unexpected vacancies, repairs, or market shifts.
+
+
+Important Rule
+
+There is NO perfect loan.
+
+Every loan comes with:
+• benefits,
+• drawbacks,
+• risks,
+• costs,
+• and tradeoffs.
+
+Your goal is to find the financing that best fits:
+• your goals,
+• your risk tolerance,
+• your reserves,
+• and your long-term strategy.
+
+
+What Impacts Financing?
+
+Interest Rate
+Higher rates:
+• reduce cash flow,
+• reduce returns,
+• lower purchasing power.
+
+Lower rates:
+• improve cash flow,
+• improve returns,
+• increase flexibility.
+
+Down Payment
+Larger down payments:
+• lower risk,
+• improve cash flow,
+• reduce monthly payments.
+
+Smaller down payments:
+• increase leverage,
+• increase cash-on-cash return,
+• but increase risk.
+
+Loan Length
+Common terms: 15 Years, 20 Years, 25 Years, 30 Years
+
+Longer terms:
+• improve cash flow,
+• lower payments.
+
+Shorter terms:
+• build equity faster,
+• reduce interest paid.
+
+Closing Costs
+Common costs include:
+• lender fees,
+• appraisal,
+• title fees,
+• escrow fees,
+• underwriting fees,
+• loan points.
+
+Higher closing costs:
+• reduce returns,
+• increase required capital.
+
+Always understand your total acquisition costs.
+
+
+FHA Loans
+
+What They Are
+Government-backed loans for owner-occupied properties. You must live in the property.
+
+Advantages
+• As little as 3.5% down
+• Easier qualification
+• Excellent for beginners
+• Great for house hacking
+• Can be used on duplexes, triplexes, and fourplexes
+
+Disadvantages
+• Must occupy the property
+• Mortgage insurance required
+• Cannot be used for pure investment properties
+
+Best Use: House hacking 2-4 unit properties.
+
+
+Owner-Occupied Conventional Loans
+
+What They Are
+Traditional residential financing used when you live in the property.
+
+Advantages
+• Lower rates
+• Better terms
+• Lower down payments
+• Strong cash flow
+
+Disadvantages
+• Occupancy requirements
+• Must be your primary residence
+
+Best Use: Primary residences and house hacks.
+
+
+Conventional Investment Loans
+
+What They Are
+Traditional financing for rental properties.
+
+Advantages
+• Long-term fixed rates
+• 30-year amortization
+• Strong cash flow
+• Widely available
+
+Disadvantages
+• Typically require 20-25% down
+• Stricter qualification standards
+• Debt-to-income limitations
+
+Best Use: Long-term buy-and-hold investing.
+
+
+The 10 Conventional Loan Strategy
+
+Many lenders allow investors to own up to 10 financed conventional properties. This can be one of the most powerful wealth-building tools available to small investors.
+
+Married Investor Advantage
+Many married couples can often structure financing so that:
+• one spouse qualifies for up to 10 financed conventional loans,
+• the other spouse qualifies for up to 10 financed conventional loans.
+
+This can dramatically increase borrowing capacity. Always verify current lending guidelines with your lender.
+
+
+DSCR Loans
+
+What They Are
+Debt Service Coverage Ratio loans. These loans focus heavily on property performance, instead of personal income.
+
+Advantages
+• Easier scaling
+• Great for self-employed investors
+• Less focus on W-2 income
+• Investor-friendly underwriting
+
+Disadvantages
+• Higher rates
+• Higher closing costs
+• Larger down payments
+• Lower cash flow
+
+Best Use: Investors scaling beyond conventional financing.
+
+
+Portfolio Loans
+
+What They Are
+Loans held directly by banks and credit unions rather than sold to the secondary market.
+
+Advantages
+• Flexible underwriting
+• Relationship-based lending
+• Creative solutions possible
+
+Disadvantages
+• Terms vary widely
+• Balloon payments may exist
+• Often less standardized
+
+Best Use: Investors building strong local banking relationships.
+
+
+Commercial Loans
+
+What They Are
+Commercial loans are typically used for:
+• Apartment buildings (5+ units)
+• Self-storage facilities
+• Office buildings
+• Retail centers
+• Industrial properties
+• Motels
+• Mobile home parks
+• Mixed-use properties
+
+Commercial lenders focus heavily on:
+• Net Operating Income (NOI)
+• Property performance
+• Debt Service Coverage Ratio (DSCR)
+• Business plan
+
+rather than primarily on personal income.
+
+Advantages
+• Finance larger properties
+• Easier scaling
+• Flexible structures
+• Entity ownership often allowed
+• May include interest-only periods
+
+Disadvantages
+• Larger down payments (20-35%)
+• Higher rates
+• More documentation
+• More lender scrutiny
+• Balloon payments are common
+
+Common Structures
+
+20-25 Year Amortization
+Creates higher payments and faster principal reduction.
+
+30-Year Amortization
+Creates lower payments and stronger cash flow.
+
+Balloon Loans
+Example: 25-year amortization with a 5-year balloon. The loan is calculated over 25 years, but the entire remaining balance becomes due after year 5.
+
+Balloon Payment Risks
+Risks include:
+• rising rates,
+• declining values,
+• tighter lending standards,
+• weaker occupancy,
+• reduced cash flow.
+
+Never assume refinancing will always be available. Maintain:
+• reserves,
+• multiple exit strategies,
+• conservative underwriting.
+
+Debt Service Coverage Ratio (DSCR)
+Commercial lenders often evaluate Net Operating Income (NOI) divided by Annual Debt Payments. A stronger DSCR generally means:
+• easier approvals,
+• better terms,
+• lower lender risk.
+
+Best Use: Apartment buildings (5+ units), storage facilities, retail properties, office buildings, industrial properties, motels.
+
+
+Seller Financing
+
+What It Is
+The seller acts as the bank.
+
+Advantages
+• Flexible terms
+• Flexible down payments
+• Flexible interest rates
+• Faster closings
+• Lower closing costs
+• Less lender involvement
+
+Disadvantages
+• Balloon payment risk
+• Requires negotiation
+• Some sellers are unfamiliar with the process
+
+Best Use: Motivated sellers and off-market opportunities.
+
+
+Private Money
+
+What It Is
+Borrowing from individuals instead of institutions.
+
+Advantages
+• Fast funding
+• Flexible terms
+• Relationship-based
+
+Disadvantages
+• Higher rates
+• Shorter terms
+• Increased risk if poorly structured
+
+Best Use: Unique opportunities and short-term projects.
+
+
+Hard Money Loans
+
+What They Are
+Asset-based loans primarily designed for short-term investing.
+
+Advantages
+• Fast approvals
+• Fast closings
+• Property-focused underwriting
+
+Disadvantages
+• High rates
+• High fees
+• Short loan terms
+
+Best Use: Fix-and-flips and heavy value-add projects. Not ideal for long-term buy-and-hold investing.
+
+
+Which Loan Should I Use?
+
+Living In The Property?
+Consider: FHA, Owner-Occupied Conventional
+
+Buying A 1-4 Unit Rental?
+Consider: Conventional Investment Financing
+
+Self-Employed Or Already Own Several Rentals?
+Consider: DSCR Loans, Portfolio Loans
+
+Buying Off-Market From A Motivated Seller?
+Consider: Seller Financing
+
+Buying 5+ Units?
+Consider: Commercial Financing
+
+Buying A Property That Needs Significant Work?
+Consider: Hard Money, Private Money
+
+
+Financing Does NOT Fix Bad Deals
+
+Good financing cannot fix:
+• bad rents,
+• bad expenses,
+• bad locations,
+• overpaying.
+
+Always start with:
+• good analysis,
+• conservative underwriting,
+• and a good property.
+
+
+More Leverage Is Not Always Better
+
+Many investors become obsessed with:
+• low down payments,
+• leverage,
+• maximizing cash-on-cash return.
+
+Remember: higher leverage often means more risk, lower reserves, larger payments, and greater downside.
+
+The best deal is not always the one with the highest cash-on-cash return. Always evaluate:
+• returns,
+• risk,
+• reserves,
+• flexibility,
+• and downside protection.
+
+
+Quick Rules To Remember
+
+1. Financing impacts everything.
+2. There is no perfect loan.
+3. Understand the tradeoffs of every financing option.
+4. Lower down payments increase leverage and risk.
+5. Longer loan terms improve cash flow.
+6. Seller financing creates flexibility.
+7. DSCR loans help investors scale.
+8. Conventional loans are often the cheapest long-term financing.
+9. More leverage is not always better.
+10. Financing improves deals, but does not fix bad ones.`,
     category: "pipeline",
     weekNumber: 2,
     weekTitle: "BUILD THE PIPELINE",
-    proofType: "photo",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day11_quiz',
+          title: 'Financing Mastery Quiz',
+          maxAttempts: 3,
+          description: 'Answer all 10 questions correctly to unlock your daily submissions.',
+          inputs: [
+            {
+              id: 'day11_q1',
+              label: '1. A new investor wants to buy a fourplex, live in one unit, and put as little money down as possible. Which financing option is MOST likely to help them accomplish this?',
+              type: 'multiple_choice',
+              options: [
+                'Commercial Loan',
+                'Hard Money Loan',
+                'FHA Loan',
+                'DSCR Loan',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day11_q2',
+              label: '2. An investor owns several rental properties, is self-employed, and has difficulty qualifying with traditional income documentation. Which financing option may be the BEST fit?',
+              type: 'multiple_choice',
+              options: [
+                'FHA Loan',
+                'DSCR Loan',
+                'Hard Money Loan',
+                'Owner-Occupied Conventional Loan',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day11_q3',
+              label: '3. Which of the following is MOST likely to improve monthly cash flow?',
+              type: 'multiple_choice',
+              options: [
+                'Higher interest rate',
+                'Larger monthly payment',
+                'Shorter amortization period',
+                'Longer loan term',
+              ],
+              correctAnswer: 3,
+            },
+            {
+              id: 'day11_q4',
+              label: '4. A seller is willing to finance the property directly and allow flexible terms. What is the BIGGEST advantage of seller financing?',
+              type: 'multiple_choice',
+              options: [
+                'Guaranteed appreciation',
+                'Flexible rates, terms, and down payments',
+                'No due diligence needed',
+                'No risk',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day11_q5',
+              label: '5. Which statement is TRUE regarding leverage?',
+              type: 'multiple_choice',
+              options: [
+                'More leverage always creates a better investment.',
+                'Higher cash-on-cash return always means lower risk.',
+                'More leverage can improve returns but also increases risk.',
+                'Leverage has no impact on cash flow.',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day11_q6',
+              label: '6. What is one major risk of a balloon payment?',
+              type: 'multiple_choice',
+              options: [
+                'Property taxes increase automatically.',
+                'The entire remaining balance may become due before the property is paid off.',
+                'The interest rate immediately doubles.',
+                'You lose depreciation benefits.',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day11_q7',
+              label: '7. Which financing option is MOST commonly used for apartment buildings with 5 or more units?',
+              type: 'multiple_choice',
+              options: [
+                'FHA Loan',
+                'Conventional Owner-Occupied Loan',
+                'Commercial Loan',
+                'HELOC',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day11_q8',
+              label: '8. An investor finds a property that needs major renovations and must close within 10 days. Which financing option is MOST likely to work?',
+              type: 'multiple_choice',
+              options: [
+                'FHA Loan',
+                'Hard Money Loan',
+                'Conventional Investment Loan',
+                'Owner-Occupied Conventional Loan',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day11_q9',
+              label: '9. Which statement BEST describes good financing?',
+              type: 'multiple_choice',
+              options: [
+                'The loan with the lowest down payment.',
+                'The loan with the highest cash-on-cash return.',
+                'The loan that balances returns, risk, reserves, and long-term goals.',
+                'The loan with the longest term available.',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day11_q10',
+              label: '10. An investor has enough cash to buy one property outright or use financing to purchase several similar properties while maintaining healthy reserves. What is the PRIMARY advantage of responsibly using financing?',
+              type: 'multiple_choice',
+              options: [
+                'Financing eliminates risk.',
+                'Financing guarantees appreciation.',
+                'Financing allows investors to control more assets with the same capital.',
+                'Financing removes the need for analysis.',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 12,
-    title: "Submit 5 Offers Today",
-    caption: "",
-    taskDescription: "Submit 5 real offers today — volume is key. Submit all offer confirmations.",
-    trainingContent: "",
+    title: "Return Metrics Mastery",
+    caption: "How Successful Investors Actually Think About Returns",
+    taskDescription: `Today's Execution Challenge
+
+Take three properties you have analyzed.
+
+For each property determine:
+• Cash Flow
+• Cash On Cash Return
+• Appreciation
+• Principal Paydown
+• Tax Benefits
+• Total Return
+
+Then rank them from 1 (Best Investment) to 3 (Weakest Investment). Explain WHY.
+
+Today's Suggested Arsenal Activity
+
+Reach out to:
+• an experienced investor,
+• CPA,
+• lender,
+• or property manager.
+
+Ask: "What return metrics matter most to you when evaluating rental properties and why?"
+
+Compare their answers to your own investing philosophy and determine which metrics matter most for your long-term goals. You can also use this conversation to accelerate your relationship and weed out Arsenal contacts that don't understand or aren't willing to align with your goals.`,
+    reviewQuiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day12_review',
+          title: 'Return Metrics 101 — Quick Review',
+          maxAttempts: 3,
+          description: 'Before discussing which return metrics matter most, let\'s make sure we understand what each metric actually measures.\n\nThis review is designed to refresh the fundamentals before moving into more advanced investing concepts.',
+          inputs: [
+            {
+              id: 'day12_r1',
+              label: '1. What are the FOUR primary ways real estate investors make money?',
+              type: 'multiple_choice',
+              options: [
+                'Cash Flow, Appreciation, Principal Paydown, Tax Benefits',
+                'Cash Flow, Financing, Credit Scores, Appreciation',
+                'Appreciation, Property Management, Reserves, Vacancy',
+                'Cash Flow, Repairs, Equity, Interest Rates',
+              ],
+              correctAnswer: 0,
+            },
+            {
+              id: 'day12_r2',
+              label: '2. What is Cash Flow?',
+              type: 'multiple_choice',
+              options: [
+                'The increase in a property\'s value over time',
+                'The amount of principal paid down on a loan each year',
+                'The money left over after all expenses and debt payments are paid',
+                'The percentage return earned on the cash invested into a property',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day12_r3',
+              label: '3. What is Cash on Cash Return?',
+              type: 'multiple_choice',
+              options: [
+                'The percentage increase in a property\'s value each year',
+                'The percentage return earned on the actual cash you invested into a property based on annual cash flow',
+                'The percentage of the loan balance paid down each year',
+                'The total return from appreciation, principal paydown, and tax benefits',
+              ],
+              correctAnswer: 1,
+              explanation: 'Example: If you invest $100,000 and receive $10,000 per year in cash flow, Cash on Cash Return = 10%',
+            },
+            {
+              id: 'day12_r4',
+              label: '4. What is Cap Rate?',
+              type: 'multiple_choice',
+              options: [
+                'The percentage return earned on your cash invested after financing',
+                'The percentage return a property produces before financing by comparing Net Operating Income (NOI) to the purchase price',
+                'The percentage increase in value a property experiences each year',
+                'The percentage of a loan paid down annually',
+              ],
+              correctAnswer: 1,
+              explanation: 'Example: If a property produces $20,000 in NOI and costs $250,000, Cap Rate = 8%. Cap Rate measures the property\'s performance before financing.',
+            },
+            {
+              id: 'day12_r5',
+              label: '5. What is Principal Paydown?',
+              type: 'multiple_choice',
+              options: [
+                'The amount of appreciation earned each year',
+                'The reduction of your loan balance over time, which increases your equity',
+                'The amount of cash flow remaining after expenses',
+                'The amount of taxes saved through depreciation',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day12_r6',
+              label: '6. What is the BIGGEST difference between Cap Rate and Cash on Cash Return?',
+              type: 'multiple_choice',
+              options: [
+                'Cap Rate includes financing while Cash on Cash Return ignores financing',
+                'They measure the exact same thing',
+                'Cap Rate measures property performance before financing, while Cash on Cash Return measures the return on the actual cash you invested after financing',
+                'Cash on Cash Return measures appreciation while Cap Rate measures cash flow',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
+    reviewContent: `Key Takeaways
+
+• Cash Flow = Money left over after expenses and debt payments.
+• Cash on Cash Return = The percentage return earned on the cash you invested.
+• Cap Rate = The percentage return the property produces before financing.
+• Principal Paydown = Debt reduction that increases your equity.
+• Great investments often create returns through Cash Flow, Appreciation, Principal Paydown, and Tax Benefits.
+• Cash on Cash Return measures the investor's return.
+• Cap Rate measures the property's return.
+
+Now that we understand what each metric measures, let's discuss which metrics matter most and how successful investors actually use them to make buying decisions.`,
+    trainingContent: `Why This Day Matters
+
+Many investors know how to calculate:
+• Cash Flow
+• Cash On Cash Return
+• Cap Rate
+
+But very few understand how to use those numbers to make great decisions.
+
+The goal is NOT calculating metrics. The goal is: Knowing what to buy and what to avoid.
+
+
+The Truth About Return Metrics
+
+Many investors spend years arguing about:
+• Cap Rate
+• IRR
+• ROE
+• Appreciation
+
+The reality is: most investors become wealthy because they buy good assets, use reasonable financing, hold for a long time, and avoid catastrophic mistakes.
+
+
+Why Cash On Cash Return Matters So Much
+
+If you are using financing, Cash On Cash Return is often one of the most important metrics.
+
+Why? Because it measures how quickly your invested money comes back to you.
+
+The faster your money comes back:
+• the faster you can build reserves,
+• the faster you can reinvest,
+• the faster you can buy another property,
+• the faster you can scale.
+
+This is why many investors focus heavily on Cash On Cash Return.
+
+
+Cash On Cash Return Can Lie
+
+Many investors become obsessed with:
+• low down payments,
+• high leverage,
+• huge cash on cash returns.
+
+This can be dangerous.
+
+Example
+Property A
+• 1% down
+• Seller financing
+• 35% Cash On Cash Return
+
+Property B
+• 25% down
+• Conventional financing
+• 12% Cash On Cash Return
+
+Most beginners automatically choose Property A. That may be a mistake.
+
+Why? Property A may have:
+• higher risk,
+• smaller reserves,
+• balloon payment risk,
+• refinancing risk,
+• greater downside,
+• thin cash flow.
+
+
+Risk Adjusted Returns
+
+Two properties can have identical returns and completely different levels of risk.
+
+Property A — 12% Cash On Cash Return
+• 25% down
+• Fixed financing
+• Strong reserves
+• Long-term loan
+
+Property B — 12% Cash On Cash Return
+• 3% down
+• Balloon payment
+• Minimal reserves
+• Short-term debt
+
+The returns are identical. The risk is not.
+
+Great investors evaluate:
+• return,
+• risk,
+• reserves,
+• financing,
+• and downside protection.
+
+
+Why Rich Investors Think Differently
+
+New investors often ask: "Which property has the highest return?"
+
+Experienced investors ask:
+• Will it survive?
+• Is it safe?
+• Can it withstand problems?
+• Will I sleep at night owning it?
+
+Many wealthy investors choose stability, predictability, and consistency over maximizing every possible percentage point of return.
+
+
+Tax Benefits Deep Dive
+
+Most investors dramatically underestimate tax benefits. Many investors think: "Tax benefits are just a small bonus." This is often not true.
+
+Depreciation
+The government assumes buildings wear out over time. Because of this, you will be able to claim depreciation deductions even while your property increases in value. This can significantly reduce taxes.
+
+Cost Segregation
+Cost Segregation allows investors to accelerate depreciation. This can create:
+• larger deductions,
+• earlier tax benefits,
+• and substantial tax savings.
+
+Many experienced investors use Cost Segregation to improve overall returns.
+
+Why Tax Benefits Matter
+Example:
+Cash Flow: $10,000
+Tax Savings: $8,000
+Actual Benefit: $18,000
+
+Many investors completely ignore this return source.
+
+
+Appreciation Is The Most Dangerous Metric
+
+Many bad investments begin with: "I think it will go up."
+
+Never buy a property because you hope, believe, or think appreciation will save the deal.
+
+Buy because:
+• it cash flows,
+• it meets criteria,
+• it survives stress tests,
+• it works today.
+
+Then let appreciation be a bonus.
+
+
+Return On Equity (ROE)
+
+ROE measures: How hard your current equity is working.
+
+As properties appreciate, equity grows. Sometimes your equity becomes so large that returns become relatively small. This can create opportunities to:
+• refinance,
+• reposition,
+• or sell.
+
+
+Internal Rate Of Return (IRR)
+
+IRR attempts to measure total performance over time. IRR includes:
+• cash flow,
+• appreciation,
+• principal paydown,
+• timing.
+
+IRR is powerful. However, most UC30 students should focus primarily on Cash Flow, Cash On Cash Return, and Total Return before worrying too much about IRR.
+
+
+The UC30 Investment Hierarchy
+
+When evaluating a property:
+
+Level 1 — Survival
+Can the property survive vacancies, repairs, market changes, bad tenants?
+If not: STOP.
+
+Level 2 — Cash Flow
+Does the property generate positive cash flow? Cash flow protects you.
+
+Level 3 — Cash On Cash Return
+Does the property meet your minimum Cash On Cash Return requirement? This helps determine how hard your money is working.
+
+Level 4 — Total Return
+What is the combined return from cash flow, appreciation, principal paydown, and tax benefits?
+
+Level 5 — Scalability
+Can this strategy be repeated? Can this help you continue growing your portfolio?
+
+
+The Goal Of Analysis
+
+The goal is NOT finding perfect metrics, maximizing one return, or winning arguments.
+
+The goal is understanding:
+• risk,
+• returns,
+• financing,
+• reserves,
+• scalability,
+• and downside protection.
+
+
+Quick Rules To Remember
+
+1. Cash Flow pays you today.
+2. Cash On Cash Return measures how hard your money is working.
+3. Appreciation should be treated as a bonus.
+4. Tax Benefits can dramatically increase returns.
+5. Risk matters just as much as return.
+6. More leverage is not always better.
+7. Great investors prioritize survival first.
+8. No single metric determines a great deal.
+9. Stability often beats maximum returns.
+10. Great investors evaluate the entire picture.`,
     category: "pipeline",
     weekNumber: 2,
     weekTitle: "BUILD THE PIPELINE",
-    proofType: "document",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day12_quiz',
+          title: 'Return Metrics Mastery Quiz',
+          maxAttempts: 3,
+          description: 'Answer all 5 questions correctly to unlock your daily submissions.',
+          inputs: [
+            {
+              id: 'day12_q1',
+              label: '1. Which property is MOST likely the better long-term investment?\n\nProperty A: 20% Cash on Cash Return, 5% Down Payment, Very little reserves, 3-year balloon payment\n\nProperty B: 10% Cash on Cash Return, 25% Down Payment, Strong reserves, 30-year fixed financing',
+              type: 'multiple_choice',
+              options: [
+                'Property A because it has the highest Cash on Cash Return',
+                'Property B because it has lower risk and stronger downside protection',
+                'Both are equal because Cash on Cash Return is all that matters',
+                'Impossible to tell because neither property has appreciation',
+              ],
+              correctAnswer: 1,
+              explanation: 'Higher returns do not automatically mean better investments. Great investors evaluate risk, reserves, financing, and downside protection.',
+            },
+            {
+              id: 'day12_q2',
+              label: '2. Which statement BEST describes why Cash on Cash Return is so important?',
+              type: 'multiple_choice',
+              options: [
+                'It predicts future appreciation.',
+                'It measures how quickly your invested capital is being returned through cash flow.',
+                'It tells you how much principal is being paid down each year.',
+                'It determines whether a lender will approve your loan.',
+              ],
+              correctAnswer: 1,
+              explanation: 'Cash on Cash Return helps determine how hard your money is working, how quickly you can build reserves, and how quickly you can scale.',
+            },
+            {
+              id: 'day12_q3',
+              label: '3. An investor says: "I don\'t care if the property cash flows. It will appreciate." What is the BIGGEST concern with this thinking?',
+              type: 'multiple_choice',
+              options: [
+                'Appreciation is guaranteed.',
+                'Appreciation should be viewed as a bonus, not the primary reason for purchasing a property.',
+                'Appreciation only occurs in commercial properties.',
+                'Appreciation only matters if you refinance.',
+              ],
+              correctAnswer: 1,
+              explanation: 'Many bad investments are justified using future appreciation. Great investors buy properties that work TODAY.',
+            },
+            {
+              id: 'day12_q4',
+              label: '4. Two properties have identical Cash on Cash Returns. Which additional factors should an investor evaluate BEFORE deciding which one is better?',
+              type: 'multiple_choice',
+              options: [
+                'Risk, reserves, financing structure, and downside protection',
+                'Paint color and curb appeal',
+                'Which property has the larger loan balance',
+                'Which property has the newest appliances',
+              ],
+              correctAnswer: 0,
+              explanation: 'Returns alone do not tell the whole story. Risk-adjusted returns matter.',
+            },
+            {
+              id: 'day12_q5',
+              label: '5. According to the UC30 Investment Hierarchy, what should an investor evaluate FIRST?',
+              type: 'multiple_choice',
+              options: [
+                'Appreciation potential',
+                'Cash on Cash Return',
+                'Whether the property can survive vacancies, repairs, and market changes',
+                'Tax benefits',
+              ],
+              correctAnswer: 2,
+              explanation: 'A property that cannot survive stress is not a good investment regardless of its projected returns. The hierarchy is: Survival → Cash Flow → Cash on Cash Return → Total Return → Scalability.',
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 13,
-    title: "Review & Adjust Your Buy Box",
-    caption: "",
-    taskDescription: "Review your results so far and adjust your buy box if needed. Submit updated criteria and reasoning.",
-    trainingContent: "",
+    title: "Solving Seller Problems",
+    caption: "Why Sellers Actually Sell",
+    taskDescription: `Today's Execution Challenge
+
+Have 5 conversations with sellers, landlords, property owners, or warm leads.
+
+Your goal is NOT just to make an offer. Your goal is to identify their biggest problem.
+
+Write down:
+• The problem.
+• The motivation level.
+• A possible solution.
+
+Today's Suggested Arsenal Activity
+
+Reach out to a realtor, wholesaler, property manager, lender, or investor.
+
+Ask: "What seller problems are you seeing most often right now?"
+
+Document their answers and look for patterns. When they bring up problems, be willing to find solutions and see if they lead to deals!`,
+    trainingContent: `Why This Matters
+
+Most investors believe: Properties create deals.
+That is not true.
+Problems create deals.
+
+If there were no problems — no stress, no motivation, no urgency — many sellers would simply keep their property.
+
+The bigger the problem, the bigger the opportunity often becomes.
+
+
+The Biggest Shift In Thinking
+
+New investors ask: "What property can I buy?"
+Great investors ask: "What problem can I solve?"
+
+This small shift changes everything.
+
+
+The Most Common Seller Problems
+
+Problem #1 — Tired Landlord
+Examples: tenant calls, maintenance, vacancies, late rent, evictions.
+Many landlords eventually burn out.
+
+Problem #2 — Deferred Maintenance
+Examples: roofs, HVAC, plumbing, siding, parking lots.
+Many sellers don't have time, money, or energy to fix problems.
+
+Problem #3 — Difficult Tenants
+Examples: non-payment, evictions, property damage, constant complaints.
+Many sellers simply want out.
+
+Problem #4 — Financial Stress
+Examples: debt, job loss, divorce, medical bills, business issues.
+Sometimes certainty matters more than price.
+
+Problem #5 — Relocation
+Examples: new job, retirement, family move.
+Convenience often becomes very important.
+
+Problem #6 — Inheritance
+Many inherited properties create stress, confusion, and maintenance responsibilities. Often heirs want simplicity.
+
+Problem #7 — Property Is Hard To Sell
+Examples: unique properties, poor condition, financing challenges, limited buyer pool.
+Creative finance may help solve these situations.
+
+Problem #8 — Taxes
+Some sellers are concerned about capital gains, tax consequences, and income timing.
+Seller financing can sometimes help.
+
+Problem #9 — Time
+Many sellers simply want speed, certainty, and simplicity.
+
+Problem #10 — Emotional Fatigue
+Many owners are simply tired. Years of management, repairs, and stress eventually wear people down.
+
+
+The Seller Motivation Pyramid
+
+Not all motivation is equal.
+
+Level 1 — Interested: "I might sell."
+Level 2 — Considering: "I'm thinking about selling."
+Level 3 — Motivated: "I want to sell."
+Level 4 — Problem Solving: "I need a solution."
+
+Level 4 is where many great deals happen.
+
+
+How To Uncover Seller Motivation
+
+The best investors ask questions. They do not assume.
+
+Examples:
+• Why are you considering selling?
+• What would an ideal outcome look like?
+• What's your biggest concern?
+• What happens if you keep the property?
+• What would make this process easier?
+
+
+Listen More Than You Talk
+
+Most investors talk too much.
+
+Great investors:
+• ask questions,
+• listen carefully,
+• identify pain points,
+• find solutions.
+
+
+Match The Solution To The Problem
+
+Different problems require different solutions.
+
+Needs cash immediately → Cash offer, fast close
+Needs monthly income → Seller financing
+Needs more money → Higher purchase price, better terms
+Needs certainty → Strong financing, large reserves, faster closing
+
+
+The Win-Win Framework
+
+The best deals are not one-sided, manipulative, or unfair. The best deals solve problems for both parties.
+
+Ask yourself:
+Seller Wins By: _______
+Buyer Wins By: _______
+
+If both boxes are strong, you may have a great deal. Long-term success comes from trust, professionalism, and honesty.
+
+
+Every Great Deal Starts Here
+
+Most deals are not created because you had money, a lender, or a calculator. Most deals are created because you understood a problem better than other buyers.
+
+
+The UC30 Problem Solver Framework
+
+Before discussing price, ask:
+1. What problem are they trying to solve?
+2. How serious is that problem?
+3. What would the ideal solution look like?
+4. Can I create a structure that solves it?
+5. Does that structure still fit my criteria?
+
+
+Quick Rules To Remember
+
+1. Problems create opportunities.
+2. Ask questions before offering solutions.
+3. Listen more than you speak.
+4. Understand motivation before discussing price.
+5. Different problems require different structures.
+6. Great investors solve problems.
+7. Trust creates opportunities.
+8. Win-win deals create the best long-term outcomes.
+9. Solve problems.`,
     category: "pipeline",
     weekNumber: 2,
     weekTitle: "BUILD THE PIPELINE",
-    proofType: "document",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day13_quiz',
+          title: 'Solving Seller Problems Quiz',
+          maxAttempts: 3,
+          description: 'Answer all 15 questions correctly to unlock your daily submissions.',
+          inputs: [
+            {
+              id: 'day13_q1',
+              label: '1. A seller says: "I\'m tired of the property, but I don\'t really need the money." What is the BEST follow-up question?',
+              type: 'multiple_choice',
+              options: [
+                '"Would you take $50,000 less?"',
+                '"How much cash do you need today?"',
+                '"If money isn\'t the primary concern, what would an ideal outcome look like for you?"',
+                '"What\'s the lowest you\'ll take?"',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day13_q2',
+              label: '2. A seller owns a free-and-clear rental property and wants monthly income in retirement. What solution should you explore first?',
+              type: 'multiple_choice',
+              options: [
+                'Hard Money',
+                'Seller Financing',
+                'FHA Financing',
+                'Commercial Financing',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day13_q3',
+              label: '3. A landlord says: "I\'m just tired of dealing with tenants." What problem are they MOST likely trying to solve?',
+              type: 'multiple_choice',
+              options: [
+                'Purchase price',
+                'Appreciation',
+                'Stress and management burden',
+                'Tax benefits',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day13_q4',
+              label: '4. Which question is MOST likely to uncover seller motivation?',
+              type: 'multiple_choice',
+              options: [
+                '"What\'s your asking price?"',
+                '"How old is the roof?"',
+                '"Why are you considering selling?"',
+                '"How many bedrooms does it have?"',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day13_q5',
+              label: '5. A seller inherited a property they don\'t want to manage. What is likely MOST important to them?',
+              type: 'multiple_choice',
+              options: [
+                'Maximum leverage',
+                'Simplicity and convenience',
+                'Appreciation potential',
+                'Cash-on-cash return',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day13_q6',
+              label: '6. A seller says: "I don\'t have the money to fix all the repairs." What should you immediately recognize?',
+              type: 'multiple_choice',
+              options: [
+                'Potential problem-solving opportunity',
+                'Reason to stop negotiating',
+                'Appreciation opportunity',
+                'Financing issue only',
+              ],
+              correctAnswer: 0,
+            },
+            {
+              id: 'day13_q7',
+              label: '7. Which investor mindset is MOST effective?',
+              type: 'multiple_choice',
+              options: [
+                '"How do I buy this property?"',
+                '"How do I negotiate harder?"',
+                '"What problem can I solve?"',
+                '"How do I get the lowest price possible?"',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day13_q8',
+              label: '8. A seller says: "I need more money than your offer." What is the BEST next step?',
+              type: 'multiple_choice',
+              options: [
+                'Immediately raise your offer',
+                'Ask what they are trying to accomplish with the additional money',
+                'End negotiations',
+                'Tell them they are unrealistic',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day13_q9',
+              label: '9. Which question is MOST likely to reveal hidden motivation?',
+              type: 'multiple_choice',
+              options: [
+                '"How many bathrooms are there?"',
+                '"If you don\'t sell this property, what do you think happens over the next year?"',
+                '"What color is the roof?"',
+                '"When was it built?"',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day13_q10',
+              label: '10. A seller wants top dollar but also wants to avoid realtor commissions, repairs, and months of showings. What should you recognize?',
+              type: 'multiple_choice',
+              options: [
+                'Multiple problems may create flexibility',
+                'They are impossible to negotiate with',
+                'Price is the only thing that matters',
+                'They are not motivated',
+              ],
+              correctAnswer: 0,
+            },
+            {
+              id: 'day13_q11',
+              label: '11. A seller says: "I already have another property under contract and need this one sold." What is likely their biggest concern?',
+              type: 'multiple_choice',
+              options: [
+                'Appreciation',
+                'Certainty and timing',
+                'Property management',
+                'Cash-on-cash return',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day13_q12',
+              label: '12. Which statement BEST builds trust?',
+              type: 'multiple_choice',
+              options: [
+                '"This property has tons of problems."',
+                '"You\'ll never get your asking price."',
+                '"Help me understand what would make this a successful outcome for you."',
+                '"My offer expires tonight."',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day13_q13',
+              label: '13. A seller says: "I don\'t really care about the purchase price. I just don\'t want a huge tax bill." Which solution may be worth exploring?',
+              type: 'multiple_choice',
+              options: [
+                'Hard Money',
+                'Seller Financing',
+                'FHA Financing',
+                'Bridge Loan',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day13_q14',
+              label: '14. What is usually the BIGGEST mistake investors make during seller conversations?',
+              type: 'multiple_choice',
+              options: [
+                'Asking too many questions',
+                'Listening too much',
+                'Talking more than they listen',
+                'Being too patient',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day13_q15',
+              label: '15. Which statement BEST represents the UC30 Problem Solver Framework?',
+              type: 'multiple_choice',
+              options: [
+                'Find properties and negotiate aggressively',
+                'Understand the seller\'s problem, identify a solution, and determine whether it still fits your criteria',
+                'Always focus on getting the lowest price possible',
+                'Solve every seller\'s problem regardless of your investment criteria',
+              ],
+              correctAnswer: 1,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 14,
@@ -3787,7 +5333,7 @@ export function getPreDayContent(dayNum, overrides = {}) {
 
 // Get day data for any day number (negative = pre-day, 1-30 from sprint, 31+ from Operator Mode)
 export function getDayDataForNum(dayNum, overrides = {}) {
-  if (dayNum < 0) {
+  if (dayNum <= 0) {
     return getPreDayContent(dayNum, overrides) || { ...POST_30_TASK, day: dayNum };
   }
   if (dayNum <= 30) {
