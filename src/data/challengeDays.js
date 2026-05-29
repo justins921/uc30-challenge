@@ -5180,6 +5180,14 @@ export function getCategoryColors(phases) {
   return colors;
 }
 
+// Resolve content day from slot day using admin day order
+export function resolveContentDay(slotDay, overrides = {}) {
+  const dayOrder = overrides?._dayOrder;
+  if (!dayOrder || !Array.isArray(dayOrder) || dayOrder.length !== 30) return slotDay;
+  if (slotDay < 1 || slotDay > 30) return slotDay;
+  return dayOrder[slotDay - 1] || slotDay;
+}
+
 // Merge defaults with admin overrides
 export function getDayContent(dayNum, overrides = {}) {
   const defaults = CHALLENGE_DAYS[dayNum - 1];

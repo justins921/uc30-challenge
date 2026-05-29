@@ -1,4 +1,4 @@
-import { getPhases, getDayContent, getGettingStartedContent, getPreDayContent, POST_30_TASK, getStreak } from '../data/challengeDays';
+import { getPhases, getDayContent, getGettingStartedContent, getPreDayContent, POST_30_TASK, getStreak, resolveContentDay } from '../data/challengeDays';
 
 export default function TimelineView({ user, onSelectDay, calendarDay, contentOverrides, customPhases, cohortStartDate }) {
   const phases = getPhases(customPhases);
@@ -126,7 +126,7 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
             gap: 10,
           }}>
             {phase.days.map(d => {
-              const dayData = getDayContent(d, contentOverrides);
+              const dayData = getDayContent(resolveContentDay(d, contentOverrides), contentOverrides);
               const isComplete = user.completedDays.includes(d);
               const isCurrent = d === user.currentDay;
 

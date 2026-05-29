@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum, getPreDayContent, DAILY_MINIMUMS, VETERAN_DAILY_MINIMUMS, getWeekNumber, getWeeklyOfferTarget, getWeekDayRange } from '../data/challengeDays';
+import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum, getPreDayContent, resolveContentDay, DAILY_MINIMUMS, VETERAN_DAILY_MINIMUMS, getWeekNumber, getWeeklyOfferTarget, getWeekDayRange } from '../data/challengeDays';
 import { COMPLIANCE_METRICS, checkDailyCompliance, getTimeUntilDeadline, DEFAULT_DAILY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
 import QuizSection from './QuizSection';
 import { CONTACT_GROUPS } from './ContactsCRM';
@@ -44,7 +44,8 @@ export default function DayView({
   // ── Day Data ──────────────────────────────────────────────────
   const isPost30 = day > 30;
   const isPreTraining = day <= 0;
-  const dayData = isPreTraining ? getPreDayContent(day, contentOverrides) : isPost30 ? getDayDataForNum(day) : getDayContent(day, contentOverrides);
+  const contentDay = (!isPreTraining && !isPost30) ? resolveContentDay(day, contentOverrides) : day;
+  const dayData = isPreTraining ? getPreDayContent(day, contentOverrides) : isPost30 ? getDayDataForNum(day) : getDayContent(contentDay, contentOverrides);
   const isReflectionDay = dayData?.isReflectionDay === true;
   const isComplete = isPreview ? false : user.completedDays.includes(day);
   const isCurrentOrPast = isPreview ? true : day <= user.currentDay;

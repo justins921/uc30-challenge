@@ -2279,6 +2279,7 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
   const [editingPhases, setEditingPhases] = useState(false);
   const [editingLanding, setEditingLanding] = useState(false);
   const [editingMinimums, setEditingMinimums] = useState(false);
+  const [reorderingDays, setReorderingDays] = useState(false);
   const [pdVideoUrl, setPdVideoUrl] = useState(practiceDaySettings?.practice_day_video || '');
   const [pdCalcUrl, setPdCalcUrl] = useState(practiceDaySettings?.rental_calculator_url || '');
   const [pdSaving, setPdSaving] = useState(false);
@@ -2336,6 +2337,20 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
     );
   }
 
+  if (reorderingDays) {
+    return (
+      <DayReorderEditor
+        contentOverrides={contentOverrides}
+        onSave={(dayOrder) => {
+          const updated = { ...contentOverrides, _dayOrder: dayOrder };
+          onSetContentOverrides(updated);
+          setReorderingDays(false);
+        }}
+        onBack={() => setReorderingDays(false)}
+      />
+    );
+  }
+
   return (
     <div className="fade-up">
       {/* Daily Minimums Editor Card */}
@@ -2359,17 +2374,26 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
         </button>
       </div>
 
-      <div className="card" style={{ marginBottom: 20, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <p style={{ color: '#888', fontSize: 13, margin: 0 }}>
+      <div className="card" style={{ marginBottom: 20, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+        <p style={{ color: '#888', fontSize: 13, margin: 0, flex: 1, minWidth: 200 }}>
           Edit the text, videos, and resources for each day. Changes are saved to the database and visible to all Operators.
         </p>
-        <button
-          className="btn-secondary"
-          style={{ padding: '8px 16px', fontSize: 12, whiteSpace: 'nowrap', marginLeft: 16 }}
-          onClick={() => setEditingPhases(true)}
-        >
-          Edit Phases
-        </button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            className="btn-secondary"
+            style={{ padding: '8px 16px', fontSize: 12, whiteSpace: 'nowrap' }}
+            onClick={() => setReorderingDays(true)}
+          >
+            Reorder Days
+          </button>
+          <button
+            className="btn-secondary"
+            style={{ padding: '8px 16px', fontSize: 12, whiteSpace: 'nowrap' }}
+            onClick={() => setEditingPhases(true)}
+          >
+            Edit Phases
+          </button>
+        </div>
       </div>
       {/* Practice Day Settings */}
       <div className="card" style={{
@@ -4812,6 +4836,148 @@ function ComplianceRemovals({ removalLog, participants, onReactivate, loading })
             </tbody>
           </table>
         )}
+      </div>
+    </div>
+  );
+}
+
+// ── Day Reorder Editor ──────────────────────────────────────────
+
+const REFLECTION_DAYS = [7, 14, 21, 28];
+
+function DayReorderEditor({ contentOverrides, onSave, onBack }) {
+  const savedOrder = contentOverrides?._dayOrder;
+  const [order, setOrder] = useState(() => {
+    if (savedOrder && savedOrder.length === 30) return [...savedOrder];
+    return Array.from({ length: 30 }, (_, i) => i + 1);
+  });
+  const [saving, setSaving] = useState(false);
+
+  const isDefault = order.every((v, i) => v === i + 1);
+
+  const moveDay = (slotIndex, direction) => {
+    const targetIndex = slotIndex + direction;
+    if (targetIndex < 0 || targetIndex >= 30) return;
+    const slotDay = slotIndex + 1;
+    const targetDay = targetIndex + 1;
+    if (REFLECTION_DAYS.includes(slotDay) || REFLECTION_DAYS.includes(targetDay)) return;
+
+    const newOrder = [...order];
+    [newOrder[slotIndex], newOrder[targetIndex]] = [newOrder[targetIndex], newOrder[slotIndex]];
+    setOrder(newOrder);
+  };
+
+  const resetOrder = () => {
+    setOrder(Array.from({ length: 30 }, (_, i) => i + 1));
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    await onSave(isDefault ? null : order);
+    setSaving(false);
+  };
+
+  return (
+    <div className="scale-in">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+        <button className="btn-secondary" onClick={onBack} style={{ padding: '8px 20px', fontSize: 13 }}>
+          ← Back to Content
+        </button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          {!isDefault && (
+            <button className="btn-secondary" onClick={resetOrder} style={{ padding: '8px 16px', fontSize: 12, color: '#e94560', borderColor: 'rgba(233,69,96,0.3)' }}>
+              Reset to Default
+            </button>
+          )}
+          <button
+            className="btn-primary"
+            onClick={handleSave}
+            disabled={saving}
+            style={{ padding: '8px 20px', fontSize: 13, opacity: saving ? 0.5 : 1 }}
+          >
+            {saving ? 'Saving...' : 'Save Order'}
+          </button>
+        </div>
+      </div>
+
+      <div className="card" style={{ padding: '16px 20px', marginBottom: 16 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>Reorder Days</h3>
+        <p style={{ fontSize: 13, color: '#888', margin: 0 }}>
+          Move days up or down to rearrange the 30-day schedule. Reflection days (7, 14, 21, 28) are pinned and cannot be moved.
+        </p>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        {order.map((contentDay, slotIndex) => {
+          const slotDay = slotIndex + 1;
+          const isReflection = REFLECTION_DAYS.includes(slotDay);
+          const isSwapped = contentDay !== slotDay;
+          const dayData = getDayContent(contentDay, contentOverrides);
+          const phase = DEFAULT_PHASES.find(p => p.days.includes(slotDay));
+
+          return (
+            <div
+              key={slotIndex}
+              className="card"
+              style={{
+                padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 12,
+                opacity: isReflection ? 0.6 : 1,
+                borderColor: isSwapped ? 'rgba(240,165,0,0.3)' : undefined,
+                background: isSwapped ? 'rgba(240,165,0,0.03)' : undefined,
+              }}
+            >
+              <div className="mono" style={{
+                width: 32, height: 32, borderRadius: 6,
+                background: isReflection ? 'rgba(255,255,255,0.04)' : `${phase?.color || '#888'}15`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 12, fontWeight: 700, color: phase?.color || '#888', flexShrink: 0,
+              }}>
+                {slotDay}
+              </div>
+
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#ccc' }}>
+                  {dayData.title || `Day ${contentDay}`}
+                  {isReflection && <span style={{ fontSize: 11, color: '#666', marginLeft: 8 }}>Pinned</span>}
+                </div>
+                {isSwapped && (
+                  <div style={{ fontSize: 11, color: '#f0a500', marginTop: 2 }}>
+                    Originally Day {contentDay}
+                  </div>
+                )}
+              </div>
+
+              {!isReflection && (
+                <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
+                  <button
+                    onClick={() => moveDay(slotIndex, -1)}
+                    disabled={slotIndex === 0 || REFLECTION_DAYS.includes(slotDay - 1)}
+                    style={{
+                      width: 28, height: 28, borderRadius: 6, border: 'none', cursor: 'pointer',
+                      background: 'rgba(255,255,255,0.06)', color: '#aaa', fontSize: 14,
+                      fontFamily: "'DM Sans', sans-serif",
+                      opacity: (slotIndex === 0 || REFLECTION_DAYS.includes(slotDay - 1)) ? 0.3 : 1,
+                    }}
+                  >
+                    ↑
+                  </button>
+                  <button
+                    onClick={() => moveDay(slotIndex, 1)}
+                    disabled={slotIndex === 29 || REFLECTION_DAYS.includes(slotDay + 1)}
+                    style={{
+                      width: 28, height: 28, borderRadius: 6, border: 'none', cursor: 'pointer',
+                      background: 'rgba(255,255,255,0.06)', color: '#aaa', fontSize: 14,
+                      fontFamily: "'DM Sans', sans-serif",
+                      opacity: (slotIndex === 29 || REFLECTION_DAYS.includes(slotDay + 1)) ? 0.3 : 1,
+                    }}
+                  >
+                    ↓
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
