@@ -97,6 +97,7 @@ export default function App() {
     completeActivation,
     submitPipelineDay,
     activateNextCohort,
+    saveConfidenceSurvey,
   } = useAppState();
 
   // CRM contacts for current user (loaded on login)
@@ -560,6 +561,7 @@ export default function App() {
       addQuizAttempt={addQuizAttempt}
       onSubmitPipelineDay={submitPipelineDay}
       onActivateNextCohort={activateNextCohort}
+      onSaveConfidenceSurvey={saveConfidenceSurvey}
     />
     </>
   );

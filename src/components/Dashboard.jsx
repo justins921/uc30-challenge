@@ -85,7 +85,7 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onUpdateContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt, practiceDaySettings, onCompletePracticeDay, onSubmitPipelineDay, onActivateNextCohort, onUpdateUser }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onUpdateContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt, practiceDaySettings, onCompletePracticeDay, onSubmitPipelineDay, onActivateNextCohort, onUpdateUser, onSaveConfidenceSurvey }) {
   const [tab, setTab] = useState(user.pipelineMode && !user.isActive ? 'pipeline' : 'timeline');
   const [selectedDay, setSelectedDay] = useState(null);
   const [existingDailySubmission, setExistingDailySubmission] = useState(null);
@@ -429,6 +429,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
               const updated = await getQuizAttempts(user.id, selectedDay);
               setQuizAttempts(updated || []);
             }}
+            onSaveConfidenceSurvey={onSaveConfidenceSurvey}
           />
         )}
         {!showPracticeDay && tab === 'community' && (

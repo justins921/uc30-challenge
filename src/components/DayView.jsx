@@ -5,6 +5,7 @@ import QuizSection from './QuizSection';
 import { CONTACT_GROUPS } from './ContactsCRM';
 import ReflectionDay from './ReflectionDay';
 import RentalCalculator from './RentalCalculator';
+import ConfidenceSurvey, { GrowthReport } from './ConfidenceSurvey';
 import { calculateFollowUpDate, validatePhone } from '../utils/storage';
 
 const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500' };
@@ -14,7 +15,7 @@ export default function DayView({
   day, user, onSubmit, onBack, contentOverrides, customPhases,
   complianceSettings, existingDailySubmission,
   onAddContact, onAddFollowUp, onUpdateContact, onUploadFile, contacts: initialContacts, getUploadUrl,
-  quizAttempts, onQuizAttempt, isPreview,
+  quizAttempts, onQuizAttempt, isPreview, onSaveConfidenceSurvey,
 }) {
   const [submitted, setSubmitted] = useState(false);
 
@@ -256,6 +257,11 @@ export default function DayView({
     dayData.reviewQuiz.scenarios.every(s => (quizAttempts || []).some(a => a.scenario_id === s.id && a.correct));
   const [reviewQuizPassed, setReviewQuizPassed] = useState(reviewQuizAlreadyPassed || isComplete);
 
+  // ── Confidence Survey checkpoint ──────────────────────────────
+  const surveyCheckpointMap = { 0: 'pre_training', 7: 'week_1', 14: 'week_2', 21: 'week_3', 28: 'week_4' };
+  const surveyCheckpoint = surveyCheckpointMap[day] || null;
+  const [surveySaving, setSurveySaving] = useState(false);
+
   // ── Handlers ──────────────────────────────────────────────────
   const setMetric = (key, value) => {
     setMetrics(prev => ({ ...prev, [key]: value }));
@@ -398,6 +404,25 @@ export default function DayView({
         />
       )}
 
+      {/* Confidence Survey — reflection days (7, 14, 21, 28) */}
+      {isReflectionDay && surveyCheckpoint && onSaveConfidenceSurvey && (
+        <ConfidenceSurvey
+          checkpoint={surveyCheckpoint}
+          existingSurveys={user.confidence_surveys || []}
+          saving={surveySaving}
+          onSave={async (data) => {
+            setSurveySaving(true);
+            await onSaveConfidenceSurvey(data);
+            setSurveySaving(false);
+          }}
+        />
+      )}
+
+      {/* Growth Report — shown on Day 28 after completing final survey */}
+      {day === 28 && (user.confidence_surveys || []).length >= 2 && (
+        <GrowthReport surveys={user.confidence_surveys} />
+      )}
+
       {/* Review Quiz (Day 12 non-standard: review quiz before training) */}
       {hasReviewQuiz && canSubmit && (
         <QuizSection
@@ -497,6 +522,20 @@ export default function DayView({
             />
           )}
         </>
+      )}
+
+      {/* Confidence Survey — pre-training (day 0), shown after quiz is passed */}
+      {isPreTraining && surveyCheckpoint && onSaveConfidenceSurvey && (!hasRequiredQuiz || quizPassed) && (
+        <ConfidenceSurvey
+          checkpoint={surveyCheckpoint}
+          existingSurveys={user.confidence_surveys || []}
+          saving={surveySaving}
+          onSave={async (data) => {
+            setSurveySaving(true);
+            await onSaveConfidenceSurvey(data);
+            setSurveySaving(false);
+          }}
+        />
       )}
 
       {/* Quiz bypass notice for veterans */}

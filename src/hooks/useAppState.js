@@ -1671,6 +1671,28 @@ export function useAppState() {
     return () => clearInterval(interval);
   }, [user, currentView]);
 
+  // ── Confidence Survey ─────────────────────────────────────
+  const saveConfidenceSurvey = useCallback(async (surveyData) => {
+    if (!user) return { error: 'Not logged in.' };
+    const existing = user.confidence_surveys || [];
+    const filtered = existing.filter(s => s.checkpoint !== surveyData.checkpoint);
+    const updated = [...filtered, surveyData];
+    const updates = { confidence_surveys: updated };
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(user.id, updates);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === user.id ? { ...p, ...updates } : p
+      );
+      setParticipants(updatedParticipants);
+      persist({ ...user, ...updates }, updatedParticipants);
+    }
+    const updatedUser = { ...user, ...updates };
+    setUser(updatedUser);
+    storage.setUser(updatedUser);
+    return { success: true };
+  }, [user, participants, persist]);
+
   return {
     user,
     participants,
@@ -1761,6 +1783,8 @@ export function useAppState() {
     // Pipeline Mode
     submitPipelineDay,
     activateNextCohort,
+    // Confidence Survey
+    saveConfidenceSurvey,
   };
 }
 
