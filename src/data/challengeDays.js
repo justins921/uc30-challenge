@@ -4753,18 +4753,1005 @@ Quick Rules To Remember
   // ── Week 3: Apply Pressure (Days 15-21) ──
   {
     day: 15,
-    title: "Negotiate a Counter-Offer",
-    caption: "",
-    taskDescription: "If you have a counter-offer, negotiate it. If not, follow up on all pending. Submit documentation.",
-    trainingContent: "",
+    title: "Objection & Influence Mastery",
+    caption: "How to build trust, handle objections, and become someone sellers want to work with",
+    taskDescription: `Today's Execution Challenge
+
+Have 5 conversations today.
+
+For each conversation identify:
+
+• The objection
+• The likely real concern
+• A reframe
+• An anchor you could use
+• A possible solution
+
+Document all five.
+
+Today's Suggested Arsenal Activity
+
+Call:
+• Realtors
+• Wholesalers
+• Property Managers
+• Investors
+
+Ask:
+"What objection do you hear most often from sellers right now?"
+
+Then ask:
+"What usually helps overcome that objection?"
+
+Document the answers and look for patterns.`,
+    trainingContent: `Why This Matters
+
+Many investors believe:
+
+The best negotiator wins.
+
+That is not true.
+
+Most sellers choose the person they:
+
+trust,
+like,
+believe,
+and feel comfortable with.
+
+Before you ever discuss:
+
+price,
+terms,
+seller financing,
+or negotiations,
+
+you are being evaluated.
+
+The seller is asking themselves:
+
+Can I trust this person?
+
+Do I like this person?
+
+Do I believe they can actually close?
+
+If the answer is no…
+
+nothing else matters.
+
+
+The UC30 Communication Formula
+
+When things get stressful, awkward, emotional, or uncertain:
+
+Remember:
+
+Smile.
+
+Head Nod.
+
+Slow Down.
+
+These three simple principles solve most communication problems.
+
+
+Smile
+
+The moment you make eye contact:
+
+Smile.
+
+Not a fake sales smile.
+
+A genuine smile.
+
+People naturally trust people who appear:
+
+confident,
+relaxed,
+friendly.
+
+A smile instantly lowers defenses.
+
+Many investors become:
+
+stiff,
+nervous,
+serious.
+
+This creates tension.
+
+Smile first.
+
+
+Head Nod
+
+Positive head nodding creates agreement.
+
+It subtly communicates:
+
+understanding,
+connection,
+empathy.
+
+People often begin subconsciously mirroring you.
+
+Avoid:
+
+excessive nodding,
+frantic nodding,
+side-to-side head shaking.
+
+Positive head nods build rapport.
+
+
+Slow Down
+
+Most inexperienced negotiators talk too fast.
+
+Fast talking often signals:
+
+nervousness,
+anxiety,
+desperation.
+
+Slow down.
+
+Pause.
+
+Think.
+
+Let silence work.
+
+Confidence is often communicated through pace.
+
+
+Down Pitch vs Up Pitch
+
+One of the biggest communication mistakes people make is ending every sentence with an upward tone.
+
+Example:
+
+"I think this property could work?"
+
+This sounds uncertain.
+
+Instead:
+
+Use a downward tone.
+
+Example:
+
+"I think this property could work."
+
+This sounds:
+
+calm,
+professional,
+confident,
+certain.
+
+People trust certainty.
+
+
+Eye Contact
+
+Good eye contact communicates:
+
+confidence,
+honesty,
+presence.
+
+However:
+
+Do NOT stare.
+
+That becomes awkward.
+
+Instead:
+
+Maintain eye contact.
+
+Break eye contact with purpose.
+
+Examples:
+
+pointing to numbers,
+pointing to repairs,
+reviewing analysis,
+discussing documents.
+
+Then return to eye contact.
+
+Natural eye contact builds trust.
+
+Forced eye contact creates discomfort.
+
+
+Get On Their Team
+
+One of the most powerful sales principles:
+
+Do not position yourself against people.
+
+Position yourself WITH people.
+
+Instead of:
+
+You vs Seller
+
+Create:
+
+You + Seller vs The Problem
+
+Physically:
+
+stand beside them,
+review numbers together,
+analyze the property together,
+look at paperwork together.
+
+This creates collaboration.
+
+Not confrontation.
+
+
+The Goal Is Never To Win
+
+Bad negotiators try to win.
+
+Great negotiators try to solve problems.
+
+The moment negotiation feels like:
+
+Me vs You
+
+everyone loses.
+
+The moment it becomes:
+
+Us vs The Problem
+
+everything changes.
+
+
+Understanding Objections
+
+Most objections are not actually objections.
+
+They are:
+
+concerns,
+uncertainty,
+lack of information,
+lack of trust,
+fear,
+timing issues.
+
+Your job is not to defeat objections.
+
+Your job is to understand them.
+
+
+The Golden Rule
+
+Every objection contains information.
+
+Most investors hear:
+
+"I need more money."
+
+And immediately think:
+
+"I need to raise my offer."
+
+Great investors think:
+
+Why?
+
+
+The Five Levels Of Objections
+
+Level 1 – Lack Of Information
+
+"I don't understand."
+
+Solution:
+
+Educate.
+
+
+Level 2 – Lack Of Trust
+
+"I'm not sure about you."
+
+Solution:
+
+Build credibility.
+
+
+Level 3 – Fear
+
+"What if this goes wrong?"
+
+Solution:
+
+Reduce risk.
+
+
+Level 4 – Timing
+
+"I'm not ready."
+
+Solution:
+
+Follow up.
+
+
+Level 5 – Structure
+
+"This doesn't solve my problem."
+
+Solution:
+
+Find a better structure.
+
+
+Turn Negatives Into Positives
+
+One of the most powerful sales skills is reframing.
+
+Reframing means helping people see situations from a different perspective.
+
+The goal is not to argue.
+
+The goal is not to manipulate.
+
+The goal is to help people see opportunities and solutions they may not have considered.
+
+
+Example
+
+Seller:
+
+"I don't want seller financing."
+
+Weak Response:
+
+"Why not?"
+
+Strong Response:
+
+"I completely understand. Most people haven't been shown how seller financing can create monthly income, potentially reduce taxes, and provide flexibility. What specifically concerns you most about it?"
+
+Notice:
+
+You did not argue.
+
+You did not push.
+
+You simply reframed the conversation.
+
+
+More Reframing Examples
+
+Seller:
+
+"I need more money."
+
+Reframe:
+
+"It sounds like accomplishing a specific financial goal is important to you. Help me understand what you're trying to accomplish."
+
+
+Seller:
+
+"I'll just keep the property."
+
+Reframe:
+
+"That's definitely an option. What do you like most about continuing to own it?"
+
+
+Seller:
+
+"Your offer is too low."
+
+Reframe:
+
+"I completely understand. If I were in your shoes, I'd probably feel the same way. Help me understand where you need to be and how you arrived at that number."
+
+
+Anchoring The Negotiation
+
+One of the most powerful negotiation skills is anchoring.
+
+Anchoring means helping the seller compare your offer to objective facts and numbers rather than emotions or unrealistic expectations.
+
+The first number discussed often becomes the reference point that future negotiations revolve around.
+
+This is why great investors do not negotiate using opinions.
+
+They negotiate using data.
+
+
+Use Real Market Anchors
+
+Strong anchors include:
+
+Recent comparable sales
+Current interest rates
+Current rents
+Vacancy rates
+Repair costs
+Insurance costs
+Taxes
+Current market conditions
+
+The more objective your anchor is, the more credibility it has.
+
+
+Use Comparable Sales Correctly
+
+Many sellers compare their property to the highest sale they can find.
+
+Your job is to help them compare it to realistic sales.
+
+For example:
+
+If comparable properties sold for:
+
+$600,000
+$610,000
+$615,000
+
+You can discuss the fact that those properties were listed with realtors and often involved:
+
+Realtor commissions
+Closing costs
+Additional carrying costs
+Months of showings
+Repairs requested by buyers
+
+A seller accepting a direct off-market offer may save significant money, time, and stress.
+
+This creates a logical anchor for discussing price.
+
+
+Use Interest Rates As An Anchor
+
+Interest rates dramatically impact affordability.
+
+Five years ago:
+
+3% financing was common.
+
+Today:
+
+6.5%–8% financing may be common.
+
+This changes what investors can pay.
+
+A property that worked at a 3% interest rate may not work at today's rates.
+
+This can be a powerful anchor when discussing price.
+
+It can also become a powerful transition into discussing seller financing.
+
+Example:
+
+"If financing were still available at 3%, I could likely pay much more for this property. Because rates are significantly higher today, the numbers become much tighter. That's one reason seller financing can sometimes create flexibility for both of us."
+
+
+Anchor Using Facts, Not Pressure
+
+The goal is never to:
+
+argue,
+pressure,
+manipulate,
+or "win."
+
+The goal is to help the seller understand the realities of the market and how you arrived at your numbers.
+
+Facts are stronger than opinions.
+
+Numbers are stronger than emotions.
+
+Always anchor using information the seller can verify.
+
+
+Know Your Numbers Before You Negotiate
+
+One of the biggest mistakes investors make is entering negotiations without knowing exactly what they can pay.
+
+This creates:
+
+hesitation,
+emotional decision-making,
+poor negotiations,
+and bad investments.
+
+Before discussing price, you should already know:
+
+your ideal purchase price,
+your maximum acceptable price,
+and the exact structure that would make the deal a buy.
+
+
+Your Analysis Creates Confidence
+
+The strongest negotiators are usually the most prepared.
+
+When you know your numbers:
+
+you negotiate calmly,
+you can justify your offer,
+and you are less likely to make emotional decisions.
+
+Your confidence should come from your analysis.
+
+Not from your personality.
+
+Not from your negotiation skills.
+
+Not from your ability to talk.
+
+Your confidence should come from knowing your numbers.
+
+
+Analyze First, Negotiate Second
+
+If a seller presents an unexpected opportunity or begins negotiating before you've analyzed the property:
+
+Stop.
+
+Find privacy.
+
+Take the time to run the numbers.
+
+Use the CDS Rental Property Calculator.
+
+Never negotiate blindly.
+
+Even a quick analysis is better than guessing.
+
+
+Create Room To Negotiate
+
+Sellers want to feel like they won something.
+
+Because of this, your initial offer should usually leave room for negotiation.
+
+Example:
+
+If your analysis shows:
+
+$550,000
+
+is your maximum acceptable purchase price,
+
+your initial offer may be:
+
+$520,000
+$530,000
+
+depending on the situation.
+
+This creates room to move while still protecting your criteria.
+
+
+Make Your Concessions Feel Valuable
+
+Do not move quickly.
+
+Do not make large jumps.
+
+When you increase your offer:
+
+move slowly,
+explain your reasoning,
+and make the movement feel meaningful.
+
+The more difficult your concessions appear, the more valuable they feel to the seller.
+
+
+Use Conservative Assumptions
+
+Great investors negotiate based on what the property is doing today.
+
+Not what they hope it will do tomorrow.
+
+Examples:
+
+Use:
+
+current rents,
+current vacancy,
+current expenses,
+realistic interest rates.
+
+Do not negotiate based on:
+
+future rent increases,
+future renovations,
+future appreciation,
+future refinancing.
+
+Those are opportunities for you to create value later.
+
+They are not value that exists today.
+
+
+Create Hidden Upside
+
+One of the best positions in negotiation is when the property looks average today but you know how to improve it.
+
+Examples:
+
+Raising under-market rents
+Improving management
+Reducing expenses
+Improving occupancy
+Negotiating lower financing costs
+Adding value through renovations
+
+Analyze the property based on its current reality.
+
+Allow the upside to become your reward for solving problems after you buy it.
+
+This keeps your analysis conservative and makes it easier to justify your offer.
+
+
+The Golden Rule Of Negotiation
+
+Never pay for upside you have not created yet.
+
+Pay based on what the property is currently producing.
+
+Then create additional value through your execution after closing.
+
+
+Option Closes
+
+People often dislike being forced into decisions.
+
+Instead of:
+
+"Do you want to move forward?"
+
+Try:
+
+"If we found a structure that works, would closing next week make more sense, or would the end of the month be better?"
+
+Notice:
+
+Both options move forward.
+
+Neither feels pushy.
+
+
+More Option Close Examples
+
+"If seller financing solved the payment issue, would you prefer a larger down payment or a higher monthly payment?"
+
+"If we make this work, would flexibility on timing be more important or maximizing price?"
+
+"If we moved forward, would you rather leave the property completely as-is or fix current issues before the sell?"
+
+
+When Things Go Sideways
+
+If:
+
+emotions rise,
+frustration appears,
+tension increases,
+
+Immediately remember:
+
+Smile.
+
+Head Nod.
+
+Slow Down.
+
+Almost every difficult conversation improves when you do these three things.
+
+
+Objections From Yourself
+
+Often the biggest objection is:
+
+You.
+
+Examples:
+
+"What if they reject me?"
+
+"What if I sound stupid?"
+
+"What if they say no?"
+
+Remember:
+
+No offer = No deal.
+
+No conversation = No deal.
+
+No follow-up = No deal.
+
+Action creates opportunities.
+
+
+The UC30 Trust Formula
+
+People trust people who are:
+
+confident,
+calm,
+knowledgeable,
+professional,
+prepared,
+consistent.
+
+Not:
+
+aggressive,
+pushy,
+manipulative,
+desperate.
+
+
+Quick Rules To Remember
+
+Smile first.
+Slow down.
+Use down pitch.
+Maintain natural eye contact.
+Get on their team.
+Listen more than you talk.
+Every objection contains information.
+Reframe negatives into positives.
+Anchor using facts and data.
+Know your numbers before negotiating.
+Never pay for upside you haven't created.
+Use option closes.
+Solve problems, don't create pressure.
+Build trust before discussing price.
+Confidence comes from preparation.
+
+
+Key Takeaway
+
+Great negotiators do not win arguments.
+
+Great negotiators:
+
+build trust,
+understand problems,
+communicate clearly,
+anchor with facts,
+know their numbers,
+and create solutions.
+
+The more trust you build, the easier negotiation becomes.
+
+The more prepared you are, the more confident you become.
+
+And the more confident you become, the more opportunities turn into contracts.`,
     category: "pressure",
     weekNumber: 3,
     weekTitle: "APPLY PRESSURE",
     proofType: "document",
     videoUrl: null,
+    videos: [
+      'The Psychology Of Objections',
+      'Building Trust Before Negotiating',
+      'Communication & Body Language Mastery',
+      'Anchoring & Framing Conversations',
+      'How To Turn Objections Into Opportunities',
+      'Option Closes & Moving Conversations Forward',
+    ],
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      questions: [
+        {
+          id: 'd15q1',
+          text: 'A seller says:\n\n"Your offer is way too low."\n\nWhat is the BEST response?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: '"That\'s the best I can do."' },
+                { label: 'B', text: '"You\'re asking way too much."' },
+                { label: 'C', text: '"I completely understand. Help me understand where you need to be and how you arrived at that number."' },
+                { label: 'D', text: '"Well that\'s just what my calculator says."' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Great negotiators seek understanding before defending their position.',
+            },
+          ],
+        },
+        {
+          id: 'd15q2',
+          text: 'During a property walkthrough, which combination is MOST likely to build trust?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Fast talking, constant eye contact, and aggressive confidence' },
+                { label: 'B', text: 'Smile, positive head nods, good eye contact, and a slower pace' },
+                { label: 'C', text: 'Avoiding eye contact and discussing only numbers' },
+                { label: 'D', text: 'Talking more than the seller' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd15q3',
+          text: 'A seller says:\n\n"I need more money."\n\nWhat should your FIRST thought be?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'I need to raise my offer.' },
+                { label: 'B', text: 'They\'re impossible to negotiate with.' },
+                { label: 'C', text: 'Why do they need more money?' },
+                { label: 'D', text: 'The deal is dead.' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'The reason behind the objection is usually more important than the objection itself.',
+            },
+          ],
+        },
+        {
+          id: 'd15q4',
+          text: 'Which statement BEST demonstrates getting on the seller\'s team?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: '"Here\'s why you\'re wrong."' },
+                { label: 'B', text: '"Let me explain why my offer is fair."' },
+                { label: 'C', text: '"Let\'s look at the numbers together and see if we can find something that works for both of us."' },
+                { label: 'D', text: '"Take it or leave it."' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd15q5',
+          text: 'Which is the BEST example of an option close?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: '"Are you ready to sign today?"' },
+                { label: 'B', text: '"You need to make a decision."' },
+                { label: 'C', text: '"If we move forward, would closing next week work better or would the end of the month be easier?"' },
+                { label: 'D', text: '"What do you want to do?"' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Both options move the conversation forward without creating pressure.',
+            },
+          ],
+        },
+        {
+          id: 'd15q6',
+          text: 'A seller says:\n\n"I think my property is worth $650,000."\n\nComparable sales suggest:\n\n$590,000\n$600,000\n$605,000\n\nWhat is the BEST anchoring approach?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Tell them they\'re wrong.' },
+                { label: 'B', text: 'Ignore the sales data.' },
+                { label: 'C', text: 'Walk through comparable sales and discuss how current market conditions impact value.' },
+                { label: 'D', text: 'Immediately raise your offer.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd15q7',
+          text: 'Which investor is MOST likely to negotiate effectively?\n\nInvestor A:\n• Knows their exact maximum price\n• Has analyzed the property\n• Understands financing options\n\nInvestor B:\n• Likes the property\n• Plans to figure out the numbers later',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Investor B' },
+                { label: 'B', text: 'Investor A' },
+                { label: 'C', text: 'Both are equal' },
+                { label: 'D', text: 'Neither' },
+              ],
+              correctAnswer: 'B',
+              explanation: 'Confidence comes from preparation and analysis.',
+            },
+          ],
+        },
+        {
+          id: 'd15q8',
+          text: 'A seller says:\n\n"I don\'t like seller financing."\n\nWhich response BEST reframes the objection?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: '"Why not?"' },
+                { label: 'B', text: '"You\'re making a mistake."' },
+                { label: 'C', text: '"I completely understand. Most people haven\'t seen how seller financing can create monthly income and flexibility. What concerns you most about it?"' },
+                { label: 'D', text: '"Trust me, it\'s better."' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd15q9',
+          text: 'Which statement BEST reflects the principle of conservative analysis?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Analyze based on future rent increases you plan to implement.' },
+                { label: 'B', text: 'Analyze based on what the property could become after renovations.' },
+                { label: 'C', text: 'Analyze based on current performance and let future improvements become your upside.' },
+                { label: 'D', text: 'Analyze using the most optimistic assumptions possible.' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Never pay for value you have not yet created.',
+            },
+          ],
+        },
+        {
+          id: 'd15q10',
+          text: 'A seller becomes frustrated during negotiations and the conversation starts feeling tense.\n\nAccording to the UC30 Communication Formula, what should you immediately focus on?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Talking faster' },
+                { label: 'B', text: 'Defending your position' },
+                { label: 'C', text: 'Smile, Head Nod, Slow Down' },
+                { label: 'D', text: 'Raising your offer' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd15q11',
+          text: 'BONUS QUESTION\n\nWhich statement BEST summarizes this entire training?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Great negotiators are aggressive.' },
+                { label: 'B', text: 'Great negotiators always get the lowest price.' },
+                { label: 'C', text: 'Great negotiators build trust, understand problems, anchor with facts, and create solutions.' },
+                { label: 'D', text: 'Great negotiators are the best talkers.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 16,

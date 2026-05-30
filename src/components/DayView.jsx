@@ -369,6 +369,31 @@ export default function DayView({
         </div>
       </div>}
 
+      {/* Video List — named videos without URLs */}
+      {!isPost30 && dayData.videos && dayData.videos.length > 0 && (
+        <div className="card" style={{ marginBottom: 24, padding: '20px 24px' }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: '#e94560', letterSpacing: 1, marginBottom: 14 }}>VIDEOS</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {dayData.videos.map((title, i) => (
+              <div key={i} style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '10px 14px', borderRadius: 8,
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid rgba(255,255,255,0.06)',
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: 6,
+                  background: 'rgba(233,69,96,0.12)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 12, color: '#e94560', flexShrink: 0,
+                }}>▶</div>
+                <div style={{ fontSize: 14, color: '#ccc', fontWeight: 500 }}>{title}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Downloads */}
       {dayData.downloads && dayData.downloads.length > 0 && (
         <div className="card" style={{ marginBottom: 24 }}>
