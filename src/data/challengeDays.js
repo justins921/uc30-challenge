@@ -5755,18 +5755,703 @@ And the more confident you become, the more opportunities turn into contracts.`,
   },
   {
     day: 16,
-    title: "Analyze a Commercial Property",
-    caption: "",
-    taskDescription: "Analyze at least 1 commercial or multifamily property. Submit your analysis.",
-    trainingContent: "",
+    title: "Seeing Hidden Value",
+    caption: "How great investors find opportunities others miss",
+    taskDescription: `Hidden Value Exercise
+
+Take the next three properties you analyze.
+
+For each property identify:
+
+Current Performance — What does the property produce today?
+
+Income Opportunities — List every income opportunity.
+
+Expense Opportunities — List every expense reduction opportunity.
+
+Financing Opportunities — List every financing opportunity.
+
+Physical Opportunities — List every value-add opportunity.
+
+Total Verified Upside — Estimate:
+• Annual income increase
+• Annual expense reduction
+• Annual cash flow improvement
+• Required costs
+• Expected timeline
+
+Today's Suggested Arsenal Activity
+
+Call:
+• Property Managers
+• Contractors
+• Realtors
+• Investors
+
+Ask:
+"What is the biggest value-add opportunity you see investors missing right now?"
+
+Document every answer.`,
+    trainingContent: `Why This Matters
+
+Most investors analyze properties based on:
+
+current rents,
+current expenses,
+current occupancy,
+current condition.
+
+Great investors do that too.
+
+The difference is that great investors also ask:
+
+What could this property become?
+
+Most wealth in real estate is created because investors:
+
+solve problems,
+increase income,
+reduce expenses,
+improve financing,
+improve operations,
+or improve the physical property.
+
+The key is understanding that opportunities only matter if they are real, measurable, and executable.
+
+
+The Most Important Rule
+
+Never pay for upside you have not created.
+
+Analyze the property based on:
+
+current rents,
+current expenses,
+current occupancy,
+current condition,
+current financing.
+
+Then allow the upside to become your reward after closing.
+
+
+The UC30 Opportunity Framework
+
+Every property should be evaluated in two stages.
+
+Stage 1 – Current Performance
+
+What is the property worth TODAY?
+
+Analyze:
+
+current rents,
+current expenses,
+current occupancy,
+current financing,
+current condition.
+
+
+Stage 2 – Future Opportunity
+
+What opportunities exist to improve the property?
+
+Analyze:
+
+income opportunities,
+expense opportunities,
+financing opportunities,
+physical improvements,
+operational improvements.
+
+Only after identifying and verifying these opportunities should they influence your purchasing decision.
+
+
+Your Personal Competitive Advantage
+
+One of the biggest mistakes investors make is assuming every buyer sees the same value.
+
+That is not true.
+
+Two investors can look at the exact same property and see completely different opportunities.
+
+The value of a property often depends on:
+
+your skills,
+your experience,
+your relationships,
+your resources.
+
+
+Realtor Advantage
+
+A realtor may receive commission income on a transaction.
+
+This effectively lowers their acquisition cost and can improve return metrics.
+
+
+Contractor Advantage
+
+A contractor may complete renovations:
+
+faster,
+cheaper,
+and with greater certainty.
+
+This may create opportunities that other buyers cannot justify.
+
+
+Trade Skill Advantage
+
+Plumbers, electricians, HVAC technicians, painters, and other tradespeople often have:
+
+lower repair costs,
+lower renovation costs,
+faster project completion.
+
+
+Business Owner Advantage
+
+Owners of:
+
+roofing companies,
+construction companies,
+landscaping companies,
+property management companies,
+
+may have access to pricing and services that create additional value.
+
+
+Relationship Advantage
+
+Some investors have strong relationships with:
+
+lenders,
+contractors,
+property managers,
+realtors,
+wholesalers.
+
+These relationships often create opportunities other investors never see.
+
+
+Important Rule
+
+Never assume your advantage is someone else's advantage.
+
+A value-add opportunity is only valuable if YOU can realistically execute it.
+
+
+The 35 Ways To Add Value
+
+Income Opportunities
+
+1. Raise Under-Market Rents — Increase rents to verified market rates.
+
+2. Improve Occupancy — Fill vacant units and reduce vacancy.
+
+3. Improve Tenant Quality — Better screening often reduces turnover, damage, and delinquencies.
+
+4. Utility Bill Backs — Charge tenants for utilities they consume.
+
+5. RUBS (Ratio Utility Billing System) — Allocate utility costs among tenants.
+
+6. Laundry Income — Add coin-operated or app-operated laundry.
+
+7. Storage Income — Rent garages, sheds, lockers, or storage areas.
+
+8. Reserved Parking — Charge for premium parking spaces.
+
+9. Pet Rent — Monthly fees for pets.
+
+10. Pet Deposits — Additional security deposits for pets.
+
+11. Internet Income — Provide and charge for internet service.
+
+12. Furnished Rentals — Increase income through furnished units.
+
+13. Mid-Term Rentals — Target traveling professionals and temporary housing needs.
+
+14. Short-Term Rentals — Vacation rentals and Airbnb opportunities.
+
+15. Room Rentals — Rent by the bedroom when appropriate.
+
+16. Corporate Housing — Target businesses needing employee housing.
+
+17. RV Parking Income — Monetize unused land or parking areas.
+
+18. Boat Storage Income — Additional income from outdoor storage.
+
+19. Vending Income — Snack, beverage, or convenience machines.
+
+20. Billboard Income — Lease visible land or structures for advertising.
+
+21. Cell Tower Income — Lease space to communication providers.
+
+
+Physical Value-Add Opportunities
+
+22. Add Bedrooms — Increase rent potential through additional bedrooms.
+
+23. Add Bathrooms — Increase functionality and desirability.
+
+24. Add Units — Convert unused spaces into rentable units.
+
+25. Build ADUs — Accessory Dwelling Units create additional income streams.
+
+26. Interior Renovations — Improve kitchens, bathrooms, flooring, paint, and finishes.
+
+27. Exterior Improvements — Improve curb appeal, landscaping, and exterior appearance.
+
+28. Convert Garages Or Storage Areas — Create additional rentable space.
+
+29. Subdivide Land — Create additional lots or parcels.
+
+30. Development Potential — Build additional units or structures.
+
+31. Zoning Changes — Increase density or modify property use.
+
+32. Mixed-Use Conversions — Combine residential and commercial opportunities.
+
+
+Expense Reduction Opportunities
+
+33. Reduce Insurance Costs — Shop providers and improve property condition.
+
+34. Reduce Maintenance Costs — Eliminate recurring issues and improve systems.
+
+35. Improve Property Management — Reduce inefficiencies and improve operations.
+
+
+Financing Opportunities
+
+Financing can create just as much value as renovations.
+
+Examples:
+
+Seller financing
+Assumable loans
+Lower interest rates
+Longer amortizations
+Reduced down payments
+Principal-only payments
+Interest-only periods
+Better lender relationships
+
+Many investors focus only on physical improvements and completely ignore financing opportunities.
+
+
+Determining Your Minimum Cash On Cash Return
+
+Before evaluating upside, determine your criteria.
+
+Ask yourself:
+
+Does the property need to meet my minimum return TODAY?
+
+or
+
+Can it meet my minimum return AFTER I execute a value-add plan?
+
+Neither approach is wrong.
+
+But you must decide before negotiating.
+
+
+Conservative Approach
+
+The property must meet your return requirements today.
+
+This creates a larger margin of safety.
+
+
+Value-Add Approach
+
+The property may not meet your return requirements today.
+
+However:
+
+upside is verified,
+costs are verified,
+timelines are verified,
+execution is realistic.
+
+
+The Rule
+
+Never assume future returns.
+
+Prove future returns.
+
+
+Verifying Value-Add Opportunities
+
+Many investors say:
+
+"I can raise rents."
+
+The question is:
+
+How do you know?
+
+
+Verify Market Rents
+
+Use:
+
+Rentometer
+Property Managers
+Zillow
+Apartments.com
+Facebook Marketplace
+Comparable rentals
+
+Never guess.
+
+Never hope.
+
+Verify.
+
+
+Verify Renovation Costs
+
+Many investors say:
+
+"I can spend $20,000 and increase rent by $300."
+
+The question is:
+
+Have you actually priced the renovation?
+
+Until you have:
+
+contractor bids,
+material estimates,
+labor estimates,
+
+you are guessing.
+
+
+Verify Timelines
+
+Renovations cost more than money.
+
+They also cost:
+
+vacancy,
+carrying costs,
+time,
+opportunity cost.
+
+
+Cost To Make Rent Ready
+
+This is one of the most important sections of the CDS Rental Calculator.
+
+Many investors underestimate it.
+
+Cost To Make Rent Ready should include:
+
+Physical Costs — flooring, paint, appliances, kitchens, bathrooms, repairs.
+
+Vacancy Costs — lost rent, utilities during vacancy, carrying costs.
+
+Holding Costs — mortgage payments, taxes, insurance while the property is not producing income.
+
+Opportunity Cost — Some investors also account for the cost of having their money tied up.
+
+Example:
+
+If you spend $20,000 and it takes 4 months before additional rent begins, that money was unavailable for other opportunities.
+
+Some investors include this. Some do not.
+
+The important thing is consistency. Choose a system and apply it consistently.
+
+
+Paying For Upside
+
+Many sellers say:
+
+"You can raise the rents."
+"You can renovate it."
+"You can add value."
+
+They may be right.
+
+But that value does not exist today.
+
+The seller has not created the value. You have.
+
+Therefore you should receive most of the reward.
+
+However, this does NOT mean the seller receives none of the upside.
+
+Many successful negotiations involve sharing a portion of future value.
+
+The key is knowing your numbers.
+
+
+The Professional Investor Framework
+
+Step 1 — Determine current performance.
+
+Step 2 — Determine verified market rents.
+
+Step 3 — Determine verified renovation costs.
+
+Step 4 — Determine realistic timelines.
+
+Step 5 — Determine realistic future performance.
+
+Step 6 — Determine the maximum price you can pay while still achieving your required return.
+
+Step 7 — Negotiate.
+
+
+The Chandler Rule
+
+You can discuss upside with a seller because usually they will bring it up.
+
+You can acknowledge opportunities.
+
+You can even share some of that future upside.
+
+But the property must be analyzed based on:
+
+What it is currently doing.
+
+Not what it might do someday.
+
+Your job is to determine:
+
+current market rent,
+future market rent,
+renovation costs,
+timelines,
+carrying costs,
+and exactly how much you can pay while still achieving your target return.
+
+Only after you know these numbers should you negotiate.
+
+
+The Ultimate Test
+
+Ask yourself:
+
+If every value-add opportunity failed, would I still be okay owning this property?
+
+If the answer is NO, the deal may be too speculative.
+
+The best investors create upside.
+
+They do not depend on upside for survival.
+
+With that being said, there are lots of ways to stress test properties and their value add opportunities, and the more that you understand risk the better you will tolerate it or even eliminate it.
+
+
+Quick Rules To Remember
+
+Analyze current reality first.
+Never pay for upside you haven't created.
+Verify market rents.
+Verify renovation costs.
+Verify timelines.
+Verify financing assumptions.
+Use Cost To Make Rent Ready correctly.
+Know your minimum return requirements.
+Leverage your unique advantages.
+Calculate opportunity before paying for it.
+Buy based on today's performance.
+Let tomorrow's improvements become your reward.
+
+
+Key Takeaway
+
+Average investors see properties.
+
+Great investors see:
+
+problems,
+opportunities,
+solutions,
+and hidden value.
+
+The ability to identify, verify, and execute on hidden value is one of the fastest ways to create wealth in real estate because it allows you to create cash flow, equity, and opportunity that other investors never saw.`,
     category: "pressure",
     weekNumber: 3,
     weekTitle: "APPLY PRESSURE",
-    proofType: "spreadsheet",
+    proofType: "document",
     videoUrl: null,
+    videos: [
+      'The Hidden Value Mindset',
+      'The 30+ Ways To Add Value To Real Estate',
+      'How To Calculate Opportunity',
+      'How To Verify Value-Add Opportunities',
+      'What Upside Is Worth Paying For?',
+      'The Difference Between Opportunity And Wishful Thinking',
+    ],
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      questions: [
+        {
+          id: 'd16q1',
+          text: 'A seller says:\n\n"All of the units should rent for $300 more per month."\n\nWhat is the BEST response as an investor?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Immediately increase your offer because the rents will eventually increase.' },
+                { label: 'B', text: 'Assume the seller is correct.' },
+                { label: 'C', text: 'Verify market rents through property managers, comparable rentals, and rental data before giving value to the upside.' },
+                { label: 'D', text: 'Ignore rent upside completely.' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Potential rent increases must be verified, not assumed.',
+            },
+          ],
+        },
+        {
+          id: 'd16q2',
+          text: 'Which statement BEST describes the principle of "Never Pay For Upside You Haven\'t Created Yet"?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Never improve a property.' },
+                { label: 'B', text: 'Analyze and negotiate based on current performance, then allow future improvements to become your reward.' },
+                { label: 'C', text: 'Ignore all future opportunities.' },
+                { label: 'D', text: 'Only buy turnkey properties.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd16q3',
+          text: 'A property currently cash flows poorly but could generate significantly more income after a renovation.\n\nWhat should you verify BEFORE giving value to that opportunity?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Renovation costs only.' },
+                { label: 'B', text: 'Rent increase only.' },
+                { label: 'C', text: 'Renovation costs, timeline, vacancy, carrying costs, and realistic future rents.' },
+                { label: 'D', text: 'Nothing. Future upside is enough.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd16q4',
+          text: 'Which investor is evaluating opportunity correctly?\n\nInvestor A:\nRaises projected rents because the seller said he could.\n\nInvestor B:\nConfirms market rents with property managers, comparable rentals, and rental listings before adjusting projections.',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Investor A' },
+                { label: 'B', text: 'Investor B' },
+                { label: 'C', text: 'Both' },
+                { label: 'D', text: 'Neither' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd16q5',
+          text: 'Which of the following is an example of a financing value-add opportunity?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'New flooring' },
+                { label: 'B', text: 'New paint' },
+                { label: 'C', text: 'Seller financing at a lower interest rate' },
+                { label: 'D', text: 'Better landscaping' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Financing improvements can create just as much value as physical improvements.',
+            },
+          ],
+        },
+        {
+          id: 'd16q6',
+          text: 'A property requires $20,000 in renovations before rents can be increased.\n\nWhat should be included in your Cost To Make Rent Ready analysis?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Only the renovation costs' },
+                { label: 'B', text: 'Renovation costs plus vacancy, holding costs, and any other expenses incurred while completing the project' },
+                { label: 'C', text: 'Future appreciation only' },
+                { label: 'D', text: 'Rent increases only' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd16q7',
+          text: 'Which statement BEST describes a personal competitive advantage?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Every investor sees the same value in every property.' },
+                { label: 'B', text: 'Competitive advantages do not matter.' },
+                { label: 'C', text: 'Skills, relationships, and resources can create opportunities that other investors cannot justify.' },
+                { label: 'D', text: 'Only cash determines value.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd16q8',
+          text: 'A seller says:\n\n"You can add another unit in the basement."\n\nWhat should you verify BEFORE giving value to that statement?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Whether the seller seems trustworthy.' },
+                { label: 'B', text: 'Whether the conversion is legal, affordable, realistic, and executable.' },
+                { label: 'C', text: 'Whether the basement looks large enough.' },
+                { label: 'D', text: 'Nothing. Just assume it can be done.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd16q9',
+          text: 'Which of the following is the MOST dangerous mistake investors make when evaluating upside?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Verifying costs' },
+                { label: 'B', text: 'Verifying rents' },
+                { label: 'C', text: 'Paying for value before they have proven they can create it' },
+                { label: 'D', text: 'Talking to property managers' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'This is one of the fastest ways to overpay for a property.',
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 17,
