@@ -6455,18 +6455,676 @@ The ability to identify, verify, and execute on hidden value is one of the faste
   },
   {
     day: 17,
-    title: "Submit Your Boldest Offer Yet",
-    caption: "",
-    taskDescription: "Submit your most aggressive offer yet on your best lead. Submit the offer.",
-    trainingContent: "",
+    title: "Deal Structuring Mastery",
+    caption: "Matching the right deal structure to the right seller",
+    taskDescription: `Today's Execution Challenge
+
+Take one property you have analyzed.
+
+Create three different deal structures (make sure all of them are deals that if accepted, you would be happy moving forward with purchasing them)
+
+Structure 1 — (Large Price) lower other terms
+
+Structure 2 — (Large interest rate) lower purchase price and adjusted other terms
+
+Structure 3 — (Large down payment) lower purchase price and terms
+
+For each structure calculate:
+• Cash Flow
+• Cash On Cash Return
+• Down Payment
+• Risk
+
+If you have personal goals, determine what matters most to you. As a buyer, you may prefer a lower interest rate, a smaller down payment, or a lower purchase price, depending on your investment strategy and objectives.
+
+Review each offer and identify which structure is most appealing to you. Then, look for ways to adjust the other offers so that your preferred option becomes the most attractive choice for the seller while still meeting your investment criteria. This can help guide the negotiation toward the outcome you want most.
+
+Today's Suggested Arsenal Activity
+
+Call:
+• Realtors
+• Investors
+• Lenders
+• Property Managers
+
+Ask:
+"What's the most creative deal structure you've ever seen get accepted?"
+
+Document the answers. The goal is to expand your understanding of what's possible.`,
+    trainingContent: `Why This Matters
+
+Most investors believe:
+
+Price creates deals.
+
+The truth is:
+
+Structure creates deals.
+
+Many sellers say:
+
+"I need more money."
+
+What they actually mean may be:
+
+I need more monthly income.
+I need more certainty.
+I need cash today.
+I want fewer taxes.
+I want simplicity.
+I want safety.
+I want flexibility.
+
+The better you understand their true motivation, the easier it becomes to structure a deal that works for both parties.
+
+
+The Biggest Mistake Investors Make
+
+Most investors negotiate:
+
+Price only.
+
+Great investors negotiate:
+
+Purchase Price
+Down Payment
+Interest Rate
+Amortization
+Balloon Terms
+Closing Timeline
+Earnest Money
+Repairs
+Possession
+Tax Treatment
+Seller Financing Terms
+
+The more levers you understand, the more opportunities you create.
+
+
+The Four Primary Levers
+
+Every deal is built around four primary levers.
+
+Purchase Price — How much are you paying?
+
+Down Payment — How much cash are you bringing?
+
+Interest Rate — What is the cost of the borrowed money?
+
+Loan Length / Amortization — How long do you have to pay it back?
+
+
+The Golden Rule
+
+When one lever improves, another usually worsens.
+
+Examples:
+
+Seller gets higher price → Buyer gets lower interest rate.
+
+Seller gets larger down payment → Buyer gets longer amortization.
+
+Seller gets faster closing → Buyer gets lower price.
+
+Seller gets higher monthly payments → Buyer gets lower purchase price.
+
+Everything is a trade.
+
+
+The Goal Of Deal Structuring
+
+The goal is NOT:
+
+getting the seller to accept anything,
+tricking the seller,
+manipulating the seller.
+
+The goal is:
+
+Finding a structure that solves their problem while still meeting your investment criteria.
+
+
+The Most Important Question
+
+Whenever negotiations become difficult:
+
+Ask:
+
+"Help me understand what you're trying to accomplish."
+
+You can also emphasize your desire to find a situation where both parties get what they want and need.
+
+This question uncovers:
+
+fears,
+goals,
+motivations,
+concerns.
+
+And motivations create solutions.
+
+
+Matching Motivation To Structure
+
+Seller Wants Cash Today — Cash Offer, Conventional Financing, Hard Money, Quick Close.
+
+Seller Wants Monthly Income — Seller Financing, Longer Amortization, Monthly Payments.
+
+Seller Wants Tax Advantages — Installment Sale, Seller Financing.
+
+Seller Wants Certainty — Strong Financing, Large Earnest Money, Fast Closing.
+
+Seller Wants Simplicity — As-Is Purchase, Minimal Contingencies, Flexible Timing.
+
+
+The Seller Who Wants Everything
+
+Eventually you will meet a seller who says:
+
+"I want the highest price, the highest interest rate, the largest down payment, and the shortest payoff period."
+
+In other words: They want all the benefits. And none of the concessions.
+
+
+How To Handle This Seller
+
+Do NOT argue, become defensive, or immediately counter.
+
+Instead: Get curious.
+
+
+Find The Real Priority
+
+Ask:
+
+"Of those items, which is the most important to you?"
+
+Most sellers eventually reveal one thing matters most.
+
+Examples:
+
+Monthly income
+Highest price
+Cash today
+Safety
+Taxes
+Certainty
+
+
+Dig Deeper
+
+Ask:
+
+"Why is that important?"
+
+This is often where the deal is hiding.
+
+Example:
+
+Seller: "I need a large down payment."
+
+You: "What does the large down payment help you accomplish?"
+
+Possible Answers:
+
+Paying off debt
+Buying another property
+Feeling safe
+Retirement
+
+Now you know the real problem.
+
+
+The Three Structure Method
+
+One of the most powerful negotiation techniques is presenting multiple acceptable options.
+
+The key: Every option must be a deal YOU would happily accept.
+
+Never present an offer you don't want.
+
+Every option should meet your criteria.
+
+Every option should produce acceptable returns.
+
+Every option should solve a different seller problem.
+
+
+Example Property
+
+Purchase Price Goal: $500,000
+
+
+Structure 1 – Maximize Purchase Price
+
+Purchase Price: $500,000
+Down Payment: 20%
+Interest Rate: 4%
+Amortization: 40 Years
+
+Seller Gets: Highest purchase price
+Buyer Gets: Excellent financing
+
+
+Structure 2 – Maximize Monthly Income
+
+Purchase Price: $475,000
+Down Payment: 15%
+Interest Rate: 6%
+Amortization: 30 Years
+
+Seller Gets: Strong monthly payments
+Buyer Gets: Lower acquisition cost
+
+
+Structure 3 – Maximize Simplicity
+
+Purchase Price: $450,000
+Cash Purchase
+Fast Closing
+
+Seller Gets: Speed, Certainty
+Buyer Gets: Lower price
+
+
+Seller Financing Structure Examples
+
+One of the most effective ways to negotiate seller financing is by allowing the seller to choose between multiple combinations of Price, Down Payment, and Interest Rate.
+
+
+Option A
+
+Purchase Price: $500,000
+Down Payment: 25%
+Interest Rate: 3.5%
+
+Seller gets: Highest price
+Buyer gets: Excellent financing
+
+
+Option B
+
+Purchase Price: $475,000
+Down Payment: 15%
+Interest Rate: 5%
+
+Middle ground for both parties.
+
+
+Option C
+
+Purchase Price: $450,000
+Down Payment: 10%
+Interest Rate: 6%
+
+Seller gets: Higher interest income
+Buyer gets: Lower acquisition cost
+
+
+Why This Works
+
+Most sellers focus on one thing.
+
+These options help them realize: Everything is connected.
+
+When price goes up, something else usually needs to improve.
+When down payment decreases, something else may increase.
+When interest rate decreases, something else may need to improve.
+
+This helps move negotiations away from emotion and toward solutions.
+
+
+Structuring Around Cash On Cash Return
+
+One of the most misunderstood concepts in real estate:
+
+High Cash On Cash Return does NOT automatically mean low risk.
+
+Example:
+
+Property A — Down Payment: $25,000, Cash Flow: $250/month, Cash On Cash Return: 12%
+
+Property B — Down Payment: $100,000, Cash Flow: $600/month, Cash On Cash Return: 7.2%
+
+Which property is safer? The answer: It depends.
+
+
+Understanding Risk
+
+Many investors assume: Higher Down Payment = Lower Risk
+
+That is often true. But not always.
+
+
+Lower Down Payments Can Be Powerful
+
+Lower down payments:
+
+increase leverage,
+increase portfolio growth,
+improve cash on cash returns,
+preserve liquidity.
+
+This can be extremely beneficial.
+
+
+The Reserve Principle
+
+Risk is often determined more by reserves than down payment.
+
+Example:
+
+Property A — Down Payment: 5%, Reserves: $50,000
+
+Property B — Down Payment: 25%, Reserves: $2,000
+
+Property A may actually be safer.
+
+Why? Because it has the reserves necessary to survive unexpected problems.
+
+
+The Cash Flow Trap
+
+A higher cash on cash return does NOT necessarily mean higher monthly cash flow.
+
+Often it means: less money invested, smaller down payment, better leverage.
+
+You must always look at BOTH: monthly cash flow AND cash on cash return.
+
+
+Multiple Ways To Reduce Risk
+
+Risk can be reduced through:
+
+larger down payments,
+larger reserves,
+stronger cash flow,
+better financing,
+lower expenses,
+longer loan terms,
+conservative analysis.
+
+Down payment is only one tool.
+
+
+Balloon Payments
+
+Balloon payments can improve cash flow, returns, and deal structure.
+
+However they increase risk.
+
+Always ask: What happens if refinancing disappears? Interest rates rise? Property values fall? Rents disappoint?
+
+Never assume perfect conditions.
+
+
+Never Structure Yourself Into A Bad Deal
+
+Many investors become obsessed with low down payments, high leverage, and huge cash on cash returns.
+
+And forget: reserves, risk, survivability.
+
+The goal is not maximizing returns.
+
+The goal is maximizing risk-adjusted returns.
+
+
+The Professional Investor Framework
+
+Before presenting any structure:
+
+Step 1 — Understand seller motivation.
+
+Step 2 — Understand the real problem.
+
+Step 3 — Analyze the deal.
+
+Step 4 — Determine your maximum acceptable price and terms.
+
+Step 5 — Create multiple acceptable solutions.
+
+Step 6 — Allow the seller to participate in choosing.
+
+
+Quick Rules To Remember
+
+Price is only one lever.
+Structure creates deals.
+Every seller has a real motivation.
+Ask why.
+Understand the problem before offering solutions.
+Present multiple acceptable options.
+Every option should be a deal you would happily accept.
+Cash on cash return and monthly cash flow both matter.
+Lower down payments are not automatically riskier.
+Reserves are one of the best risk management tools.
+Never structure yourself into a bad deal.
+Solve problems, don't argue about price.
+
+
+Key Takeaway
+
+Average investors negotiate:
+
+Price.
+
+Great investors negotiate:
+
+Structure.
+
+The investor who understands how to structure solutions can often buy properties that other investors walk away from because they understand that every deal has multiple levers—and the key is finding which lever matters most to the seller while still protecting your own criteria.`,
     category: "pressure",
     weekNumber: 3,
     weekTitle: "APPLY PRESSURE",
     proofType: "document",
     videoUrl: null,
+    videos: [
+      'Why Structure Creates Deals',
+      'The Four Primary Levers',
+      'Matching Structure To Motivation',
+      'How To Present Multiple Offers',
+      'Using Seller Financing To Create Better Deals',
+      'Managing Risk While Maximizing Returns',
+    ],
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      questions: [
+        {
+          id: 'd17q1',
+          text: 'A seller says:\n\n"I need $100,000 down."\n\nWhat should your FIRST response be?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Increase the down payment.' },
+                { label: 'B', text: 'Walk away.' },
+                { label: 'C', text: 'Ask what the down payment helps them accomplish.' },
+                { label: 'D', text: 'Increase the purchase price.' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Great investors identify the underlying problem before proposing a solution.',
+            },
+          ],
+        },
+        {
+          id: 'd17q2',
+          text: 'Which statement best summarizes deal structuring?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'The buyer who pays the most wins.' },
+                { label: 'B', text: 'The seller should always get exactly what they want.' },
+                { label: 'C', text: 'The goal is to find a structure that solves the seller\'s problem while still meeting your investment criteria.' },
+                { label: 'D', text: 'Negotiations are primarily about lowering the purchase price.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd17q3',
+          text: 'A seller wants a higher purchase price. Which of the following is a reasonable trade?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Give them the higher price and ask for nothing.' },
+                { label: 'B', text: 'Give them the higher price and ask for a lower interest rate or longer amortization.' },
+                { label: 'C', text: 'Walk away immediately.' },
+                { label: 'D', text: 'Increase the down payment.' },
+              ],
+              correctAnswer: 'B',
+              explanation: 'Whenever you give something, look for something in return.',
+            },
+          ],
+        },
+        {
+          id: 'd17q4',
+          text: 'Which of the following is NOT one of the four primary deal-structuring levers?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Purchase Price' },
+                { label: 'B', text: 'Down Payment' },
+                { label: 'C', text: 'Interest Rate' },
+                { label: 'D', text: 'Property Taxes' },
+              ],
+              correctAnswer: 'D',
+            },
+          ],
+        },
+        {
+          id: 'd17q5',
+          text: 'A seller says:\n\n"I want the highest price, the highest interest rate, and the largest down payment."\n\nWhat is the BEST next step?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Tell them their expectations are unreasonable.' },
+                { label: 'B', text: 'Ask which of those items is most important to them and why.' },
+                { label: 'C', text: 'Increase your offer immediately.' },
+                { label: 'D', text: 'End the negotiation.' },
+              ],
+              correctAnswer: 'B',
+              explanation: 'The real motivation is often hidden beneath the request.',
+            },
+          ],
+        },
+        {
+          id: 'd17q6',
+          text: 'Why might an investor intentionally create multiple deal structures for the same property?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'To confuse the seller.' },
+                { label: 'B', text: 'To give the seller options while learning what matters most to them.' },
+                { label: 'C', text: 'To make negotiations take longer.' },
+                { label: 'D', text: 'To avoid analyzing the property.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd17q7',
+          text: 'Which statement about low down payments is MOST accurate?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Low down payments are always riskier.' },
+                { label: 'B', text: 'Low down payments are always safer.' },
+                { label: 'C', text: 'Low down payments can be very effective when paired with strong reserves and disciplined analysis.' },
+                { label: 'D', text: 'Low down payments should never be used.' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Risk is influenced by many factors, including reserves and cash flow—not just down payment size.',
+            },
+          ],
+        },
+        {
+          id: 'd17q8',
+          text: 'Which investor is handling risk more effectively?\n\nInvestor A:\n5% down, $60,000 reserves\n\nInvestor B:\n25% down, $2,000 reserves',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Investor A' },
+                { label: 'B', text: 'Investor B' },
+                { label: 'C', text: 'Neither' },
+                { label: 'D', text: 'More information is needed' },
+              ],
+              correctAnswer: 'D',
+              explanation: 'Down payment alone does not determine risk. Cash flow, reserves, property quality, and many other factors matter.',
+            },
+          ],
+        },
+        {
+          id: 'd17q9',
+          text: 'A seller is primarily concerned about receiving consistent monthly income during retirement.\n\nWhich structure would likely be MOST attractive?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Cash offer with immediate closing' },
+                { label: 'B', text: 'Seller financing with predictable monthly payments' },
+                { label: 'C', text: 'Large earnest money deposit' },
+                { label: 'D', text: 'Lower purchase price' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd17q10',
+          text: 'You create three different seller-financing offers.\n\nWhat should ALL three offers have in common?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'One should be intentionally bad.' },
+                { label: 'B', text: 'One should be impossible to accept.' },
+                { label: 'C', text: 'All should meet your investment criteria and be deals you would happily buy.' },
+                { label: 'D', text: 'The seller should obviously choose your favorite one.' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Never present a structure you don\'t actually want. Every option should be a win for you if accepted.',
+            },
+          ],
+        },
+        {
+          id: 'd17q11',
+          text: 'BONUS QUESTION\n\nA property only works for you if the seller finances it at 4% interest.\n\nThe seller wants 7%.\n\nWhat is the BEST approach?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Tell them no.' },
+                { label: 'B', text: 'Ask what they\'re trying to accomplish with the higher interest rate and look for other ways to solve that problem.' },
+                { label: 'C', text: 'Agree to 7% immediately.' },
+                { label: 'D', text: 'End negotiations.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 18,
