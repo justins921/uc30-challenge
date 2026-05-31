@@ -15,9 +15,11 @@ import ContactsCRM from './ContactsCRM';
 import MyBuyBox from './MyBuyBox';
 import PracticeDay from './PracticeDay';
 import Footer from './Footer';
+import RentalCalculator from './RentalCalculator';
 
 const TABS = [
   { id: 'timeline', label: 'Timeline' },
+  { id: 'calculator', label: 'Calculator' },
   { id: 'leaderboard', label: 'Leaderboard' },
   { id: 'crm', label: 'Contacts' },
   { id: 'community', label: 'Community' },
@@ -30,6 +32,7 @@ const TABS = [
 
 const PIPELINE_TABS = [
   { id: 'pipeline', label: 'Daily Activity' },
+  { id: 'calculator', label: 'Calculator' },
   { id: 'crm', label: 'Contacts' },
   { id: 'submissions', label: 'My Submissions' },
   { id: 'stats', label: 'Operator Stats' },
@@ -456,6 +459,14 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             onUpdateContact={onUpdateContact}
             onAddContact={onAddContact}
             onAddFollowUp={onAddFollowUp}
+          />
+        )}
+        {!showPracticeDay && tab === 'calculator' && (
+          <CalculatorTab
+            contacts={contacts}
+            onUpdateContact={onUpdateContact}
+            onUploadFile={onUploadFile}
+            userId={user.id}
           />
         )}
         {!showPracticeDay && tab === 'buybox' && <MyBuyBox user={user} onUpdateUser={onUpdateUser} />}
@@ -1775,6 +1786,43 @@ function PipelineDailyActivity({ user, onSubmitPipelineDay, onAddContact, onAddF
           style={{ width: '100%', marginTop: 20, opacity: hasActivity ? 1 : 0.4 }}>
           Log Activity
         </button>
+      </div>
+    </div>
+  );
+}
+
+function CalculatorTab({ contacts, onUpdateContact, onUploadFile, userId }) {
+  const targetProps = (contacts || []).filter(c => c.contact_group === 'target' && c.pipeline_status !== 'dead');
+
+  return (
+    <div className="fade-up-delay-2">
+      <div style={{ marginBottom: 20 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>CDS Rental Property Calculator</h2>
+        <p style={{ fontSize: 13, color: '#888', margin: 0, lineHeight: 1.5 }}>
+          Analyze any property and use the Seller Finance Solver to structure deals that hit your target return.
+        </p>
+      </div>
+      <div className="card" style={{ padding: '16px 18px' }}>
+        <RentalCalculator
+          targetProperties={targetProps}
+          day={null}
+          onSaveAnalysis={async (propertyId, summary) => {
+            const contact = targetProps.find(c => c.id === propertyId);
+            const existing = contact?.analysis_notes || [];
+            const entry = {
+              id: `analysis_${Date.now()}`,
+              text: summary,
+              date: new Date().toISOString(),
+              day: 'calculator',
+            };
+            await onUpdateContact(propertyId, {
+              analysis_notes: [...existing, entry],
+            });
+          }}
+          onUploadAnalysis={onUploadFile ? async (propertyId, file) => {
+            return await onUploadFile(userId, 'calculator', 'analysis', file);
+          } : null}
+        />
       </div>
     </div>
   );
