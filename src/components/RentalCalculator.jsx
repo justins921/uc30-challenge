@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import NativeRentalCalculator from './NativeRentalCalculator';
 
 export default function RentalCalculator({ targetProperties, onSaveAnalysis, onUploadAnalysis, day }) {
   const [notes, setNotes] = useState('');
@@ -24,21 +25,8 @@ export default function RentalCalculator({ targetProperties, onSaveAnalysis, onU
 
   return (
     <div>
-      {/* CDS Rental Calculator iframe */}
-      <div style={{
-        position: 'relative', width: '100%', overflow: 'hidden',
-        borderRadius: 8, marginBottom: 14, background: '#fff',
-      }}>
-        <iframe
-          src="https://cds-rental-calc.web.app/"
-          style={{
-            width: '100%', minHeight: 500, height: '80vh', maxHeight: 800,
-            border: 'none', display: 'block',
-          }}
-          title="CDS Rental Calculator"
-          loading="lazy"
-        />
-      </div>
+      {/* CDS Rental Calculator */}
+      <NativeRentalCalculator />
 
       {/* Save analysis to a property */}
       <div style={{
