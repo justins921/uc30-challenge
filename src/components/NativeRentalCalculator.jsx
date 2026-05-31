@@ -191,15 +191,16 @@ const SOLVER_OPTIONS = [
 ];
 
 const inputBase = {
-  width: '100%', padding: '8px 10px', fontSize: 14, borderRadius: 8,
-  background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+  width: '100%', padding: '10px 12px', fontSize: 15, borderRadius: 8,
+  background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)',
   color: '#eee', fontFamily: "'DM Sans', sans-serif", outline: 'none',
   boxSizing: 'border-box',
 };
 
 const adornStyle = {
-  fontSize: 13, color: '#666', padding: '8px 6px', background: 'rgba(255,255,255,0.02)',
+  fontSize: 14, color: '#888', padding: '10px 8px', background: 'rgba(255,255,255,0.04)',
   borderRadius: 0, display: 'flex', alignItems: 'center', flexShrink: 0,
+  fontWeight: 600,
 };
 
 const DEFAULT_INPUTS = {
@@ -460,12 +461,11 @@ export default function NativeRentalCalculator() {
       )}
 
       {/* Seller Finance Solver */}
-      {hasData && (
-        <div style={{
-          marginTop: 24, borderRadius: 12, overflow: 'hidden',
-          border: `1px solid ${solverOn ? 'rgba(201,160,255,0.3)' : 'rgba(255,255,255,0.06)'}`,
-          background: solverOn ? 'rgba(201,160,255,0.03)' : 'transparent',
-        }}>
+      <div style={{
+        marginTop: 24, borderRadius: 12, overflow: 'hidden',
+        border: `1px solid ${solverOn ? 'rgba(201,160,255,0.3)' : 'rgba(255,255,255,0.08)'}`,
+        background: solverOn ? 'rgba(201,160,255,0.03)' : 'rgba(255,255,255,0.02)',
+      }}>
           <button
             onClick={() => setSolverOn(!solverOn)}
             style={{
@@ -507,6 +507,15 @@ export default function NativeRentalCalculator() {
 
           {solverOn && (
             <div style={{ padding: '0 16px 16px' }}>
+              {!hasData ? (
+                <div style={{
+                  padding: '14px 16px', borderRadius: 10,
+                  background: 'rgba(201,160,255,0.06)', border: '1px solid rgba(201,160,255,0.15)',
+                  fontSize: 13, color: '#888', lineHeight: 1.6,
+                }}>
+                  Enter property data above first. Once you have a purchase price, rents, and financing details, the solver will auto-calculate deal structures that hit your target return.
+                </div>
+              ) : (<>
               <div style={{ marginBottom: 14 }}>
                 <label style={{ fontSize: 12, color: '#c9a0ff', fontWeight: 600, display: 'block', marginBottom: 4 }}>
                   Target Cash on Cash Return
@@ -594,10 +603,10 @@ export default function NativeRentalCalculator() {
                   )}
                 </div>
               )}
+              </>)}
             </div>
           )}
         </div>
-      )}
 
       {/* Amortization Schedule */}
       {hasData && r.payment > 0 && (
