@@ -111,6 +111,13 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
   const [formAlsoArsenal, setFormAlsoArsenal] = useState(false);
   const [formArsenalFollowUp, setFormArsenalFollowUp] = useState('');
   const [formArsenalType, setFormArsenalType] = useState('');
+  const [formLeadSrcName, setFormLeadSrcName] = useState('');
+  const [formLeadSrcPhone, setFormLeadSrcPhone] = useState('');
+  const [formLeadSrcEmail, setFormLeadSrcEmail] = useState('');
+  const [formLeadSrcType, setFormLeadSrcType] = useState('');
+  const [formOwnerName, setFormOwnerName] = useState('');
+  const [formOwnerPhone, setFormOwnerPhone] = useState('');
+  const [formOwnerEmail, setFormOwnerEmail] = useState('');
   const [formSaving, setFormSaving] = useState(false);
   const [formPhoneError, setFormPhoneError] = useState('');
 
@@ -120,6 +127,8 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
     setFormPropertyDetails(''); setFormFollowUp(''); setFormArsenalFollowUp('');
     setFormAlsoProperty(false); setFormAlsoArsenal(false);
     setFormArsenalType(''); setFormPhoneError(''); setShowAddForm(false);
+    setFormLeadSrcName(''); setFormLeadSrcPhone(''); setFormLeadSrcEmail('');
+    setFormLeadSrcType(''); setFormOwnerName(''); setFormOwnerPhone(''); setFormOwnerEmail('');
   };
 
   useEffect(() => {
@@ -163,15 +172,23 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
   };
 
   const handleAddFromCRM = async () => {
-    if (!formName.trim() || !formFollowUp) return;
     const isArsenal = activeTab === 'arsenal';
     const isColdFollowUp = activeTab === 'cold_follow_ups';
+    const isTargetProp = !isArsenal && !isColdFollowUp;
+
+    if (isTargetProp) {
+      if (!(formLeadSrcName.trim() || formOwnerName.trim()) || !formFollowUp) return;
+    } else {
+      if (!formName.trim() || !formFollowUp) return;
+    }
     if (isArsenal && !formNotes.trim()) return;
 
-    const phoneCheck = validatePhone(formPhone, { required: true });
-    if (!phoneCheck.valid) { setFormPhoneError(phoneCheck.error); return; }
-    setFormPhoneError('');
-    const formattedPhone = phoneCheck.formatted;
+    if (!isTargetProp) {
+      const phoneCheck = validatePhone(formPhone, { required: true });
+      if (!phoneCheck.valid) { setFormPhoneError(phoneCheck.error); return; }
+      setFormPhoneError('');
+    }
+    const formattedPhone = isTargetProp ? null : validatePhone(formPhone, { required: true }).formatted;
 
     setFormSaving(true);
     const now = new Date().toISOString();
@@ -220,28 +237,26 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
       const propAddr = [formStreet.trim(), formCity.trim(), formState.trim(), formZip.trim()].filter(Boolean).join(', ');
       const isDead = formFollowUp?.startsWith('dead_');
       const actualInterval = isDead ? formFollowUp.replace('dead_', '') : formFollowUp;
+      const primaryName = formLeadSrcName.trim() || formOwnerName.trim();
+      const primaryPhone = formLeadSrcPhone.trim() || formOwnerPhone.trim() || null;
+      const primaryEmail = formLeadSrcEmail.trim() || formOwnerEmail.trim() || null;
       const result = await onAddContact({
-        name: formName.trim(), phone: formattedPhone, email: formEmail.trim() || null,
+        name: primaryName, phone: primaryPhone, email: primaryEmail,
         contact_group: 'target', property: propAddr || null, notes: formNotes.trim() || null,
         pipeline_status: isDead ? 'dead' : 'active',
         follow_up_interval: actualInterval,
         follow_up_date: calculateFollowUpDate(actualInterval),
         last_contact_date: now,
+        lead_source_name: formLeadSrcName.trim() || null,
+        lead_source_phone: formLeadSrcPhone.trim() || null,
+        lead_source_email: formLeadSrcEmail.trim() || null,
+        lead_source_type: formLeadSrcType || null,
+        owner_name: formOwnerName.trim() || null,
+        owner_phone: formOwnerPhone.trim() || null,
+        owner_email: formOwnerEmail.trim() || null,
       });
       if (result?.success && result.contact) {
         setContacts(prev => [result.contact, ...prev]);
-        if (formAlsoArsenal && formArsenalFollowUp) {
-          const arsenalResult = await onAddContact({
-            name: formName.trim(), phone: formattedPhone, email: formEmail.trim() || null,
-            contact_group: 'arsenal', property: null,
-            notes: formPropertyDetails.trim() || 'Also added as arsenal contact',
-            pipeline_status: 'new',
-            follow_up_interval: formArsenalFollowUp,
-            follow_up_date: calculateFollowUpDate(formArsenalFollowUp),
-            last_contact_date: now,
-          });
-          if (arsenalResult?.success && arsenalResult.contact) setContacts(prev => [arsenalResult.contact, ...prev]);
-        }
       }
     }
     setFormSaving(false);
@@ -371,6 +386,13 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
         formAlsoArsenal={formAlsoArsenal} setFormAlsoArsenal={setFormAlsoArsenal}
         formArsenalFollowUp={formArsenalFollowUp} setFormArsenalFollowUp={setFormArsenalFollowUp}
         formArsenalType={formArsenalType} setFormArsenalType={setFormArsenalType}
+        formLeadSrcName={formLeadSrcName} setFormLeadSrcName={setFormLeadSrcName}
+        formLeadSrcPhone={formLeadSrcPhone} setFormLeadSrcPhone={setFormLeadSrcPhone}
+        formLeadSrcEmail={formLeadSrcEmail} setFormLeadSrcEmail={setFormLeadSrcEmail}
+        formLeadSrcType={formLeadSrcType} setFormLeadSrcType={setFormLeadSrcType}
+        formOwnerName={formOwnerName} setFormOwnerName={setFormOwnerName}
+        formOwnerPhone={formOwnerPhone} setFormOwnerPhone={setFormOwnerPhone}
+        formOwnerEmail={formOwnerEmail} setFormOwnerEmail={setFormOwnerEmail}
         formSaving={formSaving}
         formPhoneError={formPhoneError} setFormPhoneError={setFormPhoneError}
         onSave={handleAddFromCRM} onCancel={resetForm}
@@ -485,10 +507,14 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
 }
 
 /* ═══ Add Contact Form ═══ */
-function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone, setFormPhone, formEmail, setFormEmail, formNotes, setFormNotes, formStreet, setFormStreet, formCity, setFormCity, formState, setFormState, formZip, setFormZip, formPropertyDetails, setFormPropertyDetails, formFollowUp, setFormFollowUp, formAlsoProperty, setFormAlsoProperty, formAlsoArsenal, setFormAlsoArsenal, formArsenalFollowUp, setFormArsenalFollowUp, formArsenalType, setFormArsenalType, formSaving, formPhoneError, setFormPhoneError, onSave, onCancel }) {
+function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone, setFormPhone, formEmail, setFormEmail, formNotes, setFormNotes, formStreet, setFormStreet, formCity, setFormCity, formState, setFormState, formZip, setFormZip, formPropertyDetails, setFormPropertyDetails, formFollowUp, setFormFollowUp, formAlsoProperty, setFormAlsoProperty, formAlsoArsenal, setFormAlsoArsenal, formArsenalFollowUp, setFormArsenalFollowUp, formArsenalType, setFormArsenalType, formLeadSrcName, setFormLeadSrcName, formLeadSrcPhone, setFormLeadSrcPhone, formLeadSrcEmail, setFormLeadSrcEmail, formLeadSrcType, setFormLeadSrcType, formOwnerName, setFormOwnerName, formOwnerPhone, setFormOwnerPhone, formOwnerEmail, setFormOwnerEmail, formSaving, formPhoneError, setFormPhoneError, onSave, onCancel }) {
   const isArsenal = activeTab === 'arsenal';
   const isColdFollowUp = activeTab === 'cold_follow_ups';
-  const canSave = formName.trim() && formFollowUp && (isArsenal ? formNotes.trim() : true);
+  const isTargetProp = !isArsenal && !isColdFollowUp;
+  const hasLeadOrOwner = formLeadSrcName?.trim() || formOwnerName?.trim();
+  const canSave = isTargetProp
+    ? hasLeadOrOwner && formFollowUp
+    : formName.trim() && formFollowUp && (isArsenal ? formNotes.trim() : true);
 
   return (
     <div className="card" style={{ padding: 20, marginBottom: 20, borderColor: `${tabColor}30` }}>
@@ -496,16 +522,21 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
         {isArsenal ? 'New Arsenal Contact' : isColdFollowUp ? 'New Cold Follow-Up' : 'New Target Property'}
       </div>
 
-      <input placeholder="Name *" value={formName} onChange={e => setFormName(e.target.value)}
-        style={{ width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 10 }} />
-      <div style={{ display: 'flex', gap: 8, marginBottom: formPhoneError ? 4 : 10 }}>
-        <input type="tel" placeholder="Phone # (required)" value={formPhone}
-          onChange={e => { setFormPhone(e.target.value); if (setFormPhoneError) setFormPhoneError(''); }}
-          style={{ flex: 1, fontSize: 13, padding: '10px 12px', borderColor: formPhoneError ? 'rgba(233,69,96,0.5)' : undefined }} />
-        <input placeholder="Email" value={formEmail} onChange={e => setFormEmail(e.target.value)}
-          style={{ flex: 1, fontSize: 13, padding: '10px 12px' }} />
-      </div>
-      {formPhoneError && <div style={{ fontSize: 11, color: '#e94560', marginBottom: 10 }}>{formPhoneError}</div>}
+      {/* Arsenal + Cold Follow-Up: single contact */}
+      {!isTargetProp && (
+        <>
+          <input placeholder="Name *" value={formName} onChange={e => setFormName(e.target.value)}
+            style={{ width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 10 }} />
+          <div style={{ display: 'flex', gap: 8, marginBottom: formPhoneError ? 4 : 10 }}>
+            <input type="tel" placeholder="Phone # (required)" value={formPhone}
+              onChange={e => { setFormPhone(e.target.value); if (setFormPhoneError) setFormPhoneError(''); }}
+              style={{ flex: 1, fontSize: 13, padding: '10px 12px', borderColor: formPhoneError ? 'rgba(233,69,96,0.5)' : undefined }} />
+            <input placeholder="Email" value={formEmail} onChange={e => setFormEmail(e.target.value)}
+              style={{ flex: 1, fontSize: 13, padding: '10px 12px' }} />
+          </div>
+          {formPhoneError && <div style={{ fontSize: 11, color: '#e94560', marginBottom: 10 }}>{formPhoneError}</div>}
+        </>
+      )}
 
       {/* Arsenal Type dropdown */}
       {isArsenal && (
@@ -519,10 +550,45 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
         </div>
       )}
 
-      {(!isArsenal || isColdFollowUp) && (
+      {/* Target Property: Lead Source + Owner dual sections replace single contact */}
+      {isTargetProp && (
+        <>
+          <div style={{ padding: '12px 14px', marginBottom: 10, background: 'rgba(240,165,0,0.04)', borderRadius: 8, border: '1px solid rgba(240,165,0,0.1)' }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#f0a500', marginBottom: 8 }}>Lead Source</div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 6 }}>
+              <input placeholder="Name" value={formLeadSrcName} onChange={e => setFormLeadSrcName(e.target.value)}
+                style={{ flex: '1 1 140px', fontSize: 12, padding: '8px 10px' }} />
+              <input type="tel" placeholder="Phone" value={formLeadSrcPhone} onChange={e => setFormLeadSrcPhone(e.target.value)}
+                style={{ flex: '1 1 110px', fontSize: 12, padding: '8px 10px' }} />
+              <input placeholder="Email" value={formLeadSrcEmail} onChange={e => setFormLeadSrcEmail(e.target.value)}
+                style={{ flex: '1 1 140px', fontSize: 12, padding: '8px 10px' }} />
+            </div>
+            <select value={formLeadSrcType} onChange={e => setFormLeadSrcType(e.target.value)}
+              style={{ width: '100%', fontSize: 12, padding: '8px 10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: '#ddd', fontFamily: "'DM Sans', sans-serif", cursor: 'pointer' }}>
+              <option value="">Source type...</option>
+              {ARSENAL_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+            </select>
+          </div>
+          <div style={{ padding: '12px 14px', marginBottom: 10, background: 'rgba(107,138,253,0.04)', borderRadius: 8, border: '1px solid rgba(107,138,253,0.1)' }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#6b8afd', marginBottom: 8 }}>Owner / Seller</div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              <input placeholder="Name" value={formOwnerName} onChange={e => setFormOwnerName(e.target.value)}
+                style={{ flex: '1 1 140px', fontSize: 12, padding: '8px 10px' }} />
+              <input type="tel" placeholder="Phone" value={formOwnerPhone} onChange={e => setFormOwnerPhone(e.target.value)}
+                style={{ flex: '1 1 110px', fontSize: 12, padding: '8px 10px' }} />
+              <input placeholder="Email" value={formOwnerEmail} onChange={e => setFormOwnerEmail(e.target.value)}
+                style={{ flex: '1 1 140px', fontSize: 12, padding: '8px 10px' }} />
+            </div>
+          </div>
+          <div style={{ fontSize: 10, color: '#555', marginBottom: 10, fontStyle: 'italic' }}>Fill out at least one — Lead Source or Owner</div>
+        </>
+      )}
+
+      {/* Property address for target properties and cold follow-ups */}
+      {(isTargetProp || isColdFollowUp) && (
         <>
           <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>Property Address</div>
-          <input placeholder="Street *" value={formStreet} onChange={e => setFormStreet(e.target.value)}
+          <input placeholder="Street" value={formStreet} onChange={e => setFormStreet(e.target.value)}
             style={{ width: '100%', fontSize: 13, padding: '10px 12px', marginBottom: 8 }} />
           <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
             <input placeholder="City" value={formCity} onChange={e => setFormCity(e.target.value)} style={{ flex: 2, fontSize: 13, padding: '10px 12px' }} />
@@ -620,39 +686,6 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
                     fontFamily: "'DM Sans', sans-serif", border: 'none',
                     background: formArsenalFollowUp === opt.value ? 'rgba(233,69,96,0.2)' : 'rgba(255,255,255,0.05)',
                     color: formArsenalFollowUp === opt.value ? '#e94560' : '#888',
-                  }}>{opt.label}</button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Target: "Add as Arsenal Contact too?" */}
-      {!isArsenal && (
-        <div style={{ marginBottom: 12 }}>
-          <button onClick={() => setFormAlsoArsenal(!formAlsoArsenal)} style={{
-            display: 'flex', alignItems: 'center', gap: 8, width: '100%',
-            padding: '10px 14px', borderRadius: 8, border: 'none', cursor: 'pointer',
-            background: formAlsoArsenal ? 'rgba(240,165,0,0.08)' : 'rgba(255,255,255,0.03)',
-            color: formAlsoArsenal ? '#f0a500' : '#666', fontSize: 12, fontWeight: 600,
-            fontFamily: "'DM Sans', sans-serif",
-          }}>
-            <span>{formAlsoArsenal ? '▾' : '▸'}</span> Add as Arsenal Contact too?
-          </button>
-          {formAlsoArsenal && (
-            <div style={{ padding: '12px 14px', background: 'rgba(240,165,0,0.04)', borderRadius: '0 0 8px 8px', marginTop: -2 }}>
-              <textarea placeholder="Arsenal notes — how you know them..." value={formPropertyDetails}
-                onChange={e => setFormPropertyDetails(e.target.value)} rows={2}
-                style={{ width: '100%', fontSize: 12, padding: '8px 10px', marginBottom: 6, resize: 'vertical' }} />
-              <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>Arsenal follow-up schedule</div>
-              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                {FOLLOW_UP_OPTIONS.map(opt => (
-                  <button key={opt.value} onClick={() => setFormArsenalFollowUp(opt.value)} style={{
-                    padding: '4px 10px', borderRadius: 6, fontSize: 10, cursor: 'pointer',
-                    fontFamily: "'DM Sans', sans-serif", border: 'none',
-                    background: formArsenalFollowUp === opt.value ? 'rgba(240,165,0,0.2)' : 'rgba(255,255,255,0.05)',
-                    color: formArsenalFollowUp === opt.value ? '#f0a500' : '#888',
                   }}>{opt.label}</button>
                 ))}
               </div>
@@ -812,9 +845,10 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
   const [editStatus, setEditStatus] = useState(contact.pipeline_status || 'new');
   const [editInterval, setEditInterval] = useState(contact.follow_up_interval || 'never');
   const [editArsenalType, setEditArsenalType] = useState(contact.arsenal_type || '');
-  const [editLeadGenName, setEditLeadGenName] = useState(contact.lead_generator_name || '');
-  const [editLeadGenPhone, setEditLeadGenPhone] = useState(contact.lead_generator_phone || '');
-  const [editLeadGenEmail, setEditLeadGenEmail] = useState(contact.lead_generator_email || '');
+  const [editLeadSrcName, setEditLeadSrcName] = useState(contact.lead_source_name || '');
+  const [editLeadSrcPhone, setEditLeadSrcPhone] = useState(contact.lead_source_phone || '');
+  const [editLeadSrcEmail, setEditLeadSrcEmail] = useState(contact.lead_source_email || '');
+  const [editLeadSrcType, setEditLeadSrcType] = useState(contact.lead_source_type || '');
   const [editOwnerName, setEditOwnerName] = useState(contact.owner_name || '');
   const [editOwnerPhone, setEditOwnerPhone] = useState(contact.owner_phone || '');
   const [editOwnerEmail, setEditOwnerEmail] = useState(contact.owner_email || '');
@@ -825,9 +859,7 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
   const [followUpInterval, setFollowUpInterval] = useState(contact.follow_up_interval || '1_week');
   const [followUpSaving, setFollowUpSaving] = useState(false);
 
-  const [arsenalAdding, setArsenalAdding] = useState(false);
-  const [arsenalAdded, setArsenalAdded] = useState(false);
-  const [leadGenArsenalAdded, setLeadGenArsenalAdded] = useState(false);
+  const [leadSrcArsenalAdded, setLeadSrcArsenalAdded] = useState(false);
   const [ownerArsenalAdded, setOwnerArsenalAdded] = useState(false);
   const [celebration, setCelebration] = useState(null);
 
@@ -848,9 +880,10 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
     setEditStatus(contact.pipeline_status || 'new');
     setEditInterval(contact.follow_up_interval || 'never');
     setEditArsenalType(contact.arsenal_type || '');
-    setEditLeadGenName(contact.lead_generator_name || '');
-    setEditLeadGenPhone(contact.lead_generator_phone || '');
-    setEditLeadGenEmail(contact.lead_generator_email || '');
+    setEditLeadSrcName(contact.lead_source_name || '');
+    setEditLeadSrcPhone(contact.lead_source_phone || '');
+    setEditLeadSrcEmail(contact.lead_source_email || '');
+    setEditLeadSrcType(contact.lead_source_type || '');
     setEditOwnerName(contact.owner_name || '');
     setEditOwnerPhone(contact.owner_phone || '');
     setEditOwnerEmail(contact.owner_email || '');
@@ -871,9 +904,10 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
     if (isTarget) {
       updates.property = editProperty.trim() || null;
       updates.pipeline_status = editStatus;
-      updates.lead_generator_name = editLeadGenName.trim() || null;
-      updates.lead_generator_phone = editLeadGenPhone.trim() || null;
-      updates.lead_generator_email = editLeadGenEmail.trim() || null;
+      updates.lead_source_name = editLeadSrcName.trim() || null;
+      updates.lead_source_phone = editLeadSrcPhone.trim() || null;
+      updates.lead_source_email = editLeadSrcEmail.trim() || null;
+      updates.lead_source_type = editLeadSrcType || null;
       updates.owner_name = editOwnerName.trim() || null;
       updates.owner_phone = editOwnerPhone.trim() || null;
       updates.owner_email = editOwnerEmail.trim() || null;
@@ -897,37 +931,19 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
     setSaving(false);
   };
 
-  const handleAddToArsenal = async () => {
-    setArsenalAdding(true);
-    try {
-      const result = await onAddContact({
-        name: contact.name, phone: contact.phone || null, email: contact.email || null,
-        contact_group: 'arsenal', pipeline_status: 'new',
-        notes: `Added from target property: ${contact.property || 'N/A'}`,
-        follow_up_interval: contact.follow_up_interval || '1_week',
-        follow_up_date: calculateFollowUpDate(contact.follow_up_interval || '1_week'),
-        last_contact_date: new Date().toISOString(),
-      });
-      if (result?.success) {
-        setArsenalAdded(true);
-        if (result.contact && onContactAdded) onContactAdded(result.contact);
-      }
-    } catch (e) { console.error('Failed to add to arsenal:', e); }
-    setArsenalAdding(false);
-  };
-
   const handleAddRoleToArsenal = async (role) => {
-    const isLeadGen = role === 'lead_generator';
-    const name = isLeadGen ? contact.lead_generator_name : contact.owner_name;
-    const phone = isLeadGen ? contact.lead_generator_phone : contact.owner_phone;
-    const email = isLeadGen ? contact.lead_generator_email : contact.owner_email;
+    const isLeadSrc = role === 'lead_source';
+    const name = isLeadSrc ? contact.lead_source_name : contact.owner_name;
+    const phone = isLeadSrc ? contact.lead_source_phone : contact.owner_phone;
+    const email = isLeadSrc ? contact.lead_source_email : contact.owner_email;
     if (!name) return;
-    const setSaved = isLeadGen ? setLeadGenArsenalAdded : setOwnerArsenalAdded;
+    const setSaved = isLeadSrc ? setLeadSrcArsenalAdded : setOwnerArsenalAdded;
     try {
       const result = await onAddContact({
         name, phone: phone || null, email: email || null,
         contact_group: 'arsenal', pipeline_status: 'new',
-        notes: `${isLeadGen ? 'Lead Generator' : 'Owner/Seller'} from property: ${contact.property || 'N/A'}`,
+        arsenal_type: isLeadSrc ? (contact.lead_source_type || null) : null,
+        notes: `${isLeadSrc ? 'Lead Source' : 'Owner/Seller'} from property: ${contact.property || 'N/A'}`,
         follow_up_interval: '1_week',
         follow_up_date: calculateFollowUpDate('1_week'),
         last_contact_date: new Date().toISOString(),
@@ -952,9 +968,10 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
         follow_up_date: calculateFollowUpDate(propFollowUp),
         last_contact_date: new Date().toISOString(),
         source_contact_id: contact.id,
-        lead_generator_name: contact.name,
-        lead_generator_phone: contact.phone || null,
-        lead_generator_email: contact.email || null,
+        lead_source_name: contact.name,
+        lead_source_phone: contact.phone || null,
+        lead_source_email: contact.email || null,
+        lead_source_type: contact.arsenal_type || null,
       });
       if (result?.success && result.contact && onContactAdded) onContactAdded(result.contact);
       setShowAddPropertyForm(false);
@@ -1039,15 +1056,6 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
             style={actionBtn('rgba(233,69,96,0.15)', '#e94560')}>
             {showAddPropertyForm ? 'Cancel' : '+ Target Property'}
           </button>
-        )}
-        {isTarget && !arsenalAdded && onAddContact && !editing && (
-          <button onClick={handleAddToArsenal} disabled={arsenalAdding}
-            style={actionBtn('rgba(240,165,0,0.15)', '#f0a500')}>
-            {arsenalAdding ? 'Adding...' : 'Add to Arsenal'}
-          </button>
-        )}
-        {isTarget && arsenalAdded && (
-          <span style={{ fontSize: 12, color: '#48c78e', padding: '6px 12px' }}>Added to Arsenal</span>
         )}
       </div>
 
@@ -1147,23 +1155,30 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
             </div>
           )}
 
-          {/* Lead Generator fields (target properties only) */}
+          {/* Lead Source fields (target properties only) */}
           {isTarget && (
             <div style={{ padding: '10px 14px', background: 'rgba(240,165,0,0.04)', borderRadius: 8, border: '1px solid rgba(240,165,0,0.1)' }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: '#f0a500', marginBottom: 8 }}>Lead Generator</div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#f0a500', marginBottom: 8 }}>Lead Source *</div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
                 <div style={{ flex: '1 1 150px' }}>
                   <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Name</label>
-                  <input value={editLeadGenName} onChange={e => setEditLeadGenName(e.target.value)} placeholder="Who brought the deal?" style={inputStyle} />
+                  <input value={editLeadSrcName} onChange={e => setEditLeadSrcName(e.target.value)} placeholder="Who brought the deal?" style={inputStyle} />
                 </div>
                 <div style={{ flex: '1 1 120px' }}>
                   <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Phone</label>
-                  <input value={editLeadGenPhone} onChange={e => setEditLeadGenPhone(e.target.value)} style={inputStyle} />
+                  <input value={editLeadSrcPhone} onChange={e => setEditLeadSrcPhone(e.target.value)} style={inputStyle} />
                 </div>
                 <div style={{ flex: '1 1 150px' }}>
                   <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Email</label>
-                  <input value={editLeadGenEmail} onChange={e => setEditLeadGenEmail(e.target.value)} style={inputStyle} />
+                  <input value={editLeadSrcEmail} onChange={e => setEditLeadSrcEmail(e.target.value)} style={inputStyle} />
                 </div>
+              </div>
+              <div style={{ flex: '1 1 150px' }}>
+                <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Source Type</label>
+                <select value={editLeadSrcType} onChange={e => setEditLeadSrcType(e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
+                  <option value="">Select type...</option>
+                  {ARSENAL_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                </select>
               </div>
             </div>
           )}
@@ -1227,24 +1242,31 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
             )}
           </div>
 
-          {/* Lead Generator read-only display */}
-          {isTarget && contact.lead_generator_name && (
+          {/* Lead Source read-only display */}
+          {isTarget && contact.lead_source_name && (
             <div style={{ marginTop: 10, padding: '8px 12px', background: 'rgba(240,165,0,0.04)', borderRadius: 8, border: '1px solid rgba(240,165,0,0.08)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6 }}>
                 <div>
-                  <span style={{ fontSize: 10, color: '#f0a500', fontWeight: 700 }}>LEAD GENERATOR</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 10, color: '#f0a500', fontWeight: 700 }}>LEAD SOURCE</span>
+                    {contact.lead_source_type && (
+                      <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 3, background: 'rgba(240,165,0,0.1)', color: '#f0a500', fontWeight: 600 }}>
+                        {ARSENAL_TYPE_LABELS[contact.lead_source_type] || contact.lead_source_type}
+                      </span>
+                    )}
+                  </div>
                   <div style={{ fontSize: 13, color: '#ddd', marginTop: 2 }}>
-                    {contact.lead_generator_name}
-                    {contact.lead_generator_phone && <span style={{ color: '#666', marginLeft: 10 }}>{contact.lead_generator_phone}</span>}
-                    {contact.lead_generator_email && <span style={{ color: '#666', marginLeft: 10 }}>{contact.lead_generator_email}</span>}
+                    {contact.lead_source_name}
+                    {contact.lead_source_phone && <span style={{ color: '#666', marginLeft: 10 }}>{contact.lead_source_phone}</span>}
+                    {contact.lead_source_email && <span style={{ color: '#666', marginLeft: 10 }}>{contact.lead_source_email}</span>}
                   </div>
                 </div>
-                {onAddContact && !leadGenArsenalAdded && (
-                  <button onClick={() => handleAddRoleToArsenal('lead_generator')} style={actionBtn('rgba(240,165,0,0.12)', '#f0a500')}>
+                {onAddContact && !leadSrcArsenalAdded && (
+                  <button onClick={() => handleAddRoleToArsenal('lead_source')} style={actionBtn('rgba(240,165,0,0.12)', '#f0a500')}>
                     Add as Arsenal
                   </button>
                 )}
-                {leadGenArsenalAdded && <span style={{ fontSize: 11, color: '#48c78e' }}>Added</span>}
+                {leadSrcArsenalAdded && <span style={{ fontSize: 11, color: '#48c78e' }}>Added</span>}
               </div>
             </div>
           )}
