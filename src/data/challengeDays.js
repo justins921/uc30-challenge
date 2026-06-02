@@ -8716,18 +8716,497 @@ They are usually the ones who stay in the game long enough for their effort to c
   },
   {
     day: 20,
-    title: "Resubmit Rejected Offers Higher",
-    caption: "",
-    taskDescription: "Take your best rejected offers and resubmit with better terms. Submit updated offers.",
-    trainingContent: "",
+    title: "Advanced Deal Flow",
+    caption: "Allocating your time like an investor",
+    taskDescription: `Today's Exercise
+
+Conduct a Deal Flow Audit.
+
+List:
+
+• Your top sources of opportunity
+• The number of conversations generated
+• The number of opportunities generated
+• The number of offers submitted
+• The number of active leads
+
+Then answer:
+
+If I could only spend my time in three places, where would they be?
+
+Those answers will often reveal where your greatest opportunities exist.`,
+    trainingContent: `Why This Matters
+
+One of the most important lessons in investing is that not all investments produce the same return.
+
+A great investor does not allocate money equally.
+
+They allocate more capital toward the opportunities producing the best returns.
+
+The same principle applies to finding deals.
+
+By Day 20, you have invested:
+
+time,
+effort,
+conversations,
+follow-up,
+offers,
+and relationship building.
+
+The question is no longer:
+
+"How do I find deals?"
+
+The question is:
+
+"Where should I invest more of my time?"
+
+
+Time Is Capital
+
+Most people understand that money is limited.
+
+Fewer people realize:
+
+Time is even more limited.
+
+Every hour spent:
+
+calling,
+analyzing,
+following up,
+networking,
+or building relationships
+
+is an investment.
+
+Like any investment, some activities produce a much higher return than others.
+
+Your goal is to identify those activities and allocate more time toward them.
+
+
+The Goal Is Not Activity
+
+Many investors become obsessed with activity.
+
+They want:
+
+more calls,
+more conversations,
+more contacts,
+more lead sources.
+
+Activity alone is not the goal.
+
+Results are the goal.
+
+The objective is not to be busy.
+
+The objective is to be effective.
+
+
+The Deal Flow Audit
+
+By now you have nearly three weeks of data.
+
+You should begin evaluating:
+
+Where are opportunities actually coming from?
+
+Examples:
+
+Realtors
+Wholesalers
+Property Managers
+Sellers
+Referrals
+Networking
+Follow-Up
+Target Properties
+
+Not all of these sources will perform equally.
+
+Some may produce significantly more opportunities than others.
+
+
+Follow The Evidence
+
+Many investors make decisions emotionally.
+
+Professional investors follow evidence.
+
+If one relationship has produced:
+
+multiple opportunities,
+motivated sellers,
+quality conversations,
+
+that relationship deserves additional attention.
+
+The market is constantly telling you where opportunities exist.
+
+Your responsibility is to listen.
+
+
+Your Personal Acquisition Advantage
+
+One of the biggest mistakes investors make is assuming they should build their business exactly like someone else.
+
+The reality is:
+
+Every investor has unique strengths.
+
+Some examples:
+
+Sales Background
+
+Strong at:
+rapport,
+negotiation,
+uncovering motivation.
+
+Realtor
+
+Strong at:
+market access,
+early opportunities,
+transaction knowledge.
+
+Contractor
+
+Strong at:
+repair estimates,
+value-add projects,
+construction opportunities.
+
+Property Manager
+
+Strong at:
+landlord relationships,
+distressed ownership,
+operational insights.
+
+Strong Network
+
+Strong at:
+referrals,
+introductions,
+opportunity flow.
+
+Your goal is not to eliminate weaknesses.
+
+Your goal is to leverage strengths.
+
+
+Your Buy Box Creates Opportunity
+
+Many investors unintentionally reduce deal flow because they communicate vague criteria.
+
+Examples:
+
+Poor Buy Box:
+
+"I buy rentals."
+
+Strong Buy Box:
+
+5–50 unit multifamily
+Seller-finance opportunities
+Value-add properties
+Idaho Falls and surrounding markets
+Owners experiencing management fatigue
+
+The clearer your criteria become, the easier it becomes for other people to help you.
+
+
+Focus Creates Momentum
+
+One of the biggest dangers in investing is constantly changing direction.
+
+Investors often jump between:
+
+wholesalers,
+cold calling,
+direct mail,
+networking,
+social media,
+referrals.
+
+The result is fragmented effort.
+
+Momentum comes from depth, not constant change.
+
+The investors who create consistent deal flow usually commit long enough to become known within a specific channel.
+
+
+The Multiplication Principle
+
+When you discover something working, your first instinct should not be:
+
+"What's next?"
+
+It should be:
+
+"How do I multiply this?"
+
+If one realtor produces opportunities, build relationships with more realtors.
+
+If one property manager creates leads, build relationships with more property managers.
+
+If seller follow-up is producing conversations, increase follow-up activity.
+
+Most growth comes from scaling proven systems, not constantly searching for new ones.
+
+
+Build An Acquisition System
+
+The goal of UC30 is not simply to get a property under contract.
+
+The goal is to build a repeatable acquisition process.
+
+A process that continues producing opportunities long after the challenge ends.
+
+That process should eventually answer:
+
+Where do my opportunities come from?
+
+What activities create the highest return?
+
+What relationships produce the best opportunities?
+
+What strengths create my competitive advantage?
+
+
+The Investor Mindset
+
+Average investors ask:
+
+"What should I do?"
+
+Professional investors ask:
+
+"What produces the highest return on my time?"
+
+That question changes everything.
+
+Because once you understand where your opportunities are coming from, you can focus your energy where it matters most.
+
+
+Key Takeaway
+
+The most successful investors do not try to do everything.
+
+They identify the activities, relationships, and lead sources producing the highest return on their time and systematically allocate more energy toward them.
+
+By Day 20, you have accumulated enough data to stop guessing.
+
+The objective now is to think like an investor and allocate your time the same way you would allocate capital: toward the opportunities producing the greatest return.`,
     category: "pressure",
     weekNumber: 3,
     weekTitle: "APPLY PRESSURE",
-    proofType: "document",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    videos: [
+      'Not All Deal Flow Is Created Equal',
+      'The Highest Return Activities',
+      'Allocating Time Like Capital',
+      'Identifying Your Best Sources Of Opportunity',
+      'Building A Scalable Acquisition System',
+    ],
+    quiz: {
+      questions: [
+        {
+          id: 'd20q1',
+          text: 'A student spends 10 hours per week networking and receives one opportunity per month. Another student spends 10 hours per week building relationships with property managers and receives five opportunities per month.\n\nWhat is the MOST logical conclusion?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'The first student should network harder.' },
+                { label: 'B', text: 'The second student should stop working with property managers to diversify.' },
+                { label: 'C', text: 'The second student should consider allocating more time toward property manager relationships.' },
+                { label: 'D', text: 'Both activities should receive equal time.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd20q2',
+          text: 'Which statement best reflects the purpose of Day 20?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Find as many lead sources as possible.' },
+                { label: 'B', text: 'Build relationships with everyone equally.' },
+                { label: 'C', text: 'Identify which activities produce the highest return on your time and focus more energy there.' },
+                { label: 'D', text: 'Stop trying new things.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd20q3',
+          text: 'A wholesaler has sent you eight opportunities over the last month. None have worked, but all have been close to your buy box. What is the BEST course of action?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Stop taking their calls.' },
+                { label: 'B', text: 'Continue strengthening the relationship and provide feedback to refine future opportunities.' },
+                { label: 'C', text: 'Ignore future deals until they improve.' },
+                { label: 'D', text: 'Submit offers on properties that don\'t meet your criteria.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd20q4',
+          text: 'Why is a specific buy box often more effective than a broad buy box?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'It limits opportunity.' },
+                { label: 'B', text: 'It makes analysis easier.' },
+                { label: 'C', text: 'It helps other people identify and bring you opportunities that fit your criteria.' },
+                { label: 'D', text: 'It prevents you from seeing other markets.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd20q5',
+          text: 'An investor has the following results:\n\n3 Realtors = 15 opportunities\n5 Wholesalers = 4 opportunities\n20 Cold Calls = 1 opportunity\n\nWhat should they consider first?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Making more cold calls.' },
+                { label: 'B', text: 'Building additional realtor relationships.' },
+                { label: 'C', text: 'Eliminating realtors.' },
+                { label: 'D', text: 'Switching markets.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd20q6',
+          text: 'Which investor is MOST likely suffering from shiny object syndrome?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'An investor who doubles down on a successful lead source.' },
+                { label: 'B', text: 'An investor who reviews their CRM weekly.' },
+                { label: 'C', text: 'An investor who changes lead-generation strategies every week before any have time to gain momentum.' },
+                { label: 'D', text: 'An investor who follows up consistently.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd20q7',
+          text: 'What is the primary purpose of a Deal Flow Audit?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'To count how many contacts are in your phone.' },
+                { label: 'B', text: 'To determine where opportunities are actually coming from and where more time should be invested.' },
+                { label: 'C', text: 'To identify the most expensive marketing strategy.' },
+                { label: 'D', text: 'To determine which lead source sounds most exciting.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd20q8',
+          text: 'A realtor has never brought you a deal, but consistently introduces you to owners and investors. How should you view this relationship?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'As a waste of time.' },
+                { label: 'B', text: 'As a relationship that may still create significant long-term opportunity.' },
+                { label: 'C', text: 'As less valuable than a direct seller conversation.' },
+                { label: 'D', text: 'As a lead source to eliminate.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd20q9',
+          text: 'Which statement best describes the "Multiplication Principle"?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Add more lead sources whenever possible.' },
+                { label: 'B', text: 'Focus equally on every lead source.' },
+                { label: 'C', text: 'When you discover a source producing quality opportunities, look for ways to scale and replicate it.' },
+                { label: 'D', text: 'Increase your offer price to create more deals.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd20q10',
+          text: 'An investor spends 70% of their time on activities producing 10% of their opportunities and 30% of their time on activities producing 90% of their opportunities.\n\nWhat is the biggest issue?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'They need a larger buy box.' },
+                { label: 'B', text: 'They are allocating their time inefficiently.' },
+                { label: 'C', text: 'They need more financing options.' },
+                { label: 'D', text: 'They should submit fewer offers.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd20q11',
+          text: 'Two investors complete UC30.\n\nInvestor A:\nBuilds relationships with 50 people.\nTracks every conversation.\nIdentifies the top 3 sources of opportunity.\nDoubles down on those relationships.\n\nInvestor B:\nBuilds relationships with 50 people.\nContinually pursues new lead sources.\nDoes not track results.\n\nWho is more likely to have stronger long-term deal flow and why?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Investor A, because they use data to allocate time toward the highest-return relationships.' },
+                { label: 'B', text: 'Investor B, because more lead sources always create more opportunities.' },
+                { label: 'C', text: 'Both are equally likely to succeed.' },
+                { label: 'D', text: 'Neither, because relationships don\'t matter.' },
+              ],
+              correctAnswer: 'A',
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 21,
