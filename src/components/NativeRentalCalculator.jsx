@@ -3,6 +3,13 @@ import { useState, useMemo } from 'react';
 const num = v => parseFloat(v) || 0;
 const fmtD = v => `${v < 0 ? '-' : ''}$${Math.abs(Math.round(v)).toLocaleString()}`;
 const fmtP = v => `${v.toFixed(2)}%`;
+const fmtInput = v => {
+  if (!v && v !== 0) return '';
+  const s = String(v);
+  const parts = s.split('.');
+  const intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return parts.length > 1 ? `${intPart}.${parts[1]}` : intPart;
+};
 
 function calculate(inp) {
   const pp = num(inp.purchase_price);
@@ -219,7 +226,19 @@ export default function NativeRentalCalculator() {
   const [copied, setCopied] = useState(false);
 
   const update = (key, val) => {
-    setInputs(prev => ({ ...prev, [key]: val.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1') }));
+    setInputs(prev => ({ ...prev, [key]: val.replace(/,/g, '').replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1') }));
+  };
+
+  const pctHint = (key) => {
+    if (r.pp <= 0) return null;
+    const hints = {
+      closing_costs: r.ccTotal,
+      down_payment: r.dpTotal,
+      vacancy: Math.abs(r.vacLoss),
+      maintenance: Math.abs(r.maintTotal),
+      management: Math.abs(r.mgmtTotal),
+    };
+    return hints[key] != null ? fmtD(hints[key]) : null;
   };
 
   const solvedValue = useMemo(() => {
@@ -320,19 +339,26 @@ export default function NativeRentalCalculator() {
           </div>
           {section.fields.map(f => {
             const solving = isSolving(f.key);
+            const hint = f.suffix === '%' ? pctHint(f.key) : null;
+            const rawVal = fieldValue(f.key);
+            const displayVal = f.prefix === '$' ? fmtInput(rawVal) : rawVal;
             return (
               <div key={f.key} style={{ marginBottom: 8 }}>
                 <div style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   marginBottom: 4,
                 }}>
-                  <label style={{ fontSize: 12, color: solving ? '#48c78e' : '#888', fontWeight: 500 }}>
+                  <label style={{ fontSize: 12, color: solving ? '#48c78e' : '#888', fontWeight: 500, display: 'flex', alignItems: 'center', gap: 6 }}>
                     {f.label}
                     {solving && <span style={{
-                      marginLeft: 6, fontSize: 9, fontWeight: 700, color: '#48c78e',
+                      fontSize: 9, fontWeight: 700, color: '#48c78e',
                       background: 'rgba(72,199,142,0.12)', padding: '2px 6px', borderRadius: 4,
                       letterSpacing: 0.5,
                     }}>AUTO</span>}
+                    {hint && <span style={{
+                      fontSize: 11, color: '#6b8afd', fontWeight: 600,
+                      fontFamily: "'DM Mono', monospace",
+                    }}>{hint}</span>}
                   </label>
                   {f.hasNegToggle && (
                     <button
@@ -356,7 +382,7 @@ export default function NativeRentalCalculator() {
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={fieldValue(f.key)}
+                    value={displayVal}
                     onChange={e => !solving && update(f.key, e.target.value)}
                     disabled={solving}
                     placeholder="0"
