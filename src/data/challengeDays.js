@@ -7597,11 +7597,221 @@ Become the buyer that realtors, wholesalers, property managers, lenders, investo
     ],
     transcript: null,
     downloads: [],
-    quiz: null,
-  },
-  {
-    day: 19,
-    title: "Network with 5 Investors",
+    quiz: {
+      questions: [
+        {
+          id: 'd18q1',
+          text: 'Why do most people bring deals to certain investors repeatedly?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'They have the most money.' },
+                { label: 'B', text: 'They pay the highest prices.' },
+                { label: 'C', text: 'They are trusted, responsive, and easy to work with.' },
+                { label: 'D', text: 'They own the most properties.' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'People want certainty. They bring opportunities to buyers they trust and believe can perform.',
+            },
+          ],
+        },
+        {
+          id: 'd18q2',
+          text: 'What is one of the fastest ways to damage your reputation as a buyer?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Asking questions during due diligence.' },
+                { label: 'B', text: 'Walking away from a deal because new information changed the numbers.' },
+                { label: 'C', text: 'Consistently failing to follow through on opportunities that match your stated criteria.' },
+                { label: 'D', text: 'Negotiating respectfully.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd18q3',
+          text: 'A wholesaler sends you a property that fits your buy box exactly. You analyze it and realize it works. What should you do?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Wait several days before responding.' },
+                { label: 'B', text: 'Tell them you\'ll think about it.' },
+                { label: 'C', text: 'Respond quickly and take action.' },
+                { label: 'D', text: 'Ask for another property first.' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'People remember buyers who act.',
+            },
+          ],
+        },
+        {
+          id: 'd18q4',
+          text: 'Which statement best describes the "Top Of Mind" principle?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Always be asking for deals.' },
+                { label: 'B', text: 'Stay visible, helpful, and relevant so people think of you when opportunities appear.' },
+                { label: 'C', text: 'Call people every day.' },
+                { label: 'D', text: 'Only work with new contacts.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd18q5',
+          text: 'Which of the following is MOST likely to create future deal flow?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Asking every contact for a deal.' },
+                { label: 'B', text: 'Constantly negotiating harder than everyone else.' },
+                { label: 'C', text: 'Finding ways to help people before asking for anything in return.' },
+                { label: 'D', text: 'Telling everyone how many properties you own.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd18q6',
+          text: 'A property manager mentions that one of their owners may be getting tired of managing rentals. What should you do?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Ignore it because it isn\'t listed for sale.' },
+                { label: 'B', text: 'Build the relationship and continue following up.' },
+                { label: 'C', text: 'Demand the owner\'s phone number immediately.' },
+                { label: 'D', text: 'Wait until the property hits the market.' },
+              ],
+              correctAnswer: 'B',
+              explanation: 'Many great deals start months before a property is officially for sale.',
+            },
+          ],
+        },
+        {
+          id: 'd18q7',
+          text: 'When is it acceptable to back out of a deal?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Anytime you get nervous.' },
+                { label: 'B', text: 'Anytime you find a better deal.' },
+                { label: 'C', text: 'When new information causes the property to no longer meet your criteria.' },
+                { label: 'D', text: 'Whenever you change your mind.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd18q8',
+          text: 'What is the difference between discipline and flakiness?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'There is no difference.' },
+                { label: 'B', text: 'Discipline is walking away when the investment no longer works; flakiness is walking away because you weren\'t prepared or changed your mind.' },
+                { label: 'C', text: 'Discipline means always closing.' },
+                { label: 'D', text: 'Flakiness only applies to wholesalers.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd18q9',
+          text: 'Which group is often one of the most overlooked sources of future deal flow?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Property Managers' },
+                { label: 'B', text: 'Title Companies' },
+                { label: 'C', text: 'Appraisers' },
+                { label: 'D', text: 'Inspectors' },
+              ],
+              correctAnswer: 'A',
+              explanation: 'Property managers regularly interact with tired landlords, problem properties, vacancies, and owners considering selling.',
+            },
+          ],
+        },
+        {
+          id: 'd18q10',
+          text: 'A realtor calls with a property that does NOT meet your buy box. What is the BEST response?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Ignore them.' },
+                { label: 'B', text: 'Tell them never to call again.' },
+                { label: 'C', text: 'Thank them, explain why it doesn\'t fit your criteria, and clarify what you\'re looking for.' },
+                { label: 'D', text: 'Submit an offer anyway.' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Every interaction is an opportunity to strengthen a relationship and help people better understand your criteria.',
+            },
+          ],
+        },
+        {
+          id: 'd18q11',
+          text: 'BONUS QUESTION\n\nWhat is the most valuable long-term asset an investor can build?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'A large social media following.' },
+                { label: 'B', text: 'The ability to make aggressive offers.' },
+                { label: 'C', text: 'A reputation for being trustworthy, responsive, and capable of closing.' },
+                { label: 'D', text: 'A large business card collection.' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Money, markets, and opportunities change. A strong reputation continues producing opportunities for decades.',
+            },
+          ],
+        },
+        {
+          id: 'd18q12',
+          text: 'BONUS SCENARIO\n\nA wholesaler sends you three deals over six months. You analyze each one quickly, explain exactly why they don\'t fit your criteria, and thank them for sending them. What is the most likely outcome?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'They stop sending deals.' },
+                { label: 'B', text: 'They become frustrated.' },
+                { label: 'C', text: 'They better understand your criteria and are more likely to send opportunities that fit in the future.' },
+                { label: 'D', text: 'Nothing changes.' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Professional communication turns every interaction into a learning opportunity and strengthens future deal flow.',
+            },
+          ],
+        },
+      ],
+    },
     caption: "",
     taskDescription: "Connect with 5 local investors via meetups, social media, or calls. Submit proof of outreach.",
     trainingContent: "",
