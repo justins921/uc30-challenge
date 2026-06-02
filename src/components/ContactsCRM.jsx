@@ -28,6 +28,7 @@ const STATUS_LABELS = {
   new: { label: 'New', color: '#888' },
   active: { label: 'Active', color: '#48c78e' },
   target_property: { label: 'Active', color: '#48c78e' },
+  prospect: { label: 'Prospect', color: '#9b7fd4' },
   under_contract: { label: 'Under Contract', color: '#6b8afd' },
   closed: { label: 'Closed', color: '#d4a843' },
   dead: { label: 'Dead', color: '#666' },
@@ -51,7 +52,9 @@ const DEAD_FOLLOW_UP_OPTIONS = [
   { value: 'dead_6_months', label: '6 Months' },
 ];
 
-const COLD_FOLLOW_UP_OPTIONS = [
+const PROSPECT_FOLLOW_UP_OPTIONS = [
+  { value: '1_week', label: '1 Week' },
+  { value: '2_weeks', label: '2 Weeks' },
   { value: '1_month', label: '1 Month' },
   { value: '3_months', label: '3 Months' },
   { value: '6_months', label: '6 Months' },
@@ -173,8 +176,8 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
 
   const handleAddFromCRM = async () => {
     const isArsenal = activeTab === 'arsenal';
-    const isColdFollowUp = activeTab === 'cold_follow_ups';
-    const isTargetProp = !isArsenal && !isColdFollowUp;
+    const isProspect = activeTab === 'prospects';
+    const isTargetProp = !isArsenal && !isProspect;
 
     if (isTargetProp) {
       if (!(formLeadSrcName.trim() || formOwnerName.trim()) || !formFollowUp) return;
@@ -193,12 +196,12 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
     setFormSaving(true);
     const now = new Date().toISOString();
 
-    if (isColdFollowUp) {
+    if (isProspect) {
       const propAddr = [formStreet.trim(), formCity.trim(), formState.trim(), formZip.trim()].filter(Boolean).join(', ');
       const result = await onAddContact({
         name: formName.trim(), phone: formattedPhone, email: formEmail.trim() || null,
         contact_group: 'target', property: propAddr || null, notes: formNotes.trim() || null,
-        pipeline_status: 'dead',
+        pipeline_status: 'prospect',
         follow_up_interval: formFollowUp,
         follow_up_date: calculateFollowUpDate(formFollowUp),
         last_contact_date: now,
@@ -282,19 +285,19 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
   const closedDeals = targetProperties.filter(c => c.pipeline_status === 'closed');
   const deadTargets = targetProperties.filter(c => c.pipeline_status === 'dead');
 
-  const coldFollowUps = useMemo(() =>
-    filtered.filter(c => c.contact_group === 'target' && c.pipeline_status === 'dead').sort(sortByFollowUp), [filtered]);
+  const prospects = useMemo(() =>
+    filtered.filter(c => c.contact_group === 'target' && c.pipeline_status === 'prospect').sort(sortByFollowUp), [filtered]);
 
   const overdueCount = useMemo(() =>
-    contacts.filter(c => c.pipeline_status !== 'dead' && isOverdue(c.follow_up_date)).length, [contacts]);
+    contacts.filter(c => c.pipeline_status !== 'dead' && c.pipeline_status !== 'prospect' && isOverdue(c.follow_up_date)).length, [contacts]);
 
-  const coldOverdueCount = useMemo(() =>
-    contacts.filter(c => c.pipeline_status === 'dead' && isOverdue(c.follow_up_date)).length, [contacts]);
+  const prospectOverdueCount = useMemo(() =>
+    contacts.filter(c => c.pipeline_status === 'prospect' && isOverdue(c.follow_up_date)).length, [contacts]);
 
   const linkedPropertyCount = (arsenalId) =>
     contacts.filter(c => c.contact_group === 'target' && c.source_contact_id === arsenalId).length;
 
-  const tabColor = activeTab === 'arsenal' ? '#f0a500' : activeTab === 'cold_follow_ups' ? '#888' : '#e94560';
+  const tabColor = activeTab === 'arsenal' ? '#f0a500' : activeTab === 'prospects' ? '#9b7fd4' : '#e94560';
 
   return (
     <div className="fade-up">
@@ -333,7 +336,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
         {[
           { id: 'arsenal', label: 'Arsenal', color: '#f0a500', count: arsenalContacts.length },
           { id: 'targets', label: 'Target Properties', color: '#e94560', count: targetProperties.length },
-          { id: 'cold_follow_ups', label: 'Cold Follow-Ups', color: '#888', count: coldFollowUps.length, badge: coldOverdueCount },
+          { id: 'prospects', label: 'Prospects', color: '#9b7fd4', count: prospects.length, badge: prospectOverdueCount },
         ].map(tab => (
           <button key={tab.id} onClick={() => { setActiveTab(tab.id); resetForm(); }} style={{
             flex: 1, padding: '12px 12px', borderRadius: 10, fontSize: 12, cursor: 'pointer',
@@ -364,7 +367,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
             cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
             background: showAddForm ? `${tabColor}30` : `${tabColor}15`, color: tabColor,
           }}>
-            {showAddForm ? '✕ Close Form' : activeTab === 'arsenal' ? '+ Add Arsenal Contact' : activeTab === 'cold_follow_ups' ? '+ Add Cold Follow-Up' : '+ Add Target Property'}
+            {showAddForm ? '✕ Close Form' : activeTab === 'arsenal' ? '+ Add Arsenal Contact' : activeTab === 'prospects' ? '+ Add Prospect' : '+ Add Target Property'}
           </button>
         </div>
       )}
@@ -425,15 +428,15 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
             ))}
           </div>
         )
-      ) : activeTab === 'cold_follow_ups' ? (
-        coldFollowUps.length === 0 ? (
+      ) : activeTab === 'prospects' ? (
+        prospects.length === 0 ? (
           <div className="card" style={{ textAlign: 'center', padding: 32 }}>
-            <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>No cold follow-ups yet.</div>
-            <div style={{ fontSize: 12, color: '#555' }}>Dead leads from Target Properties appear here for long-term nurturing.</div>
+            <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>No prospects yet.</div>
+            <div style={{ fontSize: 12, color: '#555' }}>Properties you're interested in but haven't become active targets yet. When they heat up, promote them to Target Property!</div>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {coldFollowUps.map(contact => {
+            {prospects.map(contact => {
               const overdue = isOverdue(contact.follow_up_date);
               return (
                 <TargetPropertyCard key={contact.id} contact={contact}
@@ -448,7 +451,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
                   onFollowUpLogged={onFollowUpLogged}
                   onPropertyUnderContract={onPropertyUnderContract}
                   user={user}
-                  isColdView
+                  isProspectView
                 />
               );
             })}
@@ -509,8 +512,8 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
 /* ═══ Add Contact Form ═══ */
 function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone, setFormPhone, formEmail, setFormEmail, formNotes, setFormNotes, formStreet, setFormStreet, formCity, setFormCity, formState, setFormState, formZip, setFormZip, formPropertyDetails, setFormPropertyDetails, formFollowUp, setFormFollowUp, formAlsoProperty, setFormAlsoProperty, formAlsoArsenal, setFormAlsoArsenal, formArsenalFollowUp, setFormArsenalFollowUp, formArsenalType, setFormArsenalType, formLeadSrcName, setFormLeadSrcName, formLeadSrcPhone, setFormLeadSrcPhone, formLeadSrcEmail, setFormLeadSrcEmail, formLeadSrcType, setFormLeadSrcType, formOwnerName, setFormOwnerName, formOwnerPhone, setFormOwnerPhone, formOwnerEmail, setFormOwnerEmail, formSaving, formPhoneError, setFormPhoneError, onSave, onCancel }) {
   const isArsenal = activeTab === 'arsenal';
-  const isColdFollowUp = activeTab === 'cold_follow_ups';
-  const isTargetProp = !isArsenal && !isColdFollowUp;
+  const isProspect = activeTab === 'prospects';
+  const isTargetProp = !isArsenal && !isProspect;
   const hasLeadOrOwner = formLeadSrcName?.trim() || formOwnerName?.trim();
   const canSave = isTargetProp
     ? hasLeadOrOwner && formFollowUp
@@ -519,10 +522,10 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
   return (
     <div className="card" style={{ padding: 20, marginBottom: 20, borderColor: `${tabColor}30` }}>
       <div style={{ fontSize: 14, fontWeight: 700, color: tabColor, marginBottom: 16 }}>
-        {isArsenal ? 'New Arsenal Contact' : isColdFollowUp ? 'New Cold Follow-Up' : 'New Target Property'}
+        {isArsenal ? 'New Arsenal Contact' : isProspect ? 'New Prospect' : 'New Target Property'}
       </div>
 
-      {/* Arsenal + Cold Follow-Up: single contact */}
+      {/* Arsenal + Prospect: single contact */}
       {!isTargetProp && (
         <>
           <input placeholder="Name *" value={formName} onChange={e => setFormName(e.target.value)}
@@ -585,7 +588,7 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
       )}
 
       {/* Property address for target properties and cold follow-ups */}
-      {(isTargetProp || isColdFollowUp) && (
+      {(isTargetProp || isProspect) && (
         <>
           <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>Property Address</div>
           <input placeholder="Street" value={formStreet} onChange={e => setFormStreet(e.target.value)}
@@ -604,14 +607,14 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
 
       <div style={{ marginBottom: 12 }}>
         <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>Follow-Up Schedule *</div>
-        {isColdFollowUp ? (
+        {isProspect ? (
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-            {COLD_FOLLOW_UP_OPTIONS.map(opt => (
+            {PROSPECT_FOLLOW_UP_OPTIONS.map(opt => (
               <button key={opt.value} onClick={() => setFormFollowUp(opt.value)} style={{
                 padding: '6px 12px', borderRadius: 6, fontSize: 11, cursor: 'pointer',
                 fontFamily: "'DM Sans', sans-serif", border: 'none',
-                background: formFollowUp === opt.value ? 'rgba(136,136,136,0.3)' : 'rgba(255,255,255,0.05)',
-                color: formFollowUp === opt.value ? '#aaa' : '#888',
+                background: formFollowUp === opt.value ? 'rgba(155,127,212,0.2)' : 'rgba(255,255,255,0.05)',
+                color: formFollowUp === opt.value ? '#9b7fd4' : '#888',
               }}>{opt.label}</button>
             ))}
           </div>
@@ -704,7 +707,7 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
           padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer',
           fontFamily: "'DM Sans', sans-serif", border: 'none',
           background: tabColor, color: '#000', opacity: (!canSave || formSaving) ? 0.4 : 1,
-        }}>{formSaving ? 'Saving...' : isArsenal ? 'Add Arsenal Contact' : isColdFollowUp ? 'Add Cold Follow-Up' : 'Add Target Property'}</button>
+        }}>{formSaving ? 'Saving...' : isArsenal ? 'Add Arsenal Contact' : isProspect ? 'Add Prospect' : 'Add Target Property'}</button>
       </div>
     </div>
   );
@@ -770,7 +773,7 @@ function ArsenalCard({ contact, linkedProperties, isExpanded, followUps, onExpan
 }
 
 /* ═══ Target Property Card ═══ */
-function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, onPropertyUnderContract, user, isColdView }) {
+function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, onPropertyUnderContract, user, isProspectView }) {
   const overdue = isOverdue(contact.follow_up_date);
   const followUpText = formatFollowUpDate(contact.follow_up_date);
   const statusInfo = STATUS_LABELS[contact.pipeline_status] || STATUS_LABELS.active;
@@ -1032,12 +1035,12 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
           border: `1px solid ${celebration === 'closed' ? 'rgba(212,168,67,0.3)' : 'rgba(107,138,253,0.3)'}`,
           animation: 'celebrationPulse 0.6s ease-in-out',
         }}>
-          <div style={{ fontSize: 32, marginBottom: 6 }}>{celebration === 'closed' ? '🎉🏠💰' : '🎉📋✨'}</div>
-          <div style={{ fontSize: 16, fontWeight: 700, color: celebration === 'closed' ? '#d4a843' : '#6b8afd', marginBottom: 4 }}>
-            {celebration === 'closed' ? 'Deal Closed!' : 'Under Contract!'}
+          <div style={{ fontSize: 32, marginBottom: 6 }}>{celebration === 'closed' ? '🎉🏠💰' : celebration === 'promoted' ? '🎯🔥' : '🎉📋✨'}</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: celebration === 'closed' ? '#d4a843' : celebration === 'promoted' ? '#e94560' : '#6b8afd', marginBottom: 4 }}>
+            {celebration === 'closed' ? 'Deal Closed!' : celebration === 'promoted' ? 'Promoted to Target!' : 'Under Contract!'}
           </div>
           <div style={{ fontSize: 13, color: '#aaa' }}>
-            {celebration === 'closed' ? 'Congratulations on closing the deal!' : 'Congratulations — keep pushing to close!'}
+            {celebration === 'closed' ? 'Congratulations on closing the deal!' : celebration === 'promoted' ? 'This prospect is now an active target property — go get it!' : 'Congratulations — keep pushing to close!'}
           </div>
           <style>{`
             @keyframes celebrationPulse {
@@ -1055,6 +1058,17 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
           <button onClick={() => setShowAddPropertyForm(!showAddPropertyForm)}
             style={actionBtn('rgba(233,69,96,0.15)', '#e94560')}>
             {showAddPropertyForm ? 'Cancel' : '+ Target Property'}
+          </button>
+        )}
+        {isTarget && contact.pipeline_status === 'prospect' && !editing && (
+          <button onClick={async () => {
+            const updates = { pipeline_status: 'active' };
+            await onUpdateContact(contact.id, updates);
+            onContactUpdated(contact.id, updates);
+            setCelebration('promoted');
+            setTimeout(() => setCelebration(null), 3000);
+          }} style={actionBtn('rgba(233,69,96,0.2)', '#e94560')}>
+            Promote to Target Property
           </button>
         )}
       </div>
