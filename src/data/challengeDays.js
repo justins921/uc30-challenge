@@ -7128,15 +7128,473 @@ The investor who understands how to structure solutions can often buy properties
   },
   {
     day: 18,
-    title: "Follow Up Blitz Day",
-    caption: "",
-    taskDescription: "Follow up on EVERY pending offer and outreach. Submit a log of all follow-ups.",
-    trainingContent: "",
+    title: "Becoming The Go-To Buyer",
+    caption: "How to build relationship capital that creates deal flow",
+    taskDescription: `Today's Exercise
+
+Reach out to:
+
+• 5 Realtors
+• 3 Wholesalers
+• 2 Property Managers
+
+Do NOT ask for deals.
+
+Instead ask:
+
+"How can I help you?"
+
+Focus on strengthening relationships. Not extracting opportunities.`,
+    trainingContent: `Why This Matters
+
+Most investors think:
+
+Deal Flow Creates Relationships.
+
+The truth is:
+
+Relationships Create Deal Flow.
+
+The investors who consistently get opportunities are often not:
+
+the smartest,
+the richest,
+or the most experienced.
+
+They are simply:
+
+the most trusted,
+the easiest to work with,
+and the first person people think of when an opportunity appears.
+
+Your goal is to become:
+
+The Go-To Buyer.
+
+The person that people think of first when they find a property that matches your criteria.
+
+
+Why People Bring Deals To Certain Investors
+
+People refer opportunities to buyers who are:
+
+responsive,
+professional,
+trustworthy,
+easy to work with,
+capable of closing,
+and clear about what they want.
+
+Most people do NOT want to waste their time bringing deals to someone who:
+
+disappears,
+changes their mind constantly,
+doesn't know what they want,
+or can't close.
+
+The easier you are to work with, the more opportunities you will receive.
+
+
+Becoming The Easy Buyer
+
+Ask yourself:
+
+If I brought myself a deal, would I enjoy working with me?
+
+Great buyers:
+
+answer calls,
+return texts,
+communicate clearly,
+make decisions,
+follow through,
+and do what they say they will do.
+
+Many investors lose future opportunities because they become difficult to work with.
+
+Remember:
+
+Every interaction either builds trust or destroys trust.
+
+
+Your Reputation Is An Asset
+
+One of the most valuable things you can build is your reputation.
+
+People talk.
+
+Realtors talk.
+
+Wholesalers talk.
+
+Property managers talk.
+
+Investors talk.
+
+Lenders talk.
+
+When your name comes up, what do you want people to say?
+
+Examples:
+
+"They always respond."
+"They know their numbers."
+"They're easy to work with."
+"They close."
+"They do what they say."
+
+That reputation will eventually create opportunities that money cannot buy.
+
+
+Building Trust With Realtors
+
+Realtors can become one of your most powerful deal sources.
+
+A great realtor should know:
+
+your buy box,
+your preferred markets,
+your financing ability,
+your investment goals,
+your preferred property types.
+
+The clearer you are, the easier it becomes for them to bring you opportunities.
+
+
+What Realtors Want
+
+Realtors want buyers who:
+
+respond quickly,
+know their criteria,
+submit offers,
+understand analysis,
+and can close.
+
+The easier you make their job, the more likely they are to think of you when opportunities arise.
+
+
+Building Trust With Wholesalers
+
+Wholesalers are constantly looking for serious buyers.
+
+Nothing frustrates wholesalers more than:
+
+buyers who disappear,
+buyers who constantly retrade,
+buyers who never perform,
+buyers who claim they will buy everything and buy nothing.
+
+
+What Wholesalers Want
+
+quick answers,
+clear criteria,
+proof of funds,
+and closings.
+
+The faster and more reliable you are, the more opportunities they will send your way.
+
+
+Building Trust With Property Managers
+
+Property managers are one of the most underrated sources of deal flow.
+
+They know:
+
+tired landlords,
+problem properties,
+vacant units,
+management issues,
+owners considering selling.
+
+Many future deals are discovered by property managers long before they ever hit the market.
+
+
+Building Trust With Contractors
+
+Contractors often know:
+
+distressed owners,
+unfinished projects,
+landlords running out of money,
+properties with major issues.
+
+Contractors see problems before most investors do.
+
+Strong contractor relationships can create opportunities for years.
+
+
+Building Trust With Lenders
+
+Good lenders often know:
+
+refinances,
+financial stress,
+upcoming sales,
+investors looking to exit.
+
+Stay connected with lenders.
+
+Many opportunities start with a simple conversation.
+
+
+Building Trust With Other Investors
+
+Many new investors think:
+
+"Other investors are my competition."
+
+The reality is:
+
+Many of the largest investors:
+
+partner,
+share opportunities,
+refer deals,
+and collaborate.
+
+Strong investor relationships create opportunities that would never be found alone.
+
+
+The Top Of Mind Principle
+
+When someone discovers:
+
+a seller,
+a property,
+a landlord,
+or an opportunity,
+
+who do they think of first?
+
+That person gets the call.
+
+Your goal is simple:
+
+Stay Top Of Mind.
+
+
+Staying Top Of Mind
+
+Examples:
+
+follow-up calls,
+texts,
+checking in,
+sharing market information,
+asking questions,
+helping solve problems.
+
+Do not only reach out when you need something.
+
+Stay visible.
+
+Stay helpful.
+
+Stay relevant.
+
+
+Give Before You Ask
+
+One of the most powerful relationship principles.
+
+Instead of asking:
+
+"Do you have any deals for me?"
+
+Ask:
+
+"How can I help you?"
+
+Examples:
+
+introductions,
+referrals,
+resources,
+recommendations,
+solving problems.
+
+People remember people who help them.
+
+
+The Consequences Of Not Following Through
+
+This may be the most important section of today's training.
+
+If you tell people:
+
+"This is exactly what I'm looking for."
+
+And they bring you a property that meets your criteria…
+
+Then you fail to perform without a valid reason…
+
+You damage trust.
+
+The same thing happens when you:
+
+get properties under contract,
+back out,
+disappear,
+stop responding,
+or fail to close.
+
+Every one of these situations affects your reputation.
+
+And your reputation affects future deal flow.
+
+
+When It IS Okay To Walk Away
+
+It is absolutely okay to walk away from a deal when:
+
+the numbers don't work,
+due diligence uncovers issues,
+repairs are larger than expected,
+rents were inaccurate,
+expenses were inaccurate,
+financing changed,
+the property no longer meets your criteria.
+
+This is called being disciplined.
+
+Good investors walk away from bad deals.
+
+
+The Difference Between Discipline And Flakiness
+
+Discipline:
+
+"I discovered new information that changes the investment."
+
+Flakiness:
+
+"I got nervous."
+
+"I wasn't prepared."
+
+"I changed my mind."
+
+"I never had financing figured out."
+
+One protects your reputation.
+
+The other damages it.
+
+
+How To Walk Away Professionally
+
+If a deal no longer works:
+
+Respond quickly.
+
+Be honest.
+
+Be respectful.
+
+Explain:
+
+what changed,
+what you found,
+why the numbers no longer work.
+
+Examples:
+
+repairs came in higher,
+rents were overstated,
+financing changed,
+expenses were inaccurate.
+
+When you can clearly explain your reasoning, the situation often becomes a learning opportunity for everyone involved.
+
+
+Turn Mistakes Into Education
+
+A good wholesaler, realtor, or seller wants to understand:
+
+Why doesn't this work?
+
+The better you explain your reasoning:
+
+The better future opportunities become.
+
+Every deal that doesn't work helps refine:
+
+your buy box,
+your criteria,
+your analysis,
+and future opportunities.
+
+
+The Trust Formula
+
+Trust is built through four things:
+
+Competence — Can you actually buy?
+
+Consistency — Do you do what you say?
+
+Character — Are you honest and respectful?
+
+Communication — Do you respond?
+
+
+Relationship Scorecard
+
+Rate yourself from 1-10:
+
+Realtors ___ /10
+Wholesalers ___ /10
+Property Managers ___ /10
+Contractors ___ /10
+Lenders ___ /10
+Investors ___ /10
+Sellers ___ /10
+
+Now ask: Which relationship category needs the most improvement?
+
+
+Quick Rules To Remember
+
+Relationships create deal flow.
+Reputation matters.
+Stay top of mind.
+Give before you ask.
+Be easy to work with.
+Respond quickly.
+Know your criteria.
+Protect your reputation.
+Walk away when the numbers change.
+Never walk away because you weren't prepared.
+Every interaction either builds or destroys trust.
+The easiest buyer to work with often gets the best opportunities.
+
+
+Key Takeaway
+
+Most investors spend their time chasing deals.
+
+The best investors spend their time building relationships.
+
+Over time, those relationships begin bringing opportunities to them.
+
+Your goal is simple:
+
+Become the buyer that realtors, wholesalers, property managers, lenders, investors, and sellers think of first when an opportunity appears.`,
     category: "pressure",
     weekNumber: 3,
     weekTitle: "APPLY PRESSURE",
     proofType: "screenshot",
     videoUrl: null,
+    videos: [
+      'Why Relationships Create Deals',
+      'Becoming The First Call',
+      'Building Trust With Realtors',
+      'Building Trust With Wholesalers',
+      'Building Trust With Property Managers',
+      'Protecting Your Reputation As A Buyer',
+    ],
     transcript: null,
     downloads: [],
     quiz: null,
