@@ -98,6 +98,7 @@ export default function App() {
     submitPipelineDay,
     activateNextCohort,
     saveConfidenceSurvey,
+    graduateViaContract,
   } = useAppState();
 
   // CRM contacts for current user (loaded on login)
@@ -434,6 +435,7 @@ export default function App() {
               getFollowUpsByContact={getFollowUpsByContact}
               getUploadUrl={getUploadUrl}
               contacts={[]}
+              onGraduateViaContract={() => {}}
             />
           </div>
         );
@@ -562,6 +564,7 @@ export default function App() {
       onSubmitPipelineDay={submitPipelineDay}
       onActivateNextCohort={activateNextCohort}
       onSaveConfidenceSurvey={saveConfidenceSurvey}
+      onGraduateViaContract={graduateViaContract}
     />
     </>
   );

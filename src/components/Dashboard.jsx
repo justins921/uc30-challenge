@@ -88,12 +88,28 @@ function getTimeLeft(targetDate) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onUpdateContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt, practiceDaySettings, onCompletePracticeDay, onSubmitPipelineDay, onActivateNextCohort, onUpdateUser, onSaveConfidenceSurvey }) {
+export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, nextCohortDate, contentOverrides, liveCalls, customPhases, onUpdateProfile, onChangePassword, onSubmitTicket, onReplyToTicket, onUpdateTicket, supportTickets, cohortStats, onCompleteGettingStarted, communityPosts, onCreateCommunityPost, onCommentOnPost, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onDismissCommunityWarning, participants, dailyMinimumsOverrides, skoolLink, onAddContact, onUpdateContact, onAddFollowUp, onUploadFile, getContacts, getFollowUps, getFollowUpsByContact, getUploadUrl, contacts, complianceSettings, getDailySubmission, getQuizAttempts, addQuizAttempt, practiceDaySettings, onCompletePracticeDay, onSubmitPipelineDay, onActivateNextCohort, onUpdateUser, onSaveConfidenceSurvey, onGraduateViaContract }) {
   const [tab, setTab] = useState(user.pipelineMode && !user.isActive ? 'pipeline' : 'timeline');
   const [selectedDay, setSelectedDay] = useState(null);
   const [existingDailySubmission, setExistingDailySubmission] = useState(null);
   const [quizAttempts, setQuizAttempts] = useState([]);
   const [showPracticeDay, setShowPracticeDay] = useState(false);
+  const [graduationModal, setGraduationModal] = useState(null);
+
+  const handlePropertyUnderContract = async (contact) => {
+    const propertyName = contact.property || contact.name || 'Property';
+    if (onGraduateViaContract) {
+      await onGraduateViaContract(propertyName);
+    }
+    setGraduationModal({
+      propertyName,
+      contactName: contact.name,
+      isFirstGraduation: (user.ucGraduateCount || 0) === 0,
+      daysCompleted: (user.completedDays || []).length,
+      offersSubmitted: user.metrics?.offersSubmitted || 0,
+      propertiesAnalyzed: user.metrics?.propertiesAnalyzed || 0,
+    });
+  };
 
   const calendarDay = getCalendarDay(cohortStartDate);
 
@@ -220,6 +236,13 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
 
   return (
     <div style={{ minHeight: '100vh' }}>
+      {graduationModal && (
+        <UnderContractGraduationModal
+          data={graduationModal}
+          onContinueLearning={() => setGraduationModal(null)}
+          onClose={() => setGraduationModal(null)}
+        />
+      )}
       <Header
         user={user}
         currentTab={tab === 'day' ? 'timeline' : tab}
@@ -268,6 +291,32 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
         {/* UC Points Score */}
         {!showPracticeDay && (tab === 'timeline' || tab === 'day' || tab === 'pipeline') && (
           <UCPointsBanner ucPoints={user.ucPoints || calculateUCPoints(user.metrics)} />
+        )}
+
+        {/* Under Contract Achievement */}
+        {!showPracticeDay && user.graduatedViaContract && (tab === 'timeline' || tab === 'stats' || tab === 'pipeline') && (
+          <div className="fade-up" style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '14px 20px', marginBottom: 16,
+            background: 'linear-gradient(135deg, rgba(107,138,253,0.08), rgba(72,199,142,0.06))',
+            border: '1px solid rgba(107,138,253,0.2)',
+            borderRadius: 12,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: 18 }}>🏠</span>
+              <div>
+                <div style={{ fontSize: 12, color: '#6b8afd', textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: 700 }}>
+                  Property Under Contract
+                </div>
+                <div style={{ fontSize: 11, color: '#888' }}>
+                  {user.graduatedViaContractProperty || 'Deal secured'}
+                </div>
+              </div>
+            </div>
+            <div style={{ fontSize: 10, color: '#48c78e', fontWeight: 700, padding: '4px 10px', borderRadius: 6, background: 'rgba(72,199,142,0.1)', border: '1px solid rgba(72,199,142,0.2)' }}>
+              LOCKED IN
+            </div>
+          </div>
         )}
 
         {/* UC Graduate Badge */}
@@ -459,6 +508,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             onUpdateContact={onUpdateContact}
             onAddContact={onAddContact}
             onAddFollowUp={onAddFollowUp}
+            onPropertyUnderContract={handlePropertyUnderContract}
           />
         )}
         {!showPracticeDay && tab === 'calculator' && (
@@ -1824,6 +1874,200 @@ function CalculatorTab({ contacts, onUpdateContact, onUploadFile, userId }) {
           } : null}
         />
       </div>
+    </div>
+  );
+}
+
+function UnderContractGraduationModal({ data, onContinueLearning, onClose }) {
+  const { propertyName, contactName, isFirstGraduation, daysCompleted, offersSubmitted, propertiesAnalyzed } = data;
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 9999,
+      background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 20, animation: 'graduationFadeIn 0.4s ease-out',
+    }}>
+      <div style={{
+        maxWidth: 520, width: '100%',
+        background: 'linear-gradient(165deg, #111318, #0d0f13)',
+        border: '1px solid rgba(107,138,253,0.3)',
+        borderRadius: 20, padding: '40px 32px', textAlign: 'center',
+        animation: 'graduationSlideUp 0.5s ease-out',
+        position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', inset: 0, opacity: 0.06,
+          background: 'radial-gradient(circle at 50% 0%, #6b8afd 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+
+        <div style={{ fontSize: 56, marginBottom: 16, position: 'relative' }}>
+          🎉🏠🎓
+        </div>
+
+        {isFirstGraduation ? (
+          <>
+            <div style={{
+              fontSize: 28, fontWeight: 800, color: '#fff',
+              marginBottom: 6, lineHeight: 1.2, position: 'relative',
+            }}>
+              You're a UC30 Graduate!
+            </div>
+            <div style={{
+              fontSize: 14, color: '#6b8afd', fontWeight: 600,
+              marginBottom: 20, position: 'relative',
+            }}>
+              Property Under Contract
+            </div>
+          </>
+        ) : (
+          <>
+            <div style={{
+              fontSize: 28, fontWeight: 800, color: '#fff',
+              marginBottom: 6, lineHeight: 1.2, position: 'relative',
+            }}>
+              Another One Under Contract!
+            </div>
+            <div style={{
+              fontSize: 14, color: '#6b8afd', fontWeight: 600,
+              marginBottom: 20, position: 'relative',
+            }}>
+              Your momentum is compounding
+            </div>
+          </>
+        )}
+
+        <div style={{
+          padding: '16px 20px', borderRadius: 12, marginBottom: 24,
+          background: 'rgba(107,138,253,0.08)',
+          border: '1px solid rgba(107,138,253,0.2)',
+          position: 'relative',
+        }}>
+          <div style={{ fontSize: 12, color: '#888', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+            Property
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: '#6b8afd' }}>
+            {propertyName}
+          </div>
+          {contactName && contactName !== propertyName && (
+            <div style={{ fontSize: 13, color: '#888', marginTop: 4 }}>
+              {contactName}
+            </div>
+          )}
+        </div>
+
+        <div style={{
+          display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12,
+          marginBottom: 28, position: 'relative',
+        }}>
+          <div style={{
+            padding: '12px 8px', borderRadius: 10,
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.06)',
+          }}>
+            <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: '#48c78e' }}>
+              {daysCompleted}
+            </div>
+            <div style={{ fontSize: 10, color: '#888', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+              Days Done
+            </div>
+          </div>
+          <div style={{
+            padding: '12px 8px', borderRadius: 10,
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.06)',
+          }}>
+            <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: '#e94560' }}>
+              {offersSubmitted}
+            </div>
+            <div style={{ fontSize: 10, color: '#888', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+              Offers Made
+            </div>
+          </div>
+          <div style={{
+            padding: '12px 8px', borderRadius: 10,
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.06)',
+          }}>
+            <div className="mono" style={{ fontSize: 24, fontWeight: 700, color: '#f0a500' }}>
+              {propertiesAnalyzed}
+            </div>
+            <div style={{ fontSize: 10, color: '#888', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+              Analyzed
+            </div>
+          </div>
+        </div>
+
+        {isFirstGraduation && (
+          <div style={{
+            padding: '14px 18px', borderRadius: 10, marginBottom: 24,
+            background: 'rgba(72,199,142,0.06)',
+            border: '1px solid rgba(72,199,142,0.15)',
+            fontSize: 13, color: '#aaa', lineHeight: 1.6, textAlign: 'left',
+            position: 'relative',
+          }}>
+            <span style={{ color: '#48c78e', fontWeight: 700 }}>Congratulations!</span> Getting a property under contract
+            means you've done what most people only talk about. You took action, made offers, negotiated, and
+            closed the gap. You are now a UC30 Graduate.
+          </div>
+        )}
+
+        <div style={{
+          display: 'flex', flexDirection: 'column', gap: 10,
+          position: 'relative',
+        }}>
+          <button
+            onClick={onContinueLearning}
+            style={{
+              padding: '14px 24px', borderRadius: 12, fontSize: 15, fontWeight: 700,
+              cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+              background: 'linear-gradient(135deg, rgba(107,138,253,0.25), rgba(72,199,142,0.15))',
+              border: '1px solid rgba(107,138,253,0.4)',
+              color: '#fff', transition: 'all 0.2s',
+            }}
+          >
+            Continue Learning & Get More Deals
+          </button>
+
+          <div style={{
+            padding: '14px 18px', borderRadius: 12,
+            background: 'rgba(240,165,0,0.06)',
+            border: '1px solid rgba(240,165,0,0.15)',
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#f0a500', marginBottom: 4 }}>
+              Due Diligence & Systems
+            </div>
+            <div style={{ fontSize: 12, color: '#888', lineHeight: 1.5, marginBottom: 10 }}>
+              Ready to close with confidence? Get access to our due diligence checklists, property management
+              setup guides, and systems to take your deal from contract to cash flow.
+            </div>
+            <button
+              onClick={onClose}
+              style={{
+                padding: '8px 18px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                background: 'rgba(240,165,0,0.15)',
+                border: '1px solid rgba(240,165,0,0.3)',
+                color: '#f0a500',
+              }}
+            >
+              Coming Soon
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes graduationFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes graduationSlideUp {
+          from { opacity: 0; transform: translateY(30px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+      `}</style>
     </div>
   );
 }

@@ -1456,6 +1456,40 @@ export function useAppState() {
     return Promise.resolve(storage.updateContact(contactId, updates));
   }, []);
 
+  const graduateViaContract = useCallback(async (propertyName) => {
+    if (!user) return;
+    const now = new Date().toISOString();
+    const updatedMetrics = { ...user.metrics, propertiesUnderContract: (user.metrics?.propertiesUnderContract || 0) + 1 };
+    const ucPoints = calculateUCPoints(updatedMetrics);
+    const alreadyGraduated = (user.ucGraduateCount || 0) > 0;
+    const gradUpdates = {
+      metrics: updatedMetrics,
+      ucPoints,
+      graduatedViaContract: true,
+      graduatedViaContractAt: now,
+      graduatedViaContractProperty: propertyName,
+    };
+    if (!alreadyGraduated) {
+      gradUpdates.ucGraduateCount = 1;
+      gradUpdates.cohortHistory = [...(user.cohortHistory || []), {
+        cohortAttempt: user.cohortAttempt || 1,
+        result: 'under_contract',
+        completedAt: now,
+        daysCompleted: (user.completedDays || []).length,
+        finalMetrics: { ...updatedMetrics },
+        ucPoints,
+        propertyName,
+      }];
+    }
+    const updatedUser = { ...user, ...gradUpdates };
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(user.id, gradUpdates);
+    }
+    setUser(updatedUser);
+    storage.setUser(updatedUser);
+    return updatedUser;
+  }, [user, persist]);
+
   // Admin: get contacts for any participant
   const getContactsForParticipant = useCallback(async (participantId) => {
     return Promise.resolve(storage.getContactsForParticipant(participantId));
@@ -1785,6 +1819,8 @@ export function useAppState() {
     activateNextCohort,
     // Confidence Survey
     saveConfidenceSurvey,
+    // Under Contract Graduation
+    graduateViaContract,
   };
 }
 

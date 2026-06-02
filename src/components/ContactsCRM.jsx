@@ -62,7 +62,7 @@ function sortByFollowUp(a, b) {
   return new Date(b.created_at || 0) - new Date(a.created_at || 0);
 }
 
-export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, onUpdateContact, onAddContact, onAddFollowUp }) {
+export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, onUpdateContact, onAddContact, onAddFollowUp, onPropertyUnderContract }) {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState(null);
@@ -384,6 +384,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
                         onContactAdded={onContactAdded}
                         onAddFollowUp={onAddFollowUp}
                         onFollowUpLogged={onFollowUpLogged}
+                        onPropertyUnderContract={onPropertyUnderContract}
                         user={user}
                       />
                     ))}
@@ -621,7 +622,7 @@ function ArsenalCard({ contact, linkedProperties, isExpanded, followUps, onExpan
 }
 
 /* ═══ Target Property Card ═══ */
-function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, user }) {
+function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, onPropertyUnderContract, user }) {
   const overdue = isOverdue(contact.follow_up_date);
   const followUpText = formatFollowUpDate(contact.follow_up_date);
   const statusInfo = STATUS_LABELS[contact.pipeline_status] || STATUS_LABELS.active;
@@ -675,13 +676,13 @@ function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdate
       {isExpanded && <ExpandedDetail contact={contact} followUps={followUps} color={color}
         onUpdateContact={onUpdateContact} onContactUpdated={onContactUpdated}
         onAddContact={onAddContact} onContactAdded={onContactAdded} onAddFollowUp={onAddFollowUp}
-        onFollowUpLogged={onFollowUpLogged} user={user} />}
+        onFollowUpLogged={onFollowUpLogged} onPropertyUnderContract={onPropertyUnderContract} user={user} />}
     </div>
   );
 }
 
 /* ═══ Expanded Detail (Editable) ═══ */
-function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, user }) {
+function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, onPropertyUnderContract, user }) {
   const statusInfo = STATUS_LABELS[contact.pipeline_status] || STATUS_LABELS.new;
   const isTarget = contact.contact_group === 'target';
 
@@ -737,6 +738,9 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
       if (isTarget && oldStatus !== editStatus && (editStatus === 'under_contract' || editStatus === 'closed')) {
         setCelebration(editStatus);
         setTimeout(() => setCelebration(null), 4000);
+        if (editStatus === 'under_contract' && onPropertyUnderContract) {
+          onPropertyUnderContract({ ...contact, ...updates });
+        }
       }
     } catch (e) { console.error('Failed to save:', e); }
     setSaving(false);
