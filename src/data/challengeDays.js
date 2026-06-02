@@ -7976,9 +7976,517 @@ Become the buyer that realtors, wholesalers, property managers, lenders, investo
         },
       ],
     },
-    caption: "",
-    taskDescription: "Connect with 5 local investors via meetups, social media, or calls. Submit proof of outreach.",
-    trainingContent: "",
+  },
+  {
+    day: 19,
+    title: "Confidence Through Repetition",
+    caption: "Why most investors quit right before success",
+    taskDescription: `Today's Exercise
+
+Identify your biggest source of opportunity so far.
+
+Then commit to increasing activity in that area by at least 25% over the next 10 days.
+
+The Confidence Exercise
+
+Write down:
+
+3 ways you are better today than you were on Day 1.
+
+Examples:
+• Better analysis
+• Better negotiations
+• Better understanding of financing
+• Better communication
+• Better confidence
+• Better deal flow
+
+Now write down:
+
+3 things you will double down on during the final 10 days.
+
+Examples:
+• More offers
+• More follow-up
+• More target contacts
+• More Arsenal contacts
+• More property analysis
+
+Today's Suggested Arsenal Activity
+
+Reach out to 10 Arsenal Contacts.
+
+Instead of simply asking for opportunities, update them on what you've been doing.
+
+Share:
+• properties you've analyzed
+• offers you've submitted
+• markets you're targeting
+• financing you've secured
+• the types of opportunities you're looking for
+
+People are more likely to bring opportunities to investors who are actively taking action.`,
+    trainingContent: `Why This Matters
+
+By now you have already done things that most investors never do.
+
+You have:
+
+analyzed properties,
+submitted offers,
+talked to sellers,
+talked to realtors,
+talked to wholesalers,
+negotiated,
+followed up,
+refined your buy box,
+and taken action.
+
+The majority of people who say they want to invest in real estate never even make it this far.
+
+Take a minute and recognize that.
+
+You are no longer preparing to become an investor.
+
+You are already acting like one.
+
+
+Confidence Is Earned
+
+Many people think confidence comes first.
+
+They believe:
+
+Confidence → Action
+
+But that is backwards.
+
+The reality is:
+
+Action → Experience → Confidence
+
+Confidence is not something you magically develop.
+
+Confidence is evidence.
+
+Every property analyzed.
+
+Every seller called.
+
+Every offer submitted.
+
+Every negotiation completed.
+
+All of those things become proof that you are capable.
+
+
+The Expertise Loop
+
+One of the biggest misconceptions people have is that experts are born with confidence.
+
+They aren't.
+
+Experts are created through a process.
+
+That process is:
+
+Repetition + Correction + Calibration = Expertise
+
+
+Step 1 – Repetition
+
+You have to do the thing.
+
+In real estate, that means:
+
+analyzing properties,
+talking to sellers,
+talking to realtors,
+submitting offers,
+negotiating,
+following up.
+
+Most people never even get here.
+
+They spend years:
+
+watching videos,
+reading books,
+listening to podcasts,
+
+without ever doing the work.
+
+You cannot think your way into expertise.
+
+You must act your way into expertise.
+
+
+Step 2 – Correction
+
+After taking action, you receive feedback.
+
+Examples:
+
+A seller rejects your offer.
+A realtor explains why your offer wasn't competitive.
+A lender teaches you financing.
+A wholesaler teaches you how they evaluate deals.
+You realize your rent assumptions were too high.
+You discover repair costs were different than expected.
+
+Every one of these moments is correction.
+
+Most people view correction as failure.
+
+Professionals view correction as education.
+
+
+Step 3 – Calibration
+
+Calibration is adjusting based on what you've learned.
+
+Examples:
+
+improving your analysis,
+tightening your buy box,
+verifying rents better,
+estimating repairs more accurately,
+asking better questions,
+negotiating more effectively.
+
+Calibration is what turns experience into expertise.
+
+
+Why Most People Never Become Experts
+
+Most people stop after correction.
+
+They experience:
+
+rejection,
+discomfort,
+criticism,
+mistakes,
+
+and assume they are not good at it.
+
+The best investors do the opposite.
+
+They use correction to calibrate.
+
+Then they repeat the process.
+
+Again.
+
+And again.
+
+And again.
+
+Until expertise develops.
+
+
+The UC30 Advantage
+
+Think about what you've already done.
+
+Over the last 18 days you've been:
+
+Repeating
+
+analyzing,
+offering,
+calling,
+negotiating,
+following up.
+
+Receiving Correction
+
+seller responses,
+realtor feedback,
+lender feedback,
+market feedback,
+deal feedback.
+
+Calibrating
+
+refining your buy box,
+improving your analysis,
+improving your conversations,
+improving your offers.
+
+Whether you realize it or not:
+
+You have already been running the Expertise Loop.
+
+
+You Are Further Along Than You Think
+
+Many students reach this point and think:
+
+"I still don't feel like an expert."
+
+That's normal.
+
+The mistake is assuming expertise feels different.
+
+Most expertise feels like:
+
+"I know more than I did before."
+
+The confidence comes from realizing:
+
+You now know:
+
+more about financing,
+more about negotiations,
+more about analysis,
+more about deal flow,
+more about seller motivation,
+more about structuring deals,
+
+than you did when you started.
+
+
+Look At What You've Already Done
+
+Think back to Day 1.
+
+Many students started UC30 feeling uncomfortable:
+
+analyzing properties,
+making offers,
+talking to sellers,
+discussing financing,
+negotiating.
+
+Now ask yourself:
+
+How much better am I today than I was on Day 1?
+
+The answer is usually:
+
+A lot better.
+
+Growth often feels slow because it happens gradually.
+
+But if you compare yourself to where you started, the progress becomes obvious.
+
+
+Most People Quit Right Before Success
+
+This is one of the biggest lessons in investing.
+
+Most people quit:
+
+right before the lead responds,
+right before the seller becomes motivated,
+right before the offer gets accepted,
+right before the relationship pays off.
+
+The problem is:
+
+Results are rarely linear.
+
+Most people expect:
+
+effort, effort, effort, result.
+
+Reality looks more like:
+
+effort, effort, effort, effort, effort, effort, effort, RESULT.
+
+The rewards often show up later than expected.
+
+
+The Relationship Pipeline
+
+Think about everything you've done so far.
+
+You have likely:
+
+contacted Arsenal contacts,
+built relationships,
+followed up,
+submitted offers,
+talked to target properties.
+
+Many of these conversations are still developing.
+
+Some sellers need:
+
+time,
+motivation,
+life changes,
+market changes,
+frustration,
+or a simple follow-up.
+
+The work you did in Week 1 may produce results in Week 4.
+
+The work you do today may produce results next month.
+
+
+Momentum Is Starting To Compound
+
+Many students underestimate how much momentum they have already built.
+
+By Day 19:
+
+You have:
+
+more contacts,
+more conversations,
+more offers,
+more relationships,
+more experience,
+more confidence.
+
+Every day you continue, the chances of success increase.
+
+Because you're not starting over each morning.
+
+You're building on everything you've already done.
+
+
+The Investor Law Of Compounding Effort
+
+The first call is valuable.
+
+The tenth call is more valuable.
+
+The hundredth call is even more valuable.
+
+The same is true for:
+
+offers,
+relationships,
+follow-up,
+conversations.
+
+Everything compounds.
+
+Most people stop before they experience the compounding effect.
+
+
+The Final 10 Days Matter Most
+
+The final third of UC30 is often where the biggest results happen.
+
+Why?
+
+Because:
+
+relationships have had time to develop,
+follow-up has accumulated,
+offers have stacked up,
+people know who you are,
+sellers have had time to think.
+
+This is NOT the time to slow down.
+
+This is the time to accelerate.
+
+
+Double Down On What Is Working
+
+Now is the time to look at your activity and ask:
+
+What is producing the best opportunities?
+
+Examples:
+
+Realtors
+Wholesalers
+Property Managers
+Direct Seller Conversations
+Target Properties
+Follow-Up
+Referrals
+
+Find what is working.
+
+Then do more of it.
+
+
+The Amateur vs Professional Mindset
+
+Amateurs ask:
+
+"When will I get results?"
+
+Professionals ask:
+
+"What is the next action?"
+
+Professionals understand:
+
+The process creates the outcome.
+
+They focus on:
+
+calls,
+offers,
+follow-up,
+relationships,
+consistency.
+
+Eventually the results follow.
+
+
+The UC30 Commitment
+
+For the remainder of UC30:
+
+Stop asking:
+
+"When is this going to work?"
+
+Start asking:
+
+"What is the next action?"
+
+Because the next action is always what creates the next opportunity.
+
+
+Quick Rules To Remember
+
+Confidence comes from repetition.
+Expertise comes from repetition, correction, and calibration.
+You are already running the Expertise Loop.
+Most people quit before results appear.
+Momentum compounds.
+Relationships compound.
+Follow-up compounds.
+Offers compound.
+Activity compounds.
+The final 10 days matter most.
+Double down on what is working.
+Trust the process.
+Keep moving forward.
+
+
+Key Takeaway
+
+The goal of UC30 was never to make you feel comfortable.
+
+The goal was to turn you into someone who consistently takes action.
+
+By Day 19, you have already proven that you can:
+
+analyze,
+negotiate,
+follow up,
+make offers,
+build relationships,
+and improve through feedback.
+
+You have already been building expertise through repetition, correction, and calibration.
+
+Now it's time to trust the process, increase your effort, and understand that many of the seeds you've planted are just beginning to grow.
+
+The investors who win are rarely the smartest.
+
+They are usually the ones who stay in the game long enough for their effort to compound into results.`,
     category: "pressure",
     weekNumber: 3,
     weekTitle: "APPLY PRESSURE",
@@ -7986,7 +8494,225 @@ Become the buyer that realtors, wholesalers, property managers, lenders, investo
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    videos: [
+      'Why Most Investors Quit Too Early',
+      'The Expertise Loop',
+      'Confidence Through Repetition',
+      'Why Results Are Delayed',
+      'How Momentum Compounds',
+      'The Final Push',
+    ],
+    quiz: {
+      questions: [
+        {
+          id: 'd19q1',
+          text: 'According to the Expertise Loop, what creates expertise?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Talent + Intelligence + Confidence' },
+                { label: 'B', text: 'Repetition + Correction + Calibration' },
+                { label: 'C', text: 'Education + Money + Experience' },
+                { label: 'D', text: 'Confidence + Knowledge + Motivation' },
+              ],
+              correctAnswer: 'B',
+              explanation: 'Experts are created through repetition, correction, and calibration—not natural talent alone.',
+            },
+          ],
+        },
+        {
+          id: 'd19q2',
+          text: 'Which statement is MOST accurate?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Confidence comes before action.' },
+                { label: 'B', text: 'Confidence comes from reading more books.' },
+                { label: 'C', text: 'Action creates experience, and experience creates confidence.' },
+                { label: 'D', text: 'Confidence comes from avoiding mistakes.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd19q3',
+          text: 'Which of the following is an example of correction?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Refining your buy box' },
+                { label: 'B', text: 'Improving your analysis' },
+                { label: 'C', text: 'A seller rejecting your offer' },
+                { label: 'D', text: 'Submitting more offers' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Correction is feedback. Calibration is how you adjust based on that feedback.',
+            },
+          ],
+        },
+        {
+          id: 'd19q4',
+          text: 'Which of the following is an example of calibration?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Submitting an offer' },
+                { label: 'B', text: 'Calling a seller' },
+                { label: 'C', text: 'Adjusting your rent assumptions after receiving new market information' },
+                { label: 'D', text: 'Reading a real estate book' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd19q5',
+          text: 'Why do most people fail to become experts?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'They are not smart enough.' },
+                { label: 'B', text: 'They stop after receiving correction instead of calibrating and continuing.' },
+                { label: 'C', text: 'They don\'t own enough properties.' },
+                { label: 'D', text: 'They don\'t have enough money.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd19q6',
+          text: 'A student has analyzed 75 properties, submitted 20 offers, talked to multiple sellers, and refined their buy box. What should this tell them?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'They should start over.' },
+                { label: 'B', text: 'They are still unprepared.' },
+                { label: 'C', text: 'They have already been building expertise through repetition, correction, and calibration.' },
+                { label: 'D', text: 'They need another course before taking action.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd19q7',
+          text: 'What is one reason the final 10 days of UC30 can be so powerful?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'The training becomes easier.' },
+                { label: 'B', text: 'Relationships, follow-up, and previous efforts begin compounding.' },
+                { label: 'C', text: 'The market improves automatically.' },
+                { label: 'D', text: 'Properties become cheaper.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd19q8',
+          text: 'Which investor is MOST likely to succeed?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'The investor who waits until they feel completely confident.' },
+                { label: 'B', text: 'The investor who keeps taking action while refining their process.' },
+                { label: 'C', text: 'The investor who studies endlessly without making offers.' },
+                { label: 'D', text: 'The investor who only analyzes perfect deals.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+        {
+          id: 'd19q9',
+          text: 'What is the biggest mistake students make at this stage?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Talking to too many sellers.' },
+                { label: 'B', text: 'Following up too often.' },
+                { label: 'C', text: 'Slowing down or quitting before their efforts have time to compound.' },
+                { label: 'D', text: 'Learning too much.' },
+              ],
+              correctAnswer: 'C',
+              explanation: 'Many deals come from relationships, follow-up, and opportunities that take weeks or months to develop.',
+            },
+          ],
+        },
+        {
+          id: 'd19q10',
+          text: 'Which statement best describes the "Investor Law of Compounding Effort"?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Every action creates an immediate result.' },
+                { label: 'B', text: 'Results happen randomly.' },
+                { label: 'C', text: 'Relationships, offers, follow-up, and conversations become more valuable as they accumulate over time.' },
+                { label: 'D', text: 'The first offer is the most important offer.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd19q11',
+          text: 'BONUS SCENARIO\n\nYou\'ve been following up with a seller for three weeks. They have rejected your offer twice but continue responding. What is the BEST interpretation?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'They are wasting your time.' },
+                { label: 'B', text: 'You should stop contacting them immediately.' },
+                { label: 'C', text: 'The relationship is still active, and continued professional follow-up may eventually create an opportunity.' },
+                { label: 'D', text: 'Raise your offer dramatically.' },
+              ],
+              correctAnswer: 'C',
+            },
+          ],
+        },
+        {
+          id: 'd19q12',
+          text: 'Which statement best summarizes Day 19?',
+          type: 'multiple_choice',
+          inputs: [
+            {
+              type: 'multiple_choice',
+              options: [
+                { label: 'A', text: 'Confidence comes from waiting until you feel ready.' },
+                { label: 'B', text: 'Expertise comes from repetition, correction, and calibration, and your previous efforts are beginning to compound.' },
+                { label: 'C', text: 'The most successful investors never feel fear.' },
+                { label: 'D', text: 'Results should happen immediately if you\'re working hard.' },
+              ],
+              correctAnswer: 'B',
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 20,
