@@ -6,6 +6,24 @@ export const CONTACT_GROUPS = [
   { value: 'arsenal', label: 'Arsenal Contacts', color: '#f0a500', desc: 'Ecosystem relationships — property managers, lenders, contractors, investors, wholesalers' },
 ];
 
+const ARSENAL_TYPES = [
+  { value: 'realtor', label: 'Realtor' },
+  { value: 'wholesaler', label: 'Wholesaler' },
+  { value: 'property_manager', label: 'Property Manager' },
+  { value: 'lender', label: 'Lender' },
+  { value: 'contractor', label: 'Contractor' },
+  { value: 'investor', label: 'Investor' },
+  { value: 'mentor', label: 'Mentor' },
+  { value: 'attorney', label: 'Attorney' },
+  { value: 'inspector', label: 'Inspector' },
+  { value: 'appraiser', label: 'Appraiser' },
+  { value: 'title_company', label: 'Title Company' },
+  { value: 'insurance', label: 'Insurance Agent' },
+  { value: 'other', label: 'Other' },
+];
+
+const ARSENAL_TYPE_LABELS = Object.fromEntries(ARSENAL_TYPES.map(t => [t.value, t.label]));
+
 const STATUS_LABELS = {
   new: { label: 'New', color: '#888' },
   active: { label: 'Active', color: '#48c78e' },
@@ -31,6 +49,12 @@ const DEAD_FOLLOW_UP_OPTIONS = [
   { value: 'dead_1_month', label: '1 Month' },
   { value: 'dead_3_months', label: '3 Months' },
   { value: 'dead_6_months', label: '6 Months' },
+];
+
+const COLD_FOLLOW_UP_OPTIONS = [
+  { value: '1_month', label: '1 Month' },
+  { value: '3_months', label: '3 Months' },
+  { value: '6_months', label: '6 Months' },
 ];
 
 function isOverdue(followUpDate) {
@@ -86,6 +110,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
   const [formAlsoProperty, setFormAlsoProperty] = useState(false);
   const [formAlsoArsenal, setFormAlsoArsenal] = useState(false);
   const [formArsenalFollowUp, setFormArsenalFollowUp] = useState('');
+  const [formArsenalType, setFormArsenalType] = useState('');
   const [formSaving, setFormSaving] = useState(false);
   const [formPhoneError, setFormPhoneError] = useState('');
 
@@ -94,7 +119,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
     setFormStreet(''); setFormCity(''); setFormState(''); setFormZip('');
     setFormPropertyDetails(''); setFormFollowUp(''); setFormArsenalFollowUp('');
     setFormAlsoProperty(false); setFormAlsoArsenal(false);
-    setFormPhoneError(''); setShowAddForm(false);
+    setFormArsenalType(''); setFormPhoneError(''); setShowAddForm(false);
   };
 
   useEffect(() => {
@@ -140,6 +165,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
   const handleAddFromCRM = async () => {
     if (!formName.trim() || !formFollowUp) return;
     const isArsenal = activeTab === 'arsenal';
+    const isColdFollowUp = activeTab === 'cold_follow_ups';
     if (isArsenal && !formNotes.trim()) return;
 
     const phoneCheck = validatePhone(formPhone, { required: true });
@@ -150,7 +176,18 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
     setFormSaving(true);
     const now = new Date().toISOString();
 
-    if (isArsenal) {
+    if (isColdFollowUp) {
+      const propAddr = [formStreet.trim(), formCity.trim(), formState.trim(), formZip.trim()].filter(Boolean).join(', ');
+      const result = await onAddContact({
+        name: formName.trim(), phone: formattedPhone, email: formEmail.trim() || null,
+        contact_group: 'target', property: propAddr || null, notes: formNotes.trim() || null,
+        pipeline_status: 'dead',
+        follow_up_interval: formFollowUp,
+        follow_up_date: calculateFollowUpDate(formFollowUp),
+        last_contact_date: now,
+      });
+      if (result?.success && result.contact) setContacts(prev => [result.contact, ...prev]);
+    } else if (isArsenal) {
       const result = await onAddContact({
         name: formName.trim(),
         phone: formattedPhone,
@@ -158,6 +195,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
         contact_group: 'arsenal',
         property: null,
         notes: formNotes.trim(),
+        arsenal_type: formArsenalType || null,
         pipeline_status: 'new',
         follow_up_interval: formFollowUp,
         follow_up_date: calculateFollowUpDate(formFollowUp),
@@ -229,13 +267,19 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
   const closedDeals = targetProperties.filter(c => c.pipeline_status === 'closed');
   const deadTargets = targetProperties.filter(c => c.pipeline_status === 'dead');
 
+  const coldFollowUps = useMemo(() =>
+    filtered.filter(c => c.contact_group === 'target' && c.pipeline_status === 'dead').sort(sortByFollowUp), [filtered]);
+
   const overdueCount = useMemo(() =>
     contacts.filter(c => c.pipeline_status !== 'dead' && isOverdue(c.follow_up_date)).length, [contacts]);
+
+  const coldOverdueCount = useMemo(() =>
+    contacts.filter(c => c.pipeline_status === 'dead' && isOverdue(c.follow_up_date)).length, [contacts]);
 
   const linkedPropertyCount = (arsenalId) =>
     contacts.filter(c => c.contact_group === 'target' && c.source_contact_id === arsenalId).length;
 
-  const tabColor = activeTab === 'arsenal' ? '#f0a500' : '#e94560';
+  const tabColor = activeTab === 'arsenal' ? '#f0a500' : activeTab === 'cold_follow_ups' ? '#888' : '#e94560';
 
   return (
     <div className="fade-up">
@@ -270,19 +314,29 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
         style={{ width: '100%', fontSize: 13, padding: '8px 12px', marginBottom: 20 }} />
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
+      <div style={{ display: 'flex', gap: 6, marginBottom: 16, flexWrap: 'wrap' }}>
         {[
-          { id: 'arsenal', label: 'Arsenal Contacts', color: '#f0a500', count: arsenalContacts.length },
+          { id: 'arsenal', label: 'Arsenal', color: '#f0a500', count: arsenalContacts.length },
           { id: 'targets', label: 'Target Properties', color: '#e94560', count: targetProperties.length },
+          { id: 'cold_follow_ups', label: 'Cold Follow-Ups', color: '#888', count: coldFollowUps.length, badge: coldOverdueCount },
         ].map(tab => (
           <button key={tab.id} onClick={() => { setActiveTab(tab.id); resetForm(); }} style={{
-            flex: 1, padding: '12px 16px', borderRadius: 10, fontSize: 13, cursor: 'pointer',
+            flex: 1, padding: '12px 12px', borderRadius: 10, fontSize: 12, cursor: 'pointer',
             fontFamily: "'DM Sans', sans-serif", border: 'none', fontWeight: 600,
             background: activeTab === tab.id ? `${tab.color}15` : 'rgba(255,255,255,0.03)',
             color: activeTab === tab.id ? tab.color : '#888',
             outline: activeTab === tab.id ? `1px solid ${tab.color}30` : '1px solid rgba(255,255,255,0.06)',
+            position: 'relative',
           }}>
             {tab.label} ({tab.count})
+            {tab.badge > 0 && (
+              <span style={{
+                position: 'absolute', top: -4, right: -4, minWidth: 16, height: 16,
+                borderRadius: 8, background: '#e94560', color: '#fff', fontSize: 9,
+                fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: '0 4px',
+              }}>{tab.badge}</span>
+            )}
           </button>
         ))}
       </div>
@@ -295,7 +349,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
             cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
             background: showAddForm ? `${tabColor}30` : `${tabColor}15`, color: tabColor,
           }}>
-            {showAddForm ? '✕ Close Form' : activeTab === 'arsenal' ? '+ Add Arsenal Contact' : '+ Add Target Property'}
+            {showAddForm ? '✕ Close Form' : activeTab === 'arsenal' ? '+ Add Arsenal Contact' : activeTab === 'cold_follow_ups' ? '+ Add Cold Follow-Up' : '+ Add Target Property'}
           </button>
         </div>
       )}
@@ -316,6 +370,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
         formAlsoProperty={formAlsoProperty} setFormAlsoProperty={setFormAlsoProperty}
         formAlsoArsenal={formAlsoArsenal} setFormAlsoArsenal={setFormAlsoArsenal}
         formArsenalFollowUp={formArsenalFollowUp} setFormArsenalFollowUp={setFormArsenalFollowUp}
+        formArsenalType={formArsenalType} setFormArsenalType={setFormArsenalType}
         formSaving={formSaving}
         formPhoneError={formPhoneError} setFormPhoneError={setFormPhoneError}
         onSave={handleAddFromCRM} onCancel={resetForm}
@@ -343,8 +398,38 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
                 onAddFollowUp={onAddFollowUp}
                 onFollowUpLogged={onFollowUpLogged}
                 user={user}
+                allContacts={contacts}
               />
             ))}
+          </div>
+        )
+      ) : activeTab === 'cold_follow_ups' ? (
+        coldFollowUps.length === 0 ? (
+          <div className="card" style={{ textAlign: 'center', padding: 32 }}>
+            <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>No cold follow-ups yet.</div>
+            <div style={{ fontSize: 12, color: '#555' }}>Dead leads from Target Properties appear here for long-term nurturing.</div>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {coldFollowUps.map(contact => {
+              const overdue = isOverdue(contact.follow_up_date);
+              return (
+                <TargetPropertyCard key={contact.id} contact={contact}
+                  isExpanded={expandedId === contact.id}
+                  followUps={expandedFollowUps[contact.id] || []}
+                  onExpand={() => handleExpand(contact.id)}
+                  onUpdateContact={onUpdateContact}
+                  onContactUpdated={onContactUpdated}
+                  onAddContact={onAddContact}
+                  onContactAdded={onContactAdded}
+                  onAddFollowUp={onAddFollowUp}
+                  onFollowUpLogged={onFollowUpLogged}
+                  onPropertyUnderContract={onPropertyUnderContract}
+                  user={user}
+                  isColdView
+                />
+              );
+            })}
           </div>
         )
       ) : (
@@ -400,14 +485,15 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
 }
 
 /* ═══ Add Contact Form ═══ */
-function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone, setFormPhone, formEmail, setFormEmail, formNotes, setFormNotes, formStreet, setFormStreet, formCity, setFormCity, formState, setFormState, formZip, setFormZip, formPropertyDetails, setFormPropertyDetails, formFollowUp, setFormFollowUp, formAlsoProperty, setFormAlsoProperty, formAlsoArsenal, setFormAlsoArsenal, formArsenalFollowUp, setFormArsenalFollowUp, formSaving, formPhoneError, setFormPhoneError, onSave, onCancel }) {
+function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone, setFormPhone, formEmail, setFormEmail, formNotes, setFormNotes, formStreet, setFormStreet, formCity, setFormCity, formState, setFormState, formZip, setFormZip, formPropertyDetails, setFormPropertyDetails, formFollowUp, setFormFollowUp, formAlsoProperty, setFormAlsoProperty, formAlsoArsenal, setFormAlsoArsenal, formArsenalFollowUp, setFormArsenalFollowUp, formArsenalType, setFormArsenalType, formSaving, formPhoneError, setFormPhoneError, onSave, onCancel }) {
   const isArsenal = activeTab === 'arsenal';
+  const isColdFollowUp = activeTab === 'cold_follow_ups';
   const canSave = formName.trim() && formFollowUp && (isArsenal ? formNotes.trim() : true);
 
   return (
     <div className="card" style={{ padding: 20, marginBottom: 20, borderColor: `${tabColor}30` }}>
       <div style={{ fontSize: 14, fontWeight: 700, color: tabColor, marginBottom: 16 }}>
-        {isArsenal ? 'New Arsenal Contact' : 'New Target Property'}
+        {isArsenal ? 'New Arsenal Contact' : isColdFollowUp ? 'New Cold Follow-Up' : 'New Target Property'}
       </div>
 
       <input placeholder="Name *" value={formName} onChange={e => setFormName(e.target.value)}
@@ -421,7 +507,19 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
       </div>
       {formPhoneError && <div style={{ fontSize: 11, color: '#e94560', marginBottom: 10 }}>{formPhoneError}</div>}
 
-      {!isArsenal && (
+      {/* Arsenal Type dropdown */}
+      {isArsenal && (
+        <div style={{ marginBottom: 10 }}>
+          <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>Contact Type</div>
+          <select value={formArsenalType} onChange={e => setFormArsenalType(e.target.value)}
+            style={{ width: '100%', fontSize: 13, padding: '10px 12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: '#ddd', fontFamily: "'DM Sans', sans-serif", cursor: 'pointer' }}>
+            <option value="">Select type...</option>
+            {ARSENAL_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+          </select>
+        </div>
+      )}
+
+      {(!isArsenal || isColdFollowUp) && (
         <>
           <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>Property Address</div>
           <input placeholder="Street *" value={formStreet} onChange={e => setFormStreet(e.target.value)}
@@ -440,7 +538,18 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
 
       <div style={{ marginBottom: 12 }}>
         <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>Follow-Up Schedule *</div>
-        {!isArsenal ? (
+        {isColdFollowUp ? (
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {COLD_FOLLOW_UP_OPTIONS.map(opt => (
+              <button key={opt.value} onClick={() => setFormFollowUp(opt.value)} style={{
+                padding: '6px 12px', borderRadius: 6, fontSize: 11, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", border: 'none',
+                background: formFollowUp === opt.value ? 'rgba(136,136,136,0.3)' : 'rgba(255,255,255,0.05)',
+                color: formFollowUp === opt.value ? '#aaa' : '#888',
+              }}>{opt.label}</button>
+            ))}
+          </div>
+        ) : !isArsenal ? (
           <>
             <div style={{ fontSize: 11, color: '#666', marginBottom: 6 }}>Active Lead</div>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
@@ -562,16 +671,17 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
           padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer',
           fontFamily: "'DM Sans', sans-serif", border: 'none',
           background: tabColor, color: '#000', opacity: (!canSave || formSaving) ? 0.4 : 1,
-        }}>{formSaving ? 'Saving...' : isArsenal ? 'Add Arsenal Contact' : 'Add Target Property'}</button>
+        }}>{formSaving ? 'Saving...' : isArsenal ? 'Add Arsenal Contact' : isColdFollowUp ? 'Add Cold Follow-Up' : 'Add Target Property'}</button>
       </div>
     </div>
   );
 }
 
 /* ═══ Arsenal Card ═══ */
-function ArsenalCard({ contact, linkedProperties, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, user }) {
+function ArsenalCard({ contact, linkedProperties, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, user, allContacts }) {
   const overdue = isOverdue(contact.follow_up_date);
   const followUpText = formatFollowUpDate(contact.follow_up_date);
+  const typeLabel = contact.arsenal_type ? ARSENAL_TYPE_LABELS[contact.arsenal_type] || contact.arsenal_type : null;
 
   return (
     <div className="card" style={{
@@ -588,15 +698,20 @@ function ArsenalCard({ contact, linkedProperties, isExpanded, followUps, onExpan
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>{contact.name}</span>
+            {typeLabel && (
+              <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 4, fontWeight: 700, background: 'rgba(240,165,0,0.1)', color: '#f0a500' }}>
+                {typeLabel}
+              </span>
+            )}
             {linkedProperties > 0 && (
               <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 4, fontWeight: 700, background: 'rgba(233,69,96,0.1)', color: '#e94560' }}>
-                🏠 {linkedProperties} {linkedProperties === 1 ? 'property' : 'properties'}
+                {linkedProperties} {linkedProperties === 1 ? 'property' : 'properties'}
               </span>
             )}
           </div>
           <div style={{ fontSize: 12, color: '#666', marginTop: 2, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            {contact.phone && <span>📞 {contact.phone}</span>}
-            {contact.email && <span>✉ {contact.email}</span>}
+            {contact.phone && <span>{contact.phone}</span>}
+            {contact.email && <span>{contact.email}</span>}
             {contact.day_added != null && <span>Day {contact.day_added}</span>}
           </div>
         </div>
@@ -608,7 +723,7 @@ function ArsenalCard({ contact, linkedProperties, isExpanded, followUps, onExpan
               background: overdue ? 'rgba(233,69,96,0.15)' : 'rgba(72,199,142,0.1)',
               color: overdue ? '#e94560' : '#48c78e',
               border: `1px solid ${overdue ? 'rgba(233,69,96,0.3)' : 'rgba(72,199,142,0.2)'}`,
-            }}>{overdue ? '⚠ ' : '📅 '}{followUpText}</span>
+            }}>{overdue ? '! ' : ''}{followUpText}</span>
           )}
           <span style={{ color: '#555', fontSize: 14, transition: 'transform 0.2s', transform: isExpanded ? 'rotate(90deg)' : 'none' }}>›</span>
         </div>
@@ -616,13 +731,13 @@ function ArsenalCard({ contact, linkedProperties, isExpanded, followUps, onExpan
       {isExpanded && <ExpandedDetail contact={contact} followUps={followUps} color="#f0a500"
         onUpdateContact={onUpdateContact} onContactUpdated={onContactUpdated}
         onAddContact={onAddContact} onContactAdded={onContactAdded} onAddFollowUp={onAddFollowUp}
-        onFollowUpLogged={onFollowUpLogged} user={user} />}
+        onFollowUpLogged={onFollowUpLogged} user={user} allContacts={allContacts} />}
     </div>
   );
 }
 
 /* ═══ Target Property Card ═══ */
-function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, onPropertyUnderContract, user }) {
+function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, onPropertyUnderContract, user, isColdView }) {
   const overdue = isOverdue(contact.follow_up_date);
   const followUpText = formatFollowUpDate(contact.follow_up_date);
   const statusInfo = STATUS_LABELS[contact.pipeline_status] || STATUS_LABELS.active;
@@ -682,9 +797,10 @@ function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdate
 }
 
 /* ═══ Expanded Detail (Editable) ═══ */
-function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, onPropertyUnderContract, user }) {
+function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, onPropertyUnderContract, user, allContacts }) {
   const statusInfo = STATUS_LABELS[contact.pipeline_status] || STATUS_LABELS.new;
   const isTarget = contact.contact_group === 'target';
+  const isArsenal = contact.contact_group === 'arsenal';
 
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -695,6 +811,13 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
   const [editProperty, setEditProperty] = useState(contact.property || '');
   const [editStatus, setEditStatus] = useState(contact.pipeline_status || 'new');
   const [editInterval, setEditInterval] = useState(contact.follow_up_interval || 'never');
+  const [editArsenalType, setEditArsenalType] = useState(contact.arsenal_type || '');
+  const [editLeadGenName, setEditLeadGenName] = useState(contact.lead_generator_name || '');
+  const [editLeadGenPhone, setEditLeadGenPhone] = useState(contact.lead_generator_phone || '');
+  const [editLeadGenEmail, setEditLeadGenEmail] = useState(contact.lead_generator_email || '');
+  const [editOwnerName, setEditOwnerName] = useState(contact.owner_name || '');
+  const [editOwnerPhone, setEditOwnerPhone] = useState(contact.owner_phone || '');
+  const [editOwnerEmail, setEditOwnerEmail] = useState(contact.owner_email || '');
   const [phoneError, setPhoneError] = useState('');
 
   const [showFollowUpForm, setShowFollowUpForm] = useState(false);
@@ -704,7 +827,19 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
 
   const [arsenalAdding, setArsenalAdding] = useState(false);
   const [arsenalAdded, setArsenalAdded] = useState(false);
+  const [leadGenArsenalAdded, setLeadGenArsenalAdded] = useState(false);
+  const [ownerArsenalAdded, setOwnerArsenalAdded] = useState(false);
   const [celebration, setCelebration] = useState(null);
+
+  // "Add Target Property" from Arsenal
+  const [showAddPropertyForm, setShowAddPropertyForm] = useState(false);
+  const [propStreet, setPropStreet] = useState('');
+  const [propCity, setPropCity] = useState('');
+  const [propState, setPropState] = useState('');
+  const [propZip, setPropZip] = useState('');
+  const [propNotes, setPropNotes] = useState('');
+  const [propFollowUp, setPropFollowUp] = useState('1_week');
+  const [propSaving, setPropSaving] = useState(false);
 
   const startEdit = () => {
     setEditName(contact.name || ''); setEditPhone(contact.phone || '');
@@ -712,6 +847,13 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
     setEditProperty(contact.property || '');
     setEditStatus(contact.pipeline_status || 'new');
     setEditInterval(contact.follow_up_interval || 'never');
+    setEditArsenalType(contact.arsenal_type || '');
+    setEditLeadGenName(contact.lead_generator_name || '');
+    setEditLeadGenPhone(contact.lead_generator_phone || '');
+    setEditLeadGenEmail(contact.lead_generator_email || '');
+    setEditOwnerName(contact.owner_name || '');
+    setEditOwnerPhone(contact.owner_phone || '');
+    setEditOwnerEmail(contact.owner_email || '');
     setEditing(true);
   };
 
@@ -729,6 +871,15 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
     if (isTarget) {
       updates.property = editProperty.trim() || null;
       updates.pipeline_status = editStatus;
+      updates.lead_generator_name = editLeadGenName.trim() || null;
+      updates.lead_generator_phone = editLeadGenPhone.trim() || null;
+      updates.lead_generator_email = editLeadGenEmail.trim() || null;
+      updates.owner_name = editOwnerName.trim() || null;
+      updates.owner_phone = editOwnerPhone.trim() || null;
+      updates.owner_email = editOwnerEmail.trim() || null;
+    }
+    if (isArsenal) {
+      updates.arsenal_type = editArsenalType || null;
     }
     const oldStatus = contact.pipeline_status;
     try {
@@ -763,6 +914,54 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
       }
     } catch (e) { console.error('Failed to add to arsenal:', e); }
     setArsenalAdding(false);
+  };
+
+  const handleAddRoleToArsenal = async (role) => {
+    const isLeadGen = role === 'lead_generator';
+    const name = isLeadGen ? contact.lead_generator_name : contact.owner_name;
+    const phone = isLeadGen ? contact.lead_generator_phone : contact.owner_phone;
+    const email = isLeadGen ? contact.lead_generator_email : contact.owner_email;
+    if (!name) return;
+    const setSaved = isLeadGen ? setLeadGenArsenalAdded : setOwnerArsenalAdded;
+    try {
+      const result = await onAddContact({
+        name, phone: phone || null, email: email || null,
+        contact_group: 'arsenal', pipeline_status: 'new',
+        notes: `${isLeadGen ? 'Lead Generator' : 'Owner/Seller'} from property: ${contact.property || 'N/A'}`,
+        follow_up_interval: '1_week',
+        follow_up_date: calculateFollowUpDate('1_week'),
+        last_contact_date: new Date().toISOString(),
+      });
+      if (result?.success) {
+        setSaved(true);
+        if (result.contact && onContactAdded) onContactAdded(result.contact);
+      }
+    } catch (e) { console.error('Failed to add to arsenal:', e); }
+  };
+
+  const handleAddTargetProperty = async () => {
+    if (!propStreet.trim()) return;
+    setPropSaving(true);
+    const propAddr = [propStreet.trim(), propCity.trim(), propState.trim(), propZip.trim()].filter(Boolean).join(', ');
+    try {
+      const result = await onAddContact({
+        name: contact.name, phone: contact.phone || null, email: contact.email || null,
+        contact_group: 'target', property: propAddr,
+        notes: propNotes.trim() || null, pipeline_status: 'active',
+        follow_up_interval: propFollowUp,
+        follow_up_date: calculateFollowUpDate(propFollowUp),
+        last_contact_date: new Date().toISOString(),
+        source_contact_id: contact.id,
+        lead_generator_name: contact.name,
+        lead_generator_phone: contact.phone || null,
+        lead_generator_email: contact.email || null,
+      });
+      if (result?.success && result.contact && onContactAdded) onContactAdded(result.contact);
+      setShowAddPropertyForm(false);
+      setPropStreet(''); setPropCity(''); setPropState(''); setPropZip('');
+      setPropNotes(''); setPropFollowUp('1_week');
+    } catch (e) { console.error('Failed to add target property:', e); }
+    setPropSaving(false);
   };
 
   const handleLogFollowUp = async () => {
@@ -835,16 +1034,70 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
       {/* Action buttons */}
       <div style={{ display: 'flex', gap: 8, marginTop: 10, marginBottom: 4, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
         {!editing && <button onClick={startEdit} style={actionBtn('rgba(255,255,255,0.06)', '#aaa')}>Edit</button>}
+        {isArsenal && onAddContact && !editing && (
+          <button onClick={() => setShowAddPropertyForm(!showAddPropertyForm)}
+            style={actionBtn('rgba(233,69,96,0.15)', '#e94560')}>
+            {showAddPropertyForm ? 'Cancel' : '+ Target Property'}
+          </button>
+        )}
         {isTarget && !arsenalAdded && onAddContact && !editing && (
           <button onClick={handleAddToArsenal} disabled={arsenalAdding}
             style={actionBtn('rgba(240,165,0,0.15)', '#f0a500')}>
-            {arsenalAdding ? 'Adding...' : 'Add to Arsenal Contacts'}
+            {arsenalAdding ? 'Adding...' : 'Add to Arsenal'}
           </button>
         )}
         {isTarget && arsenalAdded && (
           <span style={{ fontSize: 12, color: '#48c78e', padding: '6px 12px' }}>Added to Arsenal</span>
         )}
       </div>
+
+      {/* Add Target Property form (Arsenal expanded view) */}
+      {isArsenal && showAddPropertyForm && (
+        <div style={{ padding: '14px 16px', marginBottom: 8, background: 'rgba(233,69,96,0.04)', borderRadius: 10, border: '1px solid rgba(233,69,96,0.15)' }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: '#e94560', marginBottom: 10 }}>Add Target Property from {contact.name}</div>
+          <input placeholder="Street *" value={propStreet} onChange={e => setPropStreet(e.target.value)}
+            style={{ ...inputStyle, marginBottom: 6 }} />
+          <div style={{ display: 'flex', gap: 6, marginBottom: 6 }}>
+            <input placeholder="City" value={propCity} onChange={e => setPropCity(e.target.value)} style={{ ...inputStyle, flex: 2 }} />
+            <input placeholder="State" value={propState} onChange={e => setPropState(e.target.value)} style={{ ...inputStyle, flex: 1 }} />
+            <input placeholder="Zip" value={propZip} onChange={e => setPropZip(e.target.value)} style={{ ...inputStyle, flex: 1 }} />
+          </div>
+          <textarea placeholder="Property notes..." value={propNotes} onChange={e => setPropNotes(e.target.value)}
+            rows={2} style={{ ...inputStyle, resize: 'vertical', marginBottom: 8 }} />
+          <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>Follow-up schedule</div>
+          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 10 }}>
+            {FOLLOW_UP_OPTIONS.filter(o => o.value !== 'never').map(opt => (
+              <button key={opt.value} onClick={() => setPropFollowUp(opt.value)} style={{
+                padding: '4px 10px', borderRadius: 6, fontSize: 10, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", border: 'none',
+                background: propFollowUp === opt.value ? 'rgba(233,69,96,0.2)' : 'rgba(255,255,255,0.05)',
+                color: propFollowUp === opt.value ? '#e94560' : '#888',
+              }}>{opt.label}</button>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+            <button onClick={() => setShowAddPropertyForm(false)} style={actionBtn('rgba(255,255,255,0.06)', '#888')}>Cancel</button>
+            <button onClick={handleAddTargetProperty} disabled={propSaving || !propStreet.trim()}
+              style={actionBtn('rgba(233,69,96,0.2)', '#e94560')}>{propSaving ? 'Adding...' : 'Add Property'}</button>
+          </div>
+        </div>
+      )}
+
+      {/* Linked properties from this arsenal contact */}
+      {isArsenal && allContacts && (() => {
+        const linked = allContacts.filter(c => c.contact_group === 'target' && c.source_contact_id === contact.id);
+        if (linked.length === 0) return null;
+        return (
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Linked Properties</div>
+            {linked.map(p => (
+              <div key={p.id} style={{ fontSize: 12, color: '#e94560', padding: '4px 0' }}>
+                {p.property || 'No address'} — <span style={{ color: (STATUS_LABELS[p.pipeline_status] || STATUS_LABELS.active).color }}>{(STATUS_LABELS[p.pipeline_status] || STATUS_LABELS.active).label}</span>
+              </div>
+            ))}
+          </div>
+        );
+      })()}
 
       {editing ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 8 }}>
@@ -865,6 +1118,18 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
               <input value={editEmail} onChange={e => setEditEmail(e.target.value)} style={inputStyle} />
             </div>
           </div>
+
+          {/* Arsenal type dropdown */}
+          {isArsenal && (
+            <div style={{ flex: '1 1 180px' }}>
+              <label style={{ fontSize: 11, color: '#666', marginBottom: 3, display: 'block' }}>Contact Type</label>
+              <select value={editArsenalType} onChange={e => setEditArsenalType(e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
+                <option value="">Select type...</option>
+                {ARSENAL_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+              </select>
+            </div>
+          )}
+
           {isTarget && (
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               <div style={{ flex: '1 1 200px' }}>
@@ -881,6 +1146,49 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
               </div>
             </div>
           )}
+
+          {/* Lead Generator fields (target properties only) */}
+          {isTarget && (
+            <div style={{ padding: '10px 14px', background: 'rgba(240,165,0,0.04)', borderRadius: 8, border: '1px solid rgba(240,165,0,0.1)' }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#f0a500', marginBottom: 8 }}>Lead Generator</div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <div style={{ flex: '1 1 150px' }}>
+                  <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Name</label>
+                  <input value={editLeadGenName} onChange={e => setEditLeadGenName(e.target.value)} placeholder="Who brought the deal?" style={inputStyle} />
+                </div>
+                <div style={{ flex: '1 1 120px' }}>
+                  <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Phone</label>
+                  <input value={editLeadGenPhone} onChange={e => setEditLeadGenPhone(e.target.value)} style={inputStyle} />
+                </div>
+                <div style={{ flex: '1 1 150px' }}>
+                  <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Email</label>
+                  <input value={editLeadGenEmail} onChange={e => setEditLeadGenEmail(e.target.value)} style={inputStyle} />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Owner / Seller fields (target properties only) */}
+          {isTarget && (
+            <div style={{ padding: '10px 14px', background: 'rgba(107,138,253,0.04)', borderRadius: 8, border: '1px solid rgba(107,138,253,0.1)' }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#6b8afd', marginBottom: 8 }}>Owner / Seller</div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <div style={{ flex: '1 1 150px' }}>
+                  <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Name</label>
+                  <input value={editOwnerName} onChange={e => setEditOwnerName(e.target.value)} placeholder="Property owner" style={inputStyle} />
+                </div>
+                <div style={{ flex: '1 1 120px' }}>
+                  <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Phone</label>
+                  <input value={editOwnerPhone} onChange={e => setEditOwnerPhone(e.target.value)} style={inputStyle} />
+                </div>
+                <div style={{ flex: '1 1 150px' }}>
+                  <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Email</label>
+                  <input value={editOwnerEmail} onChange={e => setEditOwnerEmail(e.target.value)} style={inputStyle} />
+                </div>
+              </div>
+            </div>
+          )}
+
           <div>
             <label style={{ fontSize: 11, color: '#666', marginBottom: 3, display: 'block' }}>Follow-Up Interval</label>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -903,8 +1211,8 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
       ) : (
         <>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8 }}>
-            <DetailItem label="Type" value={contact.contact_group === 'arsenal' ? 'Arsenal' : 'Target Property'} />
-            {contact.contact_group === 'target' && <DetailItem label="Status" value={statusInfo.label} color={statusInfo.color} />}
+            <DetailItem label="Type" value={isArsenal ? (ARSENAL_TYPE_LABELS[contact.arsenal_type] || 'Arsenal') : 'Target Property'} />
+            {isTarget && <DetailItem label="Status" value={statusInfo.label} color={statusInfo.color} />}
             {contact.follow_up_interval && (
               <DetailItem label="Follow-Up Interval" value={INTERVAL_LABELS[contact.follow_up_interval] || contact.follow_up_interval} />
             )}
@@ -918,6 +1226,51 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
                 value={new Date(contact.last_contact_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} />
             )}
           </div>
+
+          {/* Lead Generator read-only display */}
+          {isTarget && contact.lead_generator_name && (
+            <div style={{ marginTop: 10, padding: '8px 12px', background: 'rgba(240,165,0,0.04)', borderRadius: 8, border: '1px solid rgba(240,165,0,0.08)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6 }}>
+                <div>
+                  <span style={{ fontSize: 10, color: '#f0a500', fontWeight: 700 }}>LEAD GENERATOR</span>
+                  <div style={{ fontSize: 13, color: '#ddd', marginTop: 2 }}>
+                    {contact.lead_generator_name}
+                    {contact.lead_generator_phone && <span style={{ color: '#666', marginLeft: 10 }}>{contact.lead_generator_phone}</span>}
+                    {contact.lead_generator_email && <span style={{ color: '#666', marginLeft: 10 }}>{contact.lead_generator_email}</span>}
+                  </div>
+                </div>
+                {onAddContact && !leadGenArsenalAdded && (
+                  <button onClick={() => handleAddRoleToArsenal('lead_generator')} style={actionBtn('rgba(240,165,0,0.12)', '#f0a500')}>
+                    Add as Arsenal
+                  </button>
+                )}
+                {leadGenArsenalAdded && <span style={{ fontSize: 11, color: '#48c78e' }}>Added</span>}
+              </div>
+            </div>
+          )}
+
+          {/* Owner read-only display */}
+          {isTarget && contact.owner_name && (
+            <div style={{ marginTop: 6, padding: '8px 12px', background: 'rgba(107,138,253,0.04)', borderRadius: 8, border: '1px solid rgba(107,138,253,0.08)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6 }}>
+                <div>
+                  <span style={{ fontSize: 10, color: '#6b8afd', fontWeight: 700 }}>OWNER / SELLER</span>
+                  <div style={{ fontSize: 13, color: '#ddd', marginTop: 2 }}>
+                    {contact.owner_name}
+                    {contact.owner_phone && <span style={{ color: '#666', marginLeft: 10 }}>{contact.owner_phone}</span>}
+                    {contact.owner_email && <span style={{ color: '#666', marginLeft: 10 }}>{contact.owner_email}</span>}
+                  </div>
+                </div>
+                {onAddContact && !ownerArsenalAdded && (
+                  <button onClick={() => handleAddRoleToArsenal('owner')} style={actionBtn('rgba(107,138,253,0.12)', '#6b8afd')}>
+                    Add as Arsenal
+                  </button>
+                )}
+                {ownerArsenalAdded && <span style={{ fontSize: 11, color: '#48c78e' }}>Added</span>}
+              </div>
+            </div>
+          )}
+
           {contact.notes && (
             <div style={{ marginTop: 12, padding: '10px 14px', background: 'rgba(255,255,255,0.02)', borderRadius: 8, fontSize: 13, color: '#aaa', lineHeight: 1.6 }}>
               <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Notes:</span>
