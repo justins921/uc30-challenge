@@ -938,9 +938,9 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
         </div>
       </div>
 
-      {/* Video */}
+      {/* Video — only shown when URL is configured */}
+      {content.videoUrl && (
       <div className="card" style={{ marginBottom: 20, padding: 0, overflow: 'hidden' }}>
-        {content.videoUrl ? (
           <div style={{ aspectRatio: '16/9' }}>
             <iframe
               src={content.videoUrl}
@@ -949,22 +949,8 @@ function GettingStartedSection({ user, onComplete, contentOverrides }) {
               allowFullScreen
             />
           </div>
-        ) : (
-          <div style={{
-            background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
-            aspectRatio: '16/9', display: 'flex', alignItems: 'center',
-            justifyContent: 'center', flexDirection: 'column', gap: 12,
-          }}>
-            <div style={{
-              width: 72, height: 72, borderRadius: '50%',
-              background: 'rgba(233,69,96,0.2)', border: '2px solid rgba(233,69,96,0.4)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28,
-            }}>▶</div>
-            <div style={{ fontSize: 13, color: '#888' }}>Getting Started Video</div>
-            <div style={{ fontSize: 11, color: '#555' }}>Admin: Add video URL in Content tab</div>
-          </div>
-        )}
       </div>
+      )}
 
       {/* Downloads */}
       {content.downloads && content.downloads.length > 0 && (

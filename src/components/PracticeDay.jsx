@@ -201,18 +201,9 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
               <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>🎬</div>
               <h3 style={{ fontSize: 16, fontWeight: 700 }}>Daily Training Video</h3>
             </div>
-            {videoUrl ? (
+            {videoUrl && (
               <div style={{ aspectRatio: '16/9', borderRadius: 10, overflow: 'hidden', marginBottom: 12 }}>
                 <iframe src={videoUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen />
-              </div>
-            ) : (
-              <div style={{
-                aspectRatio: '16/9', borderRadius: 10, marginBottom: 12,
-                background: 'rgba(255,255,255,0.03)', border: '1px dashed rgba(255,255,255,0.1)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column',
-              }}>
-                <div style={{ fontSize: 40, marginBottom: 8 }}>▶️</div>
-                <div style={{ fontSize: 13, color: '#666' }}>Daily video will appear here</div>
               </div>
             )}
             <p style={{ fontSize: 13, color: '#888', lineHeight: 1.6, margin: 0 }}>
