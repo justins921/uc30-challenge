@@ -622,6 +622,39 @@ export default function DayView({
         </div>
       )}
 
+      {/* ═══ PRE-TRAINING COMPLETION ═══ */}
+      {isPreTraining && !isComplete && !submitted && (!hasRequiredQuiz || quizPassed) && (
+        <div style={{ marginTop: 24 }}>
+          <button
+            onClick={() => {
+              onSubmit(day, {
+                text: `Completed: ${dayData.title}`,
+                dayMetrics: {},
+                complianceMetrics: {},
+                metDailyMinimum: true,
+              });
+              setSubmitted(true);
+            }}
+            className="btn-primary"
+            style={{ width: '100%', padding: '16px 24px', fontSize: 16 }}
+          >
+            Mark Complete
+          </button>
+        </div>
+      )}
+      {isPreTraining && (isComplete || submitted) && (
+        <div style={{
+          marginTop: 24, padding: '20px', borderRadius: 12, textAlign: 'center',
+          background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.2)',
+        }}>
+          <div style={{ fontSize: 28, marginBottom: 8 }}>✓</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: '#48c78e' }}>Complete!</div>
+          <p style={{ fontSize: 13, color: '#888', marginTop: 4 }}>
+            {day < 0 ? `Move on to the next pre-training step.` : 'You\'re ready for the challenge.'}
+          </p>
+        </div>
+      )}
+
       {/* ═══ SUBMISSION AREA ═══ */}
       {!isPreTraining && (isComplete && existingSubmission ? (
         <SubmissionComplete submission={existingSubmission} />

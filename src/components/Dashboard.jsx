@@ -448,7 +448,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
 
         {/* Tab Content */}
         {!showPracticeDay && tab === 'timeline' && !isPipelineMode && (
-          <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} contentOverrides={contentOverrides} customPhases={customPhases} cohortStartDate={cohortStartDate} />
+          <TimelineView user={user} onSelectDay={handleSelectDay} calendarDay={calendarDay} contentOverrides={contentOverrides} customPhases={customPhases} cohortStartDate={cohortStartDate} onLaunchPracticeDay={() => setShowPracticeDay(true)} />
         )}
         {!showPracticeDay && tab === 'day' && selectedDay === 'getting_started' && (
           <div style={{ maxWidth: 720, margin: '0 auto' }}>
@@ -640,52 +640,15 @@ function CohortCountdown({ cohortStartDate, user, onLaunchPracticeDay }) {
       )}
 
       <div className="card" style={{ padding: 24, textAlign: 'left', maxWidth: 400, margin: '0 auto', marginBottom: 20 }}>
-        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>You're activated. Use this time to:</h3>
+        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>You're activated. Complete all pre-work to unlock Day 1:</h3>
         <ul style={{ color: '#888', fontSize: 14, lineHeight: 2, listStyle: 'none', padding: 0 }}>
-          <li>✅ Complete the Getting Started section</li>
-          <li>✅ Set up your deal-finding tools</li>
-          <li>✅ Research properties in your target area</li>
-          <li>✅ Get ready to submit offers on Day 1</li>
+          <li>{user?.gettingStartedCompleted ? '✅' : '⬜'} Getting Started — social handles</li>
+          <li>{user?.completedDays?.includes(-3) ? '✅' : '⬜'} Your Foundation</li>
+          <li>{user?.completedDays?.includes(-2) ? '✅' : '⬜'} Your Market and Buy Box</li>
+          <li>{user?.completedDays?.includes(-1) ? '✅' : '⬜'} Your Team and Tools</li>
+          <li>{user?.completedDays?.includes(0) || user?.preTrainingComplete ? '✅' : '⬜'} Return Metrics 101</li>
+          <li>{user?.practiceDayCompleted ? '✅' : '⬜'} Practice Run</li>
         </ul>
-      </div>
-
-      {/* Practice Day Card */}
-      <div
-        onClick={user?.practiceDayCompleted ? undefined : onLaunchPracticeDay}
-        style={{
-          maxWidth: 400, margin: '0 auto', padding: '20px 24px', borderRadius: 14,
-          background: user?.practiceDayCompleted
-            ? 'rgba(72,199,142,0.06)' : 'linear-gradient(135deg, rgba(240,165,0,0.08), rgba(240,165,0,0.03))',
-          border: `1px solid ${user?.practiceDayCompleted ? 'rgba(72,199,142,0.2)' : 'rgba(240,165,0,0.25)'}`,
-          cursor: user?.practiceDayCompleted ? 'default' : 'pointer',
-          display: 'flex', alignItems: 'center', gap: 16,
-          transition: 'all 0.2s',
-        }}
-      >
-        <div style={{
-          width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-          background: user?.practiceDayCompleted ? 'rgba(72,199,142,0.15)' : 'rgba(240,165,0,0.15)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
-        }}>
-          {user?.practiceDayCompleted ? '✓' : '🏋️'}
-        </div>
-        <div style={{ flex: 1 }}>
-          <div style={{
-            fontSize: 14, fontWeight: 700,
-            color: user?.practiceDayCompleted ? '#48c78e' : '#f0a500',
-            marginBottom: 4,
-          }}>
-            {user?.practiceDayCompleted ? 'Practice Run Complete' : 'Take a Practice Run'}
-          </div>
-          <div style={{ fontSize: 12, color: '#888', lineHeight: 1.5 }}>
-            {user?.practiceDayCompleted
-              ? 'You\'re ready for Day 1.'
-              : 'Learn how the daily submission works before Day 1.'}
-          </div>
-        </div>
-        {!user?.practiceDayCompleted && (
-          <div style={{ color: '#f0a500', fontSize: 18, flexShrink: 0, fontWeight: 700 }}>›</div>
-        )}
       </div>
     </div>
   );

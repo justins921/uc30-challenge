@@ -1,6 +1,9 @@
-import { getPhases, getDayContent, getGettingStartedContent, getPreDayContent, POST_30_TASK, getStreak, resolveContentDay } from '../data/challengeDays';
+import { getPhases, getDayContent, getGettingStartedContent, getPreDayContent, PRE_DAYS, POST_30_TASK, getStreak, resolveContentDay } from '../data/challengeDays';
 
-export default function TimelineView({ user, onSelectDay, calendarDay, contentOverrides, customPhases, cohortStartDate }) {
+const PRE_DAY_ORDER = [-3, -2, -1, 0];
+const PRE_DAY_LABELS = { '-3': 'STEP 2', '-2': 'STEP 3', '-1': 'STEP 4', '0': 'STEP 5' };
+
+export default function TimelineView({ user, onSelectDay, calendarDay, contentOverrides, customPhases, cohortStartDate, onLaunchPracticeDay }) {
   const phases = getPhases(customPhases);
   const challengeComplete = user.completedDays.includes(30);
   const inContinuation = challengeComplete && user.currentDay > 30;
@@ -9,105 +12,93 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
   // Days 1+ are locked if cohort hasn't started yet (or no date set)
   const cohortActive = cohortStartDate && calendarDay !== null && calendarDay >= 1;
 
+  // Sequential pre-work completion status
+  const gsComplete = !!user.gettingStartedCompleted;
+  const preDayComplete = (d) => user.completedDays?.includes(d) || (d === 0 && user.preTrainingComplete);
+  const practiceComplete = !!user.practiceDayCompleted;
+
+  // All pre-work done = Getting Started + all pre-days + practice run
+  const allPreWorkDone = gsComplete
+    && PRE_DAY_ORDER.every(d => preDayComplete(d))
+    && practiceComplete;
+
   return (
     <div className="fade-up-delay-2">
-      {/* Getting Started Phase */}
+      {/* Pre-Day 1 Phase */}
       <div style={{ marginBottom: 36 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
           <div style={{ width: 12, height: 12, borderRadius: 3, background: '#e94560' }} />
-          <h3 style={{ fontSize: 16, fontWeight: 700, letterSpacing: 1 }}>Getting Started</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 700, letterSpacing: 1 }}>Before Day 1</h3>
           <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+          {allPreWorkDone && (
+            <span style={{ fontSize: 11, color: '#48c78e', fontWeight: 700 }}>ALL COMPLETE</span>
+          )}
         </div>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
           gap: 10,
         }}>
-          <div
-            onClick={() => !user.gettingStartedCompleted && onSelectDay('getting_started')}
-            className="card"
-            style={{
-              cursor: user.gettingStartedCompleted ? 'default' : 'pointer',
-              opacity: 1,
-              borderColor: user.gettingStartedCompleted
-                ? 'rgba(72,199,142,0.3)'
-                : '#e94560',
-              position: 'relative',
-              padding: '16px 16px 14px',
-              overflow: 'hidden',
-            }}
-          >
-            {user.gettingStartedCompleted && (
-              <div style={{
-                position: 'absolute', top: 12, right: 12, width: 22, height: 22,
-                borderRadius: '50%', background: '#48c78e',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 12, color: 'white',
-              }}>✓</div>
-            )}
-            {!user.gettingStartedCompleted && (
-              <div style={{
-                position: 'absolute', top: 12, right: 12, width: 10, height: 10,
-                borderRadius: '50%', background: '#e94560', animation: 'pulse 2s infinite',
-              }} />
-            )}
-            <div className="mono" style={{
-              fontSize: 11, color: '#e94560', fontWeight: 700,
-              letterSpacing: 1, marginBottom: 6,
-            }}>
-              INTRO
-            </div>
-            <div style={{
-              fontSize: 13, fontWeight: 500, lineHeight: 1.4,
-              color: user.gettingStartedCompleted ? '#48c78e' : '#ccc',
-            }}>
-              {gsContent.title}
-            </div>
-          </div>
+          {/* Step 1: Getting Started */}
+          <PreWorkCard
+            label="STEP 1"
+            title={gsContent.title}
+            color="#e94560"
+            isComplete={gsComplete}
+            isLocked={false}
+            isCurrent={!gsComplete}
+            onClick={() => !gsComplete && onSelectDay('getting_started')}
+          />
 
-          {/* Return Metrics 101 — pre-training card */}
-          {(() => {
-            const rmData = getPreDayContent(0, contentOverrides);
-            if (!rmData) return null;
-            const rmComplete = user.completedDays?.includes(0) || (user.preTrainingComplete || false);
-            const rmLocked = !user.gettingStartedCompleted;
+          {/* Steps 2-5: Pre-days (-3, -2, -1, 0) */}
+          {PRE_DAY_ORDER.map((d, i) => {
+            const data = getPreDayContent(d, contentOverrides);
+            if (!data) return null;
+            const complete = preDayComplete(d);
+            const prevDone = i === 0
+              ? gsComplete
+              : preDayComplete(PRE_DAY_ORDER[i - 1]);
+            const locked = !prevDone;
+            const isCurrent = !complete && prevDone;
             return (
-              <div
-                onClick={() => !rmLocked && onSelectDay(0)}
-                className="card"
-                style={{
-                  cursor: rmLocked ? 'not-allowed' : 'pointer',
-                  opacity: rmLocked ? 0.5 : 1,
-                  borderColor: rmComplete ? 'rgba(72,199,142,0.3)' : rmLocked ? 'rgba(255,255,255,0.06)' : '#c9a0ff',
-                  position: 'relative',
-                  padding: '16px 16px 14px',
-                  overflow: 'hidden',
-                }}
-              >
-                {rmComplete && (
-                  <div style={{
-                    position: 'absolute', top: 12, right: 12, width: 22, height: 22,
-                    borderRadius: '50%', background: '#48c78e',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 12, color: 'white',
-                  }}>✓</div>
-                )}
-                <div className="mono" style={{
-                  fontSize: 11, color: '#c9a0ff', fontWeight: 700,
-                  letterSpacing: 1, marginBottom: 6,
-                }}>
-                  PRE-TRAINING
-                </div>
-                <div style={{
-                  fontSize: 13, fontWeight: 500, lineHeight: 1.4,
-                  color: rmComplete ? '#48c78e' : rmLocked ? '#666' : '#ccc',
-                }}>
-                  {rmData.title}
-                </div>
-              </div>
+              <PreWorkCard
+                key={d}
+                label={PRE_DAY_LABELS[String(d)]}
+                title={data.title}
+                color={d === 0 ? '#c9a0ff' : '#e94560'}
+                isComplete={complete}
+                isLocked={locked}
+                isCurrent={isCurrent}
+                onClick={() => !locked && !complete && onSelectDay(d)}
+              />
             );
-          })()}
+          })}
+
+          {/* Step 6: Practice Run */}
+          <PreWorkCard
+            label="STEP 6"
+            title="Practice Run"
+            color="#f0a500"
+            isComplete={practiceComplete}
+            isLocked={!PRE_DAY_ORDER.every(d => preDayComplete(d))}
+            isCurrent={!practiceComplete && PRE_DAY_ORDER.every(d => preDayComplete(d))}
+            onClick={() => {
+              if (!practiceComplete && PRE_DAY_ORDER.every(d => preDayComplete(d)) && onLaunchPracticeDay) {
+                onLaunchPracticeDay();
+              }
+            }}
+          />
         </div>
+
+        {!allPreWorkDone && (
+          <div style={{
+            marginTop: 12, padding: '10px 14px', borderRadius: 8,
+            background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.12)',
+            fontSize: 12, color: '#888', lineHeight: 1.6, textAlign: 'center',
+          }}>
+            Complete each step in order to unlock Day 1.
+          </div>
+        )}
       </div>
 
       {phases.map((phase) => (
@@ -130,9 +121,9 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
               const isComplete = user.completedDays.includes(d);
               const isCurrent = d === user.currentDay;
 
-              // Lock all days if cohort hasn't started or Getting Started not done
+              // Lock all days if cohort hasn't started or pre-work not done
               let isLocked;
-              if (!cohortActive || !user.gettingStartedCompleted) {
+              if (!cohortActive || !allPreWorkDone) {
                 isLocked = true;
               } else if (calendarDay !== null) {
                 const isAccessible = isComplete || (isCurrent && d <= calendarDay);
@@ -220,6 +211,53 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
           onSelectDay={onSelectDay}
         />
       )}
+    </div>
+  );
+}
+
+function PreWorkCard({ label, title, color, isComplete, isLocked, isCurrent, onClick }) {
+  return (
+    <div
+      onClick={!isLocked && !isComplete ? onClick : undefined}
+      className="card"
+      style={{
+        cursor: isLocked ? 'not-allowed' : isComplete ? 'default' : 'pointer',
+        opacity: isLocked ? 0.5 : 1,
+        borderColor: isComplete ? 'rgba(72,199,142,0.3)' : isCurrent ? color : 'rgba(255,255,255,0.06)',
+        position: 'relative',
+        padding: '16px 16px 14px',
+        overflow: 'hidden',
+      }}
+    >
+      {isComplete && (
+        <div style={{
+          position: 'absolute', top: 12, right: 12, width: 22, height: 22,
+          borderRadius: '50%', background: '#48c78e',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 12, color: 'white',
+        }}>✓</div>
+      )}
+      {isCurrent && !isComplete && (
+        <div style={{
+          position: 'absolute', top: 12, right: 12, width: 10, height: 10,
+          borderRadius: '50%', background: color, animation: 'pulse 2s infinite',
+        }} />
+      )}
+      {isLocked && !isComplete && (
+        <div style={{ position: 'absolute', top: 12, right: 12, fontSize: 12, color: '#555' }}>🔒</div>
+      )}
+      <div className="mono" style={{
+        fontSize: 11, color: isLocked ? '#333' : color, fontWeight: 700,
+        letterSpacing: 1, marginBottom: 6,
+      }}>
+        {label}
+      </div>
+      <div style={{
+        fontSize: 13, fontWeight: 500, lineHeight: 1.4,
+        color: isComplete ? '#48c78e' : isLocked ? '#666' : '#ccc',
+      }}>
+        {title}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { storage, createNewUser, isSupabaseEnabled } from '../utils/storage';
 import { supabase } from '../utils/supabaseClient';
-import { CHALLENGE_DAYS, POST_30_TASK } from '../data/challengeDays';
+import { CHALLENGE_DAYS, POST_30_TASK, PRE_DAYS } from '../data/challengeDays';
 import { calculateUCPoints } from '../data/ucPoints';
 import { checkDailyCompliance, checkEnforcement, DEFAULT_DAILY_MINIMUMS as COMPLIANCE_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
 import { hashPassword } from '../utils/crypto';
@@ -871,9 +871,11 @@ export function useAppState() {
   const submitDay = useCallback(async (dayNum, proof) => {
     if (!user) return;
 
-    // Validate: must be the user's current day (or post-30 operator mode)
     const isPost30 = dayNum > 30;
-    if (!isPost30 && dayNum !== user.currentDay) {
+    const isPreTraining = dayNum <= 0;
+
+    // Validate: must be the user's current day (or post-30 / pre-training)
+    if (!isPost30 && !isPreTraining && dayNum !== user.currentDay) {
       console.error(`Submission rejected: dayNum ${dayNum} does not match currentDay ${user.currentDay}`);
       return { error: 'You can only submit your current day.' };
     }
@@ -884,7 +886,9 @@ export function useAppState() {
       return { error: 'This day has already been submitted.' };
     }
 
-    const dayData = isPost30 ? POST_30_TASK : CHALLENGE_DAYS[dayNum - 1];
+    const dayData = isPreTraining
+      ? (PRE_DAYS.find(p => p.day === dayNum) || { title: `Pre-Training Day ${dayNum}` })
+      : isPost30 ? POST_30_TASK : CHALLENGE_DAYS[dayNum - 1];
     const dayMetrics = proof.dayMetrics || {};
 
     const submission = {
@@ -921,7 +925,7 @@ export function useAppState() {
     }
 
     const updates = {
-      currentDay: dayNum + 1,
+      currentDay: isPreTraining ? user.currentDay : dayNum + 1,
       completedDays: [...user.completedDays, dayNum],
       submissions: [...user.submissions, submission],
       metrics: updatedMetrics,
@@ -929,6 +933,7 @@ export function useAppState() {
       lifetimeOffersSubmitted,
       trainingCompletedDays,
     };
+    if (isPreTraining) updates.preTrainingComplete = true;
 
     const updatedUser = { ...user, ...updates };
 
