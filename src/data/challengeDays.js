@@ -9306,18 +9306,442 @@ The objective now is to think like an investor and allocate your time the same w
   // ── Week 4: Full Sprint (Days 22-30) ──
   {
     day: 22,
-    title: "Analyze Multifamily Properties",
-    caption: "",
-    taskDescription: "Analyze at least 3 multifamily properties. Submit your analysis.",
-    trainingContent: "",
+    title: "Finding Motivation Faster",
+    caption: "Identifying opportunity before everyone else.",
+    taskDescription: `Today's Exercise
+
+Review:
+• 10 MLS listings
+• 5 FSBO listings
+• 5 current Target Properties
+
+For each one identify:
+• What evidence suggests motivation?
+• What evidence suggests frustration?
+• What evidence suggests flexibility?
+
+Then rank them from Most Motivated to Least Motivated.
+
+
+Today's Suggested Arsenal Activity
+
+Ask your Arsenal Contacts:
+
+"What situations are causing owners to sell right now?"
+
+Do not ask for properties. Ask for situations.
+
+The best opportunities often come from understanding the problem before the property ever becomes available.`,
+    trainingContent: `Why This Matters
+
+Most investors spend their time searching for properties.
+
+The best investors spend their time searching for motivated sellers.
+
+The reality is that most great deals are not created because of a great property.
+
+They are created because of a seller who has a problem they want solved.
+
+Your goal is to identify those situations before everyone else.
+
+
+Property Problems vs Seller Problems
+
+Many investors become obsessed with:
+• cap rates,
+• cash-on-cash returns,
+• rents,
+• expenses.
+
+Those things matter.
+
+But most flexibility comes from the seller, not the property.
+
+A perfect property with an unmotivated seller can be impossible to buy.
+
+An average property with a motivated seller can become an incredible investment.
+
+The question is not:
+"How good is the property?"
+
+The question is:
+"How motivated is the seller?"
+
+
+The Best Investors Recognize Patterns
+
+Most sellers never say:
+"I'm motivated."
+
+Instead, they leave clues.
+
+Your job is to recognize those clues.
+
+
+MLS Clue #1 — Long Days On Market
+
+One of the easiest signs of potential motivation is time.
+
+Ask: How long has this property been sitting?
+
+A property that has been listed for 7 days, 14 days, 21 days usually has plenty of attention.
+
+A property sitting for 90 days, 180 days, 300+ days often deserves a closer look.
+
+Long market times create:
+• frustration,
+• carrying costs,
+• uncertainty,
+• fatigue.
+
+All of which can increase flexibility.
+
+
+MLS Clue #2 — Multiple Price Reductions
+
+Every price reduction tells a story.
+
+Ask: Why hasn't it sold?
+
+Sometimes the seller is unrealistic. Sometimes the market has spoken.
+
+The more reductions you see, the more likely the seller is becoming frustrated.
+
+
+MLS Clue #3 — Properties That Need Work
+
+Many retail buyers avoid properties with:
+• ugly paint,
+• old flooring,
+• deferred maintenance,
+• poor presentation.
+
+Investors should pay attention to these properties.
+
+The property may not be the problem. The marketing may be.
+
+
+MLS Clue #4 — Vacant Properties
+
+Vacancy often creates pressure.
+
+Vacant properties can mean:
+• mortgage payments,
+• utilities,
+• insurance,
+• maintenance,
+• uncertainty.
+
+Every month that passes costs the owner money.
+
+
+Finding Forgotten FSBO Opportunities
+
+Some of the best opportunities are properties that are technically for sale but poorly marketed.
+
+Many For Sale By Owners fail because:
+• terrible photos,
+• poor descriptions,
+• limited exposure,
+• incorrect pricing,
+• no follow-up.
+
+The property may not be bad. The marketing may be bad.
+
+
+Places To Find FSBO Opportunities
+
+• Facebook Marketplace
+• Facebook Real Estate Groups
+• Craigslist
+• Zillow FSBO Listings
+• Local Classifieds
+• Neighborhood Groups
+• Community Bulletin Boards
+• Word Of Mouth Referrals
+
+
+The FSBO Opportunity Filter
+
+When evaluating a For Sale By Owner property, ask:
+Is the property unattractive? Or is the marketing unattractive?
+
+There is a huge difference.
+
+Many investors overlook opportunities because they confuse bad marketing with a bad property.
+
+
+Motivation Through Follow-Up
+
+Many motivated sellers are not motivated the first time you call.
+
+Motivation often develops over time.
+
+Examples:
+• property won't sell,
+• tenants become difficult,
+• repairs arise,
+• financing changes,
+• life circumstances change.
+
+The investor who follows up consistently is often the investor who gets the opportunity.
+
+
+Position Yourself As The Easy Solution
+
+One of the biggest mistakes investors make is focusing entirely on price.
+
+Many sellers are willing to accept less money if they believe the process will be easier.
+
+This is especially true when:
+• the property needs work,
+• tenants are difficult,
+• the seller is overwhelmed,
+• time matters.
+
+
+Your Competitive Advantage
+
+Most buyers create more work. Your goal is to create less work.
+
+You want sellers to think:
+"Working with this person would be easy."
+
+Examples:
+• Quick responses.
+• Clear communication.
+• No unnecessary drama.
+• Simple explanations.
+• Reliable follow-up.
+• Professional behavior.
+• Certainty.
+
+
+The Smooth Transaction Pitch
+
+Without directly saying it, you want sellers to understand:
+"I make this easy."
+
+Examples:
+• I understand investment properties.
+• I can evaluate quickly.
+• I communicate clearly.
+• I follow through.
+• I respect your timeline.
+• I look for solutions.
+• I don't create unnecessary complications.
+
+The more certainty you provide, the more flexibility sellers often provide in return.
+
+
+The Convenience Discount
+
+Many investors assume every seller wants the highest price. That is often not true.
+
+Many sellers value:
+• certainty,
+• convenience,
+• speed,
+• simplicity,
+• flexibility,
+
+more than squeezing out every dollar.
+
+Your goal is not to convince sellers to take less.
+
+Your goal is to become the easiest and most logical solution.
+
+When you do that, price often becomes less important.
+
+
+The Professional Investor Mindset
+
+Average investors look for: Properties.
+
+Professional investors look for: Situations.
+
+Situations create motivation.
+Motivation creates flexibility.
+Flexibility creates opportunity.
+
+
+Key Takeaway
+
+The best investors do not find opportunities because they are better at analyzing properties.
+
+They find opportunities because they are better at recognizing motivation.
+
+The ability to identify frustration, fatigue, pressure, convenience needs, and life changes before other investors do is one of the most valuable skills in real estate acquisition.`,
     category: "sprint",
     weekNumber: 4,
     weekTitle: "FULL SPRINT",
-    proofType: "spreadsheet",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      title: 'Finding Motivation Faster',
+      required: true,
+      passingScore: 100,
+      scenarios: [
+        {
+          id: 'day22_q1',
+          title: 'Property A vs Property B',
+          question: 'You are evaluating two properties.\n\nProperty A: Beautiful condition, recently listed, no price reductions, seller says they are "just seeing what\'s out there."\n\nProperty B: Needs cosmetic updates, 180 days on market, three price reductions, seller says they are tired of managing it.\n\nWhich property deserves more immediate attention?',
+          options: [
+            { id: 'a', text: 'Property A because it requires less work.' },
+            { id: 'b', text: 'Property B because seller motivation is likely higher.' },
+            { id: 'c', text: 'Both equally.' },
+            { id: 'd', text: 'Neither because both sellers want too much.' },
+          ],
+          correctId: 'b',
+          explanation: 'Property B shows multiple signs of motivation: long days on market, price reductions, and stated fatigue. These clues suggest a seller who may be flexible.',
+        },
+        {
+          id: 'day22_q2',
+          title: 'Follow-Up Question',
+          question: 'A seller says: "I\'ve owned it for 25 years and I\'m just getting tired of dealing with tenants." What is the MOST important follow-up question?',
+          options: [
+            { id: 'a', text: 'What is your asking price?' },
+            { id: 'b', text: 'How many units are there?' },
+            { id: 'c', text: 'What has been the most frustrating part of ownership recently?' },
+            { id: 'd', text: 'When was the roof replaced?' },
+          ],
+          correctId: 'c',
+          explanation: 'Understanding the seller\'s frustration helps you structure a solution around their actual problem, which creates more flexibility than jumping straight to price or property details.',
+        },
+        {
+          id: 'day22_q3',
+          title: 'Long Days On Market',
+          question: 'A property has been listed for 210 days with no price reductions. What is the BEST conclusion?',
+          options: [
+            { id: 'a', text: 'The seller is definitely motivated.' },
+            { id: 'b', text: 'The seller is definitely unmotivated.' },
+            { id: 'c', text: 'More information is needed because long market time alone does not determine motivation.' },
+            { id: 'd', text: 'Submit an offer immediately.' },
+          ],
+          correctId: 'c',
+          explanation: 'Long days on market is a clue, not a conclusion. The seller may be stubborn on price, or they may be waiting for the right buyer. More investigation is needed.',
+        },
+        {
+          id: 'day22_q4',
+          title: 'FSBO Opportunity',
+          question: 'A For Sale By Owner property has been listed for 8 months with poor photos and almost no description. What is the MOST likely explanation?',
+          options: [
+            { id: 'a', text: 'The property is a terrible investment.' },
+            { id: 'b', text: 'The seller may be struggling with marketing and exposure.' },
+            { id: 'c', text: 'The seller is guaranteed to accept a low offer.' },
+            { id: 'd', text: 'The property has hidden defects.' },
+          ],
+          correctId: 'b',
+          explanation: 'Poor marketing does not mean a bad property. Many FSBOs fail because of terrible photos, poor descriptions, and limited exposure — not because the property itself is bad.',
+        },
+        {
+          id: 'day22_q5',
+          title: 'Most Flexible Seller',
+          question: 'Which seller is MOST likely to be flexible?',
+          options: [
+            { id: 'a', text: 'A seller who inherited a property, lives out of state, and is tired of dealing with maintenance.' },
+            { id: 'b', text: 'A seller who just listed yesterday and received multiple offers.' },
+            { id: 'c', text: 'A seller who refinanced six months ago and plans to hold long-term.' },
+            { id: 'd', text: 'A seller who says they will only sell if someone dramatically overpays.' },
+          ],
+          correctId: 'a',
+          explanation: 'Inherited property + out of state + maintenance fatigue = multiple motivation factors. This seller has a problem they want solved, which creates flexibility.',
+        },
+        {
+          id: 'day22_q6',
+          title: 'Hidden Motivation',
+          question: 'A seller says: "I really don\'t need to sell." But then mentions: the property is vacant, insurance costs are rising, maintenance is becoming difficult, and they are moving to another state. What should an investor conclude?',
+          options: [
+            { id: 'a', text: 'The seller has no motivation.' },
+            { id: 'b', text: 'The seller may have more motivation than their initial statement suggests.' },
+            { id: 'c', text: 'The property should be ignored.' },
+            { id: 'd', text: 'Only discuss purchase price.' },
+          ],
+          correctId: 'b',
+          explanation: 'What sellers say and what they actually experience are often different. Vacancy, rising costs, maintenance difficulty, and relocation are all motivation factors regardless of what the seller initially states.',
+        },
+        {
+          id: 'day22_q7',
+          title: 'Competitive Advantage',
+          question: 'Which of the following is the strongest competitive advantage?',
+          options: [
+            { id: 'a', text: 'Always making the highest offer.' },
+            { id: 'b', text: 'Being the fastest talker.' },
+            { id: 'c', text: 'Being viewed as the easiest and most reliable buyer to work with.' },
+            { id: 'd', text: 'Making offers immediately without analysis.' },
+          ],
+          correctId: 'c',
+          explanation: 'Certainty, reliability, and ease of transaction are often more valuable to sellers than the highest price. Being the easy solution is a powerful competitive advantage.',
+        },
+        {
+          id: 'day22_q8',
+          title: 'Off My Plate',
+          question: 'A seller tells you: "Honestly, I just want this thing off my plate." What should your primary focus be?',
+          options: [
+            { id: 'a', text: 'Explaining why your cash-on-cash return is low.' },
+            { id: 'b', text: 'Discovering what specifically is creating stress and structuring a solution around it.' },
+            { id: 'c', text: 'Immediately negotiating price.' },
+            { id: 'd', text: 'Convincing them the property is worth less.' },
+          ],
+          correctId: 'b',
+          explanation: 'When a seller wants something "off their plate," the opportunity is in understanding what is creating the burden and building your offer around solving that specific problem.',
+        },
+        {
+          id: 'day22_q9',
+          title: 'Two Investors',
+          question: 'Two investors contact the same seller.\n\nInvestor A: Focuses entirely on price. Tries to convince the seller the property is worth less.\n\nInvestor B: Asks questions. Learns the seller wants certainty and a flexible closing date. Builds an offer around those priorities.\n\nWho is more likely to secure the deal?',
+          options: [
+            { id: 'a', text: 'Investor A.' },
+            { id: 'b', text: 'Investor B.' },
+            { id: 'c', text: 'Both equally.' },
+            { id: 'd', text: 'Impossible to know.' },
+          ],
+          correctId: 'b',
+          explanation: 'Investor B identified what the seller actually values (certainty and flexibility) and structured the offer around those priorities. This creates a stronger connection and higher likelihood of acceptance.',
+        },
+        {
+          id: 'day22_q10',
+          title: 'Seller Financing Opportunity',
+          question: 'A seller has: owned a 12-unit apartment for 30 years, reduced the price twice, complained about tenants, complained about maintenance, stated they are retiring, and mentioned wanting monthly income. What is the MOST likely opportunity?',
+          options: [
+            { id: 'a', text: 'Aggressive cash offer.' },
+            { id: 'b', text: 'Seller financing discussion.' },
+            { id: 'c', text: 'Wait six months and call back.' },
+            { id: 'd', text: 'Only discuss market value.' },
+          ],
+          correctId: 'b',
+          explanation: 'A long-term owner who is retiring and wants monthly income is a strong candidate for seller financing. This structure solves their problem (ongoing income without management) while creating opportunity for the buyer.',
+        },
+        {
+          id: 'day22_q11',
+          title: 'Price Gap',
+          question: 'A property has been listed for 150 days. The seller wants $1,000,000. Your analysis says it only works at $850,000. The seller appears frustrated but has rejected several offers. What is the BEST next step?',
+          options: [
+            { id: 'a', text: 'Tell them they\'re unrealistic.' },
+            { id: 'b', text: 'Increase your offer to $1,000,000.' },
+            { id: 'c', text: 'Continue investigating motivation, pain points, and alternative structures before assuming price is the only solution.' },
+            { id: 'd', text: 'Stop communicating.' },
+          ],
+          correctId: 'c',
+          explanation: 'Price is only one variable. Alternative structures (seller financing, lease options, creative terms) may bridge the gap while still meeting your investment criteria. Keep investigating.',
+        },
+        {
+          id: 'day22_q12',
+          title: 'Day 22 Summary',
+          question: 'Which statement best summarizes the lesson of Day 22?',
+          options: [
+            { id: 'a', text: 'The best deals come from finding the cheapest properties.' },
+            { id: 'b', text: 'The highest offer usually wins.' },
+            { id: 'c', text: 'Great investors focus on understanding seller motivation, identifying problems, and creating solutions.' },
+            { id: 'd', text: 'Every seller is motivated if you talk long enough.' },
+          ],
+          correctId: 'c',
+          explanation: 'The core lesson: situations create motivation, motivation creates flexibility, flexibility creates opportunity. Focus on the seller\'s problem, not just the property.',
+        },
+      ],
+    },
   },
   {
     day: 23,
