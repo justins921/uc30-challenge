@@ -8,6 +8,7 @@ import AdminDashboard from './components/AdminDashboard';
 import OnboardingFlow from './components/OnboardingFlow';
 import ActivationPhase from './components/ActivationPhase';
 import AffiliatePage from './components/AffiliatePage';
+import ReadinessQuestionnaire from './components/ReadinessQuestionnaire';
 
 export default function App() {
   const {
@@ -167,6 +168,15 @@ export default function App() {
   // Affiliate page — accessible to anyone, no auth required
   if (window.location.pathname.replace(/\/+$/, '') === '/affiliates') {
     return <AffiliatePage />;
+  }
+
+  // Readiness questionnaire — accessible to anyone, no auth required
+  if (window.location.pathname.replace(/\/+$/, '') === '/readiness') {
+    return (
+      <div style={{ minHeight: '100vh', padding: '40px 20px' }}>
+        <ReadinessQuestionnaire onClose={() => { window.location.href = '/'; }} />
+      </div>
+    );
   }
 
   // Not logged in

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import NativeRentalCalculator from './NativeRentalCalculator';
 
 const PRACTICE_METRICS = [
   { id: 'training_completed', label: 'Training Completed', type: 'boolean', icon: '📚', tip: 'Mark this done after watching the daily training video. Must be completed before you can submit.' },
@@ -281,29 +282,17 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
             </div>
           </div>
 
-          {/* Calculator Link */}
-          {calculatorUrl && (
-            <a href={calculatorUrl} target="_blank" rel="noopener noreferrer" style={{
-              display: 'flex', alignItems: 'center', gap: 14,
-              padding: '14px 18px', borderRadius: 12, marginBottom: 20,
-              background: 'linear-gradient(135deg, rgba(83,52,131,0.12), rgba(83,52,131,0.04))',
-              border: '1px solid rgba(83,52,131,0.25)', textDecoration: 'none',
-            }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: 8, flexShrink: 0,
-                background: 'rgba(83,52,131,0.2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16,
-              }}>📊</div>
-              <div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#c9a0ff' }}>
-                  Open CDS Rental Calculator
-                </div>
-                <div style={{ fontSize: 12, color: '#888' }}>
-                  Plug in the property data above to find the answers
-                </div>
-              </div>
-            </a>
-          )}
+          {/* Built-in Rental Calculator */}
+          <div className="card" style={{ marginBottom: 20, border: '1px solid rgba(83,52,131,0.25)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+              <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(83,52,131,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📊</div>
+              <h3 style={{ fontSize: 16, fontWeight: 700 }}>CDS Rental Calculator</h3>
+            </div>
+            <p style={{ fontSize: 13, color: '#888', lineHeight: 1.6, marginBottom: 14 }}>
+              Plug in the property data above and use the results to answer the quiz questions below.
+            </p>
+            <NativeRentalCalculator />
+          </div>
 
           {/* Quiz Questions */}
           <div className="card" style={{ marginBottom: 20 }}>
@@ -510,24 +499,45 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
               <h3 style={{ fontSize: 16, fontWeight: 700 }}>Daily Activity Log</h3>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {PRACTICE_METRICS.map(metric => {
                 const value = metrics[metric.id];
                 const isBool = metric.type === 'boolean';
+                const mins = { training_completed: true, properties_analyzed: 2, arsenal_contacts: 1, target_contacts: 3, follow_ups: 0, offers_submitted: 0 };
+                const required = mins[metric.id];
+                const met = isBool
+                  ? (!required || value)
+                  : (typeof required !== 'number' || required <= 0 || (value || 0) >= required);
+                const isRequired = isBool ? !!required : (typeof required === 'number' && required > 0);
+                const isContactMetric = metric.id === 'arsenal_contacts' || metric.id === 'target_contacts';
+                const contactColor = metric.id === 'arsenal_contacts' ? '#f0a500' : '#e94560';
+
                 return (
                   <div key={metric.id}>
                     <div style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                       padding: '12px 16px', borderRadius: 10,
-                      background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+                      background: met ? 'rgba(72,199,142,0.04)' : 'rgba(255,255,255,0.02)',
+                      border: `1px solid ${met ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.06)'}`,
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1 }}>
                         <span style={{ fontSize: 18 }}>{metric.icon}</span>
-                        <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>{metric.label}</div>
+                        <div>
+                          <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>{metric.label}</div>
+                          {isRequired && (
+                            <div style={{ fontSize: 11, color: met ? '#48c78e' : '#e94560', fontWeight: 600 }}>
+                              {isBool ? 'Required' : `Min: ${required}`}
+                              {met && ' ✓'}
+                            </div>
+                          )}
+                          {!isRequired && (
+                            <div style={{ fontSize: 11, color: '#555' }}>Optional</div>
+                          )}
+                        </div>
                       </div>
                       {isBool ? (
                         <button onClick={() => setMetric(metric.id, !value)} style={{
-                          padding: '8px 20px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+                          padding: '10px 24px', borderRadius: 8, fontSize: 14, fontWeight: 700,
                           cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
                           border: value ? '1px solid rgba(72,199,142,0.3)' : '1px solid rgba(255,255,255,0.1)',
                           background: value ? 'rgba(72,199,142,0.15)' : 'rgba(255,255,255,0.04)',
@@ -535,6 +545,20 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
                         }}>
                           {value ? '✓ Done' : 'Mark Done'}
                         </button>
+                      ) : isContactMetric ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          {(value || 0) > 0 && (
+                            <span style={{ fontSize: 14, fontWeight: 700, color: contactColor, minWidth: 24, textAlign: 'center' }}>{value}</span>
+                          )}
+                          <button onClick={() => setMetric(metric.id, (value || 0) + 1)}
+                            style={{
+                              padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                              cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                              border: `1px solid ${contactColor}40`,
+                              background: `${contactColor}10`,
+                              color: contactColor,
+                            }}>+ Add</button>
+                        </div>
                       ) : (
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                           <button onClick={() => setMetric(metric.id, Math.max(0, (value || 0) - 1))}
@@ -553,6 +577,15 @@ export default function PracticeDay({ user, practiceDaySettings, onComplete, onB
                   </div>
                 );
               })}
+            </div>
+
+            {/* Week 1 minimums note */}
+            <div style={{
+              marginTop: 16, padding: '10px 14px', borderRadius: 8,
+              background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.12)',
+              fontSize: 12, color: '#888', lineHeight: 1.6,
+            }}>
+              These are Week 1 minimums. Requirements increase each week as you build momentum.
             </div>
           </div>
           <div style={{ display: 'flex', gap: 10 }}>

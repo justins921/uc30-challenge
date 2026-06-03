@@ -805,19 +805,9 @@ export function useAppState() {
   }, [supportTickets]);
 
   // ── Getting Started (includes activation) ──────────────────────────────────
-  const completeGettingStarted = useCallback(async (socialHandles, proof, buyBox, activationData) => {
+  const completeGettingStarted = useCallback(async (socialHandles, proof) => {
     if (!user) return { error: 'Not logged in.' };
     const updates = { gettingStartedCompleted: true, socialHandles: socialHandles || {} };
-    if (buyBox) updates.buyBox = buyBox;
-    // Activation data (offer commitment, stakes, commitment)
-    if (activationData) {
-      updates.offerCommitment = activationData.offerCommitment || null;
-      updates.stakesDeclaration = activationData.stakesDeclaration || null;
-      updates.commitmentDeclaredAt = activationData.commitmentDeclaredAt || new Date().toISOString();
-      updates.activationCompleted = true;
-      updates.activationCompletedAt = new Date().toISOString();
-      updates.onboardingCompleted = true;
-    }
     // Store proof as a Getting Started submission if provided
     if (proof && (proof.text || proof.fileName)) {
       const gsSubmission = {

@@ -417,7 +417,7 @@ export default function DayView({
           padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 700,
           background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.2)', color: '#a855f7',
         }}>
-          VETERAN MINIMUMS — Cohort #{user.cohortAttempt || 2}
+          VETERAN MINIMUMS — Sprint #{user.cohortAttempt || 2}
         </div>
       )}
 
