@@ -276,9 +276,10 @@ const supabaseStorage = {
 
   // ── CRM: Contacts ────────────────────────────────────────────
   async addContact(contact) {
+    const cleaned = Object.fromEntries(Object.entries(contact).filter(([, v]) => v != null));
     const { data, error } = await supabase
       .from('contacts')
-      .insert(contact)
+      .insert(cleaned)
       .select()
       .single();
     if (error) { console.error('addContact error:', error); return null; }
@@ -323,9 +324,11 @@ const supabaseStorage = {
   },
 
   async updateContact(contactId, updates) {
+    const cleaned = Object.fromEntries(Object.entries(updates).filter(([, v]) => v != null));
+    if (Object.keys(cleaned).length === 0) return null;
     const { data, error } = await supabase
       .from('contacts')
-      .update(updates)
+      .update(cleaned)
       .eq('id', contactId)
       .select()
       .single();
