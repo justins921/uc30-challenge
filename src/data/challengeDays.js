@@ -9745,33 +9745,713 @@ The ability to identify frustration, fatigue, pressure, convenience needs, and l
   },
   {
     day: 23,
-    title: "Submit 10 Offers Today",
-    caption: "",
-    taskDescription: "Submit 10 offers today — this is your push day. Submit all confirmations.",
-    trainingContent: "",
+    title: "Opportunity Triage",
+    caption: "Allocating attention to the opportunities most likely to become contracts.",
+    taskDescription: `Today's Exercise
+
+Review:
+• Every Prospect
+• Every Target Property
+• Every Active Negotiation
+
+For each opportunity assign:
+• Motivation Score (1–10)
+• Buy Box Fit Score (1–10)
+• Financial Viability Score (1–10)
+• Relationship Strength Score (1–10)
+• Decision Maker Access Score (1–10)
+
+Then rank all opportunities from highest probability to lowest probability.
+
+Identify your Top 5 opportunities.
+
+These should become your primary focus for the remainder of UC30.
+
+
+Today's Suggested Arsenal Activity
+
+Reach out to your strongest Arsenal Contacts.
+
+Ask:
+"Who do you believe is most likely to sell in the next 90 days?"
+
+Do not ask for listings. Do not ask for properties. Ask about situations.
+
+The best opportunities are often identified through changing circumstances long before they become publicly available.`,
+    trainingContent: `Why This Matters
+
+By Day 23, most students no longer struggle with generating activity.
+
+You have likely:
+• built Arsenal Contacts,
+• added Prospects,
+• identified Target Properties,
+• analyzed deals,
+• submitted offers,
+• negotiated with sellers,
+• and developed a growing pipeline.
+
+At this stage, the challenge is no longer finding opportunities.
+
+The challenge is determining where your attention should be invested.
+
+Just as every property does not deserve investment capital, every opportunity does not deserve the same amount of time and energy.
+
+Professional investors learn to allocate attention the same way they allocate money.
+
+
+Capital Allocation Applies To More Than Money
+
+Investors spend years learning how to allocate capital.
+
+They analyze:
+• risk,
+• return,
+• cash flow,
+• upside,
+• opportunity cost.
+
+Yet many investors allocate their time with far less discipline than they allocate their money.
+
+The result is predictable.
+
+They spend too much time:
+• chasing weak opportunities,
+• following up with unmotivated sellers,
+• pursuing properties outside their buy box,
+• and neglecting opportunities that have a much higher probability of producing a contract.
+
+The objective is not just maximizing activity.
+
+The objective is maximizing results.
+
+
+Opportunities Produce Different Expected Outcomes
+
+One of the most important concepts in investing is expected return.
+
+Some opportunities have a significantly higher probability of resulting in a contract than others.
+
+Your goal is not simply to create opportunities.
+
+Your goal is to identify which opportunities justify additional investment of:
+• time,
+• attention,
+• analysis,
+• negotiation,
+• and follow-up.
+
+The best investors naturally allocate more resources toward opportunities with the highest probability-adjusted return.
+
+
+Opportunity Classification
+
+Every opportunity should fall into one of three categories.
+
+
+Tier 1 Opportunities — High Probability
+
+Characteristics:
+• Strong seller motivation.
+• Strong buy box fit.
+• Financially viable.
+• Active communication.
+• Clear path toward a transaction.
+
+Examples:
+• Ongoing negotiations.
+• Seller actively discussing terms.
+• Seller considering your offer.
+• Seller financing discussions.
+• Highly motivated sellers.
+
+These opportunities deserve the majority of your attention.
+
+
+Tier 2 Opportunities — Developing
+
+Characteristics:
+• Motivation exists but timing may not be right.
+• Seller is considering options.
+• Opportunity fits your criteria.
+• Additional information is needed.
+
+Examples:
+• "Maybe later."
+• "Call me in a few months."
+• "I'm considering selling."
+
+These opportunities deserve consistent follow-up.
+
+
+Tier 3 Opportunities — Low Probability
+
+Characteristics:
+• Little motivation.
+• Weak buy box fit.
+• Limited communication.
+• Minimal flexibility.
+
+These opportunities should remain in your pipeline but should not consume significant resources.
+
+
+Opportunity Cost
+
+Every hour spent pursuing a low-probability opportunity comes at the expense of a higher-probability opportunity.
+
+The most successful investors understand that saying "yes" to one opportunity often means saying "no" to another.
+
+As your pipeline grows, your ability to prioritize becomes increasingly important.
+
+
+The Opportunity Scorecard
+
+Every Target Property should be evaluated using the same framework.
+
+Seller Motivation — How strong is the motivation to sell? Score: 1–10
+
+Buy Box Fit — How closely does the opportunity match your criteria? Score: 1–10
+
+Financial Viability — Can the property realistically produce the returns you require? Score: 1–10
+
+Relationship Strength — How strong is your relationship with the seller or decision maker? Score: 1–10
+
+Access To Decision Makers — Can you directly influence the outcome? Score: 1–10
+
+The opportunities with the highest combined scores generally deserve the greatest attention.
+
+
+Follow-Up Is Market Intelligence
+
+Many investors view follow-up as persistence.
+
+The most effective investors view follow-up as intelligence gathering.
+
+Each conversation should improve your understanding of:
+• seller motivation,
+• timeline,
+• pain points,
+• flexibility,
+• decision-making criteria,
+• and desired outcomes.
+
+The purpose of follow-up is not simply maintaining contact.
+
+The purpose is improving the quality of information available to make future decisions.
+
+Follow-up should also be focused on building a relationship and positioning yourself as the easiest and most reliable buyer.
+
+
+What Should Be Tracked?
+
+Every follow-up should answer:
+• Has motivation changed?
+• Has the timeline changed?
+• Have the seller's pain points changed?
+• Has flexibility increased or decreased?
+• Has the property's financial viability changed?
+• Has a new opportunity emerged?
+
+If a conversation does not improve your understanding of the opportunity, the follow-up was likely ineffective.
+
+
+Motivation Is Dynamic
+
+One of the most important concepts in acquisition is understanding that motivation changes.
+
+People experience:
+• vacancies,
+• difficult tenants,
+• repairs,
+• retirement,
+• partnership disputes,
+• health concerns,
+• family changes,
+• financial pressure.
+
+The seller who says "no" today may become highly motivated six months from now.
+
+This is why professional follow-up matters.
+
+
+Follow-Up Frequency
+
+Different opportunities deserve different levels of attention.
+
+Tier 1 Opportunities — Weekly follow-up. Sometimes more frequently if negotiations are active.
+
+Tier 2 Opportunities — Monthly follow-up. Enough to remain relevant without becoming intrusive.
+
+Tier 3 Opportunities — Quarterly follow-up. Maintain contact while allocating resources elsewhere.
+
+
+The 80/20 Principle
+
+In most acquisition businesses:
+
+A small percentage of opportunities produce the majority of results.
+
+Your responsibility is identifying that small percentage.
+
+As your pipeline grows, success becomes less about creating activity and more about identifying where activity should be focused.
+
+
+The Professional Investor Mindset
+
+Average investors ask:
+"Who should I call today?"
+
+Professional investors ask:
+"Which opportunities have the highest probability-adjusted return on my time?"
+
+That distinction becomes increasingly important as your pipeline grows.
+
+
+Key Takeaway
+
+As your pipeline grows, success becomes less about generating more activity and more about allocating attention effectively.
+
+Professional investors do not treat every opportunity equally.
+
+They continuously evaluate motivation, financial viability, relationship strength, and probability of success, then allocate their time accordingly.
+
+The objective is not to be the busiest investor.
+
+The objective is to consistently focus your attention on the opportunities most likely to become contracts.`,
     category: "sprint",
     weekNumber: 4,
     weekTitle: "FULL SPRINT",
-    proofType: "document",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      title: 'Opportunity Triage',
+      required: true,
+      passingScore: 100,
+      scenarios: [
+        {
+          id: 'day23_q1',
+          title: 'Opportunity Scoring',
+          question: 'You have the following opportunities:\n\nProperty A: Motivation 9, Buy Box Fit 5, Financial Fit 4\nProperty B: Motivation 6, Buy Box Fit 9, Financial Fit 9\nProperty C: Motivation 3, Buy Box Fit 10, Financial Fit 10\n\nWhich opportunity should likely receive the most attention?',
+          options: [
+            { id: 'a', text: 'Property A' },
+            { id: 'b', text: 'Property B' },
+            { id: 'c', text: 'Property C' },
+            { id: 'd', text: 'All three equally' },
+          ],
+          correctId: 'b',
+          explanation: 'Property B has the best balance of motivation, buy box fit, and financial viability. Property A has high motivation but poor financial fit. Property C has perfect fit but low motivation.',
+        },
+        {
+          id: 'day23_q2',
+          title: 'Opportunity Triage Definition',
+          question: 'Which statement best describes professional opportunity triage?',
+          options: [
+            { id: 'a', text: 'Follow up equally with every lead.' },
+            { id: 'b', text: 'Focus on whoever responds first.' },
+            { id: 'c', text: 'Allocate time toward opportunities with the highest probability-adjusted return.' },
+            { id: 'd', text: 'Focus only on motivated sellers.' },
+          ],
+          correctId: 'c',
+          explanation: 'Professional triage is about allocating your most limited resource — time — toward the opportunities most likely to produce results, considering all factors together.',
+        },
+        {
+          id: 'day23_q3',
+          title: 'Outside Buy Box',
+          question: 'A seller has moderate motivation, but the property is completely outside your buy box. What is the best response?',
+          options: [
+            { id: 'a', text: 'Spend significant time pursuing it because motivation is high.' },
+            { id: 'b', text: 'Ignore it immediately.' },
+            { id: 'c', text: 'Determine if it is feasible as a potential purchase for you. If not, don\'t invest any more time on it.' },
+            { id: 'd', text: 'Submit an offer regardless.' },
+          ],
+          correctId: 'c',
+          explanation: 'Even moderate motivation doesn\'t justify pursuing a property that doesn\'t fit your criteria. Evaluate feasibility first, and if it doesn\'t work, redirect your attention.',
+        },
+        {
+          id: 'day23_q4',
+          title: 'Strongest Indicator',
+          question: 'Which of the following is the strongest indicator that an opportunity deserves additional resources?',
+          options: [
+            { id: 'a', text: 'The seller was really cool.' },
+            { id: 'b', text: 'The property is attractive.' },
+            { id: 'c', text: 'The opportunity scores highly across motivation, fit, viability, and decision-maker access.' },
+            { id: 'd', text: 'The property has been listed recently.' },
+          ],
+          correctId: 'c',
+          explanation: 'A high combined score across multiple factors — not just one dimension — indicates an opportunity worth investing significant time and energy into.',
+        },
+        {
+          id: 'day23_q5',
+          title: 'Changing Motivation',
+          question: 'A seller has said "maybe" for six months. During follow-up you discover: their largest tenant just moved out, insurance increased, and they are discussing retirement. What should happen to the opportunity?',
+          options: [
+            { id: 'a', text: 'Lower its priority.' },
+            { id: 'b', text: 'Remove it from the CRM.' },
+            { id: 'c', text: 'Reevaluate it because motivation may have changed significantly.' },
+            { id: 'd', text: 'Wait another six months.' },
+          ],
+          correctId: 'c',
+          explanation: 'Motivation is dynamic. New vacancy, rising costs, and retirement discussions are all signals that this opportunity may have moved from Tier 2 or 3 to Tier 1.',
+        },
+        {
+          id: 'day23_q6',
+          title: 'Follow-Up Objective',
+          question: 'Which follow-up objective is most consistent with professional acquisition practices?',
+          options: [
+            { id: 'a', text: 'Convince the seller to sell.' },
+            { id: 'b', text: 'Gather intelligence and improve your understanding of the opportunity.' },
+            { id: 'c', text: 'Get a quick answer.' },
+            { id: 'd', text: 'Negotiate price immediately.' },
+          ],
+          correctId: 'b',
+          explanation: 'Follow-up is intelligence gathering. Each conversation should improve your understanding of the seller\'s motivation, timeline, pain points, and flexibility.',
+        },
+        {
+          id: 'day23_q7',
+          title: 'Best Use of Time',
+          question: 'You have one hour available today. Which activity is likely to produce the highest return?',
+          options: [
+            { id: 'a', text: 'Calling twenty cold Tier 3 opportunities.' },
+            { id: 'b', text: 'Re-engaging a Tier 1 opportunity where negotiations recently stalled.' },
+            { id: 'c', text: 'Reviewing old listings.' },
+            { id: 'd', text: 'Reorganizing your notes.' },
+          ],
+          correctId: 'b',
+          explanation: 'A stalled Tier 1 negotiation has the highest probability of producing a contract. One focused hour on a high-probability opportunity beats twenty quick calls to low-probability leads.',
+        },
+        {
+          id: 'day23_q8',
+          title: 'Financial Viability Concern',
+          question: 'A property scores: Motivation 10, Buy Box Fit 10, Financial Fit 3, Relationship Strength 8, Access 10. What is the primary concern?',
+          options: [
+            { id: 'a', text: 'Motivation is too high.' },
+            { id: 'b', text: 'Financial viability may prevent a successful acquisition.' },
+            { id: 'c', text: 'Relationship strength is too high.' },
+            { id: 'd', text: 'Access is too high.' },
+          ],
+          correctId: 'b',
+          explanation: 'Even with perfect motivation and access, a property that doesn\'t produce adequate returns is not a good investment. Financial viability is a critical filter.',
+        },
+        {
+          id: 'day23_q9',
+          title: 'Most Likely to Contract',
+          question: 'Which investor is most likely to secure a contract?',
+          options: [
+            { id: 'a', text: 'The investor who talks to the most people.' },
+            { id: 'b', text: 'The investor who follows up the most aggressively.' },
+            { id: 'c', text: 'The investor who consistently focuses on the highest-probability opportunities.' },
+            { id: 'd', text: 'The investor who analyzes the most properties.' },
+          ],
+          correctId: 'c',
+          explanation: 'Volume alone doesn\'t produce contracts. Focused attention on high-probability opportunities consistently outperforms unfocused high-volume activity.',
+        },
+        {
+          id: 'day23_q10',
+          title: 'CRM Purpose',
+          question: 'A professional investor views their CRM primarily as:',
+          options: [
+            { id: 'a', text: 'A contact list.' },
+            { id: 'b', text: 'A marketing database.' },
+            { id: 'c', text: 'A decision-making and opportunity allocation tool.' },
+            { id: 'd', text: 'A place to store phone numbers.' },
+          ],
+          correctId: 'c',
+          explanation: 'A CRM is a decision-making tool. It helps you evaluate, prioritize, and allocate attention across your pipeline — not just store information.',
+        },
+      ],
+    },
   },
   {
     day: 24,
-    title: "Door Knock 20 Properties",
-    caption: "",
-    taskDescription: "Door knock or drop letters at 20 properties. Submit your route log and photos.",
-    trainingContent: "",
+    title: "Creating Urgency",
+    caption: "Helping sellers understand why acting now matters.",
+    taskDescription: `Today's Exercise
+
+Review your Top 5 opportunities from yesterday.
+
+For each one, identify:
+• What is preventing the seller from making a decision?
+• What legitimate consequences exist if they continue to wait?
+• What questions could help the seller gain clarity?
+
+Prepare talking points for your next conversation with each seller that focus on helping them understand the consequences of inaction — without creating artificial pressure.
+
+
+Today's Suggested Arsenal Activity
+
+Ask your Arsenal Contacts:
+"What are the most common reasons sellers in your experience delay making a decision?"
+
+Understanding why sellers hesitate helps you anticipate and address those concerns proactively.`,
+    trainingContent: `Creating Urgency
+
+This lesson focuses on helping sellers understand why acting now matters — ethically and professionally.
+
+The distinction between pressure and urgency is critical:
+• Pressure creates resistance.
+• Urgency highlights legitimate consequences of waiting.
+
+Professional investors do not manufacture deadlines or create artificial scarcity. They help sellers see the real cost of delay.
+
+
+The Seller's Perspective
+
+Most sellers who delay are not unmotivated. They are uncertain.
+
+They may understand they have a problem but lack clarity about:
+• their options,
+• the consequences of waiting,
+• whether the timing is right,
+• or whether they can trust the buyer.
+
+Your role is to help them gain clarity — not to push them into a decision.
+
+
+Ethical Urgency vs Pressure
+
+Pressure sounds like:
+• "You need to decide now."
+• "This offer expires tonight."
+• "You'll regret waiting."
+
+Urgency sounds like:
+• "I currently have financing and capital available, but that may not always be the case."
+• "What happens if you continue owning this property for another five years?"
+• "What would change for you if this was resolved?"
+
+The difference: urgency comes from the seller's own situation, not from manufactured deadlines.
+
+
+Understanding Why Sellers Delay
+
+Common reasons sellers hesitate:
+• Fear of making the wrong decision.
+• Emotional attachment to the property.
+• Uncertainty about what comes next.
+• Lack of clarity about their options.
+• Hope that a better offer will come.
+• Analysis paralysis.
+
+Each of these can be addressed through conversation, not pressure.
+
+
+Questions That Create Clarity
+
+The most powerful urgency comes from questions that help sellers think through consequences:
+
+• "What happens if nothing changes in the next 12 months?"
+• "What is this property costing you each month it sits?"
+• "What would you do with the proceeds if you sold?"
+• "What is preventing you from making a decision?"
+• "If you could solve one thing about this situation, what would it be?"
+
+These questions don't push. They illuminate.
+
+
+Motivation Through Seller Goals
+
+The strongest urgency connects to the seller's own goals:
+
+A seller who wants to retire → "How does continuing to manage this property affect your retirement timeline?"
+
+A seller frustrated with tenants → "What happens if you get another difficult tenant next year?"
+
+A seller with deferred maintenance → "What will the repair costs look like if you wait another two years?"
+
+When urgency comes from the seller's own circumstances, it feels like clarity rather than pressure.
+
+
+Seller Financing As Urgency Resolution
+
+Many sellers delay because they don't like their options:
+• Sell at market value and lose monthly income.
+• Continue managing and deal with headaches.
+
+Seller financing can resolve this by offering:
+• Monthly income without management.
+• Tax benefits from installment sales.
+• A higher sale price spread over time.
+• Certainty of closing without bank involvement.
+
+When you present seller financing as a solution to the seller's actual problem, it creates natural urgency because it addresses the reason they were hesitating.
+
+
+The Professional Approach
+
+Professional investors understand:
+• Urgency should come from the seller's situation, not yours.
+• Clarity creates more decisions than pressure.
+• The goal is not to convince — it's to illuminate.
+• Patience and professionalism build trust.
+• Trust creates willingness to act.
+
+
+Key Takeaway
+
+The most effective way to create urgency is to help sellers understand the real cost of inaction — in their own terms, based on their own goals and circumstances.
+
+You are not creating pressure. You are creating clarity.
+
+When sellers clearly understand their options and the consequences of waiting, they make decisions faster — and they feel better about those decisions.`,
     category: "sprint",
     weekNumber: 4,
     weekTitle: "FULL SPRINT",
-    proofType: "photo",
+    proofType: "screenshot",
     videoUrl: null,
     transcript: null,
     downloads: [],
-    quiz: null,
+    quiz: {
+      title: 'Creating Urgency',
+      required: true,
+      passingScore: 100,
+      scenarios: [
+        {
+          id: 'day24_q1',
+          title: 'Ethical Urgency',
+          question: 'Which statement best reflects ethical urgency?',
+          options: [
+            { id: 'a', text: 'Creating pressure so the seller decides quickly.' },
+            { id: 'b', text: 'Manufacturing deadlines to create action.' },
+            { id: 'c', text: 'Helping the seller understand legitimate reasons why delaying may have consequences.' },
+            { id: 'd', text: 'Convincing the seller they will lose money if they do not sell.' },
+          ],
+          correctId: 'c',
+          explanation: 'Ethical urgency comes from helping sellers see the real consequences of waiting — based on their own situation, not manufactured pressure.',
+        },
+        {
+          id: 'day24_q2',
+          title: 'Seller Hesitation',
+          question: 'A seller says: "I\'ve been thinking about selling for years, but I just haven\'t done anything about it." What is the most effective response?',
+          options: [
+            { id: 'a', text: 'Push for an immediate decision.' },
+            { id: 'b', text: 'Explain why your offer is great.' },
+            { id: 'c', text: 'Explore what has prevented them from making a decision.' },
+            { id: 'd', text: 'Reduce your offer price.' },
+          ],
+          correctId: 'c',
+          explanation: 'Understanding what has prevented action helps you address the real barrier. The seller may need clarity, not pressure.',
+        },
+        {
+          id: 'day24_q3',
+          title: 'Strongest Urgency',
+          question: 'Which of the following creates the strongest urgency?',
+          options: [
+            { id: 'a', text: 'A fake deadline.' },
+            { id: 'b', text: 'Market fear.' },
+            { id: 'c', text: 'The seller\'s own goals and circumstances.' },
+            { id: 'd', text: 'Repeated follow-up calls.' },
+          ],
+          correctId: 'c',
+          explanation: 'Urgency rooted in the seller\'s own goals and circumstances is the most powerful because it\'s genuine and personal to them.',
+        },
+        {
+          id: 'day24_q4',
+          title: 'Retirement Seller',
+          question: 'A seller wants to retire within the next year but has delayed selling because they are uncertain about their options. What should your focus be?',
+          options: [
+            { id: 'a', text: 'Increasing pressure.' },
+            { id: 'b', text: 'Helping them gain clarity on possible outcomes.' },
+            { id: 'c', text: 'Lowering your offer.' },
+            { id: 'd', text: 'Waiting for them to call back.' },
+          ],
+          correctId: 'b',
+          explanation: 'This seller needs clarity, not pressure. Help them understand their options — including seller financing — so they can make a confident decision.',
+        },
+        {
+          id: 'day24_q5',
+          title: 'Professional Urgency Statement',
+          question: 'Which statement is most likely to create professional urgency?',
+          options: [
+            { id: 'a', text: '"You need to make a decision now."' },
+            { id: 'b', text: '"This offer expires tonight."' },
+            { id: 'c', text: '"I currently have financing and capital available, but that may not always be the case."' },
+            { id: 'd', text: '"You\'ll regret waiting."' },
+          ],
+          correctId: 'c',
+          explanation: 'This statement is honest, non-threatening, and creates legitimate urgency by highlighting a real constraint without manufacturing pressure.',
+        },
+        {
+          id: 'day24_q6',
+          title: 'Pressure vs Urgency',
+          question: 'What is the primary difference between pressure and urgency?',
+          options: [
+            { id: 'a', text: 'Pressure is ethical and urgency is not.' },
+            { id: 'b', text: 'Pressure creates resistance, while urgency highlights legitimate consequences of waiting.' },
+            { id: 'c', text: 'Pressure is more effective.' },
+            { id: 'd', text: 'There is no difference.' },
+          ],
+          correctId: 'b',
+          explanation: 'Pressure pushes people away. Urgency helps people see clearly. The distinction is critical for professional acquisition.',
+        },
+        {
+          id: 'day24_q7',
+          title: 'Genuine Urgency',
+          question: 'Which seller is most likely experiencing genuine urgency?',
+          options: [
+            { id: 'a', text: 'A seller who just listed yesterday.' },
+            { id: 'b', text: 'A seller with no plans to change anything.' },
+            { id: 'c', text: 'A seller facing retirement, deferred maintenance, and management fatigue.' },
+            { id: 'd', text: 'A seller receiving multiple offers above asking price.' },
+          ],
+          correctId: 'c',
+          explanation: 'Multiple compounding factors — retirement, deferred maintenance, and fatigue — create genuine urgency because the cost of waiting is real and increasing.',
+        },
+        {
+          id: 'day24_q8',
+          title: 'Decision Momentum',
+          question: 'A seller is frustrated with tenants, considering retirement, and has mentioned wanting monthly income. Which strategy is most likely to create decision momentum?',
+          options: [
+            { id: 'a', text: 'Focus exclusively on purchase price.' },
+            { id: 'b', text: 'Explore how seller financing may help accomplish their goals.' },
+            { id: 'c', text: 'Wait for them to make a decision.' },
+            { id: 'd', text: 'Continue discussing market value.' },
+          ],
+          correctId: 'b',
+          explanation: 'Seller financing directly addresses this seller\'s stated desires: monthly income without management. It resolves the exact problem causing their hesitation.',
+        },
+        {
+          id: 'day24_q9',
+          title: 'Uncovering Urgency',
+          question: 'Which question is most likely to uncover urgency?',
+          options: [
+            { id: 'a', text: '"What\'s your asking price?"' },
+            { id: 'b', text: '"Would you take less?"' },
+            { id: 'c', text: '"What happens if you continue owning this property for another five years?"' },
+            { id: 'd', text: '"How many bedrooms are there?"' },
+          ],
+          correctId: 'c',
+          explanation: 'This question forces the seller to confront the consequences of inaction — in their own terms. It illuminates rather than pressures.',
+        },
+        {
+          id: 'day24_q10',
+          title: 'Fear of Wrong Decision',
+          question: 'A seller has delayed making a decision for months. After several conversations, you determine the real issue is fear of making the wrong decision. What is the best next step?',
+          options: [
+            { id: 'a', text: 'Increase pressure.' },
+            { id: 'b', text: 'Reduce your offer.' },
+            { id: 'c', text: 'Help them evaluate their options and gain clarity.' },
+            { id: 'd', text: 'Stop following up.' },
+          ],
+          correctId: 'c',
+          explanation: 'Fear-based hesitation requires clarity, not pressure. Help the seller evaluate their options so they can make a confident decision.',
+        },
+        {
+          id: 'day24_q11',
+          title: 'Why It Hasn\'t Sold',
+          question: 'A seller has: owned the property for 25 years, reduced the price twice, complained about tenants, mentioned retirement, expressed concern about future repairs, and stated they are "still thinking about it." What is the most likely reason the property has not sold?',
+          options: [
+            { id: 'a', text: 'The seller is completely unmotivated.' },
+            { id: 'b', text: 'The seller lacks information about the property.' },
+            { id: 'c', text: 'The seller may understand the problem but has not yet gained enough clarity or urgency to make a decision.' },
+            { id: 'd', text: 'The property is worth more than they think.' },
+          ],
+          correctId: 'c',
+          explanation: 'This seller has multiple motivation factors but hasn\'t acted. The most likely explanation is a gap between understanding the problem and having enough clarity to decide. Your job is to bridge that gap.',
+        },
+      ],
+    },
   },
   {
     day: 25,
