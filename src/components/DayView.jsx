@@ -42,7 +42,7 @@ export default function DayView({
   const [calcSaved, setCalcSaved] = useState(false);
 
   // ── Day Data ──────────────────────────────────────────────────
-  const isPost30 = day > 30;
+  const isPost30 = day > 32;
   const isPreTraining = day <= 0;
   const contentDay = (!isPreTraining && !isPost30) ? resolveContentDay(day, contentOverrides) : day;
   const dayData = isPreTraining ? getPreDayContent(day, contentOverrides) : isPost30 ? getDayDataForNum(day) : getDayContent(contentDay, contentOverrides);
@@ -2955,9 +2955,9 @@ function SubmissionSuccess({ day, isUpdate }) {
         {isUpdate ? 'Submission Updated!' : 'Submission Received!'}
       </h3>
       <p style={{ color: '#888', fontSize: 14 }}>
-        Day {day} is now complete. {day > 30
+        Day {day} is now complete. {day > 32
           ? 'Streak extended! Come back tomorrow to keep it going.'
-          : day < 30 ? `You've unlocked Day ${day + 1}.` : 'Sprint complete! Welcome to Operator Mode.'}
+          : day < 32 ? `You've unlocked Day ${day + 1}.` : 'Sprint complete! Welcome to Operator Mode.'}
       </p>
     </div>
   );

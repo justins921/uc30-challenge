@@ -2,19 +2,19 @@ import { CHALLENGE_DAYS, POST_30_TASK, getStreak } from '../data/challengeDays';
 
 export default function ProgressBanner({ user, cohortStartDate, calendarDay }) {
   const completedCount = user.completedDays.length;
-  const challengeComplete = user.completedDays.includes(30);
-  const inContinuation = challengeComplete && user.currentDay > 30;
+  const challengeComplete = user.completedDays.includes(32);
+  const inContinuation = challengeComplete && user.currentDay > 32;
   const streak = getStreak(user.completedDays);
 
-  // During 30-day challenge
-  const progress = Math.min((completedCount / 30) * 100, 100);
+  // During 32-day challenge
+  const progress = Math.min((completedCount / 32) * 100, 100);
   const currentDayData = inContinuation
     ? POST_30_TASK
-    : CHALLENGE_DAYS[Math.min(user.currentDay - 1, 29)];
+    : CHALLENGE_DAYS[Math.min(user.currentDay - 1, 31)];
 
   // In cohort mode, show which cohort day we're on
   const cohortDayLabel = cohortStartDate && calendarDay !== null && calendarDay >= 1 && !inContinuation
-    ? `Cohort Day ${Math.min(calendarDay, 30)}`
+    ? `Cohort Day ${Math.min(calendarDay, 32)}`
     : null;
 
   return (
@@ -36,14 +36,14 @@ export default function ProgressBanner({ user, cohortStartDate, calendarDay }) {
           ) : (
             <>
               <h1 style={{ fontSize: 'clamp(20px, 5vw, 28px)', fontWeight: 700, marginBottom: 4 }}>
-                Day {user.currentDay} of 30
+                Day {user.currentDay} of 32
               </h1>
               <p style={{ color: '#888', fontSize: 15 }}>
                 {currentDayData?.title}
               </p>
               {cohortDayLabel && (
                 <p style={{ color: '#555', fontSize: 13, marginTop: 4 }}>
-                  {cohortDayLabel} of 30
+                  {cohortDayLabel} of 32
                 </p>
               )}
             </>

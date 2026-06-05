@@ -5,8 +5,8 @@ const PRE_DAY_LABELS = { '-3': 'STEP 2', '-2': 'STEP 3', '-1': 'STEP 4', '0': 'S
 
 export default function TimelineView({ user, onSelectDay, calendarDay, contentOverrides, customPhases, cohortStartDate, onLaunchPracticeDay }) {
   const phases = getPhases(customPhases);
-  const challengeComplete = user.completedDays.includes(30);
-  const inContinuation = challengeComplete && user.currentDay > 30;
+  const challengeComplete = user.completedDays.includes(32);
+  const inContinuation = challengeComplete && user.currentDay > 32;
   const gsContent = getGettingStartedContent(contentOverrides);
 
   // Days 1+ are locked if cohort hasn't started yet (or no date set)
@@ -328,9 +328,9 @@ function ContinuationSection({ user, calendarDay, onSelectDay }) {
       </div>
 
       {/* Recent continuation history (last 7 days) */}
-      {user.completedDays.filter(d => d > 30).length > 0 && (
+      {user.completedDays.filter(d => d > 32).length > 0 && (
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8 }}>
-          {user.completedDays.filter(d => d > 30).slice(-7).map(d => (
+          {user.completedDays.filter(d => d > 32).slice(-7).map(d => (
             <div
               key={d}
               onClick={() => onSelectDay(d)}

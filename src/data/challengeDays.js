@@ -285,7 +285,6 @@ Quick Rules To Remember
 // Chandler: Replace video URLs, transcripts, and downloadable resources per day
 
 export const CHALLENGE_DAYS = [
-  // ── Week 1: Build the Foundation (Days 1-7) ──
   {
     day: 1,
     title: "Analysis",
@@ -2618,6 +2617,841 @@ Then submit enough quality offers that opportunities have a chance to say yes.`,
   },
   {
     day: 6,
+    title: "Creative Deal Structure",
+    caption: "Seller Finance, Negotiation & Structuring Win-Win Deals",
+    taskDescription: "",
+    trainingContent: `Why Creative Financing Matters
+
+Many investors believe the only way to buy real estate is 20–25% down, through a bank, with standard loan terms. That is NOT true.
+
+Creative financing can lower down payments, improve cash flow, lower interest rates, extend loan terms, reduce closing costs, and create opportunities that traditional financing cannot.
+
+Creative deal structure is one of the MOST powerful tools in real estate investing. But creative financing also creates additional risk if used improperly.
+
+The goal is NOT "creative at all costs." The goal is structuring SAFE deals, improving cash flow, reducing risk where possible, and creating WIN-WIN solutions.
+
+Why Off-Market Deals Matter
+
+Many of the BEST creative finance opportunities happen OFF market. Because many sellers do not want strangers walking through their property, do not want tenants disturbed, do not want to pay realtor commissions, want privacy, want flexibility, or want a simpler sale process.
+
+Off-market deals are often MUCH easier to negotiate creatively because there is less competition, sellers are often more flexible, and you can structure solutions directly with the seller.
+
+Benefits Of Off-Market Seller Finance Deals
+
+Benefits For The Buyer:
+• Less competition
+• More flexible negotiations
+• Lower closing costs
+• Potentially lower interest rates
+• Flexible down payments
+• More room for creative structure
+• Avoiding some bank fees and lender costs
+
+Traditional loans can easily add 1–3%+ in additional lender-related costs. Seller finance deals are often significantly cheaper to close.
+
+Benefits For The Seller:
+• Monthly income
+• Potential tax advantages
+• Flexible timing
+• Simpler transaction
+• No realtor commissions
+• Less disruption to tenants
+• Potentially higher sale prices
+• Faster and more flexible negotiations
+
+Good negotiation is NOT taking advantage of people. The BEST negotiations create solutions that genuinely help BOTH parties.
+
+How To Find Off-Market Seller Finance Opportunities
+
+1. Property Managers — Property managers often know tired landlords, struggling owners, aging investors, and owners considering selling.
+
+2. Realtors — Some realtors know expired listings, landlords open to creative terms, or sellers struggling to sell traditionally.
+
+3. Direct Outreach — Mailers, cold calling, texting, networking, driving for dollars, social media, and referrals.
+
+4. Networking With Investors — Many investors eventually burn out, want passive income, or want simpler ownership structures. Seller finance can solve those problems.
+
+What Is Seller Finance?
+
+Seller finance means the seller acts as the bank. Instead of getting all cash at closing, the seller agrees to receive payments over time. This allows buyers and sellers to negotiate down payments, interest rates, payment structure, loan terms, balloon payments, and other creative solutions.
+
+Why Sellers Accept Seller Finance
+
+Many beginners think "Why would a seller ever do this?" Because seller finance can solve REAL seller problems.
+
+Possible seller motivations: reducing taxes, creating monthly income, difficulty selling traditionally, wanting passive income, avoiding management headaches, avoiding realtor commissions, wanting higher sale prices, or needing flexible timing.
+
+Negotiation is NOT "taking advantage of people." Good negotiation is helping solve problems for BOTH sides.
+
+Creative Financing Is Negotiation
+
+Everything is negotiable: purchase price, interest rate, loan term, balloon payment, down payment, payment timing, repair credits, closing timeline, and even payment structure.
+
+The BEST creative deals help the seller, improve the buyer's cash flow, and reduce risk for both parties.
+
+The MOST Important Rule
+
+A creative deal does NOT magically make a bad property a good deal. You MUST still analyze conservatively, verify rents, verify expenses, and understand risk. Creative financing improves structure. It does NOT fix bad analysis.
+
+Understanding Down Payments
+
+Lower down payments improve cash-on-cash return, preserve liquidity, and allow faster scaling. BUT lower down payments also increase risk.
+
+The Danger Of Low Down Payments
+
+Many investors get excited because a low down payment + low interest rate = massive cash-on-cash returns. But that does NOT automatically mean the deal is safe.
+
+Example: 1% down payment, low interest rate, high leverage, and little reserves can become VERY dangerous if vacancy rises, repairs increase, rents soften, or the market shifts.
+
+Important Rule About Analysis
+
+Even if you negotiate 1% down, 5% down, or no money down, you should STILL analyze the property as if you invested at least 20% down. Why? Because you need to understand the REAL risk, the REAL leverage, and whether the deal is fundamentally strong. Creative financing can improve returns but it can also amplify risk.
+
+Understanding Interest Rates
+
+A lower interest rate lowers payments, improves cash flow, and improves debt coverage. Even small changes matter. Example: 3% seller finance vs. 7% bank financing can completely change monthly cash flow, cash-on-cash return, and long-term profitability.
+
+Understanding Loan Terms
+
+Longer loan terms lower payments, improve cash flow, and improve debt coverage. Shorter terms increase principal paydown but increase monthly payments. Sometimes longer terms create SAFER deals.
+
+What Is A Balloon Payment?
+
+A balloon payment means the loan is NOT fully paid off by the end of the agreement. Instead, a large remaining balance becomes due at a future date. Example: 30-year amortization, but the remaining balance is due in 5 years. This creates lower monthly payments initially but creates refinance or payoff pressure later.
+
+The Dangers Of Balloon Payments
+
+Balloon payments can become VERY dangerous if the market shifts, refinancing becomes difficult, interest rates rise, values decline, cash flow weakens, or analysis was incorrect. Many investors get into trouble because they only focus on today's payment, not the future balloon risk.
+
+Balloon Payment Rules To Live By
+
+1. NEVER Ignore The Balloon — You MUST have a realistic refinance plan, payoff strategy, or exit strategy.
+
+2. Stress Test Worst-Case Scenarios — Ask yourself: What if rates increase? What if values decline? What if rents soften? What if lending tightens?
+
+3. Longer Balloons Usually Reduce Risk — Generally a 10-year balloon is safer than a 3-year balloon. More time creates more flexibility.
+
+4. Strong Deals Matter MORE With Balloons — Weak deals become MUCH riskier when balloons exist.
+
+Interest-Free Principal Paydown Structures
+
+Sometimes sellers may agree to a down payment PLUS monthly principal payments with NO interest. Example: $50,000 down, $4,000/month principal-only payments, no interest for 5 years. This can massively improve cash flow, accelerate equity growth, and reduce interest expense.
+
+Risks Of Principal-Only Structures: These structures can still become dangerous if payments are too aggressive, reserves are too low, rents decline, or repairs rise unexpectedly. High cash-on-cash returns do NOT automatically equal low risk.
+
+Structuring Multiple Offers
+
+One of the BEST negotiation strategies is giving sellers MULTIPLE options. Instead of "take it or leave it," you create flexibility and collaboration.
+
+Example Creative Offer Structure:
+
+Option 1 – Higher Price / Better Terms: Purchase Price $520,000 — 5% interest, 10% down, 30-year amortization, 10-year balloon.
+
+Option 2 – Lower Price / Larger Down Payment: Purchase Price $485,000 — 6% interest, 25% down, 30-year amortization, no balloon.
+
+Option 3 – Principal-Only Structure: Purchase Price $500,000 — $60,000 down, principal-only payments for 5 years, refinance before maturity.
+
+Why Multiple Offers Work
+
+Multiple offers reduce pressure, create flexibility, help sellers feel involved, and increase chances of agreement. It also helps uncover what the seller values MOST. Some sellers prioritize price. Others prioritize monthly income, tax benefits, speed, or simplicity.
+
+Good Negotiation Principles
+
+Good negotiation is NOT manipulation, pressure, or "winning." The best negotiations solve problems, create flexibility, and improve outcomes for BOTH sides.
+
+Questions To Understand Seller Motivation:
+• Why are you selling?
+• What is most important to you?
+• Do you need cash now or income over time?
+• How flexible are you on timing?
+• What would make this deal work for you?
+• Are taxes a concern?
+• Would monthly income help you?
+
+The better you understand the seller, the better you can structure solutions.
+
+Common Creative Financing Mistakes
+
+1. Focusing ONLY On Cash Flow — Good monthly cash flow does NOT guarantee safety.
+2. Ignoring Balloon Risk — Many investors underestimate refinance risk.
+3. Using Low Down Payments Without Reserves — Leverage magnifies risk.
+4. Forcing Creative Structures On Bad Deals — Creative financing does NOT fix bad properties.
+5. Negotiating Without Understanding Seller Motivation — The best deals come from solving REAL problems.
+
+Quick Rules To Remember:
+• Creative financing improves structure — not bad deals
+• Analyze conservatively FIRST
+• Low down payments increase risk
+• Maintain strong reserves
+• Understand ALL balloon payment risks
+• Stress test refinance scenarios
+• Structure multiple options when negotiating
+• Find solutions that help BOTH buyer and seller
+• Never force a deal to work
+• Conservative analysis still matters MOST
+
+Today's Suggested Arsenal Contact
+
+Reach out to a seller, realtor, investor, property manager, or property owner and practice discussing seller finance, down payment flexibility, loan terms, or creative structures.
+
+Your goal is NOT to pressure people. Your goal is to understand seller problems and explore possible win-win solutions.
+
+The best negotiators listen carefully, understand motivations, and create flexible solutions.`,
+    category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
+    proofType: "screenshot",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day4_property_analysis',
+          title: 'Cash on Cash Return Analysis',
+          description: 'Analyze the property below. Plug the information into the CDS Rental Calculator and answer both questions.',
+          propertyListing: {
+            title: 'Rental Property Analysis',
+            price: '$600,000',
+            badges: ['Investment Property', '25% Down', '7.5% Rate'],
+            highlights: [
+              { icon: '💰', label: 'Down Pmt', value: '$150,000' },
+              { icon: '🏠', label: 'Rent', value: '$6,000/mo' },
+              { icon: '📊', label: 'Loan', value: '30yr @ 7.5%' },
+            ],
+            sections: [
+              {
+                heading: 'Purchase & Financing',
+                rows: [
+                  { label: 'Purchase Price', value: '$600,000' },
+                  { label: 'Down Payment', value: '25% ($150,000)' },
+                  { label: 'Closing Costs', value: '2% ($9,000)' },
+                  { label: 'Costs to Make Rent Ready', value: '$0' },
+                  { label: 'Loan Term', value: '30 Years' },
+                  { label: 'Interest Rate', value: '7.5%' },
+                ],
+              },
+              {
+                heading: 'Income',
+                rows: [
+                  { label: 'Monthly Rents', value: '$6,000' },
+                  { label: 'Other Monthly Income', value: '$0' },
+                  { label: 'Vacancy', value: '6%' },
+                ],
+              },
+              {
+                heading: 'Expenses',
+                rows: [
+                  { label: 'Maintenance', value: '12%' },
+                  { label: 'Property Management', value: '8%' },
+                  { label: 'Insurance', value: '$2,000/yr' },
+                  { label: 'Property Taxes', value: '$6,000/yr' },
+                  { label: 'Utilities', value: '$0' },
+                  { label: 'Additional Expenses', value: '$0' },
+                ],
+              },
+            ],
+          },
+          maxAttempts: 3,
+          showExplanationOnPass: true,
+          explanationOnFail: 'Make sure you entered all the property data correctly into the CDS Rental Calculator. Double-check each field — especially the interest rate (7.5%), insurance ($2,000/yr), and taxes ($6,000/yr).',
+          cheatSheets: [
+            {
+              title: 'Returns Analysis',
+              color: 'green',
+              rows: [
+                { label: 'Total Capital Required', value: '$159,000' },
+                { label: 'Gross Rent', value: '$72,000/yr' },
+                { label: 'Vacancy (6%)', value: '-$4,320' },
+                { label: 'Maintenance (12%)', value: '-$8,121.60' },
+                { label: 'Management (8%)', value: '-$5,414.40' },
+                { label: 'Insurance', value: '-$2,000' },
+                { label: 'Property Taxes', value: '-$6,000' },
+                { label: 'Net Operating Income', value: '$46,144' },
+                { label: 'Debt Service (7.5%, 30yr)', value: '-$37,764' },
+                { label: 'Annual Cash Flow', value: '$8,380', highlight: true },
+                { label: 'Cash on Cash Return', value: '5.27%', highlight: true },
+              ],
+            },
+          ],
+          inputs: [
+            {
+              id: 'day4_coc',
+              label: 'What is the approximate cash-on-cash return for this property?',
+              type: 'multiple_choice',
+              options: ['10.29%', '5.27%', '6.74%', '8.30%'],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day4_rate_for_10',
+              label: 'Using the same inputs, what interest rate would make the cash-on-cash return above 10%?',
+              type: 'multiple_choice',
+              options: ['6%', '6.5%', '5.5%', '5.25%'],
+              correctAnswer: 3,
+            },
+          ],
+        },
+        {
+          id: 'day4_creative_financing',
+          title: 'Creative Deal Structure Quiz',
+          description: 'Answer all 5 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Low down payment deals increase leverage and reduce your safety margin — if vacancy, repairs, or market conditions change, you have less cushion.
+2. Even with creative terms, analyzing at 20% down helps you understand the true strength and risk of the deal independent of financing.
+3. A balloon payment is a large remaining balance that becomes due at a future date, creating refinance or payoff pressure.
+4. The best negotiation strategy is structuring multiple options that solve seller problems — not pressure or single take-it-or-leave-it offers.
+5. Creative financing can improve returns but it can also increase risk — high cash-on-cash returns do NOT automatically mean low risk.`,
+          inputs: [
+            {
+              id: 'day4_q1',
+              label: '1. What is one of the BIGGEST dangers of low down payment creative financing deals?',
+              type: 'multiple_choice',
+              options: [
+                'Lower monthly payments',
+                'Increased leverage and reduced safety margin',
+                'Better cash flow',
+                'Longer amortization',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day4_q2',
+              label: '2. Why should you still analyze a property using at least 20% down assumptions?',
+              type: 'multiple_choice',
+              options: [
+                'To increase purchase price',
+                'To reduce realtor commissions',
+                'To understand the true strength and risk of the deal',
+                'To avoid negotiations',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day4_q3',
+              label: '3. What is a balloon payment?',
+              type: 'multiple_choice',
+              options: [
+                'A refundable earnest money deposit',
+                'A large payment due at a future date',
+                'A seller-paid repair credit',
+                'A property tax increase',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day4_q4',
+              label: '4. What is one of the BEST ways to negotiate creative financing?',
+              type: 'multiple_choice',
+              options: [
+                'Use pressure and urgency',
+                'Give the seller only one option',
+                'Structure multiple options that solve seller problems',
+                'Focus only on getting the lowest purchase price possible',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day4_q5',
+              label: '5. Which statement BEST describes strong creative financing?',
+              type: 'multiple_choice',
+              options: [
+                'High cash-on-cash returns always mean low risk',
+                'Creative financing can improve returns but also increase risk',
+                'Balloon payments are always safe',
+                'No-money-down deals eliminate downside risk',
+              ],
+              correctAnswer: 1,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    day: 7,
+    title: "Reorganize & Recommit",
+    caption: "Self Reflection, Momentum & Building Your Edge",
+    taskDescription: "",
+    trainingContent: "",
+    isReflectionDay: true,
+    category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
+    proofType: "screenshot",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day7_reflection',
+          title: 'Weekly Reflection Quiz',
+          description: 'Answer all 5 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
+2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
+3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
+4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
+5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
+          inputs: [
+            {
+              id: 'day7_q1',
+              label: '1. What is one reason many investors fail to gain momentum?',
+              type: 'multiple_choice',
+              options: [
+                'They analyze too many deals',
+                'They become inconsistent and lose focus',
+                'They network too much',
+                'They build too many relationships',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day7_q2',
+              label: '2. What should influence your deal flow strategy the MOST?',
+              type: 'multiple_choice',
+              options: [
+                'What everyone else is doing',
+                'Your personal strengths and consistency',
+                'What sounds easiest',
+                'Which strategy requires the least effort',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day7_q3',
+              label: '3. Why is reviewing your buy box important?',
+              type: 'multiple_choice',
+              options: [
+                'Markets and goals can change as your knowledge improves',
+                'It guarantees better financing',
+                'It eliminates negotiation',
+                'It removes all investment risk',
+              ],
+              correctAnswer: 0,
+            },
+            {
+              id: 'day7_q4',
+              label: '4. What creates confidence in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'Waiting longer before taking action',
+                'Watching more videos only',
+                'Repetition, preparation, and experience',
+                'Finding perfect deals immediately',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day7_q5',
+              label: '5. What usually creates long-term success in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'One perfect deal',
+                'Aggressive risk taking',
+                'Consistency, discipline, and relationships',
+                'Buying the biggest property possible',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    day: 8,
+    title: "Counter Offers & Negotiation",
+    caption: "How To Negotiate Real Estate Deals (On-Market & Off-Market)",
+    taskDescription: "",
+    trainingContent: `Why Negotiation Matters
+
+Most investors focus only on finding deals. But GREAT investors understand negotiation creates deals.
+
+The difference between a bad deal and a great deal is often price, terms, interest rate, timing, seller motivation, or creative structure.
+
+Strong negotiation can improve cash flow, lower risk, improve returns, reduce money down, improve loan terms, and create opportunities other buyers never see.
+
+The Goal Of Negotiation
+
+The goal is NOT "winning," manipulating people, or pressuring sellers.
+
+The BEST negotiations solve problems, reduce stress, create trust, and create win-win solutions.
+
+If the seller feels respected, heard, and helped, you will often negotiate MUCH better deals.
+
+The Most Important Rule In Negotiation
+
+NEVER negotiate emotionally.
+
+Many investors fall in love with properties, ignore numbers, overpay, or abandon their criteria. This is dangerous.
+
+You MUST know your criteria, your maximum acceptable price, and your risk tolerance BEFORE negotiating.
+
+Your Highest Acceptable Price
+
+Before ANY negotiation you should already know the MAXIMUM price and terms you are willing to accept.
+
+This should be based on conservative analysis, realistic rents, realistic expenses, and your investment criteria.
+
+Important Negotiation Rule
+
+DO NOT go above your highest acceptable price. Even if you love the property, the seller pressures you, there are multiple offers, or emotions rise.
+
+Bad deals usually happen because people abandon discipline.
+
+Negotiating Through Realtors (On-Market Deals)
+
+On-market negotiations are usually faster, more competitive, and more structured.
+
+Your realtor becomes your voice during the negotiation. Because of this, it is extremely important that they understand your investing goals, understand your criteria, know your strengths as a buyer, and know how to gather information from the other side.
+
+A great realtor should not just "submit paperwork." They should actively help uncover seller motivation, position you as a strong buyer, explain your offer properly, and improve the chances of getting your offer accepted.
+
+Have Your Realtor Gather Information FIRST
+
+Before submitting offers or counter offers, your realtor should try to learn:
+
+• Why the seller is moving
+• How motivated they are
+• Whether they already bought another property
+• How long the property has been listed
+• Whether there are other offers
+• What terms matter most
+• Where flexibility may exist
+
+The more information you have, the stronger your negotiation becomes.
+
+Have Your Realtor Build YOU Up As A Buyer
+
+Your realtor should help position you as serious, qualified, professional, easy to work with, and capable of closing.
+
+This can include discussing your financing, proof of funds, reserves, lender strength, flexibility, closing speed, or investing experience.
+
+Sellers want certainty. The stronger and safer you appear as a buyer, the more negotiating power you often gain.
+
+Make Sure Your Realtor Explains The "Why" Behind Your Offer
+
+One of the biggest mistakes investors make is allowing offers to feel like random lowball offers.
+
+Instead, your realtor should help explain your analysis, repair concerns, market rents, financing realities, expenses, and investment criteria.
+
+You want the seller to understand your offer is thoughtful, calculated, and based on real numbers. This keeps sellers from becoming emotional or offended before negotiations even begin.
+
+Express Interest In The Property — While Staying Disciplined
+
+It is important for the seller to feel respected, appreciated, and that you genuinely like the property.
+
+However, your realtor should ALSO communicate that the property still has to work financially, meet your criteria, and make sense as an investment.
+
+The goal is balancing excitement with discipline.
+
+Have Your Realtor "Prime" The Seller Before Sending Offers
+
+Strong realtors often communicate with the listing agent BEFORE officially submitting offers.
+
+This allows them to prepare expectations, explain your reasoning, build rapport, and reduce emotional reactions.
+
+This can massively improve negotiations. Many negotiations fail because the seller feels insulted BEFORE understanding the reasoning behind the offer.
+
+Start Lower Than You Are Willing To End
+
+Sellers want to feel like they won something in the negotiation.
+
+It is extremely important that your initial offer gives you room to move during counter offers. Know the highest amount you are willing to pay and do NOT go above it — but start below it so you have room to negotiate.
+
+As you move, make the movement feel meaningful and difficult. If you are working through a realtor, make sure they communicate that your movement in price or terms was painful and carefully considered.
+
+Emotions always play a role in negotiation. The more the seller feels like they are winning, the more likely you are to get your offer accepted.
+
+Counter Offer Slowly & Strategically
+
+When negotiating, move slowly, make concessions carefully, and avoid large emotional jumps.
+
+You want your movement to feel thoughtful, intentional, and difficult.
+
+The more the seller feels they earned the movement, the more likely negotiations continue positively.
+
+Focus On Terms — Not Just Price
+
+Sometimes terms matter more than price.
+
+Examples: quicker closing, flexible timing, larger earnest money, seller finance, leasebacks, shorter inspections, or fewer contingencies.
+
+A great realtor helps identify what the seller values MOST.
+
+Understand Timing & Urgency
+
+Sometimes timing matters more than price.
+
+Examples: sellers already bought another property, vacant properties costing money, inherited properties, landlord burnout, pending foreclosures, partnership disputes, divorce, relocation, or properties sitting on market too long.
+
+The more urgency exists, the more flexibility often exists.
+
+Great negotiators identify pressure, timing, and pain points early in the process.
+
+Never Let Realtors Push You Outside Your Criteria
+
+Remember: realtors are often emotionally tied to getting deals closed. You MUST remain disciplined.
+
+Never overpay, abandon your analysis, or stretch beyond your criteria just to "win" the property.
+
+Good investors protect downside risk first.
+
+Step-By-Step Process For Negotiating Directly With Sellers
+
+Step 1. Gather Information BEFORE Negotiating
+
+You should understand current rents, number of units, bedrooms/bathrooms, property condition, taxes, insurance, market rents, location, utilities, and repair needs.
+
+Do NOT negotiate blindly. Analyze FIRST.
+
+Step 2. Build Rapport
+
+People sell to people they trust, like, and feel comfortable with.
+
+Be respectful, calm, friendly, and genuinely curious.
+
+Relationship Tips:
+
+• Find Common Ground — People naturally trust people similar to themselves.
+• Ask Questions & Listen — Good negotiators talk LESS and listen MORE. Listen for stress, frustrations, goals, and problems you can help solve.
+• Be Likable — Simple things matter: smile, slow down, maintain eye contact, use calm body language, and avoid sounding overly "salesy."
+
+Step 3. Build Value As A Buyer
+
+Sellers need confidence in YOU. You want to appear professional, capable, trustworthy, and easy to work with.
+
+Examples: pre-approval letter, proof of funds, relationship with title company, lender relationships, investment experience, or ability to close quickly.
+
+Step 4. Compliment The Property Genuinely
+
+Talk positively about the location, the landscaping, the management, the upkeep, or features you genuinely like.
+
+Use phrases like: "As long as the numbers work, I would absolutely love this property."
+
+BUT: be sincere. Fake flattery destroys trust.
+
+Step 5. Run The Numbers Together
+
+This is VERY powerful. Walk through rents, expenses, repairs, vacancy, financing, and returns.
+
+Show them why the numbers may not work at their asking price.
+
+This helps make negotiation feel logical instead of emotional.
+
+Important Negotiation Technique: Discourage The NUMBERS — Not The SELLER
+
+Never attack the seller, their intelligence, or their property.
+
+Instead, explain the numbers calmly.
+
+Examples:
+"At this price and financing structure, the property becomes difficult to cash flow."
+"I really like the property, but the current returns are tighter than I normally buy."
+
+Step 6. Present Multiple Solutions
+
+Do NOT corner sellers. Give options.
+
+Examples: lower price, seller finance, lower interest rate, larger down payment, longer amortization, principal-only payments, flexible timing, or subject-to structures.
+
+Never Corner Sellers — People become defensive when they feel trapped or embarrassed. Avoid making sellers feel stupid, attacking their asking price emotionally, aggressive pressure, or "take it or leave it" ultimatums too early.
+
+Instead, stay collaborative, give options, and help sellers feel involved in the solution. The more comfortable the seller feels, the better negotiations usually go.
+
+Example Negotiation Framing:
+"I really like the property and would love to find a way to make this work for both of us."
+
+This changes negotiation from conflict to collaboration.
+
+Step 7. Stay Patient
+
+The longer you can remain calm, patient, and disciplined, the stronger your negotiation position usually becomes.
+
+Emotion creates mistakes. Patience creates leverage.
+
+Step 8. Be Willing To Walk Away
+
+If you cannot buy the property within your criteria, you MUST be willing to walk away. Be extremely respectful when doing so.
+
+Many deals come together days, weeks, or even months later because the seller realizes you were serious about your bottom dollar and disciplined in your analysis.
+
+When walking away, make sure the seller understands the absolute maximum you can pay, that you genuinely tried to create a win-win solution, and that the deal simply does not work within your criteria at the current terms.
+
+Thank them for their time and professionalism, and make sure they know you are always interested if they decide they would like to revisit terms that make the deal work for both parties.
+
+Sometimes the strongest negotiation position is being willing to walk away professionally and respectfully.
+
+Final Tips & Tricks
+
+Emotional Triggers Sellers Often Care About
+
+Sometimes sellers care about avoiding realtor commissions, avoiding repairs, avoiding showings, speed, certainty, passive income, taxes, or simplicity.
+
+Your job is to understand what matters MOST.
+
+Understand Seller Emotions & Market Concerns
+
+Sometimes sellers have emotional concerns, frustrations, or fears that need to be respectfully brought to light during negotiations.
+
+The goal is NOT manipulation, pressure, or fear tactics. The goal is helping the seller realistically evaluate the market and understand why your offer may make sense.
+
+Potential market concerns that may influence sellers include:
+
+• High interest rates
+• Uncertain or shifting markets
+• Slowing buyer demand
+• Increasing vacancy
+• Rising expenses
+• Higher insurance costs
+• Increasing maintenance costs
+• Tenant problems
+• Difficult property management
+• Crime or neighborhood decline
+• Slowing or declining property values
+• Longer days on market
+• Price reductions on nearby listings
+• Difficulty refinancing
+• Tighter lending standards
+• Economic uncertainty
+• Fear of future market softening
+
+Sometimes sellers also feel emotional pressure from owning too many properties, burnout from management, difficult tenants, deferred maintenance, financial stress, life changes, divorce, retirement, relocation, or simply wanting simplicity.
+
+The key is to discuss these things calmly, respectfully, and logically. You never want the seller to feel attacked. You want them to feel understood, heard, and that you are trying to create a realistic solution that works for both parties.
+
+Never Lie During Negotiation
+
+Strong negotiation does NOT require dishonesty. Never fake offers, fake numbers, fake repair bids, fake financial hardship, or intentionally mislead sellers.
+
+Your reputation matters. The best negotiators stay honest, stay professional, and let the numbers do the work.
+
+Common Negotiation Mistakes
+
+1. Talking Too Much — Great negotiators listen more than they speak.
+2. Negotiating Emotionally — Emotion causes overpaying.
+3. Falling In Love With The Deal — No single property will change your life.
+4. Ignoring The Numbers — Never negotiate beyond your criteria.
+5. Being Aggressive Or Manipulative — Pressure destroys trust.
+6. Giving Away Your Maximum Too Early — Maintain flexibility. Make giving up price painful and hold on for as long as you can.
+
+Quick Rules To Remember
+
+• Analyze BEFORE negotiating
+• Know your highest acceptable price
+• Stay calm and patient
+• Use numbers — not emotion
+• Listen more than you speak
+• Understand seller motivation
+• Structure solutions, not pressure
+• Be willing to walk away
+• Protect your investment criteria
+• Solve problems for BOTH sides
+
+Today's Suggested Arsenal Contact
+
+Reach out to a For Sale By Owner seller, realtor, landlord, or off-market lead.
+
+Your goal today: practice conversation, ask questions, understand seller motivation, and practice discussing terms confidently.
+
+Focus LESS on "closing the deal." Focus MORE on building rapport, understanding problems, and practicing negotiation skills.`,
+    category: "pipeline",
+    weekNumber: 2,
+    weekTitle: "BUILD THE PIPELINE",
+    proofType: "screenshot",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day5_negotiation',
+          title: 'Counter Offers & Negotiation Quiz',
+          description: 'Answer all 5 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Negotiating emotionally is one of the biggest mistakes — it causes overpaying and poor decisions.
+2. Before negotiating, you should already know your highest acceptable price and criteria based on conservative analysis.
+3. The best way to negotiate directly with sellers is to understand their motivations and solve problems for both sides.
+4. During negotiation, you should discourage the NUMBERS — not the seller. Never attack the seller personally.
+5. Patience and discipline create the strongest long-term negotiation position.`,
+          inputs: [
+            {
+              id: 'day5_q1',
+              label: '1. What is one of the BIGGEST mistakes investors make during negotiation?',
+              type: 'multiple_choice',
+              options: [
+                'Listening too carefully',
+                'Negotiating emotionally',
+                'Asking questions',
+                'Staying patient',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day5_q2',
+              label: '2. Before negotiating, what should every investor already know?',
+              type: 'multiple_choice',
+              options: [
+                "The seller's favorite price",
+                'Their highest acceptable price and criteria',
+                "The neighbor's opinion",
+                'The appraised value only',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day5_q3',
+              label: '3. What is one of the BEST ways to negotiate directly with sellers?',
+              type: 'multiple_choice',
+              options: [
+                'Pressure them emotionally',
+                'Talk constantly',
+                'Understand their motivations and solve problems',
+                'Argue aggressively over price',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day5_q4',
+              label: '4. During negotiation, what should you discourage?',
+              type: 'multiple_choice',
+              options: [
+                'The seller personally',
+                'The property condition emotionally',
+                'The NUMBERS — not the seller',
+                'All communication',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day5_q5',
+              label: '5. What creates the strongest long-term negotiation position?',
+              type: 'multiple_choice',
+              options: [
+                'Desperation',
+                'Aggressive pressure',
+                'Patience and discipline',
+                'Overpaying quickly',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    day: 9,
     title: "For Sale By Owner Contracts & Closing",
     caption: "How To Buy Real Estate Without Using Realtors",
     taskDescription: "",
@@ -2817,9 +3651,9 @@ Reach out to a title company, escrow officer, closing attorney, or investor-frie
 Your goal today: build relationships, understand the closing process, ask questions about contracts, and learn how transactions actually move from contract to closing. Try a new method of connecting with FSBO target contacts and find new target properties.
 
 Strong relationships with title companies can reduce stress, improve confidence, speed up closings, and help you safely navigate FSBO transactions.`,
-    category: "foundation",
-    weekNumber: 1,
-    weekTitle: "BUILD THE FOUNDATION",
+    category: "pipeline",
+    weekNumber: 2,
+    weekTitle: "BUILD THE PIPELINE",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
@@ -2945,103 +3779,7 @@ Strong relationships with title companies can reduce stress, improve confidence,
     },
   },
   {
-    day: 7,
-    title: "Reorganize & Recommit",
-    caption: "Self Reflection, Momentum & Building Your Edge",
-    taskDescription: "",
-    trainingContent: "",
-    isReflectionDay: true,
-    category: "foundation",
-    weekNumber: 1,
-    weekTitle: "BUILD THE FOUNDATION",
-    proofType: "screenshot",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    quiz: {
-      required: true,
-      scenarios: [
-        {
-          id: 'day7_reflection',
-          title: 'Weekly Reflection Quiz',
-          description: 'Answer all 5 questions correctly to continue.',
-          maxAttempts: 3,
-          explanationOnFail: `Review the correct answers:
-
-1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
-2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
-3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
-4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
-5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
-          inputs: [
-            {
-              id: 'day7_q1',
-              label: '1. What is one reason many investors fail to gain momentum?',
-              type: 'multiple_choice',
-              options: [
-                'They analyze too many deals',
-                'They become inconsistent and lose focus',
-                'They network too much',
-                'They build too many relationships',
-              ],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day7_q2',
-              label: '2. What should influence your deal flow strategy the MOST?',
-              type: 'multiple_choice',
-              options: [
-                'What everyone else is doing',
-                'Your personal strengths and consistency',
-                'What sounds easiest',
-                'Which strategy requires the least effort',
-              ],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day7_q3',
-              label: '3. Why is reviewing your buy box important?',
-              type: 'multiple_choice',
-              options: [
-                'Markets and goals can change as your knowledge improves',
-                'It guarantees better financing',
-                'It eliminates negotiation',
-                'It removes all investment risk',
-              ],
-              correctAnswer: 0,
-            },
-            {
-              id: 'day7_q4',
-              label: '4. What creates confidence in real estate investing?',
-              type: 'multiple_choice',
-              options: [
-                'Waiting longer before taking action',
-                'Watching more videos only',
-                'Repetition, preparation, and experience',
-                'Finding perfect deals immediately',
-              ],
-              correctAnswer: 2,
-            },
-            {
-              id: 'day7_q5',
-              label: '5. What usually creates long-term success in real estate investing?',
-              type: 'multiple_choice',
-              options: [
-                'One perfect deal',
-                'Aggressive risk taking',
-                'Consistency, discipline, and relationships',
-                'Buying the biggest property possible',
-              ],
-              correctAnswer: 2,
-            },
-          ],
-        },
-      ],
-    },
-  },
-  // ── Week 2: Build the Pipeline (Days 8-14) ──
-  {
-    day: 8,
+    day: 10,
     title: "Deal Flow Mastery",
     caption: "How GREAT Investors Consistently Find Deals",
     taskDescription: `Choose ONE primary deal flow strategy and ONE secondary strategy that fit your personality, strengths, schedule, and budget.
@@ -3365,7 +4103,7 @@ Quick Rules To Remember
     },
   },
   {
-    day: 9,
+    day: 11,
     title: "Follow-Up Mastery",
     caption: "The Fortune Is In The Follow-Up",
     taskDescription: `Follow up with every warm seller lead, every rejected offer, and every property owner who previously showed interest.
@@ -3677,7 +4415,7 @@ Quick Rules To Remember
     },
   },
   {
-    day: 10,
+    day: 12,
     title: "Speed & Momentum",
     caption: "Speed Wins Deals",
     taskDescription: `For every property you analyze today, determine your ideal purchase price, your maximum acceptable price, and the exact structure that would make it a DEFINITE buy.
@@ -4081,7 +4819,7 @@ Quick Rules To Remember
     },
   },
   {
-    day: 11,
+    day: 13,
     title: "Financing Mastery",
     caption: "Understanding Every Major Type of Real Estate Financing",
     taskDescription: `Today's Execution Challenge
@@ -4674,7 +5412,102 @@ Quick Rules To Remember
     },
   },
   {
-    day: 12,
+    day: 14,
+    title: "Reorganize & Recommit",
+    caption: "Self Reflection, Momentum & Building Your Edge",
+    taskDescription: "",
+    trainingContent: "",
+    isReflectionDay: true,
+    category: "pipeline",
+    weekNumber: 2,
+    weekTitle: "BUILD THE PIPELINE",
+    proofType: "screenshot",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day14_reflection',
+          title: 'Weekly Reflection Quiz',
+          description: 'Answer all 5 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
+2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
+3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
+4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
+5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
+          inputs: [
+            {
+              id: 'day14_q1',
+              label: '1. What is one reason many investors fail to gain momentum?',
+              type: 'multiple_choice',
+              options: [
+                'They analyze too many deals',
+                'They become inconsistent and lose focus',
+                'They network too much',
+                'They build too many relationships',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day14_q2',
+              label: '2. What should influence your deal flow strategy the MOST?',
+              type: 'multiple_choice',
+              options: [
+                'What everyone else is doing',
+                'Your personal strengths and consistency',
+                'What sounds easiest',
+                'Which strategy requires the least effort',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day14_q3',
+              label: '3. Why is reviewing your buy box important?',
+              type: 'multiple_choice',
+              options: [
+                'Markets and goals can change as your knowledge improves',
+                'It guarantees better financing',
+                'It eliminates negotiation',
+                'It removes all investment risk',
+              ],
+              correctAnswer: 0,
+            },
+            {
+              id: 'day14_q4',
+              label: '4. What creates confidence in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'Waiting longer before taking action',
+                'Watching more videos only',
+                'Repetition, preparation, and experience',
+                'Finding perfect deals immediately',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day14_q5',
+              label: '5. What usually creates long-term success in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'One perfect deal',
+                'Aggressive risk taking',
+                'Consistency, discipline, and relationships',
+                'Buying the biggest property possible',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    day: 15,
     title: "Return Metrics Mastery",
     caption: "How Successful Investors Actually Think About Returns",
     taskDescription: `Today's Execution Challenge
@@ -5014,9 +5847,9 @@ Quick Rules To Remember
 8. No single metric determines a great deal.
 9. Stability often beats maximum returns.
 10. Great investors evaluate the entire picture.`,
-    category: "pipeline",
-    weekNumber: 2,
-    weekTitle: "BUILD THE PIPELINE",
+    category: "pressure",
+    weekNumber: 3,
+    weekTitle: "APPLY PRESSURE",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
@@ -5101,7 +5934,7 @@ Quick Rules To Remember
     },
   },
   {
-    day: 13,
+    day: 16,
     title: "Solving Seller Problems",
     caption: "Why Sellers Actually Sell",
     taskDescription: `Today's Execution Challenge
@@ -5263,9 +6096,9 @@ Quick Rules To Remember
 7. Trust creates opportunities.
 8. Win-win deals create the best long-term outcomes.
 9. Solve problems.`,
-    category: "pipeline",
-    weekNumber: 2,
-    weekTitle: "BUILD THE PIPELINE",
+    category: "pressure",
+    weekNumber: 3,
+    weekTitle: "APPLY PRESSURE",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
@@ -5465,103 +6298,7 @@ Quick Rules To Remember
     },
   },
   {
-    day: 14,
-    title: "Reorganize & Recommit",
-    caption: "Self Reflection, Momentum & Building Your Edge",
-    taskDescription: "",
-    trainingContent: "",
-    isReflectionDay: true,
-    category: "pipeline",
-    weekNumber: 2,
-    weekTitle: "BUILD THE PIPELINE",
-    proofType: "screenshot",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    quiz: {
-      required: true,
-      scenarios: [
-        {
-          id: 'day14_reflection',
-          title: 'Weekly Reflection Quiz',
-          description: 'Answer all 5 questions correctly to continue.',
-          maxAttempts: 3,
-          explanationOnFail: `Review the correct answers:
-
-1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
-2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
-3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
-4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
-5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
-          inputs: [
-            {
-              id: 'day14_q1',
-              label: '1. What is one reason many investors fail to gain momentum?',
-              type: 'multiple_choice',
-              options: [
-                'They analyze too many deals',
-                'They become inconsistent and lose focus',
-                'They network too much',
-                'They build too many relationships',
-              ],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day14_q2',
-              label: '2. What should influence your deal flow strategy the MOST?',
-              type: 'multiple_choice',
-              options: [
-                'What everyone else is doing',
-                'Your personal strengths and consistency',
-                'What sounds easiest',
-                'Which strategy requires the least effort',
-              ],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day14_q3',
-              label: '3. Why is reviewing your buy box important?',
-              type: 'multiple_choice',
-              options: [
-                'Markets and goals can change as your knowledge improves',
-                'It guarantees better financing',
-                'It eliminates negotiation',
-                'It removes all investment risk',
-              ],
-              correctAnswer: 0,
-            },
-            {
-              id: 'day14_q4',
-              label: '4. What creates confidence in real estate investing?',
-              type: 'multiple_choice',
-              options: [
-                'Waiting longer before taking action',
-                'Watching more videos only',
-                'Repetition, preparation, and experience',
-                'Finding perfect deals immediately',
-              ],
-              correctAnswer: 2,
-            },
-            {
-              id: 'day14_q5',
-              label: '5. What usually creates long-term success in real estate investing?',
-              type: 'multiple_choice',
-              options: [
-                'One perfect deal',
-                'Aggressive risk taking',
-                'Consistency, discipline, and relationships',
-                'Buying the biggest property possible',
-              ],
-              correctAnswer: 2,
-            },
-          ],
-        },
-      ],
-    },
-  },
-  // ── Week 3: Apply Pressure (Days 15-21) ──
-  {
-    day: 15,
+    day: 17,
     title: "Objection & Influence Mastery",
     caption: "How to build trust, handle objections, and become someone sellers want to work with",
     taskDescription: `Today's Execution Challenge
@@ -6563,7 +7300,7 @@ And the more confident you become, the more opportunities turn into contracts.`,
     },
   },
   {
-    day: 16,
+    day: 18,
     title: "Seeing Hidden Value",
     caption: "How great investors find opportunities others miss",
     taskDescription: `Hidden Value Exercise
@@ -7427,7 +8164,7 @@ The ability to identify, verify, and execute on hidden value is one of the faste
     },
   },
   {
-    day: 17,
+    day: 19,
     title: "Deal Structuring Mastery",
     caption: "Matching the right deal structure to the right seller",
     taskDescription: `Today's Execution Challenge
@@ -8100,7 +8837,7 @@ The investor who understands how to structure solutions can often buy properties
     },
   },
   {
-    day: 18,
+    day: 20,
     title: "Becoming The Go-To Buyer",
     caption: "How to build relationship capital that creates deal flow",
     taskDescription: `Today's Exercise
@@ -8787,7 +9524,102 @@ Become the buyer that realtors, wholesalers, property managers, lenders, investo
     },
   },
   {
-    day: 19,
+    day: 21,
+    title: "Reorganize & Recommit",
+    caption: "Self Reflection, Momentum & Building Your Edge",
+    taskDescription: "",
+    trainingContent: "",
+    isReflectionDay: true,
+    category: "pressure",
+    weekNumber: 3,
+    weekTitle: "APPLY PRESSURE",
+    proofType: "screenshot",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'day21_reflection',
+          title: 'Weekly Reflection Quiz',
+          description: 'Answer all 5 questions correctly to continue.',
+          maxAttempts: 3,
+          explanationOnFail: `Review the correct answers:
+
+1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
+2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
+3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
+4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
+5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
+          inputs: [
+            {
+              id: 'day21_q1',
+              label: '1. What is one reason many investors fail to gain momentum?',
+              type: 'multiple_choice',
+              options: [
+                'They analyze too many deals',
+                'They become inconsistent and lose focus',
+                'They network too much',
+                'They build too many relationships',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day21_q2',
+              label: '2. What should influence your deal flow strategy the MOST?',
+              type: 'multiple_choice',
+              options: [
+                'What everyone else is doing',
+                'Your personal strengths and consistency',
+                'What sounds easiest',
+                'Which strategy requires the least effort',
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: 'day21_q3',
+              label: '3. Why is reviewing your buy box important?',
+              type: 'multiple_choice',
+              options: [
+                'Markets and goals can change as your knowledge improves',
+                'It guarantees better financing',
+                'It eliminates negotiation',
+                'It removes all investment risk',
+              ],
+              correctAnswer: 0,
+            },
+            {
+              id: 'day21_q4',
+              label: '4. What creates confidence in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'Waiting longer before taking action',
+                'Watching more videos only',
+                'Repetition, preparation, and experience',
+                'Finding perfect deals immediately',
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: 'day21_q5',
+              label: '5. What usually creates long-term success in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'One perfect deal',
+                'Aggressive risk taking',
+                'Consistency, discipline, and relationships',
+                'Buying the biggest property possible',
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    day: 22,
     title: "Confidence Through Repetition",
     caption: "Why most investors quit right before success",
     taskDescription: `Today's Exercise
@@ -9296,9 +10128,9 @@ Now it's time to trust the process, increase your effort, and understand that ma
 The investors who win are rarely the smartest.
 
 They are usually the ones who stay in the game long enough for their effort to compound into results.`,
-    category: "pressure",
-    weekNumber: 3,
-    weekTitle: "APPLY PRESSURE",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
@@ -9524,7 +10356,7 @@ They are usually the ones who stay in the game long enough for their effort to c
     },
   },
   {
-    day: 20,
+    day: 23,
     title: "Advanced Deal Flow",
     caption: "Allocating your time like an investor",
     taskDescription: `Today's Exercise
@@ -9811,9 +10643,9 @@ They identify the activities, relationships, and lead sources producing the high
 By Day 20, you have accumulated enough data to stop guessing.
 
 The objective now is to think like an investor and allocate your time the same way you would allocate capital: toward the opportunities producing the greatest return.`,
-    category: "pressure",
-    weekNumber: 3,
-    weekTitle: "APPLY PRESSURE",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
@@ -10018,103 +10850,7 @@ The objective now is to think like an investor and allocate your time the same w
     },
   },
   {
-    day: 21,
-    title: "Reorganize & Recommit",
-    caption: "Self Reflection, Momentum & Building Your Edge",
-    taskDescription: "",
-    trainingContent: "",
-    isReflectionDay: true,
-    category: "pressure",
-    weekNumber: 3,
-    weekTitle: "APPLY PRESSURE",
-    proofType: "screenshot",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    quiz: {
-      required: true,
-      scenarios: [
-        {
-          id: 'day21_reflection',
-          title: 'Weekly Reflection Quiz',
-          description: 'Answer all 5 questions correctly to continue.',
-          maxAttempts: 3,
-          explanationOnFail: `Review the correct answers:
-
-1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
-2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
-3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
-4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
-5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
-          inputs: [
-            {
-              id: 'day21_q1',
-              label: '1. What is one reason many investors fail to gain momentum?',
-              type: 'multiple_choice',
-              options: [
-                'They analyze too many deals',
-                'They become inconsistent and lose focus',
-                'They network too much',
-                'They build too many relationships',
-              ],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day21_q2',
-              label: '2. What should influence your deal flow strategy the MOST?',
-              type: 'multiple_choice',
-              options: [
-                'What everyone else is doing',
-                'Your personal strengths and consistency',
-                'What sounds easiest',
-                'Which strategy requires the least effort',
-              ],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day21_q3',
-              label: '3. Why is reviewing your buy box important?',
-              type: 'multiple_choice',
-              options: [
-                'Markets and goals can change as your knowledge improves',
-                'It guarantees better financing',
-                'It eliminates negotiation',
-                'It removes all investment risk',
-              ],
-              correctAnswer: 0,
-            },
-            {
-              id: 'day21_q4',
-              label: '4. What creates confidence in real estate investing?',
-              type: 'multiple_choice',
-              options: [
-                'Waiting longer before taking action',
-                'Watching more videos only',
-                'Repetition, preparation, and experience',
-                'Finding perfect deals immediately',
-              ],
-              correctAnswer: 2,
-            },
-            {
-              id: 'day21_q5',
-              label: '5. What usually creates long-term success in real estate investing?',
-              type: 'multiple_choice',
-              options: [
-                'One perfect deal',
-                'Aggressive risk taking',
-                'Consistency, discipline, and relationships',
-                'Buying the biggest property possible',
-              ],
-              correctAnswer: 2,
-            },
-          ],
-        },
-      ],
-    },
-  },
-  // ── Week 4: Full Sprint (Days 22-30) ──
-  {
-    day: 22,
+    day: 24,
     title: "Finding Motivation Faster",
     caption: "Identifying opportunity before everyone else.",
     taskDescription: `Today's Exercise
@@ -10553,7 +11289,7 @@ The ability to identify frustration, fatigue, pressure, convenience needs, and l
     },
   },
   {
-    day: 23,
+    day: 25,
     title: "Opportunity Triage",
     caption: "Allocating attention to the opportunities most likely to become contracts.",
     taskDescription: `Today's Exercise
@@ -10973,7 +11709,7 @@ The objective is to consistently focus your attention on the opportunities most 
     },
   },
   {
-    day: 24,
+    day: 26,
     title: "Creating Urgency",
     caption: "Helping sellers make decisions.",
     taskDescription: `Today's Exercise
@@ -11438,40 +12174,10 @@ The goal is helping them gain enough clarity to make a decision.`,
     },
   },
   {
-    day: 25,
+    day: 27,
     title: "Negotiate Inspection Terms",
     caption: "",
     taskDescription: "If you have a deal progressing, negotiate inspection terms. Otherwise submit 5 offers. Submit documentation.",
-    trainingContent: "",
-    category: "sprint",
-    weekNumber: 4,
-    weekTitle: "FULL SPRINT",
-    proofType: "document",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    quiz: null,
-  },
-  {
-    day: 26,
-    title: "Lock Down Your Title Company",
-    caption: "",
-    taskDescription: "Confirm your title company or closing attorney is ready. Submit confirmation of relationship.",
-    trainingContent: "",
-    category: "sprint",
-    weekNumber: 4,
-    weekTitle: "FULL SPRINT",
-    proofType: "document",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    quiz: null,
-  },
-  {
-    day: 27,
-    title: "Final Offer Push - 15 Offers",
-    caption: "",
-    taskDescription: "Final push — submit 15 offers. This is where deals happen. Submit all confirmations.",
     trainingContent: "",
     category: "sprint",
     weekNumber: 4,
@@ -11579,6 +12285,36 @@ The goal is helping them gain enough clarity to make a decision.`,
   },
   {
     day: 29,
+    title: "Lock Down Your Title Company",
+    caption: "",
+    taskDescription: "Confirm your title company or closing attorney is ready. Submit confirmation of relationship.",
+    trainingContent: "",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
+    proofType: "document",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: null,
+  },
+  {
+    day: 30,
+    title: "Final Offer Push - 15 Offers",
+    caption: "",
+    taskDescription: "Final push — submit 15 offers. This is where deals happen. Submit all confirmations.",
+    trainingContent: "",
+    category: "sprint",
+    weekNumber: 4,
+    weekTitle: "FULL SPRINT",
+    proofType: "document",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: null,
+  },
+  {
+    day: 31,
     title: "Negotiate to Contract",
     caption: "",
     taskDescription: "Negotiate your best lead to a signed contract. Submit the signed contract or latest negotiation.",
@@ -11593,7 +12329,7 @@ The goal is helping them gain enough clarity to make a decision.`,
     quiz: null,
   },
   {
-    day: 30,
+    day: 32,
     title: "Close & Celebrate",
     caption: "",
     taskDescription: "Celebrate getting your first deal under contract! Submit your contract or victory documentation.",
@@ -11606,14 +12342,14 @@ The goal is helping them gain enough clarity to make a decision.`,
     transcript: null,
     downloads: [],
     quiz: null,
-  },
+  }
 ];
 
 export const DEFAULT_PHASES = [
   { label: "Build the Foundation", days: [1, 2, 3, 4, 5, 6, 7], color: "#48c78e", weekNumber: 1 },
   { label: "Build the Pipeline", days: [8, 9, 10, 11, 12, 13, 14], color: "#d4a843", weekNumber: 2 },
   { label: "Apply Pressure", days: [15, 16, 17, 18, 19, 20, 21], color: "#b85c38", weekNumber: 3 },
-  { label: "Full Sprint", days: [22, 23, 24, 25, 26, 27, 28, 29, 30], color: "#e94560", weekNumber: 4 },
+  { label: "Full Sprint", days: [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32], color: "#e94560", weekNumber: 4 },
 ];
 
 // Kept for backward compatibility
@@ -11638,8 +12374,8 @@ export function getCategoryColors(phases) {
 // Resolve content day from slot day using admin day order
 export function resolveContentDay(slotDay, overrides = {}) {
   const dayOrder = overrides?._dayOrder;
-  if (!dayOrder || !Array.isArray(dayOrder) || dayOrder.length !== 30) return slotDay;
-  if (slotDay < 1 || slotDay > 30) return slotDay;
+  if (!dayOrder || !Array.isArray(dayOrder) || dayOrder.length !== 32) return slotDay;
+  if (slotDay < 1 || slotDay > 32) return slotDay;
   return dayOrder[slotDay - 1] || slotDay;
 }
 
@@ -11791,7 +12527,7 @@ export const POST_30_MINIMUMS = {
 
 // Get the daily minimums for a specific day, merging admin overrides
 export function getDailyMinimums(dayNum, adminOverrides = {}, cohortAttempt = 1) {
-  if (dayNum > 30) return POST_30_MINIMUMS;
+  if (dayNum > 32) return POST_30_MINIMUMS;
   const base = cohortAttempt >= 2
     ? (VETERAN_DAILY_MINIMUMS[dayNum] || VETERAN_DAILY_MINIMUMS[1])
     : (DAILY_MINIMUMS[dayNum] || DAILY_MINIMUMS[1]);

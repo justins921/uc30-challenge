@@ -203,7 +203,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
               cohortAttempt: 1,
               completedDays: previewCompletedDays,
               submissions: previewSubmissions,
-              currentDay: 30,
+              currentDay: 32,
               trainingCompletedDays: previewCompletedDays,
             }}
             onSubmit={async (day, data) => {
@@ -1482,7 +1482,7 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
 
               {/* Stats row */}
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-                <MiniStat label="Day" value={p.currentDay > 30 ? '✓' : p.currentDay} color="#e94560" />
+                <MiniStat label="Day" value={p.currentDay > 32 ? '✓' : p.currentDay} color="#e94560" />
                 <MiniStat label="UC Pts" value={p.ucPoints || calculateUCPoints(p.metrics || {})} color="#f0a500" />
                 <MiniStat label="Offers" value={p.metrics?.offersSubmitted || 0} color="#e94560" />
                 <MiniStat label="Subs" value={p.submissions?.length || 0} color="#888" />
@@ -1561,7 +1561,7 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
 
   // Offer tracking (weekly)
   const currentDay = p.currentDay || 1;
-  const weekNum = currentDay <= 30 ? getChallengeWeek(currentDay) : null;
+  const weekNum = currentDay <= 32 ? getChallengeWeek(currentDay) : null;
   const weeklyTarget = weekNum ? getWeeklyOfferTarget(currentDay) : null;
 
   const handleLoadCrm = async () => {
@@ -1840,7 +1840,7 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12, marginBottom: 24 }}>
         <div className="card" style={{ textAlign: 'center', padding: 16 }}>
           <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#e94560' }}>
-            {p.currentDay > 30 ? '✓' : p.currentDay}
+            {p.currentDay > 32 ? '✓' : p.currentDay}
           </div>
           <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>Current Day</div>
         </div>
@@ -4431,7 +4431,7 @@ function ComplianceOverview({ participants, allSubmissions, dailyMins, weeklyMin
     const nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     calendarDay = Math.floor((nowDay - startDay) / (1000 * 60 * 60 * 24)) + 1;
   }
-  const currentDay = Math.max(1, Math.min(calendarDay, 30));
+  const currentDay = Math.max(1, Math.min(calendarDay, 32));
   const currentWeek = getWeekNumber(currentDay);
   const { start: weekStart } = getWeekRange(currentWeek);
   const dayInWeek = currentDay - weekStart + 1;
@@ -4848,8 +4848,8 @@ const REFLECTION_DAYS = [7, 14, 21, 28];
 function DayReorderEditor({ contentOverrides, onSave, onBack }) {
   const savedOrder = contentOverrides?._dayOrder;
   const [order, setOrder] = useState(() => {
-    if (savedOrder && savedOrder.length === 30) return [...savedOrder];
-    return Array.from({ length: 30 }, (_, i) => i + 1);
+    if (savedOrder && savedOrder.length === 32) return [...savedOrder];
+    return Array.from({ length: 32 }, (_, i) => i + 1);
   });
   const [saving, setSaving] = useState(false);
 

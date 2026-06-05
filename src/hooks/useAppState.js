@@ -59,7 +59,7 @@ export function useAppState() {
 
     const removals = [];
     for (const p of currentParticipants) {
-      if (p.isAdmin || !p.isActive || p.currentDay > 30) continue;
+      if (p.isAdmin || !p.isActive || p.currentDay > 32) continue;
       // Existing check: missed daily submission
       if (p.currentDay < pacificDayNum) {
         removals.push(p);
@@ -871,7 +871,7 @@ export function useAppState() {
   const submitDay = useCallback(async (dayNum, proof) => {
     if (!user) return;
 
-    const isPost30 = dayNum > 30;
+    const isPost30 = dayNum > 32;
     const isPreTraining = dayNum <= 0;
 
     // Validate: must be the user's current day (or post-30 / pre-training)
@@ -973,21 +973,21 @@ export function useAppState() {
       storage.upsertDailySubmission(submissionRecord);
     }
 
-    if (dayNum < 30) {
+    if (dayNum < 32) {
       tagDayStarted(user.email, dayNum + 1).catch(() => {});
     }
-    if (dayNum === 30 && (updatedMetrics.offersSubmitted || 0) > 0) {
+    if (dayNum === 32 && (updatedMetrics.offersSubmitted || 0) > 0) {
       tagChallengeCompleted(user.email).catch(() => {});
     }
 
     // Transactional emails via Resend
     emailDayCompleted(user.email, user.firstName, dayNum);
-    if (dayNum === 30) {
+    if (dayNum === 32) {
       emailChallengeCompleted(user.email, user.firstName);
     }
 
-    // Day 30 completion: graduate tracking + cohort history
-    if (dayNum === 30) {
+    // Day 32 completion: graduate tracking + cohort history
+    if (dayNum === 32) {
       const gradUpdates = {
         ucGraduateCount: (updatedUser.ucGraduateCount || 0) + 1,
         cohortHistory: [...(updatedUser.cohortHistory || []), {

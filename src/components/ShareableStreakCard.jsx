@@ -68,15 +68,15 @@ export default function ShareableStreakCard({ user, calendarDay }) {
 
   const totalCompleted = user.completedDays.length;
   const streak = getStreak(user.completedDays);
-  const challengeComplete = user.completedDays.includes(30);
-  const inContinuation = challengeComplete && user.currentDay > 30;
-  const challengeProgress = Math.min(Math.round((Math.min(totalCompleted, 30) / 30) * 100), 100);
+  const challengeComplete = user.completedDays.includes(32);
+  const inContinuation = challengeComplete && user.currentDay > 32;
+  const challengeProgress = Math.min(Math.round((Math.min(totalCompleted, 32) / 32) * 100), 100);
 
   // Current day data for the title
   const currentDayNum = user.currentDay;
   const dayData = inContinuation
     ? POST_30_TASK
-    : CHALLENGE_DAYS[Math.min(currentDayNum - 1, 29)];
+    : CHALLENGE_DAYS[Math.min(currentDayNum - 1, 31)];
   const dayTitle = dayData?.title || 'Challenge Day';
 
   const streakFire = streak >= 20 ? '\u{1F525}\u{1F525}\u{1F525}' : streak >= 10 ? '\u{1F525}\u{1F525}' : streak >= 1 ? '\u{1F525}' : '';
