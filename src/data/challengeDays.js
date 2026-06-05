@@ -821,434 +821,1096 @@ Your job is to determine the MOST realistic and conservative market rent. Choose
   },
   {
     day: 3,
-    title: "Financing & Offers",
-    caption: "Getting Pre-Approved & Submitting Your First Offer",
-    taskDescription: "",
-    trainingContent: `Why Financing Matters
+    title: "Financing & Becoming Bankable",
+    caption: "Building Your Lending Team Before You Need It",
+    taskDescription: `Today's Exercise
 
-Many investors spend months analyzing deals but never take action because they are not pre-approved, do not understand financing, or are not ready to submit offers when opportunities appear.
+Contact:
 
-Great deals move FAST.
+• One conventional lender
+• One DSCR lender
+• One local bank or credit union
 
-If you are not financially prepared, you do not understand loan terms, or you cannot confidently submit offers, you will lose opportunities to investors who ARE ready.
+Ask each lender:
 
-The goal of today is to understand financing, build your investing team, become pre-approved, and confidently submit your first offer.
+• Current rates
+• Down payment requirements
+• Reserve requirements
+• Closing costs
+• Loan products
 
-What Is A Pre-Approval?
+Create a comparison sheet.
 
-A pre-approval is a lender reviewing your income, debt, credit, assets, and financial situation to determine how much they may lend you, what loan terms you qualify for, and what your estimated payment could look like.
+Then determine:
 
-A strong pre-approval makes sellers and realtors take you seriously.
+• Which lender would likely be your primary lender today?
+• Which lender would be your backup?
+• What steps must you complete to become fully pre-approved?
 
-Why Getting Pre-Approved Is Important
+Create a written action plan and begin the pre-approval process.
 
-1. You Learn Your REAL Buying Power
-
-Many investors guess what they can afford. A lender helps determine realistic loan amounts, down payment requirements, cash reserves, and estimated monthly payments.
-
-2. You Can Move Quickly On Deals
-
-Good deals often move fast. If you are already pre-approved, you can submit offers quickly, compete more effectively, and avoid delays.
-
-3. Realtors Take You More Seriously
-
-Most good realtors do not want to spend weeks showing properties to buyers who cannot qualify. A pre-approval shows you are serious, financially prepared, and ready to buy.
-
-Types Of Financing To Understand
-
-Conventional Loans — Most common financing type. Usually requires 15–25% down for investment properties, good credit, stable income, and cash reserves. Often best for long-term rentals, duplexes, fourplexes, and stabilized properties.
-
-DSCR Loans (Debt Service Coverage Ratio) — Loans based primarily on property cash flow instead of personal income. Helpful for self-employed investors, scaling portfolios, and investors with strong cash-flowing properties.
-
-Seller Finance — The seller acts as the bank. Can help with lower down payments, flexible terms, lower closing costs, and easier qualification.
-
-Local Banks & Credit Unions — Sometimes provide more flexible underwriting, portfolio loans, and local market understanding. Especially valuable for small multifamily, value-add deals, and investors building relationships.
-
-What Lenders Usually Look At
-
-• Credit Score — Higher credit scores usually improve approval odds, interest rates, and loan options.
-• Debt-To-Income Ratio (DTI) — Lenders compare your monthly debts vs. your monthly income. Too much debt can reduce borrowing ability.
-• Cash Reserves — Many lenders want to see extra cash after closing, emergency reserves, and liquidity.
-• Income Stability — Lenders usually prefer stable employment, consistent income, and clean tax returns.
-
-Documents You Will Usually Need: driver's license, pay stubs, tax returns, bank statements, business returns (if self-employed), entity documents (sometimes), and rental property information (if already investing).
-
-Understanding Loan Terms
-
-Do NOT focus ONLY on purchase price or monthly payment. You must understand interest rate, loan length, down payment, closing costs, reserves, and total cash needed. A bad loan can destroy a good deal.
-
-Selecting The RIGHT Realtor
-
-Not all realtors are good investor realtors. Many agents specialize in retail home buyers, emotional purchases, or luxury sales. That does NOT mean they understand investing.
-
-You want a realtor who understands cash flow, understands investment analysis, works with investors regularly, understands rental demand, understands off-market opportunities, and can move FAST.
-
-Signs Of A Strong Investor Realtor:
-
-1. They Understand Investment Numbers — They should understand cash flow, cap rates, returns, rent analysis, and operating expenses. If they cannot discuss investment numbers confidently, that is a red flag.
-
-2. They Know Investors In The Market — Good investor agents often know landlords, wholesalers, property managers, contractors, and off-market sellers.
-
-3. They Respond Quickly — Speed matters in real estate. Slow communication loses deals.
-
-4. They Push Data, Not Emotion — Bad agents say "This house feels amazing." Good investor agents say "Here are the numbers."
-
-Questions To Ask Realtors:
-• Have you worked with investors before?
-• Do you own investment property personally?
-• What investors are active in this market?
-• What areas have strongest rental demand?
-• What areas should investors avoid?
-• What property types move quickly?
-• Do you know of off-market opportunities?
-• How many investment deals did you close last year?
-• What property managers do you recommend?
-• What lenders do investors use most in this market?
-
-Understanding Offers
-
-An offer is MUCH more than just price. Strong offers include purchase price, financing terms, earnest money, due diligence period, inspection contingency, financing contingency, closing timeline, seller concessions, and additional protections.
-
-The goal is NOT just getting under contract. The goal is controlling risk, protecting downside, and maintaining multiple exit options.
-
-How To Actually Submit An Offer
-
-Step 1. Analyze The Property First — Before submitting ANY offer: verify rents, estimate expenses conservatively, understand repairs, and confirm financing. Never submit emotional offers.
-
-Step 2. Discuss Strategy With Your Realtor — Before submitting: discuss pricing strategy, market competition, seller motivation, and contingency structure. Sometimes stronger terms matter more than price.
-
-Step 3. Determine Your Maximum Price — Know your ideal price, your walk-away price, and your maximum risk tolerance. Never negotiate emotionally.
-
-Step 4. Structure The Offer Properly — A strong offer balances competitiveness, flexibility, and protection. You want enough protection to safely exit the deal if financing changes, inspections reveal issues, numbers were inaccurate, or new information appears.
-
-Earnest Money Rules To Live By
-
-Earnest money shows the seller you are serious. BUT you NEVER want to unnecessarily risk losing it.
-
-Rule #1. Keep Earnest Money Reasonable — Do NOT overcommit earnest money. New investors often believe "more earnest money = stronger offer." Not always. Use reasonable amounts appropriate for deal size, market, and risk.
-
-Rule #2. NEVER Release Earnest Money Early — Do NOT release earnest money to the seller before inspections, due diligence, and financing protections are complete.
-
-Rule #3. Make Sure Earnest Money Is Protected During Contingencies — You want contractual outs during inspection periods, due diligence periods, financing contingencies, and appraisal contingencies when possible.
-
-Due Diligence & Inspection Rules
-
-Rule #1. NEVER Waive Inspections As A Beginner — Even if the market is competitive, the seller pressures you, or your realtor pushes you. Inspections protect you from major repairs, hidden damage, structural issues, plumbing problems, electrical issues, and bad assumptions.
-
-Rule #2. Give Yourself Enough Due Diligence Time — Rushing due diligence is dangerous. You need time to inspect the property, verify leases, verify expenses, confirm financing, and validate your analysis.
-
-Rule #3. Verify EVERYTHING — Do NOT trust seller statements, pro formas, rent estimates, or verbal claims. Verify rents, leases, utilities, taxes, insurance, repairs, and operating expenses.
-
-Rule #4. Maintain Financing Outs — Your contract should allow you an exit if financing changes, rates spike, loan terms change, or approval falls apart. Never remove financing protections too early.
-
-Common Offer Mistakes New Investors Make
-
-1. Overpaying Emotionally — Good deals are created through numbers, not excitement.
-2. Using Aggressive Assumptions — Never force a deal to work.
-3. Waiving Protections — Waiving inspections, financing contingencies, or due diligence protections can create catastrophic risk.
-4. Not Understanding Repair Costs — Small issues become very expensive quickly.
-5. Trusting Seller Numbers Blindly — Always independently verify everything.
-
-Strong Offer Principles
-
-Strong investors move quickly, analyze conservatively, negotiate professionally, protect downside risk, and submit LOTS of disciplined offers. You do NOT need every offer accepted. You simply need consistent action, disciplined underwriting, and enough quality offers.
-
-Quick Rules To Remember:
-• Get pre-approved BEFORE aggressively shopping
-• Build lender relationships early
-• Use investor-friendly realtors
-• Never buy emotionally
-• Verify ALL numbers independently
-• Protect your earnest money
-• NEVER waive inspections as a beginner
-• Maintain financing contingencies
-• Use conservative underwriting
-• Some offers SHOULD be rejected
-• Real estate is a numbers game
-
-Understanding Realtor & Lender Incentives
-
-Remember: Realtors usually get paid when deals close. Mortgage brokers usually get paid when loans close. This does NOT mean they are bad people. But you still must verify numbers yourself, analyze conservatively, and make decisions based on YOUR goals.
 
 Today's Suggested Arsenal Contact
 
-Connect with a lender, mortgage broker, or investor-friendly realtor. You should also explain your investing goals, what type of properties you want to buy, and what your long-term plans are.
+Add at least one lender, mortgage broker, or banker to your Arsenal Contacts.
 
-Strong lender and realtor relationships can help you move faster, improve deal flow, strengthen offers, and help you scale more efficiently.
+Strong financing relationships often lead to:
 
-Your goals today: begin the pre-approval process, ask questions about financing, learn loan requirements, and start building relationships. SUBMIT YOUR FIRST OFFER!`,
+• Financing solutions
+• Market information
+• Referrals
+• Future opportunities
+• Faster closings`,
+    trainingContent: `Financing & Becoming Bankable — Building Your Lending Team Before You Need It
+
+
+Why Financing Matters
+
+Many investors spend months analyzing deals but never submit offers because they are not financially prepared.
+
+They have:
+
+• No lender relationships
+• No pre-approval
+• No understanding of financing
+• No understanding of what they actually qualify for
+
+The result is predictable.
+
+An opportunity appears.
+
+The investor gets excited.
+
+Then they discover they are not ready.
+
+Professional investors build their financing team before they need it.
+
+The goal of today is to become financially prepared so that when opportunities appear, you are ready to act.
+
+
+Your Financing Team
+
+Most investors should not rely on a single lender.
+
+Your goal is to build relationships with multiple financing sources.
+
+Ideally, you should develop relationships with:
+
+Conventional Lender — For traditional investment loans.
+
+DSCR Lender — For cash-flow based lending.
+
+Local Credit Union Or Community Bank — Often the best source for relationship-based lending and portfolio loans. This option is usually the best for conventional loans and most investment property loans when it comes to rates, terms and relationship.
+
+Accountant — To help ensure your tax strategy supports your long-term financing goals.
+
+
+Why Multiple Lenders Matter
+
+Different lenders excel in different situations.
+
+One lender may offer:
+
+• Lower rates
+• Lower fees
+• Better terms
+• More flexibility
+• Better loan products
+
+You do not know which lender is best until you compare them.
+
+The best investors shop financing just like they shop properties.
+
+
+How To Contact Lenders
+
+Your goal is not immediately getting your credit pulled.
+
+Your goal is gathering information.
+
+A simple conversation might sound like:
+
+"I'm actively preparing to purchase investment property. I'd like to understand your loan programs, rates, down payment requirements, reserve requirements, and qualification standards. I'm planning on investing in real estate consistently overtime and I wanna make sure I connect with the best lender to form a long-term relationship."
+
+This allows you to begin comparing options.
+
+
+Questions To Ask Every Lender
+
+• What loan products do you offer investors?
+• What are your current rates?
+• What are your closing costs?
+• What reserve requirements do you have?
+• What are your down payment requirements?
+• What are your debt-to-income requirements?
+• What property types do you prefer?
+• What is your typical closing timeline?
+• What disqualifies most borrowers?
+
+Many lenders will want to pull your credit and get you pre-approved. Explain that you plan to do this, but since you want to shop multiple lenders first, ask them to answer your questions based on the information you provide. They may ask for things like your estimated credit score or other financial details. It's fine to share this information and ask for their best estimate, with the understanding that nothing is guaranteed until they actually pull your credit and complete the process.
+
+
+Protecting Your Credit
+
+Early in the process, you typically do not need multiple lenders pulling your credit.
+
+Instead:
+
+Discuss your approximate:
+
+• Credit score
+• Income
+• Assets
+• Debt levels
+
+Ask lenders to provide estimated terms based on that information.
+
+Once you have identified the lender you are most likely to work with, then move forward with a formal application and credit pull.
+
+
+Shopping Rates And Terms
+
+Most investors focus exclusively on interest rates.
+
+This is a mistake.
+
+You should compare:
+
+• Interest Rate
+• Closing Costs
+• Loan Fees
+• Reserve Requirements
+• Loan Flexibility
+• Amortization Length
+• Prepayment Penalties
+• Customer Service
+
+The best loan is not always the lowest rate.
+
+
+Understanding Reserve Requirements
+
+Many investors become frustrated because they qualify for a loan but do not satisfy reserve requirements.
+
+Many lenders want to see:
+
+• Cash reserves
+• Emergency funds
+• Liquidity after closing
+
+You need to understand these requirements before pursuing properties.
+
+
+Becoming Bankable
+
+One of the most overlooked concepts in investing is becoming bankable.
+
+Banks prefer borrowers who demonstrate:
+
+• Stable income
+• Strong reserves
+• Responsible debt management
+• Organized financial records
+
+Your goal is to make yourself easy to lend to.
+
+
+The Accountant Conversation
+
+One of the smartest conversations an investor can have is between:
+
+• Themselves
+• Their Accountant
+• Their Lender
+
+Many investors aggressively reduce taxable income without understanding how that affects future borrowing ability.
+
+Before making major tax decisions, understand:
+
+How will this affect future financing?
+
+The goal is maximizing long-term wealth, not simply minimizing taxes.
+
+
+Protecting Your Approval
+
+Once you become pre-approved:
+
+Avoid:
+
+• Opening new credit cards
+• Financing vehicles
+• Taking on additional debt
+• Making large unexplained deposits
+• Changing employment unnecessarily
+
+What seems like a small financial decision can impact financing approval.
+
+
+Why Pre-Approval Matters
+
+Pre-approval creates credibility.
+
+It tells:
+
+Realtors — You're serious.
+
+Sellers — You can perform.
+
+Wholesalers — You are worth bringing opportunities to.
+
+Arsenal Contacts — You are prepared to act.
+
+Prepared investors get shown more opportunities.
+
+
+Conventional Financing
+
+Best for:
+
+• Long-term rentals
+• Duplexes
+• Triplexes
+• Fourplexes
+• Investors building portfolios
+
+Advantages:
+
+• Competitive rates
+• Long amortization
+• Strong cash flow
+
+Limitations:
+
+• Income verification
+• DTI requirements
+• Conventional loan limits
+
+
+DSCR Financing
+
+Best for:
+
+• Self-employed investors
+• Scaling portfolios
+• Investors with strong cash-flowing properties
+
+Advantages:
+
+• Based primarily on property performance
+• Easier scaling
+• Reduced dependence on personal income
+
+Limitations:
+
+• Often slightly higher rates
+• May require larger down payments
+
+
+Local Banks & Credit Unions
+
+Never underestimate relationship banking.
+
+Local lenders often provide:
+
+• Flexibility
+• Portfolio loans
+• Unique solutions
+• Local market knowledge
+
+Strong banking relationships can become a competitive advantage over time.
+
+
+Financing Is A Competitive Advantage
+
+Many investors think the best deal wins.
+
+Often the best prepared investor wins.
+
+The investor who:
+
+• Understands financing
+• Has lender relationships
+• Knows their numbers
+• Can move quickly
+
+often secures opportunities that others lose.
+
+
+Building Your Team
+
+Real estate is unique because you can build an entire team of professionals who are financially incentivized to help you succeed.
+
+When you win, they win.
+
+Your:
+
+• Realtor
+• Loan Officer
+• Property Manager
+• Insurance Agent
+• Contractor
+• Accountant
+• Attorney
+
+all make money when deals get done and properties perform.
+
+That means you do not have to figure everything out on your own.
+
+One of the biggest mistakes new investors make is trying to make every decision in isolation. Instead, leverage the experience of the people around you.
+
+Ask questions.
+
+Get second opinions.
+
+Have them review deals.
+
+Ask them what risks they see.
+
+Ask them what they would do in your situation.
+
+The key is finding the right people first.
+
+Take time to screen and interview professionals before adding them to your team. Look for people who are responsive, knowledgeable, investor-friendly, and aligned with your goals.
+
+Once you find great team members, use them extensively.
+
+Lean on their expertise.
+
+Call them.
+
+Email them.
+
+Ask for clarification.
+
+Have them walk you through scenarios.
+
+The best investors are not the ones who know everything. They are the ones who have built strong teams and know how to leverage the knowledge of the people around them.
+
+Your team can help you avoid costly mistakes, move faster, and make better decisions with greater confidence.
+
+Build your team early, nurture those relationships, and let their experience become one of your greatest competitive advantages.
+
+
+Key Takeaway
+
+Most investors focus on finding deals.
+
+Professional investors focus on becoming prepared before the deal appears.
+
+Your ability to secure financing, understand lending options, maintain strong lender relationships, and become fully pre-approved can dramatically increase your ability to act when opportunities arise.
+
+The goal is simple:
+
+Become the investor who is ready before the opportunity appears.
+
+Final note — make sure you are still analyzing properties, reaching out to Arsenal contacts and target properties. Financing and building your team needs to happen simultaneously to searching for deals so that you can reach your goals in under 30 days.`,
     category: "foundation",
     weekNumber: 1,
     weekTitle: "BUILD THE FOUNDATION",
     proofType: "screenshot",
     videoUrl: null,
     transcript: null,
-    downloads: [
-      { name: 'Submitting An Offer Checklist', url: '/offer-checklist.html' },
-    ],
+    downloads: [],
     quiz: {
+      title: 'Financing & Becoming Bankable',
       required: true,
+      passingScore: 100,
       scenarios: [
         {
-          id: 'day3_financing_offers',
-          title: 'Financing & Offers Quiz',
-          description: 'Answer all 5 questions correctly to continue.',
-          maxAttempts: 3,
-          explanationOnFail: `Review the correct answers:
-
-1. Getting pre-approved helps you understand your real buying power and move quickly on deals.
-2. You must understand the TOTAL loan structure and cash needed — not just monthly payment or interest rate alone.
-3. The inspection contingency protects buyers from hidden property issues like structural damage, plumbing, and electrical problems.
-4. Waiving protections and contingencies too early is one of the biggest mistakes — it creates catastrophic risk.
-5. The best realtor for investors understands investment analysis and rental properties, not just retail home sales.`,
-          inputs: [
-            {
-              id: 'day3_q1',
-              label: '1. Why is getting pre-approved important before submitting offers?',
-              type: 'multiple_choice',
-              options: [
-                'It guarantees the seller accepts your offer',
-                'It helps you understand your real buying power and move quickly',
-                'It eliminates closing costs',
-                'It removes the need for inspections',
-              ],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day3_q2',
-              label: '2. What is one of the MOST important things to understand about a loan?',
-              type: 'multiple_choice',
-              options: [
-                'Only the monthly payment',
-                'Only the interest rate',
-                'Total loan structure and cash needed',
-                'The lender\'s logo',
-              ],
-              correctAnswer: 2,
-            },
-            {
-              id: 'day3_q3',
-              label: '3. Which contingency helps protect buyers from hidden property issues?',
-              type: 'multiple_choice',
-              options: [
-                'Financing contingency',
-                'Inspection contingency',
-                'Earnest money contingency',
-                'Closing contingency',
-              ],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day3_q4',
-              label: '4. What is one of the biggest mistakes new investors make when submitting offers?',
-              type: 'multiple_choice',
-              options: [
-                'Using conservative assumptions',
-                'Protecting their earnest money',
-                'Waiving protections and contingencies too early',
-                'Asking too many questions',
-              ],
-              correctAnswer: 2,
-            },
-            {
-              id: 'day3_q5',
-              label: '5. What type of realtor is BEST for a real estate investor?',
-              type: 'multiple_choice',
-              options: [
-                'A realtor focused only on luxury homes',
-                'A realtor who mainly works with first-time retail buyers',
-                'A realtor who understands investment analysis and rental properties',
-                'Any realtor with the most Instagram followers',
-              ],
-              correctAnswer: 2,
-            },
+          id: 'day3_q1',
+          title: 'Shopping Lenders',
+          question: 'Why is it important to speak with multiple lenders before becoming formally pre-approved?',
+          options: [
+            { id: 'a', text: 'To get multiple hard credit pulls.' },
+            { id: 'b', text: 'To compare loan programs, rates, fees, reserve requirements, and financing options before selecting the best fit.' },
+            { id: 'c', text: 'To increase your credit score.' },
+            { id: 'd', text: 'To avoid providing financial documents.' },
           ],
+          correctId: 'b',
+          explanation: 'Shopping lenders allows you to compare the full financing package — rates, fees, reserves, and flexibility — before committing to a formal application.',
+        },
+        {
+          id: 'day3_q2',
+          title: 'Tax & Financing',
+          question: 'An investor aggressively minimizes taxable income every year and then struggles to qualify for financing. What is the primary lesson?',
+          options: [
+            { id: 'a', text: 'Lenders do not care about tax returns.' },
+            { id: 'b', text: 'Tax planning and financing strategy should be considered together.' },
+            { id: 'c', text: 'Conventional financing should be avoided.' },
+            { id: 'd', text: 'The lender made a mistake.' },
+          ],
+          correctId: 'b',
+          explanation: 'Tax planning and financing strategy must be considered together. Aggressively reducing taxable income can undermine your ability to qualify for future loans.',
+        },
+        {
+          id: 'day3_q3',
+          title: 'Attractive Borrower',
+          question: 'Which borrower is most attractive to a lender?',
+          options: [
+            { id: 'a', text: 'A borrower with high income but no reserves.' },
+            { id: 'b', text: 'A borrower with stable income, strong reserves, and organized financial records.' },
+            { id: 'c', text: 'A borrower with several new credit cards.' },
+            { id: 'd', text: 'A borrower with inconsistent income and significant debt.' },
+          ],
+          correctId: 'b',
+          explanation: 'Lenders prefer borrowers who demonstrate stability, reserves, and organized finances — these qualities make you easy to lend to.',
+        },
+        {
+          id: 'day3_q4',
+          title: 'Protecting Pre-Approval',
+          question: 'After receiving a pre-approval, which action is most likely to create financing problems?',
+          options: [
+            { id: 'a', text: 'Maintaining cash reserves.' },
+            { id: 'b', text: 'Comparing insurance quotes.' },
+            { id: 'c', text: 'Financing a new vehicle before closing.' },
+            { id: 'd', text: 'Continuing to save money.' },
+          ],
+          correctId: 'c',
+          explanation: 'Financing a new vehicle adds debt and changes your DTI ratio, which can jeopardize your pre-approval before closing.',
+        },
+        {
+          id: 'day3_q5',
+          title: 'Evaluating Loan Packages',
+          question: 'A lender offers a slightly higher interest rate but significantly lower fees, better service, and more flexible underwriting. What should a sophisticated investor do?',
+          options: [
+            { id: 'a', text: 'Reject the loan because the rate is higher.' },
+            { id: 'b', text: 'Evaluate the entire financing package rather than focusing on one variable.' },
+            { id: 'c', text: 'Always choose the lowest rate.' },
+            { id: 'd', text: 'Ignore underwriting flexibility.' },
+          ],
+          correctId: 'b',
+          explanation: 'The best loan is not always the lowest rate. Evaluate the entire package including fees, flexibility, service, and underwriting standards.',
+        },
+        {
+          id: 'day3_q6',
+          title: 'Reserve Requirements',
+          question: 'Why do reserve requirements matter?',
+          options: [
+            { id: 'a', text: 'They help lenders reduce risk and help investors handle unexpected expenses.' },
+            { id: 'b', text: 'They are only important for luxury properties.' },
+            { id: 'c', text: 'They replace down payment requirements.' },
+            { id: 'd', text: 'They have no impact on loan approval.' },
+          ],
+          correctId: 'a',
+          explanation: 'Reserve requirements protect both the lender and the investor by ensuring there is liquidity available to handle unexpected expenses after closing.',
+        },
+        {
+          id: 'day3_q7',
+          title: 'Relationship Banking',
+          question: 'Which financing source is most likely to provide relationship-based lending, portfolio loans, and local flexibility?',
+          options: [
+            { id: 'a', text: 'Credit card companies.' },
+            { id: 'b', text: 'National retail banks only.' },
+            { id: 'c', text: 'Local banks and credit unions.' },
+            { id: 'd', text: 'Title companies.' },
+          ],
+          correctId: 'c',
+          explanation: 'Local banks and credit unions often provide the most flexibility, portfolio loan options, and relationship-based lending for real estate investors.',
+        },
+        {
+          id: 'day3_q8',
+          title: 'Lender Conversation',
+          question: 'Which question would provide the most valuable information during an initial lender conversation?',
+          options: [
+            { id: 'a', text: '"What loan products, reserve requirements, and qualification standards do you offer investors?"' },
+            { id: 'b', text: '"How many employees work here?"' },
+            { id: 'c', text: '"Can you guarantee approval?"' },
+            { id: 'd', text: '"What color is your logo?"' },
+          ],
+          correctId: 'a',
+          explanation: 'Understanding loan products, reserve requirements, and qualification standards gives you the information needed to compare lenders effectively.',
+        },
+        {
+          id: 'day3_q9',
+          title: 'Preparation vs Enthusiasm',
+          question: 'Two investors find the same property. Investor A loves the deal but is not pre-approved and has no lender relationships. Investor B has lender relationships, is pre-approved, and knows exactly what they qualify for. Who is most likely to secure the opportunity?',
+          options: [
+            { id: 'a', text: 'Investor A because enthusiasm matters most.' },
+            { id: 'b', text: 'Investor B because preparation reduces uncertainty and increases confidence that the transaction will close.' },
+            { id: 'c', text: 'Both equally.' },
+            { id: 'd', text: 'The seller will choose randomly.' },
+          ],
+          correctId: 'b',
+          explanation: 'Preparation — pre-approval, lender relationships, and financial readiness — gives sellers confidence that the transaction will actually close.',
+        },
+        {
+          id: 'day3_q10',
+          title: 'Day 3 Summary',
+          question: 'Which statement best summarizes the lesson of Day 3?',
+          options: [
+            { id: 'a', text: 'The investor with the lowest interest rate always wins.' },
+            { id: 'b', text: 'Financing should be figured out after finding a property.' },
+            { id: 'c', text: 'Building lender relationships, becoming bankable, and securing financing before opportunities appear creates a significant competitive advantage.' },
+            { id: 'd', text: 'Only experienced investors need financing relationships.' },
+          ],
+          correctId: 'c',
+          explanation: 'Building your financing team before you need it creates a competitive advantage that allows you to act quickly when opportunities appear.',
         },
       ],
     },
   },
   {
     day: 4,
-    title: "Creative Deal Structure",
-    caption: "Seller Finance, Negotiation & Structuring Win-Win Deals",
-    taskDescription: "",
-    trainingContent: `Why Creative Financing Matters
+    title: "Building Your Realtor Team",
+    caption: "Creating Deal Flow Through Strong Realtor Relationships",
+    taskDescription: `Today's Exercise
 
-Many investors believe the only way to buy real estate is 20–25% down, through a bank, with standard loan terms. That is NOT true.
+Interview at least:
 
-Creative financing can lower down payments, improve cash flow, lower interest rates, extend loan terms, reduce closing costs, and create opportunities that traditional financing cannot.
+Three Investor-Focused Realtors
 
-Creative deal structure is one of the MOST powerful tools in real estate investing. But creative financing also creates additional risk if used improperly.
+Ask the questions from today's training.
 
-The goal is NOT "creative at all costs." The goal is structuring SAFE deals, improving cash flow, reducing risk where possible, and creating WIN-WIN solutions.
+Compare:
 
-Why Off-Market Deals Matter
+• Experience
+• Investment Knowledge
+• Responsiveness
+• Market Knowledge
+• Personality Fit
 
-Many of the BEST creative finance opportunities happen OFF market. Because many sellers do not want strangers walking through their property, do not want tenants disturbed, do not want to pay realtor commissions, want privacy, want flexibility, or want a simpler sale process.
+Then identify:
 
-Off-market deals are often MUCH easier to negotiate creatively because there is less competition, sellers are often more flexible, and you can structure solutions directly with the seller.
+• Your Primary Realtor
+• At Least Three Additional Realtor Arsenal Contacts
 
-Benefits Of Off-Market Seller Finance Deals
+Create a follow-up plan to stay in touch with each of them.
 
-Benefits For The Buyer:
-• Less competition
-• More flexible negotiations
-• Lower closing costs
-• Potentially lower interest rates
-• Flexible down payments
-• More room for creative structure
-• Avoiding some bank fees and lender costs
 
-Traditional loans can easily add 1–3%+ in additional lender-related costs. Seller finance deals are often significantly cheaper to close.
+Today's Suggested Arsenal Activity
 
-Benefits For The Seller:
-• Monthly income
-• Potential tax advantages
-• Flexible timing
-• Simpler transaction
-• No realtor commissions
-• Less disruption to tenants
-• Potentially higher sale prices
-• Faster and more flexible negotiations
+Add:
 
-Good negotiation is NOT taking advantage of people. The BEST negotiations create solutions that genuinely help BOTH parties.
+• Three Realtors
+• One Commercial Broker
+• One Multifamily Specialist
 
-How To Find Off-Market Seller Finance Opportunities
+to your Arsenal Contacts.
 
-1. Property Managers — Property managers often know tired landlords, struggling owners, aging investors, and owners considering selling.
+Explain:
 
-2. Realtors — Some realtors know expired listings, landlords open to creative terms, or sellers struggling to sell traditionally.
+• Your buy box
+• Your financing
+• Your acquisition goals
 
-3. Direct Outreach — Mailers, cold calling, texting, networking, driving for dollars, social media, and referrals.
+Ask:
 
-4. Networking With Investors — Many investors eventually burn out, want passive income, or want simpler ownership structures. Seller finance can solve those problems.
+"What opportunities are investors actively pursuing right now?"
 
-What Is Seller Finance?
+"What opportunities are investors overlooking?"`,
+    trainingContent: `Building Your Realtor Team — Creating Deal Flow Through Strong Realtor Relationships
 
-Seller finance means the seller acts as the bank. Instead of getting all cash at closing, the seller agrees to receive payments over time. This allows buyers and sellers to negotiate down payments, interest rates, payment structure, loan terms, balloon payments, and other creative solutions.
 
-Why Sellers Accept Seller Finance
+Why Realtors Matter
 
-Many beginners think "Why would a seller ever do this?" Because seller finance can solve REAL seller problems.
+Many investors think realtors simply open doors and write contracts.
 
-Possible seller motivations: reducing taxes, creating monthly income, difficulty selling traditionally, wanting passive income, avoiding management headaches, avoiding realtor commissions, wanting higher sale prices, or needing flexible timing.
+Professional investors understand that great realtors can become one of the most valuable sources of deal flow in their business.
 
-Negotiation is NOT "taking advantage of people." Good negotiation is helping solve problems for BOTH sides.
+A strong realtor relationship can help you:
 
-Creative Financing Is Negotiation
+• Find deals faster
+• Understand local markets
+• Identify seller motivation
+• Analyze neighborhoods
+• Access off-market opportunities
+• Negotiate effectively
+• Submit offers quickly
+• Scale your acquisition business
 
-Everything is negotiable: purchase price, interest rate, loan term, balloon payment, down payment, payment timing, repair credits, closing timeline, and even payment structure.
+The goal is not simply finding a realtor.
 
-The BEST creative deals help the seller, improve the buyer's cash flow, and reduce risk for both parties.
+The goal is building a team of real estate professionals who help you consistently find opportunities.
 
-The MOST Important Rule
 
-A creative deal does NOT magically make a bad property a good deal. You MUST still analyze conservatively, verify rents, verify expenses, and understand risk. Creative financing improves structure. It does NOT fix bad analysis.
+Your Realtor Strategy
 
-Understanding Down Payments
+Most investors should have:
 
-Lower down payments improve cash-on-cash return, preserve liquidity, and allow faster scaling. BUT lower down payments also increase risk.
+One Primary Realtor
 
-The Danger Of Low Down Payments
+And
 
-Many investors get excited because a low down payment + low interest rate = massive cash-on-cash returns. But that does NOT automatically mean the deal is safe.
+Multiple Secondary Relationships
 
-Example: 1% down payment, low interest rate, high leverage, and little reserves can become VERY dangerous if vacancy rises, repairs increase, rents soften, or the market shifts.
+These serve different purposes.
 
-Important Rule About Analysis
 
-Even if you negotiate 1% down, 5% down, or no money down, you should STILL analyze the property as if you invested at least 20% down. Why? Because you need to understand the REAL risk, the REAL leverage, and whether the deal is fundamentally strong. Creative financing can improve returns but it can also amplify risk.
+Your Primary Realtor
 
-Understanding Interest Rates
+Your primary realtor is your day-to-day acquisition partner.
 
-A lower interest rate lowers payments, improves cash flow, and improves debt coverage. Even small changes matter. Example: 3% seller finance vs. 7% bank financing can completely change monthly cash flow, cash-on-cash return, and long-term profitability.
+This is the person who:
 
-Understanding Loan Terms
+• Helps submit offers
+• Reviews listings
+• Pulls comparables
+• Discusses market conditions
+• Helps negotiate deals
+• Moves quickly when opportunities appear
 
-Longer loan terms lower payments, improve cash flow, and improve debt coverage. Shorter terms increase principal paydown but increase monthly payments. Sometimes longer terms create SAFER deals.
+This should be someone you trust and communicate with regularly.
 
-What Is A Balloon Payment?
+You want one primary relationship because consistency creates efficiency.
 
-A balloon payment means the loan is NOT fully paid off by the end of the agreement. Instead, a large remaining balance becomes due at a future date. Example: 30-year amortization, but the remaining balance is due in 5 years. This creates lower monthly payments initially but creates refinance or payoff pressure later.
+The more your realtor understands:
 
-The Dangers Of Balloon Payments
+• Your buy box
+• Your return requirements
+• Your financing
+• Your goals
 
-Balloon payments can become VERY dangerous if the market shifts, refinancing becomes difficult, interest rates rise, values decline, cash flow weakens, or analysis was incorrect. Many investors get into trouble because they only focus on today's payment, not the future balloon risk.
+the more effective they become.
 
-Balloon Payment Rules To Live By
+Eventually, they should know exactly what you are looking for without you having to explain it repeatedly.
 
-1. NEVER Ignore The Balloon — You MUST have a realistic refinance plan, payoff strategy, or exit strategy.
 
-2. Stress Test Worst-Case Scenarios — Ask yourself: What if rates increase? What if values decline? What if rents soften? What if lending tightens?
+Secondary Realtor Relationships
 
-3. Longer Balloons Usually Reduce Risk — Generally a 10-year balloon is safer than a 3-year balloon. More time creates more flexibility.
+While your primary realtor handles most MLS opportunities, you should still build relationships with multiple other agents.
 
-4. Strong Deals Matter MORE With Balloons — Weak deals become MUCH riskier when balloons exist.
+These relationships create additional deal flow.
 
-Interest-Free Principal Paydown Structures
+Examples:
 
-Sometimes sellers may agree to a down payment PLUS monthly principal payments with NO interest. Example: $50,000 down, $4,000/month principal-only payments, no interest for 5 years. This can massively improve cash flow, accelerate equity growth, and reduce interest expense.
+• Multifamily specialists
+• Commercial brokers
+• Land brokers
+• Investment-focused agents
+• Realtors who frequently work with landlords
 
-Risks Of Principal-Only Structures: These structures can still become dangerous if payments are too aggressive, reserves are too low, rents decline, or repairs rise unexpectedly. High cash-on-cash returns do NOT automatically equal low risk.
+Every realtor becomes a potential Arsenal Contact.
 
-Structuring Multiple Offers
+You are not asking all of them to write offers.
 
-One of the BEST negotiation strategies is giving sellers MULTIPLE options. Instead of "take it or leave it," you create flexibility and collaboration.
+You are creating relationships that can generate opportunities.
 
-Example Creative Offer Structure:
 
-Option 1 – Higher Price / Better Terms: Purchase Price $520,000 — 5% interest, 10% down, 30-year amortization, 10-year balloon.
+Expanding Your Deal-Finding Team
 
-Option 2 – Lower Price / Larger Down Payment: Purchase Price $485,000 — 6% interest, 25% down, 30-year amortization, no balloon.
+One of the biggest misconceptions among new investors is believing they need to commit exclusively to a single realtor.
 
-Option 3 – Principal-Only Structure: Purchase Price $500,000 — $60,000 down, principal-only payments for 5 years, refinance before maturity.
+In reality, most successful investors build relationships with multiple people who can help them find opportunities.
 
-Why Multiple Offers Work
+The key is understanding the different roles those relationships play.
 
-Multiple offers reduce pressure, create flexibility, help sellers feel involved, and increase chances of agreement. It also helps uncover what the seller values MOST. Some sellers prioritize price. Others prioritize monthly income, tax benefits, speed, or simplicity.
 
-Good Negotiation Principles
+Experienced Investor Realtors
 
-Good negotiation is NOT manipulation, pressure, or "winning." The best negotiations solve problems, create flexibility, and improve outcomes for BOTH sides.
+Many investors prefer a primary realtor who already understands:
 
-Questions To Understand Seller Motivation:
-• Why are you selling?
-• What is most important to you?
-• Do you need cash now or income over time?
-• How flexible are you on timing?
-• What would make this deal work for you?
-• Are taxes a concern?
-• Would monthly income help you?
+• Rental property analysis
+• Cash flow
+• Cap rates
+• Value-add opportunities
+• Investor psychology
 
-The better you understand the seller, the better you can structure solutions.
+These agents often require less training and can help identify risks and opportunities more quickly.
 
-Common Creative Financing Mistakes
+Their experience can dramatically shorten your learning curve.
 
-1. Focusing ONLY On Cash Flow — Good monthly cash flow does NOT guarantee safety.
-2. Ignoring Balloon Risk — Many investors underestimate refinance risk.
-3. Using Low Down Payments Without Reserves — Leverage magnifies risk.
-4. Forcing Creative Structures On Bad Deals — Creative financing does NOT fix bad properties.
-5. Negotiating Without Understanding Seller Motivation — The best deals come from solving REAL problems.
 
-Quick Rules To Remember:
-• Creative financing improves structure — not bad deals
-• Analyze conservatively FIRST
-• Low down payments increase risk
-• Maintain strong reserves
-• Understand ALL balloon payment risks
-• Stress test refinance scenarios
-• Structure multiple options when negotiating
-• Find solutions that help BOTH buyer and seller
-• Never force a deal to work
-• Conservative analysis still matters MOST
+Hungry Realtors
 
-Today's Suggested Arsenal Contact
+Experience is valuable.
 
-Reach out to a seller, realtor, investor, property manager, or property owner and practice discussing seller finance, down payment flexibility, loan terms, or creative structures.
+But don't overlook effort.
 
-Your goal is NOT to pressure people. Your goal is to understand seller problems and explore possible win-win solutions.
+Some newer agents are willing to:
 
-The best negotiators listen carefully, understand motivations, and create flexible solutions.`,
+• Prospect aggressively
+• Search creatively
+• Knock on doors
+• Call owners
+• Follow up consistently
+• Hunt for opportunities others ignore
+
+These agents may not have as much experience, but they often have more time, energy, and motivation.
+
+A hungry realtor can become an incredible source of deal flow.
+
+
+Investor-Focused Realtor Relationships
+
+In addition to your primary realtor, continue building relationships with:
+
+• Investor-focused agents
+• Multifamily specialists
+• Commercial brokers
+• Land brokers
+• Realtors who work with landlords
+• Realtors who own investment properties themselves
+
+Each relationship creates another potential source of opportunities.
+
+
+You Do Not Need To Be Exclusive
+
+Many investors assume they must sign agreements preventing them from working with anyone else.
+
+In most situations, that is unnecessary.
+
+Your goal is to build a network of people who understand your criteria and bring opportunities your way.
+
+Once you've selected a primary realtor, have an honest conversation.
+
+A simple conversation might sound like:
+
+"My plan is to use you as my primary realtor because I want consistency when submitting offers and negotiating deals. At the same time, I plan to build relationships with other agents, wholesalers, and brokers who may occasionally bring opportunities that fit my criteria. If they bring me a deal directly, I'd like the flexibility to work with them on that transaction."
+
+Most professional realtors will understand this.
+
+
+More Eyes Create More Opportunities
+
+Your goal is not to have one person looking for deals.
+
+Your goal is to have:
+
+• Realtors
+• Brokers
+• Wholesalers
+• Property Managers
+• Lenders
+• Contractors
+• Investors
+
+all aware of your buy box.
+
+The more people who understand what you're looking for, the more opportunities you are likely to see.
+
+
+The Realtor Multiplication Effect
+
+Imagine:
+
+Your primary realtor is looking for deals.
+Two investor-focused realtors are looking for deals.
+One commercial broker is looking for deals.
+A wholesaler is looking for deals.
+A property manager knows your criteria.
+
+Now instead of one person helping you find opportunities, you have six.
+
+This is how deal flow compounds.
+
+
+Set Expectations Early
+
+The key to maintaining strong relationships is transparency.
+
+Make sure your primary realtor understands:
+
+• You intend to submit offers consistently.
+• You want to use them as your primary acquisition partner.
+• You value the relationship.
+• You will continue building other deal-finding relationships.
+
+Most professionals appreciate honesty far more than surprises.
+
+
+Remember The Goal
+
+The objective is not finding one realtor.
+
+The objective is building an acquisition network.
+
+Your primary realtor helps execute.
+
+Your broader network helps generate opportunities.
+
+The investors who consistently find deals are usually the investors who have the most people looking for opportunities on their behalf.
+
+
+Realtors Who Bring Deals Deserve More
+
+One of the most important distinctions investors should understand is the difference between:
+
+Finding The Deal Yourself
+
+And
+
+Having Someone Bring The Deal To You
+
+If a realtor brings you an opportunity that fits your criteria and helps create the deal, paying a full commission is often completely justified.
+
+They created value.
+
+They created opportunity.
+
+They deserve to be compensated.
+
+
+MLS Deals Are Different
+
+If you are:
+
+• Finding the property
+• Analyzing the property
+• Bringing the opportunity to the realtor
+
+The value being provided is different.
+
+Many investors eventually structure relationships where:
+
+Realtor-Sourced Deals — Full commission.
+
+Investor-Sourced MLS Deals — Reduced commission structure when permitted and agreed upon.
+
+Every market and brokerage is different.
+
+Every arrangement should be clearly discussed and agreed upon in advance.
+
+The goal is transparency and long-term alignment.
+
+
+Finding The Right Primary Realtor
+
+This may be one of the most important relationships you build.
+
+The wrong realtor will waste time.
+
+The right realtor can help build your portfolio for years.
+
+
+The Difference Between Retail Realtors And Investor Realtors
+
+Many realtors are excellent agents.
+
+That does not mean they understand investing.
+
+Retail agents often focus on:
+
+• School districts
+• Paint colors
+• Kitchens
+• Emotions
+• Lifestyle preferences
+
+Investor-focused agents focus on:
+
+• Cash flow
+• Returns
+• Rent growth
+• Vacancy
+• Market trends
+• Seller motivation
+• Value-add opportunities
+
+You want someone who understands investing.
+
+
+Questions To Ask Potential Realtors
+
+• Do you own investment property personally?
+• How many investors do you currently work with?
+• How many investment transactions did you complete last year?
+• What property types do your investor clients buy most often?
+• What areas are investors actively targeting?
+• What areas are investors avoiding?
+• How do you help investors find opportunities?
+• What off-market opportunities have you seen recently?
+• What property managers do investors use most often?
+• What lenders do investors use most often?
+
+
+The Best Realtor Question
+
+One of my favorite questions is:
+
+"If you were trying to build a rental portfolio in this market, what would you buy today?"
+
+The quality of that answer tells you a lot.
+
+
+Building Yourself Up As A Buyer
+
+Remember:
+
+Realtors are evaluating you too.
+
+They spend enormous amounts of time with investors who never buy anything.
+
+Your goal is to separate yourself from those investors.
+
+
+What Realtors Want
+
+Realtors want buyers who:
+
+• Respond quickly
+• Analyze deals
+• Submit offers
+• Communicate clearly
+• Close transactions
+
+The easiest way to earn a realtor's respect is simple:
+
+Submit offers.
+
+Most investors talk.
+
+Very few consistently take action.
+
+
+Explain Your Plan
+
+When speaking with realtors, explain:
+
+• Your investing goals
+• Your buy box
+• Your financing
+• Your timeline
+• Your acquisition goals
+
+Example:
+
+"I'm looking for 5–50 unit multifamily properties that produce strong cash-on-cash returns. I'm pre-approved and actively looking to submit offers."
+
+This creates confidence.
+
+
+Teach Realtors How You Analyze
+
+Many realtors understand real estate.
+
+Fewer understand your specific criteria.
+
+Show them:
+
+• Your CDS Rental Calculator
+• Your minimum return requirements
+• Your preferred financing
+• Your target property types
+
+The better they understand your process, the better opportunities they can bring.
+
+
+Lean On Your Realtor
+
+Once you find a strong primary realtor, use them.
+
+Ask questions.
+
+Discuss neighborhoods.
+
+Discuss rents.
+
+Discuss market trends.
+
+Discuss seller behavior.
+
+Discuss inventory levels.
+
+Discuss opportunities.
+
+A great realtor can save you years of mistakes.
+
+
+How Realtors Create Deal Flow
+
+Most investors think realtors only know about MLS listings.
+
+That is far from true.
+
+Good agents know:
+
+• Expired listings
+• Withdrawn listings
+• Landlords considering selling
+• Sellers preparing to list
+• Problem properties
+• Off-market opportunities
+
+The stronger your relationship becomes, the more access you gain.
+
+
+How To Become A Realtor's Favorite Investor
+
+The formula is simple:
+
+Be Prepared
+
+Be Responsive
+
+Analyze Quickly
+
+Submit Offers
+
+Close Deals
+
+Realtors remember action takers.
+
+
+The Realtor Flywheel
+
+As you:
+
+• Analyze more properties
+• Submit more offers
+• Close more deals
+
+Your realtor becomes more confident in you.
+
+As confidence grows:
+
+They bring you more opportunities.
+
+More opportunities create more deals.
+
+More deals strengthen the relationship.
+
+The cycle compounds over time.
+
+
+The Offer Process
+
+Once you've found your primary realtor, the process should look like this:
+
+Step 1 — Identify A Property: MLS, Off-market, Referral, or Wholesaler.
+
+Step 2 — Analyze The Property: Use the CDS Rental Calculator. Verify rents, expenses, financing, repairs, and returns. Never submit emotional offers.
+
+Step 3 — Discuss Strategy: Talk with your realtor about seller motivation, market conditions, competition, comparable sales, and potential negotiation points.
+
+Step 4 — Determine Your Numbers: Know your Ideal Price, Target Price, and Maximum Price. Never negotiate emotionally.
+
+Step 5 — Submit The Offer: Allow your realtor to draft and submit the paperwork. Review everything carefully before signing.
+
+Step 6 — Follow Up: Many deals are won through professional follow-up. Not every accepted offer happens immediately.
+
+
+Your Realtor Is An Arsenal Contact
+
+Do not think of realtors as transaction coordinators.
+
+Think of them as long-term relationship assets.
+
+A great realtor may bring:
+
+• Deals
+• Referrals
+• Market knowledge
+• Partnerships
+• Opportunities
+
+for years.
+
+Treat the relationship accordingly.
+
+
+Key Takeaway
+
+The goal is not finding a realtor.
+
+The goal is building an acquisition team.
+
+A strong primary realtor helps you submit offers consistently, move quickly, and execute efficiently.
+
+A strong network of additional realtors, brokers, wholesalers, and investor-focused professionals creates deal flow, market intelligence, and future opportunities.
+
+The investors who consistently find the best opportunities are usually the investors who have built the strongest relationships and have the most people actively looking for deals on their behalf.`,
     category: "foundation",
     weekNumber: 1,
     weekTitle: "BUILD THE FOUNDATION",
@@ -1257,468 +1919,558 @@ The best negotiators listen carefully, understand motivations, and create flexib
     transcript: null,
     downloads: [],
     quiz: {
+      title: 'Building Your Realtor Team',
       required: true,
+      passingScore: 100,
       scenarios: [
         {
-          id: 'day4_property_analysis',
-          title: 'Cash on Cash Return Analysis',
-          description: 'Analyze the property below. Plug the information into the CDS Rental Calculator and answer both questions.',
-          propertyListing: {
-            title: 'Rental Property Analysis',
-            price: '$600,000',
-            badges: ['Investment Property', '25% Down', '7.5% Rate'],
-            highlights: [
-              { icon: '💰', label: 'Down Pmt', value: '$150,000' },
-              { icon: '🏠', label: 'Rent', value: '$6,000/mo' },
-              { icon: '📊', label: 'Loan', value: '30yr @ 7.5%' },
-            ],
-            sections: [
-              {
-                heading: 'Purchase & Financing',
-                rows: [
-                  { label: 'Purchase Price', value: '$600,000' },
-                  { label: 'Down Payment', value: '25% ($150,000)' },
-                  { label: 'Closing Costs', value: '2% ($9,000)' },
-                  { label: 'Costs to Make Rent Ready', value: '$0' },
-                  { label: 'Loan Term', value: '30 Years' },
-                  { label: 'Interest Rate', value: '7.5%' },
-                ],
-              },
-              {
-                heading: 'Income',
-                rows: [
-                  { label: 'Monthly Rents', value: '$6,000' },
-                  { label: 'Other Monthly Income', value: '$0' },
-                  { label: 'Vacancy', value: '6%' },
-                ],
-              },
-              {
-                heading: 'Expenses',
-                rows: [
-                  { label: 'Maintenance', value: '12%' },
-                  { label: 'Property Management', value: '8%' },
-                  { label: 'Insurance', value: '$2,000/yr' },
-                  { label: 'Property Taxes', value: '$6,000/yr' },
-                  { label: 'Utilities', value: '$0' },
-                  { label: 'Additional Expenses', value: '$0' },
-                ],
-              },
-            ],
-          },
-          maxAttempts: 3,
-          showExplanationOnPass: true,
-          explanationOnFail: 'Make sure you entered all the property data correctly into the CDS Rental Calculator. Double-check each field — especially the interest rate (7.5%), insurance ($2,000/yr), and taxes ($6,000/yr).',
-          cheatSheets: [
-            {
-              title: 'Returns Analysis',
-              color: 'green',
-              rows: [
-                { label: 'Total Capital Required', value: '$159,000' },
-                { label: 'Gross Rent', value: '$72,000/yr' },
-                { label: 'Vacancy (6%)', value: '-$4,320' },
-                { label: 'Maintenance (12%)', value: '-$8,121.60' },
-                { label: 'Management (8%)', value: '-$5,414.40' },
-                { label: 'Insurance', value: '-$2,000' },
-                { label: 'Property Taxes', value: '-$6,000' },
-                { label: 'Net Operating Income', value: '$46,144' },
-                { label: 'Debt Service (7.5%, 30yr)', value: '-$37,764' },
-                { label: 'Annual Cash Flow', value: '$8,380', highlight: true },
-                { label: 'Cash on Cash Return', value: '5.27%', highlight: true },
-              ],
-            },
+          id: 'day4_q1',
+          title: 'Primary Realtor Purpose',
+          question: 'What is the primary purpose of having a main realtor?',
+          options: [
+            { id: 'a', text: 'To eliminate the need for other realtor relationships.' },
+            { id: 'b', text: 'To have one consistent acquisition partner who understands your buy box, goals, and investment criteria.' },
+            { id: 'c', text: 'To guarantee off-market deals.' },
+            { id: 'd', text: 'To avoid analyzing properties yourself.' },
           ],
-          inputs: [
-            {
-              id: 'day4_coc',
-              label: 'What is the approximate cash-on-cash return for this property?',
-              type: 'multiple_choice',
-              options: ['10.29%', '5.27%', '6.74%', '8.30%'],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day4_rate_for_10',
-              label: 'Using the same inputs, what interest rate would make the cash-on-cash return above 10%?',
-              type: 'multiple_choice',
-              options: ['6%', '6.5%', '5.5%', '5.25%'],
-              correctAnswer: 3,
-            },
-          ],
+          correctId: 'b',
+          explanation: 'Your primary realtor serves as a consistent acquisition partner who deeply understands your criteria, making the offer process more efficient over time.',
         },
         {
-          id: 'day4_creative_financing',
-          title: 'Creative Deal Structure Quiz',
-          description: 'Answer all 5 questions correctly to continue.',
-          maxAttempts: 3,
-          explanationOnFail: `Review the correct answers:
-
-1. Low down payment deals increase leverage and reduce your safety margin — if vacancy, repairs, or market conditions change, you have less cushion.
-2. Even with creative terms, analyzing at 20% down helps you understand the true strength and risk of the deal independent of financing.
-3. A balloon payment is a large remaining balance that becomes due at a future date, creating refinance or payoff pressure.
-4. The best negotiation strategy is structuring multiple options that solve seller problems — not pressure or single take-it-or-leave-it offers.
-5. Creative financing can improve returns but it can also increase risk — high cash-on-cash returns do NOT automatically mean low risk.`,
-          inputs: [
-            {
-              id: 'day4_q1',
-              label: '1. What is one of the BIGGEST dangers of low down payment creative financing deals?',
-              type: 'multiple_choice',
-              options: [
-                'Lower monthly payments',
-                'Increased leverage and reduced safety margin',
-                'Better cash flow',
-                'Longer amortization',
-              ],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day4_q2',
-              label: '2. Why should you still analyze a property using at least 20% down assumptions?',
-              type: 'multiple_choice',
-              options: [
-                'To increase purchase price',
-                'To reduce realtor commissions',
-                'To understand the true strength and risk of the deal',
-                'To avoid negotiations',
-              ],
-              correctAnswer: 2,
-            },
-            {
-              id: 'day4_q3',
-              label: '3. What is a balloon payment?',
-              type: 'multiple_choice',
-              options: [
-                'A refundable earnest money deposit',
-                'A large payment due at a future date',
-                'A seller-paid repair credit',
-                'A property tax increase',
-              ],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day4_q4',
-              label: '4. What is one of the BEST ways to negotiate creative financing?',
-              type: 'multiple_choice',
-              options: [
-                'Use pressure and urgency',
-                'Give the seller only one option',
-                'Structure multiple options that solve seller problems',
-                'Focus only on getting the lowest purchase price possible',
-              ],
-              correctAnswer: 2,
-            },
-            {
-              id: 'day4_q5',
-              label: '5. Which statement BEST describes strong creative financing?',
-              type: 'multiple_choice',
-              options: [
-                'High cash-on-cash returns always mean low risk',
-                'Creative financing can improve returns but also increase risk',
-                'Balloon payments are always safe',
-                'No-money-down deals eliminate downside risk',
-              ],
-              correctAnswer: 1,
-            },
+          id: 'day4_q2',
+          title: 'Investor-Sourced Deals',
+          question: 'An investor finds a property on the MLS, analyzes it themselves, and brings it to their realtor to submit an offer. Which statement is most accurate?',
+          options: [
+            { id: 'a', text: 'The realtor created the opportunity.' },
+            { id: 'b', text: 'The investor created the opportunity and should have a conversation in advance about how compensation will work on investor-sourced deals.' },
+            { id: 'c', text: 'The realtor should automatically receive a full commission.' },
+            { id: 'd', text: 'The investor should avoid using a realtor.' },
           ],
+          correctId: 'b',
+          explanation: 'When the investor sources the deal, the value provided is different. Compensation structures should be discussed and agreed upon in advance.',
+        },
+        {
+          id: 'day4_q3',
+          title: 'Best Realtor',
+          question: 'Which realtor would likely create the most long-term value?',
+          options: [
+            { id: 'a', text: 'The realtor with the biggest social media following.' },
+            { id: 'b', text: 'The realtor who responds quickly, understands investment analysis, and consistently helps investors acquire properties.' },
+            { id: 'c', text: 'The realtor with the nicest office.' },
+            { id: 'd', text: 'The realtor who promises every property is a great deal.' },
+          ],
+          correctId: 'b',
+          explanation: 'Responsiveness, investment knowledge, and a track record of helping investors close deals are the qualities that create the most long-term value.',
+        },
+        {
+          id: 'day4_q4',
+          title: 'Hungry Realtors',
+          question: 'A newer realtor has little investment experience but is willing to prospect aggressively, call owners, and search creatively for opportunities. How should an investor view this relationship?',
+          options: [
+            { id: 'a', text: 'Avoid them entirely because they lack experience.' },
+            { id: 'b', text: 'Recognize that effort and deal-finding ability can sometimes create tremendous value.' },
+            { id: 'c', text: 'Only use experienced agents.' },
+            { id: 'd', text: 'Assume they cannot help find deals.' },
+          ],
+          correctId: 'b',
+          explanation: 'A hungry realtor who prospects aggressively can become an incredible source of deal flow, even without extensive experience.',
+        },
+        {
+          id: 'day4_q5',
+          title: 'Revealing Question',
+          question: 'Which question is most likely to reveal whether a realtor truly understands investing?',
+          options: [
+            { id: 'a', text: 'How long have you had your license?' },
+            { id: 'b', text: 'What brokerage do you work for?' },
+            { id: 'c', text: 'If you were building a rental portfolio in this market today, what would you buy?' },
+            { id: 'd', text: 'How many followers do you have?' },
+          ],
+          correctId: 'c',
+          explanation: 'This question reveals whether a realtor understands investment analysis, market dynamics, and what actually makes a good rental property.',
+        },
+        {
+          id: 'day4_q6',
+          title: 'Multiple Relationships',
+          question: 'What is the biggest advantage of having multiple realtor relationships while maintaining one primary realtor?',
+          options: [
+            { id: 'a', text: 'It creates competition between agents.' },
+            { id: 'b', text: 'It allows multiple people to understand your criteria and bring opportunities while maintaining consistency when submitting offers.' },
+            { id: 'c', text: 'It guarantees more accepted offers.' },
+            { id: 'd', text: 'It eliminates the need for Arsenal Contacts.' },
+          ],
+          correctId: 'b',
+          explanation: 'Having multiple relationships creates more deal flow while maintaining one primary realtor ensures consistency in offer submission and execution.',
+        },
+        {
+          id: 'day4_q7',
+          title: 'Misaligned Criteria',
+          question: 'A realtor consistently sends properties that do not fit your buy box. What is the best response?',
+          options: [
+            { id: 'a', text: 'Stop communicating with them immediately.' },
+            { id: 'b', text: 'Explain your analysis process, return requirements, and investment criteria more clearly.' },
+            { id: 'c', text: 'Submit offers anyway.' },
+            { id: 'd', text: 'Change your buy box.' },
+          ],
+          correctId: 'b',
+          explanation: 'If a realtor is sending misaligned properties, the solution is better communication about your specific criteria and analysis process.',
+        },
+        {
+          id: 'day4_q8',
+          title: 'Favorite Client',
+          question: 'Which investor is most likely to become a realtor\'s favorite client?',
+          options: [
+            { id: 'a', text: 'The investor who asks for lots of showings but never submits offers.' },
+            { id: 'b', text: 'The investor who communicates clearly, analyzes quickly, submits offers, and closes transactions.' },
+            { id: 'c', text: 'The investor who constantly changes their criteria.' },
+            { id: 'd', text: 'The investor who only talks about future plans.' },
+          ],
+          correctId: 'b',
+          explanation: 'Realtors prioritize investors who take action — analyzing quickly, submitting offers, and closing transactions builds the strongest relationships.',
+        },
+        {
+          id: 'day4_q9',
+          title: 'Off-Market Lead',
+          question: 'A realtor tells you about an off-market owner who may be considering selling but has not listed the property. What should a professional investor do?',
+          options: [
+            { id: 'a', text: 'Ignore it because it is not on the MLS.' },
+            { id: 'b', text: 'Gather information, analyze the opportunity, and determine if it fits their buy box.' },
+            { id: 'c', text: 'Immediately make an offer without analysis.' },
+            { id: 'd', text: 'Wait until it is publicly listed.' },
+          ],
+          correctId: 'b',
+          explanation: 'Off-market opportunities should be evaluated just like any other deal — gather information, analyze, and determine if it fits your criteria.',
+        },
+        {
+          id: 'day4_q10',
+          title: 'Action vs Talk',
+          question: 'Two investors meet the same realtor. Investor A talks about becoming an investor someday but never analyzes deals or submits offers. Investor B is pre-approved, understands their buy box, reviews opportunities quickly, and consistently submits offers. Six months later, a great off-market opportunity appears. Which investor is most likely to get the first call and why?',
+          options: [
+            { id: 'a', text: 'Investor A because they have bigger goals.' },
+            { id: 'b', text: 'Investor B because realtors prioritize investors who take action and can realistically close transactions.' },
+            { id: 'c', text: 'Both equally.' },
+            { id: 'd', text: 'The realtor will choose randomly.' },
+          ],
+          correctId: 'b',
+          explanation: 'Realtors remember action takers. The investor who consistently analyzes, submits offers, and closes deals earns priority access to the best opportunities.',
+        },
+        {
+          id: 'day4_q11',
+          title: 'Day 4 Summary',
+          question: 'Which statement best summarizes the lesson of Day 4?',
+          options: [
+            { id: 'a', text: 'The goal is to find one realtor and use them exclusively.' },
+            { id: 'b', text: 'The goal is to build an acquisition network consisting of a primary realtor, additional realtor relationships, and other Arsenal Contacts who understand your criteria and help create deal flow.' },
+            { id: 'c', text: 'Realtors are primarily useful for writing contracts.' },
+            { id: 'd', text: 'The best deals always come from the MLS.' },
+          ],
+          correctId: 'b',
+          explanation: 'The goal is building an acquisition network — a primary realtor for execution, plus additional relationships that create deal flow and market intelligence.',
         },
       ],
     },
   },
   {
     day: 5,
-    title: "Counter Offers & Negotiation",
-    caption: "How To Negotiate Real Estate Deals (On-Market & Off-Market)",
-    taskDescription: "",
-    trainingContent: `Why Negotiation Matters
+    title: "Offers, Contracts & Protecting Yourself",
+    caption: "Submitting Offers Like A Professional Investor",
+    taskDescription: `Today's Exercise
 
-Most investors focus only on finding deals. But GREAT investors understand negotiation creates deals.
+Identify one property that fits your buy box.
 
-The difference between a bad deal and a great deal is often price, terms, interest rate, timing, seller motivation, or creative structure.
+Determine:
 
-Strong negotiation can improve cash flow, lower risk, improve returns, reduce money down, improve loan terms, and create opportunities other buyers never see.
+• Ideal Price
+• Target Price
+• Maximum Price
 
-The Goal Of Negotiation
+Review:
 
-The goal is NOT "winning," manipulating people, or pressuring sellers.
+• Financing
+• Rents
+• Expenses
+• Repairs
+• Return Metrics
 
-The BEST negotiations solve problems, reduce stress, create trust, and create win-win solutions.
+Discuss strategy with your realtor.
 
-If the seller feels respected, heard, and helped, you will often negotiate MUCH better deals.
+Then:
 
-The Most Important Rule In Negotiation
+Submit An Offer
 
-NEVER negotiate emotionally.
+Do not wait for perfect certainty.
 
-Many investors fall in love with properties, ignore numbers, overpay, or abandon their criteria. This is dangerous.
+Do not wait for a perfect deal.
 
-You MUST know your criteria, your maximum acceptable price, and your risk tolerance BEFORE negotiating.
+Submit a disciplined offer that meets your criteria.
 
-Your Highest Acceptable Price
 
-Before ANY negotiation you should already know the MAXIMUM price and terms you are willing to accept.
+Today's Suggested Arsenal Activity
 
-This should be based on conservative analysis, realistic rents, realistic expenses, and your investment criteria.
+Reach out to your primary realtor.
 
-Important Negotiation Rule
+Review active opportunities.
 
-DO NOT go above your highest acceptable price. Even if you love the property, the seller pressures you, there are multiple offers, or emotions rise.
+Ask:
 
-Bad deals usually happen because people abandon discipline.
+"What is the strongest opportunity we can submit an offer on this week?"
 
-Negotiating Through Realtors (On-Market Deals)
+Then create a plan to submit at least one offer immediately.`,
+    trainingContent: `Offers, Contracts & Protecting Yourself — Submitting Offers Like A Professional Investor
 
-On-market negotiations are usually faster, more competitive, and more structured.
 
-Your realtor becomes your voice during the negotiation. Because of this, it is extremely important that they understand your investing goals, understand your criteria, know your strengths as a buyer, and know how to gather information from the other side.
+Why This Matters
 
-A great realtor should not just "submit paperwork." They should actively help uncover seller motivation, position you as a strong buyer, explain your offer properly, and improve the chances of getting your offer accepted.
+Most investors do not fail because they buy too many properties.
 
-Have Your Realtor Gather Information FIRST
+Most investors fail because they never submit enough offers.
 
-Before submitting offers or counter offers, your realtor should try to learn:
+They spend months:
 
-• Why the seller is moving
-• How motivated they are
-• Whether they already bought another property
-• How long the property has been listed
-• Whether there are other offers
-• What terms matter most
-• Where flexibility may exist
+• Learning
+• Analyzing
+• Watching videos
+• Listening to podcasts
+• Reading books
 
-The more information you have, the stronger your negotiation becomes.
+yet never put themselves in a position to actually acquire a property.
 
-Have Your Realtor Build YOU Up As A Buyer
+The purpose of this training is to remove the fear surrounding offers and help you understand how professional investors pursue opportunities while protecting themselves from unnecessary risk.
 
-Your realtor should help position you as serious, qualified, professional, easy to work with, and capable of closing.
+One of the biggest misconceptions in real estate is that submitting an offer means you are committed to buying a property.
 
-This can include discussing your financing, proof of funds, reserves, lender strength, flexibility, closing speed, or investing experience.
+That is not true.
 
-Sellers want certainty. The stronger and safer you appear as a buyer, the more negotiating power you often gain.
+Professional investors understand that an offer is often the beginning of the investigation process, not the end of it.
 
-Make Sure Your Realtor Explains The "Why" Behind Your Offer
+Your job is to analyze properly, protect yourself appropriately, and submit enough disciplined offers that opportunities begin to appear.
 
-One of the biggest mistakes investors make is allowing offers to feel like random lowball offers.
 
-Instead, your realtor should help explain your analysis, repair concerns, market rents, financing realities, expenses, and investment criteria.
+The Most Important Principle Of The Day
 
-You want the seller to understand your offer is thoughtful, calculated, and based on real numbers. This keeps sellers from becoming emotional or offended before negotiations even begin.
+The Answer Is Always No Unless You Ask
 
-Express Interest In The Property — While Staying Disciplined
+One of the reasons UC30 requires students to submit offers every week is because most investors dramatically underestimate how flexible sellers can be.
 
-It is important for the seller to feel respected, appreciated, and that you genuinely like the property.
+Many investors talk themselves out of opportunities before ever presenting an offer.
 
-However, your realtor should ALSO communicate that the property still has to work financially, meet your criteria, and make sense as an investment.
+They assume:
 
-The goal is balancing excitement with discipline.
+• The seller will never take that price.
+• The seller would never carry financing.
+• The seller would never negotiate.
+• The property is too competitive.
+• The offer is too low.
 
-Have Your Realtor "Prime" The Seller Before Sending Offers
+The reality is that none of us know how a seller will respond until we ask.
 
-Strong realtors often communicate with the listing agent BEFORE officially submitting offers.
+Many experienced investors can tell stories of properties they acquired at prices they never expected a seller to accept.
 
-This allows them to prepare expectations, explain your reasoning, build rapport, and reduce emotional reactions.
+Not because they manipulated anyone.
 
-This can massively improve negotiations. Many negotiations fail because the seller feels insulted BEFORE understanding the reasoning behind the offer.
+Not because they got lucky.
 
-Start Lower Than You Are Willing To End
+Because they asked.
 
-Sellers want to feel like they won something in the negotiation.
+Professional investors understand that properly analyzed offers create opportunities.
 
-It is extremely important that your initial offer gives you room to move during counter offers. Know the highest amount you are willing to pay and do NOT go above it — but start below it so you have room to negotiate.
+You may be surprised how often sellers are willing to negotiate if your offer solves a problem and helps them accomplish their goals.
 
-As you move, make the movement feel meaningful and difficult. If you are working through a realtor, make sure they communicate that your movement in price or terms was painful and carefully considered.
+The key is making sure your analysis is accurate and your offers remain disciplined.
 
-Emotions always play a role in negotiation. The more the seller feels like they are winning, the more likely you are to get your offer accepted.
+Never force a deal to work.
 
-Counter Offer Slowly & Strategically
+Never abandon your criteria.
 
-When negotiating, move slowly, make concessions carefully, and avoid large emotional jumps.
+But do not reject your own offer before the seller has the opportunity to consider it.
 
-You want your movement to feel thoughtful, intentional, and difficult.
 
-The more the seller feels they earned the movement, the more likely negotiations continue positively.
+What An Offer Really Is
 
-Focus On Terms — Not Just Price
+Many new investors believe:
 
-Sometimes terms matter more than price.
+An offer is a commitment to buy.
 
-Examples: quicker closing, flexible timing, larger earnest money, seller finance, leasebacks, shorter inspections, or fewer contingencies.
+Professional investors understand:
 
-A great realtor helps identify what the seller values MOST.
+An offer is an opportunity to control a potential transaction while gathering additional information.
 
-Understand Timing & Urgency
+This distinction is extremely important.
 
-Sometimes timing matters more than price.
+Submitting an offer does not mean:
 
-Examples: sellers already bought another property, vacant properties costing money, inherited properties, landlord burnout, pending foreclosures, partnership disputes, divorce, relocation, or properties sitting on market too long.
+• You are guaranteed to buy.
+• You cannot negotiate.
+• You cannot inspect.
+• You cannot verify information.
+• You cannot discover problems.
 
-The more urgency exists, the more flexibility often exists.
+It simply means you have started a conversation and secured an opportunity to investigate further.
 
-Great negotiators identify pressure, timing, and pain points early in the process.
+This mindset removes much of the fear that prevents new investors from taking action.
 
-Never Let Realtors Push You Outside Your Criteria
 
-Remember: realtors are often emotionally tied to getting deals closed. You MUST remain disciplined.
+The Goal Of An Offer
 
-Never overpay, abandon your analysis, or stretch beyond your criteria just to "win" the property.
+Most investors believe the purpose of an offer is getting accepted.
 
-Good investors protect downside risk first.
+That is only partially true.
 
-Step-By-Step Process For Negotiating Directly With Sellers
+The real purpose of an offer is to:
 
-Step 1. Gather Information BEFORE Negotiating
+• Control the opportunity.
+• Gather information.
+• Begin negotiations.
+• Learn seller motivations.
+• Protect downside risk.
+• Create a path toward a successful acquisition.
 
-You should understand current rents, number of units, bedrooms/bathrooms, property condition, taxes, insurance, market rents, location, utilities, and repair needs.
+The acceptance is important.
 
-Do NOT negotiate blindly. Analyze FIRST.
+But the process leading up to acceptance is where much of the value is created.
 
-Step 2. Build Rapport
 
-People sell to people they trust, like, and feel comfortable with.
+The Three Numbers Every Investor Must Know
 
-Be respectful, calm, friendly, and genuinely curious.
+Before submitting any offer, you should know three numbers.
 
-Relationship Tips:
+Ideal Price — This is the price you would love to buy the property at. If accepted, you would likely be extremely happy with the investment. This number is often used as your starting point.
 
-• Find Common Ground — People naturally trust people similar to themselves.
-• Ask Questions & Listen — Good negotiators talk LESS and listen MORE. Listen for stress, frustrations, goals, and problems you can help solve.
-• Be Likable — Simple things matter: smile, slow down, maintain eye contact, use calm body language, and avoid sounding overly "salesy."
+Target Price — This is the price you realistically believe has a chance of being accepted. This is often where negotiations ultimately land.
 
-Step 3. Build Value As A Buyer
+Maximum Price — This is the highest price you can pay while still achieving your required returns. This number should be determined before negotiations begin. Never determine your maximum price while emotions are involved. Never increase your maximum price because you are excited. Never increase your maximum price because another buyer is involved. The numbers should drive the decision. Not emotion.
 
-Sellers need confidence in YOU. You want to appear professional, capable, trustworthy, and easy to work with.
 
-Examples: pre-approval letter, proof of funds, relationship with title company, lender relationships, investment experience, or ability to close quickly.
+Never Negotiate Without Knowing Your Maximum Price
 
-Step 4. Compliment The Property Genuinely
+One of the biggest mistakes investors make is entering negotiations without knowing their walk-away point.
 
-Talk positively about the location, the landscaping, the management, the upkeep, or features you genuinely like.
+When this happens:
 
-Use phrases like: "As long as the numbers work, I would absolutely love this property."
+• Emotions take over.
+• Competition affects judgment.
+• Fear of missing out influences decisions.
 
-BUT: be sincere. Fake flattery destroys trust.
+Professional investors determine their maximum price before negotiations begin and remain disciplined.
 
-Step 5. Run The Numbers Together
+Sometimes the best negotiation is walking away.
 
-This is VERY powerful. Walk through rents, expenses, repairs, vacancy, financing, and returns.
 
-Show them why the numbers may not work at their asking price.
+Understanding Offer Components
 
-This helps make negotiation feel logical instead of emotional.
+Most people think offers are about price.
 
-Important Negotiation Technique: Discourage The NUMBERS — Not The SELLER
+Professional investors understand that offers contain many variables.
 
-Never attack the seller, their intelligence, or their property.
+These variables are often called "levers."
 
-Instead, explain the numbers calmly.
+Examples include:
 
-Examples:
-"At this price and financing structure, the property becomes difficult to cash flow."
-"I really like the property, but the current returns are tighter than I normally buy."
+• Purchase Price
+• Down Payment
+• Interest Rate
+• Seller Financing Terms
+• Earnest Money
+• Closing Timeline
+• Inspection Period
+• Due Diligence Period
+• Financing Contingencies
+• Seller Concessions
+• Included Equipment Or Personal Property
+• Repair Credits
+• Assignment Rights (when appropriate)
 
-Step 6. Present Multiple Solutions
+Many successful negotiations occur because investors learn to negotiate multiple levers rather than focusing exclusively on price.
 
-Do NOT corner sellers. Give options.
 
-Examples: lower price, seller finance, lower interest rate, larger down payment, longer amortization, principal-only payments, flexible timing, or subject-to structures.
+Understanding Earnest Money
 
-Never Corner Sellers — People become defensive when they feel trapped or embarrassed. Avoid making sellers feel stupid, attacking their asking price emotionally, aggressive pressure, or "take it or leave it" ultimatums too early.
+Earnest money exists to demonstrate that a buyer is serious.
 
-Instead, stay collaborative, give options, and help sellers feel involved in the solution. The more comfortable the seller feels, the better negotiations usually go.
+It is not designed to create unnecessary risk.
 
-Example Negotiation Framing:
-"I really like the property and would love to find a way to make this work for both of us."
+Rule #1 — Keep Earnest Money Reasonable: Many new investors assume larger earnest money deposits automatically create stronger offers. That is not always true. Earnest money should be appropriate for property size, market conditions, transaction complexity, and risk profile.
 
-This changes negotiation from conflict to collaboration.
+Rule #2 — Never Release Earnest Money Early: Until inspections, due diligence, financing, and major investigations are complete, there is generally little benefit to releasing earnest money early. Protect yourself first.
 
-Step 7. Stay Patient
+Rule #3 — Make Sure Earnest Money Is Protected: Your contingencies should provide opportunities to exit the transaction if major issues arise. The goal is not to lose earnest money. The goal is to protect it.
 
-The longer you can remain calm, patient, and disciplined, the stronger your negotiation position usually becomes.
 
-Emotion creates mistakes. Patience creates leverage.
+Due Diligence
 
-Step 8. Be Willing To Walk Away
+Professional investors verify everything.
 
-If you cannot buy the property within your criteria, you MUST be willing to walk away. Be extremely respectful when doing so.
+Not because sellers are dishonest.
 
-Many deals come together days, weeks, or even months later because the seller realizes you were serious about your bottom dollar and disciplined in your analysis.
+Because mistakes happen.
 
-When walking away, make sure the seller understands the absolute maximum you can pay, that you genuinely tried to create a win-win solution, and that the deal simply does not work within your criteria at the current terms.
+Assumptions create risk.
 
-Thank them for their time and professionalism, and make sure they know you are always interested if they decide they would like to revisit terms that make the deal work for both parties.
+Verification creates confidence.
 
-Sometimes the strongest negotiation position is being willing to walk away professionally and respectfully.
+Trust Nothing. Verify Everything.
 
-Final Tips & Tricks
+Verify:
 
-Emotional Triggers Sellers Often Care About
+• Rents
+• Leases
+• Security Deposits
+• Taxes
+• Insurance
+• Utility Costs
+• Vacancy
+• Repair Costs
+• Deferred Maintenance
+• Financial Statements
+• Property Condition
 
-Sometimes sellers care about avoiding realtor commissions, avoiding repairs, avoiding showings, speed, certainty, passive income, taxes, or simplicity.
+Never rely solely on:
 
-Your job is to understand what matters MOST.
+• Pro formas
+• Seller statements
+• Broker assumptions
+• Marketing materials
 
-Understand Seller Emotions & Market Concerns
+Everything should be independently verified.
 
-Sometimes sellers have emotional concerns, frustrations, or fears that need to be respectfully brought to light during negotiations.
 
-The goal is NOT manipulation, pressure, or fear tactics. The goal is helping the seller realistically evaluate the market and understand why your offer may make sense.
+Inspections
 
-Potential market concerns that may influence sellers include:
+Never Waive Inspections As A Beginner
 
-• High interest rates
-• Uncertain or shifting markets
-• Slowing buyer demand
-• Increasing vacancy
-• Rising expenses
-• Higher insurance costs
-• Increasing maintenance costs
-• Tenant problems
-• Difficult property management
-• Crime or neighborhood decline
-• Slowing or declining property values
-• Longer days on market
-• Price reductions on nearby listings
-• Difficulty refinancing
-• Tighter lending standards
-• Economic uncertainty
-• Fear of future market softening
+Always make sure you have an inspection contingency that gives you the opportunity to exit your contract if the inspection is unsatisfactory.
 
-Sometimes sellers also feel emotional pressure from owning too many properties, burnout from management, difficult tenants, deferred maintenance, financial stress, life changes, divorce, retirement, relocation, or simply wanting simplicity.
+You are not trying to kill deals.
 
-The key is to discuss these things calmly, respectfully, and logically. You never want the seller to feel attacked. You want them to feel understood, heard, and that you are trying to create a realistic solution that works for both parties.
+You are trying to understand risk and protect yourself.
 
-Never Lie During Negotiation
+Inspections provide information.
 
-Strong negotiation does NOT require dishonesty. Never fake offers, fake numbers, fake repair bids, fake financial hardship, or intentionally mislead sellers.
+Information improves decision making.
 
-Your reputation matters. The best negotiators stay honest, stay professional, and let the numbers do the work.
+Inspect:
 
-Common Negotiation Mistakes
+• Roof
+• HVAC
+• Plumbing
+• Electrical
+• Foundation
+• Structural Components
+• Safety Concerns
 
-1. Talking Too Much — Great negotiators listen more than they speak.
-2. Negotiating Emotionally — Emotion causes overpaying.
-3. Falling In Love With The Deal — No single property will change your life.
-4. Ignoring The Numbers — Never negotiate beyond your criteria.
-5. Being Aggressive Or Manipulative — Pressure destroys trust.
-6. Giving Away Your Maximum Too Early — Maintain flexibility. Make giving up price painful and hold on for as long as you can.
+A good inspection can save tens of thousands of dollars.
 
-Quick Rules To Remember
 
-• Analyze BEFORE negotiating
-• Know your highest acceptable price
-• Stay calm and patient
-• Use numbers — not emotion
-• Listen more than you speak
-• Understand seller motivation
-• Structure solutions, not pressure
-• Be willing to walk away
-• Protect your investment criteria
-• Solve problems for BOTH sides
+Financing Contingencies
 
-Today's Suggested Arsenal Contact
+Financing can change.
 
-Reach out to a For Sale By Owner seller, realtor, landlord, or off-market lead.
+Appraisals can change.
 
-Your goal today: practice conversation, ask questions, understand seller motivation, and practice discussing terms confidently.
+Lender requirements can change.
 
-Focus LESS on "closing the deal." Focus MORE on building rapport, understanding problems, and practicing negotiation skills.`,
+Interest rates can change.
+
+Professional investors understand that financing contingencies are a form of risk management.
+
+They provide protection when circumstances change.
+
+As a beginner, financing contingencies should generally remain in place.
+
+
+The Professional Investor Framework
+
+Before submitting any offer, ask yourself:
+
+• Does this property fit my buy box?
+• Does this property meet my return requirements?
+• Have I verified market rents?
+• Have I estimated repairs properly?
+• Does my financing support the acquisition?
+• Am I comfortable with the risk profile?
+• Would I still buy this property if everything took longer and cost more than expected?
+
+If the answer is yes, move forward.
+
+If not, continue investigating.
+
+
+Common Offer Mistakes
+
+Overpaying Emotionally — Excitement should never determine value.
+
+Negotiating Without Analysis — Every negotiation should be supported by numbers.
+
+Waiving Protections Too Early — Inspections and contingencies exist for a reason.
+
+Assuming Repair Costs — Always estimate repairs conservatively.
+
+Assuming Future Rents — Verify market rents. Do not guess.
+
+Ignoring Opportunity Cost — Capital invested in one property cannot be invested elsewhere.
+
+Changing Criteria Mid-Negotiation — Your buy box should remain consistent.
+
+
+Why Offer Volume Matters
+
+The average investor submits very few offers.
+
+Professional investors understand that opportunities are created through consistent activity.
+
+Every offer produces one of three outcomes:
+
+Accepted — You move forward.
+
+Countered — You negotiate.
+
+Rejected — You learn.
+
+All three outcomes create value.
+
+The only outcome that creates nothing is failing to submit the offer.
+
+
+The Professional Investor Mindset
+
+Most successful investors are not successful because every offer gets accepted.
+
+They are successful because they consistently:
+
+• Analyze opportunities.
+• Submit offers.
+• Follow up.
+• Negotiate.
+• Learn.
+• Repeat.
+
+This process compounds over time.
+
+Every offer improves your confidence.
+
+Every negotiation improves your skill set.
+
+Every interaction improves your understanding of the market.
+
+
+Key Takeaway
+
+Professional investors are not defined by how many properties they analyze.
+
+They are defined by how many opportunities they pursue.
+
+An offer is not a commitment to buy.
+
+It is a tool that allows you to control opportunities, gather information, negotiate effectively, and move closer to acquiring great real estate.
+
+The answer is always no unless you ask.
+
+Analyze conservatively.
+
+Protect yourself appropriately.
+
+Remain disciplined.
+
+Then submit enough quality offers that opportunities have a chance to say yes.`,
     category: "foundation",
     weekNumber: 1,
     weekTitle: "BUILD THE FOUNDATION",
@@ -1727,82 +2479,139 @@ Focus LESS on "closing the deal." Focus MORE on building rapport, understanding 
     transcript: null,
     downloads: [],
     quiz: {
+      title: 'Offers, Contracts & Protecting Yourself',
       required: true,
+      passingScore: 100,
       scenarios: [
         {
-          id: 'day5_negotiation',
-          title: 'Counter Offers & Negotiation Quiz',
-          description: 'Answer all 5 questions correctly to continue.',
-          maxAttempts: 3,
-          explanationOnFail: `Review the correct answers:
-
-1. Negotiating emotionally is one of the biggest mistakes — it causes overpaying and poor decisions.
-2. Before negotiating, you should already know your highest acceptable price and criteria based on conservative analysis.
-3. The best way to negotiate directly with sellers is to understand their motivations and solve problems for both sides.
-4. During negotiation, you should discourage the NUMBERS — not the seller. Never attack the seller personally.
-5. Patience and discipline create the strongest long-term negotiation position.`,
-          inputs: [
-            {
-              id: 'day5_q1',
-              label: '1. What is one of the BIGGEST mistakes investors make during negotiation?',
-              type: 'multiple_choice',
-              options: [
-                'Listening too carefully',
-                'Negotiating emotionally',
-                'Asking questions',
-                'Staying patient',
-              ],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day5_q2',
-              label: '2. Before negotiating, what should every investor already know?',
-              type: 'multiple_choice',
-              options: [
-                "The seller's favorite price",
-                'Their highest acceptable price and criteria',
-                "The neighbor's opinion",
-                'The appraised value only',
-              ],
-              correctAnswer: 1,
-            },
-            {
-              id: 'day5_q3',
-              label: '3. What is one of the BEST ways to negotiate directly with sellers?',
-              type: 'multiple_choice',
-              options: [
-                'Pressure them emotionally',
-                'Talk constantly',
-                'Understand their motivations and solve problems',
-                'Argue aggressively over price',
-              ],
-              correctAnswer: 2,
-            },
-            {
-              id: 'day5_q4',
-              label: '4. During negotiation, what should you discourage?',
-              type: 'multiple_choice',
-              options: [
-                'The seller personally',
-                'The property condition emotionally',
-                'The NUMBERS — not the seller',
-                'All communication',
-              ],
-              correctAnswer: 2,
-            },
-            {
-              id: 'day5_q5',
-              label: '5. What creates the strongest long-term negotiation position?',
-              type: 'multiple_choice',
-              options: [
-                'Desperation',
-                'Aggressive pressure',
-                'Patience and discipline',
-                'Overpaying quickly',
-              ],
-              correctAnswer: 2,
-            },
+          id: 'day5_q1',
+          title: 'Purpose of an Offer',
+          question: 'Which statement best describes the purpose of an offer?',
+          options: [
+            { id: 'a', text: 'An offer is a commitment to purchase the property.' },
+            { id: 'b', text: 'An offer is a tool used to control an opportunity while gathering additional information and protecting downside risk.' },
+            { id: 'c', text: 'An offer is primarily used to impress the seller.' },
+            { id: 'd', text: 'An offer should only be submitted when you are completely certain you will close.' },
           ],
+          correctId: 'b',
+          explanation: 'An offer is a tool that allows you to control an opportunity, gather information, and protect downside risk — not a final commitment to buy.',
+        },
+        {
+          id: 'day5_q2',
+          title: 'Three Numbers',
+          question: 'Before entering negotiations, what are the three most important numbers an investor should determine?',
+          options: [
+            { id: 'a', text: 'Purchase price, loan amount, and closing costs.' },
+            { id: 'b', text: 'Ideal price, target price, and maximum price.' },
+            { id: 'c', text: 'Rent, vacancy, and expenses.' },
+            { id: 'd', text: 'List price, market value, and tax value.' },
+          ],
+          correctId: 'b',
+          explanation: 'Knowing your ideal price, target price, and maximum price before negotiations keeps you disciplined and prevents emotional decision-making.',
+        },
+        {
+          id: 'day5_q3',
+          title: 'Below Asking Price',
+          question: 'A seller lists a property for $500,000. Your analysis shows you can only pay $430,000 and still meet your required returns. What is the most professional response?',
+          options: [
+            { id: 'a', text: 'Increase your maximum price to stay competitive.' },
+            { id: 'b', text: 'Wait for the seller to reduce the price.' },
+            { id: 'c', text: 'Submit an offer that meets your criteria and allow the seller to respond.' },
+            { id: 'd', text: 'Skip the opportunity because the seller will never accept.' },
+          ],
+          correctId: 'c',
+          explanation: 'The answer is always no unless you ask. Submit a disciplined offer based on your analysis and allow the seller to make the decision.',
+        },
+        {
+          id: 'day5_q4',
+          title: 'Offer Volume',
+          question: 'Why does UC30 require students to submit offers consistently?',
+          options: [
+            { id: 'a', text: 'Because most offers will be accepted.' },
+            { id: 'b', text: 'Because submitting offers guarantees success.' },
+            { id: 'c', text: 'Because opportunities are created through action, and many investors are surprised by what sellers are willing to accept.' },
+            { id: 'd', text: 'Because realtors require a minimum number of offers.' },
+          ],
+          correctId: 'c',
+          explanation: 'Opportunities are created through consistent action. Many investors underestimate how flexible sellers can be until they start asking.',
+        },
+        {
+          id: 'day5_q5',
+          title: 'Due Diligence',
+          question: 'Which of the following is the best example of professional due diligence?',
+          options: [
+            { id: 'a', text: 'Trusting the seller\'s numbers because they seem honest.' },
+            { id: 'b', text: 'Reviewing the marketing package and making a decision.' },
+            { id: 'c', text: 'Independently verifying rents, expenses, repairs, leases, and operating assumptions.' },
+            { id: 'd', text: 'Ordering an inspection and nothing else.' },
+          ],
+          correctId: 'c',
+          explanation: 'Professional due diligence means independently verifying everything — rents, expenses, repairs, leases, and all operating assumptions.',
+        },
+        {
+          id: 'day5_q6',
+          title: 'Earnest Money',
+          question: 'Which statement regarding earnest money is most accurate?',
+          options: [
+            { id: 'a', text: 'The larger the earnest money deposit, the better the offer.' },
+            { id: 'b', text: 'Earnest money should be protected through appropriate contingencies and should not be unnecessarily risked.' },
+            { id: 'c', text: 'Earnest money should be released immediately to build trust.' },
+            { id: 'd', text: 'Earnest money eliminates the need for due diligence.' },
+          ],
+          correctId: 'b',
+          explanation: 'Earnest money should be protected through contingencies. Never release it early or risk it unnecessarily.',
+        },
+        {
+          id: 'day5_q7',
+          title: 'Overpaying Risk',
+          question: 'Which investor is most likely to overpay for a property?',
+          options: [
+            { id: 'a', text: 'An investor who established a maximum price before negotiating.' },
+            { id: 'b', text: 'An investor who verified rents and expenses.' },
+            { id: 'c', text: 'An investor who entered negotiations without determining a walk-away point.' },
+            { id: 'd', text: 'An investor who used conservative assumptions.' },
+          ],
+          correctId: 'c',
+          explanation: 'Without a predetermined walk-away point, emotions, competition, and fear of missing out take over — leading to overpaying.',
+        },
+        {
+          id: 'day5_q8',
+          title: 'Contingencies',
+          question: 'Why should beginner investors generally avoid waiving inspections and financing contingencies?',
+          options: [
+            { id: 'a', text: 'Because contingencies create unnecessary delays.' },
+            { id: 'b', text: 'Because contingencies are a form of risk management that help protect against unforeseen issues.' },
+            { id: 'c', text: 'Because sellers never accept offers with waived contingencies.' },
+            { id: 'd', text: 'Because lenders require them.' },
+          ],
+          correctId: 'b',
+          explanation: 'Contingencies are risk management tools that protect you from unforeseen issues like hidden repairs, financing changes, or inaccurate information.',
+        },
+        {
+          id: 'day5_q9',
+          title: 'Least Valuable Outcome',
+          question: 'Which outcome from submitting an offer provides the least value?',
+          options: [
+            { id: 'a', text: 'An accepted offer.' },
+            { id: 'b', text: 'A counteroffer.' },
+            { id: 'c', text: 'A rejected offer that provides feedback and market insight.' },
+            { id: 'd', text: 'An offer that is never submitted.' },
+          ],
+          correctId: 'd',
+          explanation: 'An accepted offer, a counteroffer, and even a rejection all create value. The only outcome that creates nothing is failing to submit the offer.',
+        },
+        {
+          id: 'day5_q10',
+          title: 'Ready to Submit',
+          question: 'A property meets your buy box, financing requirements, and return criteria. You have verified rents, estimated repairs conservatively, and established your maximum price. Your only hesitation is uncertainty about whether the seller will accept your offer. What should a professional investor do?',
+          options: [
+            { id: 'a', text: 'Wait until they feel completely certain.' },
+            { id: 'b', text: 'Increase the offer before submitting it.' },
+            { id: 'c', text: 'Submit the offer and allow the seller to make the decision.' },
+            { id: 'd', text: 'Move on to another property.' },
+          ],
+          correctId: 'c',
+          explanation: 'If your analysis is sound, your risk is protected, and the property meets your criteria — submit the offer. The answer is always no unless you ask.',
         },
       ],
     },
