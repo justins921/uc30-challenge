@@ -109,11 +109,26 @@ export default function QuizSection({ quiz, participantId, dayNumber, existingAt
 }
 
 function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, onComplete, existingAttempts }) {
+  const inputs = useMemo(() => {
+    if (scenario.inputs) return scenario.inputs;
+    if (scenario.options) {
+      return [{
+        id: scenario.id,
+        label: scenario.question,
+        type: 'multiple_choice',
+        options: scenario.options.map(o => o.text),
+        correctAnswer: scenario.options.findIndex(o => o.id === scenario.correctId),
+        explanation: scenario.explanation,
+      }];
+    }
+    return [];
+  }, [scenario]);
+
   const maxAttempts = scenario.maxAttempts || 3;
   const [attemptCount, setAttemptCount] = useState(status?.attemptCount || 0);
   const [answers, setAnswers] = useState(() => {
     const initial = {};
-    scenario.inputs.forEach(input => { initial[input.id] = ''; });
+    inputs.forEach(input => { initial[input.id] = ''; });
     return initial;
   });
   const [results, setResults] = useState(null);
@@ -130,7 +145,7 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
     const inputResults = {};
     let allCorrect = true;
 
-    scenario.inputs.forEach(input => {
+    inputs.forEach(input => {
       const correct = checkAnswer(input, answers[input.id]);
       inputResults[input.id] = correct;
       if (!correct) allCorrect = false;
@@ -160,7 +175,7 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
     } else {
       setTimeout(() => {
         const cleared = { ...answers };
-        scenario.inputs.forEach(input => {
+        inputs.forEach(input => {
           if (!inputResults[input.id]) cleared[input.id] = '';
         });
         setAnswers(cleared);
@@ -169,7 +184,7 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
     }
   };
 
-  const allAnswered = scenario.inputs.every(i =>
+  const allAnswered = inputs.every(i =>
     i.type === 'multiple_choice' ? answers[i.id] !== '' : answers[i.id]?.trim()
   );
 
@@ -227,7 +242,7 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
             Here's how to get it right:
           </div>
 
-          {scenario.inputs.map(input => (
+          {inputs.map(input => (
             <div key={input.id} style={{
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.04)',
@@ -291,7 +306,7 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 16 }}>
-        {scenario.inputs.map(input => {
+        {inputs.map(input => {
           const isCorrect = results?.[input.id] === true;
           const isWrong = results?.[input.id] === false;
 
