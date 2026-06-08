@@ -258,6 +258,34 @@ export default function DayView({
     dayData.reviewQuiz.scenarios.every(s => (quizAttempts || []).some(a => a.scenario_id === s.id && a.correct));
   const [reviewQuizPassed, setReviewQuizPassed] = useState(reviewQuizAlreadyPassed || isComplete);
 
+  // ── Sections-mode quiz tracking ────────────────────────────────
+  const hasSections = !!dayData?.sections;
+  const veteranBypass = (user.cohortAttempt || 1) >= 2 && trainingAlreadyDone;
+
+  const sectionQuizPassedInit = useMemo(() => {
+    if (!hasSections) return {};
+    const result = {};
+    dayData.sections.forEach((section, idx) => {
+      if (section.type === 'quiz' && section.scenarios?.length > 0) {
+        const allPassed = section.scenarios.every(s =>
+          (quizAttempts || []).some(a => a.scenario_id === s.id && a.correct)
+        );
+        result[idx] = allPassed || isComplete || (section.required && veteranBypass);
+      }
+    });
+    return result;
+  }, [hasSections, dayData?.sections, quizAttempts, isComplete, veteranBypass]);
+
+  const [sectionQuizPassed, setSectionQuizPassed] = useState(sectionQuizPassedInit);
+
+  useEffect(() => {
+    if (hasSections) setSectionQuizPassed(prev => ({ ...prev, ...sectionQuizPassedInit }));
+  }, [sectionQuizPassedInit]);
+
+  const allSectionQuizzesPassed = !hasSections || dayData.sections.every((s, idx) =>
+    s.type !== 'quiz' || !s.required || sectionQuizPassed[idx]
+  );
+
   // ── Confidence Survey checkpoint ──────────────────────────────
   const surveyCheckpointMap = { 0: 'pre_training', 7: 'week_1', 14: 'week_2', 21: 'week_3', 28: 'week_4' };
   const surveyCheckpoint = surveyCheckpointMap[day] || null;
@@ -280,6 +308,108 @@ export default function DayView({
       lifetimeOffersDelta: offerDelta > 0 ? offerDelta : 0,
     });
     setSubmitted(true);
+  };
+
+  // ── Sections renderer ─────────────────────────────────────────
+  const renderDaySections = () => {
+    let gated = false;
+    return dayData.sections.map((section, idx) => {
+      if (gated) return null;
+
+      switch (section.type) {
+        case 'training':
+          return (
+            <div key={idx} className="card" style={{ marginBottom: 24 }}>
+              <div
+                style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: trainingExpanded ? 12 : 0, cursor: trainingAlreadyDone ? 'pointer' : 'default' }}
+                onClick={trainingAlreadyDone ? () => setTrainingExpanded(!trainingExpanded) : undefined}
+              >
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(83,52,131,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📚</div>
+                <h3 style={{ fontSize: 16, fontWeight: 700, flex: 1 }}>{section.title || 'Training Content'}</h3>
+                {trainingAlreadyDone && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 11, padding: '3px 10px', borderRadius: 6, background: 'rgba(72,199,142,0.1)', color: '#48c78e', fontWeight: 700 }}>
+                      PREVIOUSLY COMPLETED
+                    </span>
+                    <span style={{ fontSize: 14, color: '#666', transform: trainingExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>▼</span>
+                  </div>
+                )}
+              </div>
+              {trainingExpanded && (
+                <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{section.content}</p>
+              )}
+            </div>
+          );
+
+        case 'quiz': {
+          if (sectionQuizPassed[idx]) {
+            return (
+              <div key={idx} style={{
+                padding: '14px 20px', borderRadius: 12, marginBottom: 24,
+                background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.2)',
+                display: 'flex', alignItems: 'center', gap: 10,
+              }}>
+                <span style={{ fontSize: 16, color: '#48c78e' }}>✓</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: '#48c78e' }}>
+                  {section.title || 'Quiz'} — passed
+                </span>
+              </div>
+            );
+          }
+          if (section.required) gated = true;
+          return canSubmit ? (
+            <QuizSection
+              key={idx}
+              quiz={{ title: section.title, scenarios: section.scenarios, required: section.required, passingScore: section.passingScore }}
+              participantId={user.id}
+              dayNumber={day}
+              existingAttempts={quizAttempts || []}
+              onAttempt={onQuizAttempt}
+              onQuizComplete={() => setSectionQuizPassed(prev => ({ ...prev, [idx]: true }))}
+            />
+          ) : null;
+        }
+
+        case 'takeaways':
+          return (
+            <div key={idx} className="card" style={{ marginBottom: 24 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(240,165,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>💡</div>
+                <h3 style={{ fontSize: 16, fontWeight: 700 }}>{section.title || 'Key Takeaways'}</h3>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {section.items.map((item, i) => (
+                  <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                    <span style={{ color: '#f0a500', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>•</span>
+                    <span style={{ color: '#bbb', fontSize: 14, lineHeight: 1.7 }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+
+        case 'activities':
+          return (
+            <div key={idx} className="card" style={{ marginBottom: 24 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📋</div>
+                <h3 style={{ fontSize: 16, fontWeight: 700 }}>{section.title || "Today's Standards"}</h3>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {section.items.map((item, i) => (
+                  <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                    <span style={{ color: '#e94560', fontWeight: 700, flexShrink: 0, fontSize: 13, marginTop: 1 }}>{i + 1}.</span>
+                    <span style={{ color: '#bbb', fontSize: 14, lineHeight: 1.7 }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+
+        default:
+          return null;
+      }
+    });
   };
 
   // ── Render ────────────────────────────────────────────────────
@@ -472,80 +602,100 @@ export default function DayView({
         </div>
       )}
 
-      {/* Training Content (standard days) — gated behind review quiz if one exists */}
-      {!isReflectionDay && dayData?.trainingContent && (!hasReviewQuiz || reviewQuizPassed) && (
-        <div className="card" style={{ marginBottom: 24 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: trainingExpanded ? 12 : 0, cursor: trainingAlreadyDone ? 'pointer' : 'default' }}
-            onClick={trainingAlreadyDone ? () => setTrainingExpanded(!trainingExpanded) : undefined}>
-            <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(83,52,131,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📚</div>
-            <h3 style={{ fontSize: 16, fontWeight: 700, flex: 1 }}>Training Content</h3>
-            {trainingAlreadyDone && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 11, padding: '3px 10px', borderRadius: 6, background: 'rgba(72,199,142,0.1)', color: '#48c78e', fontWeight: 700 }}>
-                  PREVIOUSLY COMPLETED
-                </span>
-                <span style={{ fontSize: 14, color: '#666', transform: trainingExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>▼</span>
+      {/* Training + Quiz: sections mode vs legacy mode */}
+      {hasSections && (!hasReviewQuiz || reviewQuizPassed) ? (
+        <>
+          {renderDaySections()}
+          {!allSectionQuizzesPassed && canSubmit && (
+            <div style={{
+              padding: '20px', borderRadius: 12, marginBottom: 24, textAlign: 'center',
+              background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.12)',
+            }}>
+              <div style={{ fontSize: 20, marginBottom: 8 }}>🔒</div>
+              <p style={{ fontSize: 14, color: '#888', margin: 0 }}>
+                Complete all quizzes above to unlock your daily submission.
+              </p>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          {/* Training Content (standard days) — gated behind review quiz if one exists */}
+          {!isReflectionDay && dayData?.trainingContent && (!hasReviewQuiz || reviewQuizPassed) && (
+            <div className="card" style={{ marginBottom: 24 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: trainingExpanded ? 12 : 0, cursor: trainingAlreadyDone ? 'pointer' : 'default' }}
+                onClick={trainingAlreadyDone ? () => setTrainingExpanded(!trainingExpanded) : undefined}>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(83,52,131,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📚</div>
+                <h3 style={{ fontSize: 16, fontWeight: 700, flex: 1 }}>Training Content</h3>
+                {trainingAlreadyDone && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 11, padding: '3px 10px', borderRadius: 6, background: 'rgba(72,199,142,0.1)', color: '#48c78e', fontWeight: 700 }}>
+                      PREVIOUSLY COMPLETED
+                    </span>
+                    <span style={{ fontSize: 14, color: '#666', transform: trainingExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>▼</span>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          {trainingExpanded && (
-            <>
-              {dayData.trainingIllustration ? (() => {
-                const ill = dayData.trainingIllustration;
-                const splitKey = ill.insertAfter;
-                let beforeText = dayData.trainingContent;
-                let afterText = null;
-                if (splitKey) {
-                  const idx = dayData.trainingContent.indexOf(splitKey);
-                  if (idx >= 0) {
-                    const sectionBreak = dayData.trainingContent.indexOf('\n\n\n', idx);
-                    if (sectionBreak >= 0) {
-                      beforeText = dayData.trainingContent.slice(0, sectionBreak);
-                      afterText = dayData.trainingContent.slice(sectionBreak).replace(/^\n+/, '');
+              {trainingExpanded && (
+                <>
+                  {dayData.trainingIllustration ? (() => {
+                    const ill = dayData.trainingIllustration;
+                    const splitKey = ill.insertAfter;
+                    let beforeText = dayData.trainingContent;
+                    let afterText = null;
+                    if (splitKey) {
+                      const idx = dayData.trainingContent.indexOf(splitKey);
+                      if (idx >= 0) {
+                        const sectionBreak = dayData.trainingContent.indexOf('\n\n\n', idx);
+                        if (sectionBreak >= 0) {
+                          beforeText = dayData.trainingContent.slice(0, sectionBreak);
+                          afterText = dayData.trainingContent.slice(sectionBreak).replace(/^\n+/, '');
+                        }
+                      }
                     }
-                  }
-                }
 
-                return (
-                  <>
-                    <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{beforeText}</p>
-                    <FinancingComparisonCard illustration={ill} />
-                    {afterText && (
-                      <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{afterText}</p>
-                    )}
-                  </>
-                );
-              })() : (
-                <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.trainingContent}</p>
+                    return (
+                      <>
+                        <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{beforeText}</p>
+                        <FinancingComparisonCard illustration={ill} />
+                        {afterText && (
+                          <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{afterText}</p>
+                        )}
+                      </>
+                    );
+                  })() : (
+                    <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.trainingContent}</p>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Task Description — gated behind review quiz if one exists */}
+          {dayData?.taskDescription && (!hasReviewQuiz || reviewQuizPassed) && (
+            <div className="card" style={{ marginBottom: 24 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📋</div>
+                <h3 style={{ fontSize: 16, fontWeight: 700 }}>Today's Standards</h3>
+              </div>
+              <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.taskDescription}</p>
+            </div>
+          )}
+
+          {/* Quiz Section — gated behind review quiz if one exists */}
+          {hasRequiredQuiz && (!hasReviewQuiz || reviewQuizPassed) && canSubmit && !quizPassed && (
+            <>
+              {quizBypassForVeteran ? null : (
+                <QuizSection
+                  quiz={dayData.quiz}
+                  participantId={user.id}
+                  dayNumber={day}
+                  existingAttempts={quizAttempts || []}
+                  onAttempt={onQuizAttempt}
+                  onQuizComplete={() => setQuizPassed(true)}
+                />
               )}
             </>
-          )}
-        </div>
-      )}
-
-      {/* Task Description — gated behind review quiz if one exists */}
-      {dayData?.taskDescription && (!hasReviewQuiz || reviewQuizPassed) && (
-        <div className="card" style={{ marginBottom: 24 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(233,69,96,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📋</div>
-            <h3 style={{ fontSize: 16, fontWeight: 700 }}>Today's Standards</h3>
-          </div>
-          <p style={{ color: '#bbb', lineHeight: 1.8, fontSize: 15, whiteSpace: 'pre-line' }}>{dayData.taskDescription}</p>
-        </div>
-      )}
-
-      {/* Quiz Section — gated behind review quiz if one exists */}
-      {hasRequiredQuiz && (!hasReviewQuiz || reviewQuizPassed) && canSubmit && !quizPassed && (
-        <>
-          {quizBypassForVeteran ? null : (
-            <QuizSection
-              quiz={dayData.quiz}
-              participantId={user.id}
-              dayNumber={day}
-              existingAttempts={quizAttempts || []}
-              onAttempt={onQuizAttempt}
-              onQuizComplete={() => setQuizPassed(true)}
-            />
           )}
         </>
       )}
@@ -579,7 +729,7 @@ export default function DayView({
       )}
 
       {/* Locked submission notice */}
-      {!isPreTraining && hasRequiredQuiz && canSubmit && !quizPassed && !quizBypassForVeteran && (
+      {!isPreTraining && !hasSections && hasRequiredQuiz && canSubmit && !quizPassed && !quizBypassForVeteran && (
         <div style={{
           padding: '20px', borderRadius: 12, marginBottom: 24,
           background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
@@ -1301,7 +1451,7 @@ export default function DayView({
       )}
 
       {/* ═══ PRE-SUBMISSION FORM ═══ */}
-      {!isPreTraining && !submitted && !(isComplete && existingSubmission) && canSubmit && (!hasRequiredQuiz || quizPassed) ? (
+      {!isPreTraining && !submitted && !(isComplete && existingSubmission) && canSubmit && (hasSections ? allSectionQuizzesPassed : (!hasRequiredQuiz || quizPassed)) ? (
         <>
           {/* ── 6-Metric Entry Form ── */}
           <div className="card" style={{ marginBottom: 24 }}>
