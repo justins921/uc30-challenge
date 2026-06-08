@@ -158,7 +158,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
                 color: '#fff', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
               }}
             >
-              {Array.from({ length: 30 }, (_, i) => i + 1).map(d => (
+              {Array.from({ length: 32 }, (_, i) => i + 1).map(d => (
                 <option key={d} value={d} style={{ color: '#000' }}>
                   Day {d}{previewCompletedDays.includes(d) ? ' ✓' : ''}
                 </option>
@@ -342,7 +342,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
               }}
             >
               <option value="" style={{ background: '#1a1a2e' }}>Select a day...</option>
-              {Array.from({ length: 30 }, (_, i) => {
+              {Array.from({ length: 32 }, (_, i) => {
                 const dayData = getDayContent(i + 1, contentOverrides);
                 return (
                   <option key={i + 1} value={i + 1} style={{ background: '#1a1a2e' }}>
@@ -1361,7 +1361,7 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communi
       <div className="card" style={{ marginBottom: 24 }}>
         <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Active Operators by Day</h3>
         <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 160, overflowX: 'auto' }}>
-          {Array.from({ length: 30 }, (_, i) => {
+          {Array.from({ length: 32 }, (_, i) => {
             const count = dayDistribution[i + 1] || 0;
             return (
               <div key={i} style={{
@@ -1863,8 +1863,8 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
       {/* Activity Map */}
       <div className="card" style={{ marginBottom: 24 }}>
         <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Activity Map</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: 6 }}>
-          {Array.from({ length: 30 }, (_, i) => {
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: 6 }}>
+          {Array.from({ length: 32 }, (_, i) => {
             const isComplete = p.completedDays?.includes(i + 1);
             const isCurrent = i + 1 === p.currentDay;
             return (
@@ -2079,15 +2079,15 @@ function SubmissionsTab({ nonAdmin, onVerifySubmissionSocial }) {
             style={{ width: 'auto', padding: '8px 12px', fontSize: 14, minWidth: 180 }}
           >
             <option value={0}>All Days ({allSubmissions.length})</option>
-            {Array.from({ length: 30 }, (_, i) => {
+            {Array.from({ length: 32 }, (_, i) => {
               const dayNum = i + 1;
               const count = dayCounts[dayNum] || 0;
               const dayData = CHALLENGE_DAYS[i];
-              return (
+              return dayData ? (
                 <option key={dayNum} value={dayNum}>
                   Day {dayNum}: {dayData.title} ({count})
                 </option>
-              );
+              ) : null;
             })}
           </select>
         </div>
@@ -2240,7 +2240,7 @@ function DailyMinimumsEditor({ overrides, onSave, onBack }) {
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: 30 }, (_, i) => {
+            {Array.from({ length: 32 }, (_, i) => {
               const d = i + 1;
               return (
                 <tr key={d} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
@@ -4868,7 +4868,7 @@ function DayReorderEditor({ contentOverrides, onSave, onBack }) {
   };
 
   const resetOrder = () => {
-    setOrder(Array.from({ length: 30 }, (_, i) => i + 1));
+    setOrder(Array.from({ length: 32 }, (_, i) => i + 1));
   };
 
   const handleSave = async () => {
