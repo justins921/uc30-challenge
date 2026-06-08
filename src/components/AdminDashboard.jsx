@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Header from './Header';
-import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DAILY_MINIMUMS, getWeekNumber as getChallengeWeek, getWeeklyOfferTarget, getCohortStartDate } from '../data/challengeDays';
+import { CHALLENGE_DAYS, PRE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, getPreDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DAILY_MINIMUMS, getWeekNumber as getChallengeWeek, getWeeklyOfferTarget, getCohortStartDate } from '../data/challengeDays';
 import { INDICATOR_KEYS, INDICATOR_LABELS, INDICATOR_SHORT_LABELS, INDICATOR_COLORS, UC_POINT_VALUES, calculateUCPoints } from '../data/ucPoints';
 import DayView, { AttachmentLink } from './DayView';
 import ActivationPhase from './ActivationPhase';
@@ -147,7 +147,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: 1, textTransform: 'uppercase' }}>
-              Admin Preview — Day {previewDay}
+              Admin Preview — {previewDay <= 0 ? `Pre-Day ${previewDay}` : `Day ${previewDay}`}
             </span>
             <select
               value={previewDay}
@@ -158,6 +158,11 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
                 color: '#fff', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
               }}
             >
+              {PRE_DAYS.map(pd => (
+                <option key={pd.day} value={pd.day} style={{ color: '#000' }}>
+                  Pre-Day {pd.day} — {pd.title}{previewCompletedDays.includes(pd.day) ? ' ✓' : ''}
+                </option>
+              ))}
               {Array.from({ length: 32 }, (_, i) => i + 1).map(d => (
                 <option key={d} value={d} style={{ color: '#000' }}>
                   Day {d}{previewCompletedDays.includes(d) ? ' ✓' : ''}
@@ -334,7 +339,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             <span style={{ fontSize: 14, fontWeight: 600, color: '#c9a0ff', whiteSpace: 'nowrap' }}>Preview Day</span>
             <select
               value=""
-              onChange={(e) => { if (e.target.value) setPreviewDay(parseInt(e.target.value)); }}
+              onChange={(e) => { if (e.target.value !== '') setPreviewDay(parseInt(e.target.value)); }}
               style={{
                 flex: 1, fontSize: 14, padding: '8px 10px', borderRadius: 8,
                 background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
@@ -342,6 +347,11 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
               }}
             >
               <option value="" style={{ background: '#1a1a2e' }}>Select a day...</option>
+              {PRE_DAYS.map(pd => (
+                <option key={pd.day} value={pd.day} style={{ background: '#1a1a2e' }}>
+                  Pre-Day {pd.day} — {pd.title}
+                </option>
+              ))}
               {Array.from({ length: 32 }, (_, i) => {
                 const dayData = getDayContent(i + 1, contentOverrides);
                 return (
