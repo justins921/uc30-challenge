@@ -9,6 +9,7 @@ import OnboardingFlow from './components/OnboardingFlow';
 import ActivationPhase from './components/ActivationPhase';
 import AffiliatePage from './components/AffiliatePage';
 import ReadinessQuestionnaire from './components/ReadinessQuestionnaire';
+import FreeToolsPage from './components/FreeToolsPage';
 
 export default function App() {
   const {
@@ -178,6 +179,11 @@ export default function App() {
         <ReadinessQuestionnaire onClose={() => { window.location.href = '/'; }} />
       </div>
     );
+  }
+
+  // Free tools — accessible to anyone, no auth required
+  if (window.location.pathname.replace(/\/+$/, '').startsWith('/tools')) {
+    return <FreeToolsPage />;
   }
 
   // Not logged in
