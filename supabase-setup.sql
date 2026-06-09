@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS participants (
   is_admin BOOLEAN DEFAULT FALSE,
   current_day INTEGER DEFAULT 1,
   is_active BOOLEAN DEFAULT TRUE,
+  is_approved BOOLEAN DEFAULT FALSE,
   start_date TIMESTAMPTZ DEFAULT NOW(),
   completed_days JSONB DEFAULT '[]'::jsonb,
   submissions JSONB DEFAULT '[]'::jsonb,
@@ -50,6 +51,8 @@ CREATE POLICY "Allow public delete" ON participants
 -- ALTER TABLE participants ADD COLUMN IF NOT EXISTS last_name TEXT NOT NULL DEFAULT '';
 -- UPDATE participants SET first_name = split_part(name, ' ', 1), last_name = substr(name, length(split_part(name, ' ', 1)) + 2) WHERE first_name = '' AND name IS NOT NULL;
 -- ALTER TABLE participants ADD COLUMN IF NOT EXISTS access_expires_at TIMESTAMPTZ;
+-- ALTER TABLE participants ADD COLUMN IF NOT EXISTS is_approved BOOLEAN DEFAULT FALSE;
+-- UPDATE participants SET is_approved = TRUE WHERE is_admin = TRUE;
 
 -- Create index for email lookups
 CREATE INDEX IF NOT EXISTS idx_participants_email ON participants (email);

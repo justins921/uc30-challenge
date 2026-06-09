@@ -1119,6 +1119,20 @@ export function useAppState() {
     }
   }, [participants, user, persist, cohortStartDate, updateCohortStats]);
 
+  const approveParticipant = useCallback(async (participantId) => {
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(participantId, { approved: true });
+      const allParticipants = await storage.getParticipants();
+      setParticipants(allParticipants || []);
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === participantId ? { ...p, approved: true } : p
+      );
+      setParticipants(updatedParticipants);
+      persist(user, updatedParticipants);
+    }
+  }, [participants, user, persist]);
+
   const setCohortStartDate = useCallback(async (date) => {
     const current = await Promise.resolve(storage.getCohortSettings()) || {};
     const settings = { ...current, startDate: date };
@@ -1748,6 +1762,7 @@ export function useAppState() {
     removeParticipant,
     deleteParticipant,
     reactivateParticipant,
+    approveParticipant,
     toggleAdmin,
     refreshParticipants,
     setCohortStartDate,

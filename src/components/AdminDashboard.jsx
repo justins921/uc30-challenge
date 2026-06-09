@@ -67,7 +67,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink, practiceDaySettings, onSetPracticeDaySettings, getContactsForParticipant, getUploads, getUploadUrl, complianceSettings, onSetComplianceDailyMinimums, onSetComplianceWeeklyMinimums, onSetComplianceEnforcement, getAllDailySubmissions, getRemovalLog, onSwitchToParticipant, onCompleteActivation }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onApprove, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink, practiceDaySettings, onSetPracticeDaySettings, getContactsForParticipant, getUploads, getUploadUrl, complianceSettings, onSetComplianceDailyMinimums, onSetComplianceWeeklyMinimums, onSetComplianceEnforcement, getAllDailySubmissions, getRemovalLog, onSwitchToParticipant, onCompleteActivation }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -75,6 +75,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
   const nonAdmin = participants.filter(p => !p.isAdmin);
   const active = nonAdmin.filter(p => p.isActive);
   const removed = nonAdmin.filter(p => !p.isActive);
+  const pending = nonAdmin.filter(p => !p.approved);
 
   // Aggregate indicator totals
   const indicatorTotals = {};
@@ -385,6 +386,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
         }}>
           <AdminStat label="Total Enrolled" value={nonAdmin.length} color="#888" />
           <AdminStat label="Active Now" value={active.length} color="#48c78e" />
+          <AdminStat label="Pending" value={pending.length} color="#f0a500" />
           <AdminStat label="Removed" value={removed.length} color="#e94560" />
           <AdminStat label="Total UC Points" value={totalUCPoints.toLocaleString()} color="#f0a500" />
           <AdminStat label="Avg UC Points" value={avgUCPoints.toLocaleString()} color="#f0a500" />
@@ -411,6 +413,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onRemove={onRemove}
             onDelete={onDelete}
             onReactivate={onReactivate}
+            onApprove={onApprove}
             onToggleAdmin={onToggleAdmin}
             onResetPassword={onResetPassword}
             onSelect={setSelectedParticipant}
@@ -423,6 +426,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onRemove={onRemove}
             onDelete={onDelete}
             onReactivate={onReactivate}
+            onApprove={onApprove}
             onToggleAdmin={onToggleAdmin}
             onResetPassword={onResetPassword}
             onVerifySubmissionSocial={onVerifySubmissionSocial}
@@ -1411,10 +1415,12 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communi
   );
 }
 
-function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onSelect }) {
+function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onApprove, onToggleAdmin, onResetPassword, onSelect }) {
   const [filter, setFilter] = useState('all');
+  const pendingCount = nonAdmin.filter(p => !p.approved).length;
   const filtered = filter === 'all' ? nonAdmin
     : filter === 'active' ? nonAdmin.filter(p => p.isActive)
+    : filter === 'pending' ? nonAdmin.filter(p => !p.approved)
     : filter === 'removed' ? nonAdmin.filter(p => !p.isActive)
     : filter === 'refund' ? nonAdmin.filter(p => p.refundEligible !== false)
     : nonAdmin;
@@ -1424,11 +1430,12 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
   return (
     <div className="fade-up">
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
-        {['all', 'active', 'removed', 'refund'].map(f => {
-          const labels = { all: 'All', active: 'Active', removed: 'Removed', refund: 'Refund Eligible' };
+        {['all', 'active', 'pending', 'removed', 'refund'].map(f => {
+          const labels = { all: 'All', active: 'Active', pending: 'Pending', removed: 'Removed', refund: 'Refund Eligible' };
           const counts = {
             all: nonAdmin.length,
             active: nonAdmin.filter(p => p.isActive).length,
+            pending: pendingCount,
             removed: nonAdmin.filter(p => !p.isActive).length,
             refund: refundCount,
           };
@@ -1468,15 +1475,22 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
                 <div style={{
                   width: 36, height: 36, borderRadius: '50%',
-                  background: p.isActive ? 'rgba(72,199,142,0.15)' : 'rgba(233,69,96,0.15)',
+                  background: !p.approved ? 'rgba(240,165,0,0.15)' : p.isActive ? 'rgba(72,199,142,0.15)' : 'rgba(233,69,96,0.15)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 14, flexShrink: 0,
                 }}>
-                  {p.isActive ? '🟢' : '🔴'}
+                  {!p.approved ? '🟡' : p.isActive ? '🟢' : '🔴'}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span style={{ fontWeight: 600, fontSize: 15 }}>{p.firstName} {p.lastName}</span>
+                    {!p.approved && (
+                      <span style={{
+                        fontSize: 10, fontWeight: 600, color: '#f0a500',
+                        background: 'rgba(240,165,0,0.1)', padding: '2px 8px',
+                        borderRadius: 4, flexShrink: 0,
+                      }}>Pending</span>
+                    )}
                     {p.reactivatedAt && (
                       <span style={{
                         fontSize: 10, fontWeight: 600, color: '#f0a500',
@@ -1530,6 +1544,19 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
                   >
                     Make Admin
                   </button>
+                  {!p.approved && (
+                    <button
+                      style={{
+                        background: 'rgba(72,199,142,0.12)', color: '#48c78e',
+                        border: '1px solid rgba(72,199,142,0.3)', padding: '6px 12px',
+                        borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                        fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
+                      }}
+                      onClick={() => onApprove(p.id)}
+                    >
+                      Approve
+                    </button>
+                  )}
                   {p.isActive ? (
                     <button className="btn-danger" onClick={() => onRemove(p.id)}>Remove</button>
                   ) : (
@@ -1561,7 +1588,7 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onToggleA
 }
 
 // ── Participant Detail View (with all submissions) ──────────
-function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onToggleAdmin, onResetPassword, onVerifySubmissionSocial, onWarnCommunityUser, onBanCommunityUser, onViewAsUser, getContactsForParticipant, getUploads, getUploadUrl }) {
+function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactivate, onApprove, onToggleAdmin, onResetPassword, onVerifySubmissionSocial, onWarnCommunityUser, onBanCommunityUser, onViewAsUser, getContactsForParticipant, getUploads, getUploadUrl }) {
   const [showWarnInput, setShowWarnInput] = useState(false);
   const [warnMessage, setWarnMessage] = useState('');
   const [crmContacts, setCrmContacts] = useState(null);
@@ -1600,10 +1627,10 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <div style={{
               width: 56, height: 56, borderRadius: '50%',
-              background: p.isActive ? 'rgba(72,199,142,0.15)' : 'rgba(233,69,96,0.15)',
+              background: !p.approved ? 'rgba(240,165,0,0.15)' : p.isActive ? 'rgba(72,199,142,0.15)' : 'rgba(233,69,96,0.15)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24,
             }}>
-              {p.isActive ? '🟢' : '🔴'}
+              {!p.approved ? '🟡' : p.isActive ? '🟢' : '🔴'}
             </div>
             <div>
               <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 2 }}>{p.firstName} {p.lastName}</h2>
@@ -1671,6 +1698,19 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
             >
               Make Admin
             </button>
+            {!p.approved && (
+              <button
+                style={{
+                  background: 'rgba(72,199,142,0.12)', color: '#48c78e',
+                  border: '1px solid rgba(72,199,142,0.3)', padding: '8px 16px',
+                  borderRadius: 8, fontSize: 13, cursor: 'pointer',
+                  fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
+                }}
+                onClick={() => onApprove(p.id)}
+              >
+                Approve
+              </button>
+            )}
             {p.isActive ? (
               <button className="btn-danger" onClick={() => onRemove(p.id)}>Remove from Challenge</button>
             ) : (

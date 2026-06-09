@@ -34,6 +34,7 @@ export default function App() {
     removeParticipant,
     deleteParticipant,
     reactivateParticipant,
+    approveParticipant,
     toggleAdmin,
     setCohortStartDate,
     setNextCohortDate,
@@ -356,6 +357,34 @@ export default function App() {
     );
   }
 
+  // Pending approval gate — non-admin users must be approved before accessing the course
+  if (!user.isAdmin && !user.approved) {
+    return (
+      <div style={{
+        minHeight: '100vh', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', padding: 20,
+      }}>
+        <div style={{ maxWidth: 480, textAlign: 'center' }}>
+          <div className="mono" style={{ fontSize: 48, fontWeight: 700, color: '#e94560', marginBottom: 16 }}>
+            UC30
+          </div>
+          <div className="card" style={{ padding: 36 }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>&#9203;</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 12 }}>Pending Approval</div>
+            <p style={{ color: '#888', fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>
+              Your account has been created. An admin will review and approve your
+              access shortly. You'll be able to start the challenge once approved.
+            </p>
+            <p style={{ color: '#666', fontSize: 13, lineHeight: 1.5, marginBottom: 24 }}>
+              If you believe this is an error, please contact support.
+            </p>
+            <button className="btn-secondary" onClick={logout}>Log Out</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Activation Phase gate — non-admin users (or admins in participant mode) who haven't completed activation
   if ((!user.isAdmin || participantMode) && !user.activationCompleted) {
     return (
@@ -459,6 +488,7 @@ export default function App() {
         onRemove={removeParticipant}
         onDelete={deleteParticipant}
         onReactivate={reactivateParticipant}
+        onApprove={approveParticipant}
         onToggleAdmin={toggleAdmin}
         onResetPassword={adminResetPassword}
         onLogout={logout}

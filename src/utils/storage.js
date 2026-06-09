@@ -103,6 +103,7 @@ const supabaseStorage = {
         is_admin: row.is_admin,
         current_day: row.current_day,
         is_active: row.is_active,
+        is_approved: row.is_approved,
         has_paid: row.has_paid,
         completed_days: row.completed_days,
         submissions: row.submissions,
@@ -571,6 +572,7 @@ function toDbRow(user) {
     is_developer: user.isDeveloper || false,
     current_day: user.currentDay,
     is_active: user.isActive,
+    is_approved: user.approved || false,
     has_paid: user.hasPaid,
     start_date: user.startDate,
     completed_days: user.completedDays,
@@ -633,6 +635,7 @@ function toDbUpdateRow(updates) {
   if (updates.lastName !== undefined) row.last_name = updates.lastName;
   if (updates.currentDay !== undefined) row.current_day = updates.currentDay;
   if (updates.isActive !== undefined) row.is_active = updates.isActive;
+  if (updates.approved !== undefined) row.is_approved = updates.approved;
   if (updates.isAdmin !== undefined) row.is_admin = updates.isAdmin;
   if (updates.isDeveloper !== undefined) row.is_developer = updates.isDeveloper;
   if (updates.completedDays !== undefined) row.completed_days = updates.completedDays;
@@ -701,6 +704,7 @@ function fromDbRow(row) {
     isDeveloper: row.is_developer || false,
     currentDay: row.current_day,
     isActive: row.is_active,
+    approved: row.is_approved || false,
     hasPaid: row.has_paid || false,
     startDate: row.start_date,
     completedDays: row.completed_days || [],
@@ -1098,6 +1102,7 @@ export function createNewUser(firstName, lastName, email, authId) {
     password: null,
     isAdmin: email.toLowerCase() === 'admin@uc30.com' || email.toLowerCase() === 'dev@uc30.com',
     isDeveloper: email.toLowerCase() === 'dev@uc30.com' || email.toLowerCase() === 'justin.sobojinski@gmail.com',
+    approved: email.toLowerCase() === 'admin@uc30.com' || email.toLowerCase() === 'dev@uc30.com' || email.toLowerCase() === 'justin.sobojinski@gmail.com',
     currentDay: 1,
     isActive: true,
     hasPaid: false,
