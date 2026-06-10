@@ -16,10 +16,12 @@ import MyBuyBox from './MyBuyBox';
 import PracticeDay from './PracticeDay';
 import Footer from './Footer';
 import RentalCalculator from './RentalCalculator';
+import DealAnalyzer from './DealAnalyzer';
 
 const TABS = [
   { id: 'timeline', label: 'Timeline' },
   { id: 'calculator', label: 'Calculator' },
+  { id: 'analyzer', label: 'Deal Analyzer' },
   { id: 'leaderboard', label: 'Leaderboard' },
   { id: 'crm', label: 'Contacts' },
   { id: 'community', label: 'Community' },
@@ -33,6 +35,7 @@ const TABS = [
 const PIPELINE_TABS = [
   { id: 'pipeline', label: 'Daily Activity' },
   { id: 'calculator', label: 'Calculator' },
+  { id: 'analyzer', label: 'Deal Analyzer' },
   { id: 'crm', label: 'Contacts' },
   { id: 'submissions', label: 'My Submissions' },
   { id: 'stats', label: 'Operator Stats' },
@@ -519,6 +522,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             userId={user.id}
           />
         )}
+        {!showPracticeDay && tab === 'analyzer' && <DealAnalyzer user={user} />}
         {!showPracticeDay && tab === 'buybox' && <MyBuyBox user={user} onUpdateUser={onUpdateUser} />}
         {!showPracticeDay && tab === 'submissions' && <SubmissionsView user={user} onEditDay={(day) => handleSelectDay(day)} />}
         {!showPracticeDay && tab === 'stats' && <StatsView user={user} />}

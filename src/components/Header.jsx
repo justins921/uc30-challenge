@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 const TAB_ICONS = {
   timeline: '📋',
   calculator: '🧮',
+  analyzer: '🔍',
   leaderboard: '🏆',
   crm: '👥',
   community: '💬',
