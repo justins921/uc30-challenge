@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import NativeRentalCalculator from './NativeRentalCalculator';
+import CapExCalculator from './CapExCalculator';
 
 const TOOLS = [
   {
@@ -7,6 +8,14 @@ const TOOLS = [
     title: 'Rental Property Analyzer',
     description: 'Analyze any rental property in seconds. Calculate cash flow, cash-on-cash return, cap rate, DSCR, and more. Includes a seller finance solver and full amortization schedule.',
     icon: '🏠',
+    component: NativeRentalCalculator,
+  },
+  {
+    id: 'capex-calculator',
+    title: 'CapEx Projection Calculator',
+    description: 'Estimate capital expenditure reserves for any property. Covers 24 building systems with remaining-life projections, replacement costs, and urgency prioritization.',
+    icon: '🔧',
+    component: CapExCalculator,
   },
 ];
 
@@ -61,7 +70,7 @@ export default function FreeToolsPage() {
             {tool.description}
           </p>
 
-          <NativeRentalCalculator />
+          <tool.component />
 
           {/* Email gate for copy/save */}
           {!emailCaptured && (
@@ -248,7 +257,7 @@ export default function FreeToolsPage() {
           border: '1px dashed rgba(255,255,255,0.08)',
         }}>
           <div style={{ fontSize: 14, color: '#555' }}>More tools coming soon</div>
-          <div style={{ fontSize: 12, color: '#444', marginTop: 4 }}>CapEx Calculator, Seller Finance Modeler, and more</div>
+          <div style={{ fontSize: 12, color: '#444', marginTop: 4 }}>Seller Finance Modeler, Due Diligence Checklist, and more</div>
         </div>
 
         {/* Bottom CTA */}
