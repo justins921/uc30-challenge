@@ -342,13 +342,7 @@ Before calling, make sure you've already analyzed the property so you understand
 
 You are not going to do these calls perfectly at first, so don't get overwhelmed. The more calls you make, the more you learn, and the better you get. The more humble, confident, and professional you are with agents, the more invested they'll become in helping you reach your goals.
 
-Some agents may ask you to sign an agreement to work exclusively with them. In most cases, you should only do this for a specific property they brought to you.
-
-You want agents motivated to bring you new deals. You do not want to limit your ability to have multiple agents actively searching for opportunities that fit your criteria.
-
-The more agents who understand your buy box and believe you are a serious buyer, the more likely you are to receive great opportunities. If you consistently stay top of mind and agents trust that you will actually perform when the right deal appears, your chances of finding strong deals increase dramatically.
-
-This is why it is critical to know exactly what you're looking for and to be ready to act when someone brings it to you.
+We'll cover how to structure these realtor relationships — including exclusivity, multiple agents, and building yourself up as a buyer — in the next section.
 
 If you don't feel confident or decisive about your criteria yet, go back and fine-tune your buy box until you do. You know exactly what you're looking for, you will find it!`,
       },
@@ -1428,7 +1422,7 @@ The investor gets excited.
 
 Then they discover they are not ready.
 
-Professional investors build their financing team before they need it.
+Professional investors build their financing team before they need it. Two investors can buy the exact same property and produce completely different results simply because they used different financing.
 
 The goal of today is to become financially prepared so that when opportunities appear, you are ready to act.
 
@@ -1609,63 +1603,6 @@ Arsenal Contacts — You are prepared to act.
 Prepared investors get shown more opportunities.
 
 
-Conventional Financing
-
-Best for:
-
-• Long-term rentals
-• Duplexes
-• Triplexes
-• Fourplexes
-• Investors building portfolios
-
-Advantages:
-
-• Competitive rates
-• Long amortization
-• Strong cash flow
-
-Limitations:
-
-• Income verification
-• DTI requirements
-• Conventional loan limits
-
-
-DSCR Financing
-
-Best for:
-
-• Self-employed investors
-• Scaling portfolios
-• Investors with strong cash-flowing properties
-
-Advantages:
-
-• Based primarily on property performance
-• Easier scaling
-• Reduced dependence on personal income
-
-Limitations:
-
-• Often slightly higher rates
-• May require larger down payments
-
-
-Local Banks & Credit Unions
-
-Never underestimate relationship banking.
-
-Local lenders often provide:
-
-• Flexibility
-• Portfolio loans
-• Unique solutions
-• Local market knowledge
-
-Strong banking relationships can become a competitive advantage over time.
-
-
 Financing Is A Competitive Advantage
 
 Many investors think the best deal wins.
@@ -1750,33 +1687,6 @@ The goal is simple:
 Become the investor who is ready before the opportunity appears.
 
 Final note — make sure you are still analyzing properties, reaching out to Arsenal contacts and target properties. Financing and building your team needs to happen simultaneously to searching for deals so that you can reach your goals in under 30 days.
-
-
-Why Financing Matters
-
-Many investors focus heavily on:
-• finding deals,
-• negotiating deals,
-• and analyzing deals.
-
-But financing can dramatically impact:
-• cash flow,
-• cash on cash return,
-• risk,
-• reserves,
-• scalability,
-• and long-term wealth creation.
-
-Two investors can buy the exact same property and produce completely different results simply because they used different financing.
-
-
-How Financing Can Accelerate Wealth
-
-Many new investors assume paying cash is always the safest and best option. While paying cash reduces risk, financing allows you to control more real estate with the same amount of money and can dramatically increase your total returns when used responsibly.
-
-A properly financed property can generate returns from cash flow, appreciation, principal paydown, and tax benefits while allowing you to preserve capital for reserves and additional investments. The goal is not to maximize debt, but to use financing strategically so that your money works across multiple assets instead of being tied up in a single property.
-
-The key is balance: use enough leverage to improve returns and accelerate growth, but maintain enough reserves and cash flow to protect yourself during unexpected vacancies, repairs, or market shifts.
 
 
 Important Rule
@@ -4581,9 +4491,7 @@ Quick Rules To Remember
 • Build trust through professionalism
 • Use financing contingencies
 • Review seller finance terms carefully
-• Understand balloon payments fully
 • Never rush closing
-• Conservative analysis still matters MOST
 
 Top 10 Ways To Find For Sale By Owner & Off-Market Deals
 
@@ -8289,7 +8197,7 @@ The goal is not maximizing returns.
 The goal is maximizing risk-adjusted returns.
 
 
-The Professional Investor Framework
+The Deal Structuring Framework
 
 Before presenting any structure:
 
