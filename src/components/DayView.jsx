@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
-import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum, getPreDayContent, resolveContentDay, DAILY_MINIMUMS, VETERAN_DAILY_MINIMUMS, getWeekNumber, getWeeklyOfferTarget, getWeekDayRange } from '../data/challengeDays';
+import { CHALLENGE_DAYS, CATEGORY_COLORS, getCategoryColors, getPhases, getDayContent, getDayDataForNum, getPreDayContent, resolveContentDay, DAILY_MINIMUMS, VETERAN_DAILY_MINIMUMS, getWeekNumber, getWeeklyOfferTarget, getWeekDayRange, getStreak } from '../data/challengeDays';
+import { calculateDayPoints } from '../data/ucPoints';
 import { COMPLIANCE_METRICS, checkDailyCompliance, getTimeUntilDeadline, DEFAULT_DAILY_MINIMUMS, DEFAULT_ENFORCEMENT } from '../data/compliance';
 import QuizSection from './QuizSection';
 import { CONTACT_GROUPS } from './ContactsCRM';
@@ -12,12 +13,13 @@ const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500' };
 
 
 export default function DayView({
-  day, user, onSubmit, onBack, contentOverrides, customPhases,
+  day, user, onSubmit, onBack, onNavigateToStats, contentOverrides, customPhases,
   complianceSettings, existingDailySubmission,
   onAddContact, onAddFollowUp, onUpdateContact, onUploadFile, contacts: initialContacts, getUploadUrl,
   quizAttempts, onQuizAttempt, isPreview, onSaveConfidenceSurvey,
 }) {
   const [submitted, setSubmitted] = useState(false);
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
 
   // ── Training bypass for repeat users ─────────────────────────
   const trainingAlreadyDone = (user.trainingCompletedDays || []).includes(day);
@@ -308,6 +310,7 @@ export default function DayView({
       lifetimeOffersDelta: offerDelta > 0 ? offerDelta : 0,
     });
     setSubmitted(true);
+    if (!isUpdate) setShowCompletionModal(true);
   };
 
   // ── Sections renderer ─────────────────────────────────────────
@@ -784,6 +787,7 @@ export default function DayView({
                 metDailyMinimum: true,
               });
               setSubmitted(true);
+              setShowCompletionModal(true);
             }}
             className="btn-primary"
             style={{ width: '100%', padding: '16px 24px', fontSize: 16 }}
@@ -2424,6 +2428,21 @@ export default function DayView({
             : 'Submit before the daily deadline or you will be removed from this run'}
         </div>
       )}
+
+      {showCompletionModal && (
+        <DayCompletedModal
+          day={day}
+          isPreTraining={isPreTraining}
+          dayTitle={dayData?.title}
+          dayMetrics={metrics}
+          completedDays={user.completedDays}
+          onFinish={() => {
+            setShowCompletionModal(false);
+            if (onNavigateToStats) onNavigateToStats();
+          }}
+          onDismiss={() => setShowCompletionModal(false)}
+        />
+      )}
     </div>
   );
 }
@@ -3092,6 +3111,118 @@ function SubmissionComplete({ submission }) {
         <div style={{ marginTop: 8, fontSize: 12, color: '#555' }}>
           {submission && new Date(submission.timestamp).toLocaleString()}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function DayCompletedModal({ day, isPreTraining, dayTitle, dayMetrics, completedDays, onFinish, onDismiss }) {
+  const streak = getStreak([...(completedDays || []), day]);
+  const snakeToCamel = { properties_analyzed: 'propertiesAnalyzed', offers_submitted: 'offersSubmitted', arsenal_contacts: 'dealSourcesActivated', follow_ups: 'followUps' };
+  const camelMetrics = {};
+  for (const [k, v] of Object.entries(dayMetrics || {})) {
+    const ck = snakeToCamel[k];
+    if (ck && typeof v === 'number') camelMetrics[ck] = v;
+  }
+  const pointsEarned = isPreTraining ? 0 : calculateDayPoints(camelMetrics);
+  const isPreWork = day <= 0;
+
+  return (
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) onDismiss(); }}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 9999,
+        background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: 20, animation: 'completionFadeIn 0.35s ease-out',
+      }}
+    >
+      <style>{`
+        @keyframes completionFadeIn {
+          from { opacity: 0; transform: scale(0.92); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes completionPulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.08); }
+        }
+      `}</style>
+      <div style={{
+        background: '#1a1a2e', border: '1px solid rgba(233,69,96,0.3)',
+        borderRadius: 20, padding: '48px 36px 36px', maxWidth: 420, width: '100%',
+        textAlign: 'center', position: 'relative',
+      }}>
+        <button
+          onClick={onDismiss}
+          style={{
+            position: 'absolute', top: 16, right: 16, background: 'none',
+            border: 'none', color: '#666', fontSize: 20, cursor: 'pointer',
+            padding: '4px 8px', lineHeight: 1,
+          }}
+          aria-label="Close"
+        >
+          ✕
+        </button>
+
+        <div style={{
+          fontSize: 56, marginBottom: 16,
+          animation: 'completionPulse 0.6s ease-in-out',
+        }}>
+          {isPreWork ? '✓' : '🎯'}
+        </div>
+
+        <h2 style={{
+          fontSize: 22, fontWeight: 800, marginBottom: 6,
+          color: '#fff',
+        }}>
+          {isPreWork ? 'Pre-Training Complete' : `Day ${day} Complete`}
+        </h2>
+
+        <p style={{
+          fontSize: 14, color: '#aaa', marginBottom: 28, lineHeight: 1.6,
+        }}>
+          {isPreWork
+            ? 'Foundation locked in. Every rep from here builds on this.'
+            : 'Another day of execution in the books. Operators don\'t wait for motivation — they build momentum.'}
+        </p>
+
+        <div style={{
+          display: 'flex', justifyContent: 'center', gap: 24, marginBottom: 32,
+        }}>
+          {streak > 0 && (
+            <div style={{
+              padding: '12px 20px', borderRadius: 12,
+              background: 'rgba(240,165,0,0.08)', border: '1px solid rgba(240,165,0,0.2)',
+            }}>
+              <div style={{ fontSize: 24, fontWeight: 800, color: '#f0a500' }}>{streak}</div>
+              <div style={{ fontSize: 11, color: '#888', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                Day Streak
+              </div>
+            </div>
+          )}
+          {pointsEarned > 0 && (
+            <div style={{
+              padding: '12px 20px', borderRadius: 12,
+              background: 'rgba(72,199,142,0.08)', border: '1px solid rgba(72,199,142,0.2)',
+            }}>
+              <div style={{ fontSize: 24, fontWeight: 800, color: '#48c78e' }}>+{pointsEarned}</div>
+              <div style={{ fontSize: 11, color: '#888', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                UC Points
+              </div>
+            </div>
+          )}
+        </div>
+
+        <button
+          onClick={onFinish}
+          className="btn-primary"
+          style={{
+            width: '100%', padding: '16px 24px', fontSize: 15, fontWeight: 700,
+            borderRadius: 12,
+          }}
+        >
+          Finish Day
+        </button>
       </div>
     </div>
   );

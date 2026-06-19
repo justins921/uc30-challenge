@@ -467,6 +467,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             user={user}
             onSubmit={onSubmit}
             onBack={handleBackToTimeline}
+            onNavigateToStats={() => { setSelectedDay(null); setTab('stats'); }}
             contentOverrides={contentOverrides}
             customPhases={customPhases}
             dailyMinimumsOverrides={dailyMinimumsOverrides}
