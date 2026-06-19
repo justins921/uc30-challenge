@@ -136,7 +136,10 @@ const supabaseStorage = {
       .select()
       .single();
 
-    if (error) { console.error('updateParticipant error:', error); return null; }
+    if (error) {
+      console.error('updateParticipant error:', error);
+      return { __error: error.message || 'Database update failed' };
+    }
     return data ? fromDbRow(data) : null;
   },
 

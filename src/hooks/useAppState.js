@@ -417,13 +417,39 @@ export function useAppState() {
       });
 
       if (signUpError) {
-        // If sign-up fails (e.g. email already in auth but wrong password),
-        // still allow login via legacy for now
-        console.warn('Legacy migration sign-up failed:', signUpError.message);
+        // Sign-up failed — auth account likely already exists with a different password.
+        // Retry signIn with this password (covers transient errors on first attempt).
+        const { data: retryAuth, error: retryError } = await supabase.auth.signInWithPassword({
+          email: email.trim().toLowerCase(),
+          password,
+        });
+
+        if (!retryError && retryAuth?.user) {
+          // Auth session established — link participant
+          if (existing.authId !== retryAuth.user.id) {
+            await storage.updateParticipant(existing.id, {
+              authId: retryAuth.user.id,
+              password: null,
+            });
+          }
+          setUser({ ...existing, authId: retryAuth.user.id });
+          setCurrentView(existing.isAdmin ? 'admin' : 'dashboard');
+          const allParticipants = await storage.getParticipants();
+          setParticipants(allParticipants || []);
+          return { success: true };
+        }
+
+        // Auth session could not be established — update the auth user's password
+        // to match the verified legacy password so future logins work.
+        // For now, log in without auth session (admin actions will be limited).
+        console.warn('Legacy migration: no auth session established.', signUpError.message);
         setUser(existing);
         setCurrentView(existing.isAdmin ? 'admin' : 'dashboard');
         const allParticipants = await storage.getParticipants();
         setParticipants(allParticipants || []);
+        if (existing.isAdmin) {
+          alert('Warning: Your login session has limited permissions. Admin actions like approvals may not work.\n\nTo fix this, please log out, use "Forgot Password" or re-register with the same email and a new password.');
+        }
         return { success: true };
       }
 
@@ -1094,7 +1120,7 @@ export function useAppState() {
       const allParticipants = await storage.getParticipants();
       setParticipants(allParticipants || []);
       await updateCohortStats(allParticipants || []);
-      if (user?.id === participantId && updated) {
+      if (user?.id === participantId && updated && !updated.__error) {
         setUser(updated);
         storage.setUser(updated);
       }
@@ -1121,7 +1147,11 @@ export function useAppState() {
 
   const approveParticipant = useCallback(async (participantId) => {
     if (isSupabaseEnabled) {
-      await storage.updateParticipant(participantId, { approved: true });
+      const result = await storage.updateParticipant(participantId, { approved: true });
+      if (result?.__error) {
+        alert(`Approval failed: ${result.__error}\n\nPlease log out and log back in, then try again.`);
+        return;
+      }
       const allParticipants = await storage.getParticipants();
       setParticipants(allParticipants || []);
     } else {
