@@ -4446,87 +4446,394 @@ Also be aggressively clear on your buy box and that you are ready to close if so
   {
     day: 7,
     title: "Reorganize & Recommit",
-    caption: "Self Reflection, Momentum & Building Your Edge",
-    taskDescription: "",
-    trainingContent: "",
-    isReflectionDay: true,
-    category: "foundation",
-    weekNumber: 1,
-    weekTitle: "BUILD THE FOUNDATION",
-    proofType: "screenshot",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
+    category: "mindset",
+    locked: true,
+    phaseId: 'foundation',
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WEEK 1 — REORGANIZE & RECOMMIT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Self Reflection, Momentum & Building Your Edge
+
+
+WHY THIS DAY MATTERS
+
+Most people start:
+excited, motivated, and optimistic.
+
+But after a few days:
+• fear,
+• overwhelm,
+• distractions,
+• lack of confidence,
+• or inconsistency
+begin to take over.
+
+Success in real estate rarely comes from motivation alone.
+
+It comes from:
+• consistency,
+• self-awareness,
+• adaptation,
+• and relentless execution.
+
+Today is about:
+• resetting,
+• reorganizing,
+• recommitting,
+• and building a strategy around YOUR strengths.
+
+
+RECOMMIT TO YOUR GOALS
+
+Before moving into the next phase of UC30, take time to reconnect with:
+• WHY you started,
+• what you actually want,
+• and what success looks like for you.
+
+Ask yourself:
+• Why do I want financial freedom?
+• Why do I want rental properties?
+• What am I trying to change about my life?
+• What would success actually look like?
+• What happens if I never take action?
+• What will life look like for me if I do? (Be detailed in describing every part of what your life will look like if you achieve your goals)
+
+Without strong reasons, people quit when things become difficult.
+
+
+REVISIT YOUR BUY BOX
+
+Your buy box should evolve as:
+• your knowledge improves,
+• your confidence grows,
+• and you better understand your market.
+
+Now is the time to review:
+• your target locations,
+• property types,
+• price ranges,
+• financing strategy,
+• cash flow goals,
+• risk tolerance,
+• and investment criteria.
+
+
+QUESTIONS TO ASK YOURSELF ABOUT YOUR BUY BOX
+
+• Am I targeting the right price range?
+• Am I analyzing the correct property type?
+• Am I trying to compete in markets that are too competitive?
+• Do I understand my target area well enough?
+• Is my buy box too broad?
+• Is my buy box too narrow?
+• Am I focusing on properties that actually fit my goals?
+
+
+DO NOT CHASE EVERY DEAL
+
+Many beginners waste time because they chase EVERYTHING.
+
+Focused investors:
+• become experts in a smaller target,
+• recognize opportunities faster,
+• analyze deals quicker,
+• and negotiate with more confidence.
+
+Clarity creates speed.
+
+
+IDENTIFY YOUR COMPETITIVE ADVANTAGE
+
+One of the biggest mistakes investors make is copying other people instead of leveraging their own strengths.
+
+Your edge may come from:
+• personality,
+• skills,
+• relationships,
+• career experience,
+• social media,
+• persistence,
+• communication,
+• networking,
+• construction knowledge,
+• sales ability,
+• marketing,
+• or local market expertise.
+
+The goal is NOT to become someone else.
+The goal is to figure out what advantages YOU already have.
+
+
+QUESTIONS TO IDENTIFY YOUR STRENGTHS
+
+• Am I naturally good with people?
+• Am I analytical?
+• Am I organized?
+• Am I creative?
+• Am I persistent?
+• Am I comfortable talking to strangers?
+• Am I good at sales?
+• Am I good at building relationships?
+• Do I understand construction?
+• Do I understand finance?
+• Do I have local market knowledge?
+• Do I already know investors, lenders, contractors, or agents?
+
+Your strengths should influence your strategy, your outreach, and your deal flow approach.
+
+
+CHOOSE THE BEST DEAL FLOW STRATEGY FOR YOU
+
+Different investors thrive using different methods. The BEST strategy is usually the one you will actually execute consistently.
+
+Relationship-Based
+Best for people who are outgoing, social, relationship-oriented, or strong communicators.
+Examples: networking, realtor relationships, investor meetups, referrals, property managers, or local connections.
+
+Marketing-Based
+Best for people who are persistent, organized, and willing to scale outreach.
+Examples: direct mail, texting, cold calling, social media, online ads, or driving for dollars.
+
+Analysis-Based
+Best for people who are highly analytical, detail-oriented, and disciplined.
+Examples: MLS analysis, Zillow searching, expired listings, rental analysis, and finding mispriced deals.
+
+Content & Personal Brand-Based
+Best for people who enjoy creating content, networking publicly, or building authority online.
+Examples: Instagram, YouTube, TikTok, Facebook groups, or local real estate content. Trust and relationships can create deal flow.
+
+
+PICK SOMETHING CRAZY THAT GIVES YOU AN EDGE
+
+Average effort creates average results.
+
+Ask yourself:
+"What can I do that most people are NOT willing to do?"
+
+Examples:
+• analyzing 20 deals per day,
+• calling 10 sellers daily,
+• attending every investor meetup,
+• posting content daily,
+• driving neighborhoods every morning,
+• building relationships with every property manager in town,
+• creating handwritten letters,
+• or becoming the local expert in one specific neighborhood.
+
+The goal is to create unfair momentum.
+
+
+IDENTIFY YOUR ROADBLOCKS
+
+Everyone has excuses, fears, limitations, or obstacles. Ignoring them does NOT solve them. Identify them honestly.
+
+Mental Roadblocks:
+• fear of failure,
+• fear of rejection,
+• fear of talking to sellers,
+• analysis paralysis,
+• lack of confidence,
+• perfectionism,
+• procrastination,
+• or inconsistency.
+
+Physical Or External Roadblocks:
+• lack of time,
+• lack of money,
+• lack of knowledge,
+• lack of relationships,
+• bad schedule,
+• family obligations,
+• poor organization,
+• or lack of systems.
+
+
+TURN ROADBLOCKS INTO ACTION PLANS
+
+Do NOT stop at identifying problems. Create solutions.
+
+"I'm scared to talk to sellers."
+Solution: practice conversations daily.
+
+"I don't know how to analyze deals."
+Solution: analyze 5 deals every single day.
+
+"I don't know anyone in real estate."
+Solution: attend meetups, call property managers, and build relationships intentionally.
+
+"I don't have enough confidence."
+Solution: gain confidence through repetition and preparation.
+
+
+BUILD A WEEKLY RESET HABIT
+
+Successful investors constantly review, adapt, and improve.
+
+Every week ask yourself:
+• What worked?
+• What didn't?
+• What created opportunities?
+• Where did I waste time?
+• What should I double down on?
+• What should I eliminate?
+
+The best investors continuously refine their strategy.
+
+
+WEEKLY CONFIDENCE SURVEY
+
+Rate yourself 1-10 on each of the following:
+
+• Confidence in your buy box and criteria
+• Confidence in your ability to analyze deals
+• Confidence in your ability to make offers
+• Confidence in your Arsenal contacts and relationships
+• Confidence in your deal flow strategy
+• Confidence in your follow-up consistency
+• Confidence in your ability to negotiate
+• Overall confidence as an investor
+
+Compare these scores to last week. Where did you improve? Where do you need more work?
+
+
+SELF-GRADE YOUR EFFORT
+
+On a scale of 1-10, how would you grade your effort this past week?
+
+• Daily analysis completed?
+• Arsenal contacts added or strengthened?
+• Offers submitted?
+• Follow-ups completed?
+• Training content studied?
+• Action taken on opportunities?
+
+Be honest. The goal is not perfection — the goal is progress and consistency.
+
+
+RECOMMIT TO EXECUTION
+
+Knowledge means NOTHING without action.
+
+You do NOT need:
+• perfect timing,
+• perfect confidence,
+• or perfect conditions.
+
+You need:
+• consistency,
+• discipline,
+• and action.
+
+Momentum compounds.
+
+
+FINAL REMINDER
+
+Most people quit right before momentum starts building.
+
+Stay consistent long enough to:
+• learn,
+• adapt,
+• improve,
+• and create opportunities.
+
+Your future portfolio will likely come from:
+• consistency,
+• relationships,
+• discipline,
+• and volume —
+far more than one "perfect" deal.
+
+
+TODAY'S SUGGESTED ARSENAL EXERCISE
+
+Write down:
+• your updated buy box,
+• your top 3 strengths,
+• your top 3 roadblocks,
+• your primary deal flow strategy,
+• and one "crazy" thing you will do this next week to create an edge.
+
+Then: recommit to taking action for the next 7 days regardless of fear, uncertainty, or emotion.
+`,
     quiz: {
       required: true,
       scenarios: [
         {
-          id: "day7_reflection",
-          title: "Weekly Reflection Quiz",
-          description: "Answer all 5 questions correctly to continue.",
-          maxAttempts: 3,
-          explanationOnFail: `Review the correct answers:
-
-1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
-2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
-3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
-4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
-5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
-          inputs: [
+          id: 'd7q1_recommit',
+          title: 'Reorganize & Recommit Quiz',
+          questions: [
             {
-              id: "day7_q1",
-              label: "1. What is one reason many investors fail to gain momentum?",
-              type: "multiple_choice",
-              options: ["They analyze too many deals", "They become inconsistent and lose focus", "They network too much", "They build too many relationships"],
-              correctAnswer: 1,
-            },
-            {
-              id: "day7_q2",
-              label: "2. What should influence your deal flow strategy the MOST?",
-              type: "multiple_choice",
+              id: 'd7q1_q1',
+              text: 'What is one reason many investors fail to gain momentum?',
+              type: 'multiple_choice',
               options: [
-                "What everyone else is doing",
-                "Your personal strengths and consistency",
-                "What sounds easiest",
-                "Which strategy requires the least effort",
+                'They analyze too many deals',
+                'They become inconsistent and lose focus',
+                'They network too much',
+                'They build too many relationships'
               ],
               correctAnswer: 1,
+              explanationOnFail: 'Inconsistency and losing focus are among the biggest reasons investors fail to build momentum.'
             },
             {
-              id: "day7_q3",
-              label: "3. Why is reviewing your buy box important?",
-              type: "multiple_choice",
+              id: 'd7q1_q2',
+              text: 'What should influence your deal flow strategy the MOST?',
+              type: 'multiple_choice',
               options: [
-                "Markets and goals can change as your knowledge improves",
-                "It guarantees better financing",
-                "It eliminates negotiation",
-                "It removes all investment risk",
+                'What everyone else is doing',
+                'Your personal strengths and consistency',
+                'What sounds easiest',
+                'Which strategy requires the least effort'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'The BEST deal flow strategy is usually the one that leverages your personal strengths and the one you will actually execute consistently.'
+            },
+            {
+              id: 'd7q1_q3',
+              text: 'Why is reviewing your buy box important?',
+              type: 'multiple_choice',
+              options: [
+                'Markets and goals can change as your knowledge improves',
+                'It guarantees better financing',
+                'It eliminates negotiation',
+                'It removes all investment risk'
               ],
               correctAnswer: 0,
+              explanationOnFail: 'Your buy box should evolve as your knowledge improves, your confidence grows, and you better understand your market.'
             },
             {
-              id: "day7_q4",
-              label: "4. What creates confidence in real estate investing?",
-              type: "multiple_choice",
-              options: ["Waiting longer before taking action", "Watching more videos only", "Repetition, preparation, and experience", "Finding perfect deals immediately"],
-              correctAnswer: 2,
-            },
-            {
-              id: "day7_q5",
-              label: "5. What usually creates long-term success in real estate investing?",
-              type: "multiple_choice",
+              id: 'd7q1_q4',
+              text: 'What creates confidence in real estate investing?',
+              type: 'multiple_choice',
               options: [
-                "One perfect deal",
-                "Aggressive risk taking",
-                "Consistency, discipline, and relationships",
-                "Buying the biggest property possible",
+                'Waiting longer before taking action',
+                'Watching more videos only',
+                'Repetition, preparation, and experience',
+                'Finding perfect deals immediately'
               ],
               correctAnswer: 2,
+              explanationOnFail: 'Confidence comes from repetition, preparation, and experience — not from waiting or consuming more content.'
             },
-          ],
-        },
-      ],
-    },
+            {
+              id: 'd7q1_q5',
+              text: 'What usually creates long-term success in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'One perfect deal',
+                'Aggressive risk taking',
+                'Consistency, discipline, and relationships',
+                'Buying the biggest property possible'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Long-term success comes from consistency, discipline, and relationships — far more than any single deal.'
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     day: 8,
@@ -9411,87 +9718,394 @@ Which opportunity should likely receive the most attention?`,
   {
     day: 14,
     title: "Reorganize & Recommit",
-    caption: "Self Reflection, Momentum & Building Your Edge",
-    taskDescription: "",
-    trainingContent: "",
-    isReflectionDay: true,
-    category: "pipeline",
-    weekNumber: 2,
-    weekTitle: "BUILD THE PIPELINE",
-    proofType: "screenshot",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
+    category: "mindset",
+    locked: true,
+    phaseId: 'execution',
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WEEK 2 — REORGANIZE & RECOMMIT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Self Reflection, Momentum & Building Your Edge
+
+
+WHY THIS DAY MATTERS
+
+Most people start:
+excited, motivated, and optimistic.
+
+But after a few days:
+• fear,
+• overwhelm,
+• distractions,
+• lack of confidence,
+• or inconsistency
+begin to take over.
+
+Success in real estate rarely comes from motivation alone.
+
+It comes from:
+• consistency,
+• self-awareness,
+• adaptation,
+• and relentless execution.
+
+Today is about:
+• resetting,
+• reorganizing,
+• recommitting,
+• and building a strategy around YOUR strengths.
+
+
+RECOMMIT TO YOUR GOALS
+
+Before moving into the next phase of UC30, take time to reconnect with:
+• WHY you started,
+• what you actually want,
+• and what success looks like for you.
+
+Ask yourself:
+• Why do I want financial freedom?
+• Why do I want rental properties?
+• What am I trying to change about my life?
+• What would success actually look like?
+• What happens if I never take action?
+• What will life look like for me if I do? (Be detailed in describing every part of what your life will look like if you achieve your goals)
+
+Without strong reasons, people quit when things become difficult.
+
+
+REVISIT YOUR BUY BOX
+
+Your buy box should evolve as:
+• your knowledge improves,
+• your confidence grows,
+• and you better understand your market.
+
+Now is the time to review:
+• your target locations,
+• property types,
+• price ranges,
+• financing strategy,
+• cash flow goals,
+• risk tolerance,
+• and investment criteria.
+
+
+QUESTIONS TO ASK YOURSELF ABOUT YOUR BUY BOX
+
+• Am I targeting the right price range?
+• Am I analyzing the correct property type?
+• Am I trying to compete in markets that are too competitive?
+• Do I understand my target area well enough?
+• Is my buy box too broad?
+• Is my buy box too narrow?
+• Am I focusing on properties that actually fit my goals?
+
+
+DO NOT CHASE EVERY DEAL
+
+Many beginners waste time because they chase EVERYTHING.
+
+Focused investors:
+• become experts in a smaller target,
+• recognize opportunities faster,
+• analyze deals quicker,
+• and negotiate with more confidence.
+
+Clarity creates speed.
+
+
+IDENTIFY YOUR COMPETITIVE ADVANTAGE
+
+One of the biggest mistakes investors make is copying other people instead of leveraging their own strengths.
+
+Your edge may come from:
+• personality,
+• skills,
+• relationships,
+• career experience,
+• social media,
+• persistence,
+• communication,
+• networking,
+• construction knowledge,
+• sales ability,
+• marketing,
+• or local market expertise.
+
+The goal is NOT to become someone else.
+The goal is to figure out what advantages YOU already have.
+
+
+QUESTIONS TO IDENTIFY YOUR STRENGTHS
+
+• Am I naturally good with people?
+• Am I analytical?
+• Am I organized?
+• Am I creative?
+• Am I persistent?
+• Am I comfortable talking to strangers?
+• Am I good at sales?
+• Am I good at building relationships?
+• Do I understand construction?
+• Do I understand finance?
+• Do I have local market knowledge?
+• Do I already know investors, lenders, contractors, or agents?
+
+Your strengths should influence your strategy, your outreach, and your deal flow approach.
+
+
+CHOOSE THE BEST DEAL FLOW STRATEGY FOR YOU
+
+Different investors thrive using different methods. The BEST strategy is usually the one you will actually execute consistently.
+
+Relationship-Based
+Best for people who are outgoing, social, relationship-oriented, or strong communicators.
+Examples: networking, realtor relationships, investor meetups, referrals, property managers, or local connections.
+
+Marketing-Based
+Best for people who are persistent, organized, and willing to scale outreach.
+Examples: direct mail, texting, cold calling, social media, online ads, or driving for dollars.
+
+Analysis-Based
+Best for people who are highly analytical, detail-oriented, and disciplined.
+Examples: MLS analysis, Zillow searching, expired listings, rental analysis, and finding mispriced deals.
+
+Content & Personal Brand-Based
+Best for people who enjoy creating content, networking publicly, or building authority online.
+Examples: Instagram, YouTube, TikTok, Facebook groups, or local real estate content. Trust and relationships can create deal flow.
+
+
+PICK SOMETHING CRAZY THAT GIVES YOU AN EDGE
+
+Average effort creates average results.
+
+Ask yourself:
+"What can I do that most people are NOT willing to do?"
+
+Examples:
+• analyzing 20 deals per day,
+• calling 10 sellers daily,
+• attending every investor meetup,
+• posting content daily,
+• driving neighborhoods every morning,
+• building relationships with every property manager in town,
+• creating handwritten letters,
+• or becoming the local expert in one specific neighborhood.
+
+The goal is to create unfair momentum.
+
+
+IDENTIFY YOUR ROADBLOCKS
+
+Everyone has excuses, fears, limitations, or obstacles. Ignoring them does NOT solve them. Identify them honestly.
+
+Mental Roadblocks:
+• fear of failure,
+• fear of rejection,
+• fear of talking to sellers,
+• analysis paralysis,
+• lack of confidence,
+• perfectionism,
+• procrastination,
+• or inconsistency.
+
+Physical Or External Roadblocks:
+• lack of time,
+• lack of money,
+• lack of knowledge,
+• lack of relationships,
+• bad schedule,
+• family obligations,
+• poor organization,
+• or lack of systems.
+
+
+TURN ROADBLOCKS INTO ACTION PLANS
+
+Do NOT stop at identifying problems. Create solutions.
+
+"I'm scared to talk to sellers."
+Solution: practice conversations daily.
+
+"I don't know how to analyze deals."
+Solution: analyze 5 deals every single day.
+
+"I don't know anyone in real estate."
+Solution: attend meetups, call property managers, and build relationships intentionally.
+
+"I don't have enough confidence."
+Solution: gain confidence through repetition and preparation.
+
+
+BUILD A WEEKLY RESET HABIT
+
+Successful investors constantly review, adapt, and improve.
+
+Every week ask yourself:
+• What worked?
+• What didn't?
+• What created opportunities?
+• Where did I waste time?
+• What should I double down on?
+• What should I eliminate?
+
+The best investors continuously refine their strategy.
+
+
+WEEKLY CONFIDENCE SURVEY
+
+Rate yourself 1-10 on each of the following:
+
+• Confidence in your buy box and criteria
+• Confidence in your ability to analyze deals
+• Confidence in your ability to make offers
+• Confidence in your Arsenal contacts and relationships
+• Confidence in your deal flow strategy
+• Confidence in your follow-up consistency
+• Confidence in your ability to negotiate
+• Overall confidence as an investor
+
+Compare these scores to last week. Where did you improve? Where do you need more work?
+
+
+SELF-GRADE YOUR EFFORT
+
+On a scale of 1-10, how would you grade your effort this past week?
+
+• Daily analysis completed?
+• Arsenal contacts added or strengthened?
+• Offers submitted?
+• Follow-ups completed?
+• Training content studied?
+• Action taken on opportunities?
+
+Be honest. The goal is not perfection — the goal is progress and consistency.
+
+
+RECOMMIT TO EXECUTION
+
+Knowledge means NOTHING without action.
+
+You do NOT need:
+• perfect timing,
+• perfect confidence,
+• or perfect conditions.
+
+You need:
+• consistency,
+• discipline,
+• and action.
+
+Momentum compounds.
+
+
+FINAL REMINDER
+
+Most people quit right before momentum starts building.
+
+Stay consistent long enough to:
+• learn,
+• adapt,
+• improve,
+• and create opportunities.
+
+Your future portfolio will likely come from:
+• consistency,
+• relationships,
+• discipline,
+• and volume —
+far more than one "perfect" deal.
+
+
+TODAY'S SUGGESTED ARSENAL EXERCISE
+
+Write down:
+• your updated buy box,
+• your top 3 strengths,
+• your top 3 roadblocks,
+• your primary deal flow strategy,
+• and one "crazy" thing you will do this next week to create an edge.
+
+Then: recommit to taking action for the next 7 days regardless of fear, uncertainty, or emotion.
+`,
     quiz: {
       required: true,
       scenarios: [
         {
-          id: "day14_reflection",
-          title: "Weekly Reflection Quiz",
-          description: "Answer all 5 questions correctly to continue.",
-          maxAttempts: 3,
-          explanationOnFail: `Review the correct answers:
-
-1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
-2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
-3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
-4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
-5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
-          inputs: [
+          id: 'd14q1_recommit',
+          title: 'Reorganize & Recommit Quiz',
+          questions: [
             {
-              id: "day14_q1",
-              label: "1. What is one reason many investors fail to gain momentum?",
-              type: "multiple_choice",
-              options: ["They analyze too many deals", "They become inconsistent and lose focus", "They network too much", "They build too many relationships"],
-              correctAnswer: 1,
-            },
-            {
-              id: "day14_q2",
-              label: "2. What should influence your deal flow strategy the MOST?",
-              type: "multiple_choice",
+              id: 'd14q1_q1',
+              text: 'What is one reason many investors fail to gain momentum?',
+              type: 'multiple_choice',
               options: [
-                "What everyone else is doing",
-                "Your personal strengths and consistency",
-                "What sounds easiest",
-                "Which strategy requires the least effort",
+                'They analyze too many deals',
+                'They become inconsistent and lose focus',
+                'They network too much',
+                'They build too many relationships'
               ],
               correctAnswer: 1,
+              explanationOnFail: 'Inconsistency and losing focus are among the biggest reasons investors fail to build momentum.'
             },
             {
-              id: "day14_q3",
-              label: "3. Why is reviewing your buy box important?",
-              type: "multiple_choice",
+              id: 'd14q1_q2',
+              text: 'What should influence your deal flow strategy the MOST?',
+              type: 'multiple_choice',
               options: [
-                "Markets and goals can change as your knowledge improves",
-                "It guarantees better financing",
-                "It eliminates negotiation",
-                "It removes all investment risk",
+                'What everyone else is doing',
+                'Your personal strengths and consistency',
+                'What sounds easiest',
+                'Which strategy requires the least effort'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'The BEST deal flow strategy is usually the one that leverages your personal strengths and the one you will actually execute consistently.'
+            },
+            {
+              id: 'd14q1_q3',
+              text: 'Why is reviewing your buy box important?',
+              type: 'multiple_choice',
+              options: [
+                'Markets and goals can change as your knowledge improves',
+                'It guarantees better financing',
+                'It eliminates negotiation',
+                'It removes all investment risk'
               ],
               correctAnswer: 0,
+              explanationOnFail: 'Your buy box should evolve as your knowledge improves, your confidence grows, and you better understand your market.'
             },
             {
-              id: "day14_q4",
-              label: "4. What creates confidence in real estate investing?",
-              type: "multiple_choice",
-              options: ["Waiting longer before taking action", "Watching more videos only", "Repetition, preparation, and experience", "Finding perfect deals immediately"],
-              correctAnswer: 2,
-            },
-            {
-              id: "day14_q5",
-              label: "5. What usually creates long-term success in real estate investing?",
-              type: "multiple_choice",
+              id: 'd14q1_q4',
+              text: 'What creates confidence in real estate investing?',
+              type: 'multiple_choice',
               options: [
-                "One perfect deal",
-                "Aggressive risk taking",
-                "Consistency, discipline, and relationships",
-                "Buying the biggest property possible",
+                'Waiting longer before taking action',
+                'Watching more videos only',
+                'Repetition, preparation, and experience',
+                'Finding perfect deals immediately'
               ],
               correctAnswer: 2,
+              explanationOnFail: 'Confidence comes from repetition, preparation, and experience — not from waiting or consuming more content.'
             },
-          ],
-        },
-      ],
-    },
+            {
+              id: 'd14q1_q5',
+              text: 'What usually creates long-term success in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'One perfect deal',
+                'Aggressive risk taking',
+                'Consistency, discipline, and relationships',
+                'Buying the biggest property possible'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Long-term success comes from consistency, discipline, and relationships — far more than any single deal.'
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     day: 15,
@@ -10168,87 +10782,394 @@ The goal is helping them gain enough clarity to make a decision.`,
   {
     day: 21,
     title: "Reorganize & Recommit",
-    caption: "Self Reflection, Momentum & Building Your Edge",
-    taskDescription: "",
-    trainingContent: "",
-    isReflectionDay: true,
-    category: "pressure",
-    weekNumber: 3,
-    weekTitle: "APPLY PRESSURE",
-    proofType: "screenshot",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
+    category: "mindset",
+    locked: true,
+    phaseId: 'mastery',
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WEEK 3 — REORGANIZE & RECOMMIT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Self Reflection, Momentum & Building Your Edge
+
+
+WHY THIS DAY MATTERS
+
+Most people start:
+excited, motivated, and optimistic.
+
+But after a few days:
+• fear,
+• overwhelm,
+• distractions,
+• lack of confidence,
+• or inconsistency
+begin to take over.
+
+Success in real estate rarely comes from motivation alone.
+
+It comes from:
+• consistency,
+• self-awareness,
+• adaptation,
+• and relentless execution.
+
+Today is about:
+• resetting,
+• reorganizing,
+• recommitting,
+• and building a strategy around YOUR strengths.
+
+
+RECOMMIT TO YOUR GOALS
+
+Before moving into the next phase of UC30, take time to reconnect with:
+• WHY you started,
+• what you actually want,
+• and what success looks like for you.
+
+Ask yourself:
+• Why do I want financial freedom?
+• Why do I want rental properties?
+• What am I trying to change about my life?
+• What would success actually look like?
+• What happens if I never take action?
+• What will life look like for me if I do? (Be detailed in describing every part of what your life will look like if you achieve your goals)
+
+Without strong reasons, people quit when things become difficult.
+
+
+REVISIT YOUR BUY BOX
+
+Your buy box should evolve as:
+• your knowledge improves,
+• your confidence grows,
+• and you better understand your market.
+
+Now is the time to review:
+• your target locations,
+• property types,
+• price ranges,
+• financing strategy,
+• cash flow goals,
+• risk tolerance,
+• and investment criteria.
+
+
+QUESTIONS TO ASK YOURSELF ABOUT YOUR BUY BOX
+
+• Am I targeting the right price range?
+• Am I analyzing the correct property type?
+• Am I trying to compete in markets that are too competitive?
+• Do I understand my target area well enough?
+• Is my buy box too broad?
+• Is my buy box too narrow?
+• Am I focusing on properties that actually fit my goals?
+
+
+DO NOT CHASE EVERY DEAL
+
+Many beginners waste time because they chase EVERYTHING.
+
+Focused investors:
+• become experts in a smaller target,
+• recognize opportunities faster,
+• analyze deals quicker,
+• and negotiate with more confidence.
+
+Clarity creates speed.
+
+
+IDENTIFY YOUR COMPETITIVE ADVANTAGE
+
+One of the biggest mistakes investors make is copying other people instead of leveraging their own strengths.
+
+Your edge may come from:
+• personality,
+• skills,
+• relationships,
+• career experience,
+• social media,
+• persistence,
+• communication,
+• networking,
+• construction knowledge,
+• sales ability,
+• marketing,
+• or local market expertise.
+
+The goal is NOT to become someone else.
+The goal is to figure out what advantages YOU already have.
+
+
+QUESTIONS TO IDENTIFY YOUR STRENGTHS
+
+• Am I naturally good with people?
+• Am I analytical?
+• Am I organized?
+• Am I creative?
+• Am I persistent?
+• Am I comfortable talking to strangers?
+• Am I good at sales?
+• Am I good at building relationships?
+• Do I understand construction?
+• Do I understand finance?
+• Do I have local market knowledge?
+• Do I already know investors, lenders, contractors, or agents?
+
+Your strengths should influence your strategy, your outreach, and your deal flow approach.
+
+
+CHOOSE THE BEST DEAL FLOW STRATEGY FOR YOU
+
+Different investors thrive using different methods. The BEST strategy is usually the one you will actually execute consistently.
+
+Relationship-Based
+Best for people who are outgoing, social, relationship-oriented, or strong communicators.
+Examples: networking, realtor relationships, investor meetups, referrals, property managers, or local connections.
+
+Marketing-Based
+Best for people who are persistent, organized, and willing to scale outreach.
+Examples: direct mail, texting, cold calling, social media, online ads, or driving for dollars.
+
+Analysis-Based
+Best for people who are highly analytical, detail-oriented, and disciplined.
+Examples: MLS analysis, Zillow searching, expired listings, rental analysis, and finding mispriced deals.
+
+Content & Personal Brand-Based
+Best for people who enjoy creating content, networking publicly, or building authority online.
+Examples: Instagram, YouTube, TikTok, Facebook groups, or local real estate content. Trust and relationships can create deal flow.
+
+
+PICK SOMETHING CRAZY THAT GIVES YOU AN EDGE
+
+Average effort creates average results.
+
+Ask yourself:
+"What can I do that most people are NOT willing to do?"
+
+Examples:
+• analyzing 20 deals per day,
+• calling 10 sellers daily,
+• attending every investor meetup,
+• posting content daily,
+• driving neighborhoods every morning,
+• building relationships with every property manager in town,
+• creating handwritten letters,
+• or becoming the local expert in one specific neighborhood.
+
+The goal is to create unfair momentum.
+
+
+IDENTIFY YOUR ROADBLOCKS
+
+Everyone has excuses, fears, limitations, or obstacles. Ignoring them does NOT solve them. Identify them honestly.
+
+Mental Roadblocks:
+• fear of failure,
+• fear of rejection,
+• fear of talking to sellers,
+• analysis paralysis,
+• lack of confidence,
+• perfectionism,
+• procrastination,
+• or inconsistency.
+
+Physical Or External Roadblocks:
+• lack of time,
+• lack of money,
+• lack of knowledge,
+• lack of relationships,
+• bad schedule,
+• family obligations,
+• poor organization,
+• or lack of systems.
+
+
+TURN ROADBLOCKS INTO ACTION PLANS
+
+Do NOT stop at identifying problems. Create solutions.
+
+"I'm scared to talk to sellers."
+Solution: practice conversations daily.
+
+"I don't know how to analyze deals."
+Solution: analyze 5 deals every single day.
+
+"I don't know anyone in real estate."
+Solution: attend meetups, call property managers, and build relationships intentionally.
+
+"I don't have enough confidence."
+Solution: gain confidence through repetition and preparation.
+
+
+BUILD A WEEKLY RESET HABIT
+
+Successful investors constantly review, adapt, and improve.
+
+Every week ask yourself:
+• What worked?
+• What didn't?
+• What created opportunities?
+• Where did I waste time?
+• What should I double down on?
+• What should I eliminate?
+
+The best investors continuously refine their strategy.
+
+
+WEEKLY CONFIDENCE SURVEY
+
+Rate yourself 1-10 on each of the following:
+
+• Confidence in your buy box and criteria
+• Confidence in your ability to analyze deals
+• Confidence in your ability to make offers
+• Confidence in your Arsenal contacts and relationships
+• Confidence in your deal flow strategy
+• Confidence in your follow-up consistency
+• Confidence in your ability to negotiate
+• Overall confidence as an investor
+
+Compare these scores to last week. Where did you improve? Where do you need more work?
+
+
+SELF-GRADE YOUR EFFORT
+
+On a scale of 1-10, how would you grade your effort this past week?
+
+• Daily analysis completed?
+• Arsenal contacts added or strengthened?
+• Offers submitted?
+• Follow-ups completed?
+• Training content studied?
+• Action taken on opportunities?
+
+Be honest. The goal is not perfection — the goal is progress and consistency.
+
+
+RECOMMIT TO EXECUTION
+
+Knowledge means NOTHING without action.
+
+You do NOT need:
+• perfect timing,
+• perfect confidence,
+• or perfect conditions.
+
+You need:
+• consistency,
+• discipline,
+• and action.
+
+Momentum compounds.
+
+
+FINAL REMINDER
+
+Most people quit right before momentum starts building.
+
+Stay consistent long enough to:
+• learn,
+• adapt,
+• improve,
+• and create opportunities.
+
+Your future portfolio will likely come from:
+• consistency,
+• relationships,
+• discipline,
+• and volume —
+far more than one "perfect" deal.
+
+
+TODAY'S SUGGESTED ARSENAL EXERCISE
+
+Write down:
+• your updated buy box,
+• your top 3 strengths,
+• your top 3 roadblocks,
+• your primary deal flow strategy,
+• and one "crazy" thing you will do this next week to create an edge.
+
+Then: recommit to taking action for the next 7 days regardless of fear, uncertainty, or emotion.
+`,
     quiz: {
       required: true,
       scenarios: [
         {
-          id: "day21_reflection",
-          title: "Weekly Reflection Quiz",
-          description: "Answer all 5 questions correctly to continue.",
-          maxAttempts: 3,
-          explanationOnFail: `Review the correct answers:
-
-1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
-2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
-3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
-4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
-5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
-          inputs: [
+          id: 'd21q1_recommit',
+          title: 'Reorganize & Recommit Quiz',
+          questions: [
             {
-              id: "day21_q1",
-              label: "1. What is one reason many investors fail to gain momentum?",
-              type: "multiple_choice",
-              options: ["They analyze too many deals", "They become inconsistent and lose focus", "They network too much", "They build too many relationships"],
-              correctAnswer: 1,
-            },
-            {
-              id: "day21_q2",
-              label: "2. What should influence your deal flow strategy the MOST?",
-              type: "multiple_choice",
+              id: 'd21q1_q1',
+              text: 'What is one reason many investors fail to gain momentum?',
+              type: 'multiple_choice',
               options: [
-                "What everyone else is doing",
-                "Your personal strengths and consistency",
-                "What sounds easiest",
-                "Which strategy requires the least effort",
+                'They analyze too many deals',
+                'They become inconsistent and lose focus',
+                'They network too much',
+                'They build too many relationships'
               ],
               correctAnswer: 1,
+              explanationOnFail: 'Inconsistency and losing focus are among the biggest reasons investors fail to build momentum.'
             },
             {
-              id: "day21_q3",
-              label: "3. Why is reviewing your buy box important?",
-              type: "multiple_choice",
+              id: 'd21q1_q2',
+              text: 'What should influence your deal flow strategy the MOST?',
+              type: 'multiple_choice',
               options: [
-                "Markets and goals can change as your knowledge improves",
-                "It guarantees better financing",
-                "It eliminates negotiation",
-                "It removes all investment risk",
+                'What everyone else is doing',
+                'Your personal strengths and consistency',
+                'What sounds easiest',
+                'Which strategy requires the least effort'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'The BEST deal flow strategy is usually the one that leverages your personal strengths and the one you will actually execute consistently.'
+            },
+            {
+              id: 'd21q1_q3',
+              text: 'Why is reviewing your buy box important?',
+              type: 'multiple_choice',
+              options: [
+                'Markets and goals can change as your knowledge improves',
+                'It guarantees better financing',
+                'It eliminates negotiation',
+                'It removes all investment risk'
               ],
               correctAnswer: 0,
+              explanationOnFail: 'Your buy box should evolve as your knowledge improves, your confidence grows, and you better understand your market.'
             },
             {
-              id: "day21_q4",
-              label: "4. What creates confidence in real estate investing?",
-              type: "multiple_choice",
-              options: ["Waiting longer before taking action", "Watching more videos only", "Repetition, preparation, and experience", "Finding perfect deals immediately"],
-              correctAnswer: 2,
-            },
-            {
-              id: "day21_q5",
-              label: "5. What usually creates long-term success in real estate investing?",
-              type: "multiple_choice",
+              id: 'd21q1_q4',
+              text: 'What creates confidence in real estate investing?',
+              type: 'multiple_choice',
               options: [
-                "One perfect deal",
-                "Aggressive risk taking",
-                "Consistency, discipline, and relationships",
-                "Buying the biggest property possible",
+                'Waiting longer before taking action',
+                'Watching more videos only',
+                'Repetition, preparation, and experience',
+                'Finding perfect deals immediately'
               ],
               correctAnswer: 2,
+              explanationOnFail: 'Confidence comes from repetition, preparation, and experience — not from waiting or consuming more content.'
             },
-          ],
-        },
-      ],
-    },
+            {
+              id: 'd21q1_q5',
+              text: 'What usually creates long-term success in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'One perfect deal',
+                'Aggressive risk taking',
+                'Consistency, discipline, and relationships',
+                'Buying the biggest property possible'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Long-term success comes from consistency, discipline, and relationships — far more than any single deal.'
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     day: 22,
@@ -10331,87 +11252,394 @@ The goal is helping them gain enough clarity to make a decision.`,
   {
     day: 28,
     title: "Reorganize & Recommit",
-    caption: "Self Reflection, Momentum & Building Your Edge",
-    taskDescription: "",
-    trainingContent: "",
-    isReflectionDay: true,
-    category: "sprint",
-    weekNumber: 4,
-    weekTitle: "FULL SPRINT",
-    proofType: "screenshot",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
+    category: "mindset",
+    locked: true,
+    phaseId: 'mastery',
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WEEK 4 — REORGANIZE & RECOMMIT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Self Reflection, Momentum & Building Your Edge
+
+
+WHY THIS DAY MATTERS
+
+Most people start:
+excited, motivated, and optimistic.
+
+But after a few days:
+• fear,
+• overwhelm,
+• distractions,
+• lack of confidence,
+• or inconsistency
+begin to take over.
+
+Success in real estate rarely comes from motivation alone.
+
+It comes from:
+• consistency,
+• self-awareness,
+• adaptation,
+• and relentless execution.
+
+Today is about:
+• resetting,
+• reorganizing,
+• recommitting,
+• and building a strategy around YOUR strengths.
+
+
+RECOMMIT TO YOUR GOALS
+
+Before moving into the next phase of UC30, take time to reconnect with:
+• WHY you started,
+• what you actually want,
+• and what success looks like for you.
+
+Ask yourself:
+• Why do I want financial freedom?
+• Why do I want rental properties?
+• What am I trying to change about my life?
+• What would success actually look like?
+• What happens if I never take action?
+• What will life look like for me if I do? (Be detailed in describing every part of what your life will look like if you achieve your goals)
+
+Without strong reasons, people quit when things become difficult.
+
+
+REVISIT YOUR BUY BOX
+
+Your buy box should evolve as:
+• your knowledge improves,
+• your confidence grows,
+• and you better understand your market.
+
+Now is the time to review:
+• your target locations,
+• property types,
+• price ranges,
+• financing strategy,
+• cash flow goals,
+• risk tolerance,
+• and investment criteria.
+
+
+QUESTIONS TO ASK YOURSELF ABOUT YOUR BUY BOX
+
+• Am I targeting the right price range?
+• Am I analyzing the correct property type?
+• Am I trying to compete in markets that are too competitive?
+• Do I understand my target area well enough?
+• Is my buy box too broad?
+• Is my buy box too narrow?
+• Am I focusing on properties that actually fit my goals?
+
+
+DO NOT CHASE EVERY DEAL
+
+Many beginners waste time because they chase EVERYTHING.
+
+Focused investors:
+• become experts in a smaller target,
+• recognize opportunities faster,
+• analyze deals quicker,
+• and negotiate with more confidence.
+
+Clarity creates speed.
+
+
+IDENTIFY YOUR COMPETITIVE ADVANTAGE
+
+One of the biggest mistakes investors make is copying other people instead of leveraging their own strengths.
+
+Your edge may come from:
+• personality,
+• skills,
+• relationships,
+• career experience,
+• social media,
+• persistence,
+• communication,
+• networking,
+• construction knowledge,
+• sales ability,
+• marketing,
+• or local market expertise.
+
+The goal is NOT to become someone else.
+The goal is to figure out what advantages YOU already have.
+
+
+QUESTIONS TO IDENTIFY YOUR STRENGTHS
+
+• Am I naturally good with people?
+• Am I analytical?
+• Am I organized?
+• Am I creative?
+• Am I persistent?
+• Am I comfortable talking to strangers?
+• Am I good at sales?
+• Am I good at building relationships?
+• Do I understand construction?
+• Do I understand finance?
+• Do I have local market knowledge?
+• Do I already know investors, lenders, contractors, or agents?
+
+Your strengths should influence your strategy, your outreach, and your deal flow approach.
+
+
+CHOOSE THE BEST DEAL FLOW STRATEGY FOR YOU
+
+Different investors thrive using different methods. The BEST strategy is usually the one you will actually execute consistently.
+
+Relationship-Based
+Best for people who are outgoing, social, relationship-oriented, or strong communicators.
+Examples: networking, realtor relationships, investor meetups, referrals, property managers, or local connections.
+
+Marketing-Based
+Best for people who are persistent, organized, and willing to scale outreach.
+Examples: direct mail, texting, cold calling, social media, online ads, or driving for dollars.
+
+Analysis-Based
+Best for people who are highly analytical, detail-oriented, and disciplined.
+Examples: MLS analysis, Zillow searching, expired listings, rental analysis, and finding mispriced deals.
+
+Content & Personal Brand-Based
+Best for people who enjoy creating content, networking publicly, or building authority online.
+Examples: Instagram, YouTube, TikTok, Facebook groups, or local real estate content. Trust and relationships can create deal flow.
+
+
+PICK SOMETHING CRAZY THAT GIVES YOU AN EDGE
+
+Average effort creates average results.
+
+Ask yourself:
+"What can I do that most people are NOT willing to do?"
+
+Examples:
+• analyzing 20 deals per day,
+• calling 10 sellers daily,
+• attending every investor meetup,
+• posting content daily,
+• driving neighborhoods every morning,
+• building relationships with every property manager in town,
+• creating handwritten letters,
+• or becoming the local expert in one specific neighborhood.
+
+The goal is to create unfair momentum.
+
+
+IDENTIFY YOUR ROADBLOCKS
+
+Everyone has excuses, fears, limitations, or obstacles. Ignoring them does NOT solve them. Identify them honestly.
+
+Mental Roadblocks:
+• fear of failure,
+• fear of rejection,
+• fear of talking to sellers,
+• analysis paralysis,
+• lack of confidence,
+• perfectionism,
+• procrastination,
+• or inconsistency.
+
+Physical Or External Roadblocks:
+• lack of time,
+• lack of money,
+• lack of knowledge,
+• lack of relationships,
+• bad schedule,
+• family obligations,
+• poor organization,
+• or lack of systems.
+
+
+TURN ROADBLOCKS INTO ACTION PLANS
+
+Do NOT stop at identifying problems. Create solutions.
+
+"I'm scared to talk to sellers."
+Solution: practice conversations daily.
+
+"I don't know how to analyze deals."
+Solution: analyze 5 deals every single day.
+
+"I don't know anyone in real estate."
+Solution: attend meetups, call property managers, and build relationships intentionally.
+
+"I don't have enough confidence."
+Solution: gain confidence through repetition and preparation.
+
+
+BUILD A WEEKLY RESET HABIT
+
+Successful investors constantly review, adapt, and improve.
+
+Every week ask yourself:
+• What worked?
+• What didn't?
+• What created opportunities?
+• Where did I waste time?
+• What should I double down on?
+• What should I eliminate?
+
+The best investors continuously refine their strategy.
+
+
+WEEKLY CONFIDENCE SURVEY
+
+Rate yourself 1-10 on each of the following:
+
+• Confidence in your buy box and criteria
+• Confidence in your ability to analyze deals
+• Confidence in your ability to make offers
+• Confidence in your Arsenal contacts and relationships
+• Confidence in your deal flow strategy
+• Confidence in your follow-up consistency
+• Confidence in your ability to negotiate
+• Overall confidence as an investor
+
+Compare these scores to last week. Where did you improve? Where do you need more work?
+
+
+SELF-GRADE YOUR EFFORT
+
+On a scale of 1-10, how would you grade your effort this past week?
+
+• Daily analysis completed?
+• Arsenal contacts added or strengthened?
+• Offers submitted?
+• Follow-ups completed?
+• Training content studied?
+• Action taken on opportunities?
+
+Be honest. The goal is not perfection — the goal is progress and consistency.
+
+
+RECOMMIT TO EXECUTION
+
+Knowledge means NOTHING without action.
+
+You do NOT need:
+• perfect timing,
+• perfect confidence,
+• or perfect conditions.
+
+You need:
+• consistency,
+• discipline,
+• and action.
+
+Momentum compounds.
+
+
+FINAL REMINDER
+
+Most people quit right before momentum starts building.
+
+Stay consistent long enough to:
+• learn,
+• adapt,
+• improve,
+• and create opportunities.
+
+Your future portfolio will likely come from:
+• consistency,
+• relationships,
+• discipline,
+• and volume —
+far more than one "perfect" deal.
+
+
+TODAY'S SUGGESTED ARSENAL EXERCISE
+
+Write down:
+• your updated buy box,
+• your top 3 strengths,
+• your top 3 roadblocks,
+• your primary deal flow strategy,
+• and one "crazy" thing you will do this next week to create an edge.
+
+Then: recommit to taking action for the next 7 days regardless of fear, uncertainty, or emotion.
+`,
     quiz: {
       required: true,
       scenarios: [
         {
-          id: "day28_reflection",
-          title: "Weekly Reflection Quiz",
-          description: "Answer all 5 questions correctly to continue.",
-          maxAttempts: 3,
-          explanationOnFail: `Review the correct answers:
-
-1. Inconsistency and losing focus is one of the main reasons investors fail to gain momentum.
-2. Your deal flow strategy should be based on your personal strengths and what you can execute consistently.
-3. Markets, goals, and knowledge evolve — reviewing your buy box keeps you focused on the right opportunities.
-4. Confidence comes from repetition, preparation, and experience — not from waiting or watching.
-5. Consistency, discipline, and relationships create long-term success far more than any single deal.`,
-          inputs: [
+          id: 'd28q1_recommit',
+          title: 'Reorganize & Recommit Quiz',
+          questions: [
             {
-              id: "day28_q1",
-              label: "1. What is one reason many investors fail to gain momentum?",
-              type: "multiple_choice",
-              options: ["They analyze too many deals", "They become inconsistent and lose focus", "They network too much", "They build too many relationships"],
-              correctAnswer: 1,
-            },
-            {
-              id: "day28_q2",
-              label: "2. What should influence your deal flow strategy the MOST?",
-              type: "multiple_choice",
+              id: 'd28q1_q1',
+              text: 'What is one reason many investors fail to gain momentum?',
+              type: 'multiple_choice',
               options: [
-                "What everyone else is doing",
-                "Your personal strengths and consistency",
-                "What sounds easiest",
-                "Which strategy requires the least effort",
+                'They analyze too many deals',
+                'They become inconsistent and lose focus',
+                'They network too much',
+                'They build too many relationships'
               ],
               correctAnswer: 1,
+              explanationOnFail: 'Inconsistency and losing focus are among the biggest reasons investors fail to build momentum.'
             },
             {
-              id: "day28_q3",
-              label: "3. Why is reviewing your buy box important?",
-              type: "multiple_choice",
+              id: 'd28q1_q2',
+              text: 'What should influence your deal flow strategy the MOST?',
+              type: 'multiple_choice',
               options: [
-                "Markets and goals can change as your knowledge improves",
-                "It guarantees better financing",
-                "It eliminates negotiation",
-                "It removes all investment risk",
+                'What everyone else is doing',
+                'Your personal strengths and consistency',
+                'What sounds easiest',
+                'Which strategy requires the least effort'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'The BEST deal flow strategy is usually the one that leverages your personal strengths and the one you will actually execute consistently.'
+            },
+            {
+              id: 'd28q1_q3',
+              text: 'Why is reviewing your buy box important?',
+              type: 'multiple_choice',
+              options: [
+                'Markets and goals can change as your knowledge improves',
+                'It guarantees better financing',
+                'It eliminates negotiation',
+                'It removes all investment risk'
               ],
               correctAnswer: 0,
+              explanationOnFail: 'Your buy box should evolve as your knowledge improves, your confidence grows, and you better understand your market.'
             },
             {
-              id: "day28_q4",
-              label: "4. What creates confidence in real estate investing?",
-              type: "multiple_choice",
-              options: ["Waiting longer before taking action", "Watching more videos only", "Repetition, preparation, and experience", "Finding perfect deals immediately"],
-              correctAnswer: 2,
-            },
-            {
-              id: "day28_q5",
-              label: "5. What usually creates long-term success in real estate investing?",
-              type: "multiple_choice",
+              id: 'd28q1_q4',
+              text: 'What creates confidence in real estate investing?',
+              type: 'multiple_choice',
               options: [
-                "One perfect deal",
-                "Aggressive risk taking",
-                "Consistency, discipline, and relationships",
-                "Buying the biggest property possible",
+                'Waiting longer before taking action',
+                'Watching more videos only',
+                'Repetition, preparation, and experience',
+                'Finding perfect deals immediately'
               ],
               correctAnswer: 2,
+              explanationOnFail: 'Confidence comes from repetition, preparation, and experience — not from waiting or consuming more content.'
             },
-          ],
-        },
-      ],
-    },
+            {
+              id: 'd28q1_q5',
+              text: 'What usually creates long-term success in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'One perfect deal',
+                'Aggressive risk taking',
+                'Consistency, discipline, and relationships',
+                'Buying the biggest property possible'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Long-term success comes from consistency, discipline, and relationships — far more than any single deal.'
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     day: 29,
