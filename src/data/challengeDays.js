@@ -4448,6 +4448,7 @@ Also be aggressively clear on your buy box and that you are ready to close if so
     title: "Reorganize & Recommit",
     category: "mindset",
     locked: true,
+    isReflectionDay: true,
     phaseId: 'foundation',
     trainingContent: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -9184,6 +9185,7 @@ Which opportunity should likely receive the most attention?`,
     title: "Reorganize & Recommit",
     category: "mindset",
     locked: true,
+    isReflectionDay: true,
     phaseId: 'execution',
     trainingContent: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -10248,6 +10250,7 @@ The goal is helping them gain enough clarity to make a decision.`,
     title: "Reorganize & Recommit",
     category: "mindset",
     locked: true,
+    isReflectionDay: true,
     phaseId: 'mastery',
     trainingContent: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -10718,6 +10721,7 @@ Then: recommit to taking action for the next 7 days regardless of fear, uncertai
     title: "Reorganize & Recommit",
     category: "mindset",
     locked: true,
+    isReflectionDay: true,
     phaseId: 'mastery',
     trainingContent: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
