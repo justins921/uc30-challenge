@@ -6564,926 +6564,830 @@ KEY TAKEAWAY: Average investors negotiate price. Great investors negotiate struc
       ]
     }
   },
-  {
+    {
     day: 10,
     title: "Becoming the Go-To Buyer",
-    caption: "Build your reputation and become the buyer everyone wants to work with.",
-    taskDescription: "",
-    trainingContent: "",
-    category: "pipeline",
-    weekNumber: 2,
-    weekTitle: "BUILD THE PIPELINE",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    sections: [
-      {
-        type: "training",
-        title: "Confidence Through Repetition",
-        content: `Why This Matters
+    phase: "Phase 2: Offers & Negotiation",
+    phaseId: "offers",
+    trainingContent: `DAY 10 — BECOMING THE GO-TO BUYER
 
-By now you have already done things that most investors never do.
+Today combines two critical training sections: Confidence Through Repetition and Becoming The Go-To Buyer. Together, they show you how to build the internal confidence AND external reputation that create lasting deal flow.
 
-You have:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-analyzed properties,
-submitted offers,
-talked to sellers,
-talked to realtors,
-talked to wholesalers,
-negotiated,
-followed up,
-refined your buy box,
-and taken action.
+TRAINING BLOCK 1 — CONFIDENCE THROUGH REPETITION
 
-The majority of people who say they want to invest in real estate never even make it this far.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Take a minute and recognize that.
+WHY MOST INVESTORS QUIT RIGHT BEFORE SUCCESS
 
-You are no longer preparing to become an investor.
+By now you have already done things that most investors never do. You have:
+• Analyzed properties
+• Submitted offers
+• Talked to sellers
+• Talked to realtors
+• Talked to wholesalers
+• Negotiated
+• Followed up
+• Refined your buy box
+• Taken action
 
-You are already acting like one.
+The majority of people who say they want to invest in real estate never even make it this far. Take a minute and recognize that. You are no longer preparing to become an investor. You are already acting like one.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Confidence Is Earned
+CONFIDENCE IS EARNED
 
 Many people think confidence comes first.
 
-They believe:
+They believe: Confidence → Action
 
-Confidence → Action
+But that is backwards. The reality is: Action → Experience → Confidence
 
-But that is backwards.
-
-The reality is:
-
-Action → Experience → Confidence
-
-Confidence is not something you magically develop.
-
-Confidence is evidence.
-
-Every property analyzed.
-
-Every seller called.
-
-Every offer submitted.
-
-Every negotiation completed.
+Confidence is not something you magically develop. Confidence is evidence.
+• Every property analyzed
+• Every seller called
+• Every offer submitted
+• Every negotiation completed
 
 All of those things become proof that you are capable.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The Expertise Loop
+THE EXPERTISE LOOP
 
-One of the biggest misconceptions people have is that experts are born with confidence.
-
-They aren't.
-
-Experts are created through a process.
-
-That process is:
+One of the biggest misconceptions is that experts are born with confidence. They aren't. Experts are created through a process:
 
 Repetition + Correction + Calibration = Expertise
 
+STEP 1 — REPETITION
+You have to do the thing. In real estate, that means:
+• Analyzing properties
+• Talking to sellers
+• Talking to realtors
+• Submitting offers
+• Negotiating
+• Following up
 
-Step 1 – Repetition
+Most people never even get here. They spend years watching videos, reading books, listening to podcasts — without ever doing the work. You cannot think your way into expertise. You must act your way into expertise.
 
-You have to do the thing.
+STEP 2 — CORRECTION
+After taking action, you receive feedback. Examples:
+• A seller rejects your offer
+• A realtor explains why your offer wasn't competitive
+• A lender teaches you financing
+• A wholesaler teaches you how they evaluate deals
+• You realize your rent assumptions were too high
+• You discover repair costs were different than expected
 
-In real estate, that means:
+Every one of these moments is correction. Most people view correction as failure. Professionals view correction as education.
 
-analyzing properties,
-talking to sellers,
-talking to realtors,
-submitting offers,
-negotiating,
-following up.
-
-Most people never even get here.
-
-They spend years:
-
-watching videos,
-reading books,
-listening to podcasts,
-
-without ever doing the work.
-
-You cannot think your way into expertise.
-
-You must act your way into expertise.
-
-
-Step 2 – Correction
-
-After taking action, you receive feedback.
-
-Examples:
-
-A seller rejects your offer.
-A realtor explains why your offer wasn't competitive.
-A lender teaches you financing.
-A wholesaler teaches you how they evaluate deals.
-You realize your rent assumptions were too high.
-You discover repair costs were different than expected.
-
-Every one of these moments is correction.
-
-Most people view correction as failure.
-
-Professionals view correction as education.
-
-
-Step 3 – Calibration
-
-Calibration is adjusting based on what you've learned.
-
-Examples:
-
-improving your analysis,
-tightening your buy box,
-verifying rents better,
-estimating repairs more accurately,
-asking better questions,
-negotiating more effectively.
+STEP 3 — CALIBRATION
+Calibration is adjusting based on what you've learned. Examples:
+• Improving your analysis
+• Tightening your buy box
+• Verifying rents better
+• Estimating repairs more accurately
+• Asking better questions
+• Negotiating more effectively
 
 Calibration is what turns experience into expertise.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Why Most People Never Become Experts
+WHY MOST PEOPLE NEVER BECOME EXPERTS
 
-Most people stop after correction.
+Most people stop after correction. They experience rejection, discomfort, criticism, mistakes — and assume they are not good at it.
 
-They experience:
+The best investors do the opposite. They use correction to calibrate. Then they repeat the process. Again. And again. And again. Until expertise develops.
 
-rejection,
-discomfort,
-criticism,
-mistakes,
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-and assume they are not good at it.
+THE UC30 ADVANTAGE
 
-The best investors do the opposite.
+Think about what you've already done. Over the last several days you've been:
 
-They use correction to calibrate.
+Repeating: analyzing, offering, calling, negotiating, following up
+Receiving Correction: seller responses, realtor feedback, lender feedback, market feedback, deal feedback
+Calibrating: refining your buy box, improving your analysis, improving your conversations, improving your offers
 
-Then they repeat the process.
+Whether you realize it or not — you have already been running the Expertise Loop.
 
-Again.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-And again.
+YOU ARE FURTHER ALONG THAN YOU THINK
 
-And again.
+Many students reach this point and think: "I still don't feel like an expert." That's normal.
 
-Until expertise develops.
+The mistake is assuming expertise feels different. Most expertise feels like: "I know more than I did before."
 
+The confidence comes from realizing you now know:
+• More about financing
+• More about negotiations
+• More about analysis
+• More about deal flow
+• More about seller motivation
+• More about structuring deals
+...than you did when you started.
 
-The UC30 Advantage
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Think about what you've already done.
+LOOK AT WHAT YOU'VE ALREADY DONE
 
-Over the last 18 days you've been:
+Think back to Day 1. Many students started UC30 feeling uncomfortable analyzing properties, making offers, talking to sellers, discussing financing, and negotiating.
 
-Repeating
+Now ask yourself: How much better am I today than I was on Day 1?
 
-analyzing,
-offering,
-calling,
-negotiating,
-following up.
+The answer is usually: A lot better. Growth often feels slow because it happens gradually. But if you compare yourself to where you started, the progress becomes obvious.
 
-Receiving Correction
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-seller responses,
-realtor feedback,
-lender feedback,
-market feedback,
-deal feedback.
-
-Calibrating
-
-refining your buy box,
-improving your analysis,
-improving your conversations,
-improving your offers.
-
-Whether you realize it or not:
-
-You have already been running the Expertise Loop.
-
-
-You Are Further Along Than You Think
-
-Many students reach this point and think:
-
-"I still don't feel like an expert."
-
-That's normal.
-
-The mistake is assuming expertise feels different.
-
-Most expertise feels like:
-
-"I know more than I did before."
-
-The confidence comes from realizing:
-
-You now know:
-
-more about financing,
-more about negotiations,
-more about analysis,
-more about deal flow,
-more about seller motivation,
-more about structuring deals,
-
-than you did when you started.
-
-
-Look At What You've Already Done
-
-Think back to Day 1.
-
-Many students started UC30 feeling uncomfortable:
-
-analyzing properties,
-making offers,
-talking to sellers,
-discussing financing,
-negotiating.
-
-Now ask yourself:
-
-How much better am I today than I was on Day 1?
-
-The answer is usually:
-
-A lot better.
-
-Growth often feels slow because it happens gradually.
-
-But if you compare yourself to where you started, the progress becomes obvious.
-
-
-Most People Quit Right Before Success
-
-This is one of the biggest lessons in investing.
+MOST PEOPLE QUIT RIGHT BEFORE SUCCESS
 
 Most people quit:
+• Right before the lead responds
+• Right before the seller becomes motivated
+• Right before the offer gets accepted
+• Right before the relationship pays off
 
-right before the lead responds,
-right before the seller becomes motivated,
-right before the offer gets accepted,
-right before the relationship pays off.
+The problem is results are rarely linear.
 
-The problem is:
-
-Results are rarely linear.
-
-Most people expect:
-
-effort, effort, effort, result.
-
-Reality looks more like:
-
-effort, effort, effort, effort, effort, effort, effort, RESULT.
+Most people expect: effort → effort → effort → result
+Reality looks more like: effort → effort → effort → effort → effort → effort → effort → RESULT
 
 The rewards often show up later than expected.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The Relationship Pipeline
+THE RELATIONSHIP PIPELINE
 
-Think about everything you've done so far.
+Think about everything you've done so far. You have likely:
+• Contacted Arsenal contacts
+• Built relationships
+• Followed up
+• Submitted offers
+• Talked to target properties
 
-You have likely:
+Many of these conversations are still developing. Some sellers need time, motivation, life changes, market changes, frustration, or a simple follow-up.
 
-contacted Arsenal contacts,
-built relationships,
-followed up,
-submitted offers,
-talked to target properties.
+The work you did in Week 1 may produce results in Week 4. The work you do today may produce results next month.
 
-Many of these conversations are still developing.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Some sellers need:
+MOMENTUM IS COMPOUNDING
 
-time,
-motivation,
-life changes,
-market changes,
-frustration,
-or a simple follow-up.
+Many students underestimate how much momentum they have already built. You have:
+• More contacts
+• More conversations
+• More offers
+• More relationships
+• More experience
+• More confidence
 
-The work you did in Week 1 may produce results in Week 4.
+Every day you continue, the chances of success increase. You're not starting over each morning — you're building on everything you've already done.
 
-The work you do today may produce results next month.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+THE INVESTOR LAW OF COMPOUNDING EFFORT
 
-Momentum Is Starting To Compound
+The first call is valuable. The tenth call is more valuable. The hundredth call is even more valuable. The same is true for offers, relationships, follow-up, and conversations.
 
-Many students underestimate how much momentum they have already built.
+Everything compounds. Most people stop before they experience the compounding effect.
 
-By Day 19:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-You have:
+DOUBLE DOWN ON WHAT IS WORKING
 
-more contacts,
-more conversations,
-more offers,
-more relationships,
-more experience,
-more confidence.
-
-Every day you continue, the chances of success increase.
-
-Because you're not starting over each morning.
-
-You're building on everything you've already done.
-
-
-The Investor Law Of Compounding Effort
-
-The first call is valuable.
-
-The tenth call is more valuable.
-
-The hundredth call is even more valuable.
-
-The same is true for:
-
-offers,
-relationships,
-follow-up,
-conversations.
-
-Everything compounds.
-
-Most people stop before they experience the compounding effect.
-
-
-The Final 10 Days Matter Most
-
-The final third of UC30 is often where the biggest results happen.
-
-Why?
-
-Because:
-
-relationships have had time to develop,
-follow-up has accumulated,
-offers have stacked up,
-people know who you are,
-sellers have had time to think.
-
-This is NOT the time to slow down.
-
-This is the time to accelerate.
-
-
-Double Down On What Is Working
-
-Now is the time to look at your activity and ask:
-
-What is producing the best opportunities?
+Now is the time to look at your activity and ask: What is producing the best opportunities?
 
 Examples:
+• Realtors
+• Wholesalers
+• Property Managers
+• Direct Seller Conversations
+• Target Properties
+• Follow-Up
+• Referrals
 
-Realtors
-Wholesalers
-Property Managers
-Direct Seller Conversations
-Target Properties
-Follow-Up
-Referrals
+Find what is working. Then do more of it.
 
-Find what is working.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Then do more of it.
+THE AMATEUR VS PROFESSIONAL MINDSET
 
+Amateurs ask: "When will I get results?"
+Professionals ask: "What is the next action?"
 
-The Amateur vs Professional Mindset
-
-Amateurs ask:
-
-"When will I get results?"
-
-Professionals ask:
-
-"What is the next action?"
-
-Professionals understand:
-
-The process creates the outcome.
-
-They focus on:
-
-calls,
-offers,
-follow-up,
-relationships,
-consistency.
-
-Eventually the results follow.
-
-
-The UC30 Commitment
+Professionals understand the process creates the outcome. They focus on calls, offers, follow-up, relationships, consistency. Eventually the results follow.
 
 For the remainder of UC30:
-
-Stop asking:
-
-"When is this going to work?"
-
-Start asking:
-
-"What is the next action?"
+Stop asking: "When is this going to work?"
+Start asking: "What is the next action?"
 
 Because the next action is always what creates the next opportunity.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Quick Rules To Remember
+THE CONFIDENCE EXERCISE
 
-Confidence comes from repetition.
-Expertise comes from repetition, correction, and calibration.
-You are already running the Expertise Loop.
-Most people quit before results appear.
-Momentum compounds.
-Relationships compound.
-Follow-up compounds.
-Offers compound.
-Activity compounds.
-The final 10 days matter most.
-Double down on what is working.
-Trust the process.
-Keep moving forward.
+Write down 3 ways you are better today than you were on Day 1.
+Examples: Better analysis, Better negotiations, Better understanding of financing, Better communication, Better confidence, Better deal flow
 
+Now write down 3 things you will double down on during the remaining days.
+Examples: More offers, More follow-up, More target contacts, More Arsenal contacts, More property analysis
 
-Key Takeaway
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The goal of UC30 was never to make you feel comfortable.
+QUICK RULES TO REMEMBER
 
-The goal was to turn you into someone who consistently takes action.
+• Confidence comes from repetition
+• Expertise comes from repetition, correction, and calibration
+• You are already running the Expertise Loop
+• Most people quit before results appear
+• Momentum compounds
+• Relationships compound
+• Follow-up compounds
+• Offers compound
+• Activity compounds
+• Double down on what is working
+• Trust the process
+• Keep moving forward
 
-By Day 19, you have already proven that you can:
+KEY TAKEAWAY: The goal of UC30 was never to make you feel comfortable. The goal was to turn you into someone who consistently takes action. You have already proven that you can analyze, negotiate, follow up, make offers, build relationships, and improve through feedback. Now it's time to trust the process, increase your effort, and understand that many of the seeds you've planted are just beginning to grow.
 
-analyze,
-negotiate,
-follow up,
-make offers,
-build relationships,
-and improve through feedback.
+The investors who win are rarely the smartest. They are usually the ones who stay in the game long enough for their effort to compound into results.
 
-You have already been building expertise through repetition, correction, and calibration.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Now it's time to trust the process, increase your effort, and understand that many of the seeds you've planted are just beginning to grow.
+TRAINING BLOCK 2 — BECOMING THE GO-TO BUYER
 
-The investors who win are rarely the smartest.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-They are usually the ones who stay in the game long enough for their effort to compound into results.`,
-      },
-      {
-        type: "training",
-        title: "Becoming The Go-To Buyer",
-        content: `Why This Matters
+HOW TO BUILD RELATIONSHIP CAPITAL THAT CREATES DEAL FLOW
 
-Most investors think:
+Most investors think: Deal Flow Creates Relationships.
+The truth is: Relationships Create Deal Flow.
 
-Deal Flow Creates Relationships.
+The investors who consistently get opportunities are often not the smartest, the richest, or the most experienced. They are simply:
+• The most trusted
+• The easiest to work with
+• The first person people think of when an opportunity appears
 
-The truth is:
+Your goal is to become: The Go-To Buyer — the person that people think of first when they find a property that matches your criteria.
 
-Relationships Create Deal Flow.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The investors who consistently get opportunities are often not:
-
-the smartest,
-the richest,
-or the most experienced.
-
-They are simply:
-
-the most trusted,
-the easiest to work with,
-and the first person people think of when an opportunity appears.
-
-Your goal is to become:
-
-The Go-To Buyer.
-
-The person that people think of first when they find a property that matches your criteria.
-
-
-Why People Bring Deals To Certain Investors
+WHY PEOPLE BRING DEALS TO CERTAIN INVESTORS
 
 People refer opportunities to buyers who are:
+• Responsive
+• Professional
+• Trustworthy
+• Easy to work with
+• Capable of closing
+• Clear about what they want
 
-responsive,
-professional,
-trustworthy,
-easy to work with,
-capable of closing,
-and clear about what they want.
+Most people do NOT want to waste their time bringing deals to someone who disappears, changes their mind constantly, doesn't know what they want, or can't close. The easier you are to work with, the more opportunities you will receive.
 
-Most people do NOT want to waste their time bringing deals to someone who:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-disappears,
-changes their mind constantly,
-doesn't know what they want,
-or can't close.
+BECOMING THE EASY BUYER
 
-The easier you are to work with, the more opportunities you will receive.
-
-
-Becoming The Easy Buyer
-
-Ask yourself:
-
-If I brought myself a deal, would I enjoy working with me?
+Ask yourself: If I brought myself a deal, would I enjoy working with me?
 
 Great buyers:
+• Answer calls
+• Return texts
+• Communicate clearly
+• Make decisions
+• Follow through
+• Do what they say they will do
 
-answer calls,
-return texts,
-communicate clearly,
-make decisions,
-follow through,
-and do what they say they will do.
+Many investors lose future opportunities because they become difficult to work with. Remember: Every interaction either builds trust or destroys trust.
 
-Many investors lose future opportunities because they become difficult to work with.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Remember:
+YOUR REPUTATION IS AN ASSET
 
-Every interaction either builds trust or destroys trust.
-
-
-Your Reputation Is An Asset
-
-One of the most valuable things you can build is your reputation.
-
-People talk.
-
-Realtors talk.
-
-Wholesalers talk.
-
-Property managers talk.
-
-Investors talk.
-
-Lenders talk.
+One of the most valuable things you can build is your reputation. People talk — realtors talk, wholesalers talk, property managers talk, investors talk, lenders talk.
 
 When your name comes up, what do you want people to say?
-
-Examples:
-
-"They always respond."
-"They know their numbers."
-"They're easy to work with."
-"They close."
-"They do what they say."
+• "They always respond."
+• "They know their numbers."
+• "They're easy to work with."
+• "They close."
+• "They do what they say."
 
 That reputation will eventually create opportunities that money cannot buy.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Building Trust With Realtors
+BUILDING TRUST WITH REALTORS
 
-Realtors can become one of your most powerful deal sources.
-
-A great realtor should know:
-
-your buy box,
-your preferred markets,
-your financing ability,
-your investment goals,
-your preferred property types.
+Realtors can become one of your most powerful deal sources. A great realtor should know:
+• Your buy box
+• Your preferred markets
+• Your financing ability
+• Your investment goals
+• Your preferred property types
 
 The clearer you are, the easier it becomes for them to bring you opportunities.
 
+What Realtors Want: Buyers who respond quickly, know their criteria, submit offers, understand analysis, and can close. The easier you make their job, the more likely they are to think of you when opportunities arise.
 
-What Realtors Want
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Realtors want buyers who:
+BUILDING TRUST WITH WHOLESALERS
 
-respond quickly,
-know their criteria,
-submit offers,
-understand analysis,
-and can close.
+Wholesalers are constantly looking for serious buyers. Nothing frustrates wholesalers more than buyers who disappear, constantly retrade, never perform, or claim they will buy everything and buy nothing.
 
-The easier you make their job, the more likely they are to think of you when opportunities arise.
+What Wholesalers Want: Quick answers, clear criteria, proof of funds, and closings. The faster and more reliable you are, the more opportunities they will send your way.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Building Trust With Wholesalers
+BUILDING TRUST WITH PROPERTY MANAGERS
 
-Wholesalers are constantly looking for serious buyers.
-
-Nothing frustrates wholesalers more than:
-
-buyers who disappear,
-buyers who constantly retrade,
-buyers who never perform,
-buyers who claim they will buy everything and buy nothing.
-
-
-What Wholesalers Want
-
-quick answers,
-clear criteria,
-proof of funds,
-and closings.
-
-The faster and more reliable you are, the more opportunities they will send your way.
-
-
-Building Trust With Property Managers
-
-Property managers are one of the most underrated sources of deal flow.
-
-They know:
-
-tired landlords,
-problem properties,
-vacant units,
-management issues,
-owners considering selling.
+Property managers are one of the most underrated sources of deal flow. They know:
+• Tired landlords
+• Problem properties
+• Vacant units
+• Management issues
+• Owners considering selling
 
 Many future deals are discovered by property managers long before they ever hit the market.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Building Trust With Contractors
+BUILDING TRUST WITH CONTRACTORS
 
 Contractors often know:
+• Distressed owners
+• Unfinished projects
+• Landlords running out of money
+• Properties with major issues
 
-distressed owners,
-unfinished projects,
-landlords running out of money,
-properties with major issues.
+Contractors see problems before most investors do. Strong contractor relationships can create opportunities for years.
 
-Contractors see problems before most investors do.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Strong contractor relationships can create opportunities for years.
-
-
-Building Trust With Lenders
+BUILDING TRUST WITH LENDERS
 
 Good lenders often know:
+• Refinances
+• Financial stress
+• Upcoming sales
+• Investors looking to exit
 
-refinances,
-financial stress,
-upcoming sales,
-investors looking to exit.
+Stay connected with lenders. Many opportunities start with a simple conversation.
 
-Stay connected with lenders.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Many opportunities start with a simple conversation.
+BUILDING TRUST WITH OTHER INVESTORS
 
+Many new investors think other investors are their competition. The reality is many of the largest investors partner, share opportunities, refer deals, and collaborate. Strong investor relationships create opportunities that would never be found alone.
 
-Building Trust With Other Investors
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Many new investors think:
+THE TOP OF MIND PRINCIPLE
 
-"Other investors are my competition."
+When someone discovers a seller, a property, a landlord, or an opportunity — who do they think of first? That person gets the call. Your goal is simple: Stay Top Of Mind.
 
-The reality is:
+How to Stay Top Of Mind:
+• Follow-up calls
+• Texts
+• Checking in
+• Sharing market information
+• Asking questions
+• Helping solve problems
 
-Many of the largest investors:
+Do not only reach out when you need something. Stay visible. Stay helpful. Stay relevant.
 
-partner,
-share opportunities,
-refer deals,
-and collaborate.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Strong investor relationships create opportunities that would never be found alone.
-
-
-The Top Of Mind Principle
-
-When someone discovers:
-
-a seller,
-a property,
-a landlord,
-or an opportunity,
-
-who do they think of first?
-
-That person gets the call.
-
-Your goal is simple:
-
-Stay Top Of Mind.
-
-
-Staying Top Of Mind
-
-Examples:
-
-follow-up calls,
-texts,
-checking in,
-sharing market information,
-asking questions,
-helping solve problems.
-
-Do not only reach out when you need something.
-
-Stay visible.
-
-Stay helpful.
-
-Stay relevant.
-
-
-Give Before You Ask
+GIVE BEFORE YOU ASK
 
 One of the most powerful relationship principles.
 
-Instead of asking:
+Instead of asking: "Do you have any deals for me?"
+Ask: "How can I help you?"
 
-"Do you have any deals for me?"
-
-Ask:
-
-"How can I help you?"
-
-Examples:
-
-introductions,
-referrals,
-resources,
-recommendations,
-solving problems.
+Examples: introductions, referrals, resources, recommendations, solving problems.
 
 People remember people who help them.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The Consequences Of Not Following Through
+THE CONSEQUENCES OF NOT FOLLOWING THROUGH
 
 This may be the most important section of today's training.
 
-If you tell people:
+If you tell people "This is exactly what I'm looking for" and they bring you a property that meets your criteria, then you fail to perform without a valid reason — you damage trust.
 
-"This is exactly what I'm looking for."
+The same thing happens when you get properties under contract, back out, disappear, stop responding, or fail to close. Every one of these situations affects your reputation. And your reputation affects future deal flow.
 
-And they bring you a property that meets your criteria…
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Then you fail to perform without a valid reason…
-
-You damage trust.
-
-The same thing happens when you:
-
-get properties under contract,
-back out,
-disappear,
-stop responding,
-or fail to close.
-
-Every one of these situations affects your reputation.
-
-And your reputation affects future deal flow.
-
-
-When It IS Okay To Walk Away
+WHEN IT IS OKAY TO WALK AWAY
 
 It is absolutely okay to walk away from a deal when:
+• The numbers don't work
+• Due diligence uncovers issues
+• Repairs are larger than expected
+• Rents were inaccurate
+• Expenses were inaccurate
+• Financing changed
+• The property no longer meets your criteria
 
-the numbers don't work,
-due diligence uncovers issues,
-repairs are larger than expected,
-rents were inaccurate,
-expenses were inaccurate,
-financing changed,
-the property no longer meets your criteria.
+This is called being disciplined. Good investors walk away from bad deals.
 
-This is called being disciplined.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Good investors walk away from bad deals.
+DISCIPLINE VS FLAKINESS
 
+Discipline: "I discovered new information that changes the investment."
+Flakiness: "I got nervous." / "I wasn't prepared." / "I changed my mind." / "I never had financing figured out."
 
-The Difference Between Discipline And Flakiness
+One protects your reputation. The other damages it.
 
-Discipline:
-
-"I discovered new information that changes the investment."
-
-Flakiness:
-
-"I got nervous."
-
-"I wasn't prepared."
-
-"I changed my mind."
-
-"I never had financing figured out."
-
-One protects your reputation.
-
-The other damages it.
-
-
-How To Walk Away Professionally
-
-If a deal no longer works:
-
-Respond quickly.
-
-Be honest.
-
-Be respectful.
-
-Explain:
-
-what changed,
-what you found,
-why the numbers no longer work.
-
-Examples:
-
-repairs came in higher,
-rents were overstated,
-financing changed,
-expenses were inaccurate.
+How To Walk Away Professionally:
+• Respond quickly
+• Be honest
+• Be respectful
+• Explain what changed, what you found, why the numbers no longer work
 
 When you can clearly explain your reasoning, the situation often becomes a learning opportunity for everyone involved.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Turn Mistakes Into Education
+TURN MISTAKES INTO EDUCATION
 
-A good wholesaler, realtor, or seller wants to understand:
+A good wholesaler, realtor, or seller wants to understand: Why doesn't this work?
 
-Why doesn't this work?
+The better you explain your reasoning, the better future opportunities become. Every deal that doesn't work helps refine your buy box, your criteria, your analysis, and future opportunities.
 
-The better you explain your reasoning:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The better future opportunities become.
-
-Every deal that doesn't work helps refine:
-
-your buy box,
-your criteria,
-your analysis,
-and future opportunities.
-
-
-The Trust Formula
+THE TRUST FORMULA
 
 Trust is built through four things:
 
-Competence — Can you actually buy?
+1. COMPETENCE — Can you actually buy?
+2. CONSISTENCY — Do you do what you say?
+3. CHARACTER — Are you honest and respectful?
+4. COMMUNICATION — Do you respond?
 
-Consistency — Do you do what you say?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Character — Are you honest and respectful?
-
-Communication — Do you respond?
-
-
-Relationship Scorecard
+RELATIONSHIP SCORECARD
 
 Rate yourself from 1-10:
+• Realtors: ___/10
+• Wholesalers: ___/10
+• Property Managers: ___/10
+• Contractors: ___/10
+• Lenders: ___/10
+• Investors: ___/10
+• Sellers: ___/10
 
-Realtors ___ /10
-Wholesalers ___ /10
-Property Managers ___ /10
-Contractors ___ /10
-Lenders ___ /10
-Investors ___ /10
-Sellers ___ /10
+Ask yourself: Which relationship category needs the most improvement?
 
-Now ask: Which relationship category needs the most improvement?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+TODAY'S EXERCISE
 
-Quick Rules To Remember
+Reach out to:
+• 5 Realtors
+• 3 Wholesalers
+• 2 Property Managers
 
-Relationships create deal flow.
-Reputation matters.
-Stay top of mind.
-Give before you ask.
-Be easy to work with.
-Respond quickly.
-Know your criteria.
-Protect your reputation.
-Walk away when the numbers change.
-Never walk away because you weren't prepared.
-Every interaction either builds or destroys trust.
-The easiest buyer to work with often gets the best opportunities.
+Do NOT ask for deals. Instead ask: "How can I help you?"
+Focus on strengthening relationships — not extracting opportunities.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Key Takeaway
+QUICK RULES TO REMEMBER
 
-Most investors spend their time chasing deals.
+• Relationships create deal flow
+• Reputation matters
+• Stay top of mind
+• Give before you ask
+• Be easy to work with
+• Respond quickly
+• Know your criteria
+• Protect your reputation
+• Walk away when the numbers change
+• Never walk away because you weren't prepared
+• Every interaction either builds or destroys trust
+• The easiest buyer to work with often gets the best opportunities
 
-The best investors spend their time building relationships.
-
-Over time, those relationships begin bringing opportunities to them.
-
-Your goal is simple:
-
-Become the buyer that realtors, wholesalers, property managers, lenders, investors, and sellers think of first when an opportunity appears.`,
-      },
-    ],
+KEY TAKEAWAY: Most investors spend their time chasing deals. The best investors spend their time building relationships. Over time, those relationships begin bringing opportunities to them. Your goal is simple: Become the buyer that realtors, wholesalers, property managers, lenders, investors, and sellers think of first when an opportunity appears.`,
+    quiz: {
+      required: true,
+      passingScore: 80,
+      scenarios: [
+        {
+          id: 'd10q1_confidence',
+          title: 'Confidence Through Repetition Quiz',
+          questions: [
+            {
+              id: 'd10q1_q1',
+              text: 'According to the Expertise Loop, what creates expertise?',
+              type: 'multiple_choice',
+              options: [
+                'Talent + Intelligence + Confidence',
+                'Repetition + Correction + Calibration',
+                'Education + Money + Experience',
+                'Confidence + Knowledge + Motivation'
+              ],
+              correctAnswer: 1
+            },
+            {
+              id: 'd10q1_q2',
+              text: 'Which statement is MOST accurate about confidence?',
+              type: 'multiple_choice',
+              options: [
+                'Confidence comes before action',
+                'Confidence comes from reading more books',
+                'Action creates experience, and experience creates confidence',
+                'Confidence comes from avoiding mistakes'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q1_q3',
+              text: 'Which of the following is an example of correction?',
+              type: 'multiple_choice',
+              options: [
+                'Refining your buy box',
+                'Improving your analysis',
+                'A seller rejecting your offer',
+                'Submitting more offers'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q1_q4',
+              text: 'Which of the following is an example of calibration?',
+              type: 'multiple_choice',
+              options: [
+                'Submitting an offer',
+                'Calling a seller',
+                'Adjusting your rent assumptions after receiving new market information',
+                'Reading a real estate book'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q1_q5',
+              text: 'Why do most people fail to become experts?',
+              type: 'multiple_choice',
+              options: [
+                'They are not smart enough',
+                'They stop after receiving correction instead of calibrating and continuing',
+                'They don\'t own enough properties',
+                'They don\'t have enough money'
+              ],
+              correctAnswer: 1
+            },
+            {
+              id: 'd10q1_q6',
+              text: 'A student has analyzed 75 properties, submitted 20 offers, talked to multiple sellers, and refined their buy box. What should this tell them?',
+              type: 'multiple_choice',
+              options: [
+                'They should start over',
+                'They are still unprepared',
+                'They have already been building expertise through repetition, correction, and calibration',
+                'They need another course before taking action'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q1_q7',
+              text: 'What is one reason the final stretch of UC30 can be so powerful?',
+              type: 'multiple_choice',
+              options: [
+                'The training becomes easier',
+                'Relationships, follow-up, and previous efforts begin compounding',
+                'The market improves automatically',
+                'Properties become cheaper'
+              ],
+              correctAnswer: 1
+            },
+            {
+              id: 'd10q1_q8',
+              text: 'Which investor is MOST likely to succeed?',
+              type: 'multiple_choice',
+              options: [
+                'The investor who waits until they feel completely confident',
+                'The investor who keeps taking action while refining their process',
+                'The investor who studies endlessly without making offers',
+                'The investor who only analyzes perfect deals'
+              ],
+              correctAnswer: 1
+            },
+            {
+              id: 'd10q1_q9',
+              text: 'What is the biggest mistake students make at this stage?',
+              type: 'multiple_choice',
+              options: [
+                'Talking to too many sellers',
+                'Following up too often',
+                'Slowing down or quitting before their efforts have time to compound',
+                'Learning too much'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q1_q10',
+              text: 'Which statement best describes the "Investor Law of Compounding Effort"?',
+              type: 'multiple_choice',
+              options: [
+                'Every action creates an immediate result',
+                'Results happen randomly',
+                'Relationships, offers, follow-up, and conversations become more valuable as they accumulate over time',
+                'The first offer is the most important offer'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q1_q11',
+              text: 'You\'ve been following up with a seller for three weeks. They have rejected your offer twice but continue responding. What is the BEST interpretation?',
+              type: 'multiple_choice',
+              options: [
+                'They are wasting your time',
+                'You should stop contacting them immediately',
+                'The relationship is still active, and continued professional follow-up may eventually create an opportunity',
+                'Raise your offer dramatically'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q1_q12',
+              text: 'Which statement best summarizes the Confidence Through Repetition training?',
+              type: 'multiple_choice',
+              options: [
+                'Confidence comes from waiting until you feel ready',
+                'Expertise comes from repetition, correction, and calibration, and your previous efforts are beginning to compound',
+                'The most successful investors never feel fear',
+                'Results should happen immediately if you\'re working hard'
+              ],
+              correctAnswer: 1
+            }
+          ]
+        },
+        {
+          id: 'd10q2_gotoBuyer',
+          title: 'Becoming The Go-To Buyer Quiz',
+          questions: [
+            {
+              id: 'd10q2_q1',
+              text: 'Why do most people bring deals to certain investors repeatedly?',
+              type: 'multiple_choice',
+              options: [
+                'They have the most money',
+                'They pay the highest prices',
+                'They are trusted, responsive, and easy to work with',
+                'They own the most properties'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q2_q2',
+              text: 'What is one of the fastest ways to damage your reputation as a buyer?',
+              type: 'multiple_choice',
+              options: [
+                'Asking questions during due diligence',
+                'Walking away from a deal because new information changed the numbers',
+                'Consistently failing to follow through on opportunities that match your stated criteria',
+                'Negotiating respectfully'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q2_q3',
+              text: 'A wholesaler sends you a property that fits your buy box exactly. You analyze it and realize it works. What should you do?',
+              type: 'multiple_choice',
+              options: [
+                'Wait several days before responding',
+                'Tell them you\'ll think about it',
+                'Respond quickly and take action',
+                'Ask for another property first'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q2_q4',
+              text: 'Which statement best describes the "Top Of Mind" principle?',
+              type: 'multiple_choice',
+              options: [
+                'Always be asking for deals',
+                'Stay visible, helpful, and relevant so people think of you when opportunities appear',
+                'Call people every day',
+                'Only work with new contacts'
+              ],
+              correctAnswer: 1
+            },
+            {
+              id: 'd10q2_q5',
+              text: 'Which of the following is MOST likely to create future deal flow?',
+              type: 'multiple_choice',
+              options: [
+                'Asking every contact for a deal',
+                'Constantly negotiating harder than everyone else',
+                'Finding ways to help people before asking for anything in return',
+                'Telling everyone how many properties you own'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q2_q6',
+              text: 'A property manager mentions that one of their owners may be getting tired of managing rentals. What should you do?',
+              type: 'multiple_choice',
+              options: [
+                'Ignore it because it isn\'t listed for sale',
+                'Build the relationship and continue following up',
+                'Demand the owner\'s phone number immediately',
+                'Wait until the property hits the market'
+              ],
+              correctAnswer: 1
+            },
+            {
+              id: 'd10q2_q7',
+              text: 'When is it acceptable to back out of a deal?',
+              type: 'multiple_choice',
+              options: [
+                'Anytime you get nervous',
+                'Anytime you find a better deal',
+                'When new information causes the property to no longer meet your criteria',
+                'Whenever you change your mind'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q2_q8',
+              text: 'What is the difference between discipline and flakiness?',
+              type: 'multiple_choice',
+              options: [
+                'There is no difference',
+                'Discipline is walking away when the investment no longer works; flakiness is walking away because you weren\'t prepared or changed your mind',
+                'Discipline means always closing',
+                'Flakiness only applies to wholesalers'
+              ],
+              correctAnswer: 1
+            },
+            {
+              id: 'd10q2_q9',
+              text: 'Which group is often one of the most overlooked sources of future deal flow?',
+              type: 'multiple_choice',
+              options: [
+                'Property Managers',
+                'Title Companies',
+                'Appraisers',
+                'Inspectors'
+              ],
+              correctAnswer: 0
+            },
+            {
+              id: 'd10q2_q10',
+              text: 'A realtor calls with a property that does NOT meet your buy box. What is the BEST response?',
+              type: 'multiple_choice',
+              options: [
+                'Ignore them',
+                'Tell them never to call again',
+                'Thank them, explain why it doesn\'t fit your criteria, and clarify what you\'re looking for',
+                'Submit an offer anyway'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q2_q11',
+              text: 'What is the most valuable long-term asset an investor can build?',
+              type: 'multiple_choice',
+              options: [
+                'A large social media following',
+                'The ability to make aggressive offers',
+                'A reputation for being trustworthy, responsive, and capable of closing',
+                'A large business card collection'
+              ],
+              correctAnswer: 2
+            },
+            {
+              id: 'd10q2_q12',
+              text: 'A wholesaler sends you three deals over six months. You analyze each one quickly, explain exactly why they don\'t fit your criteria, and thank them for sending them. What is the most likely outcome?',
+              type: 'multiple_choice',
+              options: [
+                'They stop sending deals',
+                'They become frustrated',
+                'They better understand your criteria and are more likely to send opportunities that fit in the future',
+                'Nothing changes'
+              ],
+              correctAnswer: 2
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     day: 11,
