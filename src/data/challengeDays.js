@@ -4838,22 +4838,22 @@ Then: recommit to taking action for the next 7 days regardless of fear, uncertai
   {
     day: 8,
     title: "Solving Seller Problems & Resolving Objections",
-    caption: "Learn to solve seller problems and handle objections with confidence.",
-    taskDescription: "",
-    trainingContent: "",
-    category: "pipeline",
-    weekNumber: 2,
-    weekTitle: "BUILD THE PIPELINE",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    sections: [
-      {
-        type: "training",
-        title: "Solving Seller Problems",
-        content: `Why This Matters
+    category: "negotiation",
+    locked: true,
+    phaseId: 'foundation',
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 1 — SOLVING SELLER PROBLEMS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Most investors believe: Properties create deals.
+Why Sellers Actually Sell
+
+
+WHY THIS MATTERS
+
+Most investors believe:
+Properties create deals.
+
 That is not true.
 Problems create deals.
 
@@ -4862,67 +4862,77 @@ If there were no problems — no stress, no motivation, no urgency — many sell
 The bigger the problem, the bigger the opportunity often becomes.
 
 
-The Biggest Shift In Thinking
+THE BIGGEST SHIFT IN THINKING
 
-New investors ask: "What property can I buy?"
-Great investors ask: "What problem can I solve?"
+New investors ask:
+"What property can I buy?"
+
+Great investors ask:
+"What problem can I solve?"
 
 This small shift changes everything.
 
 
-The Most Common Seller Problems
+THE MOST COMMON SELLER PROBLEMS
 
-Problem #1 — Tired Landlord
+Problem #1 – Tired Landlord
 Examples: tenant calls, maintenance, vacancies, late rent, evictions.
 Many landlords eventually burn out.
 
-Problem #2 — Deferred Maintenance
+Problem #2 – Deferred Maintenance
 Examples: roofs, HVAC, plumbing, siding, parking lots.
-Many sellers don't have time, money, or energy to fix problems.
+Many sellers don't have the time, money, or energy to fix problems.
 
-Problem #3 — Difficult Tenants
+Problem #3 – Difficult Tenants
 Examples: non-payment, evictions, property damage, constant complaints.
 Many sellers simply want out.
 
-Problem #4 — Financial Stress
+Problem #4 – Financial Stress
 Examples: debt, job loss, divorce, medical bills, business issues.
 Sometimes certainty matters more than price.
 
-Problem #5 — Relocation
+Problem #5 – Relocation
 Examples: new job, retirement, family move.
 Convenience often becomes very important.
 
-Problem #6 — Inheritance
-Many inherited properties create stress, confusion, and maintenance responsibilities. Often heirs want simplicity.
+Problem #6 – Inheritance
+Many inherited properties create stress, confusion, and maintenance responsibilities.
+Often heirs want simplicity.
 
-Problem #7 — Property Is Hard To Sell
+Problem #7 – Property Is Hard To Sell
 Examples: unique properties, poor condition, financing challenges, limited buyer pool.
 Creative finance may help solve these situations.
 
-Problem #8 — Taxes
+Problem #8 – Taxes
 Some sellers are concerned about capital gains, tax consequences, and income timing.
 Seller financing can sometimes help.
 
-Problem #9 — Time
+Problem #9 – Time
 Many sellers simply want speed, certainty, and simplicity.
 
-Problem #10 — Emotional Fatigue
+Problem #10 – Emotional Fatigue
 Many owners are simply tired. Years of management, repairs, and stress eventually wear people down.
 
 
-The Seller Motivation Pyramid
+THE SELLER MOTIVATION PYRAMID
 
 Not all motivation is equal.
 
-Level 1 — Interested: "I might sell."
-Level 2 — Considering: "I'm thinking about selling."
-Level 3 — Motivated: "I want to sell."
-Level 4 — Problem Solving: "I need a solution."
+Level 1 – Interested
+"I might sell."
 
-Level 4 is where many great deals happen.
+Level 2 – Considering
+"I'm thinking about selling."
+
+Level 3 – Motivated
+"I want to sell."
+
+Level 4 – Problem Solving
+"I need a solution."
+This is where many great deals happen.
 
 
-How To Uncover Seller Motivation
+HOW TO UNCOVER SELLER MOTIVATION
 
 The best investors ask questions. They do not assume.
 
@@ -4934,7 +4944,7 @@ Examples:
 • What would make this process easier?
 
 
-Listen More Than You Talk
+LISTEN MORE THAN YOU TALK
 
 Most investors talk too much.
 
@@ -4945,970 +4955,787 @@ Great investors:
 • find solutions.
 
 
-Match The Solution To The Problem
+MATCH THE SOLUTION TO THE PROBLEM
 
 Different problems require different solutions.
 
-Needs cash immediately → Cash offer, fast close
-Needs monthly income → Seller financing
-Needs more money → Higher purchase price, better terms
-Needs certainty → Strong financing, large reserves, faster closing
+Problem: Needs cash immediately
+Possible Solution: Cash offer, fast close
+
+Problem: Needs monthly income
+Possible Solution: Seller financing
+
+Problem: Needs more money
+Possible Solution: Higher purchase price, better terms
+
+Problem: Needs certainty
+Possible Solution: Strong financing, large reserves, faster closing
 
 
-The Win-Win Framework
+THE WIN-WIN FRAMEWORK
 
-The best deals are not one-sided, manipulative, or unfair. The best deals solve problems for both parties.
+The best deals are not one-sided, manipulative, or unfair.
+The best deals solve problems for both parties.
 
 Ask yourself:
-Seller Wins By: _______
-Buyer Wins By: _______
+• Seller Wins By: ___
+• Buyer Wins By: ___
 
-If both boxes are strong, you may have a great deal. Long-term success comes from trust, professionalism, and honesty.
+If both boxes are strong, you may have a great deal.
 
-
-Every Great Deal Starts Here
-
-Most deals are not created because you had money, a lender, or a calculator. Most deals are created because you understood a problem better than other buyers.
+Long-term success comes from trust, professionalism, and honesty.
 
 
-The UC30 Problem Solver Framework
+THE UC30 PROBLEM SOLVER FRAMEWORK
 
 Before discussing price, ask:
-1. What problem are they trying to solve?
-2. How serious is that problem?
-3. What would the ideal solution look like?
-4. Can I create a structure that solves it?
-5. Does that structure still fit my criteria?
+• What problem are they trying to solve?
+• How serious is that problem?
+• What would the ideal solution look like?
+• Can I create a structure that solves it?
+• Does that structure still fit my criteria?
 
 
-Quick Rules To Remember
+QUICK RULES TO REMEMBER
 
-1. Problems create opportunities.
-2. Ask questions before offering solutions.
-3. Listen more than you speak.
-4. Understand motivation before discussing price.
-5. Different problems require different structures.
-6. Great investors solve problems.
-7. Trust creates opportunities.
-8. Win-win deals create the best long-term outcomes.
-9. Solve problems.`,
-      },
-      {
-        type: "quiz",
-        required: true,
-        scenarios: [
-          {
-            id: "day13_quiz",
-            title: "Solving Seller Problems Quiz",
-            maxAttempts: 3,
-            description: "Answer all 15 questions correctly to unlock your daily submissions.",
-            inputs: [
-              {
-                id: "day13_q1",
-                label: `1. A seller says: "I'm tired of the property, but I don't really need the money." What is the BEST follow-up question?`,
-                type: "multiple_choice",
-                options: [
-                  "\"Would you take $50,000 less?\"",
-                  "\"How much cash do you need today?\"",
-                  `"If money isn't the primary concern, what would an ideal outcome look like for you?"`,
-                  `"What's the lowest you'll take?"`,
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day13_q2",
-                label: `2. A seller owns a free-and-clear rental property and wants monthly income in retirement. What solution should you explore first?`,
-                type: "multiple_choice",
-                options: ["Hard Money", "Seller Financing", "FHA Financing", "Commercial Financing"],
-                correctAnswer: 1,
-              },
-              {
-                id: "day13_q3",
-                label: `3. A landlord says: "I'm just tired of dealing with tenants." What problem are they MOST likely trying to solve?`,
-                type: "multiple_choice",
-                options: ["Purchase price", "Appreciation", "Stress and management burden", "Tax benefits"],
-                correctAnswer: 2,
-              },
-              {
-                id: "day13_q4",
-                label: "4. Which question is MOST likely to uncover seller motivation?",
-                type: "multiple_choice",
-                options: [`"What's your asking price?"`, "\"How old is the roof?\"", "\"Why are you considering selling?\"", "\"How many bedrooms does it have?\""],
-                correctAnswer: 2,
-              },
-              {
-                id: "day13_q5",
-                label: "5. A seller inherited a property they don't want to manage. What is likely MOST important to them?",
-                type: "multiple_choice",
-                options: ["Maximum leverage", "Simplicity and convenience", "Appreciation potential", "Cash-on-cash return"],
-                correctAnswer: 1,
-              },
-              {
-                id: "day13_q6",
-                label: `6. A seller says: "I don't have the money to fix all the repairs." What should you immediately recognize?`,
-                type: "multiple_choice",
-                options: ["Potential problem-solving opportunity", "Reason to stop negotiating", "Appreciation opportunity", "Financing issue only"],
-                correctAnswer: 0,
-              },
-              {
-                id: "day13_q7",
-                label: "7. Which investor mindset is MOST effective?",
-                type: "multiple_choice",
-                options: [
-                  "\"How do I buy this property?\"",
-                  "\"How do I negotiate harder?\"",
-                  "\"What problem can I solve?\"",
-                  "\"How do I get the lowest price possible?\"",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day13_q8",
-                label: "8. A seller says: \"I need more money than your offer.\" What is the BEST next step?",
-                type: "multiple_choice",
-                options: [
-                  "Immediately raise your offer",
-                  "Ask what they are trying to accomplish with the additional money",
-                  "End negotiations",
-                  "Tell them they are unrealistic",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day13_q9",
-                label: "9. Which question is MOST likely to reveal hidden motivation?",
-                type: "multiple_choice",
-                options: [
-                  "\"How many bathrooms are there?\"",
-                  `"If you don't sell this property, what do you think happens over the next year?"`,
-                  "\"What color is the roof?\"",
-                  "\"When was it built?\"",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day13_q10",
-                label: `10. A seller wants top dollar but also wants to avoid realtor commissions, repairs, and months of showings. What should you recognize?`,
-                type: "multiple_choice",
-                options: [
-                  "Multiple problems may create flexibility",
-                  "They are impossible to negotiate with",
-                  "Price is the only thing that matters",
-                  "They are not motivated",
-                ],
-                correctAnswer: 0,
-              },
-              {
-                id: "day13_q11",
-                label: `11. A seller says: "I already have another property under contract and need this one sold." What is likely their biggest concern?`,
-                type: "multiple_choice",
-                options: ["Appreciation", "Certainty and timing", "Property management", "Cash-on-cash return"],
-                correctAnswer: 1,
-              },
-              {
-                id: "day13_q12",
-                label: "12. Which statement BEST builds trust?",
-                type: "multiple_choice",
-                options: [
-                  "\"This property has tons of problems.\"",
-                  `"You'll never get your asking price."`,
-                  "\"Help me understand what would make this a successful outcome for you.\"",
-                  "\"My offer expires tonight.\"",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day13_q13",
-                label: `13. A seller says: "I don't really care about the purchase price. I just don't want a huge tax bill." Which solution may be worth exploring?`,
-                type: "multiple_choice",
-                options: ["Hard Money", "Seller Financing", "FHA Financing", "Bridge Loan"],
-                correctAnswer: 1,
-              },
-              {
-                id: "day13_q14",
-                label: "14. What is usually the BIGGEST mistake investors make during seller conversations?",
-                type: "multiple_choice",
-                options: ["Asking too many questions", "Listening too much", "Talking more than they listen", "Being too patient"],
-                correctAnswer: 2,
-              },
-              {
-                id: "day13_q15",
-                label: "15. Which statement BEST represents the UC30 Problem Solver Framework?",
-                type: "multiple_choice",
-                options: [
-                  "Find properties and negotiate aggressively",
-                  "Understand the seller's problem, identify a solution, and determine whether it still fits your criteria",
-                  "Always focus on getting the lowest price possible",
-                  "Solve every seller's problem regardless of your investment criteria",
-                ],
-                correctAnswer: 1,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        type: "training",
-        title: "Objection & Influence Mastery",
-        content: `Why This Matters
+• Problems create opportunities.
+• Ask questions before offering solutions.
+• Listen more than you speak.
+• Understand motivation before discussing price.
+• Different problems require different structures.
+• Great investors solve problems.
+• Trust creates opportunities.
+• Win-win deals create the best long-term outcomes.
+
+
+TODAY'S EXECUTION CHALLENGE
+
+Have 5 conversations with sellers, landlords, property owners, or warm leads.
+
+Your goal is NOT just to make an offer.
+Your goal is to identify their biggest problem.
+
+Write down:
+• The problem.
+• The motivation level.
+• A possible solution.
+
+
+TODAY'S SUGGESTED ARSENAL ACTIVITY
+
+Reach out to a realtor, wholesaler, property manager, lender, or investor.
+
+Ask:
+"What seller problems are you seeing most often right now?"
+
+Document their answers and look for patterns. When they bring up problems, be willing to find solutions and see if they lead to deals!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 2 — OBJECTION & INFLUENCE MASTERY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+How To Build Trust, Handle Objections, And Become Someone Sellers Want To Work With
+
+
+WHY THIS MATTERS
 
 Many investors believe:
-
 The best negotiator wins.
 
 That is not true.
 
 Most sellers choose the person they:
+• trust,
+• like,
+• believe,
+• and feel comfortable with.
 
-trust,
-like,
-believe,
-and feel comfortable with.
-
-Before you ever discuss:
-
-price,
-terms,
-seller financing,
-or negotiations,
-
-you are being evaluated.
+Before you ever discuss price, terms, seller financing, or negotiations, you are being evaluated.
 
 The seller is asking themselves:
+• Can I trust this person?
+• Do I like this person?
+• Do I believe they can actually close?
 
-Can I trust this person?
-
-Do I like this person?
-
-Do I believe they can actually close?
-
-If the answer is no…
-
-nothing else matters.
+If the answer is no… nothing else matters.
 
 
-The UC30 Communication Formula
+THE UC30 COMMUNICATION FORMULA
 
-When things get stressful, awkward, emotional, or uncertain:
+When things get stressful, awkward, emotional, or uncertain, remember:
 
-Remember:
-
-Smile.
-
-Head Nod.
-
-Slow Down.
+Smile. Head Nod. Slow Down.
 
 These three simple principles solve most communication problems.
 
-
 Smile
-
-The moment you make eye contact:
-
-Smile.
-
-Not a fake sales smile.
-
-A genuine smile.
-
-People naturally trust people who appear:
-
-confident,
-relaxed,
-friendly.
-
+The moment you make eye contact — smile. Not a fake sales smile. A genuine smile.
+People naturally trust people who appear confident, relaxed, and friendly.
 A smile instantly lowers defenses.
 
-Many investors become:
-
-stiff,
-nervous,
-serious.
-
-This creates tension.
-
-Smile first.
-
-
 Head Nod
-
-Positive head nodding creates agreement.
-
-It subtly communicates:
-
-understanding,
-connection,
-empathy.
-
+Positive head nodding creates agreement. It subtly communicates understanding, connection, and empathy.
 People often begin subconsciously mirroring you.
 
-Avoid:
-
-excessive nodding,
-frantic nodding,
-side-to-side head shaking.
-
-Positive head nods build rapport.
-
-
 Slow Down
-
-Most inexperienced negotiators talk too fast.
-
-Fast talking often signals:
-
-nervousness,
-anxiety,
-desperation.
-
-Slow down.
-
-Pause.
-
-Think.
-
-Let silence work.
-
+Most inexperienced negotiators talk too fast. Fast talking often signals nervousness, anxiety, and desperation.
+Slow down. Pause. Think. Let silence work.
 Confidence is often communicated through pace.
 
 
-Down Pitch vs Up Pitch
+DOWN PITCH VS UP PITCH
 
-One of the biggest communication mistakes people make is ending every sentence with an upward tone.
+One of the biggest communication mistakes is ending every sentence with an upward tone.
 
-Example:
+Example (uncertain): "I think this property could work?"
+Example (confident): "I think this property could work."
 
-"I think this property could work?"
-
-This sounds uncertain.
-
-Instead:
-
-Use a downward tone.
-
-Example:
-
-"I think this property could work."
-
-This sounds:
-
-calm,
-professional,
-confident,
-certain.
-
+Use a downward tone. It sounds calm, professional, confident, and certain.
 People trust certainty.
 
 
-Eye Contact
+EYE CONTACT
 
-Good eye contact communicates:
+Good eye contact communicates confidence, honesty, and presence.
 
-confidence,
-honesty,
-presence.
-
-However:
-
-Do NOT stare.
-
-That becomes awkward.
+However — do NOT stare. That becomes awkward.
 
 Instead:
+• Maintain eye contact.
+• Break eye contact with purpose (pointing to numbers, reviewing analysis, discussing documents).
+• Then return to eye contact.
 
-Maintain eye contact.
-
-Break eye contact with purpose.
-
-Examples:
-
-pointing to numbers,
-pointing to repairs,
-reviewing analysis,
-discussing documents.
-
-Then return to eye contact.
-
-Natural eye contact builds trust.
-
-Forced eye contact creates discomfort.
+Natural eye contact builds trust. Forced eye contact creates discomfort.
 
 
-Get On Their Team
+GET ON THEIR TEAM
 
 One of the most powerful sales principles:
-
-Do not position yourself against people.
-
+Do not position yourself AGAINST people.
 Position yourself WITH people.
 
-Instead of:
-
-You vs Seller
-
-Create:
-
-You + Seller vs The Problem
+Instead of: You vs Seller
+Create: You + Seller vs The Problem
 
 Physically:
+• stand beside them,
+• review numbers together,
+• analyze the property together,
+• look at paperwork together.
 
-stand beside them,
-review numbers together,
-analyze the property together,
-look at paperwork together.
-
-This creates collaboration.
-
-Not confrontation.
+This creates collaboration — not confrontation.
 
 
-The Goal Is Never To Win
+THE GOAL IS NEVER TO WIN
 
 Bad negotiators try to win.
-
 Great negotiators try to solve problems.
 
-The moment negotiation feels like:
-
-Me vs You
-
-everyone loses.
-
-The moment it becomes:
-
-Us vs The Problem
-
-everything changes.
+The moment negotiation feels like "Me vs You" — everyone loses.
+The moment it becomes "Us vs The Problem" — everything changes.
 
 
-Understanding Objections
+UNDERSTANDING OBJECTIONS
 
-Most objections are not actually objections.
+Most objections are not actually objections. They are:
+• concerns,
+• uncertainty,
+• lack of information,
+• lack of trust,
+• fear,
+• or timing issues.
 
-They are:
+Your job is not to defeat objections. Your job is to understand them.
 
-concerns,
-uncertainty,
-lack of information,
-lack of trust,
-fear,
-timing issues.
+THE GOLDEN RULE: Every objection contains information.
 
-Your job is not to defeat objections.
-
-Your job is to understand them.
-
-
-The Golden Rule
-
-Every objection contains information.
-
-Most investors hear:
-
-"I need more money."
-
-And immediately think:
-
-"I need to raise my offer."
-
-Great investors think:
-
-Why?
+Most investors hear "I need more money" and immediately think "I need to raise my offer."
+Great investors think: Why?
 
 
-The Five Levels Of Objections
+THE FIVE LEVELS OF OBJECTIONS
 
 Level 1 – Lack Of Information
-
 "I don't understand."
-
-Solution:
-
-Educate.
-
+Solution: Educate.
 
 Level 2 – Lack Of Trust
-
 "I'm not sure about you."
-
-Solution:
-
-Build credibility.
-
+Solution: Build credibility.
 
 Level 3 – Fear
-
 "What if this goes wrong?"
-
-Solution:
-
-Reduce risk.
-
+Solution: Reduce risk.
 
 Level 4 – Timing
-
 "I'm not ready."
-
-Solution:
-
-Follow up.
-
+Solution: Follow up.
 
 Level 5 – Structure
-
 "This doesn't solve my problem."
-
-Solution:
-
-Find a better structure.
+Solution: Find a better structure.
 
 
-Turn Negatives Into Positives
-
-One of the most powerful sales skills is reframing.
+TURN NEGATIVES INTO POSITIVES — REFRAMING
 
 Reframing means helping people see situations from a different perspective.
+The goal is not to argue or manipulate. The goal is to help people see opportunities and solutions they may not have considered.
 
-The goal is not to argue.
+Example:
+Seller: "I don't want seller financing."
+Weak Response: "Why not?"
+Strong Response: "I completely understand. Most people haven't been shown how seller financing can create monthly income, potentially reduce taxes, and provide flexibility. What specifically concerns you most about it?"
 
-The goal is not to manipulate.
+More Examples:
+Seller: "I need more money."
+Reframe: "It sounds like accomplishing a specific financial goal is important to you. Help me understand what you're trying to accomplish."
 
-The goal is to help people see opportunities and solutions they may not have considered.
+Seller: "I'll just keep the property."
+Reframe: "That's definitely an option. What do you like most about continuing to own it?"
 
-
-Example
-
-Seller:
-
-"I don't want seller financing."
-
-Weak Response:
-
-"Why not?"
-
-Strong Response:
-
-"I completely understand. Most people haven't been shown how seller financing can create monthly income, potentially reduce taxes, and provide flexibility. What specifically concerns you most about it?"
-
-Notice:
-
-You did not argue.
-
-You did not push.
-
-You simply reframed the conversation.
+Seller: "Your offer is too low."
+Reframe: "I completely understand. If I were in your shoes, I'd probably feel the same way. Help me understand where you need to be and how you arrived at that number."
 
 
-More Reframing Examples
-
-Seller:
-
-"I need more money."
-
-Reframe:
-
-"It sounds like accomplishing a specific financial goal is important to you. Help me understand what you're trying to accomplish."
-
-
-Seller:
-
-"I'll just keep the property."
-
-Reframe:
-
-"That's definitely an option. What do you like most about continuing to own it?"
-
-
-Seller:
-
-"Your offer is too low."
-
-Reframe:
-
-"I completely understand. If I were in your shoes, I'd probably feel the same way. Help me understand where you need to be and how you arrived at that number."
-
-
-Anchoring The Negotiation
-
-One of the most powerful negotiation skills is anchoring.
+ANCHORING THE NEGOTIATION
 
 Anchoring means helping the seller compare your offer to objective facts and numbers rather than emotions or unrealistic expectations.
 
-The first number discussed often becomes the reference point that future negotiations revolve around.
+The first number discussed often becomes the reference point that future negotiations revolve around. This is why great investors negotiate using data — not opinions.
 
-This is why great investors do not negotiate using opinions.
-
-They negotiate using data.
-
-
-Use Real Market Anchors
-
-Strong anchors include:
-
-Recent comparable sales
-Current interest rates
-Current rents
-Vacancy rates
-Repair costs
-Insurance costs
-Taxes
-Current market conditions
+Use Real Market Anchors:
+• Recent comparable sales
+• Current interest rates
+• Current rents
+• Vacancy rates
+• Repair costs
+• Insurance costs and taxes
+• Current market conditions
 
 The more objective your anchor is, the more credibility it has.
 
-
 Use Comparable Sales Correctly
-
-Many sellers compare their property to the highest sale they can find.
-
-Your job is to help them compare it to realistic sales.
-
-For example:
-
-If comparable properties sold for:
-
-$600,000
-$610,000
-$615,000
-
-You can discuss the fact that those properties were listed with realtors and often involved:
-
-Realtor commissions
-Closing costs
-Additional carrying costs
-Months of showings
-Repairs requested by buyers
-
-A seller accepting a direct off-market offer may save significant money, time, and stress.
-
-This creates a logical anchor for discussing price.
-
+Many sellers compare their property to the highest sale they can find. Your job is to help them compare it to realistic sales. A seller accepting a direct off-market offer may save significant money on commissions, closing costs, carrying costs, months of showings, and buyer-requested repairs.
 
 Use Interest Rates As An Anchor
+Interest rates dramatically impact affordability. A property that worked at 3% may not work at today's rates. This can be a powerful anchor when discussing price — and a powerful transition into discussing seller financing.
 
-Interest rates dramatically impact affordability.
+Example: "If financing were still available at 3%, I could likely pay much more for this property. Because rates are significantly higher today, the numbers become much tighter. That's one reason seller financing can sometimes create flexibility for both of us."
 
-Five years ago:
-
-3% financing was common.
-
-Today:
-
-6.5%–8% financing may be common.
-
-This changes what investors can pay.
-
-A property that worked at a 3% interest rate may not work at today's rates.
-
-This can be a powerful anchor when discussing price.
-
-It can also become a powerful transition into discussing seller financing.
-
-Example:
-
-"If financing were still available at 3%, I could likely pay much more for this property. Because rates are significantly higher today, the numbers become much tighter. That's one reason seller financing can sometimes create flexibility for both of us."
+Always anchor using facts — not pressure. Numbers are stronger than emotions.
 
 
-Anchor Using Facts, Not Pressure
-
-The goal is never to:
-
-argue,
-pressure,
-manipulate,
-or "win."
-
-The goal is to help the seller understand the realities of the market and how you arrived at your numbers.
-
-Facts are stronger than opinions.
-
-Numbers are stronger than emotions.
-
-Always anchor using information the seller can verify.
-
-
-Know Your Numbers Before You Negotiate
+KNOW YOUR NUMBERS BEFORE YOU NEGOTIATE
 
 One of the biggest mistakes investors make is entering negotiations without knowing exactly what they can pay.
 
-This creates:
-
-hesitation,
-emotional decision-making,
-poor negotiations,
-and bad investments.
-
 Before discussing price, you should already know:
+• your ideal purchase price,
+• your maximum acceptable price,
+• and the exact structure that would make the deal a buy.
 
-your ideal purchase price,
-your maximum acceptable price,
-and the exact structure that would make the deal a buy.
-
-
-Your Analysis Creates Confidence
-
-The strongest negotiators are usually the most prepared.
-
-When you know your numbers:
-
-you negotiate calmly,
-you can justify your offer,
-and you are less likely to make emotional decisions.
-
-Your confidence should come from your analysis.
-
-Not from your personality.
-
-Not from your negotiation skills.
-
-Not from your ability to talk.
-
-Your confidence should come from knowing your numbers.
+Your confidence should come from your analysis — not from your personality or negotiation skills.
 
 
-Analyze First, Negotiate Second
+ANALYZE FIRST, NEGOTIATE SECOND
 
-If a seller presents an unexpected opportunity or begins negotiating before you've analyzed the property:
+If a seller presents an unexpected opportunity or begins negotiating before you've analyzed the property — stop. Find privacy. Take the time to run the numbers.
 
-Stop.
-
-Find privacy.
-
-Take the time to run the numbers.
-
-Use the CDS Rental Property Calculator.
-
-Never negotiate blindly.
-
-Even a quick analysis is better than guessing.
+Never negotiate blindly. Even a quick analysis is better than guessing.
 
 
-Create Room To Negotiate
+CREATE ROOM TO NEGOTIATE
 
 Sellers want to feel like they won something.
 
-Because of this, your initial offer should usually leave room for negotiation.
+Your initial offer should usually leave room for negotiation.
 
-Example:
-
-If your analysis shows:
-
-$550,000
-
-is your maximum acceptable purchase price,
-
-your initial offer may be:
-
-$520,000
-$530,000
-
-depending on the situation.
-
-This creates room to move while still protecting your criteria.
+Example: If your analysis shows $550,000 is your maximum acceptable purchase price, your initial offer may be $520,000-$530,000 depending on the situation. This creates room to move while still protecting your criteria.
 
 
-Make Your Concessions Feel Valuable
+MAKE YOUR CONCESSIONS FEEL VALUABLE
 
-Do not move quickly.
-
-Do not make large jumps.
-
-When you increase your offer:
-
-move slowly,
-explain your reasoning,
-and make the movement feel meaningful.
+• Do not move quickly.
+• Do not make large jumps.
+• When you increase your offer, move slowly, explain your reasoning, and make the movement feel meaningful.
 
 The more difficult your concessions appear, the more valuable they feel to the seller.
 
 
-Use Conservative Assumptions
+USE CONSERVATIVE ASSUMPTIONS
 
-Great investors negotiate based on what the property is doing today.
+Great investors negotiate based on what the property is doing TODAY — not what they hope it will do tomorrow.
 
-Not what they hope it will do tomorrow.
+Use: current rents, current vacancy, current expenses, realistic interest rates.
 
-Examples:
+Do NOT negotiate based on: future rent increases, future renovations, future appreciation, future refinancing.
 
-Use:
+Those are opportunities for you to create value later. They are not value that exists today.
 
-current rents,
-current vacancy,
-current expenses,
-realistic interest rates.
-
-Do not negotiate based on:
-
-future rent increases,
-future renovations,
-future appreciation,
-future refinancing.
-
-Those are opportunities for you to create value later.
-
-They are not value that exists today.
+THE GOLDEN RULE: Never pay for upside you have not created yet. Pay based on what the property is currently producing. Then create additional value through your execution after closing.
 
 
-Create Hidden Upside
-
-One of the best positions in negotiation is when the property looks average today but you know how to improve it.
-
-Examples:
-
-Raising under-market rents
-Improving management
-Reducing expenses
-Improving occupancy
-Negotiating lower financing costs
-Adding value through renovations
-
-Analyze the property based on its current reality.
-
-Allow the upside to become your reward for solving problems after you buy it.
-
-This keeps your analysis conservative and makes it easier to justify your offer.
-
-
-The Golden Rule Of Negotiation
-
-Never pay for upside you have not created yet.
-
-Pay based on what the property is currently producing.
-
-Then create additional value through your execution after closing.
-
-
-Option Closes
+OPTION CLOSES
 
 People often dislike being forced into decisions.
 
-Instead of:
+Instead of: "Do you want to move forward?"
 
-"Do you want to move forward?"
+Try: "If we found a structure that works, would closing next week make more sense, or would the end of the month be better?"
 
-Try:
+Both options move forward. Neither feels pushy.
 
-"If we found a structure that works, would closing next week make more sense, or would the end of the month be better?"
-
-Notice:
-
-Both options move forward.
-
-Neither feels pushy.
+More Examples:
+• "If seller financing solved the payment issue, would you prefer a larger down payment or a higher monthly payment?"
+• "If we make this work, would flexibility on timing be more important or maximizing price?"
+• "If we moved forward, would you rather leave the property completely as-is or fix current issues before the sell?"
 
 
-More Option Close Examples
+WHEN THINGS GO SIDEWAYS
 
-"If seller financing solved the payment issue, would you prefer a larger down payment or a higher monthly payment?"
+If emotions rise, frustration appears, or tension increases — immediately remember:
 
-"If we make this work, would flexibility on timing be more important or maximizing price?"
-
-"If we moved forward, would you rather leave the property completely as-is or fix current issues before the sell?"
-
-
-When Things Go Sideways
-
-If:
-
-emotions rise,
-frustration appears,
-tension increases,
-
-Immediately remember:
-
-Smile.
-
-Head Nod.
-
-Slow Down.
+Smile. Head Nod. Slow Down.
 
 Almost every difficult conversation improves when you do these three things.
 
 
-Objections From Yourself
+OBJECTIONS FROM YOURSELF
 
-Often the biggest objection is:
-
-You.
-
-Examples:
+Often the biggest objection is YOU.
 
 "What if they reject me?"
-
 "What if I sound stupid?"
-
 "What if they say no?"
 
 Remember:
-
-No offer = No deal.
-
-No conversation = No deal.
-
-No follow-up = No deal.
+• No offer = No deal.
+• No conversation = No deal.
+• No follow-up = No deal.
 
 Action creates opportunities.
 
 
-The UC30 Trust Formula
+THE UC30 TRUST FORMULA
 
 People trust people who are:
+• confident,
+• calm,
+• knowledgeable,
+• professional,
+• prepared,
+• consistent.
 
-confident,
-calm,
-knowledgeable,
-professional,
-prepared,
-consistent.
-
-Not:
-
-aggressive,
-pushy,
-manipulative,
-desperate.
+NOT:
+• aggressive,
+• pushy,
+• manipulative,
+• desperate.
 
 
-Quick Rules To Remember
+QUICK RULES TO REMEMBER
 
-Smile first.
-Slow down.
-Use down pitch.
-Maintain natural eye contact.
-Get on their team.
-Listen more than you talk.
-Every objection contains information.
-Reframe negatives into positives.
-Anchor using facts and data.
-Know your numbers before negotiating.
-Never pay for upside you haven't created.
-Use option closes.
-Solve problems, don't create pressure.
-Build trust before discussing price.
-Confidence comes from preparation.
+• Smile first.
+• Slow down.
+• Use down pitch.
+• Maintain natural eye contact.
+• Get on their team.
+• Listen more than you talk.
+• Every objection contains information.
+• Reframe negatives into positives.
+• Anchor using facts and data.
+• Know your numbers before negotiating.
+• Never pay for upside you haven't created.
+• Use option closes.
+• Solve problems, don't create pressure.
+• Build trust before discussing price.
+• Confidence comes from preparation.
 
 
-Key Takeaway
+TODAY'S EXECUTION CHALLENGE
 
-Great negotiators do not win arguments.
+Have 5 conversations today.
 
-Great negotiators:
+For each conversation identify:
+• The objection.
+• The likely real concern.
+• A reframe.
+• An anchor you could use.
+• A possible solution.
 
-build trust,
-understand problems,
-communicate clearly,
-anchor with facts,
-know their numbers,
-and create solutions.
+Document all five.
 
-The more trust you build, the easier negotiation becomes.
 
-The more prepared you are, the more confident you become.
+TODAY'S SUGGESTED ARSENAL ACTIVITY
 
-And the more confident you become, the more opportunities turn into contracts.`,
-      },
-    ],
+Call realtors, wholesalers, property managers, and investors.
+
+Ask:
+"What objection do you hear most often from sellers right now?"
+
+Then ask:
+"What usually helps overcome that objection?"
+
+Document the answers and look for patterns.
+
+KEY TAKEAWAY: Great negotiators do not win arguments. They build trust, understand problems, communicate clearly, anchor with facts, know their numbers, and create solutions.
+`,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'd8q1_sellerproblems',
+          title: 'Solving Seller Problems Quiz',
+          questions: [
+            {
+              id: 'd8q1_q1',
+              text: 'A seller says:\n"I\'m tired of the property, but I don\'t really need the money."\n\nWhat is the BEST follow-up question?',
+              type: 'multiple_choice',
+              options: [
+                '"Would you take $50,000 less?"',
+                '"How much cash do you need today?"',
+                '"If money isn\'t the primary concern, what would an ideal outcome look like for you?"',
+                '"What\'s the lowest you\'ll take?"'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'When a seller says money isn\'t the main concern, the best approach is to understand what IS important to them. Asking about their ideal outcome uncovers their true motivation.'
+            },
+            {
+              id: 'd8q1_q2',
+              text: 'A seller owns a free-and-clear rental property and wants monthly income in retirement.\n\nWhat solution should you explore first?',
+              type: 'multiple_choice',
+              options: [
+                'Hard Money',
+                'Seller Financing',
+                'FHA Financing',
+                'Commercial Financing'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Seller financing can provide the seller with monthly income during retirement while giving the buyer favorable terms. It\'s a natural fit for a free-and-clear property owner seeking income.'
+            },
+            {
+              id: 'd8q1_q3',
+              text: 'A landlord says:\n"I\'m just tired of dealing with tenants."\n\nWhat problem are they MOST likely trying to solve?',
+              type: 'multiple_choice',
+              options: [
+                'Purchase price',
+                'Appreciation',
+                'Stress and management burden',
+                'Tax benefits'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'A tired landlord is experiencing emotional fatigue from the management burden. Understanding this helps you craft a solution around convenience and simplicity.'
+            },
+            {
+              id: 'd8q1_q4',
+              text: 'Which question is MOST likely to uncover seller motivation?',
+              type: 'multiple_choice',
+              options: [
+                '"What\'s your asking price?"',
+                '"How old is the roof?"',
+                '"Why are you considering selling?"',
+                '"How many bedrooms does it have?"'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Asking WHY they are selling gets to the root motivation. Property details and price questions don\'t reveal the underlying problem you can solve.'
+            },
+            {
+              id: 'd8q1_q5',
+              text: 'A seller inherited a property they don\'t want to manage.\n\nWhat is likely MOST important to them?',
+              type: 'multiple_choice',
+              options: [
+                'Maximum leverage',
+                'Simplicity and convenience',
+                'Appreciation potential',
+                'Cash-on-cash return'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Inherited properties often create stress and confusion for heirs. They typically want simplicity and convenience above all else.'
+            },
+            {
+              id: 'd8q1_q6',
+              text: 'A seller says:\n"I don\'t have the money to fix all the repairs."\n\nWhat should you immediately recognize?',
+              type: 'multiple_choice',
+              options: [
+                'Potential problem-solving opportunity',
+                'Reason to stop negotiating',
+                'Appreciation opportunity',
+                'Financing issue only'
+              ],
+              correctAnswer: 0,
+              explanationOnFail: 'Deferred maintenance is one of the most common seller problems. A seller who can\'t afford repairs is often more flexible on price or terms — creating an opportunity for a problem-solving investor.'
+            },
+            {
+              id: 'd8q1_q7',
+              text: 'Which investor mindset is MOST effective?',
+              type: 'multiple_choice',
+              options: [
+                '"How do I buy this property?"',
+                '"How do I negotiate harder?"',
+                '"What problem can I solve?"',
+                '"How do I get the lowest price possible?"'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'The biggest shift in thinking: New investors ask "What can I buy?" Great investors ask "What problem can I solve?" This shift changes everything.'
+            },
+            {
+              id: 'd8q1_q8',
+              text: 'A seller says:\n"I need more money than your offer."\n\nWhat is the BEST next step?',
+              type: 'multiple_choice',
+              options: [
+                'Immediately raise your offer',
+                'Ask what they are trying to accomplish with the additional money',
+                'End negotiations',
+                'Tell them they are unrealistic'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Understanding WHY they need more money reveals the real problem. There may be creative solutions beyond simply raising the purchase price.'
+            },
+            {
+              id: 'd8q1_q9',
+              text: 'Which question is MOST likely to reveal hidden motivation?',
+              type: 'multiple_choice',
+              options: [
+                '"How many bathrooms are there?"',
+                '"If you don\'t sell this property, what do you think happens over the next year?"',
+                '"What color is the roof?"',
+                '"When was it built?"'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Asking what happens if they DON\'T sell forces the seller to confront the ongoing pain of ownership — often revealing deeper motivation.'
+            },
+            {
+              id: 'd8q1_q10',
+              text: 'A seller wants top dollar but also wants to avoid realtor commissions, repairs, and months of showings.\n\nWhat should you recognize?',
+              type: 'multiple_choice',
+              options: [
+                'Multiple problems may create flexibility',
+                'They are impossible to negotiate with',
+                'Price is the only thing that matters',
+                'They are not motivated'
+              ],
+              correctAnswer: 0,
+              explanationOnFail: 'When sellers have multiple concerns beyond just price, there are multiple levers you can use to create a deal. Multiple problems often create flexibility.'
+            },
+            {
+              id: 'd8q1_q11',
+              text: 'A seller says:\n"I already have another property under contract and need this one sold."\n\nWhat is likely their biggest concern?',
+              type: 'multiple_choice',
+              options: [
+                'Appreciation',
+                'Certainty and timing',
+                'Property management',
+                'Cash-on-cash return'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'When a seller has another deal contingent on selling this property, certainty and timing become the most critical factors.'
+            },
+            {
+              id: 'd8q1_q12',
+              text: 'Which statement BEST builds trust?',
+              type: 'multiple_choice',
+              options: [
+                '"This property has tons of problems."',
+                '"You\'ll never get your asking price."',
+                '"Help me understand what would make this a successful outcome for you."',
+                '"My offer expires tonight."'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Asking about their desired outcome shows genuine interest in solving their problem — building trust before discussing price.'
+            },
+            {
+              id: 'd8q1_q13',
+              text: 'A seller says:\n"I don\'t really care about the purchase price. I just don\'t want a huge tax bill."\n\nWhich solution may be worth exploring?',
+              type: 'multiple_choice',
+              options: [
+                'Hard Money',
+                'Seller Financing',
+                'FHA Financing',
+                'Bridge Loan'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Seller financing can spread the tax impact over multiple years through installment sale treatment, potentially reducing the seller\'s overall tax burden.'
+            },
+            {
+              id: 'd8q1_q14',
+              text: 'What is usually the BIGGEST mistake investors make during seller conversations?',
+              type: 'multiple_choice',
+              options: [
+                'Asking too many questions',
+                'Listening too much',
+                'Talking more than they listen',
+                'Being too patient'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Most investors talk too much. Great investors ask questions, listen carefully, identify pain points, and find solutions.'
+            },
+            {
+              id: 'd8q1_q15',
+              text: 'Which statement BEST represents the UC30 Problem Solver Framework?',
+              type: 'multiple_choice',
+              options: [
+                'Find properties and negotiate aggressively',
+                'Understand the seller\'s problem, identify a solution, and determine whether it still fits your criteria',
+                'Always focus on getting the lowest price possible',
+                'Solve every seller\'s problem regardless of your investment criteria'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'The framework is: understand the problem, assess its severity, find a solution, and confirm it still fits YOUR criteria. Great investors solve problems while maintaining discipline.'
+            }
+          ]
+        },
+        {
+          id: 'd8q2_objections',
+          title: 'Objection & Influence Mastery Quiz',
+          questions: [
+            {
+              id: 'd8q2_q1',
+              text: 'A seller says:\n"Your offer is way too low."\n\nWhat is the BEST response?',
+              type: 'multiple_choice',
+              options: [
+                '"That\'s the best I can do."',
+                '"You\'re asking way too much."',
+                '"I completely understand. Help me understand where you need to be and how you arrived at that number."',
+                '"Well that\'s just what my calculator says."'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Great negotiators seek understanding before defending their position. This response shows empathy while opening a conversation about their reasoning.'
+            },
+            {
+              id: 'd8q2_q2',
+              text: 'During a property walkthrough, which combination is MOST likely to build trust?',
+              type: 'multiple_choice',
+              options: [
+                'Fast talking, constant eye contact, and aggressive confidence',
+                'Smile, positive head nods, good eye contact, and a slower pace',
+                'Avoiding eye contact and discussing only numbers',
+                'Talking more than the seller'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'The UC30 Communication Formula: Smile, Head Nod, Slow Down. These three principles build trust and rapport naturally.'
+            },
+            {
+              id: 'd8q2_q3',
+              text: 'A seller says:\n"I need more money."\n\nWhat should your FIRST thought be?',
+              type: 'multiple_choice',
+              options: [
+                'I need to raise my offer.',
+                'They\'re impossible to negotiate with.',
+                'Why do they need more money?',
+                'The deal is dead.'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'The reason behind the objection is usually more important than the objection itself. Every objection contains information.'
+            },
+            {
+              id: 'd8q2_q4',
+              text: 'Which statement BEST demonstrates getting on the seller\'s team?',
+              type: 'multiple_choice',
+              options: [
+                '"Here\'s why you\'re wrong."',
+                '"Let me explain why my offer is fair."',
+                '"Let\'s look at the numbers together and see if we can find something that works for both of us."',
+                '"Take it or leave it."'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Position yourself WITH the seller, not AGAINST them. Create: You + Seller vs The Problem. This creates collaboration, not confrontation.'
+            },
+            {
+              id: 'd8q2_q5',
+              text: 'Which is the BEST example of an option close?',
+              type: 'multiple_choice',
+              options: [
+                '"Are you ready to sign today?"',
+                '"You need to make a decision."',
+                '"If we move forward, would closing next week work better or would the end of the month be easier?"',
+                '"What do you want to do?"'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Both options move the conversation forward without creating pressure. Option closes guide the conversation while respecting the seller\'s autonomy.'
+            },
+            {
+              id: 'd8q2_q6',
+              text: 'A seller says: "I think my property is worth $650,000."\n\nComparable sales suggest: $590,000, $600,000, $605,000.\n\nWhat is the BEST anchoring approach?',
+              type: 'multiple_choice',
+              options: [
+                'Tell them they\'re wrong.',
+                'Ignore the sales data.',
+                'Walk through comparable sales and discuss how current market conditions impact value.',
+                'Immediately raise your offer.'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Anchor using facts and data — not pressure or opinions. Walking through comparable sales helps the seller understand market reality.'
+            },
+            {
+              id: 'd8q2_q7',
+              text: 'Which investor is MOST likely to negotiate effectively?\n\nInvestor A: Knows their exact maximum price, has analyzed the property, understands financing options.\n\nInvestor B: Likes the property, plans to figure out the numbers later.',
+              type: 'multiple_choice',
+              options: [
+                'Investor B',
+                'Investor A',
+                'Both are equal',
+                'Neither'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Confidence comes from preparation and analysis. Investor A can negotiate calmly and justify their offer because they know their numbers.'
+            },
+            {
+              id: 'd8q2_q8',
+              text: 'A seller says:\n"I don\'t like seller financing."\n\nWhich response BEST reframes the objection?',
+              type: 'multiple_choice',
+              options: [
+                '"Why not?"',
+                '"You\'re making a mistake."',
+                '"I completely understand. Most people haven\'t seen how seller financing can create monthly income and flexibility. What concerns you most about it?"',
+                '"Trust me, it\'s better."'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Reframing means helping people see situations from a different perspective — without arguing, pushing, or manipulating.'
+            },
+            {
+              id: 'd8q2_q9',
+              text: 'Which statement BEST reflects the principle of conservative analysis?',
+              type: 'multiple_choice',
+              options: [
+                'Analyze based on future rent increases you plan to implement.',
+                'Analyze based on what the property could become after renovations.',
+                'Analyze based on current performance and let future improvements become your upside.',
+                'Analyze using the most optimistic assumptions possible.'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Never pay for value you have not yet created. Pay based on what the property is currently producing. Then create additional value through your execution after closing.'
+            },
+            {
+              id: 'd8q2_q10',
+              text: 'A seller becomes frustrated during negotiations and the conversation starts feeling tense.\n\nAccording to the UC30 Communication Formula, what should you immediately focus on?',
+              type: 'multiple_choice',
+              options: [
+                'Talking faster',
+                'Defending your position',
+                'Smile, Head Nod, Slow Down',
+                'Raising your offer'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'When things go sideways — Smile, Head Nod, Slow Down. Almost every difficult conversation improves when you do these three things.'
+            },
+            {
+              id: 'd8q2_q11',
+              text: 'Which statement BEST summarizes this entire training?',
+              type: 'multiple_choice',
+              options: [
+                'Great negotiators are aggressive.',
+                'Great negotiators always get the lowest price.',
+                'Great negotiators build trust, understand problems, anchor with facts, and create solutions.',
+                'Great negotiators are the best talkers.'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Great negotiators build trust, understand problems, communicate clearly, anchor with facts, know their numbers, and create solutions. The more trust you build, the easier negotiation becomes.'
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     day: 9,
