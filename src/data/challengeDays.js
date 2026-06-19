@@ -3079,52 +3079,9 @@ You want people to think: "If I decide to sell, I should call YOU."
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Arsenal Contacts vs Target Contacts
+Arsenal Contacts — Keep Building
 
-There are TWO major types of follow-up inside UC30:
-
-
-Arsenal Contacts
-
-These are people who can bring you opportunities in the future. Examples: realtors, wholesalers, property managers, lenders, investors, contractors, attorneys, and other relationships.
-
-These people may NOT currently have a deal for you, but strong relationships with them can create deal flow later.
-
-
-Target Contacts
-
-These are sellers, owners, or warm property leads connected to properties you are actively interested in buying.
-
-This includes: sellers you already spoke with, people who rejected your offer, owners considering selling, or leads that showed SOME level of interest.
-
-These are active acquisition opportunities.
-
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Following Up With Arsenal Contacts
-
-The goal with Arsenal Contacts is relationship building and staying top of mind. You want these people to remember you, trust you, and WANT to bring deals to you.
-
-
-Build Yourself Up As A Buyer
-
-Arsenal Contacts should view you as serious, professional, responsive, easy to work with, and capable of closing.
-
-You want them to feel bringing you deals will make THEIR life easier.
-
-Examples: you move quickly, communicate clearly, close reliably, understand investing, and do NOT waste time.
-
-People bring opportunities to buyers they trust. The more confidence they have in you as a buyer, the more deals they will bring you! Most importantly — you must know exactly what you're looking for and be willing to act when they bring it to you! Arsenal contacts can be destroyed if they bring you a good deal that meets your criteria, and you are unwilling or unable to take action.
-
-
-Great Follow-Up Is NOT Complicated
-
-Simple follow-up works.
-
-Examples: checking in, asking how business is going, asking if they have anything coming up, commenting on market conditions, or reminding them what type of deals you buy.
-
-The goal is consistency. NOT overwhelming people.
+You've been building your Arsenal Contacts since Day 1 — keep adding to them consistently and stay top of mind. The relationships you've built so far are already working for you. Check in regularly, remind them what you buy, and make it easy for them to bring you deals. Consistency wins.
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
