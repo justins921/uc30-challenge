@@ -3535,21 +3535,19 @@ The goal is NOT to force deals today. The goal is to become the person they thin
   },
   {
     day: 6,
-    title: "Return Metrics, Speed & Momentum",
-    caption: "Master return metrics and build execution speed.",
-    taskDescription: "",
-    trainingContent: "",
-    category: "pipeline",
-    weekNumber: 1,
-    weekTitle: "BUILD THE FOUNDATION",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    sections: [
-      {
-        type: "training",
-        title: "Return Metrics Mastery",
-        content: `Why This Day Matters
+    title: "Return Metrics Mastery & Speed & Momentum",
+    category: "analysis",
+    locked: true,
+    phaseId: 'foundation',
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 1 — RETURN METRICS MASTERY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+How Successful Investors Actually Think About Returns
+
+
+WHY THIS DAY MATTERS
 
 Many investors know how to calculate:
 • Cash Flow
@@ -3558,10 +3556,14 @@ Many investors know how to calculate:
 
 But very few understand how to use those numbers to make great decisions.
 
-The goal is NOT calculating metrics. The goal is: Knowing what to buy and what to avoid.
+The goal is NOT:
+calculating metrics.
+
+The goal is:
+Knowing what to buy and what to avoid.
 
 
-The Truth About Return Metrics
+THE TRUTH ABOUT RETURN METRICS
 
 Many investors spend years arguing about:
 • Cap Rate
@@ -3569,14 +3571,22 @@ Many investors spend years arguing about:
 • ROE
 • Appreciation
 
-The reality is: most investors become wealthy because they buy good assets, use reasonable financing, hold for a long time, and avoid catastrophic mistakes.
+The reality is:
+
+Most investors become wealthy because they:
+• buy good assets,
+• use reasonable financing,
+• hold for a long time,
+• and avoid catastrophic mistakes.
 
 
-Why Cash On Cash Return Matters So Much
+WHY CASH ON CASH RETURN MATTERS SO MUCH
 
 If you are using financing, Cash On Cash Return is often one of the most important metrics.
 
-Why? Because it measures how quickly your invested money comes back to you.
+Why?
+Because it measures:
+How quickly your invested money comes back to you.
 
 The faster your money comes back:
 • the faster you can build reserves,
@@ -3587,7 +3597,7 @@ The faster your money comes back:
 This is why many investors focus heavily on Cash On Cash Return.
 
 
-Cash On Cash Return Can Lie
+CASH ON CASH RETURN CAN LIE
 
 Many investors become obsessed with:
 • low down payments,
@@ -3596,7 +3606,8 @@ Many investors become obsessed with:
 
 This can be dangerous.
 
-Example
+Example:
+
 Property A
 • 1% down
 • Seller financing
@@ -3607,9 +3618,11 @@ Property B
 • Conventional financing
 • 12% Cash On Cash Return
 
-Most beginners automatically choose Property A. That may be a mistake.
+Most beginners automatically choose Property A.
+That may be a mistake.
 
-Why? Property A may have:
+Why?
+Property A may have:
 • higher risk,
 • smaller reserves,
 • balloon payment risk,
@@ -3618,23 +3631,26 @@ Why? Property A may have:
 • thin cash flow.
 
 
-Risk Adjusted Returns
+RISK ADJUSTED RETURNS
 
 Two properties can have identical returns and completely different levels of risk.
 
-Property A — 12% Cash On Cash Return
+Property A
+• 12% Cash On Cash Return
 • 25% down
 • Fixed financing
 • Strong reserves
 • Long-term loan
 
-Property B — 12% Cash On Cash Return
+Property B
+• 12% Cash On Cash Return
 • 3% down
 • Balloon payment
 • Minimal reserves
 • Short-term debt
 
-The returns are identical. The risk is not.
+The returns are identical.
+The risk is not.
 
 Great investors evaluate:
 • return,
@@ -3644,9 +3660,10 @@ Great investors evaluate:
 • and downside protection.
 
 
-Why Rich Investors Think Differently
+WHY RICH INVESTORS THINK DIFFERENTLY
 
-New investors often ask: "Which property has the highest return?"
+New investors often ask:
+"Which property has the highest return?"
 
 Experienced investors ask:
 • Will it survive?
@@ -3654,18 +3671,31 @@ Experienced investors ask:
 • Can it withstand problems?
 • Will I sleep at night owning it?
 
-Many wealthy investors choose stability, predictability, and consistency over maximizing every possible percentage point of return.
+Many wealthy investors choose:
+• stability,
+• predictability,
+• and consistency
+over maximizing every possible percentage point of return.
 
 
-Tax Benefits Deep Dive
+TAX BENEFITS DEEP DIVE
 
-Most investors dramatically underestimate tax benefits. Many investors think: "Tax benefits are just a small bonus." This is often not true.
+Most investors dramatically underestimate tax benefits.
+
+Many investors think:
+"Tax benefits are just a small bonus."
+
+This is often not true.
 
 Depreciation
-The government assumes buildings wear out over time. Because of this, you will be able to claim depreciation deductions even while your property increases in value. This can significantly reduce taxes.
+The government assumes buildings wear out over time.
+Because of this:
+you will be able to claim depreciation deductions even while your property increases in value.
+This can significantly reduce taxes.
 
 Cost Segregation
-Cost Segregation allows investors to accelerate depreciation. This can create:
+Cost Segregation allows investors to accelerate depreciation.
+This can create:
 • larger deductions,
 • earlier tax benefits,
 • and substantial tax savings.
@@ -3681,11 +3711,16 @@ Actual Benefit: $18,000
 Many investors completely ignore this return source.
 
 
-Appreciation Is The Most Dangerous Metric
+APPRECIATION IS THE MOST DANGEROUS METRIC
 
-Many bad investments begin with: "I think it will go up."
+Many bad investments begin with:
+"I think it will go up."
 
-Never buy a property because you hope, believe, or think appreciation will save the deal.
+Never buy a property because:
+• you hope,
+• you believe,
+• or you think
+appreciation will save the deal.
 
 Buy because:
 • it cash flows,
@@ -3696,51 +3731,78 @@ Buy because:
 Then let appreciation be a bonus.
 
 
-Return On Equity (ROE)
+RETURN ON EQUITY (ROE)
 
-ROE measures: How hard your current equity is working.
+ROE measures:
+How hard your current equity is working.
 
-As properties appreciate, equity grows. Sometimes your equity becomes so large that returns become relatively small. This can create opportunities to:
+As properties appreciate, equity grows.
+Sometimes your equity becomes so large that returns become relatively small.
+
+This can create opportunities to:
 • refinance,
 • reposition,
 • or sell.
 
 
-Internal Rate Of Return (IRR)
+INTERNAL RATE OF RETURN (IRR)
 
-IRR attempts to measure total performance over time. IRR includes:
+IRR attempts to measure total performance over time.
+
+IRR includes:
 • cash flow,
 • appreciation,
 • principal paydown,
 • timing.
 
-IRR is powerful. However, most UC30 students should focus primarily on Cash Flow, Cash On Cash Return, and Total Return before worrying too much about IRR.
+IRR is powerful.
+
+However:
+Most UC30 students should focus primarily on:
+• Cash Flow
+• Cash On Cash Return
+• Total Return
+before worrying too much about IRR.
 
 
-The UC30 Investment Hierarchy
+THE UC30 INVESTMENT HIERARCHY
 
 When evaluating a property:
 
-Level 1 — Survival
-Can the property survive vacancies, repairs, market changes, bad tenants?
+Level 1 – Survival
+Can the property survive:
+• vacancies,
+• repairs,
+• market changes,
+• bad tenants?
 If not: STOP.
 
-Level 2 — Cash Flow
-Does the property generate positive cash flow? Cash flow protects you.
+Level 2 – Cash Flow
+Does the property generate positive cash flow?
+Cash flow protects you.
 
-Level 3 — Cash On Cash Return
-Does the property meet your minimum Cash On Cash Return requirement? This helps determine how hard your money is working.
+Level 3 – Cash On Cash Return
+Does the property meet your minimum Cash On Cash Return requirement?
+This helps determine how hard your money is working.
 
-Level 4 — Total Return
-What is the combined return from cash flow, appreciation, principal paydown, and tax benefits?
+Level 4 – Total Return
+What is the combined return from:
+• cash flow,
+• appreciation,
+• principal paydown,
+• tax benefits?
 
-Level 5 — Scalability
-Can this strategy be repeated? Can this help you continue growing your portfolio?
+Level 5 – Scalability
+Can this strategy be repeated?
+Can this help you continue growing your portfolio?
 
 
-The Goal Of Analysis
+THE GOAL OF ANALYSIS
 
-The goal is NOT finding perfect metrics, maximizing one return, or winning arguments.
+The goal is NOT:
+• finding perfect metrics,
+• maximizing one return,
+• or winning arguments.
 
 The goal is understanding:
 • risk,
@@ -3751,264 +3813,363 @@ The goal is understanding:
 • and downside protection.
 
 
-Quick Rules To Remember
+QUICK RULES TO REMEMBER
 
-1. Cash Flow pays you today.
-2. Cash On Cash Return measures how hard your money is working.
-3. Appreciation should be treated as a bonus.
-4. Tax Benefits can dramatically increase returns.
-5. Risk matters just as much as return.
-6. More leverage is not always better.
-7. Great investors prioritize survival first.
-8. No single metric determines a great deal.
-9. Stability often beats maximum returns.
-10. Great investors evaluate the entire picture.`,
-      },
-      {
-        type: "quiz",
-        required: true,
-        scenarios: [
-          {
-            id: "day12_quiz",
-            title: "Return Metrics Mastery Quiz",
-            maxAttempts: 3,
-            description: "Answer all 5 questions correctly to unlock your daily submissions.",
-            inputs: [
-              {
-                id: "day12_q1",
-                label: `1. Which property is MOST likely the better long-term investment?
-
-Property A: 20% Cash on Cash Return, 5% Down Payment, Very little reserves, 3-year balloon payment
-
-Property B: 10% Cash on Cash Return, 25% Down Payment, Strong reserves, 30-year fixed financing`,
-                type: "multiple_choice",
-                options: [
-                  "Property A because it has the highest Cash on Cash Return",
-                  "Property B because it has lower risk and stronger downside protection",
-                  "Both are equal because Cash on Cash Return is all that matters",
-                  "Impossible to tell because neither property has appreciation",
-                ],
-                correctAnswer: 1,
-                explanation: `Higher returns do not automatically mean better investments. Great investors evaluate risk, reserves, financing, and downside protection.`,
-              },
-              {
-                id: "day12_q2",
-                label: "2. Which statement BEST describes why Cash on Cash Return is so important?",
-                type: "multiple_choice",
-                options: [
-                  "It predicts future appreciation.",
-                  "It measures how quickly your invested capital is being returned through cash flow.",
-                  "It tells you how much principal is being paid down each year.",
-                  "It determines whether a lender will approve your loan.",
-                ],
-                correctAnswer: 1,
-                explanation: `Cash on Cash Return helps determine how hard your money is working, how quickly you can build reserves, and how quickly you can scale.`,
-              },
-              {
-                id: "day12_q3",
-                label: `3. An investor says: "I don't care if the property cash flows. It will appreciate." What is the BIGGEST concern with this thinking?`,
-                type: "multiple_choice",
-                options: [
-                  "Appreciation is guaranteed.",
-                  "Appreciation should be viewed as a bonus, not the primary reason for purchasing a property.",
-                  "Appreciation only occurs in commercial properties.",
-                  "Appreciation only matters if you refinance.",
-                ],
-                correctAnswer: 1,
-                explanation: "Many bad investments are justified using future appreciation. Great investors buy properties that work TODAY.",
-              },
-              {
-                id: "day12_q4",
-                label: `4. Two properties have identical Cash on Cash Returns. Which additional factors should an investor evaluate BEFORE deciding which one is better?`,
-                type: "multiple_choice",
-                options: [
-                  "Risk, reserves, financing structure, and downside protection",
-                  "Paint color and curb appeal",
-                  "Which property has the larger loan balance",
-                  "Which property has the newest appliances",
-                ],
-                correctAnswer: 0,
-                explanation: "Returns alone do not tell the whole story. Risk-adjusted returns matter.",
-              },
-              {
-                id: "day12_q5",
-                label: "5. According to the UC30 Investment Hierarchy, what should an investor evaluate FIRST?",
-                type: "multiple_choice",
-                options: [
-                  "Appreciation potential",
-                  "Cash on Cash Return",
-                  "Whether the property can survive vacancies, repairs, and market changes",
-                  "Tax benefits",
-                ],
-                correctAnswer: 2,
-                explanation: `A property that cannot survive stress is not a good investment regardless of its projected returns. The hierarchy is: Survival → Cash Flow → Cash on Cash Return → Total Return → Scalability.`,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        type: "training",
-        title: "Speed & Momentum",
-        content: `Why Speed Matters
-
-Most investors lose deals because they hesitate, overthink, procrastinate, or wait for certainty.
-
-Meanwhile, great investors analyze quickly, act quickly, follow up quickly, and submit offers quickly.
-
-Speed creates opportunity. The faster you can analyze, make decisions, communicate, and submit offers, the faster you will gain confidence, create momentum, and get properties under contract.
+• Cash Flow pays you today.
+• Cash On Cash Return measures how hard your money is working.
+• Appreciation should be treated as a bonus.
+• Tax Benefits can dramatically increase returns.
+• Risk matters just as much as return.
+• More leverage is not always better.
+• Great investors prioritize survival first.
+• No single metric determines a great deal.
+• Stability often beats maximum returns.
+• Great investors evaluate the entire picture.
 
 
-Most Investors Are NOT Losing To Smarter Investors
+TODAY'S EXECUTION CHALLENGE
 
-They are losing to faster investors.
+Take three properties you have analyzed.
 
-In many markets, the investor who follows up first, submits first, calls first, or builds rapport first often wins.
+For each property determine:
+• Cash Flow
+• Cash On Cash Return
+• Appreciation
+• Principal Paydown
+• Tax Benefits
+• Total Return
+
+Then rank them from:
+1 (Best Investment) to 3 (Weakest Investment)
+
+Explain WHY.
 
 
-Analysis Should Lead To ACTION
+TODAY'S SUGGESTED ARSENAL ACTIVITY
+
+Reach out to:
+an experienced investor, CPA, lender, or property manager.
+
+Ask:
+"What return metrics matter most to you when evaluating rental properties and why?"
+
+Compare their answers to your own investing philosophy and determine which metrics matter most for your long-term goals. You can also use this conversation to accelerate your relationship and weed out Arsenal contacts that don't understand or aren't willing to align with your goals.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 2 — SPEED & MOMENTUM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"Speed Wins Deals"
+
+
+WHY SPEED MATTERS
+
+Most investors lose deals because:
+• they hesitate,
+• overthink,
+• procrastinate,
+• or wait for certainty.
+
+Meanwhile, great investors:
+• analyze quickly,
+• act quickly,
+• follow up quickly,
+• and submit offers quickly.
+
+Speed creates opportunity.
+
+The faster you can:
+• analyze,
+• make decisions,
+• communicate,
+• and submit offers,
+
+the faster you will:
+• gain confidence,
+• create momentum,
+• and get properties under contract.
+
+
+MOST INVESTORS ARE NOT LOSING TO SMARTER INVESTORS
+
+They are losing to FASTER investors.
+
+In many markets, the investor who:
+• follows up first,
+• submits first,
+• calls first,
+• or builds rapport first
+often wins.
+
+
+ANALYSIS SHOULD LEAD TO ACTION
 
 One of the biggest mistakes investors make is analyzing properties WITHOUT knowing what the analysis is supposed to accomplish.
 
-The goal of analysis is NOT to endlessly study deals. The goal is to determine whether the property is a buy, and EXACTLY what price or terms make it a buy.
+The goal of analysis is NOT:
+to endlessly study deals.
 
-Analysis should create clarity, confidence, and action.
+The goal is to determine:
+• whether the property is a buy,
+• and EXACTLY what price or terms make it a buy.
 
-
-Every Property Has A Price That Makes It A Buy
-
-This is an EXTREMELY important concept. Almost every property has a price or structure that would make it worth buying.
-
-Sometimes that price may be far below market, heavily discounted, creatively financed, or structured differently.
-
-But you should train yourself to think: "What price or structure makes this a GREAT deal?" NOT: "Would I buy this property emotionally?"
-
-
-You Are Buying NUMBERS — Not Emotions
-
-Many beginners wait for the perfect property, the perfect feeling, or emotional certainty.
-
-Strong investors understand you are buying cash flow, equity, opportunity, and returns.
-
-Some GREAT deals look ugly, need work, have problems, or feel uncomfortable initially. Your analysis should determine whether the property is a buy. Not emotion.
+Analysis should create:
+• clarity,
+• confidence,
+• and action.
 
 
-Know EXACTLY What You Would Pay
+EVERY PROPERTY HAS A PRICE THAT MAKES IT A BUY
 
-Strong investors know EXACTLY what they would pay, EXACTLY what terms work, and EXACTLY where they would walk away.
+This is an EXTREMELY important concept.
 
-This removes hesitation, confusion, and emotional decision making.
+Almost every property has a price or structure that would make it worth buying.
 
-You should be able to confidently say: "At THIS number or structure, I would absolutely buy this property."
+Sometimes that price may be:
+• far below market,
+• heavily discounted,
+• creatively financed,
+• or structured differently.
+
+But you should train yourself to think:
+"What price or structure makes this a GREAT deal?"
+
+NOT:
+"Would I buy this property emotionally?"
 
 
-Your Analysis MUST Create A Maximum Price
+YOU ARE BUYING NUMBERS — NOT EMOTIONS
 
-Your analysis should help determine the HIGHEST price you would pay while STILL making the deal safe, conservative, and profitable.
+Many beginners wait for:
+• the perfect property,
+• the perfect feeling,
+• or emotional certainty.
 
-This is one of the MOST important skills in real estate investing. Because once you know your maximum acceptable price, you can confidently submit offers, negotiate quickly, and move decisively.
+Strong investors understand you are buying:
+• cash flow,
+• equity,
+• opportunity,
+• and returns.
+
+Some GREAT deals:
+• look ugly,
+• need work,
+• have problems,
+• or feel uncomfortable initially.
+
+Your analysis should determine whether the property is a buy. Not emotion.
 
 
-Important Clarification
+KNOW EXACTLY WHAT YOU WOULD PAY
+
+Strong investors know:
+• EXACTLY what they would pay,
+• EXACTLY what terms work,
+• and EXACTLY where they would walk away.
+
+This removes:
+• hesitation,
+• confusion,
+• and emotional decision making.
+
+You should be able to confidently say:
+"At THIS number or structure, I would absolutely buy this property."
+
+
+YOUR ANALYSIS MUST CREATE A MAXIMUM PRICE
+
+Your analysis should help determine the HIGHEST price you would pay while STILL making the deal:
+• safe,
+• conservative,
+• and profitable.
+
+This is one of the MOST important skills in real estate investing.
+
+Because once you know your maximum acceptable price, you can:
+• confidently submit offers,
+• negotiate quickly,
+• and move decisively.
+
+
+IMPORTANT CLARIFICATION
 
 This does NOT mean you throw out random lowball offers with no reasoning.
 
-You still need accurate analysis, realistic rents, realistic expenses, repair estimates, financing understanding, and conservative underwriting.
+You still need:
+• accurate analysis,
+• realistic rents,
+• realistic expenses,
+• repair estimates,
+• financing understanding,
+• and conservative underwriting.
 
 Strong investors move FAST because their analysis gives them confidence.
 
 
-Stop Living In The Gray Area
+STOP LIVING IN THE GRAY AREA
 
-Many investors stay stuck because they never fully define their buy box, their criteria, or their maximum price.
+Many investors stay stuck because they never fully define:
+• their buy box,
+• their criteria,
+• or their maximum price.
 
-This creates uncertainty, hesitation, and analysis paralysis.
+This creates:
+• uncertainty,
+• hesitation,
+• and analysis paralysis.
 
-You should reach the point where your analysis clearly tells you: buy, negotiate, or walk away.
+You should reach the point where your analysis clearly tells you:
+• buy,
+• negotiate,
+• or walk away.
 
-The clearer your criteria become, the faster your execution becomes.
-
-
-Analysis Paralysis
-
-Analysis paralysis usually happens because people analyze properties WITHOUT confidence in their numbers, defined criteria, or a decision-making framework.
-
-They keep looking, analyzing, and studying WITHOUT actually deciding, offering, or acting.
-
-The goal is NOT to analyze forever. The goal is to analyze accurately enough to confidently act.
+The clearer your criteria become… the faster your execution becomes.
 
 
-Act IMMEDIATELY
+ANALYSIS PARALYSIS
 
-When you find a lead, see a property, think of a follow-up, or identify an opportunity — ACT.
+Analysis paralysis usually happens because people analyze properties WITHOUT:
+• confidence in their numbers,
+• defined criteria,
+• or a decision-making framework.
 
-Immediately make the call, send the message, analyze the deal, submit the offer, or follow up.
+They keep looking, analyzing, and studying WITHOUT actually:
+• deciding,
+• offering,
+• or acting.
+
+The goal is NOT to analyze forever.
+The goal is to analyze accurately enough to confidently act.
+
+
+ACT IMMEDIATELY
+
+When you:
+• find a lead,
+• see a property,
+• think of a follow-up,
+• or identify an opportunity…
+
+ACT.
+
+Immediately:
+• make the call,
+• send the message,
+• analyze the deal,
+• submit the offer,
+• or follow up.
 
 Most people lose opportunities because they delay action.
 
 
-Speed Creates Confidence
+SPEED CREATES CONFIDENCE
 
-Confidence does NOT come from waiting, thinking, or watching more videos.
+Confidence does NOT come from:
+• waiting,
+• thinking,
+• or watching more videos.
 
-Confidence comes from repetition, volume, conversations, offers, negotiations, and execution.
+Confidence comes from:
+• repetition,
+• volume,
+• conversations,
+• offers,
+• negotiations,
+• and execution.
 
 The more action you take, the more natural the process becomes.
 
 
-Fast Follow-Up Wins Deals
+FAST FOLLOW-UP WINS DEALS
 
 Many deals are won simply because someone followed up faster and more consistently.
 
-Strong investors follow up quickly, stay organized, and remain top of mind.
+Strong investors:
+• follow up quickly,
+• stay organized,
+• and remain top of mind.
 
-Sometimes sellers choose certainty, professionalism, and responsiveness over slightly higher offers.
+Sometimes sellers choose:
+• certainty,
+• professionalism,
+• and responsiveness
+over slightly higher offers.
 
 
-Momentum Creates Opportunity
+MOMENTUM CREATES OPPORTUNITY
 
-Once you begin analyzing daily, offering daily, talking daily, and following up daily, everything becomes easier — confidence improves, conversations improve, opportunities increase, and execution speeds up.
+Once you begin:
+• analyzing daily,
+• offering daily,
+• talking daily,
+• and following up daily…
+
+everything becomes easier:
+• confidence improves,
+• conversations improve,
+• opportunities increase,
+• and execution speeds up.
 
 Momentum compounds.
 
 
-Speed WITHOUT Emotion
+SPEED WITHOUT EMOTION
 
 Moving quickly does NOT mean becoming reckless, emotional, or careless.
 
-You still need conservative analysis, discipline, and strong criteria.
+You still need:
+• conservative analysis,
+• discipline,
+• and strong criteria.
 
-The goal is FAST and DISCIPLINED. Not FAST and EMOTIONAL.
+The goal is:
+FAST and DISCIPLINED.
 
-
-Practice Exercise
-
-For every property you analyze today, determine your ideal purchase price, your maximum acceptable price, and the exact structure that would make it a DEFINITE buy.
-
-Then ask yourself: "At what price or structure would I confidently buy this property TODAY?"
-
-The faster you can answer that question accurately, the faster you become as an investor.
+Not:
+FAST and EMOTIONAL.
 
 
-Signs You Are Becoming A Better Investor
+SIGNS YOU ARE BECOMING A BETTER INVESTOR
 
-You analyze properties faster. You know your criteria clearly. You know your maximum price quickly. You submit offers confidently. You follow up consistently. You hesitate less. You act faster. You detach emotionally. You walk away more comfortably. You create more deal flow.
+• You analyze properties faster
+• You know your criteria clearly
+• You know your maximum price quickly
+• You submit offers confidently
+• You follow up consistently
+• You hesitate less
+• You act faster
+• You detach emotionally
+• You walk away more comfortably
+• You create more deal flow
 
 
-Hold Strong To Your Criteria
+HOLD STRONG TO YOUR CRITERIA
 
-The goal is NOT to force deals to work. The goal is to buy GREAT deals that fit your criteria conservatively.
+The goal is NOT to force deals to work.
+
+The goal is to buy GREAT deals that fit your criteria conservatively.
 
 If a property does NOT meet your criteria, be willing to walk away. But do it professionally and respectfully.
 
-Many deals come together later because sellers rethink the numbers, the market shifts, other buyers fall apart, or motivation increases over time.
+Many deals come together later because:
+• sellers rethink the numbers,
+• the market shifts,
+• other buyers fall apart,
+• or motivation increases over time.
 
-When walking away: thank the seller or agent, explain your reasoning respectfully, leave the door open, and continue following up professionally.
+When walking away:
+• thank the seller or agent,
+• explain your reasoning respectfully,
+• leave the door open,
+• and continue following up professionally.
 
-Sometimes the investors who get the best deals are simply disciplined enough to walk away and consistent enough to follow up later.
+Sometimes the investors who get the best deals are simply:
+• disciplined enough to walk away, and
+• consistent enough to follow up later.
 
 
-Quick Rules To Remember
+QUICK RULES TO REMEMBER
 
 • Speed wins deals.
 • Analysis should lead to action.
@@ -4019,267 +4180,268 @@ Quick Rules To Remember
 • Fast follow-up creates opportunity.
 • Momentum compounds.
 • Confidence comes from repetition.
-• Move FAST — but stay disciplined.`,
-      },
-      {
-        type: "quiz",
-        required: true,
-        scenarios: [
-          {
-            id: "day10_calc",
-            title: "4-Plex Investment Opportunity",
-            description: `All four units are currently occupied on month-to-month leases in a stable rental market.
+• Move FAST — but stay disciplined.
 
-Use the CDS Rental Calculator to determine the EXACT purchase price that would produce each target cash-on-cash return.`,
-            maxAttempts: 5,
-            explanationOnFail: `Use the CDS Rental Calculator with the assumptions shown above. Adjust the purchase price until you hit the target cash-on-cash return. The answers are approximate ranges — you need to be close, not exact.`,
-            propertyListing: {
-              title: "4-Plex Investment Opportunity",
-              badges: ["4 Units", "Month-to-Month Leases", "Stable Market"],
-              highlights: [
-                {
-                  icon: "🏠",
-                  value: "4",
-                  label: "Units",
-                },
-                {
-                  icon: "💰",
-                  value: "$6,000",
-                  label: "Monthly Rent",
-                },
-                {
-                  icon: "📋",
-                  value: "M-T-M",
-                  label: "Lease Type",
-                },
+
+TODAY'S EXECUTION CHALLENGE
+
+For every property you analyze today, determine:
+• your ideal purchase price,
+• your maximum acceptable price,
+• and the exact structure that would make it a DEFINITE buy.
+
+Then:
+• submit offers quickly,
+• follow up immediately,
+• and act on opportunities without hesitation.
+
+The goal today is:
+faster execution, clearer decision making, and eliminating hesitation.
+
+
+TODAY'S SUGGESTED ARSENAL ACTIVITY
+
+Reach out to:
+Realtor contacts, wholesalers, property managers, lenders, investors, or anyone you previously connected with that could bring future opportunities.
+
+The goal is NOT to immediately get a deal today.
+
+The goal is to stay top of mind and continue building long-term deal flow relationships.
+
+Simple follow-up creates opportunity.
+
+Also be aggressively clear on your buy box and that you are ready to close if someone brings you a deal that meets your criteria!
+`,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'd6q1_metrics',
+          title: 'Return Metrics Mastery Quiz',
+          questions: [
+            {
+              id: 'd6q1_q1',
+              text: 'Which property is MOST likely the better long-term investment?\n\nProperty A:\n• 20% Cash on Cash Return\n• 5% Down Payment\n• Very little reserves\n• 3-year balloon payment\n\nProperty B:\n• 10% Cash on Cash Return\n• 25% Down Payment\n• Strong reserves\n• 30-year fixed financing',
+              type: 'multiple_choice',
+              options: [
+                'Property A because it has the highest Cash on Cash Return',
+                'Property B because it has lower risk and stronger downside protection',
+                'Both are equal because Cash on Cash Return is all that matters',
+                'Impossible to tell because neither property has appreciation'
               ],
-              sections: [
-                {
-                  heading: "Current Rental Income",
-                  rows: [
-                    {
-                      label: "Unit 1",
-                      value: "$1,500/mo",
-                    },
-                    {
-                      label: "Unit 2",
-                      value: "$1,500/mo",
-                    },
-                    {
-                      label: "Unit 3",
-                      value: "$1,500/mo",
-                    },
-                    {
-                      label: "Unit 4",
-                      value: "$1,500/mo",
-                    },
-                    {
-                      label: "Total Monthly Rent",
-                      value: "$6,000/mo",
-                    },
-                  ],
-                },
-                {
-                  heading: "Financing Assumptions",
-                  rows: [
-                    {
-                      label: "Down Payment",
-                      value: "25%",
-                    },
-                    {
-                      label: "Closing Costs",
-                      value: "2%",
-                    },
-                    {
-                      label: "Interest Rate",
-                      value: "6.5%",
-                    },
-                    {
-                      label: "Loan Amortization",
-                      value: "30 Years",
-                    },
-                    {
-                      label: "Vacancy",
-                      value: "6%",
-                    },
-                  ],
-                },
-                {
-                  heading: "Operating Expenses",
-                  rows: [
-                    {
-                      label: "Maintenance",
-                      value: "12%",
-                      detail: "of gross rents",
-                    },
-                    {
-                      label: "Property Management",
-                      value: "8%",
-                      detail: "of gross rents",
-                    },
-                    {
-                      label: "Additional Expenses",
-                      value: "$1,000/year",
-                    },
-                    {
-                      label: "Insurance",
-                      value: "$2,500/year",
-                    },
-                    {
-                      label: "Taxes",
-                      value: "$6,000/year",
-                    },
-                    {
-                      label: "Utilities",
-                      value: "Tenant Paid",
-                    },
-                    {
-                      label: "Costs To Make Rent Ready",
-                      value: "$0",
-                    },
-                  ],
-                },
-              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Higher returns do not automatically mean better investments. Great investors evaluate risk, reserves, financing, and downside protection.'
             },
-            inputs: [
-              {
-                id: "day10_calc_10pct",
-                label: "What purchase price produces a 10% cash-on-cash return?",
-                type: "number",
-                correctAnswer: 535385,
-                tolerance: 200,
-                rangeLabel: "$535,300 - $535,470",
-                unit: "$",
-              },
-              {
-                id: "day10_calc_12pct",
-                label: "What purchase price produces a 12% cash-on-cash return?",
-                type: "number",
-                correctAnswer: 503350,
-                tolerance: 200,
-                rangeLabel: "$503,200 - $503,500",
-                unit: "$",
-              },
-            ],
-          },
-          {
-            id: "day10_quiz",
-            title: "Speed & Momentum Quiz",
-            description: "Answer all 10 questions correctly to continue.",
-            maxAttempts: 3,
-            explanationOnFail: `Review the correct answers:
-
-1. Investors miss deals because they hesitate and move too slowly.
-2. Analysis should help you determine your maximum acceptable price and terms.
-3. Confidence comes from repetition, volume, and execution.
-4. Analysis paralysis means analyzing without making decisions or taking action.
-5. Strong investors move faster because their analysis and criteria create confidence.
-6. Every property has a price or structure that can make it a buy.
-7. The longer investors hesitate, the more emotional and uncertain they become.
-8. When you identify a strong opportunity, act quickly and follow up immediately.
-9. Momentum comes from consistent action and repetition.
-10. Fast investors still use disciplined analysis and criteria.`,
-            inputs: [
-              {
-                id: "day10_q1",
-                label: "1. What is one of the BIGGEST reasons investors miss deals?",
-                type: "multiple_choice",
-                options: ["They analyze too quickly", "They hesitate and move too slowly", "They follow up too much", "They submit too many offers"],
-                correctAnswer: 1,
-              },
-              {
-                id: "day10_q2",
-                label: "2. What should your analysis ultimately help you determine?",
-                type: "multiple_choice",
-                options: ["Whether the property looks exciting", "What other investors might pay", "Your maximum acceptable price and terms", "Whether the seller likes you"],
-                correctAnswer: 2,
-              },
-              {
-                id: "day10_q3",
-                label: "3. What usually creates confidence in real estate investing?",
-                type: "multiple_choice",
-                options: ["Waiting until you feel ready", "Watching more videos only", "Repetition, volume, and execution", "Finding perfect deals immediately"],
-                correctAnswer: 2,
-              },
-              {
-                id: "day10_q4",
-                label: "4. What is \"analysis paralysis\"?",
-                type: "multiple_choice",
-                options: [
-                  "Analyzing properties carefully",
-                  "Analyzing without making decisions or taking action",
-                  "Moving too quickly on deals",
-                  "Following up too aggressively",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day10_q5",
-                label: "5. Why do strong investors often move faster?",
-                type: "multiple_choice",
-                options: [
-                  "They ignore risk",
-                  "They skip due diligence",
-                  "Their analysis and criteria create confidence",
-                  "They make emotional decisions",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day10_q6",
-                label: "6. What is one of the MOST important concepts in investing?",
-                type: "multiple_choice",
-                options: [
-                  "Every property should be purchased eventually",
-                  "Every property has a price or structure that can make it a buy",
-                  "Only off-market deals work",
-                  "Expensive properties are always better",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day10_q7",
-                label: "7. What often happens the longer investors hesitate?",
-                type: "multiple_choice",
-                options: [
-                  "Their confidence increases",
-                  "The deal usually improves",
-                  "They become more emotional and uncertain",
-                  "Sellers become more flexible automatically",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day10_q8",
-                label: "8. What should you do when you identify a strong opportunity?",
-                type: "multiple_choice",
-                options: ["Wait a few days to think about it", "Delay contacting the seller", "Act quickly and follow up immediately", "Avoid submitting offers too fast"],
-                correctAnswer: 2,
-              },
-              {
-                id: "day10_q9",
-                label: "9. What creates momentum in real estate investing?",
-                type: "multiple_choice",
-                options: ["Watching educational content only", "Consistent action and repetition", "Waiting for perfect opportunities", "Avoiding difficult conversations"],
-                correctAnswer: 1,
-              },
-              {
-                id: "day10_q10",
-                label: "10. What is the difference between moving fast and moving emotionally?",
-                type: "multiple_choice",
-                options: [
-                  "There is no difference",
-                  "Fast investors ignore numbers",
-                  "Fast investors still use disciplined analysis and criteria",
-                  "Emotional investors are usually more successful",
-                ],
-                correctAnswer: 2,
-              },
-            ],
-          },
-        ],
-      },
-    ],
+            {
+              id: 'd6q1_q2',
+              text: 'Which statement BEST describes why Cash on Cash Return is so important?',
+              type: 'multiple_choice',
+              options: [
+                'It predicts future appreciation.',
+                'It measures how quickly your invested capital is being returned through cash flow.',
+                'It tells you how much principal is being paid down each year.',
+                'It determines whether a lender will approve your loan.'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Cash on Cash Return helps determine how hard your money is working, how quickly you can build reserves, and how quickly you can scale.'
+            },
+            {
+              id: 'd6q1_q3',
+              text: 'An investor says: "I don\'t care if the property cash flows. It will appreciate."\n\nWhat is the BIGGEST concern with this thinking?',
+              type: 'multiple_choice',
+              options: [
+                'Appreciation is guaranteed.',
+                'Appreciation should be viewed as a bonus, not the primary reason for purchasing a property.',
+                'Appreciation only occurs in commercial properties.',
+                'Appreciation only matters if you refinance.'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Many bad investments are justified using future appreciation. Great investors buy properties that work TODAY.'
+            },
+            {
+              id: 'd6q1_q4',
+              text: 'Two properties have identical Cash on Cash Returns. Which additional factors should an investor evaluate BEFORE deciding which one is better?',
+              type: 'multiple_choice',
+              options: [
+                'Risk, reserves, financing structure, and downside protection',
+                'Paint color and curb appeal',
+                'Which property has the larger loan balance',
+                'Which property has the newest appliances'
+              ],
+              correctAnswer: 0,
+              explanationOnFail: 'Returns alone do not tell the whole story. Risk-adjusted returns matter.'
+            },
+            {
+              id: 'd6q1_q5',
+              text: 'According to the UC30 Investment Hierarchy, what should an investor evaluate FIRST?',
+              type: 'multiple_choice',
+              options: [
+                'Appreciation potential',
+                'Cash on Cash Return',
+                'Whether the property can survive vacancies, repairs, and market changes',
+                'Tax benefits'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'A property that cannot survive stress is not a good investment regardless of its projected returns. The hierarchy is: Survival → Cash Flow → Cash on Cash Return → Total Return → Scalability.'
+            }
+          ]
+        },
+        {
+          id: 'd6q2_speed',
+          title: 'Speed & Momentum Quiz',
+          questions: [
+            {
+              id: 'd6q2_q1',
+              text: '4-Plex Investment Opportunity:\n\nA 4-unit apartment property is available. All four units rent for $1,500/month ($6,000/month total gross rents).\n\nFinancing & Analysis Assumptions:\n• Down Payment: 25%\n• Closing Costs: 2%\n• Interest Rate: 6.5%\n• Loan Amortization: 30 Years\n• Vacancy: 6%\n\nOperating Expenses:\n• Maintenance: 12% of gross rents\n• Property Management: 8% of gross rents\n• Additional Expenses: $1,000/year\n• Insurance: $2,500/year\n• Taxes: $6,000/year\n• Utilities: Tenant Paid\n• Costs To Make Rent Ready: $0\n\nWhat purchase price produces a 10.00% Cash on Cash Return?',
+              type: 'number',
+              correctAnswer: 535385,
+              tolerance: 200,
+              unit: '$',
+              explanationOnFail: 'Use the CDS Rental Property Calculator. The purchase price that produces a 10.00% Cash on Cash Return is approximately $535,300 - $535,470.'
+            },
+            {
+              id: 'd6q2_q2',
+              text: 'Using the same 4-Plex property details from the previous question, what purchase price yields a 12.00% Cash on Cash Return?',
+              type: 'number',
+              correctAnswer: 503350,
+              tolerance: 200,
+              unit: '$',
+              explanationOnFail: 'Using the same assumptions, the purchase price that yields a 12.00% Cash on Cash Return is approximately $503,200 - $503,500.'
+            },
+            {
+              id: 'd6q2_q3',
+              text: 'What is one of the BIGGEST reasons investors miss deals?',
+              type: 'multiple_choice',
+              options: [
+                'They analyze too quickly',
+                'They hesitate and move too slowly',
+                'They follow up too much',
+                'They submit too many offers'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Most investors lose deals because they hesitate, overthink, procrastinate, or wait for certainty.'
+            },
+            {
+              id: 'd6q2_q4',
+              text: 'What should your analysis ultimately help you determine?',
+              type: 'multiple_choice',
+              options: [
+                'Whether the property looks exciting',
+                'What other investors might pay',
+                'Your maximum acceptable price and terms',
+                'Whether the seller likes you'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'The goal of analysis is to determine whether the property is a buy and EXACTLY what price or terms make it a buy.'
+            },
+            {
+              id: 'd6q2_q5',
+              text: 'What usually creates confidence in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'Waiting until you feel ready',
+                'Watching more videos only',
+                'Repetition, volume, and execution',
+                'Finding perfect deals immediately'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Confidence comes from repetition, volume, conversations, offers, negotiations, and execution.'
+            },
+            {
+              id: 'd6q2_q6',
+              text: 'What is "analysis paralysis"?',
+              type: 'multiple_choice',
+              options: [
+                'Analyzing properties carefully',
+                'Analyzing without making decisions or taking action',
+                'Moving too quickly on deals',
+                'Following up too aggressively'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Analysis paralysis happens when investors keep analyzing without actually deciding, offering, or acting.'
+            },
+            {
+              id: 'd6q2_q7',
+              text: 'Why do strong investors often move faster?',
+              type: 'multiple_choice',
+              options: [
+                'They ignore risk',
+                'They skip due diligence',
+                'Their analysis and criteria create confidence',
+                'They make emotional decisions'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Strong investors move fast because their analysis gives them confidence, not because they are reckless.'
+            },
+            {
+              id: 'd6q2_q8',
+              text: 'What is one of the MOST important concepts in investing?',
+              type: 'multiple_choice',
+              options: [
+                'Every property should be purchased eventually',
+                'Every property has a price or structure that can make it a buy',
+                'Only off-market deals work',
+                'Expensive properties are always better'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Almost every property has a price or structure that would make it worth buying. Train yourself to think: "What price or structure makes this a GREAT deal?"'
+            },
+            {
+              id: 'd6q2_q9',
+              text: 'What often happens the longer investors hesitate?',
+              type: 'multiple_choice',
+              options: [
+                'Their confidence increases',
+                'The deal usually improves',
+                'They become more emotional and uncertain',
+                'Sellers become more flexible automatically'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'The longer investors hesitate, the more emotional and uncertain they become. Speed and action create confidence.'
+            },
+            {
+              id: 'd6q2_q10',
+              text: 'What should you do when you identify a strong opportunity?',
+              type: 'multiple_choice',
+              options: [
+                'Wait a few days to think about it',
+                'Delay contacting the seller',
+                'Act quickly and follow up immediately',
+                'Avoid submitting offers too fast'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'When you find a lead, see a property, or identify an opportunity — ACT immediately.'
+            },
+            {
+              id: 'd6q2_q11',
+              text: 'What creates momentum in real estate investing?',
+              type: 'multiple_choice',
+              options: [
+                'Watching educational content only',
+                'Consistent action and repetition',
+                'Waiting for perfect opportunities',
+                'Avoiding difficult conversations'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Momentum comes from analyzing daily, offering daily, talking daily, and following up daily. Momentum compounds.'
+            },
+            {
+              id: 'd6q2_q12',
+              text: 'What is the difference between moving fast and moving emotionally?',
+              type: 'multiple_choice',
+              options: [
+                'There is no difference',
+                'Fast investors ignore numbers',
+                'Fast investors still use disciplined analysis and criteria',
+                'Emotional investors are usually more successful'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'The goal is FAST and DISCIPLINED — not FAST and EMOTIONAL. You still need conservative analysis, discipline, and strong criteria.'
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     day: 7,
