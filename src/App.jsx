@@ -183,7 +183,7 @@ export default function App() {
 
   // Free tools — accessible to anyone, no auth required
   if (window.location.pathname.replace(/\/+$/, '').startsWith('/tools')) {
-    return <FreeToolsPage />;
+    return <FreeToolsPage user={user} />;
   }
 
   // Not logged in

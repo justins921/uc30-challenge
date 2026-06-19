@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import NativeRentalCalculator from './NativeRentalCalculator';
 import CapExCalculator from './CapExCalculator';
+import DueDiligenceChecklist from './DueDiligenceChecklist';
 import { subscribeUser, tagFreeToolAccess } from '../utils/kit';
 
 const TOOLS = [
@@ -17,6 +18,14 @@ const TOOLS = [
     description: 'Estimate capital expenditure reserves for any property. Covers 24 building systems with remaining-life projections, replacement costs, and urgency prioritization.',
     icon: '🔧',
     component: CapExCalculator,
+  },
+  {
+    id: 'due-diligence-checklist',
+    title: 'Due Diligence Checklist',
+    description: 'Track every document you need before closing. 27 items across financials, leases, legal, insurance, and management — with critical items flagged so nothing falls through the cracks.',
+    icon: '📋',
+    component: DueDiligenceChecklist,
+    passUser: true,
   },
 ];
 
@@ -118,7 +127,7 @@ function EmailGate({ tool, onUnlock }) {
   );
 }
 
-export default function FreeToolsPage() {
+export default function FreeToolsPage({ user }) {
   const [activeTool, setActiveTool] = useState(null);
   const [unlockedTools, setUnlockedTools] = useState(getUnlockedTools);
 
@@ -174,7 +183,7 @@ export default function FreeToolsPage() {
               {tool.description}
             </p>
 
-            <tool.component />
+            <tool.component {...(tool.passUser ? { user } : {})} />
 
             {/* CTA */}
             <div style={{
@@ -296,7 +305,7 @@ export default function FreeToolsPage() {
           border: '1px dashed rgba(255,255,255,0.08)',
         }}>
           <div style={{ fontSize: 14, color: '#555' }}>More tools coming soon</div>
-          <div style={{ fontSize: 12, color: '#444', marginTop: 4 }}>Seller Finance Modeler, Due Diligence Checklist, and more</div>
+          <div style={{ fontSize: 12, color: '#444', marginTop: 4 }}>Seller Finance Modeler and more</div>
         </div>
 
         {/* Bottom CTA */}
