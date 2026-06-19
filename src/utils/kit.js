@@ -115,4 +115,8 @@ export async function sendPasswordResetCode(email, code) {
   return applyTag(email, 'UC30 - Password Reset');
 }
 
+export function tagFreeToolAccess(email, toolTitle) {
+  return applyTag(email, `UC30 Free Tool - ${toolTitle}`);
+}
+
 export const isKitEnabled = KIT_ENABLED;

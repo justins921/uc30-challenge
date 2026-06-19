@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import NativeRentalCalculator from './NativeRentalCalculator';
 import CapExCalculator from './CapExCalculator';
+import { subscribeUser, tagFreeToolAccess } from '../utils/kit';
 
 const TOOLS = [
   {
@@ -19,17 +20,115 @@ const TOOLS = [
   },
 ];
 
+const STORAGE_KEY = 'uc30_tool_unlocked';
+
+function getUnlockedTools() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  } catch { return {}; }
+}
+
+function markToolUnlocked(toolId, email) {
+  try {
+    const unlocked = getUnlockedTools();
+    unlocked[toolId] = { email, at: new Date().toISOString() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(unlocked));
+  } catch {}
+}
+
+function EmailGate({ tool, onUnlock }) {
+  const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email.includes('@') || !email.includes('.')) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+    setSubmitting(true);
+    setError('');
+    try {
+      await subscribeUser(email, '');
+      await tagFreeToolAccess(email, tool.title);
+    } catch {}
+    markToolUnlocked(tool.id, email);
+    onUnlock();
+  };
+
+  return (
+    <div style={{
+      maxWidth: 460, margin: '0 auto', padding: '60px 20px', textAlign: 'center',
+    }}>
+      <div style={{
+        fontSize: 56, marginBottom: 20,
+      }}>
+        {tool.icon}
+      </div>
+      <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
+        {tool.title}
+      </h2>
+      <p style={{ color: '#888', fontSize: 14, lineHeight: 1.6, marginBottom: 32 }}>
+        {tool.description}
+      </p>
+      <div style={{
+        padding: 28, borderRadius: 14,
+        background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.15)',
+      }}>
+        <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>
+          Enter your email to access this tool
+        </div>
+        <p style={{ color: '#777', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
+          Free to use. We'll also send you real estate investing resources.
+        </p>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 8, maxWidth: 400, margin: '0 auto' }}>
+          <input
+            type="email"
+            placeholder="your@email.com"
+            value={email}
+            onChange={e => { setEmail(e.target.value); setError(''); }}
+            required
+            disabled={submitting}
+            style={{
+              flex: 1, padding: '12px 14px', fontSize: 14, borderRadius: 8,
+              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)',
+              color: '#eee', fontFamily: "'DM Sans', sans-serif", outline: 'none',
+              opacity: submitting ? 0.6 : 1,
+            }}
+          />
+          <button
+            type="submit"
+            disabled={submitting}
+            style={{
+              padding: '12px 24px', fontSize: 14, fontWeight: 600, borderRadius: 8,
+              background: '#e94560', color: '#fff', border: 'none', cursor: submitting ? 'wait' : 'pointer',
+              fontFamily: "'DM Sans', sans-serif", whiteSpace: 'nowrap',
+              opacity: submitting ? 0.7 : 1,
+            }}
+          >
+            {submitting ? 'Unlocking...' : 'Unlock Tool'}
+          </button>
+        </form>
+        {error && (
+          <div style={{ marginTop: 10, fontSize: 12, color: '#e94560' }}>{error}</div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function FreeToolsPage() {
   const [activeTool, setActiveTool] = useState(null);
-  const [email, setEmail] = useState('');
-  const [emailCaptured, setEmailCaptured] = useState(false);
-  const [copyBlocked, setCopyBlocked] = useState(false);
+  const [unlockedTools, setUnlockedTools] = useState(getUnlockedTools);
 
   const path = window.location.pathname.replace(/\/+$/, '');
   const directTool = TOOLS.find(t => path === `/tools/${t.id}`);
+  const tool = directTool || activeTool;
 
-  if (directTool || activeTool) {
-    const tool = directTool || activeTool;
+  if (tool) {
+    const isUnlocked = !!unlockedTools[tool.id];
+
     return (
       <div style={{ minHeight: '100vh', background: '#0a0a0f' }}>
         {/* Header */}
@@ -63,107 +162,47 @@ export default function FreeToolsPage() {
           </a>
         </div>
 
-        {/* Tool */}
-        <div style={{ maxWidth: 600, margin: '0 auto', padding: '24px 20px 60px' }}>
-          <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 4 }}>{tool.title}</h1>
-          <p style={{ color: '#666', fontSize: 13, marginBottom: 24, lineHeight: 1.5 }}>
-            {tool.description}
-          </p>
+        {!isUnlocked ? (
+          <EmailGate
+            tool={tool}
+            onUnlock={() => setUnlockedTools(getUnlockedTools())}
+          />
+        ) : (
+          <div style={{ maxWidth: 600, margin: '0 auto', padding: '24px 20px 60px' }}>
+            <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 4 }}>{tool.title}</h1>
+            <p style={{ color: '#666', fontSize: 13, marginBottom: 24, lineHeight: 1.5 }}>
+              {tool.description}
+            </p>
 
-          <tool.component />
+            <tool.component />
 
-          {/* Email gate for copy/save */}
-          {!emailCaptured && (
+            {/* CTA */}
             <div style={{
-              marginTop: 32, padding: 24, borderRadius: 12,
-              background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.15)',
+              marginTop: 40, padding: 28, borderRadius: 12,
+              background: 'linear-gradient(135deg, rgba(233,69,96,0.08) 0%, rgba(83,52,131,0.08) 100%)',
+              border: '1px solid rgba(233,69,96,0.15)',
               textAlign: 'center',
             }}>
-              <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>
-                Want to save your analysis?
+              <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
+                Ready to close your first deal?
               </div>
               <p style={{ color: '#888', fontSize: 13, marginBottom: 16, lineHeight: 1.5 }}>
-                Enter your email to unlock the ability to copy and download your results.
-                We'll also send you free real estate investing resources.
+                The UC30 Challenge gives you 30 days of structured training, daily tasks,
+                and accountability to go from analyzing properties to closing deals.
               </p>
-              <form
-                onSubmit={e => {
-                  e.preventDefault();
-                  if (email.includes('@') && email.includes('.')) {
-                    setEmailCaptured(true);
-                    try {
-                      const leads = JSON.parse(localStorage.getItem('uc30_tool_leads') || '[]');
-                      leads.push({ email, tool: tool.id, capturedAt: new Date().toISOString() });
-                      localStorage.setItem('uc30_tool_leads', JSON.stringify(leads));
-                    } catch {}
-                  }
+              <a
+                href="/"
+                style={{
+                  display: 'inline-block', padding: '12px 32px', fontSize: 15, fontWeight: 700,
+                  borderRadius: 8, background: '#e94560', color: '#fff', textDecoration: 'none',
+                  fontFamily: "'DM Sans', sans-serif",
                 }}
-                style={{ display: 'flex', gap: 8, maxWidth: 400, margin: '0 auto' }}
               >
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
-                  style={{
-                    flex: 1, padding: '10px 14px', fontSize: 14, borderRadius: 8,
-                    background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)',
-                    color: '#eee', fontFamily: "'DM Sans', sans-serif", outline: 'none',
-                  }}
-                />
-                <button
-                  type="submit"
-                  style={{
-                    padding: '10px 20px', fontSize: 14, fontWeight: 600, borderRadius: 8,
-                    background: '#e94560', color: '#fff', border: 'none', cursor: 'pointer',
-                    fontFamily: "'DM Sans', sans-serif", whiteSpace: 'nowrap',
-                  }}
-                >
-                  Unlock
-                </button>
-              </form>
+                Join the Challenge
+              </a>
             </div>
-          )}
-
-          {emailCaptured && (
-            <div style={{
-              marginTop: 24, padding: 16, borderRadius: 10,
-              background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.15)',
-              textAlign: 'center',
-            }}>
-              <div style={{ fontSize: 13, color: '#48c78e', fontWeight: 600 }}>
-                Results unlocked — use the copy button above to save your analysis.
-              </div>
-            </div>
-          )}
-
-          {/* CTA */}
-          <div style={{
-            marginTop: 40, padding: 28, borderRadius: 12,
-            background: 'linear-gradient(135deg, rgba(233,69,96,0.08) 0%, rgba(83,52,131,0.08) 100%)',
-            border: '1px solid rgba(233,69,96,0.15)',
-            textAlign: 'center',
-          }}>
-            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
-              Ready to close your first deal?
-            </div>
-            <p style={{ color: '#888', fontSize: 13, marginBottom: 16, lineHeight: 1.5 }}>
-              The UC30 Challenge gives you 30 days of structured training, daily tasks,
-              and accountability to go from analyzing properties to closing deals.
-            </p>
-            <a
-              href="/"
-              style={{
-                display: 'inline-block', padding: '12px 32px', fontSize: 15, fontWeight: 700,
-                borderRadius: 8, background: '#e94560', color: '#fff', textDecoration: 'none',
-                fontFamily: "'DM Sans', sans-serif",
-              }}
-            >
-              Join the Challenge
-            </a>
           </div>
-        </div>
+        )}
       </div>
     );
   }
