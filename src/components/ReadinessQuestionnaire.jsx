@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { subscribeUser, tagByName } from '../utils/kit';
 
 const QUESTIONS = [
   {
@@ -164,12 +165,50 @@ function getResult(answers) {
   };
 }
 
+const READINESS_UNLOCKED_KEY = 'uc30_readiness_unlocked';
+
+function isReadinessUnlocked() {
+  try { return localStorage.getItem(READINESS_UNLOCKED_KEY) === 'true'; } catch { return false; }
+}
+
 export default function ReadinessQuestionnaire({ onClose }) {
   const [answers, setAnswers] = useState({});
   const [showResult, setShowResult] = useState(false);
+  const [showEmailGate, setShowEmailGate] = useState(false);
+  const [emailUnlocked, setEmailUnlocked] = useState(isReadinessUnlocked);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [emailSubmitting, setEmailSubmitting] = useState(false);
 
   const allAnswered = QUESTIONS.every(q => answers[q.id] !== undefined);
   const result = allAnswered ? getResult(answers) : null;
+
+  const handleSeeResults = () => {
+    if (emailUnlocked) {
+      setShowResult(true);
+    } else {
+      setShowEmailGate(true);
+    }
+  };
+
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    if (!email.includes('@') || !email.includes('.')) {
+      setEmailError('Please enter a valid email address.');
+      return;
+    }
+    setEmailSubmitting(true);
+    setEmailError('');
+    try {
+      await subscribeUser(email, '');
+      await tagByName(email, 'UC30 - Real Estate Readiness');
+    } catch {}
+    try { localStorage.setItem(READINESS_UNLOCKED_KEY, 'true'); } catch {}
+    setEmailUnlocked(true);
+    setEmailSubmitting(false);
+    setShowEmailGate(false);
+    setShowResult(true);
+  };
 
   return (
     <div className="fade-up" style={{ maxWidth: 600, margin: '0 auto' }}>
@@ -232,7 +271,7 @@ export default function ReadinessQuestionnaire({ onClose }) {
           ))}
 
           <button
-            onClick={() => setShowResult(true)}
+            onClick={handleSeeResults}
             disabled={!allAnswered}
             className="btn-primary"
             style={{
@@ -243,6 +282,60 @@ export default function ReadinessQuestionnaire({ onClose }) {
             See My Results
           </button>
         </>
+      ) : showEmailGate && !showResult ? (
+        <div className="scale-in">
+          <div className="card" style={{ padding: '36px 24px', textAlign: 'center', marginBottom: 20 }}>
+            <div style={{ fontSize: 40, marginBottom: 16 }}>📊</div>
+            <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>
+              Your results are ready
+            </h2>
+            <p style={{ color: '#888', fontSize: 14, lineHeight: 1.6, marginBottom: 28, maxWidth: 380, margin: '0 auto 28px' }}>
+              Enter your email to see your personalized readiness score, result tier, and action items.
+            </p>
+            <form onSubmit={handleEmailSubmit} style={{ display: 'flex', gap: 8, maxWidth: 400, margin: '0 auto' }}>
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={e => { setEmail(e.target.value); setEmailError(''); }}
+                required
+                disabled={emailSubmitting}
+                style={{
+                  flex: 1, padding: '12px 14px', fontSize: 14, borderRadius: 8,
+                  background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)',
+                  color: '#eee', fontFamily: "'DM Sans', sans-serif", outline: 'none',
+                  opacity: emailSubmitting ? 0.6 : 1,
+                }}
+              />
+              <button
+                type="submit"
+                disabled={emailSubmitting}
+                style={{
+                  padding: '12px 24px', fontSize: 14, fontWeight: 600, borderRadius: 8,
+                  background: '#e94560', color: '#fff', border: 'none',
+                  cursor: emailSubmitting ? 'wait' : 'pointer',
+                  fontFamily: "'DM Sans', sans-serif", whiteSpace: 'nowrap',
+                  opacity: emailSubmitting ? 0.7 : 1,
+                }}
+              >
+                {emailSubmitting ? 'Loading...' : 'See Results'}
+              </button>
+            </form>
+            {emailError && (
+              <div style={{ marginTop: 10, fontSize: 12, color: '#e94560' }}>{emailError}</div>
+            )}
+            <p style={{ color: '#555', fontSize: 11, marginTop: 16, lineHeight: 1.5 }}>
+              We'll also send you free real estate investing resources. No spam.
+            </p>
+          </div>
+          <button
+            onClick={() => { setShowEmailGate(false); }}
+            className="btn-secondary"
+            style={{ padding: '10px 20px', fontSize: 13 }}
+          >
+            ← Back to questions
+          </button>
+        </div>
       ) : result && (
         <div className="scale-in">
           <div className="card" style={{
@@ -286,7 +379,7 @@ export default function ReadinessQuestionnaire({ onClose }) {
 
           <div style={{ display: 'flex', gap: 10, marginBottom: 40 }}>
             <button
-              onClick={() => { setShowResult(false); setAnswers({}); }}
+              onClick={() => { setShowResult(false); setShowEmailGate(false); setAnswers({}); }}
               className="btn-secondary"
               style={{ padding: '14px 20px' }}
             >

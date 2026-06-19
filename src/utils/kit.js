@@ -119,4 +119,8 @@ export function tagFreeToolAccess(email, toolTitle) {
   return applyTag(email, `UC30 Free Tool - ${toolTitle}`);
 }
 
+export function tagByName(email, tagName) {
+  return applyTag(email, tagName);
+}
+
 export const isKitEnabled = KIT_ENABLED;
