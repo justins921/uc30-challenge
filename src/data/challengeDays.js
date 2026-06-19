@@ -2796,20 +2796,16 @@ Strong relationships with title companies can reduce stress, improve confidence,
   {
     day: 5,
     title: "Deal Flow Mastery & Follow Up",
-    caption: "Build a consistent deal pipeline and master the art of follow-up.",
+    caption: "Build a consistent deal pipeline through multiple strategies and master the art of professional follow-up.",
     taskDescription: "",
-    trainingContent: "",
-    category: "pipeline",
-    weekNumber: 1,
-    weekTitle: "BUILD THE FOUNDATION",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    sections: [
-      {
-        type: "training",
-        title: "Deal Flow Mastery",
-        content: `Why Deal Flow Matters
+    trainingContent: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 1 — Deal Flow Mastery
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+How GREAT Investors Consistently Find Deals
+
+
+Why Deal Flow Matters
 
 Deal flow is the lifeblood of real estate investing.
 
@@ -2824,32 +2820,36 @@ Important Truth About Deal Flow
 
 There is NO single "best" way to find deals.
 
-Different strategies work better for different people depending on: personality, skillset, market, consistency, and budget.
+Different strategies work better for different people depending on personality, skillset, market, consistency, and budget.
 
 The best strategy is usually the one you can execute CONSISTENTLY.
 
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 1. Realtors & Brokers
 
-MLS Access
-The MLS gives access to listed properties, price reductions, days on market, and market data. Most beginners SHOULD start here because information is easier to access, contracts are standardized, and there is less complexity.
+MLS Access — The MLS gives access to listed properties, price reductions, days on market, and market data. Most beginners SHOULD start here because information is easier to access, contracts are standardized, and there is less complexity.
 
-Pocket Listings
-Pocket listings are deals not publicly marketed yet. Strong realtor relationships often create access to off-market opportunities, motivated sellers, and less competition.
+Pocket Listings — Pocket listings are deals not publicly marketed yet. Strong realtor relationships often create access to off-market opportunities, motivated sellers, and less competition.
 
-Expired Listings
-Expired listings are properties that failed to sell. These sellers are often frustrated, more flexible, and potentially open to creative solutions.
+Expired Listings — Expired listings are properties that failed to sell. These sellers are often frustrated, more flexible, and potentially open to creative solutions.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 2. Wholesalers
 
 Wholesalers put properties under contract and assign the contract to investors. This can create quick deal flow, off-market opportunities, and access to distressed properties.
 
 Assignment Deals — You purchase the contract rights directly from the wholesaler.
+
 Double Closings — The wholesaler closes on the property and immediately resells it.
 
 Important Rule About Wholesalers: Always verify repairs, rents, expenses, title, and ARV independently. Never blindly trust wholesale numbers.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 3. Online Platforms
 
@@ -2862,22 +2862,35 @@ Craigslist & Facebook Marketplace — Often attract smaller landlords, older inv
 MLS Aggregators — Sites that combine listings from multiple sources can help increase visibility, speed, and analysis volume.
 
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 4. Property Managers
 
-Property managers are one of the BEST sources of deal flow. Why? Because they often know tired landlords, frustrated owners, problem properties, retiring investors, and owners considering selling quietly.
+Property managers are one of the BEST sources of deal flow.
 
-Best Ways To Use Property Managers: Build relationships by asking thoughtful questions, being professional, following up consistently, and proving you are serious. The stronger your reputation becomes, the more opportunities usually appear.
+Why? Because they often know tired landlords, frustrated owners, problem properties, retiring investors, and owners considering selling quietly.
 
+Best Ways To Use Property Managers: Build relationships by asking thoughtful questions, being professional, following up consistently, and proving you are serious.
+
+The stronger your reputation becomes, the more opportunities usually appear.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 5. Real Estate Investors
 
 Many deals come from other investors. Investors often sell because of burnout, partnerships, 1031 deadlines, life changes, management frustrations, or shifting priorities.
 
 Important Investor Categories:
-• Retiring Investors — Often open to seller finance, flexible timing, or simplified transactions.
-• Unhappy Landlords — Many landlords eventually become exhausted, frustrated, or overwhelmed. Pain creates opportunity.
-• 1031 Exchange Investors — These investors often operate under strict deadlines, pressure, and timing sensitivity.
 
+Retiring Investors — Often open to seller finance, flexible timing, or simplified transactions.
+
+Unhappy Landlords — Many landlords eventually become exhausted, frustrated, or overwhelmed. Pain creates opportunity.
+
+1031 Exchange Investors — These investors often operate under strict deadlines, pressure, and timing sensitivity.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 6. Direct-To-Owner Prospecting
 
@@ -2887,7 +2900,7 @@ Mailers — Simple letters or postcards sent to landlords, absentee owners, prob
 
 SMS & Texting — Direct outreach through text messaging. This works best when respectful, short, and non-pushy.
 
-Cold Calling — Directly calling owners. This can feel uncomfortable initially, but repetition builds confidence. Great for motivated sellers, distressed properties, and direct negotiation opportunities.
+Cold Calling — Directly calling owners. This can feel uncomfortable initially but repetition builds confidence. Great for motivated sellers, distressed properties, and direct negotiation opportunities.
 
 Door Knocking — Physically visiting owners. Most people are NOT willing to do this consistently, which is why it can create opportunity.
 
@@ -2895,9 +2908,14 @@ Driving For Dollars — Driving neighborhoods looking for deferred maintenance, 
 
 Skip Tracing — Finding owner contact information through databases, software, or public records. Often paired with cold calling, texting, or direct mail.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Distressed Property Opportunities
+
 Pre-Foreclosures — Owners behind on payments may need speed, flexibility, or creative solutions. These situations require professionalism, empathy, and caution.
 
-Foreclosures — Bank-owned or distressed opportunities. Competition can be high, but strong opportunities still exist.
+Foreclosures — Bank-owned or distressed opportunities. Competition can be high but strong opportunities still exist.
 
 Tax Liens — Properties with unpaid taxes. These owners may have financial distress, deferred maintenance, or motivation to sell.
 
@@ -2907,6 +2925,8 @@ Divorce Situations — Divorce often creates urgency, stress, and a need for fas
 
 Eviction-Heavy Landlords — Some landlords become overwhelmed by nonpaying tenants, property damage, or burnout. These owners can become motivated sellers.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 7. Networking & Relationships
 
@@ -2927,6 +2947,8 @@ Bankers & Lenders — Strong lender relationships can create referrals, investor
 Social Media — Posting deals, renovations, education, or investing content can create credibility, referrals, and inbound opportunities. Attention creates deal flow.
 
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 8. Advertising & Marketing
 
 Marketing creates inbound opportunities.
@@ -2942,181 +2964,76 @@ SEO & Google Ads — Ranking locally for "sell my house fast" or investment-rela
 Authority Content (YouTube, Instagram, TikTok) — Educational content can build trust, create referrals, attract sellers, and create inbound deal flow. Authority compounds over time.
 
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 9. Public Records & Government Data
 
-Public records create opportunities most people ignore. Examples: code violations, evictions, probate filings, foreclosure filings, tax delinquency lists, and vacant property lists. These often uncover motivated owners, distressed properties, and off-market opportunities.
+Public records create opportunities most people ignore.
 
+Examples: code violations, evictions, probate filings, foreclosure filings, tax delinquency lists, and vacant property lists.
+
+These often uncover motivated owners, distressed properties, and off-market opportunities.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 10. Your Existing Network
 
-Never underestimate friends, coworkers, church groups, gyms, neighbors, or local relationships. Many people know someone struggling with a property, wanting to sell, or needing help. The more people know what you do, the more opportunities usually appear.
+Never underestimate friends, coworkers, church groups, gyms, neighbors, or local relationships.
 
+Many people know someone struggling with a property, wanting to sell, or needing help.
+
+The more people know what you do, the more opportunities usually appear.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 The MOST Important Deal Flow Rule
 
 Consistency beats intensity.
 
-Many investors try one strategy briefly, get discouraged, and quit. Great investors consistently build relationships, consistently analyze deals, consistently market, and consistently follow up. Deal flow compounds over time.
+Many investors try one strategy briefly, get discouraged, and quit.
 
+Great investors consistently build relationships, consistently analyze deals, consistently market, and consistently follow up.
+
+Deal flow compounds over time.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Quick Rules To Remember
 
-• Deal flow is the lifeblood of real estate.
-• Relationships create opportunities.
-• Consistency matters more than perfection.
-• Most great deals are CREATED.
-• Strong follow-up creates deals.
-• Different strategies fit different personalities.
-• Build trust before trying to close deals.
-• Volume creates opportunities.
-• Most sellers care about certainty and simplicity.
-• The more people know you buy real estate, the more opportunities appear.`,
-      },
-      {
-        type: "quiz",
-        required: true,
-        scenarios: [
-          {
-            id: "day8_quiz",
-            title: "Deal Flow Mastery Quiz",
-            description: "Answer all 10 questions correctly to continue.",
-            maxAttempts: 3,
-            explanationOnFail: `Review the correct answers:
+Deal flow is the lifeblood of real estate.
+Relationships create opportunities.
+Consistency matters more than perfection.
+Most great deals are CREATED.
+Strong follow-up creates deals.
+Different strategies fit different personalities.
+Build trust before trying to close deals.
+Volume creates opportunities.
+Most sellers care about certainty and simplicity.
+The more people know you buy real estate, the more opportunities appear.
 
-1. Consistency and follow-up is the most important factor in successful deal flow.
-2. Property managers often know tired landlords and struggling owners.
-3. Off-market deals often have less competition and more flexibility.
-4. Driving for Dollars means driving neighborhoods looking for distressed properties.
-5. Relationships and opportunities compound over time — consistency matters.
-6. Strong networking means building long-term relationships and credibility.
-7. Expired listings create opportunity because sellers may become more flexible after failing to sell.
-8. Quitting strategies before momentum builds is one of the biggest beginner mistakes.
-9. The best deal flow strategy is the one you can execute consistently.
-10. Social media builds trust, authority, and inbound opportunities.`,
-            inputs: [
-              {
-                id: "day8_q1",
-                label: "1. What is the MOST important factor in successful deal flow?",
-                type: "multiple_choice",
-                options: ["Finding one perfect marketing strategy", "Consistency and follow-up", "Spending the most money on advertising", "Using every strategy at once"],
-                correctAnswer: 1,
-              },
-              {
-                id: "day8_q2",
-                label: "2. Why are property managers such valuable deal flow sources?",
-                type: "multiple_choice",
-                options: [
-                  "They determine property values",
-                  "They often know tired landlords and struggling owners",
-                  "They control the MLS",
-                  "They provide free financing",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day8_q3",
-                label: "3. What is one major advantage of off-market deals?",
-                type: "multiple_choice",
-                options: [
-                  "They always require no repairs",
-                  "There is often less competition and more flexibility",
-                  "Banks automatically approve financing",
-                  "They eliminate due diligence",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day8_q4",
-                label: "4. What is \"Driving For Dollars\"?",
-                type: "multiple_choice",
-                options: [
-                  "Touring luxury properties with agents",
-                  "Driving neighborhoods looking for distressed properties",
-                  "Driving sellers to closing appointments",
-                  "Looking at properties only online",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day8_q5",
-                label: "5. What is one reason consistency matters so much in deal flow?",
-                type: "multiple_choice",
-                options: [
-                  "Most deal flow strategies work instantly",
-                  "Sellers usually respond immediately",
-                  "Relationships and opportunities compound over time",
-                  "You only need one week of marketing",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day8_q6",
-                label: "6. Which statement BEST describes strong networking?",
-                type: "multiple_choice",
-                options: [
-                  "Asking everyone for deals immediately",
-                  "Building long-term relationships and credibility",
-                  "Only talking to wealthy investors",
-                  "Avoiding follow-up conversations",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day8_q7",
-                label: "7. Why can expired listings create opportunity?",
-                type: "multiple_choice",
-                options: [
-                  "They are always free properties",
-                  "Sellers may become more flexible after failing to sell",
-                  "Banks automatically discount them",
-                  "They no longer require contracts",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day8_q8",
-                label: "8. What is one of the BIGGEST mistakes beginners make with deal flow?",
-                type: "multiple_choice",
-                options: [
-                  "Focusing on too few strategies",
-                  "Being too consistent",
-                  "Quitting strategies before momentum builds",
-                  "Building too many relationships",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day8_q9",
-                label: "9. Which deal flow strategy is BEST?",
-                type: "multiple_choice",
-                options: [
-                  "The most expensive one",
-                  "The one everyone else uses",
-                  "The strategy you can execute consistently",
-                  "Cold calling only",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day8_q10",
-                label: "10. Why is social media becoming a stronger deal flow tool?",
-                type: "multiple_choice",
-                options: [
-                  "It eliminates negotiations",
-                  "It builds trust, authority, and inbound opportunities",
-                  "It guarantees off-market deals",
-                  "It replaces networking completely",
-                ],
-                correctAnswer: 1,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        type: "training",
-        title: "Follow-Up Mastery",
-        content: `Why Follow-Up Matters
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Today's Suggested Arsenal Exercise
+
+Choose ONE primary deal flow strategy and ONE secondary strategy that fit your personality, strengths, schedule, and budget.
+
+Then reach out to Arsenal Contacts that will help you achieve these goals.
+
+Remember: consistent action creates momentum.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 2 — Follow-Up Mastery
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"The Fortune Is In The Follow-Up"
+
+
+Why Follow-Up Matters
 
 Most investors believe deals happen immediately, on the first call, or after the first offer.
 
@@ -3127,11 +3044,15 @@ Why? Because motivation changes, markets shift, sellers become frustrated, buyer
 The investor who stays professional, stays patient, and stays top of mind often wins the deal later.
 
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Most Investors Quit Too Early
 
 One of the biggest mistakes investors make is giving up after one conversation, one rejected offer, or one "no."
 
-Many sellers initially say no, maybe later, I need more, or I'm not ready. That does NOT always mean the opportunity is dead.
+Many sellers initially say no, maybe later, I need more, or I'm not ready.
+
+That does NOT always mean the opportunity is dead.
 
 Sometimes it simply means wrong timing, not enough trust, not enough pain yet, or the wrong structure.
 
@@ -3140,10 +3061,12 @@ Sometimes it simply means wrong timing, not enough trust, not enough pain yet, o
 
 Strong investors understand many deals are won through patience, consistency, and follow-up.
 
-A seller who says "I need more money" today may feel VERY differently 30 days later — after another buyer falls apart, after more stress, after more vacancy, after more repairs, or after more frustration.
+A seller who says "I need more money" today may feel VERY differently 30 days later, after another buyer falls apart, after more stress, after more vacancy, after more repairs, or after more frustration.
 
 This is why follow-up matters so much.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 The Goal Of Follow-Up
 
@@ -3151,23 +3074,44 @@ The goal is NOT pressure, desperation, manipulation, or constantly bothering peo
 
 The goal is to remain professional, helpful, respectful, and top of mind.
 
-You want people to think: "If I decide to sell… I should call YOU."
+You want people to think: "If I decide to sell, I should call YOU."
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Arsenal Contacts vs Target Contacts
 
 There are TWO major types of follow-up inside UC30:
 
-Arsenal Contacts — These are people who can bring you opportunities in the future. Examples: realtors, wholesalers, property managers, lenders, investors, contractors, attorneys, and other relationships. These people may NOT currently have a deal for you, but strong relationships with them can create deal flow later.
 
-Target Contacts — These are sellers, owners, or warm property leads connected to properties you are actively interested in buying. This includes sellers you already spoke with, people who rejected your offer, owners considering selling, or leads that showed SOME level of interest. These are active acquisition opportunities.
+Arsenal Contacts
 
+These are people who can bring you opportunities in the future. Examples: realtors, wholesalers, property managers, lenders, investors, contractors, attorneys, and other relationships.
+
+These people may NOT currently have a deal for you, but strong relationships with them can create deal flow later.
+
+
+Target Contacts
+
+These are sellers, owners, or warm property leads connected to properties you are actively interested in buying.
+
+This includes: sellers you already spoke with, people who rejected your offer, owners considering selling, or leads that showed SOME level of interest.
+
+These are active acquisition opportunities.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Following Up With Arsenal Contacts
 
 The goal with Arsenal Contacts is relationship building and staying top of mind. You want these people to remember you, trust you, and WANT to bring deals to you.
 
-Build Yourself Up As A Buyer — Arsenal Contacts should view you as serious, professional, responsive, easy to work with, and capable of closing. You want them to feel bringing you deals will make THEIR life easier.
+
+Build Yourself Up As A Buyer
+
+Arsenal Contacts should view you as serious, professional, responsive, easy to work with, and capable of closing.
+
+You want them to feel bringing you deals will make THEIR life easier.
 
 Examples: you move quickly, communicate clearly, close reliably, understand investing, and do NOT waste time.
 
@@ -3176,10 +3120,14 @@ People bring opportunities to buyers they trust. The more confidence they have i
 
 Great Follow-Up Is NOT Complicated
 
-Simple follow-up works. Examples: checking in, asking how business is going, asking if they have anything coming up, commenting on market conditions, or reminding them what type of deals you buy.
+Simple follow-up works.
+
+Examples: checking in, asking how business is going, asking if they have anything coming up, commenting on market conditions, or reminding them what type of deals you buy.
 
 The goal is consistency. NOT overwhelming people.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Following Up With Target Contacts
 
@@ -3187,8 +3135,15 @@ Target Contact follow-up is VERY important. These are often warm leads, almost-d
 
 Many investors lose deals because they disappear after the first rejected offer. Strong investors continue following up professionally.
 
-Make Sure Sellers Know You Are STILL Interested — If the property still works at your price or terms, make sure the seller knows you are still interested, still serious, and still ready to buy. Sometimes sellers simply need more time, more stress, more failed buyers, or more market pressure before becoming realistic.
 
+Make Sure Sellers Know You Are STILL Interested
+
+If the property still works at your price or terms, make sure the seller knows you are still interested, still serious, and still ready to buy.
+
+Sometimes sellers simply need more time, more stress, more failed buyers, or more market pressure before becoming realistic.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Follow-Up WITHOUT Damaging The Relationship
 
@@ -3196,7 +3151,10 @@ One of the most important skills in investing is learning how to follow up WITHO
 
 Good follow-up feels calm, confident, respectful, and low pressure.
 
-Be Helpful — Not Pushy. Strong investors focus on helping, problem solving, and creating certainty. NOT pressuring people emotionally.
+
+Be Helpful — Not Pushy
+
+Strong investors focus on helping, problem solving, and creating certainty. NOT pressuring people emotionally.
 
 You want sellers and contacts to feel working with you would be smooth, easy, professional, and low stress.
 
@@ -3207,22 +3165,37 @@ Sometimes it is appropriate to respectfully discuss rising interest rates, slowi
 
 The goal is NOT fear tactics. The goal is helping sellers realistically evaluate the market, their stress, and the value of certainty.
 
-Position Yourself As The EASY Solution — Many sellers eventually choose simplicity, certainty, professionalism, and low stress over trying to squeeze every possible dollar out of a property. You want sellers to feel working with YOU makes life easier.
 
+Position Yourself As The EASY Solution
+
+Many sellers eventually choose simplicity, certainty, professionalism, and low stress over trying to squeeze every possible dollar out of a property.
+
+You want sellers to feel working with YOU makes life easier.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Consistency Beats Intensity
 
-Many investors follow up aggressively for a few days, then disappear completely. Strong investors follow up consistently, professionally, and long term.
+Many investors follow up aggressively for a few days, then disappear completely.
+
+Strong investors follow up consistently, professionally, and long term.
 
 Small consistent follow-up often beats sporadic intense follow-up.
 
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 CRM Organization Matters
 
-As your lead volume grows, organization becomes critical. Track conversations, offers, follow-up dates, motivation, objections, and relationship notes.
+As your lead volume grows, organization becomes critical.
+
+Track: conversations, offers, follow-up dates, motivation, objections, and relationship notes.
 
 The better organized you become, the more deals you will eventually convert. UC30 makes it easy for you to schedule when to follow up and will even remind you when it is time to do so. Make sure that you select the shortest follow-up window that seems realistic. If you have a hot lead, follow up as soon as possible and consistently.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Find Pain Points & Solve Problems
 
@@ -3230,18 +3203,24 @@ One of the MOST important goals when following up with Target Contacts is identi
 
 Great investors do NOT just chase properties. They solve problems.
 
-Sometimes sellers are dealing with difficult tenants, deferred maintenance, vacancies, rising expenses, burnout, divorce, inheritance, relocation, management frustrations, financial pressure, or simply emotional exhaustion.
+Sometimes sellers are dealing with: difficult tenants, deferred maintenance, vacancies, rising expenses, burnout, divorce, inheritance, relocation, management frustrations, financial pressure, or simply emotional exhaustion.
 
 Your job is NOT to pressure people, manipulate emotions, or force deals. Your job is to become anxiously engaged in helping find solutions that genuinely benefit both parties.
 
 When sellers feel understood, heard, respected, and helped, trust increases dramatically.
 
-Many GREAT deals happen because the seller feels like you actually care about solving the problem — not just buying the property. Sometimes the more focused you become on helping solve problems, the more deals naturally begin finding YOU.
+Many GREAT deals happen because the seller feels like you actually care about solving the problem — not just buying the property.
 
+Sometimes the more focused you become on helping solve problems, the more deals naturally begin finding YOU.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Follow-Up Creates Trust
 
-People naturally trust familiarity, consistency, and reliability. The more professionally someone hears from you over time, the more comfortable they usually become. Trust compounds.
+People naturally trust familiarity, consistency, and reliability. The more professionally someone hears from you over time, the more comfortable they usually become.
+
+Trust compounds.
 
 
 Stay Patient
@@ -3253,152 +3232,306 @@ Most investors quit too early, stop following up, or assume the deal is dead.
 Stay patient. Stay professional. Stay top of mind.
 
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Quick Rules To Remember
 
-• The fortune is in the follow-up.
-• "No" often means "not yet."
-• Stay top of mind professionally.
-• Follow up WITHOUT pressure.
-• Relationships create opportunities.
-• Trust compounds over time.
-• Consistency beats intensity.
-• Position yourself as the easy solution.
-• Strong follow-up builds deal flow.
-• Patience creates opportunities.
-• Focus on finding pain points and solving problems.`,
-      },
-      {
-        type: "quiz",
-        required: true,
-        scenarios: [
-          {
-            id: "day9_quiz",
-            title: "Follow-Up Mastery Quiz",
-            description: "Answer all 10 questions correctly to continue.",
-            maxAttempts: 3,
-            explanationOnFail: `Review the correct answers:
+The fortune is in the follow-up.
+"No" often means "not yet."
+Stay top of mind professionally.
+Follow up WITHOUT pressure.
+Relationships create opportunities.
+Trust compounds over time.
+Consistency beats intensity.
+Position yourself as the easy solution.
+Strong follow-up builds deal flow.
+Patience creates opportunities.
+Focus on finding pain points and solving problems.
 
-1. Most investors lose deals by disappearing after the first conversation or rejected offer.
-2. "No" often means not yet — wrong timing or wrong structure.
-3. The primary goal of follow-up is to stay professional and top of mind.
-4. Arsenal Contacts are relationships capable of bringing future opportunities.
-5. Target Contacts are active property leads or sellers tied to deal opportunities.
-6. Consistency and professionalism create the best long-term follow-up results.
-7. Sellers should feel the process will be smooth and low stress.
-8. Deals happen later because motivation and circumstances change over time.
-9. Quitting too early is one of the biggest follow-up mistakes.
-10. Finding pain points and helping solve the seller's problems is key.`,
-            inputs: [
-              {
-                id: "day9_q1",
-                label: "1. Why do many investors lose potential deals?",
-                type: "multiple_choice",
-                options: [
-                  "They analyze too many properties",
-                  "They disappear after the first conversation or rejected offer",
-                  "They follow up too professionally",
-                  "They build too many relationships",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day9_q2",
-                label: "2. What does \"No\" often actually mean in real estate?",
-                type: "multiple_choice",
-                options: [
-                  "Never contact me again",
-                  "The property is sold already",
-                  "Not yet, wrong timing, or wrong structure",
-                  "The seller hates investors",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day9_q3",
-                label: "3. What is the PRIMARY goal of follow-up?",
-                type: "multiple_choice",
-                options: ["Pressure people into selling", "Stay professional and top of mind", "Convince sellers emotionally", "Constantly lower your offer price"],
-                correctAnswer: 1,
-              },
-              {
-                id: "day9_q4",
-                label: "4. What is an Arsenal Contact?",
-                type: "multiple_choice",
-                options: [
-                  "A property currently under contract",
-                  "A seller who accepted your offer",
-                  "A relationship capable of bringing future opportunities",
-                  "A bank-owned property",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day9_q5",
-                label: "5. What is a Target Contact?",
-                type: "multiple_choice",
-                options: [
-                  "A random networking contact",
-                  "An active property lead or seller tied to a deal opportunity",
-                  "A contractor referral only",
-                  "A lender relationship",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day9_q6",
-                label: "6. What creates the BEST long-term follow-up results?",
-                type: "multiple_choice",
-                options: ["Aggressive pressure", "Constant emotional persuasion", "Consistency and professionalism", "Calling sellers multiple times daily"],
-                correctAnswer: 2,
-              },
-              {
-                id: "day9_q7",
-                label: "7. What should sellers feel when working with you?",
-                type: "multiple_choice",
-                options: [
-                  "Pressured",
-                  "Manipulated",
-                  "That the process will be smooth and low stress",
-                  "Rushed emotionally",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day9_q8",
-                label: "8. Why do many deals happen later instead of immediately?",
-                type: "multiple_choice",
-                options: [
-                  "Sellers never make decisions quickly",
-                  "Motivation and circumstances often change over time",
-                  "Buyers should always wait 6 months",
-                  "Realtors delay every deal intentionally",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day9_q9",
-                label: "9. What is one major mistake investors make with follow-up?",
-                type: "multiple_choice",
-                options: ["Being too organized", "Following up too calmly", "Quitting too early", "Building too much trust"],
-                correctAnswer: 2,
-              },
-              {
-                id: "day9_q10",
-                label: "10. What is one of the MOST important goals when following up with Target Contacts?",
-                type: "multiple_choice",
-                options: [
-                  "Convincing them to sell immediately through pressure",
-                  "Finding pain points and helping solve the seller's problems",
-                  "Constantly lowering your offer price",
-                  "Avoiding conversations about stress or frustration",
-                ],
-                correctAnswer: 1,
-              },
-            ],
-          },
-        ],
-      },
-    ],
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Today's Execution Challenge
+
+Follow up with every warm seller lead, every rejected offer, and every property owner who previously showed interest.
+
+Your goal: stay top of mind, continue building trust, and remind them you are still interested if the deal makes sense at your price or terms.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Today's Suggested Arsenal Activity
+
+Reach back out to realtors, wholesalers, property managers, lenders, investors, or anyone capable of bringing future opportunities.
+
+Focus on relationship building, professionalism, and positioning yourself as a strong buyer who is easy to work with and capable of closing.
+
+Attempt to build urgency in your desire to find a deal and close quickly if they bring you a deal! Convince them you are ready to act!
+
+The goal is NOT to force deals today. The goal is to become the person they think of FIRST when opportunities appear.`,
+    category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: "d5q1_dealflow",
+          title: "Deal Flow Mastery Quiz",
+          questions: [
+            {
+              id: "d5q1_1",
+              text: "What is the MOST important factor in successful deal flow?",
+              type: "multiple_choice",
+              options: [
+                "Finding one perfect marketing strategy",
+                "Consistency and follow-up",
+                "Spending the most money on advertising",
+                "Using every strategy at once"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d5q1_2",
+              text: "Why are property managers such valuable deal flow sources?",
+              type: "multiple_choice",
+              options: [
+                "They determine property values",
+                "They often know tired landlords and struggling owners",
+                "They control the MLS",
+                "They provide free financing"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d5q1_3",
+              text: "What is one major advantage of off-market deals?",
+              type: "multiple_choice",
+              options: [
+                "They always require no repairs",
+                "There is often less competition and more flexibility",
+                "Banks automatically approve financing",
+                "They eliminate due diligence"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d5q1_4",
+              text: "What is \"Driving For Dollars\"?",
+              type: "multiple_choice",
+              options: [
+                "Touring luxury properties with agents",
+                "Driving neighborhoods looking for distressed properties",
+                "Driving sellers to closing appointments",
+                "Looking at properties only online"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d5q1_5",
+              text: "What is one reason consistency matters so much in deal flow?",
+              type: "multiple_choice",
+              options: [
+                "Most deal flow strategies work instantly",
+                "Sellers usually respond immediately",
+                "Relationships and opportunities compound over time",
+                "You only need one week of marketing"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d5q1_6",
+              text: "Which statement BEST describes strong networking?",
+              type: "multiple_choice",
+              options: [
+                "Asking everyone for deals immediately",
+                "Building long-term relationships and credibility",
+                "Only talking to wealthy investors",
+                "Avoiding follow-up conversations"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d5q1_7",
+              text: "Why can expired listings create opportunity?",
+              type: "multiple_choice",
+              options: [
+                "They are always free properties",
+                "Sellers may become more flexible after failing to sell",
+                "Banks automatically discount them",
+                "They no longer require contracts"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d5q1_8",
+              text: "What is one of the BIGGEST mistakes beginners make with deal flow?",
+              type: "multiple_choice",
+              options: [
+                "Focusing on too few strategies",
+                "Being too consistent",
+                "Quitting strategies before momentum builds",
+                "Building too many relationships"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d5q1_9",
+              text: "Which deal flow strategy is BEST?",
+              type: "multiple_choice",
+              options: [
+                "The most expensive one",
+                "The one everyone else uses",
+                "The strategy you can execute consistently",
+                "Cold calling only"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d5q1_10",
+              text: "Why is social media becoming a stronger deal flow tool?",
+              type: "multiple_choice",
+              options: [
+                "It eliminates negotiations",
+                "It builds trust, authority, and inbound opportunities",
+                "It guarantees off-market deals",
+                "It replaces networking completely"
+              ],
+              correctAnswer: 1,
+            },
+          ],
+        },
+        {
+          id: "d5q2_followup",
+          title: "Follow-Up Mastery Quiz",
+          questions: [
+            {
+              id: "d5q2_1",
+              text: "Why do many investors lose potential deals?",
+              type: "multiple_choice",
+              options: [
+                "They analyze too many properties",
+                "They disappear after the first conversation or rejected offer",
+                "They follow up too professionally",
+                "They build too many relationships"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d5q2_2",
+              text: "What does \"No\" often actually mean in real estate?",
+              type: "multiple_choice",
+              options: [
+                "Never contact me again",
+                "The property is sold already",
+                "Not yet, wrong timing, or wrong structure",
+                "The seller hates investors"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d5q2_3",
+              text: "What is the PRIMARY goal of follow-up?",
+              type: "multiple_choice",
+              options: [
+                "Pressure people into selling",
+                "Stay professional and top of mind",
+                "Convince sellers emotionally",
+                "Constantly lower your offer price"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d5q2_4",
+              text: "What is an Arsenal Contact?",
+              type: "multiple_choice",
+              options: [
+                "A property currently under contract",
+                "A seller who accepted your offer",
+                "A relationship capable of bringing future opportunities",
+                "A bank-owned property"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d5q2_5",
+              text: "What is a Target Contact?",
+              type: "multiple_choice",
+              options: [
+                "A random networking contact",
+                "An active property lead or seller tied to a deal opportunity",
+                "A contractor referral only",
+                "A lender relationship"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d5q2_6",
+              text: "What creates the BEST long-term follow-up results?",
+              type: "multiple_choice",
+              options: [
+                "Aggressive pressure",
+                "Constant emotional persuasion",
+                "Consistency and professionalism",
+                "Calling sellers multiple times daily"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d5q2_7",
+              text: "What should sellers feel when working with you?",
+              type: "multiple_choice",
+              options: [
+                "Pressured",
+                "Manipulated",
+                "That the process will be smooth and low stress",
+                "Rushed emotionally"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d5q2_8",
+              text: "Why do many deals happen later instead of immediately?",
+              type: "multiple_choice",
+              options: [
+                "Sellers never make decisions quickly",
+                "Motivation and circumstances often change over time",
+                "Buyers should always wait 6 months",
+                "Realtors delay every deal intentionally"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d5q2_9",
+              text: "What is one major mistake investors make with follow-up?",
+              type: "multiple_choice",
+              options: [
+                "Being too organized",
+                "Following up too calmly",
+                "Quitting too early",
+                "Building too much trust"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d5q2_10",
+              text: "What is one of the MOST important goals when following up with Target Contacts?",
+              type: "multiple_choice",
+              options: [
+                "Convincing them to sell immediately through pressure",
+                "Finding pain points and helping solve the seller's problems",
+                "Constantly lowering your offer price",
+                "Avoiding conversations about stress or frustration"
+              ],
+              correctAnswer: 1,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 6,
