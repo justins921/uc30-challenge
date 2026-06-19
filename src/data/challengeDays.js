@@ -569,32 +569,454 @@ Review the property analysis training if you're unclear on the inputs.`,
   {
     day: 2,
     title: "Financing & Rental Analysis",
-    caption: "Build your lending team, master financing options, and sharpen your rental analysis skills.",
-    taskDescription: "",
-    trainingContent: "",
-    category: "foundation",
-    weekNumber: 1,
-    weekTitle: "BUILD THE FOUNDATION",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    sections: [
-      {
-        type: "training",
-        title: "Financing & Becoming Bankable",
-        content: `Financing & Becoming Bankable — Building Your Lending Team Before You Need It
+    caption: "Master every financing type, build your lending team, and learn to accurately analyze rents and expenses.",
+    taskDescription: "Contact one conventional lender, one DSCR lender, and one local bank or credit union. Create a financing comparison sheet. Then analyze market rents for a property using at least 3 sources and connect with a local property manager as an Arsenal Contact.",
+    trainingContent: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 1 — Financing Mastery
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+Building Your Lending Team & Understanding Every Major Type of Real Estate Financing
 
 Why Financing Matters
 
-Many investors spend months analyzing deals but never submit offers because they are not financially prepared.
+Many investors spend months analyzing deals but never submit offers because they are not financially prepared. They have no lender relationships, no pre-approval, no understanding of financing, and no understanding of what they actually qualify for.
 
-They have:
+The result is predictable. An opportunity appears. The investor gets excited. Then they discover they are not ready.
 
-• No lender relationships
-• No pre-approval
-• No understanding of financing
-• No understanding of what they actually qualify for
+But financing goes far beyond just getting approved. Financing can dramatically impact cash flow, cash-on-cash return, risk, reserves, scalability, and long-term wealth creation. Two investors can buy the exact same property and produce completely different results simply because they used different financing.
+
+Professional investors build their financing team before they need it. The goal of today is to become financially prepared so that when opportunities appear, you are ready to act.
+
+How Financing Can Accelerate Wealth
+
+Many new investors assume paying cash is always the safest and best option. While paying cash reduces risk, financing allows you to control more real estate with the same amount of money and can dramatically increase your total returns when used responsibly.
+
+A properly financed property can generate returns from cash flow, appreciation, principal paydown, and tax benefits while allowing you to preserve capital for reserves and additional investments. The goal is not to maximize debt, but to use financing strategically so that your money works across multiple assets instead of being tied up in a single property.
+
+The key is balance: use enough leverage to improve returns and accelerate growth, but maintain enough reserves and cash flow to protect yourself during unexpected vacancies, repairs, or market shifts.
+
+Important Rule: There is NO perfect loan. Every loan comes with benefits, drawbacks, risks, costs, and tradeoffs. Your goal is to find the financing that best fits your goals, your risk tolerance, your reserves, and your long-term strategy.
+
+Your Financing Team
+
+Most investors should not rely on a single lender. Your goal is to build relationships with multiple financing sources:
+
+• Conventional Lender — For traditional investment loans
+• DSCR Lender — For cash-flow based lending
+• Local Credit Union or Community Bank — Often the best source for relationship-based lending and portfolio loans (usually the best for conventional loans and most investment property loans when it comes to rates, terms, and relationship)
+• Accountant — To help ensure your tax strategy supports your long-term financing goals
+
+Why Multiple Lenders Matter
+
+Different lenders excel in different situations. One lender may offer lower rates, lower fees, better terms, more flexibility, or better loan products. You do not know which lender is best until you compare them. The best investors shop financing just like they shop properties.
+
+How To Contact Lenders
+
+Your goal is not immediately getting your credit pulled. Your goal is gathering information. A simple conversation might sound like:
+
+"I'm actively preparing to purchase investment property. I'd like to understand your loan programs, rates, down payment requirements, reserve requirements, and qualification standards. I'm planning on investing in real estate consistently over time and I want to make sure I connect with the best lender to form a long-term relationship."
+
+Questions To Ask Every Lender:
+• What loan products do you offer investors?
+• What are your current rates?
+• What are your closing costs?
+• What reserve requirements do you have?
+• What are your down payment requirements?
+• What are your debt-to-income requirements?
+• What property types do you prefer?
+• What is your typical closing timeline?
+• What disqualifies most borrowers?
+
+Protecting Your Credit
+
+Early in the process, you typically do not need multiple lenders pulling your credit. Instead, discuss your approximate credit score, income, assets, and debt levels. Ask lenders to provide estimated terms based on that information. Once you have identified the lender you are most likely to work with, then move forward with a formal application and credit pull.
+
+Shopping Rates And Terms
+
+Most investors focus exclusively on interest rates. This is a mistake. You should compare: interest rate, closing costs, loan fees, reserve requirements, loan flexibility, amortization length, prepayment penalties, and customer service. The best loan is not always the lowest rate.
+
+What Impacts Financing?
+
+Interest Rate — Higher rates reduce cash flow and returns. Lower rates improve cash flow and increase flexibility.
+
+Down Payment — Larger down payments lower risk and improve cash flow. Smaller down payments increase leverage and cash-on-cash return but increase risk.
+
+Loan Length — Common terms are 15, 20, 25, and 30 years. Longer terms improve cash flow with lower payments. Shorter terms build equity faster and reduce total interest paid.
+
+Closing Costs — Include lender fees, appraisal, title fees, escrow fees, underwriting fees, and loan points. Higher closing costs reduce returns and increase required capital. Always understand your total acquisition costs.
+
+Understanding Reserve Requirements
+
+Many investors become frustrated because they qualify for a loan but do not satisfy reserve requirements. Many lenders want to see cash reserves, emergency funds, and liquidity after closing. You need to understand these requirements before pursuing properties.
+
+Becoming Bankable
+
+One of the most overlooked concepts in investing is becoming bankable. Banks prefer borrowers who demonstrate stable income, strong reserves, responsible debt management, and organized financial records. Your goal is to make yourself easy to lend to.
+
+The Accountant Conversation
+
+One of the smartest conversations an investor can have is between themselves, their accountant, and their lender. Many investors aggressively reduce taxable income without understanding how that affects future borrowing ability. Before making major tax decisions, understand: How will this affect future financing? The goal is maximizing long-term wealth, not simply minimizing taxes.
+
+Protecting Your Approval
+
+Once you become pre-approved, avoid opening new credit cards, financing vehicles, taking on additional debt, making large unexplained deposits, or changing employment unnecessarily. What seems like a small financial decision can impact financing approval.
+
+Why Pre-Approval Matters
+
+Pre-approval creates credibility. It tells realtors you're serious, sellers you can perform, wholesalers you are worth bringing opportunities to, and Arsenal Contacts you are prepared to act. Prepared investors get shown more opportunities.
+
+━━━━━━━━━━━━━━━━━━━━━━
+Financing Types — Complete Guide
+━━━━━━━━━━━━━━━━━━━━━━
+
+FHA Loans
+
+Government-backed loans for owner-occupied properties. You must live in the property.
+• Advantages: As little as 3.5% down, easier qualification, excellent for beginners, great for house hacking, can be used on duplexes, triplexes, and fourplexes
+• Disadvantages: Must occupy the property, mortgage insurance required, cannot be used for pure investment properties
+• Best Use: House hacking 2–4 unit properties
+
+Owner-Occupied Conventional Loans
+
+Traditional residential financing used when you live in the property.
+• Advantages: Lower rates, better terms, lower down payments, strong cash flow
+• Disadvantages: Occupancy requirements, must be your primary residence
+• Best Use: Primary residences and house hacks
+
+Conventional Investment Loans
+
+Traditional financing for rental properties.
+• Advantages: Long-term fixed rates, 30-year amortization, strong cash flow, widely available
+• Disadvantages: Typically require 20–25% down, stricter qualification standards, debt-to-income limitations
+• Best Use: Long-term buy-and-hold investing
+
+The 10 Conventional Loan Strategy: Many lenders allow investors to own up to 10 financed conventional properties. This can be one of the most powerful wealth-building tools available to small investors. Married couples can often structure financing so that each spouse qualifies for up to 10 financed conventional loans, dramatically increasing borrowing capacity. Always verify current lending guidelines with your lender.
+
+DSCR Loans (Debt Service Coverage Ratio)
+
+These loans focus heavily on property performance instead of personal income.
+• Advantages: Easier scaling, great for self-employed investors, less focus on W-2 income, investor-friendly underwriting
+• Disadvantages: Higher rates, higher closing costs, larger down payments, lower cash flow
+• Best Use: Investors scaling beyond conventional financing
+
+Portfolio Loans
+
+Loans held directly by banks and credit unions rather than sold to the secondary market.
+• Advantages: Flexible underwriting, relationship-based lending, creative solutions possible
+• Disadvantages: Terms vary widely, balloon payments may exist, often less standardized
+• Best Use: Investors building strong local banking relationships
+
+Commercial Loans
+
+Used for apartment buildings (5+ units), self-storage, office buildings, retail centers, industrial properties, motels, mobile home parks, and mixed-use properties. Commercial lenders focus heavily on Net Operating Income (NOI), property performance, DSCR, and business plan rather than primarily on personal income.
+• Advantages: Finance larger properties, easier scaling, flexible structures, entity ownership often allowed, may include interest-only periods
+• Disadvantages: Larger down payments (20–35%), higher rates, more documentation, more lender scrutiny, balloon payments are common
+• Best Use: Apartment buildings (5+ units), storage facilities, retail, office, industrial, motels
+
+Common Commercial Structures:
+• 20–25 Year Amortization — Higher payments, faster principal reduction
+• 30-Year Amortization — Lower payments, stronger cash flow
+• Balloon Loans — Example: 25-year amortization with a 5-year balloon. The loan is calculated over 25 years, but the entire remaining balance becomes due after year 5.
+
+Balloon Payment Risks: Rising rates, declining values, tighter lending standards, weaker occupancy, reduced cash flow. Never assume refinancing will always be available. Maintain reserves, multiple exit strategies, and conservative underwriting.
+
+Seller Financing
+
+The seller acts as the bank.
+• Advantages: Flexible terms, flexible down payments, flexible interest rates, faster closings, lower closing costs, less lender involvement
+• Disadvantages: Balloon payment risk, requires negotiation, some sellers are unfamiliar with the process
+• Best Use: Motivated sellers and off-market opportunities
+
+Private Money
+
+Borrowing from individuals instead of institutions.
+• Advantages: Fast funding, flexible terms, relationship-based
+• Disadvantages: Higher rates, shorter terms, increased risk if poorly structured
+• Best Use: Unique opportunities and short-term projects
+
+Hard Money Loans
+
+Asset-based loans primarily designed for short-term investing.
+• Advantages: Fast approvals, fast closings, property-focused underwriting
+• Disadvantages: High rates, high fees, short loan terms
+• Best Use: Fix-and-flips and heavy value-add projects. Not ideal for long-term buy-and-hold.
+
+━━━━━━━━━━━━━━━━━━━━━━
+Which Loan Should I Use?
+━━━━━━━━━━━━━━━━━━━━━━
+
+• Living in the property? → FHA or Owner-Occupied Conventional
+• Buying a 1–4 unit rental? → Conventional Investment Financing
+• Self-employed or already own several rentals? → DSCR Loans or Portfolio Loans
+• Buying off-market from a motivated seller? → Seller Financing
+• Buying 5+ units? → Commercial Financing
+• Property needs significant work? → Hard Money or Private Money
+
+Quick Rules To Remember:
+• Financing impacts everything
+• There is no perfect loan
+• Understand the tradeoffs of every financing option
+• Lower down payments increase leverage AND risk
+• Longer loan terms improve cash flow
+• Seller financing creates flexibility
+• DSCR loans help investors scale
+• Conventional loans are often the cheapest long-term financing
+• More leverage is not always better
+• Financing improves deals but does not fix bad ones
+
+Building Your Team
+
+Real estate is unique because you can build an entire team of professionals who are financially incentivized to help you succeed. When you win, they win. Your realtor, loan officer, property manager, insurance agent, contractor, accountant, and attorney all make money when deals get done and properties perform.
+
+One of the biggest mistakes new investors make is trying to make every decision in isolation. Instead, leverage the experience of the people around you. Ask questions. Get second opinions. Have them review deals. Ask them what risks they see. Ask them what they would do in your situation.
+
+The best investors are not the ones who know everything. They are the ones who have built strong teams and know how to leverage the knowledge of the people around them. Your team can help you avoid costly mistakes, move faster, and make better decisions with greater confidence.
+
+Today's Financing Exercise
+
+Contact one conventional lender, one DSCR lender, and one local bank or credit union. Ask each lender about current rates, down payment requirements, reserve requirements, closing costs, and loan products. Create a comparison sheet. Then determine which lender would likely be your primary lender today, which would be your backup, and what steps you must complete to become fully pre-approved. Create a written action plan and begin the pre-approval process.
+
+▼ Complete the Financing Quiz below before continuing ▼
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 2 — Rental Analysis & Expenses
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Understanding Market Rents
+
+Your rent estimate is one of the MOST important numbers when analyzing a deal. If your rent estimate is wrong, your cash flow will be wrong, your returns will be wrong, and your investment decision may be wrong.
+
+The biggest mistake new investors make is assuming rents are higher than the market actually supports. When this happens, the deal is bad from the start. Nothing makes up for bad analysis.
+
+As you follow the steps below, you will learn how to determine what a property can ACTUALLY rent for. To do this properly, you MUST verify market rents using multiple sources and ALWAYS stay conservative.
+
+How To Determine Market Rents
+
+1. Recently Leased Comparable Properties (BEST SOURCE)
+Find properties that ACTUALLY rented recently. Use properties with similar bedrooms, bathrooms, square footage, condition, and location. Focus on properties leased within the last 30–90 days. Pay attention to how quickly the property rented. A property rented in 3 days is a much stronger comp than one sitting for 60 days.
+
+2. Call Local Property Managers
+Ask property managers what they believe the property would realistically rent for today. Good property managers understand current demand, tenant expectations, vacancy trends, and pricing pressure. Ask multiple managers so you can compare answers.
+
+Questions To Ask Property Managers:
+• What would this realistically rent for?
+• How fast would it rent?
+• What upgrades would increase rent?
+• What tenant class would this attract?
+• What are current vacancy rates in this area?
+• What utilities are typically tenant-paid vs owner-paid?
+
+3. Check Active Rental Listings
+Use Zillow, Apartments.com, Facebook Marketplace, Rent.com, and Craigslist (in some markets). Compare similar properties in the same area. DO NOT blindly trust asking rents. Pay attention to days on market, price drops, property condition, utilities included, parking, amenities, and updates/renovations. If listings sit for a long time, the market may not support that rent.
+
+4. Call Current Rental Listings
+Call landlords or leasing agents directly. Ask how much interest they are getting, how quickly rentals are moving, and whether they have recently lowered pricing. This gives real-time market feedback. If you feel comfortable, you can even call as a potential tenant to learn how negotiable pricing is, whether concessions are being offered, and how strong demand actually is.
+
+5. Compare Nearby Rentals You Already Own (or Lean on a Local Investor/Mentor)
+If you already own rentals nearby, use your own data. You already understand demand, vacancy, tenant quality, renewal rates, maintenance trends, and market behavior. You can also lean on experienced local investors or mentors.
+
+6. Use AI & Software Tools
+Tools like ChatGPT, Claude, Rentometer, Zillow Rent Zestimate, and property management software can provide helpful insight. However, these should NEVER be your only source of information. These tools work best when combined with real comps, local conversations, and market research.
+
+7. Be Conservative
+Never use unrealistic "best-case" rent numbers. Use rent numbers you are confident you can ACTUALLY achieve. It is always better to underestimate rent than overestimate it. Conservative underwriting protects you during market slowdowns. Stress test lower rent scenarios to make sure you are still comfortable with the deal.
+
+Quick Rules For Rents:
+• Never guess rents
+• Use multiple data sources
+• Compare similar properties only
+• Talk to real people in the market
+• Use conservative numbers
+• Verify rents BEFORE submitting offers
+• DO NOT buy a property unless you are confident in your rent analysis
+
+Understanding Expenses
+
+Real estate investors usually lose on analysis in TWO ways:
+1. They estimate rents too high
+2. They estimate expenses too low
+
+The older the property is, the higher your expenses will usually be. The lower the quality of the tenant base, the higher your expenses will usually be. Even if the property is newer, you believe management will be excellent, or you believe repairs will be minimal, DO NOT underwrite below realistic operating ranges. That is not good analysis — it is simply aggressive assumptions.
+
+Tips For Analyzing Expenses
+
+1. Analyze Conservatively — If the deal still works using conservative numbers, it is probably a strong deal.
+
+2. Research The Property Thoroughly — Study the age of the property, deferred maintenance, tenant quality, location, crime, utility setup, and historical performance.
+
+3. Lean On Professionals — Talk to professionals who are NOT financially incentivized by you buying the property. This often means property managers, contractors, insurance agents, or local operators. If a property manager gives you expense expectations, make sure they are willing to stand behind those expectations once they manage the property.
+
+4. Use AI & Software For Insight — Tools like ChatGPT, Claude, calculators, and property analysis software can help identify realistic ranges and potential blind spots.
+
+5. Conservative Analysis Creates Safer Deals — It is ALWAYS better for actual expenses to come in lower than expected. Conservative analysis protects you. Aggressive analysis increases risk.
+
+Important Expense Notes:
+• ALWAYS get exact property tax numbers for the specific property
+• Taxes may increase significantly after purchase or reassessment
+• ALWAYS get real insurance quotes before purchasing
+• Older properties generally require higher maintenance and CapEx reserves
+• Tenant-paid utilities can dramatically improve operating expenses
+• High turnover properties usually have much higher real expenses
+• Verify ALL numbers before submitting offers or removing contingencies
+
+Today's Analysis Exercise
+
+Connect with a local property manager to see if they know of any available deals or off-market opportunities. During the conversation, explain your real estate investing goals, let them know you are actively looking to purchase rental properties, and tell them you will likely need property management services in the future.
+
+Ask them what they believe a property you are analyzing would realistically rent for, how quickly they believe it would rent, and what tenant class they believe the property would attract. Building strong relationships with quality property managers can help you find deals, better understand local market conditions, improve your analysis, and build a stronger investing team.
+
+Key Takeaway
+
+Most investors focus on finding deals. Professional investors focus on becoming prepared before the deal appears. Your ability to secure financing, understand lending options, maintain strong lender relationships, and become fully pre-approved can dramatically increase your ability to act when opportunities arise. Combined with accurate rental analysis and conservative expense estimates, you become the investor who is ready before the opportunity appears.
+
+Final note — make sure you are still analyzing properties, reaching out to Arsenal Contacts and target properties. Financing and building your team needs to happen simultaneously to searching for deals so that you can reach your goals in under 30 days.`,
+    category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
+    proofType: "screenshot",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: "d2q1_financing",
+          title: "Financing Mastery Quiz",
+          maxAttempts: 3,
+          description: "Test your understanding of real estate financing types, strategies, and tradeoffs.",
+          inputs: [
+            {
+              id: "d2q1_fha",
+              label: "1. A new investor wants to buy a fourplex, live in one unit, and put as little money down as possible. Which financing option is MOST likely to help them?",
+              type: "multiple_choice",
+              options: [
+                "Commercial Loan",
+                "Hard Money Loan",
+                "FHA Loan",
+                "DSCR Loan",
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d2q1_dscr",
+              label: "2. An investor owns several rental properties, is self-employed, and has difficulty qualifying with traditional income documentation. Which financing option may be the BEST fit?",
+              type: "multiple_choice",
+              options: [
+                "FHA Loan",
+                "DSCR Loan",
+                "Hard Money Loan",
+                "Owner-Occupied Conventional Loan",
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d2q1_cashflow",
+              label: "3. Which of the following is MOST likely to improve monthly cash flow?",
+              type: "multiple_choice",
+              options: [
+                "Higher interest rate",
+                "Larger monthly payment",
+                "Shorter amortization period",
+                "Longer loan term",
+              ],
+              correctAnswer: 3,
+            },
+            {
+              id: "d2q1_seller",
+              label: "4. A seller is willing to finance the property directly and allow flexible terms. What is the BIGGEST advantage of seller financing?",
+              type: "multiple_choice",
+              options: [
+                "Guaranteed appreciation",
+                "Flexible rates, terms, and down payments",
+                "No due diligence needed",
+                "No risk",
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d2q1_leverage",
+              label: "5. Which statement is TRUE regarding leverage?",
+              type: "multiple_choice",
+              options: [
+                "More leverage always creates a better investment",
+                "Higher cash-on-cash return always means lower risk",
+                "More leverage can improve returns but also increases risk",
+                "Leverage has no impact on cash flow",
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d2q1_balloon",
+              label: "6. What is one major risk of a balloon payment?",
+              type: "multiple_choice",
+              options: [
+                "Property taxes increase automatically",
+                "The entire remaining balance may become due before the property is paid off",
+                "The interest rate immediately doubles",
+                "You lose depreciation benefits",
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d2q1_commercial",
+              label: "7. Which financing option is MOST commonly used for apartment buildings with 5 or more units?",
+              type: "multiple_choice",
+              options: [
+                "FHA Loan",
+                "Conventional Owner-Occupied Loan",
+                "Commercial Loan",
+                "HELOC",
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d2q1_hardmoney",
+              label: "8. An investor finds a property that needs major renovations and must close within 10 days. Which financing option is MOST likely to work?",
+              type: "multiple_choice",
+              options: [
+                "FHA Loan",
+                "Hard Money Loan",
+                "Conventional Investment Loan",
+                "Owner-Occupied Conventional Loan",
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d2q1_good_financing",
+              label: "9. Which statement BEST describes good financing?",
+              type: "multiple_choice",
+              options: [
+                "The loan with the lowest down payment",
+                "The loan with the highest cash-on-cash return",
+                "The loan that balances returns, risk, reserves, and long-term goals",
+                "The loan with the longest term available",
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d2q1_scaling",
+              label: "10. An investor has enough cash to buy one property outright or use financing to purchase several similar properties while maintaining healthy reserves. What is the PRIMARY advantage of responsibly using financing?",
+              type: "multiple_choice",
+              options: [
+                "Financing eliminates risk",
+                "Financing guarantees appreciation",
+                "Financing allows investors to control more assets with the same capital",
+                "Financing removes the need for analysis",
+              ],
+              correctAnswer: 2,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    day: 3,
+    title: "Offers, Counter Offers & Contracts",
+    caption: "Learn to submit professional offers and negotiate effectively.",
+    taskDescription: "",
 
 The result is predictable.
 
