@@ -2012,60 +2012,79 @@ Focus MORE on building rapport, understanding problems, and practicing negotiati
   },
   {
     day: 4,
-    title: "Creative Deal Structure & FSBO Contracts",
-    caption: "Explore creative financing strategies and master for-sale-by-owner transactions.",
+    title: "Creative Deal Structure & For Sale By Owner Contracts",
+    caption: "Master creative financing strategies, seller finance structures, and learn to confidently handle FSBO transactions.",
     taskDescription: "",
-    trainingContent: "",
-    category: "foundation",
-    weekNumber: 1,
-    weekTitle: "BUILD THE FOUNDATION",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    sections: [
-      {
-        type: "training",
-        title: "Creative Deal Structure",
-        content: `Why Creative Financing Matters
+    trainingContent: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 1 — Creative Deal Structure
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Seller Finance, Negotiation & Structuring Win-Win Deals
+
+
+Why Creative Financing Matters
 
 Many investors believe the only way to buy real estate is 20–25% down, through a bank, with standard loan terms. That is NOT true.
 
-Creative financing can lower down payments, improve cash flow, lower interest rates, extend loan terms, reduce closing costs, and create opportunities that traditional financing cannot.
+Creative financing can:
+lower down payments,
+improve cash flow,
+lower interest rates,
+extend loan terms,
+reduce closing costs,
+and create opportunities that traditional financing cannot.
 
-Creative deal structure is one of the MOST powerful tools in real estate investing. But creative financing also creates additional risk if used improperly.
+Creative deal structure is one of the MOST powerful tools in real estate investing.
 
-The goal is NOT "creative at all costs." The goal is structuring SAFE deals, improving cash flow, reducing risk where possible, and creating WIN-WIN solutions.
+But creative financing also creates additional risk if used improperly.
+
+The goal is NOT "creative at all costs."
+
+The goal is structuring SAFE deals, improving cash flow, reducing risk where possible, and creating WIN-WIN solutions.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Why Off-Market Deals Matter
 
-Many of the BEST creative finance opportunities happen OFF market. Because many sellers do not want strangers walking through their property, do not want tenants disturbed, do not want to pay realtor commissions, want privacy, want flexibility, or want a simpler sale process.
+Many of the BEST creative finance opportunities happen OFF market.
+
+Why? Because many sellers:
+do not want strangers walking through their property,
+do not want tenants disturbed,
+do not want to pay realtor commissions,
+want privacy,
+want flexibility,
+or prefer a simpler sale process.
 
 Off-market deals are often MUCH easier to negotiate creatively because there is less competition, sellers are often more flexible, and you can structure solutions directly with the seller.
 
-Benefits Of Off-Market Seller Finance Deals
 
 Benefits For The Buyer:
-• Less competition
-• More flexible negotiations
-• Lower closing costs
-• Potentially lower interest rates
-• Flexible down payments
-• More room for creative structure
-• Avoiding some bank fees and lender costs
-
+Less competition
+More flexible negotiations
+Lower closing costs
+Potentially lower interest rates
+Flexible down payments
+More room for creative structure
+Avoiding some bank fees and lender costs
 Traditional loans can easily add 1–3%+ in additional lender-related costs. Seller finance deals are often significantly cheaper to close.
 
+
 Benefits For The Seller:
-• Monthly income
-• Potential tax advantages
-• Flexible timing
-• Simpler transaction
-• No realtor commissions
-• Less disruption to tenants
-• Potentially higher sale prices
-• Faster and more flexible negotiations
+Monthly income
+Potential tax advantages
+Flexible timing
+Simpler transaction
+No realtor commissions
+Less disruption to tenants
+Potentially higher sale prices
+Faster and more flexible negotiations
 
 Good negotiation is NOT taking advantage of people. The BEST negotiations create solutions that genuinely help BOTH parties.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 How To Find Off-Market Seller Finance Opportunities
 
@@ -2073,31 +2092,77 @@ How To Find Off-Market Seller Finance Opportunities
 
 2. Realtors — Some realtors know expired listings, landlords open to creative terms, or sellers struggling to sell traditionally.
 
-3. Direct Outreach — Mailers, cold calling, texting, networking, driving for dollars, social media, and referrals.
+3. Direct Outreach — Examples: mailers, cold calling, texting, networking, driving for dollars, social media, and referrals.
 
 4. Networking With Investors — Many investors eventually burn out, want passive income, or want simpler ownership structures. Seller finance can solve those problems.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 What Is Seller Finance?
 
-Seller finance means the seller acts as the bank. Instead of getting all cash at closing, the seller agrees to receive payments over time. This allows buyers and sellers to negotiate down payments, interest rates, payment structure, loan terms, balloon payments, and other creative solutions.
+Seller finance means the seller acts as the bank. Instead of getting all cash at closing, the seller agrees to receive payments over time.
+
+This allows buyers and sellers to negotiate:
+down payments,
+interest rates,
+payment structure,
+loan terms,
+balloon payments,
+and other creative solutions.
+
 
 Why Sellers Accept Seller Finance
 
-Many beginners think "Why would a seller ever do this?" Because seller finance can solve REAL seller problems.
+Many beginners think: "Why would a seller ever do this?"
 
-Possible seller motivations: reducing taxes, creating monthly income, difficulty selling traditionally, wanting passive income, avoiding management headaches, avoiding realtor commissions, wanting higher sale prices, or needing flexible timing.
+Because seller finance can solve REAL seller problems.
 
-Negotiation is NOT "taking advantage of people." Good negotiation is helping solve problems for BOTH sides.
+Possible seller motivations:
+reducing taxes,
+creating monthly income,
+difficulty selling traditionally,
+wanting passive income,
+avoiding management headaches,
+avoiding realtor commissions,
+wanting higher sale prices,
+or needing flexible timing.
+
+Good negotiation is helping solve problems for BOTH sides.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Creative Financing Is Negotiation
 
-Everything is negotiable: purchase price, interest rate, loan term, balloon payment, down payment, payment timing, repair credits, closing timeline, and even payment structure.
+Everything is negotiable:
+purchase price,
+interest rate,
+loan term,
+balloon payment,
+down payment,
+payment timing,
+repair credits,
+closing timeline,
+and even payment structure.
 
 The BEST creative deals help the seller, improve the buyer's cash flow, and reduce risk for both parties.
 
+
 The MOST Important Rule
 
-A creative deal does NOT magically make a bad property a good deal. You MUST still analyze conservatively, verify rents, verify expenses, and understand risk. Creative financing improves structure. It does NOT fix bad analysis.
+A creative deal does NOT magically make a bad property a good deal.
+
+You MUST still:
+analyze conservatively,
+verify rents,
+verify expenses,
+and understand risk.
+
+Creative financing improves structure. It does NOT fix bad analysis.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Understanding Down Payments
 
@@ -2111,23 +2176,54 @@ Example: 1% down payment, low interest rate, high leverage, and little reserves 
 
 Important Rule About Analysis
 
-Even if you negotiate 1% down, 5% down, or no money down, you should STILL analyze the property as if you invested at least 20% down. Why? Because you need to understand the REAL risk, the REAL leverage, and whether the deal is fundamentally strong. Creative financing can improve returns but it can also amplify risk.
+Even if you negotiate 1% down, 5% down, or no money down, you should STILL analyze the property as if you invested at least 20% down.
+
+Why? Because you need to understand the REAL risk, the REAL leverage, and whether the deal is fundamentally strong.
+
+Creative financing can improve returns but it can also amplify risk.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Understanding Interest Rates
 
-A lower interest rate lowers payments, improves cash flow, and improves debt coverage. Even small changes matter. Example: 3% seller finance vs. 7% bank financing can completely change monthly cash flow, cash-on-cash return, and long-term profitability.
+A lower interest rate lowers payments, improves cash flow, and improves debt coverage. Even small changes matter.
+
+Example: 3% seller finance vs. 7% bank financing can completely change monthly cash flow, cash-on-cash return, and long-term profitability.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Understanding Loan Terms
 
-Longer loan terms lower payments, improve cash flow, and improve debt coverage. Shorter terms increase principal paydown but increase monthly payments. Sometimes longer terms create SAFER deals.
+Longer loan terms lower payments, improve cash flow, and improve debt coverage.
+
+Shorter terms increase principal paydown but increase monthly payments.
+
+Sometimes longer terms create SAFER deals.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 What Is A Balloon Payment?
 
-A balloon payment means the loan is NOT fully paid off by the end of the agreement. Instead, a large remaining balance becomes due at a future date. Example: 30-year amortization, but the remaining balance is due in 5 years. This creates lower monthly payments initially but creates refinance or payoff pressure later.
+A balloon payment means the loan is NOT fully paid off by the end of the agreement. Instead, a large remaining balance becomes due at a future date.
+
+Example: 30-year amortization, but the remaining balance is due in 5 years. This creates lower monthly payments initially, but creates refinance or payoff pressure later.
+
 
 The Dangers Of Balloon Payments
 
-Balloon payments can become VERY dangerous if the market shifts, refinancing becomes difficult, interest rates rise, values decline, cash flow weakens, or analysis was incorrect. Many investors get into trouble because they only focus on today's payment, not the future balloon risk.
+Balloon payments can become VERY dangerous if:
+the market shifts,
+refinancing becomes difficult,
+interest rates rise,
+values decline,
+cash flow weakens,
+or analysis was incorrect.
+
+Many investors get into trouble because they only focus on today's payment, not the future balloon risk.
+
 
 Balloon Payment Rules To Live By
 
@@ -2139,62 +2235,115 @@ Balloon Payment Rules To Live By
 
 4. Strong Deals Matter MORE With Balloons — Weak deals become MUCH riskier when balloons exist.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Interest-Free Principal Paydown Structures
 
-Sometimes sellers may agree to a down payment PLUS monthly principal payments with NO interest. Example: $50,000 down, $4,000/month principal-only payments, no interest for 5 years. This can massively improve cash flow, accelerate equity growth, and reduce interest expense.
+Sometimes sellers may agree to a down payment PLUS monthly principal payments with NO interest.
 
-Risks Of Principal-Only Structures: These structures can still become dangerous if payments are too aggressive, reserves are too low, rents decline, or repairs rise unexpectedly. High cash-on-cash returns do NOT automatically equal low risk.
+Example:
+$50,000 down
+$4,000/month principal-only payments
+no interest for 5 years
+
+This can massively improve cash flow, accelerate equity growth, and reduce interest expense.
+
+Risks Of Principal-Only Structures: These structures can still become dangerous if payments are too aggressive, reserves are too low, rents decline, or repairs rise unexpectedly.
+
+Again: high cash-on-cash returns do NOT automatically equal low risk.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Structuring Multiple Offers
 
 One of the BEST negotiation strategies is giving sellers MULTIPLE options. Instead of "take it or leave it," you create flexibility and collaboration.
 
-Example Creative Offer Structure:
 
-Option 1 – Higher Price / Better Terms: Purchase Price $520,000 — 5% interest, 10% down, 30-year amortization, 10-year balloon.
+Example Creative Offer Structure
 
-Option 2 – Lower Price / Larger Down Payment: Purchase Price $485,000 — 6% interest, 25% down, 30-year amortization, no balloon.
+Option 1 — Higher Price / Better Terms
+Purchase Price: $520,000
+5% interest
+10% down
+30-year amortization
+10-year balloon
 
-Option 3 – Principal-Only Structure: Purchase Price $500,000 — $60,000 down, principal-only payments for 5 years, refinance before maturity.
+Option 2 — Lower Price / Larger Down Payment
+Purchase Price: $485,000
+6% interest
+25% down
+30-year amortization
+no balloon
+
+Option 3 — Principal-Only Structure
+Purchase Price: $500,000
+$60,000 down
+principal-only payments for 5 years
+refinance before maturity
+
 
 Why Multiple Offers Work
 
-Multiple offers reduce pressure, create flexibility, help sellers feel involved, and increase chances of agreement. It also helps uncover what the seller values MOST. Some sellers prioritize price. Others prioritize monthly income, tax benefits, speed, or simplicity.
+Multiple offers reduce pressure, create flexibility, help sellers feel involved, and increase chances of agreement. It also helps uncover what the seller values MOST.
+
+Some sellers prioritize price. Others prioritize monthly income, tax benefits, speed, or simplicity.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Good Negotiation Principles
 
-Good negotiation is NOT manipulation, pressure, or "winning." The best negotiations solve problems, create flexibility, and improve outcomes for BOTH sides.
+Good negotiation is NOT manipulation, pressure, or "winning."
+
+The best negotiations solve problems, create flexibility, and improve outcomes for BOTH sides.
+
 
 Questions To Understand Seller Motivation:
-• Why are you selling?
-• What is most important to you?
-• Do you need cash now or income over time?
-• How flexible are you on timing?
-• What would make this deal work for you?
-• Are taxes a concern?
-• Would monthly income help you?
+Why are you selling?
+What is most important to you?
+Do you need cash now or income over time?
+How flexible are you on timing?
+What would make this deal work for you?
+Are taxes a concern?
+Would monthly income help you?
 
 The better you understand the seller, the better you can structure solutions.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Common Creative Financing Mistakes
 
 1. Focusing ONLY On Cash Flow — Good monthly cash flow does NOT guarantee safety.
+
 2. Ignoring Balloon Risk — Many investors underestimate refinance risk.
+
 3. Using Low Down Payments Without Reserves — Leverage magnifies risk.
+
 4. Forcing Creative Structures On Bad Deals — Creative financing does NOT fix bad properties.
+
 5. Negotiating Without Understanding Seller Motivation — The best deals come from solving REAL problems.
 
-Quick Rules To Remember:
-• Creative financing improves structure — not bad deals
-• Analyze conservatively FIRST
-• Low down payments increase risk
-• Maintain strong reserves
-• Understand ALL balloon payment risks
-• Stress test refinance scenarios
-• Structure multiple options when negotiating
-• Find solutions that help BOTH buyer and seller
-• Never force a deal to work
-• Conservative analysis still matters MOST
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Quick Rules To Remember
+
+Creative financing improves structure — not bad deals.
+Analyze conservatively FIRST.
+Low down payments increase risk.
+Maintain strong reserves.
+Understand ALL balloon payment risks.
+Stress test refinance scenarios.
+Structure multiple options when negotiating.
+Find solutions that help BOTH buyer and seller.
+Never force a deal to work.
+Conservative analysis still matters MOST.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Today's Suggested Arsenal Contact
 
@@ -2202,287 +2351,56 @@ Reach out to a seller, realtor, investor, property manager, or property owner an
 
 Your goal is NOT to pressure people. Your goal is to understand seller problems and explore possible win-win solutions.
 
-The best negotiators listen carefully, understand motivations, and create flexible solutions.`,
-      },
-      {
-        type: "quiz",
-        required: true,
-        scenarios: [
-          {
-            id: "day4_property_analysis",
-            title: "Cash on Cash Return Analysis",
-            description: "Analyze the property below. Plug the information into the CDS Rental Calculator and answer both questions.",
-            propertyListing: {
-              title: "Rental Property Analysis",
-              price: "$600,000",
-              badges: ["Investment Property", "25% Down", "7.5% Rate"],
-              highlights: [
-                {
-                  icon: "💰",
-                  label: "Down Pmt",
-                  value: "$150,000",
-                },
-                {
-                  icon: "🏠",
-                  label: "Rent",
-                  value: "$6,000/mo",
-                },
-                {
-                  icon: "📊",
-                  label: "Loan",
-                  value: "30yr @ 7.5%",
-                },
-              ],
-              sections: [
-                {
-                  heading: "Purchase & Financing",
-                  rows: [
-                    {
-                      label: "Purchase Price",
-                      value: "$600,000",
-                    },
-                    {
-                      label: "Down Payment",
-                      value: "25% ($150,000)",
-                    },
-                    {
-                      label: "Closing Costs",
-                      value: "2% ($9,000)",
-                    },
-                    {
-                      label: "Costs to Make Rent Ready",
-                      value: "$0",
-                    },
-                    {
-                      label: "Loan Term",
-                      value: "30 Years",
-                    },
-                    {
-                      label: "Interest Rate",
-                      value: "7.5%",
-                    },
-                  ],
-                },
-                {
-                  heading: "Income",
-                  rows: [
-                    {
-                      label: "Monthly Rents",
-                      value: "$6,000",
-                    },
-                    {
-                      label: "Other Monthly Income",
-                      value: "$0",
-                    },
-                    {
-                      label: "Vacancy",
-                      value: "6%",
-                    },
-                  ],
-                },
-                {
-                  heading: "Expenses",
-                  rows: [
-                    {
-                      label: "Maintenance",
-                      value: "12%",
-                    },
-                    {
-                      label: "Property Management",
-                      value: "8%",
-                    },
-                    {
-                      label: "Insurance",
-                      value: "$2,000/yr",
-                    },
-                    {
-                      label: "Property Taxes",
-                      value: "$6,000/yr",
-                    },
-                    {
-                      label: "Utilities",
-                      value: "$0",
-                    },
-                    {
-                      label: "Additional Expenses",
-                      value: "$0",
-                    },
-                  ],
-                },
-              ],
-            },
-            maxAttempts: 3,
-            showExplanationOnPass: true,
-            explanationOnFail: `Make sure you entered all the property data correctly into the CDS Rental Calculator. Double-check each field — especially the interest rate (7.5%), insurance ($2,000/yr), and taxes ($6,000/yr).`,
-            cheatSheets: [
-              {
-                title: "Returns Analysis",
-                color: "green",
-                rows: [
-                  {
-                    label: "Total Capital Required",
-                    value: "$159,000",
-                  },
-                  {
-                    label: "Gross Rent",
-                    value: "$72,000/yr",
-                  },
-                  {
-                    label: "Vacancy (6%)",
-                    value: "-$4,320",
-                  },
-                  {
-                    label: "Maintenance (12%)",
-                    value: "-$8,121.60",
-                  },
-                  {
-                    label: "Management (8%)",
-                    value: "-$5,414.40",
-                  },
-                  {
-                    label: "Insurance",
-                    value: "-$2,000",
-                  },
-                  {
-                    label: "Property Taxes",
-                    value: "-$6,000",
-                  },
-                  {
-                    label: "Net Operating Income",
-                    value: "$46,144",
-                  },
-                  {
-                    label: "Debt Service (7.5%, 30yr)",
-                    value: "-$37,764",
-                  },
-                  {
-                    label: "Annual Cash Flow",
-                    value: "$8,380",
-                    highlight: true,
-                  },
-                  {
-                    label: "Cash on Cash Return",
-                    value: "5.27%",
-                    highlight: true,
-                  },
-                ],
-              },
-            ],
-            inputs: [
-              {
-                id: "day4_coc",
-                label: "What is the approximate cash-on-cash return for this property?",
-                type: "multiple_choice",
-                options: ["10.29%", "5.27%", "6.74%", "8.30%"],
-                correctAnswer: 1,
-              },
-              {
-                id: "day4_rate_for_10",
-                label: "Using the same inputs, what interest rate would make the cash-on-cash return above 10%?",
-                type: "multiple_choice",
-                options: ["6%", "6.5%", "5.5%", "5.25%"],
-                correctAnswer: 3,
-              },
-            ],
-          },
-          {
-            id: "day4_creative_financing",
-            title: "Creative Deal Structure Quiz",
-            description: "Answer all 5 questions correctly to continue.",
-            maxAttempts: 3,
-            explanationOnFail: `Review the correct answers:
+The best negotiators listen carefully, understand motivations, and create flexible solutions.
 
-1. Low down payment deals increase leverage and reduce your safety margin — if vacancy, repairs, or market conditions change, you have less cushion.
-2. Even with creative terms, analyzing at 20% down helps you understand the true strength and risk of the deal independent of financing.
-3. A balloon payment is a large remaining balance that becomes due at a future date, creating refinance or payoff pressure.
-4. The best negotiation strategy is structuring multiple options that solve seller problems — not pressure or single take-it-or-leave-it offers.
-5. Creative financing can improve returns but it can also increase risk — high cash-on-cash returns do NOT automatically mean low risk.`,
-            inputs: [
-              {
-                id: "day4_q1",
-                label: "1. What is one of the BIGGEST dangers of low down payment creative financing deals?",
-                type: "multiple_choice",
-                options: [
-                  "Lower monthly payments",
-                  "Increased leverage and reduced safety margin",
-                  "Better cash flow",
-                  "Longer amortization",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day4_q2",
-                label: "2. Why should you still analyze a property using at least 20% down assumptions?",
-                type: "multiple_choice",
-                options: [
-                  "To increase purchase price",
-                  "To reduce realtor commissions",
-                  "To understand the true strength and risk of the deal",
-                  "To avoid negotiations",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day4_q3",
-                label: "3. What is a balloon payment?",
-                type: "multiple_choice",
-                options: ["A refundable earnest money deposit", "A large payment due at a future date", "A seller-paid repair credit", "A property tax increase"],
-                correctAnswer: 1,
-              },
-              {
-                id: "day4_q4",
-                label: "4. What is one of the BEST ways to negotiate creative financing?",
-                type: "multiple_choice",
-                options: [
-                  "Use pressure and urgency",
-                  "Give the seller only one option",
-                  "Structure multiple options that solve seller problems",
-                  "Focus only on getting the lowest purchase price possible",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day4_q5",
-                label: "5. Which statement BEST describes strong creative financing?",
-                type: "multiple_choice",
-                options: [
-                  "High cash-on-cash returns always mean low risk",
-                  "Creative financing can improve returns but also increase risk",
-                  "Balloon payments are always safe",
-                  "No-money-down deals eliminate downside risk",
-                ],
-                correctAnswer: 1,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        type: "training",
-        title: "For Sale By Owner Contracts & Closing",
-        content: `Why Learning FSBO Matters
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 2 — For Sale By Owner Contracts & Closing Without An Agent
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+How To Buy Real Estate Without Using Realtors
+
+
+Why Learning FSBO Matters
 
 Some of the BEST real estate deals happen directly with sellers, off market, and without agents involved.
 
-Many sellers do not want to pay commissions, want privacy, want simplicity, or prefer working directly with buyers.
+Many sellers:
+do not want to pay commissions,
+want privacy,
+want simplicity,
+or prefer working directly with buyers.
 
 Learning how to confidently handle contracts, negotiations, title companies, inspections, earnest money, and closing can create opportunities most investors never pursue.
+
 
 Important Reminder
 
 Just because there is no realtor involved does NOT mean you should rush, skip protections, or trust everything blindly.
 
-In many ways, FSBO deals require MORE discipline and caution.
+In many ways FSBO deals require MORE discipline and caution.
 
 You must verify everything, protect yourself contractually, and maintain strong due diligence protections.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 The MOST Important Rule
 
 NEVER remove your ability to exit the deal safely.
 
-Your contract should ALWAYS protect you if inspections reveal major issues, financing changes, title problems appear, leases are inaccurate, expenses were misrepresented, or the numbers no longer work.
+Your contract should ALWAYS protect you if:
+inspections reveal major issues,
+financing changes,
+title problems appear,
+leases are inaccurate,
+expenses were misrepresented,
+or the numbers no longer work.
 
 The goal is NOT "getting a deal at all costs." The goal is getting GOOD deals safely.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Building Trust With Sellers
 
@@ -2491,26 +2409,34 @@ When buying directly from sellers, trust matters tremendously.
 Sellers need confidence that you are legitimate, capable of closing, and easy to work with.
 
 Ways to build trust:
-
-• Provide a pre-approval letter
-• Provide proof of funds
-• Explain your relationship with your lender
-• Explain your relationship with the title company
-• Communicate professionally
-• Move quickly
-• Stay organized
+provide a pre-approval letter,
+provide proof of funds,
+explain your relationship with your lender,
+explain your relationship with the title company,
+communicate professionally,
+move quickly,
+and stay organized.
 
 Professionalism builds confidence.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Why Title Companies Matter
 
-A great title company can help guide the ENTIRE process.
-
-Many title companies regularly handle For Sale By Owner deals, seller finance deals, assignments, and creative financing transactions.
+A great title company can help guide the ENTIRE process. Many title companies regularly handle For Sale By Owner deals, seller finance deals, assignments, and creative financing transactions.
 
 Building a relationship with someone at a title company is extremely valuable.
 
-A good title company can help explain documents, coordinate signatures, manage earnest money, order title work, schedule closing, prepare settlement statements, and help both parties feel comfortable during the process.
+A good title company can help:
+explain documents,
+coordinate signatures,
+manage earnest money,
+order title work,
+schedule closing,
+prepare settlement statements,
+and help both parties feel comfortable during the process.
+
 
 Find A Title Company Comfortable With FSBO Deals
 
@@ -2520,77 +2446,66 @@ Find one that works with investors regularly, understands seller finance, commun
 
 Strong title company relationships can make transactions MUCH smoother. On seller finance deals they can also help out with all of the back end to make sure automatic payments are set up and relationships stay positive with the seller. Some are even willing to collect and handle payments for property, taxes, and insurance.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Important Sections Of A FSBO Contract
 
 Most purchase agreements contain similar sections. It is suggested that you use a "for sale by owner" agreement provided by the local title company you are going to use or a real estate lawyer. It's also important that you do research on your state and county. If you feel uneasy or uncertain, connect with a real estate lawyer or you can negotiate to pay a real estate agent a small fee to help with the process/transaction. With all of that being said, most title companies are very willing to help you understand a for sale by owner agreement and walk you through the process.
 
 You do NOT need to become an attorney. But you DO need to understand the major terms, the protections, and the deadlines.
 
+
 1. Buyer & Seller Information
-
-This section identifies who is buying, who is selling, and the legal names involved.
-
-Make sure names are correct, entities are correct, and ownership is verified.
+This section identifies who is buying, who is selling, and the legal names involved. Make sure names are correct, entities are correct, and ownership is verified.
 
 2. Property Description
-
-This identifies the address, legal description, parcel information (title company can get this for you), and included items.
-
-Make sure the correct property is listed and included items are clearly identified.
-
-Examples: appliances, sheds, equipment, or furniture.
+This identifies the address, legal description, parcel information (title company can get this for you), and included items. Make sure the correct property is listed and included items are clearly identified. Examples: appliances, sheds, equipment, or furniture.
 
 3. Purchase Price
-
-This states the agreed purchase price, financing structure, and payment terms.
-
-If seller financing exists, make sure terms are VERY clear.
-
-Examples: down payment, interest rate, amortization, balloon payment, payment dates, and maturity date.
+This states the agreed purchase price, financing structure, and payment terms. If seller financing exists, make sure terms are VERY clear. Examples: down payment, interest rate, amortization, balloon payment, payment dates, and maturity date.
 
 4. Earnest Money
-
 Earnest money shows seriousness, commitment, and intent to close. BUT you NEVER want to unnecessarily risk losing it.
 
 Earnest Money Rules:
-
-• Keep Earnest Money Reasonable — Do NOT overcommit.
-• NEVER Release Earnest Money Early — Do NOT release earnest money before inspections, financing approval, and due diligence are complete.
-• Make Sure Earnest Money Is Protected — Your contract should clearly protect earnest money during due diligence, inspections, financing contingencies, and title review.
+Keep Earnest Money Reasonable — Do NOT overcommit.
+NEVER Release Earnest Money Early — Do NOT release earnest money before inspections, financing approval, and due diligence are complete.
+Make Sure Earnest Money Is Protected — Your contract should clearly protect earnest money during due diligence, inspections, financing contingencies, and title review.
 
 Earnest money can/should be somewhere between 1% and 5%. Some sellers might want larger earnest money but make sure it's protected as this could also be a red flag.
 
 5. Due Diligence Period (VERY IMPORTANT)
-
 This is one of the MOST important sections in the contract.
 
-Your due diligence period gives you time to inspect the property, verify leases, review expenses, review title work, verify financing, inspect units, review repairs, and confirm your analysis.
+Your due diligence period gives you time to:
+inspect the property,
+verify leases,
+review expenses,
+review title work,
+verify financing,
+inspect units,
+review repairs,
+and confirm your analysis.
 
 This is your protection period.
 
 Due Diligence Rules:
-
-• NEVER Waive Due Diligence As A Beginner — This creates massive risk.
-• Give Yourself Enough Time (usually 15 days or more) — You need enough time to inspect thoroughly, get contractor bids, verify numbers, leases, utilities, and fully understand the property.
-• Maintain Contractual Outs — Your contract should allow you to exit the deal if major issues appear, financing changes, inspections fail, title problems exist, or the numbers no longer work.
+NEVER Waive Due Diligence As A Beginner — This creates massive risk.
+Give Yourself Enough Time (usually 15 days or more) — You need enough time to inspect thoroughly, get contractor bids, verify numbers, leases, utilities, and fully understand the property.
+Maintain Contractual Outs — Your contract should allow you to exit the deal if major issues appear, financing changes, inspections fail, title problems exist, or the numbers no longer work.
 
 6. Financing Contingency
-
-This protects you if financing falls apart, loan terms change, rates increase, or approval fails.
-
-Never remove financing protections too early.
+This protects you if financing falls apart, loan terms change, rates increase, or approval fails. Never remove financing protections too early.
 
 7. Title & Ownership Review
-
-The title company will help verify ownership, liens, unpaid taxes, judgments, easements, and title issues.
-
-You NEVER want to buy title problems, lawsuits, or hidden liens.
+The title company will help verify ownership, liens, unpaid taxes, judgments, easements, and title issues. You NEVER want to buy title problems, lawsuits, or hidden liens.
 
 8. Closing Date
+This identifies when ownership transfers, documents are signed, and money changes hands. Be realistic with timelines.
 
-This identifies when ownership transfers, documents are signed, and money changes hands.
 
-Be realistic with timelines.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Step-By-Step FSBO Process
 
@@ -2598,7 +2513,7 @@ Step 1. Negotiate Terms — Agree on price, financing, timing, contingencies, an
 
 Step 2. Open Escrow With Title Company — The title company helps coordinate the process, holds earnest money, and begins title work.
 
-Step 3. Execute Due Diligence — During due diligence, inspect EVERYTHING, verify EVERYTHING, and confirm your analysis.
+Step 3. Execute Due Diligence — During due diligence: inspect EVERYTHING, verify EVERYTHING, and confirm your analysis.
 
 Step 4. Finalize Financing — Work with lenders, title company, insurance, and seller.
 
@@ -2606,28 +2521,43 @@ Step 5. Review Closing Documents — Review settlement statements, loan terms, p
 
 Step 6. Close The Deal — Sign documents. Fund the transaction. Receive ownership.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Common FSBO Mistakes
 
 1. Trusting Verbal Statements — Verify EVERYTHING independently.
+
 2. Removing Protections Too Early — Keep due diligence, financing contingencies, and inspection protections active.
+
 3. Not Using A Title Company — Always use professionals.
+
 4. Rushing Due Diligence — Slow down and verify the numbers.
+
 5. Getting Emotional — Good deals still require discipline.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Quick Rules To Remember
 
-• Always use a title company
-• Protect your earnest money
-• NEVER waive due diligence as a beginner
-• Verify ALL numbers independently
-• Build trust through professionalism
-• Use financing contingencies
-• Review seller finance terms carefully
-• Never rush closing
+Always use a title company.
+Protect your earnest money.
+NEVER waive due diligence as a beginner.
+Verify ALL numbers independently.
+Build trust through professionalism.
+Use financing contingencies.
+Review seller finance terms carefully.
+Understand balloon payments fully.
+Never rush closing.
+Conservative analysis still matters MOST.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Top 10 Ways To Find For Sale By Owner & Off-Market Deals
 
-1. Facebook Marketplace — Many landlords and homeowners list properties directly on Facebook to avoid realtor commissions. Search "For Sale By Owner," "Investment Property," "Rental Property," "Handyman Special." You can also message sellers directly and begin building rapport immediately.
+1. Facebook Marketplace — Many landlords and homeowners list properties directly on Facebook to avoid realtor commissions. Search: "For Sale By Owner," "Investment Property," "Rental Property," "Handyman Special." You can also message sellers directly and begin building rapport immediately.
 
 2. Zillow "By Owner" Listings — Zillow has a specific "By Owner" filter. These sellers are often trying to avoid commissions, more flexible, and more open to negotiation or creative financing.
 
@@ -2647,125 +2577,221 @@ Top 10 Ways To Find For Sale By Owner & Off-Market Deals
 
 10. Cold Calling & Direct Outreach — Directly contact owners of rentals, distressed properties, vacant homes, or target properties. This can feel uncomfortable initially, but consistent outreach creates deal flow over time. The best investors often create opportunities instead of waiting for them.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Today's Suggested Arsenal Contact
 
 Reach out to a title company, escrow officer, closing attorney, or investor-friendly lender.
 
-Your goal today: build relationships, understand the closing process, ask questions about contracts, and learn how transactions actually move from contract to closing. Try a new method of connecting with FSBO target contacts and find new target properties.
+Your goal today: build relationships, understand the closing process, ask questions about contracts, and learn how transactions actually move from contract to closing.
+
+Try a new method of connecting with FSBO target contacts. Find new target properties.
 
 Strong relationships with title companies can reduce stress, improve confidence, speed up closings, and help you safely navigate FSBO transactions.`,
-      },
-      {
-        type: "quiz",
-        required: true,
-        scenarios: [
-          {
-            id: "day6_fsbo",
-            title: "FSBO Contracts & Closing Quiz",
-            description: "Answer all 8 questions correctly to continue.",
-            maxAttempts: 3,
-            explanationOnFail: `Review the correct answers:
-
-1. Due diligence protections are one of the most important protections in a FSBO contract — they give you time to verify everything and exit safely if needed.
-2. Title companies help coordinate closing and verify title work — they ensure ownership is clean and manage the closing process.
-3. Never release earnest money until inspections and due diligence are complete — releasing early creates unnecessary risk.
-4. Providing proof of funds and communicating professionally builds trust with sellers and shows you are a serious buyer.
-5. Removing protections too early is one of the biggest FSBO mistakes — always keep due diligence, financing, and inspection protections active.
-6. FSBO properties are attractive because sellers are often more flexible and/or motivated without agents involved.
-7. Driving for dollars means looking for distressed or neglected properties while driving neighborhoods.
-8. Property managers often know tired landlords or owners considering selling, making them a strong source of off-market deals.`,
-            inputs: [
-              {
-                id: "day6_q1",
-                label: "1. What is one of the MOST important protections in a FSBO contract?",
-                type: "multiple_choice",
-                options: ["Large earnest money", "Fast closing", "Due diligence protections", "Verbal agreements"],
-                correctAnswer: 2,
-              },
-              {
-                id: "day6_q2",
-                label: "2. Why is a title company important during FSBO transactions?",
-                type: "multiple_choice",
-                options: [
-                  "They determine property value",
-                  "They help coordinate closing and verify title work",
-                  "They negotiate purchase price",
-                  "They replace inspections",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day6_q3",
-                label: "3. What should you do before releasing earnest money?",
-                type: "multiple_choice",
-                options: [
-                  "Release it immediately to show seriousness",
-                  "Wait until inspections and due diligence are complete",
-                  "Skip inspections",
-                  "Let the seller hold the money directly",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day6_q4",
-                label: "4. What is one way to build trust directly with sellers?",
-                type: "multiple_choice",
-                options: [
-                  "Pressure them emotionally",
-                  "Avoid showing financial strength",
-                  "Provide proof of funds and communicate professionally",
-                  "Rush them into signing quickly",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day6_q5",
-                label: "5. What is one of the biggest FSBO mistakes investors make?",
-                type: "multiple_choice",
-                options: ["Using title companies", "Verifying numbers carefully", "Removing protections too early", "Reviewing leases"],
-                correctAnswer: 2,
-              },
-              {
-                id: "day6_q6",
-                label: "6. Why are For Sale By Owner properties often attractive to investors?",
-                type: "multiple_choice",
-                options: [
-                  "They always sell below market value",
-                  "They usually require no due diligence",
-                  "Sellers are often more flexible and/or motivated",
-                  "Banks finance them automatically",
-                ],
-                correctAnswer: 2,
-              },
-              {
-                id: "day6_q7",
-                label: "7. What is \"Driving For Dollars\"?",
-                type: "multiple_choice",
-                options: [
-                  "Driving to open houses every weekend",
-                  "Looking for distressed or neglected properties while driving neighborhoods",
-                  "Driving sellers to title companies",
-                  "Touring luxury homes with realtors",
-                ],
-                correctAnswer: 1,
-              },
-              {
-                id: "day6_q8",
-                label: "8. Why can property managers be a strong source of off-market deals?",
-                type: "multiple_choice",
-                options: [
-                  "They determine property taxes",
-                  "They often know tired landlords or owners considering selling",
-                  "They provide free financing",
-                  "They automatically list all properties off market",
-                ],
-                correctAnswer: 1,
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: "d4q1_creative",
+          title: "Creative Deal Structure Quiz",
+          questions: [
+            {
+              id: "d4q1_1",
+              text: "What is one of the BIGGEST dangers of low down payment creative financing deals?",
+              type: "multiple_choice",
+              options: [
+                "Lower monthly payments",
+                "Increased leverage and reduced safety margin",
+                "Better cash flow",
+                "Longer amortization"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d4q1_2",
+              text: "Why should you still analyze a property using at least 20% down assumptions?",
+              type: "multiple_choice",
+              options: [
+                "To increase purchase price",
+                "To reduce realtor commissions",
+                "To understand the true strength and risk of the deal",
+                "To avoid negotiations"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d4q1_3",
+              text: "What is a balloon payment?",
+              type: "multiple_choice",
+              options: [
+                "A refundable earnest money deposit",
+                "A large payment due at a future date",
+                "A seller-paid repair credit",
+                "A property tax increase"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d4q1_4",
+              text: "What is one of the BEST ways to negotiate creative financing?",
+              type: "multiple_choice",
+              options: [
+                "Use pressure and urgency",
+                "Give the seller only one option",
+                "Structure multiple options that solve seller problems",
+                "Focus only on getting the lowest purchase price possible"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d4q1_5",
+              text: "Which statement BEST describes strong creative financing?",
+              type: "multiple_choice",
+              options: [
+                "High cash-on-cash returns always mean low risk",
+                "Creative financing can improve returns but also increase risk",
+                "Balloon payments are always safe",
+                "No-money-down deals eliminate downside risk"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d4q1_6",
+              text: "You are analyzing a rental property:\n\nPurchase Price: $600,000\nDown Payment: 25% ($150,000)\nClosing Costs: 2% ($9,000)\nCosts To Make Rent Ready: $0\nLoan Term: 30 Years\nInterest Rate: 7.5%\nMonthly Rents: $6,000\nOther Monthly Income: $0\nVacancy: 6%\nMaintenance: 12%\nProperty Management: 8%\nInsurance: $2,000/year\nProperty Taxes: $6,000/year\nUtilities: $0\nAdditional Expenses: $0\n\nWhat is the approximate cash-on-cash return for this property?",
+              type: "multiple_choice",
+              options: [
+                "10.29%",
+                "5.27%",
+                "6.74%",
+                "8.30%"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d4q1_7",
+              text: "Using the same property inputs from the previous question, what interest rate would make the cash-on-cash return above 10%?",
+              type: "multiple_choice",
+              options: [
+                "6%",
+                "6.5%",
+                "5.5%",
+                "5.25%"
+              ],
+              correctAnswer: 3,
+            },
+          ],
+        },
+        {
+          id: "d4q2_fsbo",
+          title: "For Sale By Owner Contracts Quiz",
+          questions: [
+            {
+              id: "d4q2_1",
+              text: "What is one of the MOST important protections in a FSBO contract?",
+              type: "multiple_choice",
+              options: [
+                "Large earnest money",
+                "Fast closing",
+                "Due diligence protections",
+                "Verbal agreements"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d4q2_2",
+              text: "Why is a title company important during FSBO transactions?",
+              type: "multiple_choice",
+              options: [
+                "They determine property value",
+                "They help coordinate closing and verify title work",
+                "They negotiate purchase price",
+                "They replace inspections"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d4q2_3",
+              text: "What should you do before releasing earnest money?",
+              type: "multiple_choice",
+              options: [
+                "Release it immediately to show seriousness",
+                "Wait until inspections and due diligence are complete",
+                "Skip inspections",
+                "Let the seller hold the money directly"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d4q2_4",
+              text: "What is one way to build trust directly with sellers?",
+              type: "multiple_choice",
+              options: [
+                "Pressure them emotionally",
+                "Avoid showing financial strength",
+                "Provide proof of funds and communicate professionally",
+                "Rush them into signing quickly"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d4q2_5",
+              text: "What is one of the biggest FSBO mistakes investors make?",
+              type: "multiple_choice",
+              options: [
+                "Using title companies",
+                "Verifying numbers carefully",
+                "Removing protections too early",
+                "Reviewing leases"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d4q2_6",
+              text: "Why are For Sale By Owner properties often attractive to investors?",
+              type: "multiple_choice",
+              options: [
+                "They always sell below market value",
+                "They usually require no due diligence",
+                "Sellers are often more flexible and/or motivated",
+                "Banks finance them automatically"
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d4q2_7",
+              text: "What is \"Driving For Dollars\"?",
+              type: "multiple_choice",
+              options: [
+                "Driving to open houses every weekend",
+                "Looking for distressed or neglected properties while driving neighborhoods",
+                "Driving sellers to title companies",
+                "Touring luxury homes with realtors"
+              ],
+              correctAnswer: 1,
+            },
+            {
+              id: "d4q2_8",
+              text: "Why can property managers be a strong source of off-market deals?",
+              type: "multiple_choice",
+              options: [
+                "They determine property taxes",
+                "They often know tired landlords or owners considering selling",
+                "They provide free financing",
+                "They automatically list all properties off market"
+              ],
+              correctAnswer: 1,
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     day: 5,
