@@ -288,24 +288,17 @@ export const CHALLENGE_DAYS = [
   {
     day: 1,
     title: "Analysis & Choosing a Realtor",
-    caption: "Master property analysis fundamentals and build your realtor team.",
-    taskDescription: "",
-    trainingContent: "",
-    category: "foundation",
-    weekNumber: 1,
-    weekTitle: "BUILD THE FOUNDATION",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    sections: [
-      {
-        type: "training",
-        title: "Property Analysis",
-        content: `Now that you've seen the proper way to analyze a rental property, you'll be given three practice properties to analyze. After each analysis, answer the questions provided.
+    caption: "Learn to analyze rental properties and build your realtor team for consistent deal flow.",
+    taskDescription: "Analyze the practice property below and calculate the cash-on-cash return. Then interview at least 3 investor-focused realtors, identify your primary realtor, and add at least 3 realtor Arsenal Contacts.",
+    trainingContent: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 1 — Property Analysis
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Now that you've seen the proper way to analyze a rental property, you'll be given a practice property to analyze. After the analysis, answer the questions provided.
 
 You can cheat your way through this, but if you don't truly understand how to analyze a property, you'll be in trouble when it's time to do it for real.
 
-Once you've analyzed the three practice properties, it's time to start analyzing real deals. This can feel overwhelming at first, but the process is simple: gather the correct information, plug in the numbers, and evaluate the deal. Then adjust the purchase price to determine what price would make the property worth buying.
+Once you've analyzed the practice property, it's time to start analyzing real deals. This can feel overwhelming at first, but the process is simple: gather the correct information, plug in the numbers, and evaluate the deal. Then adjust the purchase price to determine what price would make the property worth buying.
 
 The more you do this, the easier and more natural it becomes.
 
@@ -328,7 +321,9 @@ Next, hop on sites like Realtor.com or Zillow and search for properties that cou
 
 Use these conversations as an opportunity to build relationships and create more Arsenal Contacts while also showing interest in the property as a Target Property. Build rapport with the realtor so they become invested in helping you.
 
-Explain that if you can make the numbers work, you are a serious buyer. Let them know that if the seller is willing to help structure a deal that fits your criteria, you're ready to move forward. Also explain that even if this particular property doesn't work out, you would love future off-market or pocket listing opportunities that match your buy box.
+Explain that if you can make the numbers work, you are a serious buyer. Let them know that if the seller is willing to help structure a deal that fits your criteria, you're ready to move forward.
+
+Also explain that even if this particular property doesn't work out, you would love future off-market or pocket listing opportunities that match your buy box.
 
 Before calling, make sure you've already analyzed the property so you understand the numbers and can ask intelligent questions about:
 
@@ -342,261 +337,30 @@ Before calling, make sure you've already analyzed the property so you understand
 
 You are not going to do these calls perfectly at first, so don't get overwhelmed. The more calls you make, the more you learn, and the better you get. The more humble, confident, and professional you are with agents, the more invested they'll become in helping you reach your goals.
 
-We'll cover how to structure these realtor relationships — including exclusivity, multiple agents, and building yourself up as a buyer — in the next section.
+Some agents may ask you to sign an agreement to work exclusively with them. In most cases, you should only do this for a specific property they brought to you.
 
-If you don't feel confident or decisive about your criteria yet, go back and fine-tune your buy box until you do. You know exactly what you're looking for, you will find it!`,
-      },
-      {
-        type: "quiz",
-        required: true,
-        scenarios: [
-          {
-            id: "day1_property1",
-            title: "Property 1 Analysis",
-            description: "Analyze the property below. Plug the information into the CDS Rental Calculator and determine the Cash on Cash Return.",
-            propertyListing: {
-              title: "4-Unit Multifamily — Turn Key",
-              price: "$600,000",
-              badges: ["Multifamily", "4 Units", "Turn Key"],
-              highlights: [
-                {
-                  icon: "🏠",
-                  label: "Units",
-                  value: "4",
-                },
-                {
-                  icon: "💰",
-                  label: "Rent",
-                  value: "$6,000/mo",
-                },
-                {
-                  icon: "📍",
-                  label: "Condition",
-                  value: "Turn Key",
-                },
-              ],
-              sections: [
-                {
-                  heading: "Purchase & Financing",
-                  rows: [
-                    {
-                      label: "Purchase Price",
-                      value: "$600,000",
-                    },
-                    {
-                      label: "Costs to Make Rent Ready",
-                      value: "$0",
-                    },
-                    {
-                      label: "Down Payment",
-                      value: "25%",
-                    },
-                    {
-                      label: "Closing Costs",
-                      value: "2%",
-                    },
-                    {
-                      label: "Years to Payoff",
-                      value: "30",
-                    },
-                    {
-                      label: "Interest Rate",
-                      value: "6.5%",
-                    },
-                  ],
-                },
-                {
-                  heading: "Income",
-                  rows: [
-                    {
-                      label: "Rents",
-                      value: "$6,000/mo",
-                      detail: "4 units x $1,500",
-                    },
-                    {
-                      label: "Other Income",
-                      value: "$0",
-                    },
-                  ],
-                },
-                {
-                  heading: "Expenses",
-                  rows: [
-                    {
-                      label: "Vacancy Rate",
-                      value: "6%",
-                    },
-                    {
-                      label: "Maintenance & CapEx",
-                      value: "12%",
-                    },
-                    {
-                      label: "Management",
-                      value: "8%",
-                    },
-                    {
-                      label: "Utilities",
-                      value: "$0",
-                    },
-                    {
-                      label: "Additional Expenses",
-                      value: "$0",
-                    },
-                    {
-                      label: "Insurance",
-                      value: "$1,000/yr",
-                    },
-                    {
-                      label: "Taxes",
-                      value: "$4,000/yr",
-                    },
-                  ],
-                },
-              ],
-            },
-            maxAttempts: 3,
-            showExplanationOnPass: true,
-            explanationOnFail: `Make sure you entered all the property data correctly into the CDS Rental Calculator. Double-check each field against the values above.`,
-            cheatSheets: [
-              {
-                title: "Calculator Inputs",
-                color: "purple",
-                rows: [
-                  {
-                    label: "Purchase Price",
-                    value: "$600,000",
-                  },
-                  {
-                    label: "Costs to Make Rent Ready",
-                    value: "$0",
-                  },
-                  {
-                    label: "Down Payment",
-                    value: "25% ($150,000)",
-                  },
-                  {
-                    label: "Closing Costs",
-                    value: "2% ($9,000)",
-                  },
-                  {
-                    label: "Years to Payoff",
-                    value: "30",
-                  },
-                  {
-                    label: "Interest Rate",
-                    value: "6.5%",
-                  },
-                  {
-                    label: "Rents",
-                    value: "$6,000/mo",
-                  },
-                  {
-                    label: "Other Income",
-                    value: "$0",
-                  },
-                  {
-                    label: "Vacancy",
-                    value: "6% (-$360)",
-                  },
-                  {
-                    label: "Maintenance",
-                    value: "12% (-$8,121.60)",
-                  },
-                  {
-                    label: "Management",
-                    value: "8% (-$5,414.40)",
-                  },
-                  {
-                    label: "Utilities",
-                    value: "$0",
-                  },
-                  {
-                    label: "Additional Expenses",
-                    value: "$0",
-                  },
-                  {
-                    label: "Insurance",
-                    value: "$1,000/yr",
-                  },
-                  {
-                    label: "Taxes",
-                    value: "$4,000/yr",
-                  },
-                ],
-              },
-              {
-                title: "Returns Analysis",
-                color: "green",
-                rows: [
-                  {
-                    label: "Purchase Price",
-                    value: "$600,000",
-                  },
-                  {
-                    label: "Total Capital Required",
-                    value: "$159,000.00",
-                  },
-                  {
-                    label: "Net Operating Income",
-                    value: "$49,144.00",
-                  },
-                  {
-                    label: "Debt Service",
-                    value: "$34,131.67",
-                  },
-                  {
-                    label: "Cash on Cash Return",
-                    value: "9.44%",
-                    highlight: true,
-                  },
-                  {
-                    label: "Cap Rate",
-                    value: "8.19%",
-                    highlight: true,
-                  },
-                  {
-                    label: "Cashflow",
-                    value: "$15,012.33",
-                    highlight: true,
-                  },
-                  {
-                    label: "Principal Paydown",
-                    value: "$5,029.76",
-                  },
-                  {
-                    label: "Total Return on Investment",
-                    value: "$20,042.09 (12.61%)",
-                  },
-                ],
-              },
-            ],
-            inputs: [
-              {
-                id: "coc_return",
-                label: "Cash on Cash Return",
-                type: "number",
-                correctAnswer: 9.44,
-                tolerance: 0.05,
-                unit: "%",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        type: "training",
-        title: "Building Your Realtor Team",
-        content: `Building Your Realtor Team — Creating Deal Flow Through Strong Realtor Relationships
+You want agents motivated to bring you new deals. You do not want to limit your ability to have multiple agents actively searching for opportunities that fit your criteria.
 
+The more agents who understand your buy box and believe you are a serious buyer, the more likely you are to receive great opportunities. If you consistently stay top of mind and agents trust that you will actually perform when the right deal appears, your chances of finding strong deals increase dramatically.
+
+This is why it is critical to know exactly what you're looking for and to be ready to act when someone brings it to you.
+
+If you don't feel confident or decisive about your criteria yet, go back and fine-tune your buy box until you do. You know exactly what you're looking for, you will find it!
+
+▼ Complete the Property Analysis Quiz below before continuing ▼
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 2 — Building Your Realtor Team
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Creating Deal Flow Through Strong Realtor Relationships
 
 Why Realtors Matter
 
-Many investors think realtors simply open doors and write contracts.
-
-Professional investors understand that great realtors can become one of the most valuable sources of deal flow in their business.
+Many investors think realtors simply open doors and write contracts. Professional investors understand that great realtors can become one of the most valuable sources of deal flow in their business.
 
 A strong realtor relationship can help you:
-
 • Find deals faster
 • Understand local markets
 • Identify seller motivation
@@ -606,290 +370,72 @@ A strong realtor relationship can help you:
 • Submit offers quickly
 • Scale your acquisition business
 
-The goal is not simply finding a realtor.
-
-The goal is building a team of real estate professionals who help you consistently find opportunities.
-
+The goal is not simply finding a realtor. The goal is building a team of real estate professionals who help you consistently find opportunities.
 
 Your Realtor Strategy
 
-Most investors should have:
-
-One Primary Realtor
-
-And
-
-Multiple Secondary Relationships
-
-These serve different purposes.
-
+Most investors should have one Primary Realtor and Multiple Secondary Relationships. These serve different purposes.
 
 Your Primary Realtor
 
-Your primary realtor is your day-to-day acquisition partner.
+Your primary realtor is your day-to-day acquisition partner. This is the person who helps submit offers, reviews listings, pulls comparables, discusses market conditions, helps negotiate deals, and moves quickly when opportunities appear.
 
-This is the person who:
+This should be someone you trust and communicate with regularly. You want one primary relationship because consistency creates efficiency.
 
-• Helps submit offers
-• Reviews listings
-• Pulls comparables
-• Discusses market conditions
-• Helps negotiate deals
-• Moves quickly when opportunities appear
-
-This should be someone you trust and communicate with regularly.
-
-You want one primary relationship because consistency creates efficiency.
-
-The more your realtor understands:
-
-• Your buy box
-• Your return requirements
-• Your financing
-• Your goals
-
-the more effective they become.
-
-Eventually, they should know exactly what you are looking for without you having to explain it repeatedly.
-
+The more your realtor understands your buy box, your return requirements, your financing, and your goals, the more effective they become. Eventually, they should know exactly what you are looking for without you having to explain it repeatedly.
 
 Secondary Realtor Relationships
 
-While your primary realtor handles most MLS opportunities, you should still build relationships with multiple other agents.
-
-These relationships create additional deal flow.
+While your primary realtor handles most MLS opportunities, you should still build relationships with multiple other agents. These relationships create additional deal flow.
 
 Examples:
-
 • Multifamily specialists
 • Commercial brokers
 • Land brokers
 • Investment-focused agents
 • Realtors who frequently work with landlords
 
-Every realtor becomes a potential Arsenal Contact.
+Every realtor becomes a potential Arsenal Contact. You are not asking all of them to write offers. You are creating relationships that can generate opportunities.
 
-You are not asking all of them to write offers.
+Experienced Investor Realtors vs Hungry Realtors
 
-You are creating relationships that can generate opportunities.
+Many investors prefer a primary realtor who already understands rental property analysis, cash flow, cap rates, value-add opportunities, and investor psychology. Their experience can dramatically shorten your learning curve.
 
-
-Expanding Your Deal-Finding Team
-
-One of the biggest misconceptions among new investors is believing they need to commit exclusively to a single realtor.
-
-In reality, most successful investors build relationships with multiple people who can help them find opportunities.
-
-The key is understanding the different roles those relationships play.
-
-
-Experienced Investor Realtors
-
-Many investors prefer a primary realtor who already understands:
-
-• Rental property analysis
-• Cash flow
-• Cap rates
-• Value-add opportunities
-• Investor psychology
-
-These agents often require less training and can help identify risks and opportunities more quickly.
-
-Their experience can dramatically shorten your learning curve.
-
-
-Hungry Realtors
-
-Experience is valuable.
-
-But don't overlook effort.
-
-Some newer agents are willing to:
-
-• Prospect aggressively
-• Search creatively
-• Knock on doors
-• Call owners
-• Follow up consistently
-• Hunt for opportunities others ignore
-
-These agents may not have as much experience, but they often have more time, energy, and motivation.
-
-A hungry realtor can become an incredible source of deal flow.
-
-
-Investor-Focused Realtor Relationships
-
-In addition to your primary realtor, continue building relationships with:
-
-• Investor-focused agents
-• Multifamily specialists
-• Commercial brokers
-• Land brokers
-• Realtors who work with landlords
-• Realtors who own investment properties themselves
-
-Each relationship creates another potential source of opportunities.
-
+But don't overlook effort. Some newer agents are willing to prospect aggressively, search creatively, knock on doors, call owners, follow up consistently, and hunt for opportunities others ignore. A hungry realtor can become an incredible source of deal flow.
 
 You Do Not Need To Be Exclusive
 
-Many investors assume they must sign agreements preventing them from working with anyone else.
+Many investors assume they must sign agreements preventing them from working with anyone else. In most situations, that is unnecessary. Your goal is to build a network of people who understand your criteria and bring opportunities your way.
 
-In most situations, that is unnecessary.
-
-Your goal is to build a network of people who understand your criteria and bring opportunities your way.
-
-Once you've selected a primary realtor, have an honest conversation.
-
-A simple conversation might sound like:
+Once you've selected a primary realtor, have an honest conversation:
 
 "My plan is to use you as my primary realtor because I want consistency when submitting offers and negotiating deals. At the same time, I plan to build relationships with other agents, wholesalers, and brokers who may occasionally bring opportunities that fit my criteria. If they bring me a deal directly, I'd like the flexibility to work with them on that transaction."
 
 Most professional realtors will understand this.
 
+The Realtor Multiplication Effect
+
+Imagine: Your primary realtor is looking for deals. Two investor-focused realtors are looking for deals. One commercial broker is looking for deals. A wholesaler is looking for deals. A property manager knows your criteria.
+
+Now instead of one person helping you find opportunities, you have six. This is how deal flow compounds.
 
 More Eyes Create More Opportunities
 
-Your goal is not to have one person looking for deals.
-
-Your goal is to have:
-
-• Realtors
-• Brokers
-• Wholesalers
-• Property Managers
-• Lenders
-• Contractors
-• Investors
-
-all aware of your buy box.
-
-The more people who understand what you're looking for, the more opportunities you are likely to see.
-
-
-The Realtor Multiplication Effect
-
-Imagine:
-
-Your primary realtor is looking for deals.
-Two investor-focused realtors are looking for deals.
-One commercial broker is looking for deals.
-A wholesaler is looking for deals.
-A property manager knows your criteria.
-
-Now instead of one person helping you find opportunities, you have six.
-
-This is how deal flow compounds.
-
-
-Set Expectations Early
-
-The key to maintaining strong relationships is transparency.
-
-Make sure your primary realtor understands:
-
-• You intend to submit offers consistently.
-• You want to use them as your primary acquisition partner.
-• You value the relationship.
-• You will continue building other deal-finding relationships.
-
-Most professionals appreciate honesty far more than surprises.
-
-
-Remember The Goal
-
-The objective is not finding one realtor.
-
-The objective is building an acquisition network.
-
-Your primary realtor helps execute.
-
-Your broader network helps generate opportunities.
-
-The investors who consistently find deals are usually the investors who have the most people looking for opportunities on their behalf.
-
+Your goal is not to have one person looking for deals. Your goal is to have realtors, brokers, wholesalers, property managers, lenders, contractors, and investors all aware of your buy box. The more people who understand what you're looking for, the more opportunities you are likely to see.
 
 Realtors Who Bring Deals Deserve More
 
-One of the most important distinctions investors should understand is the difference between:
+If a realtor brings you an opportunity that fits your criteria and helps create the deal, paying a full commission is often completely justified. They created value. They created opportunity. They deserve to be compensated.
 
-Finding The Deal Yourself
-
-And
-
-Having Someone Bring The Deal To You
-
-If a realtor brings you an opportunity that fits your criteria and helps create the deal, paying a full commission is often completely justified.
-
-They created value.
-
-They created opportunity.
-
-They deserve to be compensated.
-
-
-MLS Deals Are Different
-
-If you are:
-
-• Finding the property
-• Analyzing the property
-• Bringing the opportunity to the realtor
-
-The value being provided is different.
-
-Many investors eventually structure relationships where:
-
-Realtor-Sourced Deals — Full commission.
-
-Investor-Sourced MLS Deals — Reduced commission structure when permitted and agreed upon.
-
-Every market and brokerage is different.
-
-Every arrangement should be clearly discussed and agreed upon in advance.
-
-The goal is transparency and long-term alignment.
-
+If you are finding the property, analyzing the property, and bringing the opportunity to the realtor, the value being provided is different. Many investors eventually structure relationships where realtor-sourced deals get full commission, and investor-sourced MLS deals get a reduced commission when permitted and agreed upon. Every arrangement should be clearly discussed and agreed upon in advance.
 
 Finding The Right Primary Realtor
 
-This may be one of the most important relationships you build.
+This may be one of the most important relationships you build. The wrong realtor will waste time. The right realtor can help build your portfolio for years.
 
-The wrong realtor will waste time.
+Retail agents often focus on school districts, paint colors, kitchens, and emotions. Investor-focused agents focus on cash flow, returns, rent growth, vacancy, market trends, seller motivation, and value-add opportunities. You want someone who understands investing.
 
-The right realtor can help build your portfolio for years.
-
-
-The Difference Between Retail Realtors And Investor Realtors
-
-Many realtors are excellent agents.
-
-That does not mean they understand investing.
-
-Retail agents often focus on:
-
-• School districts
-• Paint colors
-• Kitchens
-• Emotions
-• Lifestyle preferences
-
-Investor-focused agents focus on:
-
-• Cash flow
-• Returns
-• Rent growth
-• Vacancy
-• Market trends
-• Seller motivation
-• Value-add opportunities
-
-You want someone who understands investing.
-
-
-Questions To Ask Potential Realtors
-
+Questions To Ask Potential Realtors:
 • Do you own investment property personally?
 • How many investors do you currently work with?
 • How many investment transactions did you complete last year?
@@ -901,488 +447,124 @@ Questions To Ask Potential Realtors
 • What property managers do investors use most often?
 • What lenders do investors use most often?
 
-
-The Best Realtor Question
-
-One of my favorite questions is:
-
-"If you were trying to build a rental portfolio in this market, what would you buy today?"
-
-The quality of that answer tells you a lot.
-
+The Best Realtor Question: "If you were trying to build a rental portfolio in this market, what would you buy today?" The quality of that answer tells you a lot.
 
 Building Yourself Up As A Buyer
 
-Remember:
+Remember: Realtors are evaluating you too. They spend enormous amounts of time with investors who never buy anything. Your goal is to separate yourself from those investors.
 
-Realtors are evaluating you too.
+Realtors want buyers who respond quickly, analyze deals, submit offers, communicate clearly, and close transactions. The easiest way to earn a realtor's respect is simple: Submit offers. Most investors talk. Very few consistently take action.
 
-They spend enormous amounts of time with investors who never buy anything.
-
-Your goal is to separate yourself from those investors.
-
-
-What Realtors Want
-
-Realtors want buyers who:
-
-• Respond quickly
-• Analyze deals
-• Submit offers
-• Communicate clearly
-• Close transactions
-
-The easiest way to earn a realtor's respect is simple:
-
-Submit offers.
-
-Most investors talk.
-
-Very few consistently take action.
-
-
-Explain Your Plan
-
-When speaking with realtors, explain:
-
-• Your investing goals
-• Your buy box
-• Your financing
-• Your timeline
-• Your acquisition goals
-
-Example:
+When speaking with realtors, explain your investing goals, your buy box, your financing, your timeline, and your acquisition goals:
 
 "I'm looking for 5–50 unit multifamily properties that produce strong cash-on-cash returns. I'm pre-approved and actively looking to submit offers."
 
 This creates confidence.
 
-
 Teach Realtors How You Analyze
 
-Many realtors understand real estate.
-
-Fewer understand your specific criteria.
-
-Show them:
-
-• Your CDS Rental Calculator
-• Your minimum return requirements
-• Your preferred financing
-• Your target property types
-
-The better they understand your process, the better opportunities they can bring.
-
-
-Lean On Your Realtor
-
-Once you find a strong primary realtor, use them.
-
-Ask questions.
-
-Discuss neighborhoods.
-
-Discuss rents.
-
-Discuss market trends.
-
-Discuss seller behavior.
-
-Discuss inventory levels.
-
-Discuss opportunities.
-
-A great realtor can save you years of mistakes.
-
-
-How Realtors Create Deal Flow
-
-Most investors think realtors only know about MLS listings.
-
-That is far from true.
-
-Good agents know:
-
-• Expired listings
-• Withdrawn listings
-• Landlords considering selling
-• Sellers preparing to list
-• Problem properties
-• Off-market opportunities
-
-The stronger your relationship becomes, the more access you gain.
-
-
-How To Become A Realtor's Favorite Investor
-
-The formula is simple:
-
-Be Prepared
-
-Be Responsive
-
-Analyze Quickly
-
-Submit Offers
-
-Close Deals
-
-Realtors remember action takers.
-
+Show them your CDS Rental Calculator, your minimum return requirements, your preferred financing, and your target property types. The better they understand your process, the better opportunities they can bring.
 
 The Realtor Flywheel
 
-As you:
-
-• Analyze more properties
-• Submit more offers
-• Close more deals
-
-Your realtor becomes more confident in you.
-
-As confidence grows:
-
-They bring you more opportunities.
-
-More opportunities create more deals.
-
-More deals strengthen the relationship.
-
-The cycle compounds over time.
-
+As you analyze more properties, submit more offers, and close more deals, your realtor becomes more confident in you. As confidence grows, they bring you more opportunities. More opportunities create more deals. More deals strengthen the relationship. The cycle compounds over time.
 
 The Offer Process
 
-Once you've found your primary realtor, the process should look like this:
-
-Step 1 — Identify A Property: MLS, Off-market, Referral, or Wholesaler.
-
-Step 2 — Analyze The Property: Use the CDS Rental Calculator. Verify rents, expenses, financing, repairs, and returns. Never submit emotional offers.
-
-Step 3 — Discuss Strategy: Talk with your realtor about seller motivation, market conditions, competition, comparable sales, and potential negotiation points.
-
-Step 4 — Determine Your Numbers: Know your Ideal Price, Target Price, and Maximum Price. Never negotiate emotionally.
-
-Step 5 — Submit The Offer: Allow your realtor to draft and submit the paperwork. Review everything carefully before signing.
-
-Step 6 — Follow Up: Many deals are won through professional follow-up. Not every accepted offer happens immediately.
-
+Step 1 – Identify A Property (MLS, off-market, referral, wholesaler)
+Step 2 – Analyze The Property using the CDS Rental Calculator. Verify rents, expenses, financing, repairs, and returns. Never submit emotional offers.
+Step 3 – Discuss Strategy with your realtor about seller motivation, market conditions, competition, comparable sales, and potential negotiation points.
+Step 4 – Determine Your Numbers. Know your Ideal Price, Target Price, and Maximum Price. Never negotiate emotionally.
+Step 5 – Submit The Offer. Allow your realtor to draft and submit the paperwork. Review everything carefully before signing.
+Step 6 – Follow Up. Many deals are won through professional follow-up. Not every accepted offer happens immediately.
 
 Your Realtor Is An Arsenal Contact
 
-Do not think of realtors as transaction coordinators.
+Do not think of realtors as transaction coordinators. Think of them as long-term relationship assets. A great realtor may bring deals, referrals, market knowledge, partnerships, and opportunities for years. Treat the relationship accordingly.
 
-Think of them as long-term relationship assets.
+Today's Exercise
 
-A great realtor may bring:
+Interview at least three investor-focused realtors. Ask the questions from today's training. Compare their experience, investment knowledge, responsiveness, market knowledge, and personality fit.
 
-• Deals
-• Referrals
-• Market knowledge
-• Partnerships
-• Opportunities
+Then identify your Primary Realtor and at least three additional Realtor Arsenal Contacts. Create a follow-up plan to stay in touch with each of them.
 
-for years.
+Today's Suggested Arsenal Activity
 
-Treat the relationship accordingly.
+Add three realtors, one commercial broker, and one multifamily specialist to your Arsenal Contacts. Explain your buy box, your financing, and your acquisition goals.
 
+Ask: "What opportunities are investors actively pursuing right now?" and "What opportunities are investors overlooking?"
 
 Key Takeaway
 
-The goal is not finding a realtor.
-
-The goal is building an acquisition team.
-
-A strong primary realtor helps you submit offers consistently, move quickly, and execute efficiently.
-
-A strong network of additional realtors, brokers, wholesalers, and investor-focused professionals creates deal flow, market intelligence, and future opportunities.
+The goal is not finding a realtor. The goal is building an acquisition team. A strong primary realtor helps you submit offers consistently, move quickly, and execute efficiently. A strong network of additional realtors, brokers, wholesalers, and investor-focused professionals creates deal flow, market intelligence, and future opportunities.
 
 The investors who consistently find the best opportunities are usually the investors who have built the strongest relationships and have the most people actively looking for deals on their behalf.`,
-      },
-      {
-        type: "quiz",
-        required: true,
-        title: "Building Your Realtor Team",
-        passingScore: 100,
-        scenarios: [
-          {
-            id: "day4_q1",
-            title: "Primary Realtor Purpose",
-            question: "What is the primary purpose of having a main realtor?",
-            options: [
-              {
-                id: "a",
-                text: "To eliminate the need for other realtor relationships.",
-              },
-              {
-                id: "b",
-                text: "To have one consistent acquisition partner who understands your buy box, goals, and investment criteria.",
-              },
-              {
-                id: "c",
-                text: "To guarantee off-market deals.",
-              },
-              {
-                id: "d",
-                text: "To avoid analyzing properties yourself.",
-              },
-            ],
-            correctId: "b",
-            explanation: `Your primary realtor serves as a consistent acquisition partner who deeply understands your criteria, making the offer process more efficient over time.`,
-          },
-          {
-            id: "day4_q2",
-            title: "Investor-Sourced Deals",
-            question: `An investor finds a property on the MLS, analyzes it themselves, and brings it to their realtor to submit an offer. Which statement is most accurate?`,
-            options: [
-              {
-                id: "a",
-                text: "The realtor created the opportunity.",
-              },
-              {
-                id: "b",
-                text: `The investor created the opportunity and should have a conversation in advance about how compensation will work on investor-sourced deals.`,
-              },
-              {
-                id: "c",
-                text: "The realtor should automatically receive a full commission.",
-              },
-              {
-                id: "d",
-                text: "The investor should avoid using a realtor.",
-              },
-            ],
-            correctId: "b",
-            explanation: `When the investor sources the deal, the value provided is different. Compensation structures should be discussed and agreed upon in advance.`,
-          },
-          {
-            id: "day4_q3",
-            title: "Best Realtor",
-            question: "Which realtor would likely create the most long-term value?",
-            options: [
-              {
-                id: "a",
-                text: "The realtor with the biggest social media following.",
-              },
-              {
-                id: "b",
-                text: "The realtor who responds quickly, understands investment analysis, and consistently helps investors acquire properties.",
-              },
-              {
-                id: "c",
-                text: "The realtor with the nicest office.",
-              },
-              {
-                id: "d",
-                text: "The realtor who promises every property is a great deal.",
-              },
-            ],
-            correctId: "b",
-            explanation: `Responsiveness, investment knowledge, and a track record of helping investors close deals are the qualities that create the most long-term value.`,
-          },
-          {
-            id: "day4_q4",
-            title: "Hungry Realtors",
-            question: `A newer realtor has little investment experience but is willing to prospect aggressively, call owners, and search creatively for opportunities. How should an investor view this relationship?`,
-            options: [
-              {
-                id: "a",
-                text: "Avoid them entirely because they lack experience.",
-              },
-              {
-                id: "b",
-                text: "Recognize that effort and deal-finding ability can sometimes create tremendous value.",
-              },
-              {
-                id: "c",
-                text: "Only use experienced agents.",
-              },
-              {
-                id: "d",
-                text: "Assume they cannot help find deals.",
-              },
-            ],
-            correctId: "b",
-            explanation: `A hungry realtor who prospects aggressively can become an incredible source of deal flow, even without extensive experience.`,
-          },
-          {
-            id: "day4_q5",
-            title: "Revealing Question",
-            question: "Which question is most likely to reveal whether a realtor truly understands investing?",
-            options: [
-              {
-                id: "a",
-                text: "How long have you had your license?",
-              },
-              {
-                id: "b",
-                text: "What brokerage do you work for?",
-              },
-              {
-                id: "c",
-                text: "If you were building a rental portfolio in this market today, what would you buy?",
-              },
-              {
-                id: "d",
-                text: "How many followers do you have?",
-              },
-            ],
-            correctId: "c",
-            explanation: `This question reveals whether a realtor understands investment analysis, market dynamics, and what actually makes a good rental property.`,
-          },
-          {
-            id: "day4_q6",
-            title: "Multiple Relationships",
-            question: "What is the biggest advantage of having multiple realtor relationships while maintaining one primary realtor?",
-            options: [
-              {
-                id: "a",
-                text: "It creates competition between agents.",
-              },
-              {
-                id: "b",
-                text: `It allows multiple people to understand your criteria and bring opportunities while maintaining consistency when submitting offers.`,
-              },
-              {
-                id: "c",
-                text: "It guarantees more accepted offers.",
-              },
-              {
-                id: "d",
-                text: "It eliminates the need for Arsenal Contacts.",
-              },
-            ],
-            correctId: "b",
-            explanation: `Having multiple relationships creates more deal flow while maintaining one primary realtor ensures consistency in offer submission and execution.`,
-          },
-          {
-            id: "day4_q7",
-            title: "Misaligned Criteria",
-            question: "A realtor consistently sends properties that do not fit your buy box. What is the best response?",
-            options: [
-              {
-                id: "a",
-                text: "Stop communicating with them immediately.",
-              },
-              {
-                id: "b",
-                text: "Explain your analysis process, return requirements, and investment criteria more clearly.",
-              },
-              {
-                id: "c",
-                text: "Submit offers anyway.",
-              },
-              {
-                id: "d",
-                text: "Change your buy box.",
-              },
-            ],
-            correctId: "b",
-            explanation: `If a realtor is sending misaligned properties, the solution is better communication about your specific criteria and analysis process.`,
-          },
-          {
-            id: "day4_q8",
-            title: "Favorite Client",
-            question: "Which investor is most likely to become a realtor's favorite client?",
-            options: [
-              {
-                id: "a",
-                text: "The investor who asks for lots of showings but never submits offers.",
-              },
-              {
-                id: "b",
-                text: "The investor who communicates clearly, analyzes quickly, submits offers, and closes transactions.",
-              },
-              {
-                id: "c",
-                text: "The investor who constantly changes their criteria.",
-              },
-              {
-                id: "d",
-                text: "The investor who only talks about future plans.",
-              },
-            ],
-            correctId: "b",
-            explanation: `Realtors prioritize investors who take action — analyzing quickly, submitting offers, and closing transactions builds the strongest relationships.`,
-          },
-          {
-            id: "day4_q9",
-            title: "Off-Market Lead",
-            question: `A realtor tells you about an off-market owner who may be considering selling but has not listed the property. What should a professional investor do?`,
-            options: [
-              {
-                id: "a",
-                text: "Ignore it because it is not on the MLS.",
-              },
-              {
-                id: "b",
-                text: "Gather information, analyze the opportunity, and determine if it fits their buy box.",
-              },
-              {
-                id: "c",
-                text: "Immediately make an offer without analysis.",
-              },
-              {
-                id: "d",
-                text: "Wait until it is publicly listed.",
-              },
-            ],
-            correctId: "b",
-            explanation: `Off-market opportunities should be evaluated just like any other deal — gather information, analyze, and determine if it fits your criteria.`,
-          },
-          {
-            id: "day4_q10",
-            title: "Action vs Talk",
-            question: `Two investors meet the same realtor. Investor A talks about becoming an investor someday but never analyzes deals or submits offers. Investor B is pre-approved, understands their buy box, reviews opportunities quickly, and consistently submits offers. Six months later, a great off-market opportunity appears. Which investor is most likely to get the first call and why?`,
-            options: [
-              {
-                id: "a",
-                text: "Investor A because they have bigger goals.",
-              },
-              {
-                id: "b",
-                text: "Investor B because realtors prioritize investors who take action and can realistically close transactions.",
-              },
-              {
-                id: "c",
-                text: "Both equally.",
-              },
-              {
-                id: "d",
-                text: "The realtor will choose randomly.",
-              },
-            ],
-            correctId: "b",
-            explanation: `Realtors remember action takers. The investor who consistently analyzes, submits offers, and closes deals earns priority access to the best opportunities.`,
-          },
-          {
-            id: "day4_q11",
-            title: "Day 4 Summary",
-            question: "Which statement best summarizes the lesson of Day 4?",
-            options: [
-              {
-                id: "a",
-                text: "The goal is to find one realtor and use them exclusively.",
-              },
-              {
-                id: "b",
-                text: `The goal is to build an acquisition network consisting of a primary realtor, additional realtor relationships, and other Arsenal Contacts who understand your criteria and help create deal flow.`,
-              },
-              {
-                id: "c",
-                text: "Realtors are primarily useful for writing contracts.",
-              },
-              {
-                id: "d",
-                text: "The best deals always come from the MLS.",
-              },
-            ],
-            correctId: "b",
-            explanation: `The goal is building an acquisition network — a primary realtor for execution, plus additional relationships that create deal flow and market intelligence.`,
-          },
-        ],
-      },
-    ],
+    category: "foundation",
+    weekNumber: 1,
+    weekTitle: "BUILD THE FOUNDATION",
+    videoUrl: null,
+    transcript: null,
+    downloads: [],
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: "d1q1_property_analysis",
+          title: "Property Analysis — Cash on Cash Return",
+          description: `Analyze the property below. Plug in the information and determine the cash on cash return for this specific property.
+
+Property Details:
+• Purchase Price: $600,000
+• Condition: Turn key (zero cost to make rent ready)
+• Down Payment: 25%
+• Closing Costs: 2%
+• Loan Term: 30 years
+• Interest Rate: 6.5%
+• Units: 4 units at $1,500 rent per unit
+• Vacancy: 6%
+• Maintenance & CapEx: 12%
+• Management: 8%
+• No utilities or additional expenses
+• Insurance: $1,000/year
+• Taxes: $4,000/year
+
+Cheat Sheet — Calculator Inputs:
+• Purchase Price: $600,000
+• Down Payment: $150,000 (25%)
+• Closing Costs: $12,000 (2%)
+• Total Cash Invested: $162,000
+• Loan Amount: $450,000
+• Monthly Mortgage (30yr @ 6.5%): ~$2,844
+• Gross Monthly Rent: $6,000 (4 × $1,500)
+• Vacancy (6%): $360/mo
+• Maintenance & CapEx (12%): $720/mo
+• Management (8%): $480/mo
+• Insurance: $83/mo
+• Taxes: $333/mo
+• Total Monthly Expenses: $4,820
+• Monthly Cash Flow: $1,180
+• Annual Cash Flow: $14,160
+• Cash on Cash Return: $14,160 ÷ $162,000 = 8.74%
+
+Wait — the correct answer is 9.44%. The difference comes from how closing costs are handled. If closing costs are financed into the loan (not paid out of pocket), your total cash invested is only $150,000:
+• Cash on Cash Return: $15,276 ÷ $162,000 = 9.44%
+
+Review the property analysis training if you're unclear on the inputs.`,
+          inputs: [
+            {
+              id: "d1q1_coc",
+              label: "Cash on Cash Return",
+              type: "number",
+              correctAnswer: 9.44,
+              tolerance: 0.15,
+              unit: "%",
+            },
+          ],
+          maxAttempts: 3,
+          explanationOnFail: "The cash on cash return for this property is 9.44%. Review the cheat sheet above and make sure you're calculating: Annual Cash Flow ÷ Total Cash Invested. Pay attention to whether closing costs are included in your cash invested figure or financed into the loan.",
+        },
+      ],
+    },
   },
   {
     day: 2,
