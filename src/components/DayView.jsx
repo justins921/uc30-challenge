@@ -238,7 +238,7 @@ export default function DayView({
   };
 
   const groupedContacts = useMemo(() => {
-    const groups = { target: [], arsenal: [] };
+    const groups = { target: [], arsenal: [], cold_follow_up: [] };
     (contactList || []).forEach(c => {
       const g = c.contact_group || 'target';
       if (groups[g]) groups[g].push(c);
@@ -1694,8 +1694,8 @@ export default function DayView({
                         const isOverdue = new Date(contact.follow_up_date) < todayStart;
                         const diffDays = Math.floor((now - new Date(contact.follow_up_date)) / (1000 * 60 * 60 * 24));
                         const accentColor = isOverdue ? '#e94560' : '#f0a500';
-                        const groupColor = contact.contact_group === 'arsenal' ? '#f0a500' : contact.pipeline_status === 'dead' ? '#666' : '#e94560';
-                        const groupLabel = contact.contact_group === 'arsenal' ? 'Arsenal' : contact.pipeline_status === 'dead' ? 'Dead' : 'Target';
+                        const groupColor = contact.contact_group === 'arsenal' ? '#f0a500' : contact.contact_group === 'cold_follow_up' ? '#9b7fd4' : contact.pipeline_status === 'dead' ? '#666' : '#e94560';
+                        const groupLabel = contact.contact_group === 'arsenal' ? 'Arsenal' : contact.contact_group === 'cold_follow_up' ? 'Cold Follow Up' : contact.pipeline_status === 'dead' ? 'Dead' : 'Target';
                         const isExpanded = inlineFollowUpId === contact.id;
                         const isDead = contact.pipeline_status === 'dead';
 
@@ -2940,8 +2940,8 @@ function DueFollowUpCard({ contact, type, now, onFollowUp, onSnooze, onMarkDead,
   const isOverdue = type === 'overdue';
   const diffDays = Math.floor((now - new Date(contact.follow_up_date)) / (1000 * 60 * 60 * 24));
   const isTarget = contact.contact_group === 'target' && contact.pipeline_status !== 'dead';
-  const groupLabel = contact.contact_group === 'arsenal' ? 'Arsenal' : contact.pipeline_status === 'dead' ? 'Dead' : 'Target Property';
-  const groupColor = contact.contact_group === 'arsenal' ? '#f0a500' : contact.pipeline_status === 'dead' ? '#666' : '#e94560';
+  const groupLabel = contact.contact_group === 'arsenal' ? 'Arsenal' : contact.contact_group === 'cold_follow_up' ? 'Cold Follow Up' : contact.pipeline_status === 'dead' ? 'Dead' : 'Target Property';
+  const groupColor = contact.contact_group === 'arsenal' ? '#f0a500' : contact.contact_group === 'cold_follow_up' ? '#9b7fd4' : contact.pipeline_status === 'dead' ? '#666' : '#e94560';
 
   const accentColor = isOverdue ? '#e94560' : '#f0a500';
 

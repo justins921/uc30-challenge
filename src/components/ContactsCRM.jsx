@@ -4,6 +4,7 @@ import { calculateFollowUpDate, validatePhone } from '../utils/storage';
 export const CONTACT_GROUPS = [
   { value: 'target', label: 'Target Contacts', color: '#e94560', desc: 'Deal sources — property owners, sellers, listing agents tied to specific properties' },
   { value: 'arsenal', label: 'Arsenal Contacts', color: '#f0a500', desc: 'Ecosystem relationships — property managers, lenders, contractors, investors, wholesalers' },
+  { value: 'cold_follow_up', label: 'Cold Follow Ups', color: '#9b7fd4', desc: 'Not interested now — check back later. One property tied to each contact.' },
 ];
 
 const ARSENAL_TYPES = [
@@ -28,7 +29,6 @@ const STATUS_LABELS = {
   new: { label: 'New', color: '#888' },
   active: { label: 'Active', color: '#48c78e' },
   target_property: { label: 'Active', color: '#48c78e' },
-  prospect: { label: 'Prospect', color: '#9b7fd4' },
   under_contract: { label: 'Under Contract', color: '#6b8afd' },
   closed: { label: 'Closed', color: '#d4a843' },
   dead: { label: 'Dead', color: '#666' },
@@ -52,9 +52,7 @@ const DEAD_FOLLOW_UP_OPTIONS = [
   { value: 'dead_6_months', label: '6 Months' },
 ];
 
-const PROSPECT_FOLLOW_UP_OPTIONS = [
-  { value: '1_week', label: '1 Week' },
-  { value: '2_weeks', label: '2 Weeks' },
+const COLD_FOLLOW_UP_OPTIONS = [
   { value: '1_month', label: '1 Month' },
   { value: '3_months', label: '3 Months' },
   { value: '6_months', label: '6 Months' },
@@ -176,8 +174,8 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
 
   const handleAddFromCRM = async () => {
     const isArsenal = activeTab === 'arsenal';
-    const isProspect = activeTab === 'prospects';
-    const isTargetProp = !isArsenal && !isProspect;
+    const isColdFollowUp = activeTab === 'cold_follow_ups';
+    const isTargetProp = !isArsenal && !isColdFollowUp;
 
     if (isTargetProp) {
       if (!(formLeadSrcName.trim() || formOwnerName.trim()) || !formFollowUp) return;
@@ -186,7 +184,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
     }
     if (isArsenal && !formNotes.trim()) return;
 
-    if (!isTargetProp) {
+    if (isArsenal || isColdFollowUp) {
       const phoneCheck = validatePhone(formPhone, { required: true });
       if (!phoneCheck.valid) { setFormPhoneError(phoneCheck.error); return; }
       setFormPhoneError('');
@@ -196,12 +194,12 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
     setFormSaving(true);
     const now = new Date().toISOString();
 
-    if (isProspect) {
+    if (isColdFollowUp) {
       const propAddr = [formStreet.trim(), formCity.trim(), formState.trim(), formZip.trim()].filter(Boolean).join(', ');
       const result = await onAddContact({
-        name: formName.trim(), phone: formattedPhone, email: formEmail.trim() || null,
-        contact_group: 'target', property: propAddr || null, notes: formNotes.trim() || null,
-        pipeline_status: 'prospect',
+        name: formName.trim(), phone: formattedPhone, email: null,
+        contact_group: 'cold_follow_up', property: propAddr || null, notes: formNotes.trim() || null,
+        pipeline_status: 'new',
         follow_up_interval: formFollowUp,
         follow_up_date: calculateFollowUpDate(formFollowUp),
         last_contact_date: now,
@@ -285,19 +283,19 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
   const closedDeals = targetProperties.filter(c => c.pipeline_status === 'closed');
   const deadTargets = targetProperties.filter(c => c.pipeline_status === 'dead');
 
-  const prospects = useMemo(() =>
-    filtered.filter(c => c.contact_group === 'target' && c.pipeline_status === 'prospect').sort(sortByFollowUp), [filtered]);
+  const coldFollowUps = useMemo(() =>
+    filtered.filter(c => c.contact_group === 'cold_follow_up').sort(sortByFollowUp), [filtered]);
 
   const overdueCount = useMemo(() =>
-    contacts.filter(c => c.pipeline_status !== 'dead' && c.pipeline_status !== 'prospect' && isOverdue(c.follow_up_date)).length, [contacts]);
+    contacts.filter(c => c.contact_group !== 'cold_follow_up' && c.pipeline_status !== 'dead' && isOverdue(c.follow_up_date)).length, [contacts]);
 
-  const prospectOverdueCount = useMemo(() =>
-    contacts.filter(c => c.pipeline_status === 'prospect' && isOverdue(c.follow_up_date)).length, [contacts]);
+  const coldFollowUpOverdueCount = useMemo(() =>
+    contacts.filter(c => c.contact_group === 'cold_follow_up' && isOverdue(c.follow_up_date)).length, [contacts]);
 
   const linkedPropertyCount = (arsenalId) =>
     contacts.filter(c => c.contact_group === 'target' && c.source_contact_id === arsenalId).length;
 
-  const tabColor = activeTab === 'arsenal' ? '#f0a500' : activeTab === 'prospects' ? '#9b7fd4' : '#e94560';
+  const tabColor = activeTab === 'arsenal' ? '#f0a500' : activeTab === 'cold_follow_ups' ? '#9b7fd4' : '#e94560';
 
   return (
     <div className="fade-up">
@@ -334,9 +332,9 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
       {/* Tabs */}
       <div style={{ display: 'flex', gap: 6, marginBottom: 16, flexWrap: 'wrap' }}>
         {[
-          { id: 'arsenal', label: 'Arsenal', color: '#f0a500', count: arsenalContacts.length },
+          { id: 'arsenal', label: 'Arsenal Contacts', color: '#f0a500', count: arsenalContacts.length },
           { id: 'targets', label: 'Target Properties', color: '#e94560', count: targetProperties.length },
-          { id: 'prospects', label: 'Prospects', color: '#9b7fd4', count: prospects.length, badge: prospectOverdueCount },
+          { id: 'cold_follow_ups', label: 'Cold Follow Ups', color: '#9b7fd4', count: coldFollowUps.length, badge: coldFollowUpOverdueCount },
         ].map(tab => (
           <button key={tab.id} onClick={() => { setActiveTab(tab.id); resetForm(); }} style={{
             flex: 1, padding: '12px 12px', borderRadius: 10, fontSize: 12, cursor: 'pointer',
@@ -367,7 +365,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
             cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", border: 'none',
             background: showAddForm ? `${tabColor}30` : `${tabColor}15`, color: tabColor,
           }}>
-            {showAddForm ? '✕ Close Form' : activeTab === 'arsenal' ? '+ Add Arsenal Contact' : activeTab === 'prospects' ? '+ Add Prospect' : '+ Add Target Property'}
+            {showAddForm ? '✕ Close Form' : activeTab === 'arsenal' ? '+ Add Arsenal Contact' : activeTab === 'cold_follow_ups' ? '+ Add Cold Follow Up' : '+ Add Target Property'}
           </button>
         </div>
       )}
@@ -428,33 +426,29 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
             ))}
           </div>
         )
-      ) : activeTab === 'prospects' ? (
-        prospects.length === 0 ? (
+      ) : activeTab === 'cold_follow_ups' ? (
+        coldFollowUps.length === 0 ? (
           <div className="card" style={{ textAlign: 'center', padding: 32 }}>
-            <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>No prospects yet.</div>
-            <div style={{ fontSize: 12, color: '#555' }}>Properties you're interested in but haven't become active targets yet. When they heat up, promote them to Target Property!</div>
+            <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>No cold follow ups yet.</div>
+            <div style={{ fontSize: 12, color: '#555' }}>For contacts who said "not interested right now" — add them here with a future follow-up date and check back when the time comes.</div>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {prospects.map(contact => {
-              const overdue = isOverdue(contact.follow_up_date);
-              return (
-                <TargetPropertyCard key={contact.id} contact={contact}
-                  isExpanded={expandedId === contact.id}
-                  followUps={expandedFollowUps[contact.id] || []}
-                  onExpand={() => handleExpand(contact.id)}
-                  onUpdateContact={onUpdateContact}
-                  onContactUpdated={onContactUpdated}
-                  onAddContact={onAddContact}
-                  onContactAdded={onContactAdded}
-                  onAddFollowUp={onAddFollowUp}
-                  onFollowUpLogged={onFollowUpLogged}
-                  onPropertyUnderContract={onPropertyUnderContract}
-                  user={user}
-                  isProspectView
-                />
-              );
-            })}
+            {coldFollowUps.map(contact => (
+              <ColdFollowUpCard key={contact.id} contact={contact}
+                isExpanded={expandedId === contact.id}
+                followUps={expandedFollowUps[contact.id] || []}
+                onExpand={() => handleExpand(contact.id)}
+                onUpdateContact={onUpdateContact}
+                onContactUpdated={onContactUpdated}
+                onAddContact={onAddContact}
+                onContactAdded={onContactAdded}
+                onAddFollowUp={onAddFollowUp}
+                onFollowUpLogged={onFollowUpLogged}
+                user={user}
+                setContacts={setContacts}
+              />
+            ))}
           </div>
         )
       ) : (
@@ -512,8 +506,8 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
 /* ═══ Add Contact Form ═══ */
 function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone, setFormPhone, formEmail, setFormEmail, formNotes, setFormNotes, formStreet, setFormStreet, formCity, setFormCity, formState, setFormState, formZip, setFormZip, formPropertyDetails, setFormPropertyDetails, formFollowUp, setFormFollowUp, formAlsoProperty, setFormAlsoProperty, formAlsoArsenal, setFormAlsoArsenal, formArsenalFollowUp, setFormArsenalFollowUp, formArsenalType, setFormArsenalType, formLeadSrcName, setFormLeadSrcName, formLeadSrcPhone, setFormLeadSrcPhone, formLeadSrcEmail, setFormLeadSrcEmail, formLeadSrcType, setFormLeadSrcType, formOwnerName, setFormOwnerName, formOwnerPhone, setFormOwnerPhone, formOwnerEmail, setFormOwnerEmail, formSaving, formPhoneError, setFormPhoneError, onSave, onCancel }) {
   const isArsenal = activeTab === 'arsenal';
-  const isProspect = activeTab === 'prospects';
-  const isTargetProp = !isArsenal && !isProspect;
+  const isColdFollowUp = activeTab === 'cold_follow_ups';
+  const isTargetProp = !isArsenal && !isColdFollowUp;
   const hasLeadOrOwner = formLeadSrcName?.trim() || formOwnerName?.trim();
   const canSave = isTargetProp
     ? hasLeadOrOwner && formFollowUp
@@ -522,10 +516,10 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
   return (
     <div className="card" style={{ padding: 20, marginBottom: 20, borderColor: `${tabColor}30` }}>
       <div style={{ fontSize: 14, fontWeight: 700, color: tabColor, marginBottom: 16 }}>
-        {isArsenal ? 'New Arsenal Contact' : isProspect ? 'New Prospect' : 'New Target Property'}
+        {isArsenal ? 'New Arsenal Contact' : isColdFollowUp ? 'New Cold Follow Up' : 'New Target Property'}
       </div>
 
-      {/* Arsenal + Prospect: single contact */}
+      {/* Arsenal + Cold Follow Up: single contact */}
       {!isTargetProp && (
         <>
           <input placeholder="Name *" value={formName} onChange={e => setFormName(e.target.value)}
@@ -588,7 +582,7 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
       )}
 
       {/* Property address for target properties and cold follow-ups */}
-      {(isTargetProp || isProspect) && (
+      {(isTargetProp || isColdFollowUp) && (
         <>
           <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>Property Address</div>
           <input placeholder="Street" value={formStreet} onChange={e => setFormStreet(e.target.value)}
@@ -607,9 +601,9 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
 
       <div style={{ marginBottom: 12 }}>
         <div style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>Follow-Up Schedule *</div>
-        {isProspect ? (
+        {isColdFollowUp ? (
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-            {PROSPECT_FOLLOW_UP_OPTIONS.map(opt => (
+            {COLD_FOLLOW_UP_OPTIONS.map(opt => (
               <button key={opt.value} onClick={() => setFormFollowUp(opt.value)} style={{
                 padding: '6px 12px', borderRadius: 6, fontSize: 11, cursor: 'pointer',
                 fontFamily: "'DM Sans', sans-serif", border: 'none',
@@ -707,7 +701,7 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
           padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer',
           fontFamily: "'DM Sans', sans-serif", border: 'none',
           background: tabColor, color: '#000', opacity: (!canSave || formSaving) ? 0.4 : 1,
-        }}>{formSaving ? 'Saving...' : isArsenal ? 'Add Arsenal Contact' : isProspect ? 'Add Prospect' : 'Add Target Property'}</button>
+        }}>{formSaving ? 'Saving...' : isArsenal ? 'Add Arsenal Contact' : isColdFollowUp ? 'Add Cold Follow Up' : 'Add Target Property'}</button>
       </div>
     </div>
   );
@@ -773,7 +767,7 @@ function ArsenalCard({ contact, linkedProperties, isExpanded, followUps, onExpan
 }
 
 /* ═══ Target Property Card ═══ */
-function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, onPropertyUnderContract, user, isProspectView }) {
+function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, onPropertyUnderContract, user }) {
   const overdue = isOverdue(contact.follow_up_date);
   const followUpText = formatFollowUpDate(contact.follow_up_date);
   const statusInfo = STATUS_LABELS[contact.pipeline_status] || STATUS_LABELS.active;
@@ -828,6 +822,250 @@ function TargetPropertyCard({ contact, isExpanded, followUps, onExpand, onUpdate
         onUpdateContact={onUpdateContact} onContactUpdated={onContactUpdated}
         onAddContact={onAddContact} onContactAdded={onContactAdded} onAddFollowUp={onAddFollowUp}
         onFollowUpLogged={onFollowUpLogged} onPropertyUnderContract={onPropertyUnderContract} user={user} />}
+    </div>
+  );
+}
+
+/* ═══ Cold Follow Up Card ═══ */
+function ColdFollowUpCard({ contact, isExpanded, followUps, onExpand, onUpdateContact, onContactUpdated, onAddContact, onContactAdded, onAddFollowUp, onFollowUpLogged, user, setContacts }) {
+  const overdue = isOverdue(contact.follow_up_date);
+  const followUpText = formatFollowUpDate(contact.follow_up_date);
+  const color = '#9b7fd4';
+
+  const [converting, setConverting] = useState(false);
+  const [celebration, setCelebration] = useState(null);
+
+  const handleConvertToTarget = async () => {
+    setConverting(true);
+    const now = new Date().toISOString();
+    try {
+      const result = await onAddContact({
+        name: contact.name,
+        phone: contact.phone || null,
+        email: contact.email || null,
+        contact_group: 'target',
+        property: contact.property || null,
+        notes: contact.notes ? `[Converted from Cold Follow Up] ${contact.notes}` : '[Converted from Cold Follow Up]',
+        pipeline_status: 'active',
+        follow_up_interval: '1_week',
+        follow_up_date: calculateFollowUpDate('1_week'),
+        last_contact_date: now,
+      });
+      if (result?.success && result.contact) {
+        if (onContactAdded) onContactAdded(result.contact);
+        const removeUpdates = { pipeline_status: 'dead', follow_up_interval: 'never', follow_up_date: null };
+        await onUpdateContact(contact.id, removeUpdates);
+        onContactUpdated(contact.id, removeUpdates);
+        setContacts(prev => prev.filter(c => c.id !== contact.id));
+        setCelebration('converted');
+        setTimeout(() => setCelebration(null), 3000);
+      }
+    } catch (e) { console.error('Failed to convert:', e); }
+    setConverting(false);
+  };
+
+  return (
+    <div className="card" style={{
+      padding: 0, transition: 'border-color 0.2s',
+      borderColor: overdue ? 'rgba(233,69,96,0.3)' : isExpanded ? 'rgba(155,127,212,0.3)' : undefined,
+    }}>
+      {celebration && (
+        <div style={{
+          padding: '16px 20px', textAlign: 'center',
+          background: 'linear-gradient(135deg, rgba(233,69,96,0.15), rgba(155,127,212,0.1))',
+          border: '1px solid rgba(233,69,96,0.3)',
+          borderRadius: '12px 12px 0 0',
+          animation: 'celebrationPulse 0.6s ease-in-out',
+        }}>
+          <div style={{ fontSize: 32, marginBottom: 6 }}>🎯🔥</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: '#e94560', marginBottom: 4 }}>Converted to Target!</div>
+          <div style={{ fontSize: 13, color: '#aaa' }}>This contact is now an active target property — go get it!</div>
+          <style>{`
+            @keyframes celebrationPulse {
+              0% { transform: scale(0.9); opacity: 0; }
+              50% { transform: scale(1.03); }
+              100% { transform: scale(1); opacity: 1; }
+            }
+          `}</style>
+        </div>
+      )}
+      <div onClick={onExpand} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 18px', cursor: 'pointer' }}>
+        <div style={{
+          width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
+          background: 'rgba(155,127,212,0.15)', border: '1px solid rgba(155,127,212,0.3)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 14, fontWeight: 700, color: '#9b7fd4',
+        }}>{contact.name?.charAt(0).toUpperCase()}</div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>{contact.name}</div>
+          {contact.property && (
+            <div style={{ fontSize: 12, color: '#9b7fd4', marginTop: 2 }}>📍 {contact.property}</div>
+          )}
+          <div style={{ fontSize: 11, color: '#555', marginTop: 2, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            {contact.phone && <span>📞 {contact.phone}</span>}
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          {followUpText && (
+            <span style={{
+              fontSize: 11, padding: '3px 8px', borderRadius: 6, fontWeight: 700,
+              fontFamily: "'DM Mono', monospace",
+              background: overdue ? 'rgba(233,69,96,0.15)' : 'rgba(155,127,212,0.1)',
+              color: overdue ? '#e94560' : '#9b7fd4',
+              border: `1px solid ${overdue ? 'rgba(233,69,96,0.3)' : 'rgba(155,127,212,0.2)'}`,
+            }}>{overdue ? '! ' : '📅 '}{followUpText}</span>
+          )}
+          <span style={{ color: '#555', fontSize: 14, transition: 'transform 0.2s', transform: isExpanded ? 'rotate(90deg)' : 'none' }}>›</span>
+        </div>
+      </div>
+      {isExpanded && (
+        <div style={{ padding: '0 18px 16px', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+          <div style={{ display: 'flex', gap: 8, marginTop: 10, marginBottom: 8, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+            <button onClick={handleConvertToTarget} disabled={converting}
+              style={{
+                padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", border: 'none',
+                background: 'rgba(233,69,96,0.2)', color: '#e94560',
+                opacity: converting ? 0.5 : 1,
+              }}>
+              {converting ? 'Converting...' : 'Convert to Target Property'}
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 4 }}>
+            {contact.follow_up_interval && (
+              <DetailItem label="Follow-Up Interval" value={INTERVAL_LABELS[contact.follow_up_interval] || contact.follow_up_interval} />
+            )}
+            {contact.follow_up_date && (
+              <DetailItem label="Next Follow-Up"
+                value={new Date(contact.follow_up_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                color={isOverdue(contact.follow_up_date) ? '#e94560' : '#9b7fd4'} />
+            )}
+            {contact.last_contact_date && (
+              <DetailItem label="Last Contact"
+                value={new Date(contact.last_contact_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} />
+            )}
+          </div>
+
+          {contact.notes && (
+            <div style={{ marginTop: 12, padding: '10px 14px', background: 'rgba(255,255,255,0.02)', borderRadius: 8, fontSize: 13, color: '#aaa', lineHeight: 1.6 }}>
+              <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Notes:</span>
+              {contact.notes}
+            </div>
+          )}
+
+          <FollowUpHistory
+            contact={contact} followUps={followUps} color={color}
+            onAddFollowUp={onAddFollowUp} onFollowUpLogged={onFollowUpLogged}
+            onUpdateContact={onUpdateContact} onContactUpdated={onContactUpdated} user={user}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ═══ Follow-Up History (shared) ═══ */
+function FollowUpHistory({ contact, followUps, color, onAddFollowUp, onFollowUpLogged, onUpdateContact, onContactUpdated, user }) {
+  const [showFollowUpForm, setShowFollowUpForm] = useState(false);
+  const [followUpNotes, setFollowUpNotes] = useState('');
+  const [followUpInterval, setFollowUpInterval] = useState(contact.follow_up_interval || '1_month');
+  const [followUpSaving, setFollowUpSaving] = useState(false);
+
+  const inputStyle = {
+    width: '100%', fontSize: 13, padding: '7px 10px',
+    background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+    borderRadius: 6, color: '#ddd', fontFamily: "'DM Sans', sans-serif",
+  };
+
+  const pillBtn = (isActive) => ({
+    padding: '5px 12px', borderRadius: 20, fontSize: 12, fontWeight: 600, cursor: 'pointer',
+    fontFamily: "'DM Sans', sans-serif", border: '1px solid',
+    background: isActive ? `${color}20` : 'rgba(255,255,255,0.03)',
+    color: isActive ? color : '#666',
+    borderColor: isActive ? `${color}40` : 'rgba(255,255,255,0.08)',
+  });
+
+  const actionBtn = (bg, fg) => ({
+    padding: '6px 16px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer',
+    fontFamily: "'DM Sans', sans-serif", border: 'none', background: bg, color: fg,
+  });
+
+  const handleLogFollowUp = async () => {
+    if (!followUpNotes.trim() || !followUpInterval) return;
+    setFollowUpSaving(true);
+    const now = new Date().toISOString();
+    const contactUpdates = {
+      follow_up_interval: followUpInterval,
+      follow_up_date: calculateFollowUpDate(followUpInterval),
+      last_contact_date: now,
+    };
+    try {
+      const result = await onAddFollowUp({
+        contact_id: contact.id, participant_id: user?.id,
+        day_number: contact.day_added || 0, notes: followUpNotes.trim(),
+      }, contactUpdates);
+      if (result?.success && result.followUp) onFollowUpLogged(contact.id, result.followUp);
+      onContactUpdated(contact.id, contactUpdates);
+      setFollowUpNotes(''); setShowFollowUpForm(false);
+    } catch (e) { console.error('Failed to log follow-up:', e); }
+    setFollowUpSaving(false);
+  };
+
+  return (
+    <div style={{ marginTop: 16 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, color: '#888' }}>Follow-Up History ({followUps.length})</div>
+        {!showFollowUpForm && onAddFollowUp && (
+          <button onClick={() => setShowFollowUpForm(true)} style={actionBtn('rgba(72,199,142,0.12)', '#48c78e')}>
+            Log Follow-Up
+          </button>
+        )}
+      </div>
+      {followUps.length === 0 && !showFollowUpForm ? (
+        <div style={{ fontSize: 12, color: '#555', fontStyle: 'italic' }}>No follow-ups recorded yet.</div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {followUps.map((f, i) => (
+            <div key={f.id || i} style={{
+              padding: '8px 12px', borderLeft: `3px solid ${color}`,
+              background: 'rgba(255,255,255,0.02)', borderRadius: '0 8px 8px 0',
+              fontSize: 13, color: '#bbb',
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                <span style={{ fontSize: 11, color: '#48c78e', fontWeight: 600 }}>Day {f.day_number}</span>
+                <span style={{ fontSize: 11, color: '#555' }}>{f.created_at && new Date(f.created_at).toLocaleDateString()}</span>
+              </div>
+              {f.notes}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {showFollowUpForm && (
+        <div style={{ marginTop: 10, padding: '12px 14px', background: 'rgba(255,255,255,0.02)', borderRadius: 8, border: '1px solid rgba(72,199,142,0.15)' }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: '#48c78e', marginBottom: 8 }}>Log Follow-Up</div>
+          <textarea value={followUpNotes} onChange={e => setFollowUpNotes(e.target.value)}
+            rows={3} placeholder="What did you discuss? Any updates..."
+            style={{ ...inputStyle, resize: 'vertical', marginBottom: 8 }} />
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Next Follow-Up Interval</div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {Object.entries(INTERVAL_LABELS).map(([key, label]) => (
+                <button key={key} onClick={() => setFollowUpInterval(key)} style={pillBtn(followUpInterval === key)}>{label}</button>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+            <button onClick={() => { setShowFollowUpForm(false); setFollowUpNotes(''); }}
+              style={actionBtn('rgba(255,255,255,0.06)', '#888')}>Cancel</button>
+            <button onClick={handleLogFollowUp} disabled={followUpSaving || !followUpNotes.trim()}
+              style={actionBtn('rgba(72,199,142,0.2)', '#48c78e')}>
+              {followUpSaving ? 'Saving...' : 'Save Follow-Up'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1035,12 +1273,12 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
           border: `1px solid ${celebration === 'closed' ? 'rgba(212,168,67,0.3)' : 'rgba(107,138,253,0.3)'}`,
           animation: 'celebrationPulse 0.6s ease-in-out',
         }}>
-          <div style={{ fontSize: 32, marginBottom: 6 }}>{celebration === 'closed' ? '🎉🏠💰' : celebration === 'promoted' ? '🎯🔥' : '🎉📋✨'}</div>
-          <div style={{ fontSize: 16, fontWeight: 700, color: celebration === 'closed' ? '#d4a843' : celebration === 'promoted' ? '#e94560' : '#6b8afd', marginBottom: 4 }}>
-            {celebration === 'closed' ? 'Deal Closed!' : celebration === 'promoted' ? 'Promoted to Target!' : 'Under Contract!'}
+          <div style={{ fontSize: 32, marginBottom: 6 }}>{celebration === 'closed' ? '🎉🏠💰' : '🎉📋✨'}</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: celebration === 'closed' ? '#d4a843' : '#6b8afd', marginBottom: 4 }}>
+            {celebration === 'closed' ? 'Deal Closed!' : 'Under Contract!'}
           </div>
           <div style={{ fontSize: 13, color: '#aaa' }}>
-            {celebration === 'closed' ? 'Congratulations on closing the deal!' : celebration === 'promoted' ? 'This prospect is now an active target property — go get it!' : 'Congratulations — keep pushing to close!'}
+            {celebration === 'closed' ? 'Congratulations on closing the deal!' : 'Congratulations — keep pushing to close!'}
           </div>
           <style>{`
             @keyframes celebrationPulse {
@@ -1058,17 +1296,6 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
           <button onClick={() => setShowAddPropertyForm(!showAddPropertyForm)}
             style={actionBtn('rgba(233,69,96,0.15)', '#e94560')}>
             {showAddPropertyForm ? 'Cancel' : '+ Target Property'}
-          </button>
-        )}
-        {isTarget && contact.pipeline_status === 'prospect' && !editing && (
-          <button onClick={async () => {
-            const updates = { pipeline_status: 'active' };
-            await onUpdateContact(contact.id, updates);
-            onContactUpdated(contact.id, updates);
-            setCelebration('promoted');
-            setTimeout(() => setCelebration(null), 3000);
-          }} style={actionBtn('rgba(233,69,96,0.2)', '#e94560')}>
-            Promote to Target Property
           </button>
         )}
       </div>
