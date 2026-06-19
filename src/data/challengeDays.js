@@ -752,6 +752,24 @@ Which Loan Should I Use?
 • Buying 5+ units? → Commercial Financing
 • Property needs significant work? → Hard Money or Private Money
 
+━━━━━━━━━━━━━━━━━━━━━━
+Financing Does NOT Fix Bad Deals
+━━━━━━━━━━━━━━━━━━━━━━
+
+Good financing cannot fix bad rents, bad expenses, bad locations, or overpaying. A terrible deal with a great loan is still a terrible deal. The interest rate does not matter if the property does not cash flow. The down payment does not matter if the market rents do not support the purchase price.
+
+Always start with good analysis, conservative underwriting, and a good property. Find the right deal first, then find the right financing for it.
+
+━━━━━━━━━━━━━━━━━━━━━━
+More Leverage Is Not Always Better
+━━━━━━━━━━━━━━━━━━━━━━
+
+Many investors become obsessed with low down payments, maximum leverage, and maximizing cash-on-cash return. But higher leverage often means more risk, lower reserves, larger payments, and greater downside. A deal that looks incredible on paper with 5% down can become dangerous when vacancies hit, repairs pile up, or rates rise.
+
+The best deal is not always the one with the highest cash-on-cash return. Always evaluate returns, risk, reserves, flexibility, and downside protection together. A slightly lower return with stronger reserves and lower risk is often the smarter long-term play.
+
+━━━━━━━━━━━━━━━━━━━━━━
+
 Quick Rules To Remember:
 • Financing impacts everything
 • There is no perfect loan
@@ -885,7 +903,7 @@ Final note — make sure you are still analyzing properties, reaching out to Ars
           id: "d2q1_financing",
           title: "Financing Mastery Quiz",
           maxAttempts: 3,
-          description: "Test your understanding of real estate financing types, strategies, and tradeoffs.",
+          description: "Test your understanding of real estate financing types, leverage strategy, risk management, and tradeoffs.",
           inputs: [
             {
               id: "d2q1_fha",
@@ -1004,6 +1022,30 @@ Final note — make sure you are still analyzing properties, reaching out to Ars
                 "Financing guarantees appreciation",
                 "Financing allows investors to control more assets with the same capital",
                 "Financing removes the need for analysis",
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d2q1_bad_deals",
+              label: "11. An investor finds a property with poor rents and high expenses but secures financing at 5.5% with only 10% down. Will this financing fix the deal?",
+              type: "multiple_choice",
+              options: [
+                "Yes — the low down payment compensates for weak cash flow",
+                "Yes — a low interest rate can overcome any expense problem",
+                "No — good financing cannot fix bad rents, bad expenses, or overpaying",
+                "No — but a longer loan term would fix it",
+              ],
+              correctAnswer: 2,
+            },
+            {
+              id: "d2q1_leverage_risk",
+              label: "12. An investor is comparing two ways to buy the same property: 5% down with thin reserves, or 25% down with strong reserves. Which statement is MOST accurate?",
+              type: "multiple_choice",
+              options: [
+                "The 5% down option is always better because it maximizes cash-on-cash return",
+                "The 25% down option is always better because it eliminates risk",
+                "Higher leverage increases potential returns but also increases risk and reduces reserves",
+                "Down payment size has no impact on risk or cash flow",
               ],
               correctAnswer: 2,
             },
