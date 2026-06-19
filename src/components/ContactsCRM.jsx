@@ -121,13 +121,15 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
   const [formOwnerEmail, setFormOwnerEmail] = useState('');
   const [formSaving, setFormSaving] = useState(false);
   const [formPhoneError, setFormPhoneError] = useState('');
+  const [formLeadSrcPhoneError, setFormLeadSrcPhoneError] = useState('');
+  const [formOwnerPhoneError, setFormOwnerPhoneError] = useState('');
 
   const resetForm = () => {
     setFormName(''); setFormPhone(''); setFormEmail(''); setFormNotes('');
     setFormStreet(''); setFormCity(''); setFormState(''); setFormZip('');
     setFormPropertyDetails(''); setFormFollowUp(''); setFormArsenalFollowUp('');
     setFormAlsoProperty(false); setFormAlsoArsenal(false);
-    setFormArsenalType(''); setFormPhoneError(''); setShowAddForm(false);
+    setFormArsenalType(''); setFormPhoneError(''); setFormLeadSrcPhoneError(''); setFormOwnerPhoneError(''); setShowAddForm(false);
     setFormLeadSrcName(''); setFormLeadSrcPhone(''); setFormLeadSrcEmail('');
     setFormLeadSrcType(''); setFormOwnerName(''); setFormOwnerPhone(''); setFormOwnerEmail('');
   };
@@ -189,6 +191,14 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
       if (!phoneCheck.valid) { setFormPhoneError(phoneCheck.error); return; }
       setFormPhoneError('');
     }
+    if (isTargetProp) {
+      const leadPhoneCheck = validatePhone(formLeadSrcPhone);
+      if (!leadPhoneCheck.valid) { setFormLeadSrcPhoneError(leadPhoneCheck.error); return; }
+      setFormLeadSrcPhoneError('');
+      const ownerPhoneCheck = validatePhone(formOwnerPhone);
+      if (!ownerPhoneCheck.valid) { setFormOwnerPhoneError(ownerPhoneCheck.error); return; }
+      setFormOwnerPhoneError('');
+    }
     const formattedPhone = isTargetProp ? null : validatePhone(formPhone, { required: true }).formatted;
 
     setFormSaving(true);
@@ -239,7 +249,9 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
       const isDead = formFollowUp?.startsWith('dead_');
       const actualInterval = isDead ? formFollowUp.replace('dead_', '') : formFollowUp;
       const primaryName = formLeadSrcName.trim() || formOwnerName.trim();
-      const primaryPhone = formLeadSrcPhone.trim() || formOwnerPhone.trim() || null;
+      const formattedLeadSrcPhone = validatePhone(formLeadSrcPhone).formatted;
+      const formattedOwnerPhone = validatePhone(formOwnerPhone).formatted;
+      const primaryPhone = formattedLeadSrcPhone || formattedOwnerPhone || null;
       const primaryEmail = formLeadSrcEmail.trim() || formOwnerEmail.trim() || null;
       const result = await onAddContact({
         name: primaryName, phone: primaryPhone, email: primaryEmail,
@@ -249,11 +261,11 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
         follow_up_date: calculateFollowUpDate(actualInterval),
         last_contact_date: now,
         lead_source_name: formLeadSrcName.trim() || null,
-        lead_source_phone: formLeadSrcPhone.trim() || null,
+        lead_source_phone: formattedLeadSrcPhone,
         lead_source_email: formLeadSrcEmail.trim() || null,
         lead_source_type: formLeadSrcType || null,
         owner_name: formOwnerName.trim() || null,
-        owner_phone: formOwnerPhone.trim() || null,
+        owner_phone: formattedOwnerPhone,
         owner_email: formOwnerEmail.trim() || null,
       });
       if (result?.success && result.contact) {
@@ -396,6 +408,8 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
         formOwnerEmail={formOwnerEmail} setFormOwnerEmail={setFormOwnerEmail}
         formSaving={formSaving}
         formPhoneError={formPhoneError} setFormPhoneError={setFormPhoneError}
+        formLeadSrcPhoneError={formLeadSrcPhoneError} setFormLeadSrcPhoneError={setFormLeadSrcPhoneError}
+        formOwnerPhoneError={formOwnerPhoneError} setFormOwnerPhoneError={setFormOwnerPhoneError}
         onSave={handleAddFromCRM} onCancel={resetForm}
       />}
 
@@ -504,7 +518,7 @@ export default function ContactsCRM({ user, getContacts, getFollowUpsByContact, 
 }
 
 /* ═══ Add Contact Form ═══ */
-function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone, setFormPhone, formEmail, setFormEmail, formNotes, setFormNotes, formStreet, setFormStreet, formCity, setFormCity, formState, setFormState, formZip, setFormZip, formPropertyDetails, setFormPropertyDetails, formFollowUp, setFormFollowUp, formAlsoProperty, setFormAlsoProperty, formAlsoArsenal, setFormAlsoArsenal, formArsenalFollowUp, setFormArsenalFollowUp, formArsenalType, setFormArsenalType, formLeadSrcName, setFormLeadSrcName, formLeadSrcPhone, setFormLeadSrcPhone, formLeadSrcEmail, setFormLeadSrcEmail, formLeadSrcType, setFormLeadSrcType, formOwnerName, setFormOwnerName, formOwnerPhone, setFormOwnerPhone, formOwnerEmail, setFormOwnerEmail, formSaving, formPhoneError, setFormPhoneError, onSave, onCancel }) {
+function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone, setFormPhone, formEmail, setFormEmail, formNotes, setFormNotes, formStreet, setFormStreet, formCity, setFormCity, formState, setFormState, formZip, setFormZip, formPropertyDetails, setFormPropertyDetails, formFollowUp, setFormFollowUp, formAlsoProperty, setFormAlsoProperty, formAlsoArsenal, setFormAlsoArsenal, formArsenalFollowUp, setFormArsenalFollowUp, formArsenalType, setFormArsenalType, formLeadSrcName, setFormLeadSrcName, formLeadSrcPhone, setFormLeadSrcPhone, formLeadSrcEmail, setFormLeadSrcEmail, formLeadSrcType, setFormLeadSrcType, formOwnerName, setFormOwnerName, formOwnerPhone, setFormOwnerPhone, formOwnerEmail, setFormOwnerEmail, formSaving, formPhoneError, setFormPhoneError, formLeadSrcPhoneError, setFormLeadSrcPhoneError, formOwnerPhoneError, setFormOwnerPhoneError, onSave, onCancel }) {
   const isArsenal = activeTab === 'arsenal';
   const isColdFollowUp = activeTab === 'cold_follow_ups';
   const isTargetProp = !isArsenal && !isColdFollowUp;
@@ -552,14 +566,16 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
         <>
           <div style={{ padding: '12px 14px', marginBottom: 10, background: 'rgba(240,165,0,0.04)', borderRadius: 8, border: '1px solid rgba(240,165,0,0.1)' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#f0a500', marginBottom: 8 }}>Lead Source</div>
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 6 }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: formLeadSrcPhoneError ? 4 : 6 }}>
               <input placeholder="Name" value={formLeadSrcName} onChange={e => setFormLeadSrcName(e.target.value)}
                 style={{ flex: '1 1 140px', fontSize: 12, padding: '8px 10px' }} />
-              <input type="tel" placeholder="Phone" value={formLeadSrcPhone} onChange={e => setFormLeadSrcPhone(e.target.value)}
-                style={{ flex: '1 1 110px', fontSize: 12, padding: '8px 10px' }} />
+              <input type="tel" placeholder="Phone" value={formLeadSrcPhone}
+                onChange={e => { setFormLeadSrcPhone(e.target.value); if (setFormLeadSrcPhoneError) setFormLeadSrcPhoneError(''); }}
+                style={{ flex: '1 1 110px', fontSize: 12, padding: '8px 10px', borderColor: formLeadSrcPhoneError ? 'rgba(233,69,96,0.5)' : undefined }} />
               <input placeholder="Email" value={formLeadSrcEmail} onChange={e => setFormLeadSrcEmail(e.target.value)}
                 style={{ flex: '1 1 140px', fontSize: 12, padding: '8px 10px' }} />
             </div>
+            {formLeadSrcPhoneError && <div style={{ fontSize: 11, color: '#e94560', marginBottom: 6 }}>{formLeadSrcPhoneError}</div>}
             <select value={formLeadSrcType} onChange={e => setFormLeadSrcType(e.target.value)}
               style={{ width: '100%', fontSize: 12, padding: '8px 10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: '#ddd', fontFamily: "'DM Sans', sans-serif", cursor: 'pointer' }}>
               <option value="">Source type...</option>
@@ -568,14 +584,16 @@ function AddContactForm({ activeTab, tabColor, formName, setFormName, formPhone,
           </div>
           <div style={{ padding: '12px 14px', marginBottom: 10, background: 'rgba(107,138,253,0.04)', borderRadius: 8, border: '1px solid rgba(107,138,253,0.1)' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#6b8afd', marginBottom: 8 }}>Owner / Seller</div>
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: formOwnerPhoneError ? 4 : 0 }}>
               <input placeholder="Name" value={formOwnerName} onChange={e => setFormOwnerName(e.target.value)}
                 style={{ flex: '1 1 140px', fontSize: 12, padding: '8px 10px' }} />
-              <input type="tel" placeholder="Phone" value={formOwnerPhone} onChange={e => setFormOwnerPhone(e.target.value)}
-                style={{ flex: '1 1 110px', fontSize: 12, padding: '8px 10px' }} />
+              <input type="tel" placeholder="Phone" value={formOwnerPhone}
+                onChange={e => { setFormOwnerPhone(e.target.value); if (setFormOwnerPhoneError) setFormOwnerPhoneError(''); }}
+                style={{ flex: '1 1 110px', fontSize: 12, padding: '8px 10px', borderColor: formOwnerPhoneError ? 'rgba(233,69,96,0.5)' : undefined }} />
               <input placeholder="Email" value={formOwnerEmail} onChange={e => setFormOwnerEmail(e.target.value)}
                 style={{ flex: '1 1 140px', fontSize: 12, padding: '8px 10px' }} />
             </div>
+            {formOwnerPhoneError && <div style={{ fontSize: 11, color: '#e94560', marginBottom: 4 }}>{formOwnerPhoneError}</div>}
           </div>
           <div style={{ fontSize: 10, color: '#555', marginBottom: 10, fontStyle: 'italic' }}>Fill out at least one — Lead Source or Owner</div>
         </>
@@ -1094,6 +1112,8 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
   const [editOwnerPhone, setEditOwnerPhone] = useState(contact.owner_phone || '');
   const [editOwnerEmail, setEditOwnerEmail] = useState(contact.owner_email || '');
   const [phoneError, setPhoneError] = useState('');
+  const [leadSrcPhoneError, setLeadSrcPhoneError] = useState('');
+  const [ownerPhoneError, setOwnerPhoneError] = useState('');
 
   const [showFollowUpForm, setShowFollowUpForm] = useState(false);
   const [followUpNotes, setFollowUpNotes] = useState('');
@@ -1135,6 +1155,14 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
     const phoneCheck = validatePhone(editPhone, { required: true });
     if (!phoneCheck.valid) { setPhoneError(phoneCheck.error); return; }
     setPhoneError('');
+    if (isTarget) {
+      const leadPhoneCheck = validatePhone(editLeadSrcPhone);
+      if (!leadPhoneCheck.valid) { setLeadSrcPhoneError(leadPhoneCheck.error); return; }
+      setLeadSrcPhoneError('');
+      const ownerPhoneCheck = validatePhone(editOwnerPhone);
+      if (!ownerPhoneCheck.valid) { setOwnerPhoneError(ownerPhoneCheck.error); return; }
+      setOwnerPhoneError('');
+    }
     setSaving(true);
     const updates = {
       name: editName.trim(), phone: phoneCheck.formatted,
@@ -1146,11 +1174,11 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
       updates.property = editProperty.trim() || null;
       updates.pipeline_status = editStatus;
       updates.lead_source_name = editLeadSrcName.trim() || null;
-      updates.lead_source_phone = editLeadSrcPhone.trim() || null;
+      updates.lead_source_phone = validatePhone(editLeadSrcPhone).formatted;
       updates.lead_source_email = editLeadSrcEmail.trim() || null;
       updates.lead_source_type = editLeadSrcType || null;
       updates.owner_name = editOwnerName.trim() || null;
-      updates.owner_phone = editOwnerPhone.trim() || null;
+      updates.owner_phone = validatePhone(editOwnerPhone).formatted;
       updates.owner_email = editOwnerEmail.trim() || null;
     }
     if (isArsenal) {
@@ -1400,20 +1428,23 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
           {isTarget && (
             <div style={{ padding: '10px 14px', background: 'rgba(240,165,0,0.04)', borderRadius: 8, border: '1px solid rgba(240,165,0,0.1)' }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: '#f0a500', marginBottom: 8 }}>Lead Source *</div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: leadSrcPhoneError ? 4 : 8 }}>
                 <div style={{ flex: '1 1 150px' }}>
                   <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Name</label>
                   <input value={editLeadSrcName} onChange={e => setEditLeadSrcName(e.target.value)} placeholder="Who brought the deal?" style={inputStyle} />
                 </div>
                 <div style={{ flex: '1 1 120px' }}>
                   <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Phone</label>
-                  <input value={editLeadSrcPhone} onChange={e => setEditLeadSrcPhone(e.target.value)} style={inputStyle} />
+                  <input type="tel" value={editLeadSrcPhone}
+                    onChange={e => { setEditLeadSrcPhone(e.target.value); setLeadSrcPhoneError(''); }}
+                    style={{ ...inputStyle, borderColor: leadSrcPhoneError ? 'rgba(233,69,96,0.5)' : undefined }} />
                 </div>
                 <div style={{ flex: '1 1 150px' }}>
                   <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Email</label>
                   <input value={editLeadSrcEmail} onChange={e => setEditLeadSrcEmail(e.target.value)} style={inputStyle} />
                 </div>
               </div>
+              {leadSrcPhoneError && <div style={{ fontSize: 11, color: '#e94560', marginBottom: 8 }}>{leadSrcPhoneError}</div>}
               <div style={{ flex: '1 1 150px' }}>
                 <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Source Type</label>
                 <select value={editLeadSrcType} onChange={e => setEditLeadSrcType(e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
@@ -1428,20 +1459,23 @@ function ExpandedDetail({ contact, followUps, color, onUpdateContact, onContactU
           {isTarget && (
             <div style={{ padding: '10px 14px', background: 'rgba(107,138,253,0.04)', borderRadius: 8, border: '1px solid rgba(107,138,253,0.1)' }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: '#6b8afd', marginBottom: 8 }}>Owner / Seller</div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: ownerPhoneError ? 4 : 0 }}>
                 <div style={{ flex: '1 1 150px' }}>
                   <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Name</label>
                   <input value={editOwnerName} onChange={e => setEditOwnerName(e.target.value)} placeholder="Property owner" style={inputStyle} />
                 </div>
                 <div style={{ flex: '1 1 120px' }}>
                   <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Phone</label>
-                  <input value={editOwnerPhone} onChange={e => setEditOwnerPhone(e.target.value)} style={inputStyle} />
+                  <input type="tel" value={editOwnerPhone}
+                    onChange={e => { setEditOwnerPhone(e.target.value); setOwnerPhoneError(''); }}
+                    style={{ ...inputStyle, borderColor: ownerPhoneError ? 'rgba(233,69,96,0.5)' : undefined }} />
                 </div>
                 <div style={{ flex: '1 1 150px' }}>
                   <label style={{ fontSize: 10, color: '#666', marginBottom: 2, display: 'block' }}>Email</label>
                   <input value={editOwnerEmail} onChange={e => setEditOwnerEmail(e.target.value)} style={inputStyle} />
                 </div>
               </div>
+              {ownerPhoneError && <div style={{ fontSize: 11, color: '#e94560', marginBottom: 4 }}>{ownerPhoneError}</div>}
             </div>
           )}
 
