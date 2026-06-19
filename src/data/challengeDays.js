@@ -5740,1096 +5740,829 @@ KEY TAKEAWAY: Great negotiators do not win arguments. They build trust, understa
   {
     day: 9,
     title: "Seeing Hidden Value & Structuring Deals",
-    caption: "Identify hidden property value and structure deals that work.",
-    taskDescription: "",
-    trainingContent: "",
-    category: "pipeline",
-    weekNumber: 2,
-    weekTitle: "BUILD THE PIPELINE",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-    sections: [
-      {
-        type: "training",
-        title: "Seeing Hidden Value",
-        content: `Why This Matters
+    category: "analysis",
+    locked: true,
+    phaseId: 'foundation',
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 1 — SEEING HIDDEN VALUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+How Great Investors Find Opportunities Others Miss
+
+
+WHY THIS MATTERS
 
 Most investors analyze properties based on:
-
-current rents,
-current expenses,
-current occupancy,
-current condition.
+current rents, current expenses, current occupancy, current condition.
 
 Great investors do that too.
 
 The difference is that great investors also ask:
-
 What could this property become?
 
 Most wealth in real estate is created because investors:
-
-solve problems,
-increase income,
-reduce expenses,
-improve financing,
-improve operations,
-or improve the physical property.
+• solve problems,
+• increase income,
+• reduce expenses,
+• improve financing,
+• improve operations,
+• or improve the physical property.
 
 The key is understanding that opportunities only matter if they are real, measurable, and executable.
 
 
-The Most Important Rule
+THE MOST IMPORTANT RULE
 
 Never pay for upside you have not created.
 
 Analyze the property based on:
-
-current rents,
-current expenses,
-current occupancy,
-current condition,
-current financing.
+current rents, current expenses, current occupancy, current condition, current financing.
 
 Then allow the upside to become your reward after closing.
 
 
-The UC30 Opportunity Framework
+THE UC30 OPPORTUNITY FRAMEWORK
 
 Every property should be evaluated in two stages.
 
 Stage 1 – Current Performance
-
 What is the property worth TODAY?
-
-Analyze:
-
-current rents,
-current expenses,
-current occupancy,
-current financing,
-current condition.
-
+Analyze: current rents, current expenses, current occupancy, current financing, current condition.
 
 Stage 2 – Future Opportunity
-
 What opportunities exist to improve the property?
-
-Analyze:
-
-income opportunities,
-expense opportunities,
-financing opportunities,
-physical improvements,
-operational improvements.
+Analyze: income opportunities, expense opportunities, financing opportunities, physical improvements, operational improvements.
 
 Only after identifying and verifying these opportunities should they influence your purchasing decision.
 
 
-Your Personal Competitive Advantage
+YOUR PERSONAL COMPETITIVE ADVANTAGE
 
-One of the biggest mistakes investors make is assuming every buyer sees the same value.
-
-That is not true.
+One of the biggest mistakes investors make is assuming every buyer sees the same value. That is not true.
 
 Two investors can look at the exact same property and see completely different opportunities.
 
 The value of a property often depends on:
-
-your skills,
-your experience,
-your relationships,
-your resources.
-
+• your skills,
+• your experience,
+• your relationships,
+• your resources.
 
 Realtor Advantage
-
-A realtor may receive commission income on a transaction.
-
-This effectively lowers their acquisition cost and can improve return metrics.
-
+A realtor may receive commission income on a transaction, effectively lowering their acquisition cost and improving return metrics.
 
 Contractor Advantage
-
-A contractor may complete renovations:
-
-faster,
-cheaper,
-and with greater certainty.
-
-This may create opportunities that other buyers cannot justify.
-
+A contractor may complete renovations faster, cheaper, and with greater certainty — creating opportunities that other buyers cannot justify.
 
 Trade Skill Advantage
-
-Plumbers, electricians, HVAC technicians, painters, and other tradespeople often have:
-
-lower repair costs,
-lower renovation costs,
-faster project completion.
-
+Plumbers, electricians, HVAC technicians, painters, and other tradespeople often have lower repair and renovation costs with faster project completion.
 
 Business Owner Advantage
-
-Owners of:
-
-roofing companies,
-construction companies,
-landscaping companies,
-property management companies,
-
-may have access to pricing and services that create additional value.
-
+Owners of roofing companies, construction companies, landscaping companies, or property management companies may have access to pricing and services that create additional value.
 
 Relationship Advantage
+Some investors have strong relationships with lenders, contractors, property managers, realtors, or wholesalers. These relationships often create opportunities other investors never see.
 
-Some investors have strong relationships with:
-
-lenders,
-contractors,
-property managers,
-realtors,
-wholesalers.
-
-These relationships often create opportunities other investors never see.
+Important Rule: Never assume your advantage is someone else's advantage. A value-add opportunity is only valuable if YOU can realistically execute it.
 
 
-Important Rule
+THE 35 WAYS TO ADD VALUE
 
-Never assume your advantage is someone else's advantage.
+Income Opportunities:
+1. Raise Under-Market Rents — Increase rents to verified market rates
+2. Improve Occupancy — Fill vacant units and reduce vacancy
+3. Improve Tenant Quality — Better screening reduces turnover, damage, and delinquencies
+4. Utility Bill Backs — Charge tenants for utilities they consume
+5. RUBS (Ratio Utility Billing System) — Allocate utility costs among tenants
+6. Laundry Income — Add coin-operated or app-operated laundry
+7. Storage Income — Rent garages, sheds, lockers, or storage areas
+8. Reserved Parking — Charge for premium parking spaces
+9. Pet Rent — Monthly fees for pets
+10. Pet Deposits — Additional security deposits for pets
+11. Internet Income — Provide and charge for internet service
+12. Furnished Rentals — Increase income through furnished units
+13. Mid-Term Rentals — Target traveling professionals and temporary housing needs
+14. Short-Term Rentals — Vacation rentals and Airbnb opportunities
+15. Room Rentals — Rent by the bedroom when appropriate
+16. Corporate Housing — Target businesses needing employee housing
+17. RV Parking Income — Monetize unused land or parking areas
+18. Boat Storage Income — Additional income from outdoor storage
+19. Vending Income — Snack, beverage, or convenience machines
+20. Billboard Income — Lease visible land or structures for advertising
+21. Cell Tower Income — Lease space to communication providers
 
-A value-add opportunity is only valuable if YOU can realistically execute it.
+Physical Value-Add Opportunities:
+22. Add Bedrooms — Increase rent potential through additional bedrooms
+23. Add Bathrooms — Increase functionality and desirability
+24. Add Units — Convert unused spaces into rentable units
+25. Build ADUs — Accessory Dwelling Units create additional income streams
+26. Interior Renovations — Improve kitchens, bathrooms, flooring, paint, and finishes
+27. Exterior Improvements — Improve curb appeal, landscaping, and exterior appearance
+28. Convert Garages Or Storage Areas — Create additional rentable space
+29. Subdivide Land — Create additional lots or parcels
+30. Development Potential — Build additional units or structures
+31. Zoning Changes — Increase density or modify property use
+32. Mixed-Use Conversions — Combine residential and commercial opportunities
 
+Expense Reduction Opportunities:
+33. Reduce Insurance Costs — Shop providers and improve property condition
+34. Reduce Maintenance Costs — Eliminate recurring issues and improve systems
+35. Improve Property Management — Reduce inefficiencies and improve operations
 
-The 35 Ways To Add Value
-
-Income Opportunities
-
-1. Raise Under-Market Rents — Increase rents to verified market rates.
-
-2. Improve Occupancy — Fill vacant units and reduce vacancy.
-
-3. Improve Tenant Quality — Better screening often reduces turnover, damage, and delinquencies.
-
-4. Utility Bill Backs — Charge tenants for utilities they consume.
-
-5. RUBS (Ratio Utility Billing System) — Allocate utility costs among tenants.
-
-6. Laundry Income — Add coin-operated or app-operated laundry.
-
-7. Storage Income — Rent garages, sheds, lockers, or storage areas.
-
-8. Reserved Parking — Charge for premium parking spaces.
-
-9. Pet Rent — Monthly fees for pets.
-
-10. Pet Deposits — Additional security deposits for pets.
-
-11. Internet Income — Provide and charge for internet service.
-
-12. Furnished Rentals — Increase income through furnished units.
-
-13. Mid-Term Rentals — Target traveling professionals and temporary housing needs.
-
-14. Short-Term Rentals — Vacation rentals and Airbnb opportunities.
-
-15. Room Rentals — Rent by the bedroom when appropriate.
-
-16. Corporate Housing — Target businesses needing employee housing.
-
-17. RV Parking Income — Monetize unused land or parking areas.
-
-18. Boat Storage Income — Additional income from outdoor storage.
-
-19. Vending Income — Snack, beverage, or convenience machines.
-
-20. Billboard Income — Lease visible land or structures for advertising.
-
-21. Cell Tower Income — Lease space to communication providers.
-
-
-Physical Value-Add Opportunities
-
-22. Add Bedrooms — Increase rent potential through additional bedrooms.
-
-23. Add Bathrooms — Increase functionality and desirability.
-
-24. Add Units — Convert unused spaces into rentable units.
-
-25. Build ADUs — Accessory Dwelling Units create additional income streams.
-
-26. Interior Renovations — Improve kitchens, bathrooms, flooring, paint, and finishes.
-
-27. Exterior Improvements — Improve curb appeal, landscaping, and exterior appearance.
-
-28. Convert Garages Or Storage Areas — Create additional rentable space.
-
-29. Subdivide Land — Create additional lots or parcels.
-
-30. Development Potential — Build additional units or structures.
-
-31. Zoning Changes — Increase density or modify property use.
-
-32. Mixed-Use Conversions — Combine residential and commercial opportunities.
-
-
-Expense Reduction Opportunities
-
-33. Reduce Insurance Costs — Shop providers and improve property condition.
-
-34. Reduce Maintenance Costs — Eliminate recurring issues and improve systems.
-
-35. Improve Property Management — Reduce inefficiencies and improve operations.
-
-
-Financing Opportunities
-
-Financing can create just as much value as renovations.
-
-Examples:
-
-Seller financing
-Assumable loans
-Lower interest rates
-Longer amortizations
-Reduced down payments
-Principal-only payments
-Interest-only periods
-Better lender relationships
+Financing Opportunities:
+Financing can create just as much value as renovations. Examples: seller financing, assumable loans, lower interest rates, longer amortizations, reduced down payments, principal-only payments, interest-only periods, better lender relationships.
 
 Many investors focus only on physical improvements and completely ignore financing opportunities.
 
 
-Determining Your Minimum Cash On Cash Return
+DETERMINING YOUR MINIMUM CASH ON CASH RETURN
 
 Before evaluating upside, determine your criteria.
 
 Ask yourself:
-
 Does the property need to meet my minimum return TODAY?
+Or can it meet my minimum return AFTER I execute a value-add plan?
 
-or
+Neither approach is wrong. But you must decide before negotiating.
 
-Can it meet my minimum return AFTER I execute a value-add plan?
+Conservative Approach: The property must meet your return requirements today. This creates a larger margin of safety.
 
-Neither approach is wrong.
+Value-Add Approach: The property may not meet your return requirements today. However: upside is verified, costs are verified, timelines are verified, execution is realistic.
 
-But you must decide before negotiating.
-
-
-Conservative Approach
-
-The property must meet your return requirements today.
-
-This creates a larger margin of safety.
+The Rule: Never assume future returns. Prove future returns.
 
 
-Value-Add Approach
+VERIFYING VALUE-ADD OPPORTUNITIES
 
-The property may not meet your return requirements today.
+Many investors say "I can raise rents." The question is: How do you know?
 
-However:
+Verify Market Rents using: Rentometer, Property Managers, Zillow, Apartments.com, Facebook Marketplace, Comparable rentals.
+Never guess. Never hope. Verify.
 
-upside is verified,
-costs are verified,
-timelines are verified,
-execution is realistic.
+Verify Renovation Costs: Until you have contractor bids, material estimates, and labor estimates — you are guessing.
 
-
-The Rule
-
-Never assume future returns.
-
-Prove future returns.
+Verify Timelines: Renovations cost more than money. They also cost vacancy, carrying costs, time, and opportunity cost.
 
 
-Verifying Value-Add Opportunities
+COST TO MAKE RENT READY
 
-Many investors say:
-
-"I can raise rents."
-
-The question is:
-
-How do you know?
-
-
-Verify Market Rents
-
-Use:
-
-Rentometer
-Property Managers
-Zillow
-Apartments.com
-Facebook Marketplace
-Comparable rentals
-
-Never guess.
-
-Never hope.
-
-Verify.
-
-
-Verify Renovation Costs
-
-Many investors say:
-
-"I can spend $20,000 and increase rent by $300."
-
-The question is:
-
-Have you actually priced the renovation?
-
-Until you have:
-
-contractor bids,
-material estimates,
-labor estimates,
-
-you are guessing.
-
-
-Verify Timelines
-
-Renovations cost more than money.
-
-They also cost:
-
-vacancy,
-carrying costs,
-time,
-opportunity cost.
-
-
-Cost To Make Rent Ready
-
-This is one of the most important sections of the CDS Rental Calculator.
-
-Many investors underestimate it.
+This is one of the most important sections of the CDS Rental Calculator. Many investors underestimate it.
 
 Cost To Make Rent Ready should include:
 
-Physical Costs — flooring, paint, appliances, kitchens, bathrooms, repairs.
+Physical Costs: flooring, paint, appliances, kitchens, bathrooms, repairs
 
-Vacancy Costs — lost rent, utilities during vacancy, carrying costs.
+Vacancy Costs: lost rent, utilities during vacancy, carrying costs
 
-Holding Costs — mortgage payments, taxes, insurance while the property is not producing income.
+Holding Costs: mortgage payments, taxes, insurance while the property is not producing income
 
-Opportunity Cost — Some investors also account for the cost of having their money tied up.
-
-Example:
-
-If you spend $20,000 and it takes 4 months before additional rent begins, that money was unavailable for other opportunities.
-
-Some investors include this. Some do not.
+Opportunity Cost: Some investors account for the cost of having money tied up. Example: If you spend $20,000 and it takes 4 months before additional rent begins, that money was unavailable for other opportunities.
 
 The important thing is consistency. Choose a system and apply it consistently.
 
 
-Paying For Upside
+PAYING FOR UPSIDE
 
-Many sellers say:
+Many sellers say "You can raise the rents" or "You can renovate it." They may be right. But that value does not exist today.
 
-"You can raise the rents."
-"You can renovate it."
-"You can add value."
+The seller has not created the value. You have. Therefore you should receive most of the reward.
 
-They may be right.
-
-But that value does not exist today.
-
-The seller has not created the value. You have.
-
-Therefore you should receive most of the reward.
-
-However, this does NOT mean the seller receives none of the upside.
-
-Many successful negotiations involve sharing a portion of future value.
-
-The key is knowing your numbers.
+However, this does NOT mean the seller receives none of the upside. Many successful negotiations involve sharing a portion of future value. The key is knowing your numbers.
 
 
-The Professional Investor Framework
+THE PROFESSIONAL INVESTOR FRAMEWORK
 
-Step 1 — Determine current performance.
-
-Step 2 — Determine verified market rents.
-
-Step 3 — Determine verified renovation costs.
-
-Step 4 — Determine realistic timelines.
-
-Step 5 — Determine realistic future performance.
-
-Step 6 — Determine the maximum price you can pay while still achieving your required return.
-
-Step 7 — Negotiate.
+Step 1: Determine current performance.
+Step 2: Determine verified market rents.
+Step 3: Determine verified renovation costs.
+Step 4: Determine realistic timelines.
+Step 5: Determine realistic future performance.
+Step 6: Determine the maximum price you can pay while still achieving your required return.
+Step 7: Negotiate.
 
 
-The Chandler Rule
+THE CHANDLER RULE
 
-You can discuss upside with a seller because usually they will bring it up.
+You can discuss upside with a seller because usually they will bring it up. You can acknowledge opportunities. You can even share some of that future upside.
 
-You can acknowledge opportunities.
+But the property must be analyzed based on what it is currently doing — not what it might do someday.
 
-You can even share some of that future upside.
-
-But the property must be analyzed based on:
-
-What it is currently doing.
-
-Not what it might do someday.
-
-Your job is to determine:
-
-current market rent,
-future market rent,
-renovation costs,
-timelines,
-carrying costs,
-and exactly how much you can pay while still achieving your target return.
-
-Only after you know these numbers should you negotiate.
+Your job is to determine: current market rent, future market rent, renovation costs, timelines, carrying costs, and exactly how much you can pay while still achieving your target return.
 
 
-The Ultimate Test
+THE ULTIMATE TEST
 
 Ask yourself:
-
 If every value-add opportunity failed, would I still be okay owning this property?
 
-If the answer is NO, the deal may be too speculative.
+If the answer is NO — the deal may be too speculative.
 
-The best investors create upside.
+The best investors create upside. They do not depend on upside for survival.
 
-They do not depend on upside for survival.
-
-With that being said, there are lots of ways to stress test properties and their value add opportunities, and the more that you understand risk the better you will tolerate it or even eliminate it.
+With that being said, there are lots of ways to stress test properties and their value-add opportunities, and the more that you understand risk the better you will tolerate it or even eliminate it.
 
 
-Quick Rules To Remember
-
-Analyze current reality first.
-Never pay for upside you haven't created.
-Verify market rents.
-Verify renovation costs.
-Verify timelines.
-Verify financing assumptions.
-Use Cost To Make Rent Ready correctly.
-Know your minimum return requirements.
-Leverage your unique advantages.
-Calculate opportunity before paying for it.
-Buy based on today's performance.
-Let tomorrow's improvements become your reward.
-
-
-Quick Repair Cost Estimation Framework
+QUICK REPAIR COST ESTIMATION FRAMEWORK
 
 How To Estimate Repairs Fast Enough To Make Offers
 
-One of the biggest reasons new investors never submit offers is because they don't know how much repairs will cost.
+One of the biggest reasons new investors never submit offers is because they don't know how much repairs will cost. The uncertainty causes them to freeze.
 
-They walk a property and immediately start wondering:
+Remember: Your goal is NOT to become a contractor. Your goal is to get close enough to analyze, make an offer, negotiate, and get the property under contract. The due diligence period exists so you can verify your assumptions later.
 
-Does this need $10,000?
-Does this need $50,000?
-Does this need $100,000?
-
-The uncertainty causes them to freeze.
-
-Remember:
-
-Your goal is NOT to become a contractor.
-
-Your goal is to get close enough to:
-
-analyze,
-make an offer,
-negotiate,
-and get the property under contract.
-
-The due diligence period exists so you can verify your assumptions later.
-
-
-The Three Rehab Categories
+The Three Rehab Categories:
 
 Cosmetic Rehab — $5-$20 Per Square Foot
-
-Examples: Paint, Flooring, Light fixtures, Landscaping, Appliances, Cleaning, Minor repairs.
-
-These properties often look rough, smell bad, and show poorly, but usually do not have major structural issues.
-
+Examples: Paint, flooring, light fixtures, landscaping, appliances, cleaning, minor repairs. These properties often look rough but usually don't have major structural issues.
 
 Moderate Rehab — $20-$50 Per Square Foot
-
-Examples: Kitchens, Bathrooms, Windows, HVAC replacement, Partial plumbing, Partial electrical, Flooring throughout.
-
-These properties require meaningful updates but are still functional.
-
+Examples: Kitchens, bathrooms, windows, HVAC replacement, partial plumbing, partial electrical, flooring throughout. These properties require meaningful updates but are still functional.
 
 Heavy Rehab — $50-$100+ Per Square Foot
+Examples: Full gut remodel, major plumbing replacement, full electrical replacement, foundation issues, fire damage, structural repairs. These projects deserve extra caution.
 
-Examples: Full gut remodel, Major plumbing replacement, Full electrical replacement, Foundation issues, Fire damage, Structural repairs.
-
-These projects deserve extra caution and more verification.
-
-
-The Quick Investor Rule
-
-If you're unsure: Estimate High.
-
-Never estimate low.
-
-A property that still works with conservative repair assumptions is usually much safer.
+The Quick Investor Rule: If you're unsure — Estimate High. A property that still works with conservative repair assumptions is usually much safer.
 
 
-The Big-Ticket Item Cheat Sheet
+BIG-TICKET ITEM CHEAT SHEET
 
-These are the items that can dramatically impact repair budgets.
+Roof:
+• Small Home: $8,000-$15,000 | Medium Home: $12,000-$20,000 | Large Home: $20,000-$40,000+
+• Questions: How old is it? Any visible damage? Any leaks?
 
-Roof — Small Home: $8,000-$15,000 | Medium Home: $12,000-$20,000 | Large Home: $20,000-$40,000+
-Questions: How old is it? Any visible damage? Any leaks?
+HVAC:
+• Furnace: $4,000-$10,000 | AC Unit: $4,000-$10,000 | Full System: $8,000-$20,000+
+• Questions: Age? Working? Service history?
 
-HVAC — Furnace: $4,000-$10,000 | AC Unit: $4,000-$10,000 | Full System: $8,000-$20,000+
-Questions: Age? Working? Service history?
+Plumbing:
+• Minor Repairs: $500-$5,000 | Major Repipe: $5,000-$25,000+
+• Questions: Leaks? Water pressure? Sewer issues? Galvanized pipes?
 
-Plumbing — Minor Repairs: $500-$5,000 | Major Repipe: $5,000-$25,000+
-Questions: Leaks? Water pressure? Sewer issues? Galvanized pipes?
+Electrical:
+• Panel Upgrade: $2,000-$5,000 | Full Rewire: $8,000-$30,000+
+• Questions: Updated panel? Knob and tube? Aluminum wiring?
 
-Electrical — Panel Upgrade: $2,000-$5,000 | Full Rewire: $8,000-$30,000+
-Questions: Updated panel? Knob and tube? Aluminum wiring?
+Foundation:
+• Minor Issues: $2,000-$10,000 | Major Issues: $10,000-$100,000+
+• Questions: Cracks? Water intrusion? Settling?
 
-Foundation — Minor Issues: $2,000-$10,000 | Major Issues: $10,000-$100,000+
-Questions: Cracks? Water intrusion? Settling?
+Kitchens:
+• Budget: $5,000-$15,000 | Mid-Level: $15,000-$30,000 | High-End: $30,000+
 
-Kitchens — Budget: $5,000-$15,000 | Mid-Level: $15,000-$30,000 | High-End: $30,000+
+Bathrooms:
+• Budget: $3,000-$10,000 | Mid-Level: $10,000-$20,000 | High-End: $20,000+
 
-Bathrooms — Budget: $3,000-$10,000 | Mid-Level: $10,000-$20,000 | High-End: $20,000+
-
-
-Multifamily Shortcut
-
-For apartments and multifamily properties:
-
-Light Turn — $3,000-$7,500 per unit
-
-Moderate Turn — $7,500-$15,000 per unit
-
-Heavy Turn — $15,000-$30,000+ per unit
-
-This gives you a quick starting point when analyzing opportunities.
+Multifamily Shortcut:
+• Light Turn: $3,000-$7,500 per unit
+• Moderate Turn: $7,500-$15,000 per unit
+• Heavy Turn: $15,000-$30,000+ per unit
 
 
-My Favorite Way To Estimate Repairs
+GETTING QUICK REPAIR ESTIMATES
 
 One of the easiest ways to get a quick repair estimate is to call a professional in the specific trade before submitting an offer.
 
-Examples: Roofer, HVAC Contractor, Electrician, Plumber, General Contractor.
+Explain: "I'm looking at purchasing a property and I'm trying to determine whether it makes sense to move forward. I know you can't give me an exact bid without seeing it, but can you give me a rough ballpark estimate based on these pictures and details?"
 
-Explain:
+Most contractors are willing to help because they understand you're considering a project and they want to build a relationship with future investors.
 
-"I'm looking at purchasing a property and I'm trying to determine whether it makes sense to move forward. I know you can't give me an exact bid without seeing it, but can you give me a rough ballpark estimate based on these pictures and details?"
-
-Most contractors are willing to help because they understand you're considering a project, they know there is a chance they may get the job, and they often want to build a relationship with future investors.
-
-This is one of the fastest ways to get reasonably accurate numbers without spending money upfront.
+Be honest with contractors. Tell them you are not looking for a final bid right now. You simply need a ballpark estimate to determine whether the property is worth pursuing. Then, if the property gets under contract, bring them out for a detailed walkthrough and formal bid.
 
 
-Important Rule
+TODAY'S HIDDEN VALUE EXERCISE
 
-Be honest with contractors.
-
-Tell them: "I am not looking for a final bid right now."
-
-You simply need a ballpark estimate to determine whether the property is worth pursuing.
-
-Then, if the property gets under contract, bring them out for a much more detailed walkthrough and formal bid.
-
-
-Why This Works
-
-Most contractors can quickly tell you:
-
-whether you're in the ballpark,
-whether you're wildly underestimating costs,
-whether something is a major issue,
-and whether the project is realistic.
-
-Even a five-minute conversation can save you from making bad assumptions.
+Take the next three properties you analyze. For each property identify:
+• Current Performance — What does the property produce today?
+• Income Opportunities — List every income opportunity
+• Expense Opportunities — List every expense reduction opportunity
+• Financing Opportunities — List every financing opportunity
+• Physical Opportunities — List every value-add opportunity
+• Total Verified Upside — Estimate annual income increase, annual expense reduction, annual cash flow improvement, required costs, and expected timeline
 
 
-Cost To Make Rent Ready
+TODAY'S SUGGESTED ARSENAL ACTIVITY
 
-When analyzing a value-add opportunity, all expected costs should be entered into Cost To Make Rent Ready.
+Call property managers, contractors, realtors, and investors.
 
-Examples: Renovations, Contractor costs, Permit costs, Vacancy costs, Cleanup, Holding costs.
+Ask: "What is the biggest value-add opportunity you see investors missing right now?"
 
-Many investors underestimate this number and accidentally inflate their projected returns.
-
-
-The Professional Investor Test
-
-Before counting upside, ask:
-
-Have I verified market rents? Repair costs? Timeline? Vacancy? Holding costs?
-
-If not, you're still guessing.
+Document every answer.
 
 
-The UC30 Rule
+QUICK RULES TO REMEMBER
 
-You do NOT need perfect numbers before making an offer.
+• Analyze current reality first.
+• Never pay for upside you haven't created.
+• Verify market rents, renovation costs, timelines, and financing assumptions.
+• Use Cost To Make Rent Ready correctly.
+• Know your minimum return requirements.
+• Leverage your unique advantages.
+• Calculate opportunity before paying for it.
+• Buy based on today's performance.
+• Let tomorrow's improvements become your reward.
 
-You need numbers that are reasonable, conservative, and good enough to move forward.
 
-Remember: Due diligence exists to verify your assumptions, not to achieve perfection before taking action.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRAINING BLOCK 2 — DEAL STRUCTURING MASTERY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The investor who gets close enough and takes action will consistently outperform the investor who waits for certainty.
+Matching The Right Deal Structure To The Right Seller
 
 
-Key Takeaway
+WHY THIS MATTERS
 
-Average investors see properties.
+Most investors believe: Price creates deals.
 
-Great investors see:
+The truth is: Structure creates deals.
 
-problems,
-opportunities,
-solutions,
-and hidden value.
-
-The ability to identify, verify, and execute on hidden value is one of the fastest ways to create wealth in real estate because it allows you to create cash flow, equity, and opportunity that other investors never saw.`,
-      },
-      {
-        type: "training",
-        title: "Deal Structuring Mastery",
-        content: `Why This Matters
-
-Most investors believe:
-
-Price creates deals.
-
-The truth is:
-
-Structure creates deals.
-
-Many sellers say:
-
-"I need more money."
-
-What they actually mean may be:
-
-I need more monthly income.
-I need more certainty.
-I need cash today.
-I want fewer taxes.
-I want simplicity.
-I want safety.
-I want flexibility.
+Many sellers say "I need more money." What they actually mean may be:
+• I need more monthly income.
+• I need more certainty.
+• I need cash today.
+• I want fewer taxes.
+• I want simplicity.
+• I want safety.
+• I want flexibility.
 
 The better you understand their true motivation, the easier it becomes to structure a deal that works for both parties.
 
 
-The Biggest Mistake Investors Make
+THE BIGGEST MISTAKE INVESTORS MAKE
 
-Most investors negotiate:
-
-Price only.
+Most investors negotiate Price only.
 
 Great investors negotiate:
-
-Purchase Price
-Down Payment
-Interest Rate
-Amortization
-Balloon Terms
-Closing Timeline
-Earnest Money
-Repairs
-Possession
-Tax Treatment
-Seller Financing Terms
+• Purchase Price
+• Down Payment
+• Interest Rate
+• Amortization
+• Balloon Terms
+• Closing Timeline
+• Earnest Money
+• Repairs
+• Possession
+• Tax Treatment
+• Seller Financing Terms
 
 The more levers you understand, the more opportunities you create.
 
 
-The Four Primary Levers
+THE FOUR PRIMARY LEVERS
 
-Every deal is built around four primary levers.
+Every deal is built around four primary levers:
 
-Purchase Price — How much are you paying?
+1. Purchase Price — How much are you paying?
+2. Down Payment — How much cash are you bringing?
+3. Interest Rate — What is the cost of the borrowed money?
+4. Loan Length / Amortization — How long do you have to pay it back?
 
-Down Payment — How much cash are you bringing?
-
-Interest Rate — What is the cost of the borrowed money?
-
-Loan Length / Amortization — How long do you have to pay it back?
-
-
-The Golden Rule
-
-When one lever improves, another usually worsens.
+The Golden Rule: When one lever improves, another usually worsens.
 
 Examples:
-
-Seller gets higher price → Buyer gets lower interest rate.
-
-Seller gets larger down payment → Buyer gets longer amortization.
-
-Seller gets faster closing → Buyer gets lower price.
-
-Seller gets higher monthly payments → Buyer gets lower purchase price.
+• Seller gets higher price → Buyer gets lower interest rate
+• Seller gets larger down payment → Buyer gets longer amortization
+• Seller gets faster closing → Buyer gets lower price
+• Seller gets higher monthly payments → Buyer gets lower purchase price
 
 Everything is a trade.
 
 
-The Goal Of Deal Structuring
+THE GOAL OF DEAL STRUCTURING
 
-The goal is NOT:
+The goal is NOT getting the seller to accept anything, tricking the seller, or manipulating the seller.
 
-getting the seller to accept anything,
-tricking the seller,
-manipulating the seller.
-
-The goal is:
-
-Finding a structure that solves their problem while still meeting your investment criteria.
+The goal is finding a structure that solves their problem while still meeting your investment criteria.
 
 
-The Most Important Question
+THE MOST IMPORTANT QUESTION
 
-Whenever negotiations become difficult:
-
-Ask:
-
+Whenever negotiations become difficult, ask:
 "Help me understand what you're trying to accomplish."
 
 You can also emphasize your desire to find a situation where both parties get what they want and need.
 
-This question uncovers:
 
-fears,
-goals,
-motivations,
-concerns.
+MATCHING MOTIVATION TO STRUCTURE
 
-And motivations create solutions.
+Seller Wants Cash Today → Cash Offer, Conventional Financing, Hard Money, Quick Close
 
+Seller Wants Monthly Income → Seller Financing, Longer Amortization, Monthly Payments
 
-Matching Motivation To Structure
+Seller Wants Tax Advantages → Installment Sale, Seller Financing
 
-Seller Wants Cash Today — Cash Offer, Conventional Financing, Hard Money, Quick Close.
+Seller Wants Certainty → Strong Financing, Large Earnest Money, Fast Closing
 
-Seller Wants Monthly Income — Seller Financing, Longer Amortization, Monthly Payments.
-
-Seller Wants Tax Advantages — Installment Sale, Seller Financing.
-
-Seller Wants Certainty — Strong Financing, Large Earnest Money, Fast Closing.
-
-Seller Wants Simplicity — As-Is Purchase, Minimal Contingencies, Flexible Timing.
+Seller Wants Simplicity → As-Is Purchase, Minimal Contingencies, Flexible Timing
 
 
-The Seller Who Wants Everything
+THE SELLER WHO WANTS EVERYTHING
 
-Eventually you will meet a seller who says:
+Eventually you will meet a seller who says: "I want the highest price, the highest interest rate, the largest down payment, and the shortest payoff period."
 
-"I want the highest price, the highest interest rate, the largest down payment, and the shortest payoff period."
+How To Handle This:
+Do NOT argue, become defensive, or immediately counter. Instead — get curious.
 
-In other words: They want all the benefits. And none of the concessions.
-
-
-How To Handle This Seller
-
-Do NOT argue, become defensive, or immediately counter.
-
-Instead: Get curious.
-
-
-Find The Real Priority
-
-Ask:
-
-"Of those items, which is the most important to you?"
-
+Find The Real Priority — Ask: "Of those items, which is the most important to you?"
 Most sellers eventually reveal one thing matters most.
 
-Examples:
-
-Monthly income
-Highest price
-Cash today
-Safety
-Taxes
-Certainty
-
-
-Dig Deeper
-
-Ask:
-
-"Why is that important?"
-
+Dig Deeper — Ask: "Why is that important?"
 This is often where the deal is hiding.
 
 Example:
-
 Seller: "I need a large down payment."
-
 You: "What does the large down payment help you accomplish?"
-
-Possible Answers:
-
-Paying off debt
-Buying another property
-Feeling safe
-Retirement
-
+Possible Answers: Paying off debt, buying another property, feeling safe, retirement.
 Now you know the real problem.
 
 
-The Three Structure Method
+THE THREE STRUCTURE METHOD
 
 One of the most powerful negotiation techniques is presenting multiple acceptable options.
 
-The key: Every option must be a deal YOU would happily accept.
+The key: Every option must be a deal YOU would happily accept. Never present an offer you don't want. Every option should meet your criteria, produce acceptable returns, and solve a different seller problem.
 
-Never present an offer you don't want.
-
-Every option should meet your criteria.
-
-Every option should produce acceptable returns.
-
-Every option should solve a different seller problem.
-
-
-Example Property
-
-Purchase Price Goal: $500,000
-
+Example Property (Purchase Price Goal: $500,000):
 
 Structure 1 – Maximize Purchase Price
-
-Purchase Price: $500,000
-Down Payment: 20%
-Interest Rate: 4%
-Amortization: 40 Years
-
-Seller Gets: Highest purchase price
-Buyer Gets: Excellent financing
-
+Price: $500,000 | Down: 20% | Rate: 4% | Amortization: 40 Years
+Seller Gets: Highest price | Buyer Gets: Excellent financing
 
 Structure 2 – Maximize Monthly Income
-
-Purchase Price: $475,000
-Down Payment: 15%
-Interest Rate: 6%
-Amortization: 30 Years
-
-Seller Gets: Strong monthly payments
-Buyer Gets: Lower acquisition cost
-
+Price: $475,000 | Down: 15% | Rate: 6% | Amortization: 30 Years
+Seller Gets: Strong monthly payments | Buyer Gets: Lower acquisition cost
 
 Structure 3 – Maximize Simplicity
-
-Purchase Price: $450,000
-Cash Purchase
-Fast Closing
-
-Seller Gets: Speed, Certainty
-Buyer Gets: Lower price
+Price: $450,000 | Cash Purchase | Fast Closing
+Seller Gets: Speed and certainty | Buyer Gets: Lower price
 
 
-Seller Financing Structure Examples
+SELLER FINANCING STRUCTURE EXAMPLES
 
-One of the most effective ways to negotiate seller financing is by allowing the seller to choose between multiple combinations of Price, Down Payment, and Interest Rate.
+Option A: Price $500,000 | Down 25% | Rate 3.5%
+Seller gets highest price | Buyer gets excellent financing
 
+Option B: Price $475,000 | Down 15% | Rate 5%
+Middle ground for both parties
 
-Option A
+Option C: Price $450,000 | Down 10% | Rate 6%
+Seller gets higher interest income | Buyer gets lower acquisition cost
 
-Purchase Price: $500,000
-Down Payment: 25%
-Interest Rate: 3.5%
-
-Seller gets: Highest price
-Buyer gets: Excellent financing
-
-
-Option B
-
-Purchase Price: $475,000
-Down Payment: 15%
-Interest Rate: 5%
-
-Middle ground for both parties.
+Why This Works: Most sellers focus on one thing. These options help them realize everything is connected. When price goes up, something else usually needs to improve. This moves negotiations away from emotion and toward solutions.
 
 
-Option C
-
-Purchase Price: $450,000
-Down Payment: 10%
-Interest Rate: 6%
-
-Seller gets: Higher interest income
-Buyer gets: Lower acquisition cost
-
-
-Why This Works
-
-Most sellers focus on one thing.
-
-These options help them realize: Everything is connected.
-
-When price goes up, something else usually needs to improve.
-When down payment decreases, something else may increase.
-When interest rate decreases, something else may need to improve.
-
-This helps move negotiations away from emotion and toward solutions.
-
-
-Structuring Around Cash On Cash Return
-
-One of the most misunderstood concepts in real estate:
+STRUCTURING AROUND CASH ON CASH RETURN
 
 High Cash On Cash Return does NOT automatically mean low risk.
 
 Example:
+Property A: Down $25,000 | Cash Flow $250/month | CoC Return 12%
+Property B: Down $100,000 | Cash Flow $600/month | CoC Return 7.2%
 
-Property A — Down Payment: $25,000, Cash Flow: $250/month, Cash On Cash Return: 12%
+Which property is safer? It depends.
 
-Property B — Down Payment: $100,000, Cash Flow: $600/month, Cash On Cash Return: 7.2%
+The Reserve Principle: Risk is often determined more by reserves than down payment.
+Property A: 5% down, $50,000 reserves — may actually be SAFER than
+Property B: 25% down, $2,000 reserves
 
-Which property is safer? The answer: It depends.
-
-
-Understanding Risk
-
-Many investors assume: Higher Down Payment = Lower Risk
-
-That is often true. But not always.
+The Cash Flow Trap: A higher cash on cash return does NOT necessarily mean higher monthly cash flow. Often it means less money invested and better leverage. Always look at BOTH monthly cash flow AND cash on cash return.
 
 
-Lower Down Payments Can Be Powerful
+BALLOON PAYMENTS
 
-Lower down payments:
-
-increase leverage,
-increase portfolio growth,
-improve cash on cash returns,
-preserve liquidity.
-
-This can be extremely beneficial.
-
-
-The Reserve Principle
-
-Risk is often determined more by reserves than down payment.
-
-Example:
-
-Property A — Down Payment: 5%, Reserves: $50,000
-
-Property B — Down Payment: 25%, Reserves: $2,000
-
-Property A may actually be safer.
-
-Why? Because it has the reserves necessary to survive unexpected problems.
-
-
-The Cash Flow Trap
-
-A higher cash on cash return does NOT necessarily mean higher monthly cash flow.
-
-Often it means: less money invested, smaller down payment, better leverage.
-
-You must always look at BOTH: monthly cash flow AND cash on cash return.
-
-
-Multiple Ways To Reduce Risk
-
-Risk can be reduced through:
-
-larger down payments,
-larger reserves,
-stronger cash flow,
-better financing,
-lower expenses,
-longer loan terms,
-conservative analysis.
-
-Down payment is only one tool.
-
-
-Balloon Payments
-
-Balloon payments can improve cash flow, returns, and deal structure.
-
-However they increase risk.
+Balloon payments can improve cash flow, returns, and deal structure. However they increase risk.
 
 Always ask: What happens if refinancing disappears? Interest rates rise? Property values fall? Rents disappoint?
 
 Never assume perfect conditions.
 
 
-Never Structure Yourself Into A Bad Deal
-
-Many investors become obsessed with low down payments, high leverage, and huge cash on cash returns.
-
-And forget: reserves, risk, survivability.
-
-The goal is not maximizing returns.
-
-The goal is maximizing risk-adjusted returns.
-
-
-The Deal Structuring Framework
+THE PROFESSIONAL INVESTOR FRAMEWORK
 
 Before presenting any structure:
-
-Step 1 — Understand seller motivation.
-
-Step 2 — Understand the real problem.
-
-Step 3 — Analyze the deal.
-
-Step 4 — Determine your maximum acceptable price and terms.
-
-Step 5 — Create multiple acceptable solutions.
-
-Step 6 — Allow the seller to participate in choosing.
+Step 1: Understand seller motivation
+Step 2: Understand the real problem
+Step 3: Analyze the deal
+Step 4: Determine your maximum acceptable price and terms
+Step 5: Create multiple acceptable solutions
+Step 6: Allow the seller to participate in choosing
 
 
-Quick Rules To Remember
+QUICK RULES TO REMEMBER
 
-Price is only one lever.
-Structure creates deals.
-Every seller has a real motivation.
-Ask why.
-Understand the problem before offering solutions.
-Present multiple acceptable options.
-Every option should be a deal you would happily accept.
-Cash on cash return and monthly cash flow both matter.
-Lower down payments are not automatically riskier.
-Reserves are one of the best risk management tools.
-Never structure yourself into a bad deal.
-Solve problems, don't argue about price.
+• Price is only one lever.
+• Structure creates deals.
+• Every seller has a real motivation — ask why.
+• Understand the problem before offering solutions.
+• Present multiple acceptable options.
+• Every option should be a deal you would happily accept.
+• Cash on cash return and monthly cash flow both matter.
+• Lower down payments are not automatically riskier.
+• Reserves are one of the best risk management tools.
+• Never structure yourself into a bad deal.
+• Solve problems, don't argue about price.
 
 
-Key Takeaway
+TODAY'S EXECUTION CHALLENGE
 
-Average investors negotiate:
+Take one property you have analyzed. Create three different deal structures (make sure all of them are deals that if accepted, you would be happy moving forward with).
 
-Price.
+Structure 1: Large Price, lower other terms
+Structure 2: Large interest rate, lower purchase price and adjusted terms
+Structure 3: Large down payment, lower purchase price and terms
 
-Great investors negotiate:
+For each structure calculate: Cash Flow, Cash On Cash Return, Down Payment, Risk.
 
-Structure.
+If you have personal goals, determine what matters most to you. As a buyer, you may prefer a lower interest rate, a smaller down payment, or a lower purchase price depending on your strategy. Review each offer and identify which structure is most appealing to you. Then look for ways to adjust the other offers so that your preferred option becomes the most attractive choice for the seller.
 
-The investor who understands how to structure solutions can often buy properties that other investors walk away from because they understand that every deal has multiple levers—and the key is finding which lever matters most to the seller while still protecting your own criteria.`,
-      },
-    ],
+
+TODAY'S SUGGESTED ARSENAL ACTIVITY
+
+Call realtors, investors, lenders, and property managers.
+
+Ask: "What's the most creative deal structure you've ever seen get accepted?"
+
+Document the answers. The goal is to expand your understanding of what's possible.
+
+KEY TAKEAWAY: Average investors negotiate price. Great investors negotiate structure. The investor who understands how to structure solutions can often buy properties that other investors walk away from.
+`,
+    quiz: {
+      required: true,
+      scenarios: [
+        {
+          id: 'd9q1_hiddenvalue',
+          title: 'Seeing Hidden Value Quiz',
+          questions: [
+            {
+              id: 'd9q1_q1',
+              text: 'A seller says:\n"All of the units should rent for $300 more per month."\n\nWhat is the BEST response as an investor?',
+              type: 'multiple_choice',
+              options: [
+                'Immediately increase your offer because the rents will eventually increase.',
+                'Assume the seller is correct.',
+                'Verify market rents through property managers, comparable rentals, and rental data before giving value to the upside.',
+                'Ignore rent upside completely.'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Potential rent increases must be verified, not assumed. Use property managers, comparable rentals, and rental data to confirm.'
+            },
+            {
+              id: 'd9q1_q2',
+              text: 'Which statement BEST describes the principle of "Never Pay For Upside You Haven\'t Created Yet"?',
+              type: 'multiple_choice',
+              options: [
+                'Never improve a property.',
+                'Analyze and negotiate based on current performance, then allow future improvements to become your reward.',
+                'Ignore all future opportunities.',
+                'Only buy turnkey properties.'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Analyze based on current performance. Allow the upside to become your reward after closing — don\'t pay for value that doesn\'t exist yet.'
+            },
+            {
+              id: 'd9q1_q3',
+              text: 'A property currently cash flows poorly but could generate significantly more income after a renovation.\n\nWhat should you verify BEFORE giving value to that opportunity?',
+              type: 'multiple_choice',
+              options: [
+                'Renovation costs only.',
+                'Rent increase only.',
+                'Renovation costs, timeline, vacancy, carrying costs, and realistic future rents.',
+                'Nothing. Future upside is enough.'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'You must verify ALL costs including renovation, timeline, vacancy, carrying costs, and realistic future rents before giving value to upside.'
+            },
+            {
+              id: 'd9q1_q4',
+              text: 'Which investor is evaluating opportunity correctly?\n\nInvestor A: Raises projected rents because the seller said he could.\n\nInvestor B: Confirms market rents with property managers, comparable rentals, and rental listings before adjusting projections.',
+              type: 'multiple_choice',
+              options: [
+                'Investor A',
+                'Investor B',
+                'Both',
+                'Neither'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Never take a seller\'s word on potential rents. Verify independently through multiple sources before adjusting your projections.'
+            },
+            {
+              id: 'd9q1_q5',
+              text: 'Which of the following is an example of a financing value-add opportunity?',
+              type: 'multiple_choice',
+              options: [
+                'New flooring',
+                'New paint',
+                'Seller financing at a lower interest rate',
+                'Better landscaping'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Financing improvements can create just as much value as physical improvements. Many investors completely ignore financing opportunities.'
+            },
+            {
+              id: 'd9q1_q6',
+              text: 'A property requires $20,000 in renovations before rents can be increased.\n\nWhat should be included in your Cost To Make Rent Ready analysis?',
+              type: 'multiple_choice',
+              options: [
+                'Only the renovation costs',
+                'Renovation costs plus vacancy, holding costs, and any other expenses incurred while completing the project',
+                'Future appreciation only',
+                'Rent increases only'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Cost To Make Rent Ready should include physical costs, vacancy costs, holding costs, and potentially opportunity cost — not just the renovation itself.'
+            },
+            {
+              id: 'd9q1_q7',
+              text: 'Which statement BEST describes a personal competitive advantage?',
+              type: 'multiple_choice',
+              options: [
+                'Every investor sees the same value in every property.',
+                'Competitive advantages do not matter.',
+                'Skills, relationships, and resources can create opportunities that other investors cannot justify.',
+                'Only cash determines value.'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Two investors can look at the same property and see completely different opportunities based on their unique skills, relationships, and resources.'
+            },
+            {
+              id: 'd9q1_q8',
+              text: 'A seller says:\n"You can add another unit in the basement."\n\nWhat should you verify BEFORE giving value to that statement?',
+              type: 'multiple_choice',
+              options: [
+                'Whether the seller seems trustworthy.',
+                'Whether the conversion is legal, affordable, realistic, and executable.',
+                'Whether the basement looks large enough.',
+                'Nothing. Just assume it can be done.'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Before giving value to any physical value-add opportunity, verify that it is legal, affordable, realistic, and something you can actually execute.'
+            },
+            {
+              id: 'd9q1_q9',
+              text: 'Which of the following is the MOST dangerous mistake investors make when evaluating upside?',
+              type: 'multiple_choice',
+              options: [
+                'Verifying costs',
+                'Verifying rents',
+                'Paying for value before they have proven they can create it',
+                'Talking to property managers'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Paying for upside you haven\'t proven you can create is one of the fastest ways to overpay for a property.'
+            }
+          ]
+        },
+        {
+          id: 'd9q2_structuring',
+          title: 'Deal Structuring Mastery Quiz',
+          questions: [
+            {
+              id: 'd9q2_q1',
+              text: 'A seller says:\n"I need $100,000 down."\n\nWhat should your FIRST response be?',
+              type: 'multiple_choice',
+              options: [
+                'Increase the down payment.',
+                'Walk away.',
+                'Ask what the down payment helps them accomplish.',
+                'Increase the purchase price.'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Great investors identify the underlying problem before proposing a solution. The down payment request may be driven by a need you can solve a different way.'
+            },
+            {
+              id: 'd9q2_q2',
+              text: 'Which statement best summarizes deal structuring?',
+              type: 'multiple_choice',
+              options: [
+                'The buyer who pays the most wins.',
+                'The seller should always get exactly what they want.',
+                'The goal is to find a structure that solves the seller\'s problem while still meeting your investment criteria.',
+                'Negotiations are primarily about lowering the purchase price.'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Deal structuring is about finding solutions that work for both parties — solving the seller\'s problem while protecting your investment criteria.'
+            },
+            {
+              id: 'd9q2_q3',
+              text: 'A seller wants a higher purchase price. Which of the following is a reasonable trade?',
+              type: 'multiple_choice',
+              options: [
+                'Give them the higher price and ask for nothing.',
+                'Give them the higher price and ask for a lower interest rate or longer amortization.',
+                'Walk away immediately.',
+                'Increase the down payment.'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Whenever you give something, look for something in return. When one lever improves for the seller, another should improve for you.'
+            },
+            {
+              id: 'd9q2_q4',
+              text: 'Which of the following is NOT one of the four primary deal-structuring levers?',
+              type: 'multiple_choice',
+              options: [
+                'Purchase Price',
+                'Down Payment',
+                'Interest Rate',
+                'Property Taxes'
+              ],
+              correctAnswer: 3,
+              explanationOnFail: 'The four primary levers are: Purchase Price, Down Payment, Interest Rate, and Loan Length/Amortization. Property taxes are not a negotiable deal-structuring lever.'
+            },
+            {
+              id: 'd9q2_q5',
+              text: 'A seller says:\n"I want the highest price, the highest interest rate, and the largest down payment."\n\nWhat is the BEST next step?',
+              type: 'multiple_choice',
+              options: [
+                'Tell them their expectations are unreasonable.',
+                'Ask which of those items is most important to them and why.',
+                'Increase your offer immediately.',
+                'End the negotiation.'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'The real motivation is often hidden beneath the request. Finding which item matters most reveals where the deal is hiding.'
+            },
+            {
+              id: 'd9q2_q6',
+              text: 'Why might an investor intentionally create multiple deal structures for the same property?',
+              type: 'multiple_choice',
+              options: [
+                'To confuse the seller.',
+                'To give the seller options while learning what matters most to them.',
+                'To make negotiations take longer.',
+                'To avoid analyzing the property.'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Multiple structures give the seller choices and help reveal what matters most to them — moving negotiations toward solutions.'
+            },
+            {
+              id: 'd9q2_q7',
+              text: 'Which statement about low down payments is MOST accurate?',
+              type: 'multiple_choice',
+              options: [
+                'Low down payments are always riskier.',
+                'Low down payments are always safer.',
+                'Low down payments can be very effective when paired with strong reserves and disciplined analysis.',
+                'Low down payments should never be used.'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Risk is influenced by many factors including reserves and cash flow — not just down payment size. Low down payments paired with strong reserves can be very effective.'
+            },
+            {
+              id: 'd9q2_q8',
+              text: 'Which investor is handling risk more effectively?\n\nInvestor A: 5% down, $60,000 reserves\nInvestor B: 25% down, $2,000 reserves',
+              type: 'multiple_choice',
+              options: [
+                'Investor A',
+                'Investor B',
+                'Neither',
+                'More information is needed'
+              ],
+              correctAnswer: 3,
+              explanationOnFail: 'Down payment alone does not determine risk. Cash flow, reserves, property quality, and many other factors matter. More information is needed to make this determination.'
+            },
+            {
+              id: 'd9q2_q9',
+              text: 'A seller is primarily concerned about receiving consistent monthly income during retirement.\n\nWhich structure would likely be MOST attractive?',
+              type: 'multiple_choice',
+              options: [
+                'Cash offer with immediate closing',
+                'Seller financing with predictable monthly payments',
+                'Large earnest money deposit',
+                'Lower purchase price'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'A seller seeking monthly retirement income is a natural fit for seller financing with predictable monthly payments.'
+            },
+            {
+              id: 'd9q2_q10',
+              text: 'You create three different seller-financing offers.\n\nWhat should ALL three offers have in common?',
+              type: 'multiple_choice',
+              options: [
+                'One should be intentionally bad.',
+                'One should be impossible to accept.',
+                'All should meet your investment criteria and be deals you would happily buy.',
+                'The seller should obviously choose your favorite one.'
+              ],
+              correctAnswer: 2,
+              explanationOnFail: 'Never present a structure you don\'t actually want. Every option should be a win for you if accepted.'
+            },
+            {
+              id: 'd9q2_q11',
+              text: 'A property only works for you if the seller finances it at 4% interest. The seller wants 7%.\n\nWhat is the BEST approach?',
+              type: 'multiple_choice',
+              options: [
+                'Tell them no.',
+                'Ask what they\'re trying to accomplish with the higher interest rate and look for other ways to solve that problem.',
+                'Agree to 7% immediately.',
+                'End negotiations.'
+              ],
+              correctAnswer: 1,
+              explanationOnFail: 'Understanding WHY they want 7% reveals the underlying need. There may be other ways to solve their problem while keeping the rate workable for you.'
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     day: 10,
