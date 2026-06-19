@@ -164,7 +164,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
                   Pre-Day {pd.day} — {pd.title}{previewCompletedDays.includes(pd.day) ? ' ✓' : ''}
                 </option>
               ))}
-              {Array.from({ length: 32 }, (_, i) => i + 1).map(d => (
+              {Array.from({ length: 30 }, (_, i) => i + 1).map(d => (
                 <option key={d} value={d} style={{ color: '#000' }}>
                   Day {d}{previewCompletedDays.includes(d) ? ' ✓' : ''}
                 </option>
@@ -209,7 +209,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
               cohortAttempt: 1,
               completedDays: previewCompletedDays,
               submissions: previewSubmissions,
-              currentDay: 32,
+              currentDay: 30,
               trainingCompletedDays: previewCompletedDays,
             }}
             onSubmit={async (day, data) => {
@@ -353,7 +353,7 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
                   Pre-Day {pd.day} — {pd.title}
                 </option>
               ))}
-              {Array.from({ length: 32 }, (_, i) => {
+              {Array.from({ length: 30 }, (_, i) => {
                 const dayData = getDayContent(i + 1, contentOverrides);
                 return (
                   <option key={i + 1} value={i + 1} style={{ background: '#1a1a2e' }}>
@@ -1375,7 +1375,7 @@ function OverviewTab({ active, nonAdmin, dayDistribution, retentionRate, communi
       <div className="card" style={{ marginBottom: 24 }}>
         <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Active Operators by Day</h3>
         <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 160, overflowX: 'auto' }}>
-          {Array.from({ length: 32 }, (_, i) => {
+          {Array.from({ length: 30 }, (_, i) => {
             const count = dayDistribution[i + 1] || 0;
             return (
               <div key={i} style={{
@@ -1506,7 +1506,7 @@ function ParticipantsTab({ nonAdmin, onRemove, onDelete, onReactivate, onApprove
 
               {/* Stats row */}
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-                <MiniStat label="Day" value={p.currentDay > 32 ? '✓' : p.currentDay} color="#e94560" />
+                <MiniStat label="Day" value={p.currentDay > 30 ? '✓' : p.currentDay} color="#e94560" />
                 <MiniStat label="UC Pts" value={p.ucPoints || calculateUCPoints(p.metrics || {})} color="#f0a500" />
                 <MiniStat label="Offers" value={p.metrics?.offersSubmitted || 0} color="#e94560" />
                 <MiniStat label="Subs" value={p.submissions?.length || 0} color="#888" />
@@ -1598,7 +1598,7 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
 
   // Offer tracking (weekly)
   const currentDay = p.currentDay || 1;
-  const weekNum = currentDay <= 32 ? getChallengeWeek(currentDay) : null;
+  const weekNum = currentDay <= 30 ? getChallengeWeek(currentDay) : null;
   const weeklyTarget = weekNum ? getWeeklyOfferTarget(currentDay) : null;
 
   const handleLoadCrm = async () => {
@@ -1890,7 +1890,7 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12, marginBottom: 24 }}>
         <div className="card" style={{ textAlign: 'center', padding: 16 }}>
           <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: '#e94560' }}>
-            {p.currentDay > 32 ? '✓' : p.currentDay}
+            {p.currentDay > 30 ? '✓' : p.currentDay}
           </div>
           <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>Current Day</div>
         </div>
@@ -1914,7 +1914,7 @@ function ParticipantDetail({ participant, onBack, onRemove, onDelete, onReactiva
       <div className="card" style={{ marginBottom: 24 }}>
         <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Activity Map</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: 6 }}>
-          {Array.from({ length: 32 }, (_, i) => {
+          {Array.from({ length: 30 }, (_, i) => {
             const isComplete = p.completedDays?.includes(i + 1);
             const isCurrent = i + 1 === p.currentDay;
             return (
@@ -2129,7 +2129,7 @@ function SubmissionsTab({ nonAdmin, onVerifySubmissionSocial }) {
             style={{ width: 'auto', padding: '8px 12px', fontSize: 14, minWidth: 180 }}
           >
             <option value={0}>All Days ({allSubmissions.length})</option>
-            {Array.from({ length: 32 }, (_, i) => {
+            {Array.from({ length: 30 }, (_, i) => {
               const dayNum = i + 1;
               const count = dayCounts[dayNum] || 0;
               const dayData = CHALLENGE_DAYS[i];
@@ -2290,7 +2290,7 @@ function DailyMinimumsEditor({ overrides, onSave, onBack }) {
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: 32 }, (_, i) => {
+            {Array.from({ length: 30 }, (_, i) => {
               const d = i + 1;
               return (
                 <tr key={d} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
@@ -4481,7 +4481,7 @@ function ComplianceOverview({ participants, allSubmissions, dailyMins, weeklyMin
     const nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     calendarDay = Math.floor((nowDay - startDay) / (1000 * 60 * 60 * 24)) + 1;
   }
-  const currentDay = Math.max(1, Math.min(calendarDay, 32));
+  const currentDay = Math.max(1, Math.min(calendarDay, 30));
   const currentWeek = getWeekNumber(currentDay);
   const { start: weekStart } = getWeekRange(currentWeek);
   const dayInWeek = currentDay - weekStart + 1;
@@ -4898,8 +4898,8 @@ const REFLECTION_DAYS = [7, 14, 21, 28];
 function DayReorderEditor({ contentOverrides, onSave, onBack }) {
   const savedOrder = contentOverrides?._dayOrder;
   const [order, setOrder] = useState(() => {
-    if (savedOrder && savedOrder.length === 32) return [...savedOrder];
-    return Array.from({ length: 32 }, (_, i) => i + 1);
+    if (savedOrder && savedOrder.length === 30) return [...savedOrder];
+    return Array.from({ length: 30 }, (_, i) => i + 1);
   });
   const [saving, setSaving] = useState(false);
 
@@ -4918,7 +4918,7 @@ function DayReorderEditor({ contentOverrides, onSave, onBack }) {
   };
 
   const resetOrder = () => {
-    setOrder(Array.from({ length: 32 }, (_, i) => i + 1));
+    setOrder(Array.from({ length: 30 }, (_, i) => i + 1));
   };
 
   const handleSave = async () => {

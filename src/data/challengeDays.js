@@ -11135,32 +11135,6 @@ Then: recommit to taking action for the next 7 days regardless of fear, uncertai
     transcript: null,
     downloads: [],
   },
-  {
-    day: 31,
-    title: "Day 31 - Coming Soon",
-    caption: "Content coming soon.",
-    taskDescription: "",
-    trainingContent: "",
-    category: "closing",
-    weekNumber: 4,
-    weekTitle: "CLOSE & CELEBRATE",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-  },
-  {
-    day: 32,
-    title: "Day 32 - Coming Soon",
-    caption: "Content coming soon.",
-    taskDescription: "",
-    trainingContent: "",
-    category: "closing",
-    weekNumber: 4,
-    weekTitle: "CLOSE & CELEBRATE",
-    videoUrl: null,
-    transcript: null,
-    downloads: [],
-  },
 ];
 
 
@@ -11168,7 +11142,7 @@ export const DEFAULT_PHASES = [
   { label: "Build the Foundation", days: [1, 2, 3, 4, 5, 6, 7], color: "#48c78e", weekNumber: 1 },
   { label: "Build the Pipeline", days: [8, 9, 10, 11, 12, 13, 14], color: "#d4a843", weekNumber: 2 },
   { label: "Apply Pressure", days: [15, 16, 17, 18, 19, 20, 21], color: "#b85c38", weekNumber: 3 },
-  { label: "Full Sprint", days: [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32], color: "#e94560", weekNumber: 4 },
+  { label: "Full Sprint", days: [22, 23, 24, 25, 26, 27, 28, 29, 30], color: "#e94560", weekNumber: 4 },
 ];
 
 // Kept for backward compatibility
@@ -11193,8 +11167,8 @@ export function getCategoryColors(phases) {
 // Resolve content day from slot day using admin day order
 export function resolveContentDay(slotDay, overrides = {}) {
   const dayOrder = overrides?._dayOrder;
-  if (!dayOrder || !Array.isArray(dayOrder) || dayOrder.length !== 32) return slotDay;
-  if (slotDay < 1 || slotDay > 32) return slotDay;
+  if (!dayOrder || !Array.isArray(dayOrder) || dayOrder.length !== 30) return slotDay;
+  if (slotDay < 1 || slotDay > 30) return slotDay;
   return dayOrder[slotDay - 1] || slotDay;
 }
 
@@ -11346,7 +11320,7 @@ export const POST_30_MINIMUMS = {
 
 // Get the daily minimums for a specific day, merging admin overrides
 export function getDailyMinimums(dayNum, adminOverrides = {}, cohortAttempt = 1) {
-  if (dayNum > 32) return POST_30_MINIMUMS;
+  if (dayNum > 30) return POST_30_MINIMUMS;
   const base = cohortAttempt >= 2
     ? (VETERAN_DAILY_MINIMUMS[dayNum] || VETERAN_DAILY_MINIMUMS[1])
     : (DAILY_MINIMUMS[dayNum] || DAILY_MINIMUMS[1]);

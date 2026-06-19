@@ -102,7 +102,7 @@ export default function Leaderboard({ participants, currentUserId }) {
                     )}
                   </div>
                   <div style={{ fontSize: 11, color: '#666', marginTop: 2 }}>
-                    Day {p.currentDay > 32 ? p.currentDay : `${p.currentDay}/32`}
+                    Day {p.currentDay > 30 ? p.currentDay : `${p.currentDay}/30`}
                     {p.streak > 0 && <span style={{ marginLeft: 8, color: '#48c78e' }}>🔥 {p.streak} streak</span>}
                   </div>
                 </div>

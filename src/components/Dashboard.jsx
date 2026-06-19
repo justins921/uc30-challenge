@@ -676,7 +676,7 @@ function NextDayCountdown({ calendarDay }) {
     return () => clearInterval(timer);
   }, [calendarDay]);
 
-  const isPost30 = calendarDay > 32;
+  const isPost30 = calendarDay > 30;
 
   return (
     <div className="fade-up" style={{
@@ -1150,7 +1150,7 @@ function NextCohortCountdown({ nextCohortDate }) {
 function ComplianceCards({ calendarDay, existingDailySubmission, complianceSettings, user }) {
   const enforcement = { ...DEFAULT_ENFORCEMENT, ...complianceSettings?.enforcement };
 
-  const currentDay = Math.max(1, Math.min(calendarDay || 1, 32));
+  const currentDay = Math.max(1, Math.min(calendarDay || 1, 30));
   const currentWeek = getChallengeWeekNumber(currentDay);
   const { start: weekStart, end: weekEnd } = getWeekDayRange(currentWeek);
   const dayInWeek = currentDay - weekStart + 1;
