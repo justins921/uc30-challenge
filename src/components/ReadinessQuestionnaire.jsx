@@ -221,7 +221,7 @@ export default function ReadinessQuestionnaire({ onClose }) {
       <div className="card" style={{ textAlign: 'center', padding: '32px 24px', marginBottom: 24 }}>
         <div style={{ fontSize: 36, marginBottom: 12 }}>📋</div>
         <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 10 }}>
-          Are You Ready for UC30?
+          Am I Ready for Real Estate Investing?
         </h1>
         <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7, maxWidth: 440, margin: '0 auto' }}>
           Answer these questions honestly. This isn't a test — it's a tool to make sure you're set up to succeed, not just participate.
