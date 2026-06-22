@@ -204,36 +204,36 @@ Quick Rules To Remember
               label: '1. What are the FOUR primary ways real estate investors make money?',
               type: 'multiple_choice',
               options: [
+                'Cash Flow, Financing, Credit Score Improvements, Appreciation',
+                'Appreciation, Property Management Fees, Reserves, Vacancy Savings',
                 'Cash Flow, Appreciation, Principal Paydown, Tax Benefits',
-                'Cash Flow, Financing, Credit Scores, Appreciation',
-                'Appreciation, Property Management, Reserves, Vacancy',
-                'Cash Flow, Repairs, Equity, Interest Rates',
+                'Cash Flow, Repairs and Maintenance, Equity Buildup, Interest Rate Arbitrage',
               ],
-              correctAnswer: 0,
+              correctAnswer: 2,
             },
             {
               id: 'rm101_q2',
               label: '2. What is Cash Flow?',
               type: 'multiple_choice',
               options: [
-                'The increase in a property\'s value over time',
-                'The amount of principal paid down on a loan each year',
-                'The money left over after all expenses, debt payments, and reserves are accounted for',
-                'The percentage return earned on the cash invested into a property',
+                'The total increase in a property\'s market value over a given period of time',
+                'Money left over after all expenses, debt, and reserves',
+                'The amount of principal that gets paid down on the mortgage loan each year',
+                'The percentage return earned on the total cash you invested into the property',
               ],
-              correctAnswer: 2,
+              correctAnswer: 1,
             },
             {
               id: 'rm101_q3',
               label: '3. What is Cash on Cash Return?',
               type: 'multiple_choice',
               options: [
-                'The percentage return earned on the actual cash you invested into a property, based on the property\'s annual cash flow',
-                'The percentage increase in the property\'s value each year',
-                'The percentage of the loan balance paid down each year',
-                'The percentage return earned from all sources including appreciation, principal paydown, and tax benefits',
+                'The percentage increase in a property\'s total market value on an annual basis',
+                'The total return from all sources including appreciation, principal paydown, tax benefits, and cash flow combined',
+                'The percentage of the outstanding loan balance that is paid down each calendar year',
+                'Annual cash flow divided by the total cash you invested',
               ],
-              correctAnswer: 0,
+              correctAnswer: 3,
               explanation: 'Example: If you invest $100,000 and the property produces $10,000 of annual cash flow, Cash on Cash Return = 10%',
             },
             {
@@ -241,10 +241,10 @@ Quick Rules To Remember
               label: '4. What is Cap Rate?',
               type: 'multiple_choice',
               options: [
-                'The percentage return earned on your cash invested after financing',
-                'The percentage return a property produces before financing by comparing Net Operating Income (NOI) to the purchase price',
-                'The percentage increase in property value each year',
-                'The percentage of a loan that is paid down annually',
+                'The percentage of your total cash investment that is returned to you annually through cash flow',
+                'NOI divided by purchase price — measures performance before financing',
+                'The annual percentage increase in a property\'s appraised market value over time',
+                'The percentage of the outstanding loan principal that gets paid down each year by tenants',
               ],
               correctAnswer: 1,
               explanation: 'Example: If a property produces $20,000 in NOI and costs $250,000, Cap Rate = 8%. Cap Rate measures the property\'s performance before considering financing.',
@@ -254,10 +254,10 @@ Quick Rules To Remember
               label: '5. What is Principal Paydown?',
               type: 'multiple_choice',
               options: [
-                'The amount of appreciation earned each year',
-                'The reduction of your loan balance over time, which increases your equity in the property',
-                'The amount of cash flow remaining after expenses',
-                'The amount of taxes saved through depreciation',
+                'The annual increase in a property\'s appraised market value due to local market conditions',
+                'Your loan balance decreasing over time, building equity',
+                'The net cash flow that remains each month after subtracting all operating expenses from rental income',
+                'The total amount of taxes saved annually through depreciation deductions and write-offs',
               ],
               correctAnswer: 1,
             },
@@ -266,12 +266,12 @@ Quick Rules To Remember
               label: '6. What is the BIGGEST difference between Cap Rate and Cash on Cash Return?',
               type: 'multiple_choice',
               options: [
-                'Cap Rate includes financing while Cash on Cash Return ignores financing',
-                'Both metrics measure the exact same thing',
-                'Cap Rate measures property performance before financing, while Cash on Cash Return measures the return on the actual cash you invested after financing',
-                'Cash on Cash Return measures appreciation while Cap Rate measures cash flow',
+                'Cap Rate factors in your financing terms while Cash on Cash Return strips out all debt service',
+                'Cap Rate ignores financing; Cash on Cash Return includes it',
+                'Both metrics measure the exact same thing using slightly different formulas',
+                'Cash on Cash Return tracks appreciation over time while Cap Rate focuses only on monthly cash flow',
               ],
-              correctAnswer: 2,
+              correctAnswer: 1,
             },
           ],
         },
@@ -1866,12 +1866,12 @@ Focus MORE on building rapport, understanding problems, and practicing negotiati
               text: "Which statement best describes the purpose of an offer?",
               type: "multiple_choice",
               options: [
-                "An offer is a commitment to purchase the property.",
-                "An offer is a tool used to control an opportunity while gathering additional information and protecting downside risk.",
-                "An offer is primarily used to impress the seller.",
-                "An offer should only be submitted when you are completely certain you will close."
+                "A binding commitment to purchase the property at the agreed-upon terms with no further investigation needed.",
+                "A way to impress the seller and demonstrate that you are a serious, well-funded buyer.",
+                "A tool to control an opportunity while gathering info and protecting downside risk.",
+                "Something you should only submit after completing all due diligence and being completely certain you will close."
               ],
-              correctAnswer: 1,
+              correctAnswer: 2,
             },
             {
               id: "d3q1_2",
@@ -2649,12 +2649,12 @@ Strong relationships with title companies can reduce stress, improve confidence,
               text: "What is one of the BIGGEST dangers of low down payment creative financing deals?",
               type: "multiple_choice",
               options: [
-                "Lower monthly payments",
-                "Increased leverage and reduced safety margin",
-                "Better cash flow",
-                "Longer amortization"
+                "Lower monthly payments that reduce your overall portfolio income potential",
+                "Better cash flow that masks underlying property condition issues",
+                "Higher leverage with a thinner safety margin",
+                "Longer amortization schedules that delay your equity buildup timeline"
               ],
-              correctAnswer: 1,
+              correctAnswer: 2,
             },
             {
               id: "d4q1_2",
@@ -5393,12 +5393,12 @@ KEY TAKEAWAY: Great negotiators do not win arguments. They build trust, understa
               text: 'A seller says:\n"I\'m tired of the property, but I don\'t really need the money."\n\nWhat is the BEST follow-up question?',
               type: 'multiple_choice',
               options: [
-                '"Would you take $50,000 less?"',
-                '"How much cash do you need today?"',
-                '"If money isn\'t the primary concern, what would an ideal outcome look like for you?"',
-                '"What\'s the lowest you\'ll take?"'
+                '"Would you consider selling for a significant discount if we could close within the next two weeks?"',
+                '"What would an ideal outcome look like for you?"',
+                '"How much cash do you absolutely need to walk away from this deal today?"',
+                '"What\'s the lowest price you\'d be willing to accept if I made you a fair offer?"'
               ],
-              correctAnswer: 2,
+              correctAnswer: 1,
               explanationOnFail: 'When a seller says money isn\'t the main concern, the best approach is to understand what IS important to them. Asking about their ideal outcome uncovers their true motivation.'
             },
             {
@@ -6434,12 +6434,12 @@ KEY TAKEAWAY: Average investors negotiate price. Great investors negotiate struc
               text: 'Which statement best summarizes deal structuring?',
               type: 'multiple_choice',
               options: [
-                'The buyer who pays the most wins.',
-                'The seller should always get exactly what they want.',
-                'The goal is to find a structure that solves the seller\'s problem while still meeting your investment criteria.',
-                'Negotiations are primarily about lowering the purchase price.'
+                'The buyer who offers the highest purchase price and the most favorable closing timeline always wins the deal.',
+                'Solve the seller\'s problem while meeting your criteria.',
+                'The seller should always get exactly what they want so you can build long-term referral relationships.',
+                'Negotiations are primarily about finding creative ways to significantly lower the final purchase price.'
               ],
-              correctAnswer: 2,
+              correctAnswer: 1,
               explanationOnFail: 'Deal structuring is about finding solutions that work for both parties — solving the seller\'s problem while protecting your investment criteria.'
             },
             {
