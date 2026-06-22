@@ -11,7 +11,20 @@ import AffiliatePage from './components/AffiliatePage';
 import ReadinessQuestionnaire from './components/ReadinessQuestionnaire';
 import FreeToolsPage from './components/FreeToolsPage';
 
+const DEV_VERSION = 'v0.9.2-beta';
+
 export default function App() {
+  // DEV BANNER — remove this useEffect block before going live
+  useEffect(() => {
+    const banner = document.createElement('div');
+    banner.id = 'uc30-dev-banner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#1a1a2e;color:#e94560;text-align:center;padding:6px 12px;font-size:12px;font-weight:600;font-family:monospace;letter-spacing:0.5px;border-bottom:2px solid #e94560;pointer-events:none;';
+    banner.textContent = `DEV BUILD — ${DEV_VERSION} — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+    document.body.prepend(banner);
+    document.body.style.paddingTop = '32px';
+    return () => { banner.remove(); document.body.style.paddingTop = ''; };
+  }, []);
+
   const {
     user,
     participants,
