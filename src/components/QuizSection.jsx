@@ -111,6 +111,18 @@ export default function QuizSection({ quiz, participantId, dayNumber, existingAt
 function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, onComplete, existingAttempts }) {
   const inputs = useMemo(() => {
     if (scenario.inputs) return scenario.inputs;
+    if (scenario.questions) {
+      return scenario.questions.map(q => ({
+        id: q.id,
+        label: q.text,
+        type: q.type || 'multiple_choice',
+        options: q.options,
+        correctAnswer: q.correctAnswer,
+        tolerance: q.tolerance,
+        unit: q.unit,
+        explanation: q.explanationOnFail || q.explanation,
+      }));
+    }
     if (scenario.options) {
       return [{
         id: scenario.id,

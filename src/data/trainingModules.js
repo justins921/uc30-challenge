@@ -6921,6 +6921,7 @@ export function getResolvedTrainingModules(trainingConfig = {}) {
       ...(override.title !== undefined ? { title: override.title } : {}),
       ...(override.description !== undefined ? { description: override.description } : {}),
       ...(override.content !== undefined ? { content: override.content } : {}),
+      ...(override.quiz !== undefined ? { quiz: override.quiz } : {}),
       ...(override.hidden !== undefined ? { hidden: override.hidden } : {}),
     };
   });

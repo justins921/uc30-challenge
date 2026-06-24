@@ -2110,6 +2110,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
   const [editingModuleId, setEditingModuleId] = useState(null);
   const [editContent, setEditContent] = useState('');
   const [editTitle, setEditTitle] = useState('');
+  const [editQuiz, setEditQuiz] = useState(null);
   const [moduleSaving, setModuleSaving] = useState(false);
   const [editingDay, setEditingDay] = useState(null);
   const [editingPhases, setEditingPhases] = useState(false);
@@ -2148,10 +2149,36 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
     onSetTrainingConfig(updated);
   };
 
+  const normalizeQuizForEditing = (quiz) => {
+    if (!quiz?.scenarios?.length) return null;
+    return {
+      ...quiz,
+      scenarios: quiz.scenarios.map(s => ({
+        ...s,
+        inputs: s.inputs
+          ? s.inputs.map(inp => ({ ...inp }))
+          : s.questions
+            ? s.questions.map(q => ({
+                id: q.id,
+                label: q.text,
+                type: q.type || 'multiple_choice',
+                options: q.options ? [...q.options] : [],
+                correctAnswer: q.correctAnswer,
+                tolerance: q.tolerance,
+                unit: q.unit,
+                explanation: q.explanationOnFail || q.explanation,
+              }))
+            : [],
+        questions: undefined,
+      })),
+    };
+  };
+
   const startEditingModule = (mod) => {
     setEditingModuleId(mod.id);
     setEditTitle(mod.title);
     setEditContent(mod.content || '');
+    setEditQuiz(normalizeQuizForEditing(mod.quiz));
   };
 
   const saveModuleEdit = async () => {
@@ -2160,6 +2187,8 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
     const defaultMod = TRAINING_MODULES.find(m => m.id === editingModuleId);
     const titleChanged = defaultMod && editTitle !== defaultMod.title;
     const contentChanged = defaultMod && editContent !== defaultMod.content;
+    const defaultQuiz = normalizeQuizForEditing(defaultMod?.quiz);
+    const quizChanged = JSON.stringify(editQuiz) !== JSON.stringify(defaultQuiz);
     const updated = {
       ...trainingConfig,
       moduleOverrides: {
@@ -2168,6 +2197,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
           ...current,
           ...(titleChanged ? { title: editTitle } : {}),
           ...(contentChanged ? { content: editContent } : {}),
+          ...(quizChanged && editQuiz ? { quiz: editQuiz } : {}),
         },
       },
     };
@@ -2208,12 +2238,195 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
           }} />
         </div>
 
-        {mod?.quiz?.scenarios?.length > 0 && (
-          <div className="card" style={{ marginBottom: 16, opacity: 0.6 }}>
-            <div style={{ fontSize: 13, color: '#888' }}>
-              Quiz: {mod.quiz.scenarios.reduce((n, s) => n + (s.inputs || s.questions || []).length, 0)} questions
-              <span style={{ color: '#555', marginLeft: 8 }}>(quiz editing coming soon)</span>
-            </div>
+        {editQuiz?.scenarios?.length > 0 && (
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ fontSize: 14, color: '#f0a500', fontWeight: 700, display: 'block', marginBottom: 12 }}>
+              Quiz ({editQuiz.scenarios.reduce((n, s) => n + (s.inputs || []).length, 0)} questions)
+            </label>
+            {editQuiz.scenarios.map((scenario, sIdx) => (
+              <div key={scenario.id || sIdx} className="card" style={{ marginBottom: 12, padding: 20 }}>
+                <div style={{ marginBottom: 14 }}>
+                  <label style={{ fontSize: 11, color: '#888', fontWeight: 600, display: 'block', marginBottom: 4 }}>Scenario Title</label>
+                  <input
+                    value={scenario.title || ''}
+                    onChange={e => {
+                      const updated = { ...editQuiz, scenarios: editQuiz.scenarios.map((s, i) => i === sIdx ? { ...s, title: e.target.value } : s) };
+                      setEditQuiz(updated);
+                    }}
+                    style={{
+                      width: '100%', padding: '8px 12px', borderRadius: 6, fontSize: 13, fontWeight: 600,
+                      background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+                      color: '#eee', fontFamily: "'DM Sans', sans-serif",
+                    }}
+                  />
+                </div>
+
+                {scenario.description && (
+                  <div style={{ marginBottom: 14 }}>
+                    <label style={{ fontSize: 11, color: '#888', fontWeight: 600, display: 'block', marginBottom: 4 }}>Scenario Description</label>
+                    <textarea
+                      value={scenario.description || ''}
+                      onChange={e => {
+                        const updated = { ...editQuiz, scenarios: editQuiz.scenarios.map((s, i) => i === sIdx ? { ...s, description: e.target.value } : s) };
+                        setEditQuiz(updated);
+                      }}
+                      rows={4}
+                      style={{
+                        width: '100%', padding: '8px 12px', borderRadius: 6, fontSize: 12,
+                        background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+                        color: '#ccc', fontFamily: 'monospace', lineHeight: 1.5, resize: 'vertical',
+                      }}
+                    />
+                  </div>
+                )}
+
+                {(scenario.inputs || []).map((input, qIdx) => (
+                  <div key={input.id || qIdx} style={{
+                    padding: 14, marginBottom: 10, borderRadius: 8,
+                    background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                      <span style={{ fontSize: 11, color: '#f0a500', fontWeight: 700 }}>Q{qIdx + 1}</span>
+                      <span style={{ fontSize: 11, color: '#555' }}>{input.type || 'multiple_choice'}</span>
+                    </div>
+
+                    <div style={{ marginBottom: 10 }}>
+                      <label style={{ fontSize: 11, color: '#888', fontWeight: 600, display: 'block', marginBottom: 3 }}>Question</label>
+                      <textarea
+                        value={input.label || ''}
+                        onChange={e => {
+                          const newInputs = [...scenario.inputs];
+                          newInputs[qIdx] = { ...newInputs[qIdx], label: e.target.value };
+                          const updated = { ...editQuiz, scenarios: editQuiz.scenarios.map((s, i) => i === sIdx ? { ...s, inputs: newInputs } : s) };
+                          setEditQuiz(updated);
+                        }}
+                        rows={2}
+                        style={{
+                          width: '100%', padding: '8px 10px', borderRadius: 6, fontSize: 13,
+                          background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+                          color: '#ddd', fontFamily: "'DM Sans', sans-serif", resize: 'vertical',
+                        }}
+                      />
+                    </div>
+
+                    {input.type === 'multiple_choice' && input.options && (
+                      <div style={{ marginBottom: 10 }}>
+                        <label style={{ fontSize: 11, color: '#888', fontWeight: 600, display: 'block', marginBottom: 6 }}>
+                          Options (select correct answer)
+                        </label>
+                        {input.options.map((opt, oIdx) => (
+                          <div key={oIdx} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                            <button
+                              onClick={() => {
+                                const newInputs = [...scenario.inputs];
+                                newInputs[qIdx] = { ...newInputs[qIdx], correctAnswer: oIdx };
+                                const updated = { ...editQuiz, scenarios: editQuiz.scenarios.map((s, i) => i === sIdx ? { ...s, inputs: newInputs } : s) };
+                                setEditQuiz(updated);
+                              }}
+                              style={{
+                                width: 22, height: 22, borderRadius: 11, border: `2px solid ${input.correctAnswer === oIdx ? '#48c78e' : 'rgba(255,255,255,0.15)'}`,
+                                background: input.correctAnswer === oIdx ? 'rgba(72,199,142,0.2)' : 'transparent',
+                                cursor: 'pointer', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              }}
+                            >
+                              {input.correctAnswer === oIdx && <div style={{ width: 10, height: 10, borderRadius: 5, background: '#48c78e' }} />}
+                            </button>
+                            <input
+                              value={opt}
+                              onChange={e => {
+                                const newOptions = [...input.options];
+                                newOptions[oIdx] = e.target.value;
+                                const newInputs = [...scenario.inputs];
+                                newInputs[qIdx] = { ...newInputs[qIdx], options: newOptions };
+                                const updated = { ...editQuiz, scenarios: editQuiz.scenarios.map((s, i) => i === sIdx ? { ...s, inputs: newInputs } : s) };
+                                setEditQuiz(updated);
+                              }}
+                              style={{
+                                flex: 1, padding: '6px 10px', borderRadius: 6, fontSize: 12,
+                                background: 'rgba(255,255,255,0.04)', border: `1px solid ${input.correctAnswer === oIdx ? 'rgba(72,199,142,0.3)' : 'rgba(255,255,255,0.08)'}`,
+                                color: input.correctAnswer === oIdx ? '#48c78e' : '#bbb', fontFamily: "'DM Sans', sans-serif",
+                              }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {input.type === 'number' && (
+                      <div style={{ display: 'flex', gap: 12, marginBottom: 10 }}>
+                        <div style={{ flex: 1 }}>
+                          <label style={{ fontSize: 11, color: '#888', fontWeight: 600, display: 'block', marginBottom: 3 }}>Correct Answer</label>
+                          <input
+                            type="number"
+                            value={input.correctAnswer ?? ''}
+                            onChange={e => {
+                              const newInputs = [...scenario.inputs];
+                              newInputs[qIdx] = { ...newInputs[qIdx], correctAnswer: parseFloat(e.target.value) || 0 };
+                              const updated = { ...editQuiz, scenarios: editQuiz.scenarios.map((s, i) => i === sIdx ? { ...s, inputs: newInputs } : s) };
+                              setEditQuiz(updated);
+                            }}
+                            style={{ width: '100%', padding: '6px 10px', borderRadius: 6, fontSize: 13, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }}
+                          />
+                        </div>
+                        <div style={{ width: 80 }}>
+                          <label style={{ fontSize: 11, color: '#888', fontWeight: 600, display: 'block', marginBottom: 3 }}>Tolerance</label>
+                          <input
+                            type="number"
+                            value={input.tolerance ?? ''}
+                            onChange={e => {
+                              const newInputs = [...scenario.inputs];
+                              newInputs[qIdx] = { ...newInputs[qIdx], tolerance: parseFloat(e.target.value) || 0 };
+                              const updated = { ...editQuiz, scenarios: editQuiz.scenarios.map((s, i) => i === sIdx ? { ...s, inputs: newInputs } : s) };
+                              setEditQuiz(updated);
+                            }}
+                            style={{ width: '100%', padding: '6px 10px', borderRadius: 6, fontSize: 13, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }}
+                          />
+                        </div>
+                        <div style={{ width: 60 }}>
+                          <label style={{ fontSize: 11, color: '#888', fontWeight: 600, display: 'block', marginBottom: 3 }}>Unit</label>
+                          <input
+                            value={input.unit || ''}
+                            onChange={e => {
+                              const newInputs = [...scenario.inputs];
+                              newInputs[qIdx] = { ...newInputs[qIdx], unit: e.target.value };
+                              const updated = { ...editQuiz, scenarios: editQuiz.scenarios.map((s, i) => i === sIdx ? { ...s, inputs: newInputs } : s) };
+                              setEditQuiz(updated);
+                            }}
+                            placeholder="%, $"
+                            style={{ width: '100%', padding: '6px 10px', borderRadius: 6, fontSize: 13, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#eee' }}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
+                      <label style={{ fontSize: 11, color: '#888', fontWeight: 600, display: 'block', marginBottom: 3 }}>Explanation (shown on fail)</label>
+                      <input
+                        value={input.explanation || ''}
+                        onChange={e => {
+                          const newInputs = [...scenario.inputs];
+                          newInputs[qIdx] = { ...newInputs[qIdx], explanation: e.target.value };
+                          const updated = { ...editQuiz, scenarios: editQuiz.scenarios.map((s, i) => i === sIdx ? { ...s, inputs: newInputs } : s) };
+                          setEditQuiz(updated);
+                        }}
+                        placeholder="Optional explanation"
+                        style={{
+                          width: '100%', padding: '6px 10px', borderRadius: 6, fontSize: 12,
+                          background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+                          color: '#999', fontFamily: "'DM Sans', sans-serif",
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {!editQuiz && (
+          <div className="card" style={{ marginBottom: 16, padding: '14px 20px', background: 'rgba(255,255,255,0.02)' }}>
+            <div style={{ fontSize: 13, color: '#666' }}>No quiz for this module</div>
           </div>
         )}
 
