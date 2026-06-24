@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import Header from './Header';
-import { CHALLENGE_DAYS, PRE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, getPreDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DAILY_MINIMUMS, getWeekNumber as getChallengeWeek, getWeeklyOfferTarget, getCohortStartDate } from '../data/challengeDays';
+import { CHALLENGE_DAYS, getPhases, DEFAULT_PHASES, getDayContent, getPreDayContent, GETTING_STARTED_DEFAULT, getGettingStartedContent, DAILY_MINIMUMS, getWeekNumber as getChallengeWeek, getWeeklyOfferTarget, getCohortStartDate } from '../data/challengeDays';
 import { INDICATOR_KEYS, INDICATOR_LABELS, INDICATOR_SHORT_LABELS, INDICATOR_COLORS, UC_POINT_VALUES, calculateUCPoints } from '../data/ucPoints';
 import DayView, { AttachmentLink } from './DayView';
-import ActivationPhase from './ActivationPhase';
 import { LANDING_DEFAULTS } from './LandingPage';
 import Footer from './Footer';
 import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT, checkWeeklyCompliance, getWeekNumber, getWeekRange, getWeekDayCount, calculateAtRisk, getNowInTimezone } from '../data/compliance';
@@ -69,7 +68,7 @@ const ADMIN_TABS = [
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onApprove, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink, practiceDaySettings, onSetPracticeDaySettings, getContactsForParticipant, getUploads, getUploadUrl, complianceSettings, onSetComplianceDailyMinimums, onSetComplianceWeeklyMinimums, onSetComplianceEnforcement, getAllDailySubmissions, getRemovalLog, onSwitchToParticipant, onCompleteActivation, trainingConfig, onSetTrainingConfig }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onApprove, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink, practiceDaySettings, onSetPracticeDaySettings, getContactsForParticipant, getUploads, getUploadUrl, complianceSettings, onSetComplianceDailyMinimums, onSetComplianceWeeklyMinimums, onSetComplianceEnforcement, getAllDailySubmissions, getRemovalLog, onSwitchToParticipant, trainingConfig, onSetTrainingConfig }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -117,182 +116,10 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
     return t;
   });
 
-  const [previewActivation, setPreviewActivation] = useState(false);
-  const [previewDay, setPreviewDay] = useState(null);
-
-  // Preview session state — persists across day switches, resets on exit
-  const [previewContacts, setPreviewContacts] = useState([]);
-  const [previewSubmissions, setPreviewSubmissions] = useState([]);
-  const [previewCompletedDays, setPreviewCompletedDays] = useState([]);
-  const [previewQuizAttempts, setPreviewQuizAttempts] = useState([]);
-
-  const resetPreviewSession = () => {
-    setPreviewDay(null);
-    setPreviewContacts([]);
-    setPreviewSubmissions([]);
-    setPreviewCompletedDays([]);
-    setPreviewQuizAttempts([]);
-  };
-
   const handleTabChange = (newTab) => {
     setTab(newTab);
     setSelectedParticipant(null);
   };
-
-  if (previewDay !== null) {
-    const previewExistingSub = previewSubmissions.find(s => s.day === previewDay) || null;
-    return (
-      <div style={{ position: 'relative' }}>
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-          background: 'rgba(83,52,131,0.95)', padding: '10px 20px',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: 1, textTransform: 'uppercase' }}>
-              Admin Preview — {previewDay <= 0 ? `Pre-Day ${previewDay}` : `Day ${previewDay}`}
-            </span>
-            <select
-              value={previewDay}
-              onChange={e => setPreviewDay(parseInt(e.target.value))}
-              style={{
-                fontSize: 12, padding: '4px 8px', borderRadius: 4,
-                background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)',
-                color: '#fff', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-              }}
-            >
-              {PRE_DAYS.map(pd => (
-                <option key={pd.day} value={pd.day} style={{ color: '#000' }}>
-                  Pre-Day {pd.day} — {pd.title}{previewCompletedDays.includes(pd.day) ? ' ✓' : ''}
-                </option>
-              ))}
-              {Array.from({ length: 30 }, (_, i) => i + 1).map(d => (
-                <option key={d} value={d} style={{ color: '#000' }}>
-                  Day {d}{previewCompletedDays.includes(d) ? ' ✓' : ''}
-                </option>
-              ))}
-            </select>
-            {previewContacts.length > 0 && (
-              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)' }}>
-                {previewContacts.length} contacts | {previewCompletedDays.length} days done
-              </span>
-            )}
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            {(previewContacts.length > 0 || previewCompletedDays.length > 0) && (
-              <button
-                onClick={() => { setPreviewContacts([]); setPreviewSubmissions([]); setPreviewCompletedDays([]); setPreviewQuizAttempts([]); }}
-                style={{
-                  background: 'rgba(233,69,96,0.3)', border: '1px solid rgba(233,69,96,0.5)',
-                  color: '#fff', padding: '6px 12px', borderRadius: 6, fontSize: 12,
-                  fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-                }}
-              >Reset Session</button>
-            )}
-            <button
-              onClick={resetPreviewSession}
-              style={{
-                background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)',
-                color: '#fff', padding: '6px 16px', borderRadius: 6, fontSize: 13,
-                fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-              }}
-            >
-              Exit Preview
-            </button>
-          </div>
-        </div>
-        <div style={{ paddingTop: 44, maxWidth: 700, margin: '0 auto', padding: '60px 20px 40px' }}>
-          <DayView
-            key={previewDay}
-            day={previewDay}
-            user={{
-              ...user,
-              activationCompleted: true,
-              cohortAttempt: 1,
-              completedDays: previewCompletedDays,
-              submissions: previewSubmissions,
-              currentDay: 30,
-              trainingCompletedDays: previewCompletedDays,
-            }}
-            onSubmit={async (day, data) => {
-              setPreviewSubmissions(prev => {
-                const existing = prev.findIndex(s => s.day === day);
-                const sub = { day, ...data, submittedAt: new Date().toISOString() };
-                if (existing >= 0) {
-                  const copy = [...prev];
-                  copy[existing] = sub;
-                  return copy;
-                }
-                return [...prev, sub];
-              });
-              setPreviewCompletedDays(prev => prev.includes(day) ? prev : [...prev, day]);
-            }}
-            onBack={() => setPreviewDay(null)}
-            contentOverrides={contentOverrides}
-            customPhases={customPhases}
-            complianceSettings={complianceSettings}
-            existingDailySubmission={previewExistingSub}
-            onAddContact={async (data) => {
-              const contact = { id: 'preview_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6), created_at: new Date().toISOString(), ...data };
-              setPreviewContacts(prev => [contact, ...prev]);
-              return { success: true, contact };
-            }}
-            onAddFollowUp={async (followUpData, contactUpdates) => {
-              const followUp = { id: 'fu_' + Date.now(), created_at: new Date().toISOString(), ...followUpData };
-              if (contactUpdates) {
-                setPreviewContacts(prev => prev.map(c => c.id === followUpData.contact_id ? { ...c, ...contactUpdates } : c));
-              }
-              return { success: true, followUp };
-            }}
-            onUpdateContact={async (id, updates) => {
-              setPreviewContacts(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
-            }}
-            onUploadFile={async () => {}}
-            contacts={previewContacts}
-            getUploadUrl={null}
-            quizAttempts={previewQuizAttempts}
-            onQuizAttempt={async (attempt) => {
-              setPreviewQuizAttempts(prev => [...prev, attempt]);
-              return attempt;
-            }}
-            isPreview
-          />
-        </div>
-      </div>
-    );
-  }
-
-  if (previewActivation) {
-    return (
-      <div style={{ position: 'relative' }}>
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-          background: 'rgba(233,69,96,0.95)', padding: '10px 20px',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        }}>
-          <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: 1, textTransform: 'uppercase' }}>
-            Admin Preview Mode
-          </span>
-          <button
-            onClick={() => setPreviewActivation(false)}
-            style={{
-              background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)',
-              color: '#fff', padding: '6px 16px', borderRadius: 6, fontSize: 13,
-              fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-            }}
-          >
-            Exit Preview
-          </button>
-        </div>
-        <div style={{ paddingTop: 44 }}>
-          <ActivationPhase
-            user={{ ...user, activationCompleted: false }}
-            onComplete={onCompleteActivation}
-          />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div style={{ minHeight: '100vh' }}>
@@ -317,54 +144,6 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
               background: 'rgba(72,199,142,0.15)', color: '#48c78e',
             }}>My Course</button>
           )}
-        </div>
-
-        {/* Admin Previews */}
-        <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
-          <button
-            onClick={() => setPreviewActivation(true)}
-            style={{
-              flex: 1, minWidth: 200, padding: '14px 20px', borderRadius: 12, fontSize: 14, fontWeight: 600,
-              background: 'rgba(233,69,96,0.06)', border: '1px solid rgba(233,69,96,0.15)',
-              color: '#e94560', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            }}
-          >
-            <span style={{ fontSize: 16 }}>👁️</span>
-            Preview Activation Flow
-          </button>
-          <div style={{
-            flex: 1, minWidth: 200, display: 'flex', alignItems: 'center', gap: 8,
-            padding: '8px 14px', borderRadius: 12,
-            background: 'rgba(83,52,131,0.06)', border: '1px solid rgba(83,52,131,0.15)',
-          }}>
-            <span style={{ fontSize: 16 }}>📋</span>
-            <span style={{ fontSize: 14, fontWeight: 600, color: '#c9a0ff', whiteSpace: 'nowrap' }}>Preview Day</span>
-            <select
-              value=""
-              onChange={(e) => { if (e.target.value !== '') setPreviewDay(parseInt(e.target.value)); }}
-              style={{
-                flex: 1, fontSize: 14, padding: '8px 10px', borderRadius: 8,
-                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-                color: '#eee', fontFamily: "'DM Sans', sans-serif", cursor: 'pointer',
-              }}
-            >
-              <option value="" style={{ background: '#1a1a2e' }}>Select a day...</option>
-              {PRE_DAYS.map(pd => (
-                <option key={pd.day} value={pd.day} style={{ background: '#1a1a2e' }}>
-                  Pre-Day {pd.day} — {pd.title}
-                </option>
-              ))}
-              {Array.from({ length: 30 }, (_, i) => {
-                const dayData = getDayContent(i + 1, contentOverrides);
-                return (
-                  <option key={i + 1} value={i + 1} style={{ background: '#1a1a2e' }}>
-                    Day {i + 1} — {dayData?.title || `Day ${i + 1}`}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
         </div>
 
         {/* Cohort Settings */}

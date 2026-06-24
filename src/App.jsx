@@ -596,7 +596,6 @@ export default function App() {
         getAllDailySubmissions={getAllDailySubmissions}
         getRemovalLog={getRemovalLog}
         onSwitchToParticipant={() => setParticipantMode(true)}
-        onCompleteActivation={completeActivation}
         trainingConfig={trainingConfig}
         onSetTrainingConfig={setTrainingConfig}
       />
