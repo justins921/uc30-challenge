@@ -5,3 +5,4 @@ ALTER TABLE participants ADD COLUMN IF NOT EXISTS is_developer BOOLEAN DEFAULT F
 ALTER TABLE participants ADD COLUMN IF NOT EXISTS social_handles JSONB;
 ALTER TABLE participants ADD COLUMN IF NOT EXISTS getting_started_completed BOOLEAN DEFAULT FALSE;
 ALTER TABLE participants ADD COLUMN IF NOT EXISTS is_approved BOOLEAN DEFAULT FALSE;
+ALTER TABLE participants ADD COLUMN IF NOT EXISTS training_completed_modules JSONB DEFAULT '[]';

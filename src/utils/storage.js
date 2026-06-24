@@ -205,6 +205,12 @@ const supabaseStorage = {
   },
   async setContentOverrides(overrides) { await this._setSetting('content_overrides', overrides); },
 
+  async getTrainingConfig() {
+    const val = await this._getSetting('training_config');
+    return val || {};
+  },
+  async setTrainingConfig(config) { await this._setSetting('training_config', config); },
+
   async getLiveCalls() {
     const val = await this._getSetting('live_calls');
     if (val) { try { localStorage.setItem('uc30_live_calls', JSON.stringify(val)); } catch {} }
@@ -688,6 +694,7 @@ function toDbUpdateRow(updates) {
   if (updates.pipelineModeActivatedAt !== undefined) row.pipeline_mode_activated_at = updates.pipelineModeActivatedAt;
   // Repeat Cohort / Graduate tracking
   if (updates.trainingCompletedDays !== undefined) row.training_completed_days = updates.trainingCompletedDays;
+  if (updates.trainingCompletedModules !== undefined) row.training_completed_modules = updates.trainingCompletedModules;
   if (updates.cohortHistory !== undefined) row.cohort_history = updates.cohortHistory;
   if (updates.ucGraduateCount !== undefined) row.uc_graduate_count = updates.ucGraduateCount;
   if (updates.propertiesUnderContract !== undefined) row.properties_under_contract = updates.propertiesUnderContract;
@@ -759,6 +766,7 @@ function fromDbRow(row) {
     pipelineModeActivatedAt: row.pipeline_mode_activated_at || null,
     // Repeat Cohort / Graduate tracking
     trainingCompletedDays: row.training_completed_days || [],
+    trainingCompletedModules: row.training_completed_modules || [],
     cohortHistory: row.cohort_history || [],
     ucGraduateCount: row.uc_graduate_count || 0,
     propertiesUnderContract: row.properties_under_contract || 0,

@@ -7,6 +7,8 @@ import Dashboard from './components/Dashboard';
 import AdminDashboard from './components/AdminDashboard';
 import OnboardingFlow from './components/OnboardingFlow';
 import ActivationPhase from './components/ActivationPhase';
+import TrainingPhase from './components/TrainingPhase';
+import { getResolvedTrainingModules } from './data/trainingModules';
 import AffiliatePage from './components/AffiliatePage';
 import ReadinessQuestionnaire from './components/ReadinessQuestionnaire';
 import FreeToolsPage from './components/FreeToolsPage';
@@ -111,6 +113,9 @@ export default function App() {
     setComplianceWeeklyMinimums,
     setComplianceEnforcement,
     completeActivation,
+    completeTrainingModule,
+    trainingConfig,
+    setTrainingConfig,
     submitPipelineDay,
     activateNextCohort,
     saveConfidenceSurvey,
@@ -433,6 +438,43 @@ export default function App() {
     );
   }
 
+  // Training Phase gate — after activation, before sprint
+  const resolvedModules = getResolvedTrainingModules(trainingConfig);
+  const trainingComplete = resolvedModules.filter(m => !m.hidden).length === 0 ||
+    resolvedModules.filter(m => !m.hidden).every(m => (user.trainingCompletedModules || []).includes(m.id));
+
+  if ((!user.isAdmin || participantMode) && !trainingComplete) {
+    return (
+      <>
+        {user.isAdmin && participantMode && (
+          <div style={{
+            position: 'sticky', top: 0, zIndex: 200,
+            background: 'rgba(72,199,142,0.95)', padding: '8px 20px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#000' }}>
+              Participant Mode — Taking the course as a participant
+            </span>
+            <button onClick={() => setParticipantMode(false)} style={{
+              fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
+              border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.15)',
+              color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
+            }}>Back to Admin</button>
+          </div>
+        )}
+        <TrainingPhase
+          user={user}
+          modules={resolvedModules}
+          onCompleteModule={completeTrainingModule}
+          onCompleteAll={() => completeActivation({ trainingCompletedModules: resolvedModules.filter(m => !m.hidden).map(m => m.id) })}
+          addQuizAttempt={addQuizAttempt}
+          getQuizAttempts={getQuizAttempts}
+          onSaveExit={user.isAdmin && participantMode ? () => setParticipantMode(false) : undefined}
+        />
+      </>
+    );
+  }
+
   if (currentView === 'admin' && user.isAdmin && !participantMode) {
     // Impersonation: show Dashboard as selected user
     if (viewAsUser) {
@@ -555,6 +597,8 @@ export default function App() {
         getRemovalLog={getRemovalLog}
         onSwitchToParticipant={() => setParticipantMode(true)}
         onCompleteActivation={completeActivation}
+        trainingConfig={trainingConfig}
+        onSetTrainingConfig={setTrainingConfig}
       />
     );
   }

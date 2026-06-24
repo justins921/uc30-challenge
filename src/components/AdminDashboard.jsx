@@ -7,6 +7,7 @@ import ActivationPhase from './ActivationPhase';
 import { LANDING_DEFAULTS } from './LandingPage';
 import Footer from './Footer';
 import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT, checkWeeklyCompliance, getWeekNumber, getWeekRange, getWeekDayCount, calculateAtRisk, getNowInTimezone } from '../data/compliance';
+import { TRAINING_MODULES, getResolvedTrainingModules } from '../data/trainingModules';
 
 function getSocialUrl(platform, handle) {
   const clean = handle.replace(/^@/, '').trim();
@@ -62,12 +63,13 @@ const ADMIN_TABS = [
   { id: 'compliance', label: 'Compliance' },
   { id: 'submissions', label: 'Submissions' },
   { id: 'community', label: 'Community' },
+  { id: 'training', label: 'Training' },
   { id: 'content', label: 'Content' },
   { id: 'support', label: 'Support' },
   { id: 'social', label: 'Social Proof' },
 ];
 
-export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onApprove, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink, practiceDaySettings, onSetPracticeDaySettings, getContactsForParticipant, getUploads, getUploadUrl, complianceSettings, onSetComplianceDailyMinimums, onSetComplianceWeeklyMinimums, onSetComplianceEnforcement, getAllDailySubmissions, getRemovalLog, onSwitchToParticipant, onCompleteActivation }) {
+export default function AdminDashboard({ user, participants, onRemove, onDelete, onReactivate, onApprove, onToggleAdmin, onResetPassword, onLogout, cohortStartDate, nextCohortDate, onSetCohortStartDate, onSetNextCohortDate, contentOverrides, onSetContentOverrides, liveCalls, onSetLiveCalls, customPhases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, supportTickets, onUpdateTicket, onReplyToTicket, onVerifySubmissionSocial, communityPosts, onDeleteCommunityPost, onDeleteCommunityComment, onPinCommunityPost, onWarnCommunityUser, onBanCommunityUser, onCreateCommunityPost, onCommentOnPost, onViewAsUser, dailyMinimumsOverrides, onSetDailyMinimums, skoolLink, onSetSkoolLink, practiceDaySettings, onSetPracticeDaySettings, getContactsForParticipant, getUploads, getUploadUrl, complianceSettings, onSetComplianceDailyMinimums, onSetComplianceWeeklyMinimums, onSetComplianceEnforcement, getAllDailySubmissions, getRemovalLog, onSwitchToParticipant, onCompleteActivation, trainingConfig, onSetTrainingConfig }) {
   const phases = getPhases(customPhases);
   const [tab, setTab] = useState('overview');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
@@ -467,6 +469,12 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             onComment={onCommentOnPost}
             user={user}
             cohortStartDate={cohortStartDate}
+          />
+        )}
+        {tab === 'training' && (
+          <TrainingTab
+            trainingConfig={trainingConfig || {}}
+            onSetTrainingConfig={onSetTrainingConfig}
           />
         )}
         {tab === 'content' && (
@@ -2320,6 +2328,196 @@ function DailyMinimumsEditor({ overrides, onSave, onBack }) {
       <button className="btn-primary" onClick={handleSave} style={{ padding: '12px 32px' }}>
         Save Daily Standards
       </button>
+    </div>
+  );
+}
+
+function TrainingTab({ trainingConfig, onSetTrainingConfig }) {
+  const [editingModuleId, setEditingModuleId] = useState(null);
+  const [editContent, setEditContent] = useState('');
+  const [editTitle, setEditTitle] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const modules = getResolvedTrainingModules(trainingConfig);
+  const overrides = trainingConfig.moduleOverrides || {};
+  const moduleOrder = trainingConfig.moduleOrder || modules.map(m => m.id);
+
+  const moveModule = (idx, direction) => {
+    const order = [...moduleOrder];
+    if (order.length === 0) {
+      modules.forEach(m => order.push(m.id));
+    }
+    const targetIdx = idx + direction;
+    if (targetIdx < 0 || targetIdx >= order.length) return;
+    [order[idx], order[targetIdx]] = [order[targetIdx], order[idx]];
+    onSetTrainingConfig({ ...trainingConfig, moduleOrder: order });
+  };
+
+  const toggleHidden = (moduleId) => {
+    const current = overrides[moduleId] || {};
+    const updated = {
+      ...trainingConfig,
+      moduleOverrides: {
+        ...overrides,
+        [moduleId]: { ...current, hidden: !current.hidden },
+      },
+    };
+    onSetTrainingConfig(updated);
+  };
+
+  const startEditing = (mod) => {
+    setEditingModuleId(mod.id);
+    setEditTitle(mod.title);
+    setEditContent(mod.content || '');
+  };
+
+  const saveEdit = async () => {
+    setSaving(true);
+    const current = overrides[editingModuleId] || {};
+    const defaultMod = TRAINING_MODULES.find(m => m.id === editingModuleId);
+    const titleChanged = defaultMod && editTitle !== defaultMod.title;
+    const contentChanged = defaultMod && editContent !== defaultMod.content;
+    const updated = {
+      ...trainingConfig,
+      moduleOverrides: {
+        ...overrides,
+        [editingModuleId]: {
+          ...current,
+          ...(titleChanged ? { title: editTitle } : {}),
+          ...(contentChanged ? { content: editContent } : {}),
+        },
+      },
+    };
+    await onSetTrainingConfig(updated);
+    setSaving(false);
+    setEditingModuleId(null);
+  };
+
+  if (editingModuleId) {
+    const mod = modules.find(m => m.id === editingModuleId);
+    return (
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+          <button onClick={() => setEditingModuleId(null)} style={{
+            background: 'none', border: 'none', color: '#e94560', cursor: 'pointer',
+            fontSize: 14, fontWeight: 600, padding: 0, fontFamily: "'DM Sans', sans-serif",
+          }}>&larr; Back</button>
+          <h3 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Edit Training Module</h3>
+        </div>
+
+        <div className="card" style={{ marginBottom: 16 }}>
+          <label style={{ fontSize: 12, color: '#888', fontWeight: 600, display: 'block', marginBottom: 6 }}>Title</label>
+          <input value={editTitle} onChange={e => setEditTitle(e.target.value)} style={{
+            width: '100%', padding: '10px 14px', borderRadius: 8, fontSize: 15, fontWeight: 600,
+            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+            color: '#eee', fontFamily: "'DM Sans', sans-serif",
+          }} />
+        </div>
+
+        <div className="card" style={{ marginBottom: 16 }}>
+          <label style={{ fontSize: 12, color: '#888', fontWeight: 600, display: 'block', marginBottom: 6 }}>
+            Content ({editContent.length.toLocaleString()} chars)
+          </label>
+          <textarea value={editContent} onChange={e => setEditContent(e.target.value)} rows={30} style={{
+            width: '100%', padding: '12px 14px', borderRadius: 8, fontSize: 13,
+            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+            color: '#ccc', fontFamily: 'monospace', lineHeight: 1.6, resize: 'vertical',
+          }} />
+        </div>
+
+        {mod?.quiz?.scenarios?.length > 0 && (
+          <div className="card" style={{ marginBottom: 16, opacity: 0.6 }}>
+            <div style={{ fontSize: 13, color: '#888' }}>
+              Quiz: {mod.quiz.scenarios.reduce((n, s) => n + (s.inputs || s.questions || []).length, 0)} questions
+              <span style={{ color: '#555', marginLeft: 8 }}>(quiz editing coming soon)</span>
+            </div>
+          </div>
+        )}
+
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button className="btn-primary" onClick={saveEdit} disabled={saving} style={{ padding: '12px 28px' }}>
+            {saving ? 'Saving...' : 'Save Changes'}
+          </button>
+          <button className="btn-secondary" onClick={() => setEditingModuleId(null)} style={{ padding: '12px 28px' }}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+        <div>
+          <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Training Modules</h3>
+          <p style={{ fontSize: 13, color: '#888', margin: 0 }}>
+            {modules.filter(m => !m.hidden).length} active modules &middot; Users complete these before the 30-day sprint
+          </p>
+        </div>
+      </div>
+
+      {modules.length === 0 && (
+        <div className="card" style={{ textAlign: 'center', padding: 40, color: '#666' }}>
+          No training modules configured yet.
+        </div>
+      )}
+
+      {modules.map((mod, idx) => (
+        <div key={mod.id} style={{
+          display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px',
+          borderRadius: 10, marginBottom: 6,
+          background: mod.hidden ? 'rgba(255,255,255,0.01)' : 'rgba(255,255,255,0.03)',
+          border: `1px solid ${mod.hidden ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.06)'}`,
+          opacity: mod.hidden ? 0.4 : 1,
+        }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <button onClick={() => moveModule(idx, -1)} disabled={idx === 0} style={{
+              background: 'none', border: 'none', color: idx === 0 ? '#333' : '#888',
+              cursor: idx === 0 ? 'default' : 'pointer', fontSize: 10, padding: '2px 4px',
+            }}>&#9650;</button>
+            <button onClick={() => moveModule(idx, 1)} disabled={idx === modules.length - 1} style={{
+              background: 'none', border: 'none', color: idx === modules.length - 1 ? '#333' : '#888',
+              cursor: idx === modules.length - 1 ? 'default' : 'pointer', fontSize: 10, padding: '2px 4px',
+            }}>&#9660;</button>
+          </div>
+
+          <div style={{
+            width: 28, height: 28, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'rgba(233,69,96,0.1)', color: '#e94560', fontSize: 12, fontWeight: 700, flexShrink: 0,
+          }}>
+            {idx + 1}
+          </div>
+
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: mod.hidden ? '#555' : '#eee', marginBottom: 2 }}>
+              {mod.title}
+            </div>
+            <div style={{ fontSize: 11, color: '#666' }}>
+              {mod.description || 'No description'}
+              {mod.quiz?.scenarios?.length > 0 && (
+                <span style={{ marginLeft: 8, color: '#555' }}>
+                  &middot; {mod.quiz.scenarios.reduce((n, s) => n + (s.inputs || s.questions || []).length, 0)} quiz questions
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+            <button onClick={() => startEditing(mod)} style={{
+              fontSize: 11, padding: '5px 12px', borderRadius: 6, cursor: 'pointer',
+              border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+              color: '#aaa', fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
+            }}>Edit</button>
+            <button onClick={() => toggleHidden(mod.id)} style={{
+              fontSize: 11, padding: '5px 12px', borderRadius: 6, cursor: 'pointer',
+              border: `1px solid ${mod.hidden ? 'rgba(72,199,142,0.3)' : 'rgba(255,255,255,0.1)'}`,
+              background: mod.hidden ? 'rgba(72,199,142,0.08)' : 'rgba(255,255,255,0.04)',
+              color: mod.hidden ? '#48c78e' : '#888', fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
+            }}>{mod.hidden ? 'Show' : 'Hide'}</button>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

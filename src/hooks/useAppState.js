@@ -16,6 +16,7 @@ export function useAppState() {
   const [cohortStartDate, setCohortStartDateState] = useState(null);
   const [nextCohortDate, setNextCohortDateState] = useState(null);
   const [contentOverrides, setContentOverridesState] = useState({});
+  const [trainingConfig, setTrainingConfigState] = useState({});
   const [liveCalls, setLiveCallsState] = useState([]);
   const [customPhases, setCustomPhasesState] = useState(null);
   const [landingContent, setLandingContentState] = useState(null);
@@ -195,6 +196,9 @@ export function useAppState() {
 
       const overrides = await Promise.resolve(storage.getContentOverrides());
       if (overrides) setContentOverridesState(overrides);
+
+      const tConfig = await Promise.resolve(storage.getTrainingConfig());
+      if (tConfig) setTrainingConfigState(tConfig);
 
       const calls = await Promise.resolve(storage.getLiveCalls());
       if (calls) setLiveCallsState(calls);
@@ -1410,6 +1414,31 @@ export function useAppState() {
     return { success: true };
   }, [user, participants, persist]);
 
+  // ── Training Modules ─────────────────────────────────────
+  const completeTrainingModule = useCallback(async (moduleId) => {
+    if (!user) return;
+    const current = user.trainingCompletedModules || [];
+    if (current.includes(moduleId)) return;
+    const updated = [...current, moduleId];
+    const updatedUser = { ...user, trainingCompletedModules: updated };
+    if (isSupabaseEnabled) {
+      await storage.updateParticipant(user.id, { trainingCompletedModules: updated });
+    } else {
+      const updatedParticipants = participants.map(p =>
+        p.id === user.id ? updatedUser : p
+      );
+      setParticipants(updatedParticipants);
+      persist(updatedUser, updatedParticipants);
+    }
+    setUser(updatedUser);
+    storage.setUser(updatedUser);
+  }, [user, participants, persist]);
+
+  const setTrainingConfig = useCallback(async (config) => {
+    await Promise.resolve(storage.setTrainingConfig(config));
+    setTrainingConfigState(config);
+  }, []);
+
   // ── Skool Link (admin) ───────────────────────────────────
   const setSkoolLink = useCallback(async (link) => {
     await Promise.resolve(storage.setSkoolLink(link));
@@ -1823,6 +1852,9 @@ export function useAppState() {
     dismissCommunityWarning,
     completeOnboarding,
     completeActivation,
+    completeTrainingModule,
+    trainingConfig,
+    setTrainingConfig,
     skoolLink,
     setSkoolLink,
     practiceDaySettings,
