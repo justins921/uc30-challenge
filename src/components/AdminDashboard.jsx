@@ -62,8 +62,7 @@ const ADMIN_TABS = [
   { id: 'compliance', label: 'Compliance' },
   { id: 'submissions', label: 'Submissions' },
   { id: 'community', label: 'Community' },
-  { id: 'training', label: 'Training' },
-  { id: 'content', label: 'Content' },
+  { id: 'training-content', label: 'Training Content' },
   { id: 'support', label: 'Support' },
   { id: 'social', label: 'Social Proof' },
 ];
@@ -250,14 +249,10 @@ export default function AdminDashboard({ user, participants, onRemove, onDelete,
             cohortStartDate={cohortStartDate}
           />
         )}
-        {tab === 'training' && (
-          <TrainingTab
+        {tab === 'training-content' && (
+          <TrainingContentTab
             trainingConfig={trainingConfig || {}}
             onSetTrainingConfig={onSetTrainingConfig}
-          />
-        )}
-        {tab === 'content' && (
-          <ContentTab
             contentOverrides={contentOverrides}
             onSetContentOverrides={onSetContentOverrides}
             phases={phases}
@@ -2111,11 +2106,20 @@ function DailyMinimumsEditor({ overrides, onSave, onBack }) {
   );
 }
 
-function TrainingTab({ trainingConfig, onSetTrainingConfig }) {
+function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, dailyMinimumsOverrides, onSetDailyMinimums, practiceDaySettings, onSetPracticeDaySettings }) {
   const [editingModuleId, setEditingModuleId] = useState(null);
   const [editContent, setEditContent] = useState('');
   const [editTitle, setEditTitle] = useState('');
-  const [saving, setSaving] = useState(false);
+  const [moduleSaving, setModuleSaving] = useState(false);
+  const [editingDay, setEditingDay] = useState(null);
+  const [editingPhases, setEditingPhases] = useState(false);
+  const [editingLanding, setEditingLanding] = useState(false);
+  const [editingMinimums, setEditingMinimums] = useState(false);
+  const [reorderingDays, setReorderingDays] = useState(false);
+  const [pdVideoUrl, setPdVideoUrl] = useState(practiceDaySettings?.practice_day_video || '');
+  const [pdCalcUrl, setPdCalcUrl] = useState(practiceDaySettings?.rental_calculator_url || '');
+  const [pdSaving, setPdSaving] = useState(false);
+  const [pdSaved, setPdSaved] = useState(false);
 
   const modules = getResolvedTrainingModules(trainingConfig);
   const overrides = trainingConfig.moduleOverrides || {};
@@ -2144,14 +2148,14 @@ function TrainingTab({ trainingConfig, onSetTrainingConfig }) {
     onSetTrainingConfig(updated);
   };
 
-  const startEditing = (mod) => {
+  const startEditingModule = (mod) => {
     setEditingModuleId(mod.id);
     setEditTitle(mod.title);
     setEditContent(mod.content || '');
   };
 
-  const saveEdit = async () => {
-    setSaving(true);
+  const saveModuleEdit = async () => {
+    setModuleSaving(true);
     const current = overrides[editingModuleId] || {};
     const defaultMod = TRAINING_MODULES.find(m => m.id === editingModuleId);
     const titleChanged = defaultMod && editTitle !== defaultMod.title;
@@ -2168,7 +2172,7 @@ function TrainingTab({ trainingConfig, onSetTrainingConfig }) {
       },
     };
     await onSetTrainingConfig(updated);
-    setSaving(false);
+    setModuleSaving(false);
     setEditingModuleId(null);
   };
 
@@ -2214,8 +2218,8 @@ function TrainingTab({ trainingConfig, onSetTrainingConfig }) {
         )}
 
         <div style={{ display: 'flex', gap: 12 }}>
-          <button className="btn-primary" onClick={saveEdit} disabled={saving} style={{ padding: '12px 28px' }}>
-            {saving ? 'Saving...' : 'Save Changes'}
+          <button className="btn-primary" onClick={saveModuleEdit} disabled={moduleSaving} style={{ padding: '12px 28px' }}>
+            {moduleSaving ? 'Saving...' : 'Save Changes'}
           </button>
           <button className="btn-secondary" onClick={() => setEditingModuleId(null)} style={{ padding: '12px 28px' }}>
             Cancel
@@ -2225,98 +2229,11 @@ function TrainingTab({ trainingConfig, onSetTrainingConfig }) {
     );
   }
 
-  return (
-    <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-        <div>
-          <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Training Modules</h3>
-          <p style={{ fontSize: 13, color: '#888', margin: 0 }}>
-            {modules.filter(m => !m.hidden).length} active modules &middot; Users complete these before the 30-day sprint
-          </p>
-        </div>
-      </div>
-
-      {modules.length === 0 && (
-        <div className="card" style={{ textAlign: 'center', padding: 40, color: '#666' }}>
-          No training modules configured yet.
-        </div>
-      )}
-
-      {modules.map((mod, idx) => (
-        <div key={mod.id} style={{
-          display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px',
-          borderRadius: 10, marginBottom: 6,
-          background: mod.hidden ? 'rgba(255,255,255,0.01)' : 'rgba(255,255,255,0.03)',
-          border: `1px solid ${mod.hidden ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.06)'}`,
-          opacity: mod.hidden ? 0.4 : 1,
-        }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <button onClick={() => moveModule(idx, -1)} disabled={idx === 0} style={{
-              background: 'none', border: 'none', color: idx === 0 ? '#333' : '#888',
-              cursor: idx === 0 ? 'default' : 'pointer', fontSize: 10, padding: '2px 4px',
-            }}>&#9650;</button>
-            <button onClick={() => moveModule(idx, 1)} disabled={idx === modules.length - 1} style={{
-              background: 'none', border: 'none', color: idx === modules.length - 1 ? '#333' : '#888',
-              cursor: idx === modules.length - 1 ? 'default' : 'pointer', fontSize: 10, padding: '2px 4px',
-            }}>&#9660;</button>
-          </div>
-
-          <div style={{
-            width: 28, height: 28, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: 'rgba(233,69,96,0.1)', color: '#e94560', fontSize: 12, fontWeight: 700, flexShrink: 0,
-          }}>
-            {idx + 1}
-          </div>
-
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 14, fontWeight: 600, color: mod.hidden ? '#555' : '#eee', marginBottom: 2 }}>
-              {mod.title}
-            </div>
-            <div style={{ fontSize: 11, color: '#666' }}>
-              {mod.description || 'No description'}
-              {mod.quiz?.scenarios?.length > 0 && (
-                <span style={{ marginLeft: 8, color: '#555' }}>
-                  &middot; {mod.quiz.scenarios.reduce((n, s) => n + (s.inputs || s.questions || []).length, 0)} quiz questions
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-            <button onClick={() => startEditing(mod)} style={{
-              fontSize: 11, padding: '5px 12px', borderRadius: 6, cursor: 'pointer',
-              border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
-              color: '#aaa', fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
-            }}>Edit</button>
-            <button onClick={() => toggleHidden(mod.id)} style={{
-              fontSize: 11, padding: '5px 12px', borderRadius: 6, cursor: 'pointer',
-              border: `1px solid ${mod.hidden ? 'rgba(72,199,142,0.3)' : 'rgba(255,255,255,0.1)'}`,
-              background: mod.hidden ? 'rgba(72,199,142,0.08)' : 'rgba(255,255,255,0.04)',
-              color: mod.hidden ? '#48c78e' : '#888', fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
-            }}>{mod.hidden ? 'Show' : 'Hide'}</button>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, dailyMinimumsOverrides, onSetDailyMinimums, practiceDaySettings, onSetPracticeDaySettings }) {
-  const [editingDay, setEditingDay] = useState(null);
-  const [editingPhases, setEditingPhases] = useState(false);
-  const [editingLanding, setEditingLanding] = useState(false);
-  const [editingMinimums, setEditingMinimums] = useState(false);
-  const [reorderingDays, setReorderingDays] = useState(false);
-  const [pdVideoUrl, setPdVideoUrl] = useState(practiceDaySettings?.practice_day_video || '');
-  const [pdCalcUrl, setPdCalcUrl] = useState(practiceDaySettings?.rental_calculator_url || '');
-  const [pdSaving, setPdSaving] = useState(false);
-  const [pdSaved, setPdSaved] = useState(false);
-
   if (editingLanding) {
     return (
       <div className="scale-in">
         <button className="btn-secondary" onClick={() => setEditingLanding(false)} style={{ marginBottom: 24, padding: '8px 20px', fontSize: 13 }}>
-          ← Back to Content
+          &larr; Back to Training Content
         </button>
         <LandingPageEditor landingContent={landingContent} onSave={onSetLandingContent} />
       </div>
@@ -2328,8 +2245,8 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
       <DayEditor
         dayNum={editingDay}
         contentOverrides={contentOverrides}
-        onSave={(dayNum, overrides) => {
-          const updated = { ...contentOverrides, [dayNum]: overrides };
+        onSave={(dayNum, dayOverrides) => {
+          const updated = { ...contentOverrides, [dayNum]: dayOverrides };
           onSetContentOverrides(updated);
           setEditingDay(null);
         }}
@@ -2380,214 +2297,294 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
 
   return (
     <div className="fade-up">
-      {/* Daily Minimums Editor Card */}
-      <div className="card" style={{
-        marginBottom: 20, padding: '16px 20px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
-        background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.15)',
-      }}>
-        <div>
-          <div style={{ fontSize: 14, fontWeight: 600, color: '#f0a500' }}>Daily Standards (Minimums)</div>
-          <p style={{ color: '#888', fontSize: 12, margin: '4px 0 0' }}>
-            Configure the minimum indicator requirements for each day of the sprint.
-          </p>
+      {/* ── Pre-Sprint Training Modules ── */}
+      <div style={{ marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+          <div style={{ width: 10, height: 10, borderRadius: 3, background: '#e94560' }} />
+          <h3 style={{ fontSize: 17, fontWeight: 700 }}>Pre-Sprint Training Modules</h3>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
         </div>
-        <button
-          className="btn-secondary"
-          style={{ padding: '8px 18px', fontSize: 12, color: '#f0a500', borderColor: 'rgba(240,165,0,0.3)' }}
-          onClick={() => setEditingMinimums(true)}
-        >
-          Edit Daily Minimums
-        </button>
+        <p style={{ fontSize: 13, color: '#888', margin: '0 0 14px', paddingLeft: 20 }}>
+          {modules.filter(m => !m.hidden).length} active modules &middot; Users complete these before the 30-day sprint
+        </p>
+
+        {modules.length === 0 && (
+          <div className="card" style={{ textAlign: 'center', padding: 40, color: '#666' }}>
+            No training modules configured yet.
+          </div>
+        )}
+
+        {modules.map((mod, idx) => (
+          <div key={mod.id} style={{
+            display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px',
+            borderRadius: 10, marginBottom: 6,
+            background: mod.hidden ? 'rgba(255,255,255,0.01)' : 'rgba(255,255,255,0.03)',
+            border: `1px solid ${mod.hidden ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.06)'}`,
+            opacity: mod.hidden ? 0.4 : 1,
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <button onClick={() => moveModule(idx, -1)} disabled={idx === 0} style={{
+                background: 'none', border: 'none', color: idx === 0 ? '#333' : '#888',
+                cursor: idx === 0 ? 'default' : 'pointer', fontSize: 10, padding: '2px 4px',
+              }}>&#9650;</button>
+              <button onClick={() => moveModule(idx, 1)} disabled={idx === modules.length - 1} style={{
+                background: 'none', border: 'none', color: idx === modules.length - 1 ? '#333' : '#888',
+                cursor: idx === modules.length - 1 ? 'default' : 'pointer', fontSize: 10, padding: '2px 4px',
+              }}>&#9660;</button>
+            </div>
+
+            <div style={{
+              width: 28, height: 28, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: 'rgba(233,69,96,0.1)', color: '#e94560', fontSize: 12, fontWeight: 700, flexShrink: 0,
+            }}>
+              {idx + 1}
+            </div>
+
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: mod.hidden ? '#555' : '#eee', marginBottom: 2 }}>
+                {mod.title}
+              </div>
+              <div style={{ fontSize: 11, color: '#666' }}>
+                {mod.description || 'No description'}
+                {mod.quiz?.scenarios?.length > 0 && (
+                  <span style={{ marginLeft: 8, color: '#555' }}>
+                    &middot; {mod.quiz.scenarios.reduce((n, s) => n + (s.inputs || s.questions || []).length, 0)} quiz questions
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+              <button onClick={() => startEditingModule(mod)} style={{
+                fontSize: 11, padding: '5px 12px', borderRadius: 6, cursor: 'pointer',
+                border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
+                color: '#aaa', fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
+              }}>Edit</button>
+              <button onClick={() => toggleHidden(mod.id)} style={{
+                fontSize: 11, padding: '5px 12px', borderRadius: 6, cursor: 'pointer',
+                border: `1px solid ${mod.hidden ? 'rgba(72,199,142,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                background: mod.hidden ? 'rgba(72,199,142,0.08)' : 'rgba(255,255,255,0.04)',
+                color: mod.hidden ? '#48c78e' : '#888', fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
+              }}>{mod.hidden ? 'Show' : 'Hide'}</button>
+            </div>
+          </div>
+        ))}
       </div>
 
-      <div className="card" style={{ marginBottom: 20, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-        <p style={{ color: '#888', fontSize: 13, margin: 0, flex: 1, minWidth: 200 }}>
-          Edit the text, videos, and resources for each day. Changes are saved to the database and visible to all Operators.
-        </p>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button
-            className="btn-secondary"
-            style={{ padding: '8px 16px', fontSize: 12, whiteSpace: 'nowrap' }}
-            onClick={() => setReorderingDays(true)}
-          >
-            Reorder Days
-          </button>
-          <button
-            className="btn-secondary"
-            style={{ padding: '8px 16px', fontSize: 12, whiteSpace: 'nowrap' }}
-            onClick={() => setEditingPhases(true)}
-          >
-            Edit Phases
-          </button>
-        </div>
-      </div>
-      {/* Practice Day Settings */}
-      <div className="card" style={{
-        marginBottom: 20, padding: '20px 24px',
-        background: 'rgba(83,52,131,0.04)', border: '1px solid rgba(83,52,131,0.15)',
-      }}>
+      {/* ── 30-Day Sprint Content ── */}
+      <div style={{ marginBottom: 32 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-          <span style={{ fontSize: 18 }}>🏋️</span>
-          <div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: '#c9a0ff' }}>Practice Day Settings</div>
-            <p style={{ color: '#888', fontSize: 12, margin: '2px 0 0' }}>
-              Configure resources shown during the pre-Day-1 practice walkthrough.
-            </p>
-          </div>
+          <div style={{ width: 10, height: 10, borderRadius: 3, background: '#533483' }} />
+          <h3 style={{ fontSize: 17, fontWeight: 700 }}>30-Day Sprint</h3>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <div>
-            <label style={{ fontSize: 12, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 6 }}>
-              Practice Day Video URL
-            </label>
-            <input
-              value={pdVideoUrl}
-              onChange={e => { setPdVideoUrl(e.target.value); setPdSaved(false); }}
-              placeholder="https://www.youtube.com/embed/..."
-              style={{ width: '100%', fontSize: 13, padding: '10px 14px' }}
-            />
-            <p style={{ fontSize: 11, color: '#555', marginTop: 4, marginBottom: 0 }}>
-              Embed URL for the intro/training video shown during practice mode.
-            </p>
-          </div>
-          <div>
-            <label style={{ fontSize: 12, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 6 }}>
-              Rental Calculator Download URL
-            </label>
-            <input
-              value={pdCalcUrl}
-              onChange={e => { setPdCalcUrl(e.target.value); setPdSaved(false); }}
-              placeholder="https://drive.google.com/..."
-              style={{ width: '100%', fontSize: 13, padding: '10px 14px' }}
-            />
-            <p style={{ fontSize: 11, color: '#555', marginTop: 4, marginBottom: 0 }}>
-              Link to the CDS Rental Calculator spreadsheet or file.
-            </p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+
+        <div className="card" style={{ marginBottom: 16, padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <p style={{ color: '#888', fontSize: 13, margin: 0, flex: 1, minWidth: 200 }}>
+            Edit the text, videos, and resources for each day. Changes are saved to the database and visible to all Operators.
+          </p>
+          <div style={{ display: 'flex', gap: 8 }}>
             <button
               className="btn-secondary"
-              style={{ padding: '8px 18px', fontSize: 12, color: '#c9a0ff', borderColor: 'rgba(83,52,131,0.3)' }}
-              disabled={pdSaving}
-              onClick={async () => {
-                setPdSaving(true);
-                await onSetPracticeDaySettings({
-                  practice_day_video: pdVideoUrl.trim() || null,
-                  rental_calculator_url: pdCalcUrl.trim() || null,
-                });
-                setPdSaving(false);
-                setPdSaved(true);
-              }}
+              style={{ padding: '8px 16px', fontSize: 12, whiteSpace: 'nowrap' }}
+              onClick={() => setReorderingDays(true)}
             >
-              {pdSaving ? 'Saving...' : 'Save Practice Day Settings'}
+              Reorder Days
             </button>
-            {pdSaved && <span style={{ fontSize: 12, color: '#48c78e', fontWeight: 600 }}>Saved</span>}
+            <button
+              className="btn-secondary"
+              style={{ padding: '8px 16px', fontSize: 12, whiteSpace: 'nowrap' }}
+              onClick={() => setEditingPhases(true)}
+            >
+              Edit Phases
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* Getting Started */}
-      <div style={{ marginBottom: 28 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-          <div style={{ width: 10, height: 10, borderRadius: 3, background: '#e94560' }} />
-          <h3 style={{ fontSize: 15, fontWeight: 700 }}>Getting Started</h3>
-          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
-        </div>
-        <div
-          className="card"
-          style={{ padding: '14px 18px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14 }}
-          onClick={() => setEditingDay('getting_started')}
-        >
-          <div className="mono" style={{
-            width: 36, height: 36, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 16, flexShrink: 0,
-          }}>
-            GS
+        {/* Getting Started */}
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+            <h4 style={{ fontSize: 14, fontWeight: 600, color: '#aaa', margin: 0 }}>Getting Started</h4>
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>
-              {getGettingStartedContent(contentOverrides).title}
+          <div
+            className="card"
+            style={{ padding: '14px 18px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14 }}
+            onClick={() => setEditingDay('getting_started')}
+          >
+            <div className="mono" style={{
+              width: 36, height: 36, borderRadius: 8, background: 'rgba(233,69,96,0.15)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 16, flexShrink: 0,
+            }}>
+              GS
             </div>
-            <div style={{ fontSize: 12, color: '#555', display: 'flex', gap: 10 }}>
-              {getGettingStartedContent(contentOverrides).videoUrl && <span style={{ color: '#48c78e' }}>Video set</span>}
-              {getGettingStartedContent(contentOverrides).downloads?.length > 0 && (
-                <span style={{ color: '#533483' }}>
-                  {getGettingStartedContent(contentOverrides).downloads.length} resource{getGettingStartedContent(contentOverrides).downloads.length !== 1 ? 's' : ''}
-                </span>
-              )}
-              {getGettingStartedContent(contentOverrides).transcript && <span style={{ color: '#666' }}>Transcript</span>}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>
+                {getGettingStartedContent(contentOverrides).title}
+              </div>
+              <div style={{ fontSize: 12, color: '#555', display: 'flex', gap: 10 }}>
+                {getGettingStartedContent(contentOverrides).videoUrl && <span style={{ color: '#48c78e' }}>Video set</span>}
+                {getGettingStartedContent(contentOverrides).downloads?.length > 0 && (
+                  <span style={{ color: '#533483' }}>
+                    {getGettingStartedContent(contentOverrides).downloads.length} resource{getGettingStartedContent(contentOverrides).downloads.length !== 1 ? 's' : ''}
+                  </span>
+                )}
+                {getGettingStartedContent(contentOverrides).transcript && <span style={{ color: '#666' }}>Transcript</span>}
+              </div>
             </div>
+            {contentOverrides['getting_started'] && (
+              <span style={{
+                fontSize: 10, fontWeight: 600, color: '#48c78e',
+                background: 'rgba(72,199,142,0.1)', padding: '3px 8px', borderRadius: 4,
+              }}>Customized</span>
+            )}
+            <div style={{ color: '#444', fontSize: 18, flexShrink: 0 }}>&rsaquo;</div>
           </div>
-          {contentOverrides['getting_started'] && (
-            <span style={{
-              fontSize: 10, fontWeight: 600, color: '#48c78e',
-              background: 'rgba(72,199,142,0.1)', padding: '3px 8px', borderRadius: 4,
-            }}>Customized</span>
-          )}
-          <div style={{ color: '#444', fontSize: 18, flexShrink: 0 }}>›</div>
         </div>
-      </div>
 
-      {phases.map(phase => (
-        <div key={phase.label} style={{ marginBottom: 28 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-            <div style={{ width: 10, height: 10, borderRadius: 3, background: phase.color }} />
-            <h3 style={{ fontSize: 15, fontWeight: 700 }}>{phase.label}</h3>
-            <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            {phase.days.map(d => {
-              const dayData = getDayContent(d, contentOverrides);
-              const hasOverrides = !!contentOverrides[d];
-              return (
-                <div
-                  key={d}
-                  className="card"
-                  style={{ padding: '14px 18px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14 }}
-                  onClick={() => setEditingDay(d)}
-                >
-                  <div className="mono" style={{
-                    width: 36, height: 36, borderRadius: 8, background: `${phase.color}15`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 13, fontWeight: 700, color: phase.color, flexShrink: 0,
-                  }}>
-                    {d}
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{dayData.title}</div>
-                    <div style={{ fontSize: 12, color: '#555', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                      {dayData.videoUrl && <span style={{ color: '#48c78e' }}>Video set</span>}
-                      {dayData.downloads?.length > 0 && <span style={{ color: '#533483' }}>{dayData.downloads.length} resource{dayData.downloads.length !== 1 ? 's' : ''}</span>}
-                      {dayData.transcript && <span style={{ color: '#666' }}>Transcript</span>}
-                      {dayData.quiz?.scenarios?.length > 0 && <span style={{ color: '#f0a500' }}>Quiz ({dayData.quiz.scenarios.length})</span>}
+        {phases.map(phase => (
+          <div key={phase.label} style={{ marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+              <div style={{ width: 8, height: 8, borderRadius: 2, background: phase.color }} />
+              <h4 style={{ fontSize: 14, fontWeight: 600, color: '#aaa', margin: 0 }}>{phase.label}</h4>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {phase.days.map(d => {
+                const dayData = getDayContent(d, contentOverrides);
+                const hasOverrides = !!contentOverrides[d];
+                return (
+                  <div
+                    key={d}
+                    className="card"
+                    style={{ padding: '14px 18px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14 }}
+                    onClick={() => setEditingDay(d)}
+                  >
+                    <div className="mono" style={{
+                      width: 36, height: 36, borderRadius: 8, background: `${phase.color}15`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 13, fontWeight: 700, color: phase.color, flexShrink: 0,
+                    }}>
+                      {d}
                     </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{dayData.title}</div>
+                      <div style={{ fontSize: 12, color: '#555', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                        {dayData.videoUrl && <span style={{ color: '#48c78e' }}>Video set</span>}
+                        {dayData.downloads?.length > 0 && <span style={{ color: '#533483' }}>{dayData.downloads.length} resource{dayData.downloads.length !== 1 ? 's' : ''}</span>}
+                        {dayData.transcript && <span style={{ color: '#666' }}>Transcript</span>}
+                        {dayData.quiz?.scenarios?.length > 0 && <span style={{ color: '#f0a500' }}>Quiz ({dayData.quiz.scenarios.length})</span>}
+                      </div>
+                    </div>
+                    {hasOverrides && (
+                      <span style={{
+                        fontSize: 10, fontWeight: 600, color: '#48c78e',
+                        background: 'rgba(72,199,142,0.1)', padding: '3px 8px', borderRadius: 4,
+                      }}>Customized</span>
+                    )}
+                    <div style={{ color: '#444', fontSize: 18, flexShrink: 0 }}>&rsaquo;</div>
                   </div>
-                  {hasOverrides && (
-                    <span style={{
-                      fontSize: 10, fontWeight: 600, color: '#48c78e',
-                      background: 'rgba(72,199,142,0.1)', padding: '3px 8px', borderRadius: 4,
-                    }}>Customized</span>
-                  )}
-                  <div style={{ color: '#444', fontSize: 18, flexShrink: 0 }}>›</div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
-      {/* Landing Page */}
-      <div style={{ marginBottom: 28 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-          <div style={{ width: 10, height: 10, borderRadius: 3, background: '#533483' }} />
-          <h3 style={{ fontSize: 15, fontWeight: 700 }}>Landing Page</h3>
+      {/* ── Settings ── */}
+      <div style={{ marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+          <div style={{ width: 10, height: 10, borderRadius: 3, background: '#f0a500' }} />
+          <h3 style={{ fontSize: 17, fontWeight: 700 }}>Settings</h3>
           <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
         </div>
 
-        {/* Version selector */}
-        <div className="card" style={{ padding: 20, marginBottom: 10 }}>
+        {/* Daily Minimums */}
+        <div className="card" style={{
+          marginBottom: 12, padding: '16px 20px', display: 'flex', alignItems: 'center',
+          justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
+          background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.15)',
+        }}>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: '#f0a500' }}>Daily Standards (Minimums)</div>
+            <p style={{ color: '#888', fontSize: 12, margin: '4px 0 0' }}>
+              Configure the minimum indicator requirements for each day of the sprint.
+            </p>
+          </div>
+          <button
+            className="btn-secondary"
+            style={{ padding: '8px 18px', fontSize: 12, color: '#f0a500', borderColor: 'rgba(240,165,0,0.3)' }}
+            onClick={() => setEditingMinimums(true)}
+          >
+            Edit Daily Minimums
+          </button>
+        </div>
+
+        {/* Practice Day Settings */}
+        <div className="card" style={{
+          marginBottom: 12, padding: '20px 24px',
+          background: 'rgba(83,52,131,0.04)', border: '1px solid rgba(83,52,131,0.15)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: '#c9a0ff' }}>Practice Day Settings</div>
+              <p style={{ color: '#888', fontSize: 12, margin: '2px 0 0' }}>
+                Configure resources shown during the pre-Day-1 practice walkthrough.
+              </p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div>
+              <label style={{ fontSize: 12, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 6 }}>
+                Practice Day Video URL
+              </label>
+              <input
+                value={pdVideoUrl}
+                onChange={e => { setPdVideoUrl(e.target.value); setPdSaved(false); }}
+                placeholder="https://www.youtube.com/embed/..."
+                style={{ width: '100%', fontSize: 13, padding: '10px 14px' }}
+              />
+              <p style={{ fontSize: 11, color: '#555', marginTop: 4, marginBottom: 0 }}>
+                Embed URL for the intro/training video shown during practice mode.
+              </p>
+            </div>
+            <div>
+              <label style={{ fontSize: 12, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 6 }}>
+                Rental Calculator Download URL
+              </label>
+              <input
+                value={pdCalcUrl}
+                onChange={e => { setPdCalcUrl(e.target.value); setPdSaved(false); }}
+                placeholder="https://drive.google.com/..."
+                style={{ width: '100%', fontSize: 13, padding: '10px 14px' }}
+              />
+              <p style={{ fontSize: 11, color: '#555', marginTop: 4, marginBottom: 0 }}>
+                Link to the CDS Rental Calculator spreadsheet or file.
+              </p>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <button
+                className="btn-secondary"
+                style={{ padding: '8px 18px', fontSize: 12, color: '#c9a0ff', borderColor: 'rgba(83,52,131,0.3)' }}
+                disabled={pdSaving}
+                onClick={async () => {
+                  setPdSaving(true);
+                  await onSetPracticeDaySettings({
+                    practice_day_video: pdVideoUrl.trim() || null,
+                    rental_calculator_url: pdCalcUrl.trim() || null,
+                  });
+                  setPdSaving(false);
+                  setPdSaved(true);
+                }}
+              >
+                {pdSaving ? 'Saving...' : 'Save Practice Day Settings'}
+              </button>
+              {pdSaved && <span style={{ fontSize: 12, color: '#48c78e', fontWeight: 600 }}>Saved</span>}
+            </div>
+          </div>
+        </div>
+
+        {/* Landing Page */}
+        <div className="card" style={{ padding: 20, marginBottom: 12 }}>
           <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Active Landing Page</div>
           <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
             <button
@@ -2601,7 +2598,7 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
                 transition: 'all 0.15s',
               }}
             >
-              <div>V1 — Original</div>
+              <div>V1 &mdash; Original</div>
               <div style={{ fontSize: 11, fontWeight: 400, marginTop: 4, opacity: 0.7 }}>Clean and simple</div>
             </button>
             <button
@@ -2615,31 +2612,16 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
                 transition: 'all 0.15s',
               }}
             >
-              <div>V2 — Marketing Optimized</div>
+              <div>V2 &mdash; Marketing Optimized</div>
               <div style={{ fontSize: 11, fontWeight: 400, marginTop: 4, opacity: 0.7 }}>CRO, testimonials, FAQ</div>
             </button>
           </div>
           <div style={{ display: 'flex', gap: 10, fontSize: 12 }}>
-            <a
-              href="/?v=1"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: '#888', textDecoration: 'underline' }}
-            >
-              Preview V1
-            </a>
-            <a
-              href="/?v=2"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: '#888', textDecoration: 'underline' }}
-            >
-              Preview V2
-            </a>
+            <a href="/?v=1" target="_blank" rel="noopener noreferrer" style={{ color: '#888', textDecoration: 'underline' }}>Preview V1</a>
+            <a href="/?v=2" target="_blank" rel="noopener noreferrer" style={{ color: '#888', textDecoration: 'underline' }}>Preview V2</a>
           </div>
         </div>
 
-        {/* Edit landing page content */}
         <div
           className="card"
           style={{ padding: '14px 18px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14 }}
@@ -2664,7 +2646,7 @@ function ContentTab({ contentOverrides, onSetContentOverrides, phases, onSetPhas
               background: 'rgba(72,199,142,0.1)', padding: '3px 8px', borderRadius: 4,
             }}>Customized</span>
           )}
-          <div style={{ color: '#444', fontSize: 18, flexShrink: 0 }}>›</div>
+          <div style={{ color: '#444', fontSize: 18, flexShrink: 0 }}>&rsaquo;</div>
         </div>
       </div>
     </div>
