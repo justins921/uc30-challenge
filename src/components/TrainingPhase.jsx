@@ -65,6 +65,7 @@ export default function TrainingPhase({
   const [activeModuleId, setActiveModuleId] = useState(null);
   const [activePrincipleIndex, setActivePrincipleIndex] = useState(null);
   const [showKeyTerms, setShowKeyTerms] = useState(false);
+  const [showTermsPanel, setShowTermsPanel] = useState(false);
   const [moduleAttempts, setModuleAttempts] = useState([]);
 
   const completed = user.trainingCompletedModules || [];
@@ -140,6 +141,7 @@ export default function TrainingPhase({
   const goToPrinciple = (idx) => {
     setActivePrincipleIndex(idx);
     setShowKeyTerms(false);
+    setShowTermsPanel(false);
     window.scrollTo(0, 0);
   };
 
@@ -194,9 +196,22 @@ export default function TrainingPhase({
               }}>
                 &larr; All Modules
               </button>
-              <span style={{ fontSize: 11, color: '#666', fontWeight: 600, letterSpacing: 1 }}>
-                Module {activeModule.moduleNumber} of {allModules.length} &middot; Principle {activePrincipleIndex + 1} of {principles.length}
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                {activeModule.keyTerms?.length > 0 && (
+                  <button onClick={() => setShowTermsPanel(p => !p)} style={{
+                    background: showTermsPanel ? 'rgba(240,165,0,0.15)' : 'rgba(255,255,255,0.04)',
+                    border: `1px solid ${showTermsPanel ? 'rgba(240,165,0,0.3)' : 'rgba(255,255,255,0.08)'}`,
+                    color: showTermsPanel ? '#f0a500' : '#888', cursor: 'pointer',
+                    fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6,
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}>
+                    Key Terms
+                  </button>
+                )}
+                <span style={{ fontSize: 11, color: '#666', fontWeight: 600, letterSpacing: 1 }}>
+                  {activePrincipleIndex + 1} / {principles.length}
+                </span>
+              </div>
             </div>
             <div style={{ height: 3, borderRadius: 2, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
               <div style={{
@@ -207,6 +222,25 @@ export default function TrainingPhase({
               }} />
             </div>
           </div>
+
+          {showTermsPanel && activeModule.keyTerms?.length > 0 && (
+            <div style={{
+              maxWidth: 720, margin: '0 auto', padding: '12px 0 4px',
+              borderTop: '1px solid rgba(240,165,0,0.1)',
+            }}>
+              <div style={{
+                maxHeight: 240, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6,
+                padding: '0 4px',
+              }}>
+                {activeModule.keyTerms.map((kt, i) => (
+                  <div key={i} style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.03)' }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: '#f0a500' }}>{kt.term}: </span>
+                    <span style={{ fontSize: 12, color: '#999', lineHeight: 1.5 }}>{kt.definition}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div style={{ flex: 1, maxWidth: 720, margin: '0 auto', padding: '24px 20px', width: '100%' }}>
