@@ -440,8 +440,9 @@ export default function App() {
 
   // Training Phase gate — after activation, before sprint
   const resolvedModules = getResolvedTrainingModules(trainingConfig);
-  const trainingComplete = resolvedModules.filter(m => !m.hidden).length === 0 ||
-    resolvedModules.filter(m => !m.hidden).every(m => (user.trainingCompletedModules || []).includes(m.id));
+  const activeModules = resolvedModules.filter(m => !m.hidden && !m.comingSoon);
+  const trainingComplete = activeModules.length === 0 ||
+    activeModules.every(m => (user.trainingCompletedModules || []).includes(m.id));
 
   if ((!user.isAdmin || participantMode) && !trainingComplete) {
     return (
@@ -466,7 +467,7 @@ export default function App() {
           user={user}
           modules={resolvedModules}
           onCompleteModule={completeTrainingModule}
-          onCompleteAll={() => completeActivation({ trainingCompletedModules: resolvedModules.filter(m => !m.hidden).map(m => m.id) })}
+          onCompleteAll={() => completeActivation({ trainingCompletedModules: activeModules.map(m => m.id) })}
           addQuizAttempt={addQuizAttempt}
           getQuizAttempts={getQuizAttempts}
           onSaveExit={user.isAdmin && participantMode ? () => setParticipantMode(false) : undefined}
