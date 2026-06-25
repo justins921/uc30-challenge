@@ -145,7 +145,7 @@ export const TRAINING_MODULES = [
       {
         id: 'mod1_p7',
         title: 'Tax benefits are bigger than most people think',
-        content: 'The government hands investors real advantages — **depreciation** (deductions even while the property gains value), **cost segregation** (accelerated depreciation for larger, earlier deductions), and ordinary **expense deductions.** These aren\'t a rounding error; they can rival cash flow. Example: a $10,000 cash-flow year plus $8,000 in tax savings is really an $18,000 year. Most investors ignore this return source entirely.',
+        content: 'The government hands investors real advantages — **depreciation** (deductions even while the property gains value), **cost segregation** (accelerated depreciation for larger, earlier deductions), and ordinary **expense deductions.** These aren\'t a rounding error; they can rival cash flow. Example: if a property produces $10,000 in cash flow and $8,000 in tax savings, your total annual benefit is $18,000. Most investors ignore this return source entirely.',
         questions: [
           {
             id: 'mod1_p7_q1',
