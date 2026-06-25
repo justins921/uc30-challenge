@@ -1758,14 +1758,10 @@ function TrainingIntroStep({ user, onBack, onSave }) {
 
       <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, marginBottom: 24 }}>
         There is basic information that you need to know in order to complete your daily tasks.
-        All of this information is provided in the next training modules.
-      </p>
-
-      <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, marginBottom: 24 }}>
-        Each module has key principles and follow-up questions to ensure clarity.
-        These modules were created to give you all the information you need to feel
-        completely comfortable analyzing properties, connecting with necessary contacts,
-        putting in offers, and getting properties under contract!
+        All of this information is provided in the next 10 modules. Each module has key principles
+        and follow-up questions to ensure clarity. These modules were created to give you all the
+        information you need to feel completely comfortable analyzing properties, connecting with
+        necessary contacts, putting in offers, and getting properties under contract!
       </p>
 
       <div style={{
@@ -1819,6 +1815,7 @@ function TrainingIntroStep({ user, onBack, onSave }) {
         fontWeight: 600, textAlign: 'center',
       }}>
         Commit now to finish all the modules before the first day of UC30!
+        Each module should take 30 minutes or less.
       </p>
 
       <div style={{ display: 'flex', gap: 12 }}>
