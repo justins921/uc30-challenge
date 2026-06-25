@@ -249,7 +249,7 @@ export const TRAINING_MODULES = [
       { term: 'Depreciation', definition: 'A tax deduction based on the assumption that buildings wear out over time — which you can claim even while the property is rising in value.' },
       { term: 'Cost segregation', definition: 'A strategy that accelerates depreciation, creating larger deductions earlier and bigger near-term tax savings.' },
     ],
-    completionMessage: 'Module 1 complete. You now know the four profit sources; the four core metrics (cash flow, cash-on-cash, cap rate, DSCR); why a high return can hide risk; how to weigh risk-adjusted returns; the exact order to judge any deal; and the key terms behind all of it. Next: turning these metrics into an accurate analysis of a real property.',
+    completionMessage: 'Module 1 complete. You now know the four profit sources; the four core metrics (cash flow, cash-on-cash, cap rate, DSCR); why a high return can hide risk; how to weigh risk-adjusted returns; and the exact order to judge any deal. Next: turning these metrics into an accurate analysis of a real property.',
   },
   {
     id: 'mod2',
