@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import QuizSection from './QuizSection';
 import NativeRentalCalculator from './NativeRentalCalculator';
+import { GetClearStep, BuyBoxStep, CapitalConfirmationStep } from './ActivationPhase';
 
 const MODULE_DAY_OFFSET = -100;
 
@@ -69,6 +70,7 @@ export default function TrainingPhase({
   const [showTermsPanel, setShowTermsPanel] = useState(false);
   const [moduleAttempts, setModuleAttempts] = useState([]);
   const [calcOpen, setCalcOpen] = useState(false);
+  const [componentOpen, setComponentOpen] = useState(false);
 
   const completed = user.trainingCompletedModules || [];
   const visibleModules = modules.filter(m => !m.hidden && !m.comingSoon);
@@ -150,6 +152,7 @@ export default function TrainingPhase({
     setShowKeyTerms(false);
     setShowTermsPanel(false);
     setCalcOpen(false);
+    setComponentOpen(false);
     window.scrollTo(0, 0);
   };
 
@@ -325,6 +328,62 @@ export default function TrainingPhase({
               )}
             </div>
           )}
+
+          {principle.showComponent && (() => {
+            const COMPONENT_MAP = {
+              capitalConfirmation: { Component: CapitalConfirmationStep, label: 'Confirm Access to Capital', icon: '💰', color: '#48c78e', props: { existingCapital: user.capitalConfirmation || {} } },
+              getClear: { Component: GetClearStep, label: 'Get Clear', icon: '🎯', color: '#e94560', props: { existing: user.getClear || {} } },
+              buyBox: { Component: BuyBoxStep, label: 'Define Your Buy Box', icon: '📦', color: '#c9a0ff', props: { existingBuyBox: user.buyBox || {} } },
+            };
+            const cfg = COMPONENT_MAP[principle.showComponent];
+            if (!cfg) return null;
+            const { Component, label, icon, color } = cfg;
+            const noop = () => {};
+            const noopAsync = async () => {};
+            return (
+              <div style={{
+                marginBottom: 24, borderRadius: 12, overflow: 'hidden',
+                border: `1px solid ${componentOpen ? `${color}40` : 'rgba(255,255,255,0.08)'}`,
+                background: componentOpen ? `${color}08` : 'rgba(255,255,255,0.02)',
+              }}>
+                <button
+                  onClick={() => setComponentOpen(!componentOpen)}
+                  style={{
+                    width: '100%', padding: '14px 16px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    background: 'transparent', border: 'none', cursor: 'pointer',
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{
+                      width: 32, height: 32, borderRadius: 8,
+                      background: componentOpen ? `${color}22` : 'rgba(255,255,255,0.04)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 16,
+                    }}>{icon}</div>
+                    <div style={{ textAlign: 'left' }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: componentOpen ? color : '#ccc' }}>
+                        {label}
+                      </div>
+                      <div style={{ fontSize: 11, color: '#666' }}>
+                        {componentOpen ? 'Tap to collapse' : 'Tap to open'}
+                      </div>
+                    </div>
+                  </div>
+                  <span style={{
+                    fontSize: 12, color: '#888', transition: 'transform 0.2s',
+                    transform: componentOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                  }}>&#9660;</span>
+                </button>
+                {componentOpen && (
+                  <div style={{ padding: '0 16px 16px' }}>
+                    <Component onNext={noop} onBack={noop} onSave={noopAsync} {...cfg.props} />
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
           {hasQuestions && !principleComplete && (
             <QuizSection
