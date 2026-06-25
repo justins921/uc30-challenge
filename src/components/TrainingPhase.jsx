@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import QuizSection from './QuizSection';
+import NativeRentalCalculator from './NativeRentalCalculator';
 
 const MODULE_DAY_OFFSET = -100;
 
@@ -67,6 +68,7 @@ export default function TrainingPhase({
   const [showKeyTerms, setShowKeyTerms] = useState(false);
   const [showTermsPanel, setShowTermsPanel] = useState(false);
   const [moduleAttempts, setModuleAttempts] = useState([]);
+  const [calcOpen, setCalcOpen] = useState(false);
 
   const completed = user.trainingCompletedModules || [];
   const visibleModules = modules.filter(m => !m.hidden && !m.comingSoon);
@@ -142,6 +144,7 @@ export default function TrainingPhase({
     setActivePrincipleIndex(idx);
     setShowKeyTerms(false);
     setShowTermsPanel(false);
+    setCalcOpen(false);
     window.scrollTo(0, 0);
   };
 
@@ -270,6 +273,50 @@ export default function TrainingPhase({
               {renderMarkdown(principle.content)}
             </div>
           </div>
+
+          {principle.showCalculator && (
+            <div style={{
+              marginBottom: 24, borderRadius: 12, overflow: 'hidden',
+              border: `1px solid ${calcOpen ? 'rgba(233,69,96,0.25)' : 'rgba(255,255,255,0.08)'}`,
+              background: calcOpen ? 'rgba(233,69,96,0.02)' : 'rgba(255,255,255,0.02)',
+            }}>
+              <button
+                onClick={() => setCalcOpen(!calcOpen)}
+                style={{
+                  width: '100%', padding: '14px 16px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  background: 'transparent', border: 'none', cursor: 'pointer',
+                  fontFamily: "'DM Sans', sans-serif",
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{
+                    width: 32, height: 32, borderRadius: 8,
+                    background: calcOpen ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.04)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 16,
+                  }}>&#128200;</div>
+                  <div style={{ textAlign: 'left' }}>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: calcOpen ? '#e94560' : '#ccc' }}>
+                      CDS Rental Calculator
+                    </div>
+                    <div style={{ fontSize: 11, color: '#666' }}>
+                      {calcOpen ? 'Tap to collapse' : 'Tap to open the calculator'}
+                    </div>
+                  </div>
+                </div>
+                <span style={{
+                  fontSize: 12, color: '#888', transition: 'transform 0.2s',
+                  transform: calcOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                }}>&#9660;</span>
+              </button>
+              {calcOpen && (
+                <div style={{ padding: '0 16px 16px' }}>
+                  <NativeRentalCalculator />
+                </div>
+              )}
+            </div>
+          )}
 
           {hasQuestions && !principleComplete && (
             <QuizSection

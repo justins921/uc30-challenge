@@ -296,18 +296,21 @@ export const TRAINING_MODULES = [
       {
         id: 'mod2_p3',
         title: 'The CDS Rental Calculator — field by field',
+        showCalculator: true,
         content: 'Fill it top to bottom. Some fields are dollars, some are percentages — the calculator marks which. Here\'s what each one means, a starter range where it helps, and how to verify it.\n\n**Property Details**\n- **Purchase Price ($):** the price you\'re analyzing. This is also the lever you\'ll adjust at the end to find your max price.\n- **Costs To Make Rent Ready ($):** every up-front dollar to get it rentable — repairs, renovations, and the vacancy/holding costs while you do the work.\n- **Down Payment (%):** the percent you put down. Range: conventional investment loans are typically 20–25%. Verify: ask your lender what they\'ll actually require.\n- **Closing Costs (%):** lender, title, and escrow fees. Range: 2–5% of price. Verify: your lender and title company will give you a real estimate.\n- **Years To Payoff:** the loan\'s amortization (default 30). Longer term = lower payment = stronger cash flow.\n- **Interest Rate (%):** get a real quote from a lender, not a guess. Even half a point changes the whole deal.\n\n**Monthly Income**\n- **Rents ($):** total monthly rent across all units. This is the single most important number — verify it (Principle 6).\n- **Other Income ($):** laundry, storage, pet rent, parking, etc. Enter $0 if none.\n- **Vacancy (%):** expected empty time. Range: 5–8% in a typical market. Use a higher number in soft or seasonal markets.\n\n**Yearly Expenses**\n- **Maintenance (%):** repairs and capital reserves (CapEx) as a percent of rent. Range: 8–15% — newer properties at the low end, older properties higher.\n- **Management (%):** Range: 8–10% of rent. Include it even if you\'ll self-manage — your time has value.\n- **Yearly Utilities ($):** owner-paid utilities only. Enter $0 if tenants pay.\n- **Additional Expenses ($):** HOA dues, landscaping, snow removal, trash, etc.\n- **Insurance ($/yr):** get a real quote from an insurance agent. Never guess this one.\n- **Taxes ($/yr):** pull the exact figure from the county — and ask whether taxes reassess (often higher) after a sale.\n\nThen press **Run Numbers.**',
         questions: [],
       },
       {
         id: 'mod2_p4',
         title: 'Reading your results',
+        showCalculator: true,
         content: 'The results screen answers "is this a buy?" Here\'s what each output means and how it connects to the metrics from Module 1:\n\n- **Total Capital Required:** all the cash to get in — down payment + closing costs + costs to make rent ready. This is the "cash invested" your returns are measured against.\n- **Net Operating Income (NOI):** income after operating expenses but before the mortgage.\n- **Debt Service:** your total annual mortgage payments.\n- **Cashflow:** NOI minus debt service — the money left each year. Your primary survival number.\n- **Cash on Cash Return:** cashflow ÷ total capital required. How hard your invested cash is working.\n- **Cap Rate:** NOI ÷ purchase price — the property\'s return before financing.\n- **Principal Paydown:** the equity built this year as your tenants pay down the loan.\n- **Total Return on Investment:** cashflow + principal paydown, shown in dollars and as a percent of your cash invested.',
         questions: [],
       },
       {
         id: 'mod2_p5',
         title: 'Worked example — 104 12th St',
+        showCalculator: true,
         content: 'Read straight off the results screen:\n\n- Purchase Price **$350,000**, Total Capital Required **$92,750**\n- NOI **$30,142** → Cap Rate = 30,142 ÷ 350,000 = **8.61%**\n- Debt Service **$19,395.09** → Cashflow = 30,142 − 19,395.09 = **$10,746.91**\n- Cash on Cash = 10,746.91 ÷ 92,750 = **11.59%**\n- Add Principal Paydown **$3,075.96** → Total Return = 10,746.91 + 3,075.96 = **$13,822.87**\n- Total Return % = 13,822.87 ÷ 92,750 = **14.90%**\n\nNotice the story the numbers tell: this deal cash-flows (survives), returns 11.59% on your cash, and once you add the equity your tenants build, your real return is **14.90%.** That\'s how you *read* an analysis — not one number, but the whole picture, in order.',
         questions: [
           {
@@ -430,6 +433,7 @@ export const TRAINING_MODULES = [
       {
         id: 'mod2_p9',
         title: 'Find your max price by reverse-engineering the return',
+        showCalculator: true,
         content: 'Once your inputs are solid, your last move is to adjust the **purchase price** until the cash-on-cash return hits your minimum requirement. That price is your **maximum acceptable price** — the most you can pay and still get the return you require. You\'re not trying to hit a return exactly to the decimal; you just need the property to meet or exceed your minimum. This is the skill that lets you make confident offers fast: you already know your number.\n\nAnd remember the UC30 rule: you do **not** need perfect numbers to make an offer. You need numbers that are reasonable, conservative, and good enough to move forward. Due diligence verifies your assumptions — it isn\'t a reason to wait for certainty. The investor who gets close enough and acts beats the one who waits.',
         questions: [
           {
@@ -457,6 +461,7 @@ export const TRAINING_MODULES = [
       {
         id: 'mod2_p10',
         title: 'Practice — Run the numbers yourself',
+        showCalculator: true,
         content: 'Time to apply everything you\'ve learned. Use the CDS Rental Calculator to analyze these properties and answer the questions below.\n\n**Property 1 — Turn-key 4-plex**\nPurchase Price: $600,000 · Turn-key ($0 rent-ready) · 25% down · 2% closing · 30 years · 6.5% interest · 4 units at $1,500/mo · 6% vacancy · 12% maintenance+CapEx · 8% management · $1,000 insurance · $4,000 taxes · No utilities/additional.\n\n**Property 2 — Same 4-plex, different rate**\nSame property and inputs as above, but with **7.5% interest** instead of 6.5%.\n\n**Property 3 — Find the price**\nA 4-unit property. All four units rent for $1,500/month ($6,000/month total). 25% down · 2% closing · 6.5% interest · 30 years · 6% vacancy · 12% maintenance · 8% management · $1,000/yr additional expenses · $2,500 insurance · $6,000 taxes · Tenant-paid utilities · $0 rent-ready.',
         questions: [
           {
