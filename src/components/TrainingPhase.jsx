@@ -101,15 +101,15 @@ export default function TrainingPhase({
   }, [addQuizAttempt, dayNumber]);
 
   const isPrincipleComplete = useCallback((principle) => {
+    const isScenarioDone = (scenarioId, maxAttempts) => {
+      const attempts = moduleAttempts.filter(a => a.scenario_id === scenarioId);
+      return attempts.some(a => a.correct) || attempts.length >= (maxAttempts || 5);
+    };
     if (principle?.scenarios?.length) {
-      return principle.scenarios.every(s =>
-        moduleAttempts.some(a => a.scenario_id === s.id && a.correct)
-      );
+      return principle.scenarios.every(s => isScenarioDone(s.id, s.maxAttempts));
     }
     if (!principle?.questions?.length) return true;
-    return principle.questions.every(q =>
-      moduleAttempts.some(a => a.scenario_id === principle.id && a.correct)
-    );
+    return isScenarioDone(principle.id, 5);
   }, [moduleAttempts]);
 
   const isPrincipleUnlocked = useCallback((principleIndex) => {
