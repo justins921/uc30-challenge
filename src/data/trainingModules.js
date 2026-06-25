@@ -782,11 +782,173 @@ export const TRAINING_MODULES = [
     id: 'mod4',
     moduleNumber: 4,
     title: 'Financing & Becoming Bankable',
-    description: 'Understand your financing options and what lenders actually look for.',
-    principles: [],
-    keyTerms: [],
-    completionMessage: '',
-    comingSoon: true,
+    description: 'The engine behind every deal — loan types, bankability, reserves, leverage, and matching the loan to your strategy.',
+    principles: [
+      {
+        id: 'mod4_p1',
+        title: 'Financing is the engine; line it up before the deal',
+        content: 'The investor who already has financing ready moves fast and wins. The one who\'s "still working on it" loses deals to someone who isn\'t. Financing isn\'t paperwork you scramble for after you find a property — it\'s the engine you build *first*, so that when a good deal shows up you can move in hours, not weeks. Get your money ready before you go hunting.',
+        questions: [
+          {
+            id: 'mod4_p1_q1',
+            text: 'When should you line up your financing?',
+            type: 'multiple_choice',
+            options: [
+              'After you\'ve found a deal and gone under contract',
+              'Before you start hunting, so you can move fast when a deal appears',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod4_p2',
+        title: 'Know the main loan types and what each is for',
+        content: 'You don\'t need to master every loan — you need to know which tool fits which job:\n- **Conventional** — a standard bank mortgage (Fannie/Freddie). Best rates and long fixed terms, but needs solid credit, documented income, and usually **20–25% down** on a rental. There\'s a limit to how many you can hold.\n- **DSCR loan** — qualifies on the **property\'s income covering its debt**, not your personal income. Great once you own a few, or if you\'re self-employed. Slightly higher rate, fewer hoops.\n- **FHA / owner-occupant** — low down payment (as little as **3.5%**) if you\'ll *live in it*, including one unit of a 2–4 unit. The cheapest way for a beginner to get in (house-hacking).\n- **Hard money** — fast, short-term, asset-based financing with high rates and points. Used to **buy and rehab** quickly (BRRRR/flips), then you refinance out of it.\n- **Portfolio / local bank / commercial** — loans the lender keeps in-house, with flexible terms. Common for **5+ unit** properties or once you\'ve maxed out conventional loans.\n- **Seller financing** — the **seller acts as the bank**, letting you pay over time with negotiable price, rate, and terms. Powerful when a seller owns the property free-and-clear.',
+        questions: [
+          {
+            id: 'mod4_p2_q1',
+            text: 'You want to qualify based on the property\'s income rather than your W-2. Which loan fits?',
+            type: 'multiple_choice',
+            options: [
+              'FHA',
+              'DSCR',
+              'Hard money',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod4_p2_q2',
+            text: 'The cheapest way for a beginner to get in, if they\'ll live in one unit, is:',
+            type: 'multiple_choice',
+            options: [
+              'Hard money',
+              'An FHA / owner-occupant loan',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod4_p3',
+        title: 'Become "bankable": make lenders want to say yes',
+        content: '"Bankable" means a lender looks at you and easily approves you. Five things drive it:\n- **Credit score** — higher score, better rate and approval odds.\n- **Debt-to-income (DTI)** — your monthly debt payments vs. income; lower is better.\n- **Cash reserves** — money in the bank after closing (lenders want to see you can weather a rough patch).\n- **Documented income** — clean, provable income (tax returns, W-2s, or strong property numbers for DSCR).\n- **A clean paper trail** — organized statements, no surprise large deposits, no chaos.\n\nWork on these *before* you apply: pay down consumer debt, protect your credit, keep reserves, and keep clean records. Bankability buys you better rates, more approvals, and faster closings.',
+        questions: [
+          {
+            id: 'mod4_p3_q1',
+            text: '"Bankable" basically means:',
+            type: 'multiple_choice',
+            options: [
+              'You have the most expensive property',
+              'Lenders can easily approve you — good credit, low DTI, reserves, clean docs',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod4_p3_q2',
+            text: 'Lowering your debt-to-income ratio makes you:',
+            type: 'multiple_choice',
+            options: [
+              'Less likely to qualify',
+              'More likely to qualify, at better terms',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod4_p4',
+        title: 'Don\'t forget reserves and seasoning',
+        content: 'Two things beginners overlook and lenders care about:\n- **Reserves** — lenders often want to see several months of mortgage payments sitting in the bank *after* you close. Showing up with exactly enough to close (and nothing left) is a red flag.\n- **Seasoning** — some lenders want funds or ownership to have been in place for a certain period (often a few months) before they\'ll lend on or refinance a property. It prevents last-minute shuffled money.\n\nPlan for both: keep reserves separate and untouched, and don\'t expect to refinance the day after you buy.',
+        questions: [
+          {
+            id: 'mod4_p4_q1',
+            text: '"Reserves" in a lender\'s eyes are:',
+            type: 'multiple_choice',
+            options: [
+              'The down payment itself',
+              'Money left in the bank after closing, to cover future payments',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod4_p5',
+        title: 'Build your lending team before you need it',
+        content: 'Don\'t wait until you have a deal to go meet lenders. Line up your bench now:\n- A **conventional mortgage lender or broker** for standard purchases.\n- A **DSCR or portfolio lender** for when you scale past conventional or want property-based qualifying.\n- Optionally a **hard-money lender** for BRRRR or fast/rehab deals.\n\nGet **pre-approved** so you know your numbers and can make offers with confidence. Lending is a relationship business — a lender who knows you and trusts you will move faster and bend further. The time to build those relationships is *before* the clock is ticking on a deal.',
+        questions: [
+          {
+            id: 'mod4_p5_q1',
+            text: 'The best time to meet lenders and get pre-approved is:',
+            type: 'multiple_choice',
+            options: [
+              'After you\'re already under contract',
+              'Before you start making offers',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod4_p6',
+        title: 'Leverage is a tool, not a trophy',
+        content: 'Leverage (borrowed money) multiplies your returns — and your risk. Bigger leverage with thin reserves is how investors get wiped out in a bad year. Watch the danger signs:\n- **Balloon payments** — the entire remaining balance comes due on a set date; you must refinance, sell, or pay it off, even if the market is bad that day.\n- **Adjustable-rate (ARM)** loans — the rate can jump later and spike your payment.\n- **Over-leverage** — borrowing so much that one vacancy or repair sinks the deal.\n- **Short terms** — less time before the loan must be dealt with.\n\nBorrow so the deal survives a *bad* year, not just a good one. This is the risk-adjusted-return thinking from Module 1, applied to your financing.',
+        questions: [
+          {
+            id: 'mod4_p6_q1',
+            text: 'A balloon payment means:',
+            type: 'multiple_choice',
+            options: [
+              'Your payment slowly shrinks over time',
+              'The whole remaining balance comes due on a set date',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod4_p6_q2',
+            text: 'The right way to use leverage is to:',
+            type: 'multiple_choice',
+            options: [
+              'Borrow as much as possible to maximize return',
+              'Borrow so the deal still survives a bad year',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod4_p7',
+        title: 'Match the loan to the strategy',
+        content: 'The "best" loan depends entirely on the play you chose in Module 3:\n- **Buy & Hold →** conventional or DSCR (long, fixed, stable).\n- **BRRRR →** hard money to buy and rehab, then refinance into a DSCR or conventional loan.\n- **House-hack →** FHA / owner-occupant (lowest down payment).\n- **Low cash →** seller financing or a JV partner.\n\nPick the loan that fits the strategy and the property — not just whatever\'s familiar.',
+        questions: [
+          {
+            id: 'mod4_p7_q1',
+            text: 'For a BRRRR deal, the usual financing path is:',
+            type: 'multiple_choice',
+            options: [
+              'Conventional from start to finish',
+              'Hard money to buy/rehab, then refinance into a longer-term loan',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+    ],
+    keyTerms: [
+      { term: 'Conventional loan', definition: 'A standard bank mortgage (Fannie/Freddie) with the best rates and long fixed terms; needs good credit, documented income, and a sizable down payment.' },
+      { term: 'FHA / owner-occupant loan', definition: 'A low-down-payment loan available when you live in the property (including one unit of a 2–4 unit).' },
+      { term: 'Portfolio loan', definition: 'A loan a bank keeps in-house rather than selling, allowing more flexible terms — common past conventional limits.' },
+      { term: 'Commercial loan', definition: 'Financing for larger (typically 5+ unit) or commercial properties, underwritten mainly on the property\'s income.' },
+      { term: 'Debt-to-income (DTI)', definition: 'Your monthly debt payments divided by your monthly income; lower is better for qualifying.' },
+      { term: 'Credit score', definition: 'A number summarizing your creditworthiness; higher means better rates and easier approvals.' },
+      { term: 'Reserves (lending sense)', definition: 'Cash a lender wants to see remaining in your account after closing, as a safety cushion.' },
+      { term: 'Seasoning', definition: 'A required period that funds or ownership must be in place before a lender will lend or refinance.' },
+      { term: 'Points', definition: 'An upfront fee on a loan, each point equal to 1% of the loan amount (common with hard money).' },
+      { term: 'ARM (adjustable-rate mortgage)', definition: 'A loan whose interest rate can change over time, so the payment can rise.' },
+      { term: 'Bankable', definition: 'Being the kind of borrower lenders readily approve — strong credit, low DTI, solid reserves, clean documentation.' },
+    ],
+    completionMessage: 'Module 4 complete. You know the main loan types, what makes you bankable, the reserves and seasoning lenders look for, who to line up before you need them, how to use leverage safely, and how to match the loan to your strategy. Next: deal flow and building the team that brings you deals.',
   },
   {
     id: 'mod5',
