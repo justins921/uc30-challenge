@@ -1769,22 +1769,49 @@ function TrainingIntroStep({ user, onBack, onSave }) {
       </p>
 
       <div style={{
-        padding: '20px 24px', borderRadius: 14, marginBottom: 24,
+        padding: '20px 24px', borderRadius: 14, marginBottom: 20,
+        background: 'rgba(233,69,96,0.03)', border: '1px solid rgba(233,69,96,0.1)',
+      }}>
+        {[
+          'Return Metrics & How Investors Profit',
+          'Analyzing a Property',
+          'Your Buy Box & Your Edge',
+          'Financing & Becoming Bankable',
+          'Deal Flow & Your Team',
+          'Offers, Contracts & Protecting Yourself',
+          'Creative Deal Structure',
+          'Negotiation & Influence',
+          'Seller Problems & Motivation',
+          'Seeing Hidden Value',
+        ].map((title, i) => (
+          <div key={i} style={{
+            display: 'flex', alignItems: 'center', gap: 12,
+            padding: '9px 0',
+            borderBottom: i < 9 ? '1px solid rgba(255,255,255,0.03)' : 'none',
+          }}>
+            <div style={{
+              width: 24, height: 24, borderRadius: 6, flexShrink: 0,
+              background: 'rgba(233,69,96,0.1)', border: '1px solid rgba(233,69,96,0.18)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 11, color: '#e94560', fontWeight: 700,
+            }}>
+              {i + 1}
+            </div>
+            <span style={{ fontSize: 14, color: '#bbb' }}>{title}</span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        padding: '16px 20px', borderRadius: 12, marginBottom: 24,
         background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.12)',
       }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-          <div>
-            <p style={{ color: '#f0a500', fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
-              What to expect:
-            </p>
-            <ul style={{ color: '#bbb', fontSize: 14, lineHeight: 2, margin: 0, paddingLeft: 20 }}>
-              <li>Each module should take 30 minutes or less</li>
-              <li>Key principles with follow-up questions after each one</li>
-              <li>Complete at your own pace — about an hour a day for 5 days, or all at once</li>
-              <li>You must finish all modules before Day 1 of UC30</li>
-            </ul>
-          </div>
-        </div>
+        <ul style={{ color: '#bbb', fontSize: 13, lineHeight: 2, margin: 0, paddingLeft: 18 }}>
+          <li>Each module should take 30 minutes or less</li>
+          <li>Key principles with follow-up questions after each one</li>
+          <li>Complete at your own pace — about an hour a day for 5 days, or all at once</li>
+          <li>You must finish all modules before Day 1 of UC30</li>
+        </ul>
       </div>
 
       <p style={{
