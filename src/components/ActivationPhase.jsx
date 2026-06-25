@@ -1849,3 +1849,5 @@ const CAPITAL_LABELS = {
   seller_finance: 'Seller financing',
   working_on_it: 'Still working on this',
 };
+
+export { GetClearStep, BuyBoxStep, CapitalConfirmationStep, OfferCommitmentStep };

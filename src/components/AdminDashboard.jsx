@@ -7,6 +7,7 @@ import { LANDING_DEFAULTS } from './LandingPage';
 import Footer from './Footer';
 import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT, checkWeeklyCompliance, getWeekNumber, getWeekRange, getWeekDayCount, calculateAtRisk, getNowInTimezone } from '../data/compliance';
 import { TRAINING_MODULES, getResolvedTrainingModules } from '../data/trainingModules';
+import { GetClearStep, BuyBoxStep, CapitalConfirmationStep, OfferCommitmentStep } from './ActivationPhase';
 
 function getSocialUrl(platform, handle) {
   const clean = handle.replace(/^@/, '').trim();
@@ -2115,6 +2116,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
   const [editingLanding, setEditingLanding] = useState(false);
   const [editingMinimums, setEditingMinimums] = useState(false);
   const [reorderingDays, setReorderingDays] = useState(false);
+  const [previewingStep, setPreviewingStep] = useState(null);
   const [pdVideoUrl, setPdVideoUrl] = useState(practiceDaySettings?.practice_day_video || '');
   const [pdCalcUrl, setPdCalcUrl] = useState(practiceDaySettings?.rental_calculator_url || '');
   const [pdSaving, setPdSaving] = useState(false);
@@ -2171,6 +2173,48 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
     setModuleSaving(false);
     setEditingModuleId(null);
   };
+
+  const PREVIEW_STEPS = {
+    getClear: { component: GetClearStep, title: 'Get Clear', props: { existing: {} } },
+    buyBox: { component: BuyBoxStep, title: 'Define Your Buy Box', props: { existingBuyBox: {} } },
+    capital: { component: CapitalConfirmationStep, title: 'Confirm Access to Capital', props: { existingCapital: {} } },
+    offerCommitment: { component: OfferCommitmentStep, title: 'Set Your Offer Commitment', props: { existingCommitment: null } },
+  };
+
+  if (previewingStep && PREVIEW_STEPS[previewingStep]) {
+    const preview = PREVIEW_STEPS[previewingStep];
+    const StepComponent = preview.component;
+    const noop = () => {};
+    const noopAsync = async () => {};
+    return (
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+          <button onClick={() => setPreviewingStep(null)} style={{
+            background: 'none', border: 'none', color: '#e94560', cursor: 'pointer',
+            fontSize: 14, fontWeight: 600, padding: 0, fontFamily: "'DM Sans', sans-serif",
+          }}>&larr; Back to Training Content</button>
+        </div>
+        <div style={{
+          padding: '4px 12px', borderRadius: 6, marginBottom: 20, display: 'inline-block',
+          background: 'rgba(240,165,0,0.1)', border: '1px solid rgba(240,165,0,0.2)',
+        }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: '#f0a500', letterSpacing: 0.5 }}>
+            ADMIN PREVIEW &mdash; {preview.title}
+          </span>
+        </div>
+        <div style={{
+          maxWidth: 560, margin: '0 auto', padding: '0 0 40px',
+        }}>
+          <StepComponent
+            onNext={noop}
+            onBack={noop}
+            onSave={noopAsync}
+            {...preview.props}
+          />
+        </div>
+      </div>
+    );
+  }
 
   if (editingModuleId) {
     const mod = modules.find(m => m.id === editingModuleId);
@@ -2432,6 +2476,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
             color: '#e94560',
             icon: '🎯',
             saves: 'getClear',
+            previewKey: 'getClear',
             features: [
               'Define Your Destination (text)',
               'Key Indicator selector (Cash Flow, Appreciation, Equity, Tax Benefits)',
@@ -2447,6 +2492,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
             color: '#c9a0ff',
             icon: '📦',
             saves: 'buyBox',
+            previewKey: 'buyBox',
             features: [
               'Target Markets (tag chips, add/remove)',
               'Specific Zip Codes (optional)',
@@ -2466,6 +2512,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
             color: '#48c78e',
             icon: '💰',
             saves: 'capitalConfirmation',
+            previewKey: 'capital',
             features: [
               'Single-select radio cards:',
               'Cash available / Hard money lender / Conventional pre-approval / DSCR lender / JV partner / Seller financing / Still working on it',
@@ -2477,6 +2524,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
             color: '#f0a500',
             icon: '📝',
             saves: 'offerCommitment',
+            previewKey: 'offerCommitment',
             features: [
               'Preset tiers: 30 (Minimum), 45 (Strong), 60+ (Elite)',
               'Custom number input (min 30)',
@@ -2501,6 +2549,19 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
                   saves to <code style={{ fontSize: 10, color: '#888', background: 'rgba(255,255,255,0.04)', padding: '1px 5px', borderRadius: 3 }}>{step.saves}</code>
                 </div>
               </div>
+              {step.previewKey && (
+                <button
+                  onClick={() => setPreviewingStep(step.previewKey)}
+                  style={{
+                    padding: '6px 14px', borderRadius: 7, fontSize: 12, fontWeight: 600,
+                    cursor: 'pointer', border: `1px solid ${step.color}40`,
+                    background: `${step.color}12`, color: step.color,
+                    fontFamily: "'DM Sans', sans-serif", flexShrink: 0,
+                  }}
+                >
+                  Preview
+                </button>
+              )}
             </div>
             <div style={{ paddingLeft: 42 }}>
               {step.features.map((f, fi) => (
