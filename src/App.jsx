@@ -471,6 +471,11 @@ export default function App() {
           addQuizAttempt={addQuizAttempt}
           getQuizAttempts={getQuizAttempts}
           onSaveExit={user.isAdmin && participantMode ? () => setParticipantMode(false) : undefined}
+          getContacts={getContacts}
+          getFollowUpsByContact={getFollowUpsByContact}
+          onUpdateContact={updateContact}
+          onAddContact={addContact}
+          onAddFollowUp={addFollowUp}
         />
       </>
     );

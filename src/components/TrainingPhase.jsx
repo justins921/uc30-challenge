@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import QuizSection from './QuizSection';
 import NativeRentalCalculator from './NativeRentalCalculator';
 import { GetClearStep, BuyBoxStep, CapitalConfirmationStep } from './ActivationPhase';
+import ContactsCRM from './ContactsCRM';
 
 const MODULE_DAY_OFFSET = -100;
 
@@ -63,6 +64,11 @@ export default function TrainingPhase({
   addQuizAttempt,
   getQuizAttempts,
   onSaveExit,
+  getContacts,
+  getFollowUpsByContact,
+  onUpdateContact,
+  onAddContact,
+  onAddFollowUp,
 }) {
   const [activeModuleId, setActiveModuleId] = useState(null);
   const [activePrincipleIndex, setActivePrincipleIndex] = useState(null);
@@ -71,6 +77,7 @@ export default function TrainingPhase({
   const [moduleAttempts, setModuleAttempts] = useState([]);
   const [calcOpen, setCalcOpen] = useState(false);
   const [componentOpen, setComponentOpen] = useState(false);
+  const [showCRM, setShowCRM] = useState(false);
 
   const completed = user.trainingCompletedModules || [];
   const visibleModules = modules.filter(m => !m.hidden && !m.comingSoon);
@@ -582,6 +589,42 @@ export default function TrainingPhase({
         </div>
       </div>
 
+      {/* Tab bar */}
+      <div style={{ maxWidth: 720, margin: '0 auto', padding: '16px 20px 0', width: '100%' }}>
+        <div style={{ display: 'flex', gap: 4, borderBottom: '1px solid rgba(255,255,255,0.06)', marginBottom: 0 }}>
+          {[
+            { id: 'training', label: 'Training' },
+            { id: 'crm', label: 'Contacts' },
+          ].map(t => (
+            <button
+              key={t.id}
+              onClick={() => setShowCRM(t.id === 'crm')}
+              style={{
+                padding: '10px 20px', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                border: 'none', borderBottom: `2px solid ${(t.id === 'crm') === showCRM ? '#e94560' : 'transparent'}`,
+                background: 'transparent',
+                color: (t.id === 'crm') === showCRM ? '#e94560' : '#666',
+                fontFamily: "'DM Sans', sans-serif", transition: 'color 0.15s',
+              }}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {showCRM ? (
+        <div style={{ flex: 1, maxWidth: 900, margin: '0 auto', padding: '24px 20px', width: '100%' }}>
+          <ContactsCRM
+            user={user}
+            getContacts={getContacts}
+            getFollowUpsByContact={getFollowUpsByContact}
+            onUpdateContact={onUpdateContact}
+            onAddContact={onAddContact}
+            onAddFollowUp={onAddFollowUp}
+          />
+        </div>
+      ) : (
       <div style={{ flex: 1, maxWidth: 720, margin: '0 auto', padding: '24px 20px', width: '100%' }}>
         {allModules.map((mod, idx) => {
           const done = completed.includes(mod.id);
@@ -651,6 +694,7 @@ export default function TrainingPhase({
           </div>
         )}
       </div>
+      )}
     </div>
   );
 }
