@@ -2110,6 +2110,11 @@ function DailyMinimumsEditor({ overrides, onSave, onBack }) {
 function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, dailyMinimumsOverrides, onSetDailyMinimums, practiceDaySettings, onSetPracticeDaySettings }) {
   const [editingModuleId, setEditingModuleId] = useState(null);
   const [editTitle, setEditTitle] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+  const [editPrinciples, setEditPrinciples] = useState([]);
+  const [editKeyTerms, setEditKeyTerms] = useState([]);
+  const [editCompletionMessage, setEditCompletionMessage] = useState('');
+  const [expandedPrinciple, setExpandedPrinciple] = useState(null);
   const [moduleSaving, setModuleSaving] = useState(false);
   const [editingDay, setEditingDay] = useState(null);
   const [editingPhases, setEditingPhases] = useState(false);
@@ -2152,21 +2157,28 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
   const startEditingModule = (mod) => {
     setEditingModuleId(mod.id);
     setEditTitle(mod.title);
+    setEditDescription(mod.description || '');
+    setEditPrinciples(JSON.parse(JSON.stringify(mod.principles || [])));
+    setEditKeyTerms(JSON.parse(JSON.stringify(mod.keyTerms || [])));
+    setEditCompletionMessage(mod.completionMessage || '');
+    setExpandedPrinciple(null);
   };
 
   const saveModuleEdit = async () => {
     setModuleSaving(true);
     const current = overrides[editingModuleId] || {};
     const defaultMod = TRAINING_MODULES.find(m => m.id === editingModuleId);
-    const titleChanged = defaultMod && editTitle !== defaultMod.title;
+    const overrideData = { ...current };
+    if (defaultMod && editTitle !== defaultMod.title) overrideData.title = editTitle;
+    if (defaultMod && editDescription !== defaultMod.description) overrideData.description = editDescription;
+    if (editPrinciples.length > 0) overrideData.principles = editPrinciples;
+    if (editKeyTerms.length > 0) overrideData.keyTerms = editKeyTerms;
+    if (editCompletionMessage) overrideData.completionMessage = editCompletionMessage;
     const updated = {
       ...trainingConfig,
       moduleOverrides: {
         ...overrides,
-        [editingModuleId]: {
-          ...current,
-          ...(titleChanged ? { title: editTitle } : {}),
-        },
+        [editingModuleId]: overrideData,
       },
     };
     await onSetTrainingConfig(updated);
@@ -2217,7 +2229,76 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
   }
 
   if (editingModuleId) {
-    const mod = modules.find(m => m.id === editingModuleId);
+    const inputStyle = {
+      width: '100%', padding: '10px 14px', borderRadius: 8, fontSize: 14,
+      background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+      color: '#eee', fontFamily: "'DM Sans', sans-serif", boxSizing: 'border-box',
+    };
+    const labelStyle = { fontSize: 12, color: '#888', fontWeight: 600, display: 'block', marginBottom: 6 };
+
+    const updatePrinciple = (idx, field, value) => {
+      setEditPrinciples(prev => prev.map((p, i) => i === idx ? { ...p, [field]: value } : p));
+    };
+    const updateQuestion = (pIdx, qIdx, field, value) => {
+      setEditPrinciples(prev => prev.map((p, i) => {
+        if (i !== pIdx) return p;
+        const qs = [...(p.questions || [])];
+        qs[qIdx] = { ...qs[qIdx], [field]: value };
+        return { ...p, questions: qs };
+      }));
+    };
+    const updateOption = (pIdx, qIdx, oIdx, value) => {
+      setEditPrinciples(prev => prev.map((p, i) => {
+        if (i !== pIdx) return p;
+        const qs = [...(p.questions || [])];
+        const opts = [...(qs[qIdx].options || [])];
+        opts[oIdx] = value;
+        qs[qIdx] = { ...qs[qIdx], options: opts };
+        return { ...p, questions: qs };
+      }));
+    };
+    const addQuestion = (pIdx) => {
+      setEditPrinciples(prev => prev.map((p, i) => {
+        if (i !== pIdx) return p;
+        const qs = [...(p.questions || [])];
+        qs.push({ id: `${p.id}_q${qs.length + 1}`, text: '', type: 'multiple_choice', options: ['', ''], correctAnswer: 0 });
+        return { ...p, questions: qs };
+      }));
+    };
+    const removeQuestion = (pIdx, qIdx) => {
+      setEditPrinciples(prev => prev.map((p, i) => {
+        if (i !== pIdx) return p;
+        return { ...p, questions: p.questions.filter((_, qi) => qi !== qIdx) };
+      }));
+    };
+    const addOption = (pIdx, qIdx) => {
+      setEditPrinciples(prev => prev.map((p, i) => {
+        if (i !== pIdx) return p;
+        const qs = [...(p.questions || [])];
+        qs[qIdx] = { ...qs[qIdx], options: [...(qs[qIdx].options || []), ''] };
+        return { ...p, questions: qs };
+      }));
+    };
+    const removeOption = (pIdx, qIdx, oIdx) => {
+      setEditPrinciples(prev => prev.map((p, i) => {
+        if (i !== pIdx) return p;
+        const qs = [...(p.questions || [])];
+        const opts = qs[qIdx].options.filter((_, oi) => oi !== oIdx);
+        const ca = qs[qIdx].correctAnswer >= oIdx && qs[qIdx].correctAnswer > 0 ? qs[qIdx].correctAnswer - 1 : qs[qIdx].correctAnswer;
+        qs[qIdx] = { ...qs[qIdx], options: opts, correctAnswer: Math.min(ca, opts.length - 1) };
+        return { ...p, questions: qs };
+      }));
+    };
+    const updateKeyTerm = (idx, field, value) => {
+      setEditKeyTerms(prev => prev.map((t, i) => i === idx ? { ...t, [field]: value } : t));
+    };
+    const addKeyTerm = () => {
+      setEditKeyTerms(prev => [...prev, { term: '', definition: '' }]);
+    };
+    const removeKeyTerm = (idx) => {
+      setEditKeyTerms(prev => prev.filter((_, i) => i !== idx));
+    };
+
     return (
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
@@ -2225,69 +2306,175 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
             background: 'none', border: 'none', color: '#e94560', cursor: 'pointer',
             fontSize: 14, fontWeight: 600, padding: 0, fontFamily: "'DM Sans', sans-serif",
           }}>&larr; Back</button>
-          <h3 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Edit Training Module</h3>
+          <h3 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Edit: {editTitle}</h3>
         </div>
 
+        {/* Module Title & Description */}
         <div className="card" style={{ marginBottom: 16 }}>
-          <label style={{ fontSize: 12, color: '#888', fontWeight: 600, display: 'block', marginBottom: 6 }}>Title</label>
-          <input value={editTitle} onChange={e => setEditTitle(e.target.value)} style={{
-            width: '100%', padding: '10px 14px', borderRadius: 8, fontSize: 15, fontWeight: 600,
-            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-            color: '#eee', fontFamily: "'DM Sans', sans-serif",
-          }} />
+          <label style={labelStyle}>Module Title</label>
+          <input value={editTitle} onChange={e => setEditTitle(e.target.value)} style={{ ...inputStyle, fontSize: 15, fontWeight: 600, marginBottom: 12 }} />
+          <label style={labelStyle}>Description</label>
+          <textarea value={editDescription} onChange={e => setEditDescription(e.target.value)} rows={2} style={{ ...inputStyle, resize: 'vertical' }} />
         </div>
 
-        {mod?.principles?.length > 0 && (
-          <div style={{ marginBottom: 16 }}>
-            <label style={{ fontSize: 14, color: '#f0a500', fontWeight: 700, display: 'block', marginBottom: 12 }}>
-              Principles ({mod.principles.length}) &middot; {mod.principles.reduce((n, p) => n + (p.questions?.length || 0) + (p.scenarios?.reduce((sn, s) => sn + (s.inputs?.length || 0), 0) || 0), 0)} quiz questions
-            </label>
-            {mod.principles.map((principle, pIdx) => (
-              <div key={principle.id} className="card" style={{ marginBottom: 8, padding: '14px 18px' }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+        {/* Principles */}
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ fontSize: 14, color: '#f0a500', fontWeight: 700, display: 'block', marginBottom: 12 }}>
+            Principles ({editPrinciples.length})
+          </label>
+          {editPrinciples.map((principle, pIdx) => {
+            const isExpanded = expandedPrinciple === pIdx;
+            return (
+              <div key={principle.id || pIdx} className="card" style={{ marginBottom: 8, padding: 0, overflow: 'hidden' }}>
+                {/* Collapsed header */}
+                <div
+                  onClick={() => setExpandedPrinciple(isExpanded ? null : pIdx)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 10, padding: '14px 18px',
+                    cursor: 'pointer', background: isExpanded ? 'rgba(233,69,96,0.04)' : 'transparent',
+                  }}
+                >
                   <span style={{
                     fontSize: 11, fontWeight: 700, color: '#e94560',
                     background: 'rgba(233,69,96,0.1)', padding: '3px 8px', borderRadius: 5, flexShrink: 0,
                   }}>P{pIdx + 1}</span>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: '#eee', marginBottom: 4 }}>{principle.title}</div>
-                    <div style={{ fontSize: 12, color: '#777', lineHeight: 1.6, marginBottom: 6 }}>
-                      {principle.content?.slice(0, 120)}{principle.content?.length > 120 ? '...' : ''}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#eee', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {principle.title || '(untitled)'}
                     </div>
-                    {principle.questions?.length > 0 && (
-                      <div style={{ fontSize: 11, color: '#555' }}>
-                        {principle.questions.length} question{principle.questions.length !== 1 ? 's' : ''}
-                        {principle.questions.map((q, qi) => (
-                          <span key={qi} style={{ marginLeft: 8, color: '#48c78e' }}>
-                            &#10003; Ans: {q.options?.[q.correctAnswer]?.slice(0, 30) || q.correctAnswer}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    {principle.scenarios?.length > 0 && (
-                      <div style={{ fontSize: 11, color: '#555' }}>
-                        {principle.scenarios.length} scenario{principle.scenarios.length !== 1 ? 's' : ''}
-                        {' '}&middot;{' '}
-                        {principle.scenarios.reduce((n, s) => n + (s.inputs?.length || 0), 0)} questions
-                        {principle.scenarios.map((s, si) => (
-                          <span key={si} style={{ display: 'block', marginTop: 2, color: '#666' }}>
-                            {s.title} ({s.inputs?.length || 0}q)
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                    <div style={{ fontSize: 11, color: '#666' }}>
+                      {principle.questions?.length || 0} questions
+                      {principle.showComponent && <span style={{ marginLeft: 6, color: '#c9a0ff' }}>&middot; {principle.showComponent}</span>}
+                      {principle.showCalculator && <span style={{ marginLeft: 6, color: '#c9a0ff' }}>&middot; calculator</span>}
+                    </div>
                   </div>
+                  <span style={{ fontSize: 12, color: '#888', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>&#9660;</span>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
 
-        {(!mod?.principles || mod.principles.length === 0) && (
-          <div className="card" style={{ marginBottom: 16, padding: '14px 20px', background: 'rgba(255,255,255,0.02)' }}>
-            <div style={{ fontSize: 13, color: '#666' }}>{mod?.comingSoon ? 'Content coming soon' : 'No principles configured'}</div>
+                {/* Expanded editor */}
+                {isExpanded && (
+                  <div style={{ padding: '0 18px 18px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div style={{ paddingTop: 14 }}>
+                      <label style={labelStyle}>Principle Title</label>
+                      <input value={principle.title} onChange={e => updatePrinciple(pIdx, 'title', e.target.value)} style={{ ...inputStyle, fontWeight: 600, marginBottom: 12 }} />
+
+                      <label style={labelStyle}>Content (supports **bold** and *italic*)</label>
+                      <textarea
+                        value={principle.content || ''}
+                        onChange={e => updatePrinciple(pIdx, 'content', e.target.value)}
+                        rows={10}
+                        style={{ ...inputStyle, resize: 'vertical', lineHeight: 1.7, fontSize: 13, marginBottom: 16 }}
+                      />
+
+                      {/* Questions */}
+                      <div style={{ marginBottom: 12 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                          <label style={{ ...labelStyle, marginBottom: 0, color: '#48c78e' }}>Quiz Questions ({principle.questions?.length || 0})</label>
+                          <button onClick={() => addQuestion(pIdx)} style={{
+                            fontSize: 11, padding: '4px 12px', borderRadius: 6, cursor: 'pointer',
+                            border: '1px solid rgba(72,199,142,0.3)', background: 'rgba(72,199,142,0.08)',
+                            color: '#48c78e', fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
+                          }}>+ Add Question</button>
+                        </div>
+
+                        {(principle.questions || []).map((q, qIdx) => (
+                          <div key={q.id || qIdx} style={{
+                            padding: 14, borderRadius: 10, marginBottom: 8,
+                            background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+                          }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                              <span style={{ fontSize: 11, fontWeight: 700, color: '#f0a500' }}>Q{qIdx + 1}</span>
+                              <button onClick={() => removeQuestion(pIdx, qIdx)} style={{
+                                fontSize: 10, padding: '2px 8px', borderRadius: 4, cursor: 'pointer',
+                                border: '1px solid rgba(233,69,96,0.2)', background: 'transparent',
+                                color: '#e94560', fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
+                              }}>Remove</button>
+                            </div>
+                            <input
+                              value={q.text}
+                              onChange={e => updateQuestion(pIdx, qIdx, 'text', e.target.value)}
+                              placeholder="Question text..."
+                              style={{ ...inputStyle, fontSize: 13, marginBottom: 8 }}
+                            />
+                            {(q.options || []).map((opt, oIdx) => (
+                              <div key={oIdx} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                                <input
+                                  type="radio"
+                                  name={`correct_${pIdx}_${qIdx}`}
+                                  checked={q.correctAnswer === oIdx}
+                                  onChange={() => updateQuestion(pIdx, qIdx, 'correctAnswer', oIdx)}
+                                  style={{ accentColor: '#48c78e', cursor: 'pointer' }}
+                                />
+                                <input
+                                  value={opt}
+                                  onChange={e => updateOption(pIdx, qIdx, oIdx, e.target.value)}
+                                  placeholder={`Option ${oIdx + 1}...`}
+                                  style={{ ...inputStyle, flex: 1, fontSize: 13, padding: '6px 10px',
+                                    borderColor: q.correctAnswer === oIdx ? 'rgba(72,199,142,0.3)' : undefined,
+                                    background: q.correctAnswer === oIdx ? 'rgba(72,199,142,0.04)' : undefined,
+                                  }}
+                                />
+                                {(q.options || []).length > 2 && (
+                                  <button onClick={() => removeOption(pIdx, qIdx, oIdx)} style={{
+                                    fontSize: 10, padding: '2px 6px', borderRadius: 4, cursor: 'pointer',
+                                    border: 'none', background: 'transparent', color: '#666', fontFamily: "'DM Sans', sans-serif",
+                                  }}>&times;</button>
+                                )}
+                              </div>
+                            ))}
+                            <button onClick={() => addOption(pIdx, qIdx)} style={{
+                              fontSize: 11, padding: '3px 10px', borderRadius: 5, cursor: 'pointer', marginTop: 4,
+                              border: '1px solid rgba(255,255,255,0.08)', background: 'transparent',
+                              color: '#888', fontFamily: "'DM Sans', sans-serif",
+                            }}>+ Option</button>
+                          </div>
+                        ))}
+                      </div>
+
+                      {principle.scenarios?.length > 0 && (
+                        <div style={{ padding: '10px 14px', borderRadius: 8, background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.12)', marginBottom: 12 }}>
+                          <div style={{ fontSize: 12, color: '#f0a500', fontWeight: 600 }}>
+                            {principle.scenarios.length} scenario{principle.scenarios.length !== 1 ? 's' : ''} (property listing quizzes — edit in code)
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Key Terms */}
+        <div className="card" style={{ marginBottom: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <label style={{ ...labelStyle, marginBottom: 0, color: '#c9a0ff' }}>Key Terms ({editKeyTerms.length})</label>
+            <button onClick={addKeyTerm} style={{
+              fontSize: 11, padding: '4px 12px', borderRadius: 6, cursor: 'pointer',
+              border: '1px solid rgba(201,160,255,0.3)', background: 'rgba(201,160,255,0.08)',
+              color: '#c9a0ff', fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
+            }}>+ Add Term</button>
           </div>
-        )}
+          {editKeyTerms.map((kt, idx) => (
+            <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 6, alignItems: 'flex-start' }}>
+              <input value={kt.term} onChange={e => updateKeyTerm(idx, 'term', e.target.value)}
+                placeholder="Term" style={{ ...inputStyle, flex: '0 0 180px', fontSize: 13, padding: '6px 10px' }} />
+              <input value={kt.definition} onChange={e => updateKeyTerm(idx, 'definition', e.target.value)}
+                placeholder="Definition" style={{ ...inputStyle, flex: 1, fontSize: 13, padding: '6px 10px' }} />
+              <button onClick={() => removeKeyTerm(idx)} style={{
+                fontSize: 12, padding: '4px 8px', borderRadius: 4, cursor: 'pointer',
+                border: 'none', background: 'transparent', color: '#666', fontFamily: "'DM Sans', sans-serif", flexShrink: 0,
+              }}>&times;</button>
+            </div>
+          ))}
+        </div>
+
+        {/* Completion Message */}
+        <div className="card" style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Completion Message</label>
+          <textarea value={editCompletionMessage} onChange={e => setEditCompletionMessage(e.target.value)} rows={3} style={{ ...inputStyle, resize: 'vertical', fontSize: 13 }} />
+        </div>
 
         <div style={{ display: 'flex', gap: 12 }}>
           <button className="btn-primary" onClick={saveModuleEdit} disabled={moduleSaving} style={{ padding: '12px 28px' }}>
