@@ -378,7 +378,7 @@ export default function TrainingPhase({
                 </button>
                 {componentOpen && (
                   <div style={{ padding: '0 16px 16px' }}>
-                    <Component onNext={noop} onBack={noop} onSave={noopAsync} {...cfg.props} />
+                    <Component onNext={noop} onBack={noop} onSave={noopAsync} embedded {...cfg.props} />
                   </div>
                 )}
               </div>

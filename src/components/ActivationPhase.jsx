@@ -150,7 +150,7 @@ function WelcomeStep({ firstName, onBegin }) {
 const KEY_INDICATORS = ['Cash Flow', 'Appreciation', 'Equity', 'Tax Benefits', 'All of the Above'];
 const FINANCING_OPTIONS = ['DSCR', 'Seller Finance', 'Conventional', 'Hard Money', 'Cash', 'Other'];
 
-function GetClearStep({ onNext, onBack, onSave, existing }) {
+function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
   const gc = existing || {};
   const fp = gc.financialPlan || {};
   const [destination, setDestination] = useState(gc.destination || '');
@@ -465,28 +465,32 @@ function GetClearStep({ onNext, onBack, onSave, existing }) {
       </div>
 
       {/* Navigation */}
-      <div style={{ display: 'flex', gap: 12 }}>
-        <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
-          Back
-        </button>
-        <button
-          className="btn-primary"
-          style={{
-            flex: 1, padding: '14px 24px',
-            opacity: canProceed ? 1 : 0.4,
-            pointerEvents: canProceed ? 'auto' : 'none',
-          }}
-          onClick={handleNext}
-          disabled={!canProceed || saving}
-        >
-          {saving ? 'Saving...' : 'Continue'}
-        </button>
-      </div>
+      {!embedded && (
+        <>
+          <div style={{ display: 'flex', gap: 12 }}>
+            <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
+              Back
+            </button>
+            <button
+              className="btn-primary"
+              style={{
+                flex: 1, padding: '14px 24px',
+                opacity: canProceed ? 1 : 0.4,
+                pointerEvents: canProceed ? 'auto' : 'none',
+              }}
+              onClick={handleNext}
+              disabled={!canProceed || saving}
+            >
+              {saving ? 'Saving...' : 'Continue'}
+            </button>
+          </div>
 
-      {!canProceed && (
-        <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 10 }}>
-          {!destination.trim() ? 'Define your destination' : 'Explain why this goal matters'} to continue.
-        </p>
+          {!canProceed && (
+            <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 10 }}>
+              {!destination.trim() ? 'Define your destination' : 'Explain why this goal matters'} to continue.
+            </p>
+          )}
+        </>
       )}
     </div>
   );
@@ -508,7 +512,7 @@ function parseCurrency(str) {
   return isNaN(num) ? '' : num;
 }
 
-function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
+function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded }) {
   const bb = existingBuyBox || {};
   const bbReturn = bb.returnRequirements || {};
   const [markets, setMarkets] = useState(bb.markets || []);
@@ -907,28 +911,32 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox }) {
       </a>
 
       {/* Navigation */}
-      <div style={{ display: 'flex', gap: 12 }}>
-        <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
-          Back
-        </button>
-        <button
-          className="btn-primary"
-          style={{
-            flex: 1, padding: '14px 24px',
-            opacity: canProceed ? 1 : 0.4,
-            pointerEvents: canProceed ? 'auto' : 'none',
-          }}
-          onClick={handleNext}
-          disabled={!canProceed || saving}
-        >
-          {saving ? 'Saving...' : 'Continue'}
-        </button>
-      </div>
+      {!embedded && (
+        <>
+          <div style={{ display: 'flex', gap: 12 }}>
+            <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
+              Back
+            </button>
+            <button
+              className="btn-primary"
+              style={{
+                flex: 1, padding: '14px 24px',
+                opacity: canProceed ? 1 : 0.4,
+                pointerEvents: canProceed ? 'auto' : 'none',
+              }}
+              onClick={handleNext}
+              disabled={!canProceed || saving}
+            >
+              {saving ? 'Saving...' : 'Continue'}
+            </button>
+          </div>
 
-      {!canProceed && (
-        <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 10 }}>
-          {markets.length === 0 ? 'Add at least one market' : propertyTypes.length === 0 ? 'Select at least one property type' : 'Fill out at least one return requirement'} to continue.
-        </p>
+          {!canProceed && (
+            <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 10 }}>
+              {markets.length === 0 ? 'Add at least one market' : propertyTypes.length === 0 ? 'Select at least one property type' : 'Fill out at least one return requirement'} to continue.
+            </p>
+          )}
+        </>
       )}
     </div>
   );
@@ -945,7 +953,7 @@ const CAPITAL_OPTIONS = [
   { key: 'working_on_it', label: "I'm still working on this" },
 ];
 
-function CapitalConfirmationStep({ onNext, onBack, onSave, existingCapital }) {
+function CapitalConfirmationStep({ onNext, onBack, onSave, existingCapital, embedded }) {
   const [selected, setSelected] = useState(existingCapital?.type || '');
   const [saving, setSaving] = useState(false);
 
@@ -1027,23 +1035,25 @@ function CapitalConfirmationStep({ onNext, onBack, onSave, existingCapital }) {
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: 12 }}>
-        <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
-          Back
-        </button>
-        <button
-          className="btn-primary"
-          style={{
-            flex: 1, padding: '14px 24px',
-            opacity: selected ? 1 : 0.4,
-            pointerEvents: selected ? 'auto' : 'none',
-          }}
-          onClick={handleNext}
-          disabled={!selected || saving}
-        >
-          {saving ? 'Saving...' : 'Continue'}
-        </button>
-      </div>
+      {!embedded && (
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
+            Back
+          </button>
+          <button
+            className="btn-primary"
+            style={{
+              flex: 1, padding: '14px 24px',
+              opacity: selected ? 1 : 0.4,
+              pointerEvents: selected ? 'auto' : 'none',
+            }}
+            onClick={handleNext}
+            disabled={!selected || saving}
+          >
+            {saving ? 'Saving...' : 'Continue'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
