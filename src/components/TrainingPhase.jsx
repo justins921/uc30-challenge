@@ -223,25 +223,41 @@ export default function TrainingPhase({
             </div>
           </div>
 
-          {showTermsPanel && activeModule.keyTerms?.length > 0 && (
-            <div style={{
-              maxWidth: 720, margin: '0 auto', padding: '12px 0 4px',
-              borderTop: '1px solid rgba(240,165,0,0.1)',
-            }}>
-              <div style={{
-                maxHeight: 240, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6,
-                padding: '0 4px',
-              }}>
+        </div>
+
+        {showTermsPanel && activeModule.keyTerms?.length > 0 && (
+          <div style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100,
+            background: 'rgba(5,5,10,0.95)', backdropFilter: 'blur(12px)',
+            overflowY: 'auto', padding: '24px 20px',
+          }}>
+            <div style={{ maxWidth: 720, margin: '0 auto' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                <div>
+                  <div style={{ fontSize: 11, color: '#f0a500', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 4 }}>
+                    Reference
+                  </div>
+                  <h2 style={{ fontSize: 20, fontWeight: 700, margin: 0 }}>Key Terms</h2>
+                </div>
+                <button onClick={() => setShowTermsPanel(false)} style={{
+                  background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                  color: '#eee', cursor: 'pointer', fontSize: 13, fontWeight: 600,
+                  padding: '8px 20px', borderRadius: 8, fontFamily: "'DM Sans', sans-serif",
+                }}>
+                  Close
+                </button>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {activeModule.keyTerms.map((kt, i) => (
-                  <div key={i} style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.03)' }}>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: '#f0a500' }}>{kt.term}: </span>
-                    <span style={{ fontSize: 12, color: '#999', lineHeight: 1.5 }}>{kt.definition}</span>
+                  <div key={i} style={{ padding: '14px 16px', borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#f0a500', marginBottom: 4 }}>{kt.term}</div>
+                    <div style={{ fontSize: 14, color: '#bbb', lineHeight: 1.7 }}>{kt.definition}</div>
                   </div>
                 ))}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <div style={{ flex: 1, maxWidth: 720, margin: '0 auto', padding: '24px 20px', width: '100%' }}>
           <div style={{ marginBottom: 6, fontSize: 11, color: '#e94560', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>
