@@ -612,6 +612,8 @@ function toDbRow(user) {
   if (user.stakesDeclarationSetAt) row.stakes_declaration_set_at = user.stakesDeclarationSetAt;
   if (user.theirWhy) row.their_why = user.theirWhy;
   if (user.theirWhySetAt) row.their_why_set_at = user.theirWhySetAt;
+  if (user.dreamLife) row.dream_life = user.dreamLife;
+  if (user.dreamLifeSetAt) row.dream_life_set_at = user.dreamLifeSetAt;
   if (user.notificationPreferences) row.notification_preferences = user.notificationPreferences;
   if (user.activationCompleted) row.activation_completed = true;
   if (user.activationCompletedAt) row.activation_completed_at = user.activationCompletedAt;
@@ -676,6 +678,8 @@ function toDbUpdateRow(updates) {
   if (updates.stakesDeclarationSetAt !== undefined) row.stakes_declaration_set_at = updates.stakesDeclarationSetAt;
   if (updates.theirWhy !== undefined) row.their_why = updates.theirWhy;
   if (updates.theirWhySetAt !== undefined) row.their_why_set_at = updates.theirWhySetAt;
+  if (updates.dreamLife !== undefined) row.dream_life = updates.dreamLife;
+  if (updates.dreamLifeSetAt !== undefined) row.dream_life_set_at = updates.dreamLifeSetAt;
   if (updates.notificationPreferences !== undefined) row.notification_preferences = updates.notificationPreferences;
   if (updates.activationCompleted !== undefined) row.activation_completed = updates.activationCompleted;
   if (updates.activationCompletedAt !== undefined) row.activation_completed_at = updates.activationCompletedAt;
@@ -748,6 +752,8 @@ function fromDbRow(row) {
     stakesDeclarationSetAt: row.stakes_declaration_set_at || null,
     theirWhy: row.their_why || null,
     theirWhySetAt: row.their_why_set_at || null,
+    dreamLife: row.dream_life || null,
+    dreamLifeSetAt: row.dream_life_set_at || null,
     notificationPreferences: row.notification_preferences || null,
     activationCompleted: row.activation_completed || false,
     activationCompletedAt: row.activation_completed_at || null,
@@ -1174,6 +1180,8 @@ export function createNewUser(firstName, lastName, email, authId) {
     stakesDeclarationSetAt: null,
     theirWhy: null,
     theirWhySetAt: null,
+    dreamLife: null,
+    dreamLifeSetAt: null,
     notificationPreferences: null,
     activationCompleted: false,
     activationCompletedAt: null,

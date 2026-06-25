@@ -6,3 +6,5 @@ ALTER TABLE participants ADD COLUMN IF NOT EXISTS social_handles JSONB;
 ALTER TABLE participants ADD COLUMN IF NOT EXISTS getting_started_completed BOOLEAN DEFAULT FALSE;
 ALTER TABLE participants ADD COLUMN IF NOT EXISTS is_approved BOOLEAN DEFAULT FALSE;
 ALTER TABLE participants ADD COLUMN IF NOT EXISTS training_completed_modules JSONB DEFAULT '[]';
+ALTER TABLE participants ADD COLUMN IF NOT EXISTS dream_life TEXT;
+ALTER TABLE participants ADD COLUMN IF NOT EXISTS dream_life_set_at TIMESTAMPTZ;

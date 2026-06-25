@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const TOTAL_STEPS = 10;
+const TOTAL_STEPS = 6;
 
 export default function ActivationPhase({ user, onComplete }) {
   const [step, setStep] = useState(1);
@@ -62,15 +62,11 @@ export default function ActivationPhase({ user, onComplete }) {
       }}>
         <div key={stepKey} className="fade-up" style={{ width: '100%', maxWidth: 560 }}>
           {step === 1 && <WelcomeStep firstName={user?.firstName} onBegin={goNext} />}
-          {step === 2 && <MarketResearchStep onNext={goNext} onBack={goBack} onSave={onComplete} />}
-          {step === 3 && <GetClearStep onNext={goNext} onBack={goBack} onSave={onComplete} existing={user?.getClear} />}
-          {step === 4 && <BuyBoxStep onNext={goNext} onBack={goBack} onSave={onComplete} existingBuyBox={user?.buyBox} />}
-          {step === 5 && <CapitalConfirmationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingCapital={user?.capitalConfirmation} />}
-          {step === 6 && <OfferCommitmentStep onNext={goNext} onBack={goBack} onSave={onComplete} existingCommitment={user?.offerCommitment} />}
-          {step === 7 && <StakesDeclarationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingStakes={user?.stakesDeclaration} />}
-          {step === 8 && <TheirWhyStep onNext={goNext} onBack={goBack} onSave={onComplete} existingWhy={user?.theirWhy} />}
-          {step === 9 && <NotificationPrefsStep onNext={goNext} onBack={goBack} onSave={onComplete} existingPrefs={user?.notificationPreferences} />}
-          {step === 10 && <CommitmentStep user={user} onBack={goBack} onSave={onComplete} />}
+          {step === 2 && <StakesDeclarationStep onNext={goNext} onBack={goBack} onSave={onComplete} existingStakes={user?.stakesDeclaration} />}
+          {step === 3 && <TheirWhyStep onNext={goNext} onBack={goBack} onSave={onComplete} existingWhy={user?.theirWhy} />}
+          {step === 4 && <DreamLifeStep onNext={goNext} onBack={goBack} onSave={onComplete} existingDreamLife={user?.dreamLife} />}
+          {step === 5 && <NotificationPrefsStep onNext={goNext} onBack={goBack} onSave={onComplete} existingPrefs={user?.notificationPreferences} />}
+          {step === 6 && <TrainingIntroStep user={user} onBack={goBack} onSave={onComplete} />}
         </div>
       </div>
     </div>
@@ -96,16 +92,15 @@ function WelcomeStep({ firstName, onBegin }) {
         color: '#999', fontSize: 16, lineHeight: 1.8, maxWidth: 460,
         margin: '0 auto 12px',
       }}>
-        You've made the decision. Now let's make sure you're ready to execute.
+        You've made the decision. Now let's lock in your commitment before you start training.
       </p>
 
       <p style={{
         color: '#666', fontSize: 14, lineHeight: 1.7, maxWidth: 440,
         margin: '0 auto 40px',
       }}>
-        Over the next few minutes, we'll build your operator profile — your target market,
-        your buy box, your financing plan, your commitment level. When you're done, you'll
-        be locked and loaded for Day 1.
+        Over the next few minutes, you'll define what's at stake, why this matters,
+        and set yourself up for the training that will prepare you for UC30.
       </p>
 
       <div style={{
@@ -114,19 +109,16 @@ function WelcomeStep({ firstName, onBegin }) {
         maxWidth: 400, margin: '0 auto 40px', textAlign: 'left',
       }}>
         {[
-          'Confirm your market research',
-          'Define your buy box',
-          'Verify access to capital',
-          'Set your offer commitment',
           'Declare your stakes',
           'Define your why',
-          'Set daily reminders',
-          'Commit and activate',
+          'Describe your dream life',
+          'Set your daily reminder',
+          'Commit and begin training',
         ].map((item, i) => (
           <div key={i} style={{
             display: 'flex', alignItems: 'center', gap: 10,
             padding: '7px 0',
-            borderBottom: i < 7 ? '1px solid rgba(255,255,255,0.03)' : 'none',
+            borderBottom: i < 4 ? '1px solid rgba(255,255,255,0.03)' : 'none',
           }}>
             <div style={{
               width: 22, height: 22, borderRadius: 6, flexShrink: 0,
@@ -144,117 +136,17 @@ function WelcomeStep({ firstName, onBegin }) {
       <button className="btn-primary" onClick={onBegin} style={{
         padding: '16px 48px', fontSize: 17, letterSpacing: 0.3,
       }}>
-        Begin Activation
+        Let's Go
       </button>
     </div>
   );
 }
 
-// ── Step 2: Market Research Confirmation ───────────────────
-function MarketResearchStep({ onNext, onBack, onSave }) {
-  const [confirmed, setConfirmed] = useState(false);
-  const [saving, setSaving] = useState(false);
+// ── Deferred Steps (used post-training) ──────────────────
+// GetClearStep, BuyBoxStep, CapitalConfirmationStep, OfferCommitmentStep
+// are kept here for use after training modules are completed.
 
-  const handleNext = async () => {
-    if (!confirmed) return;
-    setSaving(true);
-    await onSave({
-      marketResearchConfirmed: true,
-      marketResearchConfirmedAt: new Date().toISOString(),
-    });
-    setSaving(false);
-    onNext();
-  };
-
-  return (
-    <div>
-      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 12 }}>
-        Confirm Your Market Research
-      </h1>
-
-      <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, marginBottom: 24 }}>
-        Before Day 1, you should know the basics of your target market — median home
-        prices, average days on market, and average rent if you're buying rentals. This
-        ensures you're ready to analyze properties and submit offers from the start.
-      </p>
-
-      <div style={{
-        padding: '20px 24px', borderRadius: 12, marginBottom: 28,
-        background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.12)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-          <span style={{ fontSize: 16, flexShrink: 0, marginTop: 1 }}>💡</span>
-          <div>
-            <p style={{ color: '#f0a500', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>
-              Not sure where to start?
-            </p>
-            <p style={{ color: '#888', fontSize: 13, lineHeight: 1.7, margin: 0 }}>
-              Check Zillow, Redfin, or Realtor.com for your target area. Look at median list
-              price, average days on market, and price-to-rent ratios. 30 minutes of research
-              now saves you days of guessing later.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <label
-        onClick={() => setConfirmed(!confirmed)}
-        style={{
-          display: 'flex', alignItems: 'flex-start', gap: 14,
-          padding: '18px 20px', borderRadius: 12, cursor: 'pointer',
-          background: confirmed ? 'rgba(72,199,142,0.06)' : 'rgba(255,255,255,0.03)',
-          border: `1px solid ${confirmed ? 'rgba(72,199,142,0.2)' : 'rgba(255,255,255,0.08)'}`,
-          transition: 'all 0.2s',
-          userSelect: 'none',
-        }}
-      >
-        <div style={{
-          width: 24, height: 24, borderRadius: 7, flexShrink: 0, marginTop: 1,
-          background: confirmed ? '#48c78e' : 'rgba(255,255,255,0.06)',
-          border: confirmed ? '2px solid #48c78e' : '2px solid rgba(255,255,255,0.15)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          transition: 'all 0.2s',
-        }}>
-          {confirmed && (
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          )}
-        </div>
-        <div>
-          <div style={{
-            fontSize: 15, fontWeight: 600, lineHeight: 1.5,
-            color: confirmed ? '#48c78e' : '#ccc',
-            transition: 'color 0.2s',
-          }}>
-            I have researched my target market and understand current pricing, days on
-            market, and rental rates in my area.
-          </div>
-        </div>
-      </label>
-
-      <div style={{ display: 'flex', gap: 12, marginTop: 32 }}>
-        <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
-          Back
-        </button>
-        <button
-          className="btn-primary"
-          style={{
-            flex: 1, padding: '14px 24px',
-            opacity: confirmed ? 1 : 0.4,
-            pointerEvents: confirmed ? 'auto' : 'none',
-          }}
-          onClick={handleNext}
-          disabled={!confirmed || saving}
-        >
-          {saving ? 'Saving...' : 'Continue'}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ── Step 3: Get Clear ─────────────────────────────────────
+// ── Get Clear ─────────────────────────────────────
 const KEY_INDICATORS = ['Cash Flow', 'Appreciation', 'Equity', 'Tax Benefits', 'All of the Above'];
 const FINANCING_OPTIONS = ['DSCR', 'Seller Finance', 'Conventional', 'Hard Money', 'Cash', 'Other'];
 
@@ -1495,7 +1387,99 @@ function TheirWhyStep({ onNext, onBack, onSave, existingWhy }) {
   );
 }
 
-// ── Step 8: Daily Notification Preferences ───────────────
+// ── My Dream Life ────────────────────────────────────────
+function DreamLifeStep({ onNext, onBack, onSave, existingDreamLife }) {
+  const [text, setText] = useState(existingDreamLife || '');
+  const [saving, setSaving] = useState(false);
+
+  const isValid = text.trim().length >= 20;
+
+  const handleNext = async () => {
+    if (!isValid) return;
+    setSaving(true);
+    await onSave({
+      dreamLife: text.trim(),
+      dreamLifeSetAt: new Date().toISOString(),
+    });
+    setSaving(false);
+    onNext();
+  };
+
+  return (
+    <div>
+      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 12, color: '#f0a500' }}>
+        My Dream Life
+      </h1>
+
+      <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, marginBottom: 28 }}>
+        Describe in detail the life you want — provided by cash flow from passive income.
+      </p>
+
+      <textarea
+        value={text}
+        onChange={e => setText(e.target.value)}
+        rows={8}
+        style={{
+          width: '100%', fontSize: 15, lineHeight: 1.8,
+          padding: '16px 18px', borderRadius: 12, resize: 'vertical',
+          background: 'rgba(255,255,255,0.03)',
+          border: `1px solid ${text.length > 0 && !isValid ? 'rgba(240,165,0,0.2)' : 'rgba(255,255,255,0.08)'}`,
+          color: '#e8e6e3', fontFamily: "'DM Sans', sans-serif",
+          minHeight: 200,
+        }}
+        placeholder="Where do you live? What does your morning look like? How does your family benefit? What does financial freedom feel like day to day?"
+      />
+
+      {text.length > 0 && !isValid && (
+        <p style={{ fontSize: 12, color: '#f0a500', marginTop: 6, marginBottom: 0 }}>
+          Keep going — paint the full picture.
+        </p>
+      )}
+
+      <div style={{
+        marginTop: 20, marginBottom: 32, padding: '16px 18px',
+        borderRadius: 10, background: 'rgba(240,165,0,0.02)',
+        borderLeft: '3px solid rgba(240,165,0,0.12)',
+      }}>
+        <p style={{ fontSize: 12, color: '#555', marginBottom: 10, fontWeight: 600, letterSpacing: 0.5, textTransform: 'uppercase' }}>
+          Think about:
+        </p>
+        {[
+          'Waking up with no alarm, knowing your properties are generating income...',
+          'Taking your family on vacation without worrying about the cost...',
+          'Having the freedom to choose how you spend every single day...',
+        ].map((hint, i) => (
+          <p key={i} style={{
+            fontSize: 13, color: '#444', fontStyle: 'italic', lineHeight: 1.7,
+            margin: 0, padding: '3px 0',
+          }}>
+            "{hint}"
+          </p>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', gap: 12 }}>
+        <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
+          Back
+        </button>
+        <button
+          className="btn-primary"
+          style={{
+            flex: 1, padding: '14px 24px',
+            opacity: isValid ? 1 : 0.4,
+            pointerEvents: isValid ? 'auto' : 'none',
+          }}
+          onClick={handleNext}
+          disabled={!isValid || saving}
+        >
+          {saving ? 'Saving...' : 'Continue'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Daily Notification Preferences ───────────────
 const TIME_PRESETS = [
   { label: 'Morning', time: '08:00', display: '8 AM' },
   { label: 'Afternoon', time: '12:00', display: '12 PM' },
@@ -1583,8 +1567,9 @@ function NotificationPrefsStep({ onNext, onBack, onSave, existingPrefs }) {
       </h1>
 
       <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, marginBottom: 28 }}>
-        When do you want to be reminded to complete your daily standards? Pick a time
-        that works with your schedule.
+        Each day you will be required to complete training and tasks that are going to help
+        you get a property under contract in the next 30 days. Pick the time that you want
+        to be reminded to complete your daily standards.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
@@ -1727,33 +1712,10 @@ function NotificationPrefsStep({ onNext, onBack, onSave, existingPrefs }) {
   );
 }
 
-// ── Step 9: Commitment Confirmation & Completion ─────────
-const CAPITAL_LABELS = {
-  cash: 'Cash available',
-  hard_money_lender: 'Hard money lender',
-  conventional: 'Conventional pre-approval',
-  dscr: 'DSCR lender',
-  jv_partner: 'JV partner / private money',
-  seller_finance: 'Seller financing',
-  working_on_it: 'Still working on this',
-};
-
-function CommitmentStep({ user, onBack, onSave }) {
+// ── Training Intro & Commitment ──────────────────────────
+function TrainingIntroStep({ user, onBack, onSave }) {
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
-
-  const gc = user?.getClear || {};
-  const bb = user?.buyBox || {};
-  const cap = user?.capitalConfirmation;
-  const notifPrefs = user?.notificationPreferences;
-
-  const formatTime = (t) => {
-    if (!t) return '';
-    const h = parseInt(t.split(':')[0], 10);
-    if (h === 0) return '12:00 AM';
-    if (h === 12) return '12:00 PM';
-    return h > 12 ? `${h - 12}:00 PM` : `${h}:00 AM`;
-  };
 
   const handleCommit = async () => {
     setSaving(true);
@@ -1779,75 +1741,59 @@ function CommitmentStep({ user, onBack, onSave }) {
           </svg>
         </div>
         <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 12, color: '#48c78e' }}>
-          You're Activated.
+          Let's Start Training.
         </h1>
         <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, maxWidth: 400, margin: '0 auto 32px' }}>
-          Your operator profile is locked in. When your cohort begins, you'll hit the ground running.
-        </p>
-        <p style={{ color: '#666', fontSize: 13, marginBottom: 32 }}>
-          Loading your dashboard...
+          Your commitment is locked in. Loading your training modules...
         </p>
       </div>
     );
   }
 
-  const summaryRow = (label, value) => (
-    <div style={{
-      display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
-      padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)',
-    }}>
-      <span style={{ fontSize: 13, color: '#777', flexShrink: 0, marginRight: 12 }}>{label}</span>
-      <span style={{ fontSize: 14, color: '#ddd', fontWeight: 500, textAlign: 'right' }}>{value || '—'}</span>
-    </div>
-  );
-
   return (
     <div>
-      <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>
-        You're Ready, {user?.firstName || 'Operator'}.
+      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 16 }}>
+        Time to Start Training!
       </h1>
-      <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7, marginBottom: 28 }}>
-        Review your setup below. If anything needs changing, use the Back button.
+
+      <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, marginBottom: 24 }}>
+        There is basic information that you need to know in order to complete your daily tasks.
+        All of this information is provided in the next training modules.
       </p>
 
-      {/* Summary */}
+      <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, marginBottom: 24 }}>
+        Each module has key principles and follow-up questions to ensure clarity.
+        These modules were created to give you all the information you need to feel
+        completely comfortable analyzing properties, connecting with necessary contacts,
+        putting in offers, and getting properties under contract!
+      </p>
+
       <div style={{
-        padding: '20px 22px', borderRadius: 14, marginBottom: 24,
-        background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+        padding: '20px 24px', borderRadius: 14, marginBottom: 24,
+        background: 'rgba(240,165,0,0.04)', border: '1px solid rgba(240,165,0,0.12)',
       }}>
-        {summaryRow('Goal', gc.destination ? (gc.destination.length > 60 ? gc.destination.slice(0, 60) + '...' : gc.destination) : '')}
-        {summaryRow('Key Indicator', gc.keyIndicator || '')}
-        {summaryRow('Market', (bb.markets || []).join(', '))}
-        {summaryRow('Property Types', (bb.propertyTypes || []).join(', '))}
-        {summaryRow('Price Range',
-          bb.priceMin || bb.priceMax
-            ? `$${bb.priceMin ? Number(bb.priceMin).toLocaleString() : '—'} – $${bb.priceMax ? Number(bb.priceMax).toLocaleString() : '—'}`
-            : ''
-        )}
-        {summaryRow('Strategy', (bb.strategies || []).join(', '))}
-        {summaryRow('Capital', cap ? CAPITAL_LABELS[cap.type] || cap.type : '')}
-        {summaryRow('Offer Commitment', user?.offerCommitment ? `${user.offerCommitment} offers` : '')}
-        {summaryRow('Daily Reminder',
-          notifPrefs
-            ? `${formatTime(notifPrefs.dailyReminderTime)} (${(notifPrefs.timezone || '').replace(/_/g, ' ')})`
-            : ''
-        )}
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+          <div>
+            <p style={{ color: '#f0a500', fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
+              What to expect:
+            </p>
+            <ul style={{ color: '#bbb', fontSize: 14, lineHeight: 2, margin: 0, paddingLeft: 20 }}>
+              <li>Each module should take 30 minutes or less</li>
+              <li>Key principles with follow-up questions after each one</li>
+              <li>Complete at your own pace — about an hour a day for 5 days, or all at once</li>
+              <li>You must finish all modules before Day 1 of UC30</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
-      {/* Commitment Statement */}
-      <div style={{
-        padding: '20px 22px', borderRadius: 14, marginBottom: 32,
-        background: 'rgba(233,69,96,0.03)', border: '1px solid rgba(233,69,96,0.1)',
+      <p style={{
+        color: '#ccc', fontSize: 16, lineHeight: 1.8, marginBottom: 32,
+        fontWeight: 600, textAlign: 'center',
       }}>
-        <p style={{
-          fontSize: 15, color: '#ccc', lineHeight: 1.8, margin: 0, fontStyle: 'italic',
-        }}>
-          "I commit to completing all daily standards for 30 consecutive days. I understand
-          that if I fall behind, I will restart with the next cohort."
-        </p>
-      </div>
+        Commit now to finish all the modules before the first day of UC30!
+      </p>
 
-      {/* Actions */}
       <div style={{ display: 'flex', gap: 12 }}>
         <button className="btn-secondary" onClick={onBack} style={{ padding: '16px 24px' }}>
           Back
@@ -1868,3 +1814,14 @@ function CommitmentStep({ user, onBack, onSave }) {
     </div>
   );
 }
+
+// CAPITAL_LABELS kept for post-training steps
+const CAPITAL_LABELS = {
+  cash: 'Cash available',
+  hard_money_lender: 'Hard money lender',
+  conventional: 'Conventional pre-approval',
+  dscr: 'DSCR lender',
+  jv_partner: 'JV partner / private money',
+  seller_finance: 'Seller financing',
+  working_on_it: 'Still working on this',
+};
