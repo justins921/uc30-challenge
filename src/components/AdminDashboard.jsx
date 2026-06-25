@@ -2196,7 +2196,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
         {mod?.principles?.length > 0 && (
           <div style={{ marginBottom: 16 }}>
             <label style={{ fontSize: 14, color: '#f0a500', fontWeight: 700, display: 'block', marginBottom: 12 }}>
-              Principles ({mod.principles.length}) &middot; {mod.principles.reduce((n, p) => n + (p.questions?.length || 0), 0)} quiz questions
+              Principles ({mod.principles.length}) &middot; {mod.principles.reduce((n, p) => n + (p.questions?.length || 0) + (p.scenarios?.reduce((sn, s) => sn + (s.inputs?.length || 0), 0) || 0), 0)} quiz questions
             </label>
             {mod.principles.map((principle, pIdx) => (
               <div key={principle.id} className="card" style={{ marginBottom: 8, padding: '14px 18px' }}>
@@ -2216,6 +2216,18 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
                         {principle.questions.map((q, qi) => (
                           <span key={qi} style={{ marginLeft: 8, color: '#48c78e' }}>
                             &#10003; Ans: {q.options?.[q.correctAnswer]?.slice(0, 30) || q.correctAnswer}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {principle.scenarios?.length > 0 && (
+                      <div style={{ fontSize: 11, color: '#555' }}>
+                        {principle.scenarios.length} scenario{principle.scenarios.length !== 1 ? 's' : ''}
+                        {' '}&middot;{' '}
+                        {principle.scenarios.reduce((n, s) => n + (s.inputs?.length || 0), 0)} questions
+                        {principle.scenarios.map((s, si) => (
+                          <span key={si} style={{ display: 'block', marginTop: 2, color: '#666' }}>
+                            {s.title} ({s.inputs?.length || 0}q)
                           </span>
                         ))}
                       </div>
@@ -2364,7 +2376,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
                 {mod.comingSoon ? 'Coming soon' : mod.description || 'No description'}
                 {mod.principles?.length > 0 && (
                   <span style={{ marginLeft: 8, color: '#555' }}>
-                    &middot; {mod.principles.length} principles &middot; {mod.principles.reduce((n, p) => n + (p.questions?.length || 0), 0)} questions
+                    &middot; {mod.principles.length} principles &middot; {mod.principles.reduce((n, p) => n + (p.questions?.length || 0) + (p.scenarios?.reduce((sn, s) => sn + (s.inputs?.length || 0), 0) || 0), 0)} questions
                   </span>
                 )}
               </div>

@@ -462,45 +462,183 @@ export const TRAINING_MODULES = [
         id: 'mod2_p10',
         title: 'Practice — Run the numbers yourself',
         showCalculator: true,
-        content: 'Time to apply everything you\'ve learned. Use the CDS Rental Calculator to analyze these properties and answer the questions below.\n\n**Property 1 — Turn-key 4-plex**\nPurchase Price: $600,000 · Turn-key ($0 rent-ready) · 25% down · 2% closing · 30 years · 6.5% interest · 4 units at $1,500/mo · 6% vacancy · 12% maintenance+CapEx · 8% management · $1,000 insurance · $4,000 taxes · No utilities/additional.\n\n**Property 2 — Same 4-plex, different rate**\nSame property and inputs as above, but with **7.5% interest** instead of 6.5%.\n\n**Property 3 — Find the price**\nA 4-unit property. All four units rent for $1,500/month ($6,000/month total). 25% down · 2% closing · 6.5% interest · 30 years · 6% vacancy · 12% maintenance · 8% management · $1,000/yr additional expenses · $2,500 insurance · $6,000 taxes · Tenant-paid utilities · $0 rent-ready.',
-        questions: [
+        content: 'Time to apply everything you\'ve learned. Use the CDS Rental Calculator to analyze each property below and answer the questions.',
+        scenarios: [
           {
-            id: 'mod2_p10_q1',
-            text: 'Property 1: What is the cash-on-cash return for the $600,000 turn-key 4-plex at 6.5% interest?',
-            type: 'number',
-            correctAnswer: 9.44,
-            tolerance: 0.15,
-            unit: '%',
+            id: 'mod2_p10_prop1',
+            title: 'Property 1 — Turn-key 4-plex',
+            maxAttempts: 5,
+            propertyListing: {
+              title: 'Turn-key 4-plex',
+              price: '$600,000',
+              badges: ['4 Units', 'Turn-key', '$0 Rent-Ready'],
+              highlights: [
+                { icon: '🏠', value: '4', label: 'Units' },
+                { icon: '💰', value: '$1,500', label: 'Per Unit/mo' },
+                { icon: '🔑', value: 'Turn-key', label: 'Condition' },
+              ],
+              sections: [
+                {
+                  heading: 'Financing',
+                  rows: [
+                    { label: 'Down Payment', value: '25%' },
+                    { label: 'Closing Costs', value: '2%' },
+                    { label: 'Loan Term', value: '30 years' },
+                    { label: 'Interest Rate', value: '6.5%' },
+                  ],
+                },
+                {
+                  heading: 'Income',
+                  rows: [
+                    { label: 'Monthly Rent', value: '$6,000', detail: '4 units × $1,500' },
+                    { label: 'Vacancy', value: '6%' },
+                  ],
+                },
+                {
+                  heading: 'Expenses',
+                  rows: [
+                    { label: 'Maintenance + CapEx', value: '12%' },
+                    { label: 'Management', value: '8%' },
+                    { label: 'Insurance', value: '$1,000/yr' },
+                    { label: 'Taxes', value: '$4,000/yr' },
+                    { label: 'Utilities / Additional', value: '$0' },
+                  ],
+                },
+              ],
+            },
+            inputs: [
+              {
+                id: 'mod2_p10_q1',
+                label: 'What is the cash-on-cash return?',
+                type: 'number',
+                correctAnswer: 9.44,
+                tolerance: 0.15,
+                unit: '%',
+              },
+            ],
           },
           {
-            id: 'mod2_p10_q2',
-            text: 'Property 2: Same $600,000 property but at 7.5% interest — what is the approximate cash-on-cash return?',
-            type: 'multiple_choice',
-            options: ['10.29%', '5.27%', '6.74%', '8.30%'],
-            correctAnswer: 1,
+            id: 'mod2_p10_prop2',
+            title: 'Property 2 — Same 4-plex, Higher Rate',
+            description: 'Same property and inputs as Property 1, but with a higher interest rate.',
+            maxAttempts: 5,
+            propertyListing: {
+              title: 'Turn-key 4-plex — Higher Rate',
+              price: '$600,000',
+              badges: ['4 Units', 'Turn-key', '7.5% Interest'],
+              highlights: [
+                { icon: '🏠', value: '4', label: 'Units' },
+                { icon: '💰', value: '$1,500', label: 'Per Unit/mo' },
+                { icon: '📈', value: '7.5%', label: 'Interest' },
+              ],
+              sections: [
+                {
+                  heading: 'Financing',
+                  rows: [
+                    { label: 'Down Payment', value: '25%' },
+                    { label: 'Closing Costs', value: '2%' },
+                    { label: 'Loan Term', value: '30 years' },
+                    { label: 'Interest Rate', value: '7.5%' },
+                  ],
+                },
+                {
+                  heading: 'Income',
+                  rows: [
+                    { label: 'Monthly Rent', value: '$6,000', detail: '4 units × $1,500' },
+                    { label: 'Vacancy', value: '6%' },
+                  ],
+                },
+                {
+                  heading: 'Expenses',
+                  rows: [
+                    { label: 'Maintenance + CapEx', value: '12%' },
+                    { label: 'Management', value: '8%' },
+                    { label: 'Insurance', value: '$1,000/yr' },
+                    { label: 'Taxes', value: '$4,000/yr' },
+                    { label: 'Utilities / Additional', value: '$0' },
+                  ],
+                },
+              ],
+            },
+            inputs: [
+              {
+                id: 'mod2_p10_q2',
+                label: 'What is the approximate cash-on-cash return at 7.5%?',
+                type: 'multiple_choice',
+                options: ['10.29%', '5.27%', '6.74%', '8.30%'],
+                correctAnswer: 1,
+              },
+              {
+                id: 'mod2_p10_q3',
+                label: 'What interest rate would make the cash-on-cash return above 10%?',
+                type: 'multiple_choice',
+                options: ['6%', '6.5%', '5.5%', '5.25%'],
+                correctAnswer: 3,
+              },
+            ],
           },
           {
-            id: 'mod2_p10_q3',
-            text: 'Property 2: What interest rate would make the cash-on-cash return above 10%?',
-            type: 'multiple_choice',
-            options: ['6%', '6.5%', '5.5%', '5.25%'],
-            correctAnswer: 3,
-          },
-          {
-            id: 'mod2_p10_q4',
-            text: 'Property 3: What purchase price produces a 10.00% cash-on-cash return?',
-            type: 'number',
-            correctAnswer: 535385,
-            tolerance: 200,
-            unit: '$',
-          },
-          {
-            id: 'mod2_p10_q5',
-            text: 'Property 3: What purchase price yields a 12.00% cash-on-cash return?',
-            type: 'number',
-            correctAnswer: 503350,
-            tolerance: 200,
-            unit: '$',
+            id: 'mod2_p10_prop3',
+            title: 'Property 3 — Find the Price',
+            description: 'Use the Seller Finance Solver to find the purchase price that hits each target return.',
+            maxAttempts: 5,
+            propertyListing: {
+              title: '4-Unit — Find Your Price',
+              badges: ['4 Units', '$1,500/unit', 'Tenant-paid Utilities'],
+              highlights: [
+                { icon: '🏠', value: '4', label: 'Units' },
+                { icon: '💰', value: '$1,500', label: 'Per Unit/mo' },
+                { icon: '🔍', value: '???', label: 'Price' },
+              ],
+              sections: [
+                {
+                  heading: 'Financing',
+                  rows: [
+                    { label: 'Down Payment', value: '25%' },
+                    { label: 'Closing Costs', value: '2%' },
+                    { label: 'Loan Term', value: '30 years' },
+                    { label: 'Interest Rate', value: '6.5%' },
+                  ],
+                },
+                {
+                  heading: 'Income',
+                  rows: [
+                    { label: 'Monthly Rent', value: '$6,000', detail: '4 units × $1,500' },
+                    { label: 'Vacancy', value: '6%' },
+                  ],
+                },
+                {
+                  heading: 'Expenses',
+                  rows: [
+                    { label: 'Maintenance', value: '12%' },
+                    { label: 'Management', value: '8%' },
+                    { label: 'Additional Expenses', value: '$1,000/yr' },
+                    { label: 'Insurance', value: '$2,500/yr' },
+                    { label: 'Taxes', value: '$6,000/yr' },
+                    { label: 'Utilities', value: 'Tenant-paid ($0)' },
+                    { label: 'Costs to Make Rent Ready', value: '$0' },
+                  ],
+                },
+              ],
+            },
+            inputs: [
+              {
+                id: 'mod2_p10_q4',
+                label: 'What purchase price produces a 10.00% cash-on-cash return?',
+                type: 'number',
+                correctAnswer: 535385,
+                tolerance: 200,
+                unit: '$',
+              },
+              {
+                id: 'mod2_p10_q5',
+                label: 'What purchase price yields a 12.00% cash-on-cash return?',
+                type: 'number',
+                correctAnswer: 503350,
+                tolerance: 200,
+                unit: '$',
+              },
+            ],
           },
         ],
       },

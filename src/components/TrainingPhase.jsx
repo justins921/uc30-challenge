@@ -99,6 +99,11 @@ export default function TrainingPhase({
   }, [addQuizAttempt, dayNumber]);
 
   const isPrincipleComplete = useCallback((principle) => {
+    if (principle?.scenarios?.length) {
+      return principle.scenarios.every(s =>
+        moduleAttempts.some(a => a.scenario_id === s.id && a.correct)
+      );
+    }
     if (!principle?.questions?.length) return true;
     return principle.questions.every(q =>
       moduleAttempts.some(a => a.scenario_id === principle.id && a.correct)
@@ -165,10 +170,10 @@ export default function TrainingPhase({
 
     const principleComplete = isPrincipleComplete(principle);
     const isLastPrinciple = activePrincipleIndex === principles.length - 1;
-    const hasQuestions = principle.questions?.length > 0;
+    const hasQuestions = (principle.questions?.length > 0) || (principle.scenarios?.length > 0);
 
     const principleQuiz = hasQuestions ? {
-      scenarios: [{
+      scenarios: principle.scenarios || [{
         id: principle.id,
         title: 'Quick Check',
         maxAttempts: 5,
@@ -182,7 +187,10 @@ export default function TrainingPhase({
       }],
     } : null;
 
-    const principleAttempts = moduleAttempts.filter(a => a.scenario_id === principle.id);
+    const scenarioIds = principle.scenarios
+      ? principle.scenarios.map(s => s.id)
+      : [principle.id];
+    const principleAttempts = moduleAttempts.filter(a => scenarioIds.includes(a.scenario_id));
 
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
