@@ -227,8 +227,8 @@ export default function TrainingPhase({
 
         {showTermsPanel && activeModule.keyTerms?.length > 0 && (
           <div style={{
-            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100,
-            background: 'rgba(5,5,10,0.95)', backdropFilter: 'blur(12px)',
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 250,
+            background: 'rgba(5,5,10,0.97)', backdropFilter: 'blur(12px)',
             overflowY: 'auto', padding: '24px 20px',
           }}>
             <div style={{ maxWidth: 720, margin: '0 auto' }}>
