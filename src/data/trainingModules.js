@@ -25,15 +25,15 @@ export const TRAINING_MODULES = [
       },
       {
         id: 'mod1_p2',
-        title: 'Cash flow is what’s left after everything',
-        content: 'Cash flow is the money remaining after **all** expenses — mortgage, taxes, insurance, maintenance, vacancy, management, and reserves. Example: $2,000 rent − $1,500 expenses = $500/month, or $6,000/year. It pays you today, builds reserves, lowers risk, and helps you buy more property. If a number leaves out reserves, it isn’t real cash flow.',
+        title: 'Cash flow is what\'s left after everything',
+        content: 'Cash flow is the money remaining after **all** expenses — mortgage, taxes, insurance, maintenance, vacancy, management, and reserves. Example: $2,000 rent − $1,500 expenses = $500/month, or $6,000/year. It pays you today, builds reserves, lowers risk, and helps you buy more property. If a number leaves out reserves, it isn\'t real cash flow.',
         questions: [
           {
             id: 'mod1_p2_q1',
             text: 'Cash flow is:',
             type: 'multiple_choice',
             options: [
-              'The rise in a property’s value over time',
+              'The rise in a property\'s value over time',
               'The money left after all expenses, debt, and reserves',
               'The return on the cash you invested',
             ],
@@ -92,7 +92,7 @@ export const TRAINING_MODULES = [
       {
         id: 'mod1_p5',
         title: 'DSCR measures whether the income covers the debt',
-        content: 'Debt Service Coverage Ratio = **NOI ÷ annual debt payments.** It tells you (and your lender) whether the property’s income comfortably covers its loan. A DSCR of 1.0 means income exactly equals the payment; lenders typically want **1.2 or higher** for a margin of safety. A stronger DSCR means easier approvals, better terms, and lower risk.',
+        content: 'Debt Service Coverage Ratio = **NOI ÷ annual debt payments.** It tells you (and your lender) whether the property\'s income comfortably covers its loan. A DSCR of 1.0 means income exactly equals the payment; lenders typically want **1.2 or higher** for a margin of safety. A stronger DSCR means easier approvals, better terms, and lower risk.',
         questions: [
           {
             id: 'mod1_p5_q1',
@@ -117,7 +117,7 @@ export const TRAINING_MODULES = [
       {
         id: 'mod1_p6',
         title: 'Tenants build your equity; appreciation is a bonus',
-        content: 'Every payment chips down your loan balance — **principal paydown** your tenants effectively fund. Example: a $150,000 balance paid down to $146,000 in a year is $4,000 of equity built for you. **Appreciation** grows wealth too (a $200,000 property worth $206,000 a year later gained $6,000), but it’s never a reason to buy. Never purchase a property *because* you think it’ll go up.',
+        content: 'Every payment chips down your loan balance — **principal paydown** your tenants effectively fund. Example: a $150,000 balance paid down to $146,000 in a year is $4,000 of equity built for you. **Appreciation** grows wealth too (a $200,000 property worth $206,000 a year later gained $6,000), but it\'s never a reason to buy. Never purchase a property *because* you think it\'ll go up.',
         questions: [
           {
             id: 'mod1_p6_q1',
@@ -145,7 +145,7 @@ export const TRAINING_MODULES = [
       {
         id: 'mod1_p7',
         title: 'Tax benefits are bigger than most people think',
-        content: 'The government hands investors real advantages — **depreciation** (deductions even while the property gains value), **cost segregation** (accelerated depreciation for larger, earlier deductions), and ordinary **expense deductions.** These aren’t a rounding error; they can rival cash flow. Example: a $10,000 cash-flow year plus $8,000 in tax savings is really an $18,000 year. Most investors ignore this return source entirely.',
+        content: 'The government hands investors real advantages — **depreciation** (deductions even while the property gains value), **cost segregation** (accelerated depreciation for larger, earlier deductions), and ordinary **expense deductions.** These aren\'t a rounding error; they can rival cash flow. Example: a $10,000 cash-flow year plus $8,000 in tax savings is really an $18,000 year. Most investors ignore this return source entirely.',
         questions: [
           {
             id: 'mod1_p7_q1',
@@ -189,7 +189,7 @@ export const TRAINING_MODULES = [
       {
         id: 'mod1_p9',
         title: 'Risk-adjusted returns: same number, different danger',
-        content: 'Two deals can show the **identical** return and carry completely different risk:\n\n• **Property A:** 12% cash-on-cash, 25% down, fixed financing, strong reserves, long-term loan\n• **Property B:** 12% cash-on-cash, 3% down, balloon payment, minimal reserves, short-term debt\n\nThe returns match. The risk does not. Great investors evaluate return **and** financing, reserves, and downside protection together. Wealthy investors ask “Will it survive? Will I sleep at night?” — not just “What’s the return?”',
+        content: 'Two deals can show the **identical** return and carry completely different risk:\n\n• **Property A:** 12% cash-on-cash, 25% down, fixed financing, strong reserves, long-term loan\n• **Property B:** 12% cash-on-cash, 3% down, balloon payment, minimal reserves, short-term debt\n\nThe returns match. The risk does not. Great investors evaluate return **and** financing, reserves, and downside protection together. Wealthy investors ask "Will it survive? Will I sleep at night?" — not just "What\'s the return?"',
         questions: [
           {
             id: 'mod1_p9_q1',
@@ -206,7 +206,7 @@ export const TRAINING_MODULES = [
       {
         id: 'mod1_p10',
         title: 'Run every deal through the hierarchy, in order',
-        content: 'Evaluate in this sequence, and stop if it fails an early level:\n\n1. **Survival** — can it withstand vacancy, repairs, a soft market? If not, STOP.\n2. **Cash flow** — is it positive?\n3. **Cash-on-cash** — does it hit your minimum return?\n4. **Total return** — cash flow + appreciation + paydown + tax benefits\n5. **Scalability** — can you repeat it?\n\nSurvival comes first. A deal that can’t survive stress isn’t a deal, no matter how good the projected return looks.',
+        content: 'Evaluate in this sequence, and stop if it fails an early level:\n\n1. **Survival** — can it withstand vacancy, repairs, a soft market? If not, STOP.\n2. **Cash flow** — is it positive?\n3. **Cash-on-cash** — does it hit your minimum return?\n4. **Total return** — cash flow + appreciation + paydown + tax benefits\n5. **Scalability** — can you repeat it?\n\nSurvival comes first. A deal that can\'t survive stress isn\'t a deal, no matter how good the projected return looks.',
         questions: [
           {
             id: 'mod1_p10_q1',
@@ -233,7 +233,7 @@ export const TRAINING_MODULES = [
       },
     ],
     keyTerms: [
-      { term: 'Net Operating Income (NOI)', definition: 'A property’s income after operating expenses but BEFORE the mortgage payment. Rent (minus vacancy) minus costs like taxes, insurance, maintenance, and management — but not the loan. It’s the property’s profit before financing.' },
+      { term: 'Net Operating Income (NOI)', definition: 'A property\'s income after operating expenses but BEFORE the mortgage payment. Rent (minus vacancy) minus costs like taxes, insurance, maintenance, and management — but not the loan. It\'s the property\'s profit before financing.' },
       { term: 'Operating expenses', definition: 'The ongoing costs of running the property — taxes, insurance, maintenance, management, utilities you pay. Does NOT include the mortgage.' },
       { term: 'Reserves', definition: 'Cash set aside to cover surprises — vacancies, repairs, a slow market. Reserves are what let a property survive bad months. Smart investors keep them no matter what.' },
       { term: 'Vacancy', definition: 'Income lost when a unit sits empty. Estimated as a percentage of rent so your analysis stays realistic instead of assuming 100% occupancy.' },
@@ -245,7 +245,7 @@ export const TRAINING_MODULES = [
       { term: 'Conventional financing', definition: 'A traditional bank mortgage — usually fixed-rate with a long payoff, requiring income verification and a down payment.' },
       { term: 'Seller financing', definition: 'When the seller acts as the bank. Instead of getting all cash at closing, they let you pay over time, with negotiable price, interest rate, and terms.' },
       { term: 'Balloon payment', definition: 'A loan whose regular payments do NOT pay it off. After a set period (say 5 years), the entire remaining balance comes due at once — you must refinance, sell, or pay it off. Lower payments now, big risk later.' },
-      { term: 'Refinance (refi)', definition: 'Replacing your current loan with a new one — often to get a better rate, pull cash out of your equity, or pay off a balloon before it’s due.' },
+      { term: 'Refinance (refi)', definition: 'Replacing your current loan with a new one — often to get a better rate, pull cash out of your equity, or pay off a balloon before it\'s due.' },
       { term: 'Depreciation', definition: 'A tax deduction based on the assumption that buildings wear out over time — which you can claim even while the property is rising in value.' },
       { term: 'Cost segregation', definition: 'A strategy that accelerates depreciation, creating larger deductions earlier and bigger near-term tax savings.' },
     ],
@@ -255,17 +255,272 @@ export const TRAINING_MODULES = [
     id: 'mod2',
     moduleNumber: 2,
     title: 'Analyzing a Property',
-    description: 'Learn how to run the numbers on any deal and know within minutes whether it’s worth pursuing.',
-    principles: [],
-    keyTerms: [],
-    completionMessage: '',
-    comingSoon: true,
+    description: 'Turning a listing into a decision — gather the numbers, plug them in, and know your price.',
+    principles: [
+      {
+        id: 'mod2_p1',
+        title: 'Analysis exists to produce a decision, not a number',
+        content: 'The point of analysis isn\'t to admire metrics. It\'s to answer one question: is this a buy, and at what price? The process is simple: **gather the right information, plug in the numbers, evaluate the result, then adjust the purchase price until the deal becomes a buy.** Every property has a price that makes it work — your job is to find it. The more deals you run, the faster and more natural it becomes.',
+        questions: [
+          {
+            id: 'mod2_p1_q1',
+            text: 'The real goal of analyzing a property is to:',
+            type: 'multiple_choice',
+            options: [
+              'Collect as many metrics as possible',
+              'Decide whether it\'s a buy and at what price',
+              'Prove the property is perfect',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod2_p2',
+        title: 'Two numbers make or break every deal',
+        content: 'Investors lose on analysis in exactly two ways: **they estimate rents too high, and they estimate expenses too low.** Get those two right — conservatively — and everything downstream is reliable. Get either wrong and every result the calculator gives you is wrong too. Most of this module is about nailing those two numbers.',
+        questions: [
+          {
+            id: 'mod2_p2_q1',
+            text: 'The two most common analysis mistakes are:',
+            type: 'multiple_choice',
+            options: [
+              'Wrong interest rate and wrong loan term',
+              'Overestimating rent and underestimating expenses',
+              'Wrong purchase price and wrong closing costs',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod2_p3',
+        title: 'The CDS Rental Calculator — field by field',
+        content: 'Fill it top to bottom. Some fields are dollars, some are percentages — the calculator marks which. Here\'s what each one means, a starter range where it helps, and how to verify it.\n\n**Property Details**\n- **Purchase Price ($):** the price you\'re analyzing. This is also the lever you\'ll adjust at the end to find your max price.\n- **Costs To Make Rent Ready ($):** every up-front dollar to get it rentable — repairs, renovations, and the vacancy/holding costs while you do the work.\n- **Down Payment (%):** the percent you put down. Range: conventional investment loans are typically 20–25%. Verify: ask your lender what they\'ll actually require.\n- **Closing Costs (%):** lender, title, and escrow fees. Range: 2–5% of price. Verify: your lender and title company will give you a real estimate.\n- **Years To Payoff:** the loan\'s amortization (default 30). Longer term = lower payment = stronger cash flow.\n- **Interest Rate (%):** get a real quote from a lender, not a guess. Even half a point changes the whole deal.\n\n**Monthly Income**\n- **Rents ($):** total monthly rent across all units. This is the single most important number — verify it (Principle 6).\n- **Other Income ($):** laundry, storage, pet rent, parking, etc. Enter $0 if none.\n- **Vacancy (%):** expected empty time. Range: 5–8% in a typical market. Use a higher number in soft or seasonal markets.\n\n**Yearly Expenses**\n- **Maintenance (%):** repairs and capital reserves (CapEx) as a percent of rent. Range: 8–15% — newer properties at the low end, older properties higher.\n- **Management (%):** Range: 8–10% of rent. Include it even if you\'ll self-manage — your time has value.\n- **Yearly Utilities ($):** owner-paid utilities only. Enter $0 if tenants pay.\n- **Additional Expenses ($):** HOA dues, landscaping, snow removal, trash, etc.\n- **Insurance ($/yr):** get a real quote from an insurance agent. Never guess this one.\n- **Taxes ($/yr):** pull the exact figure from the county — and ask whether taxes reassess (often higher) after a sale.\n\nThen press **Run Numbers.**',
+        questions: [],
+      },
+      {
+        id: 'mod2_p4',
+        title: 'Reading your results',
+        content: 'The results screen answers "is this a buy?" Here\'s what each output means and how it connects to the metrics from Module 1:\n\n- **Total Capital Required:** all the cash to get in — down payment + closing costs + costs to make rent ready. This is the "cash invested" your returns are measured against.\n- **Net Operating Income (NOI):** income after operating expenses but before the mortgage.\n- **Debt Service:** your total annual mortgage payments.\n- **Cashflow:** NOI minus debt service — the money left each year. Your primary survival number.\n- **Cash on Cash Return:** cashflow ÷ total capital required. How hard your invested cash is working.\n- **Cap Rate:** NOI ÷ purchase price — the property\'s return before financing.\n- **Principal Paydown:** the equity built this year as your tenants pay down the loan.\n- **Total Return on Investment:** cashflow + principal paydown, shown in dollars and as a percent of your cash invested.',
+        questions: [],
+      },
+      {
+        id: 'mod2_p5',
+        title: 'Worked example — 104 12th St',
+        content: 'Read straight off the results screen:\n\n- Purchase Price **$350,000**, Total Capital Required **$92,750**\n- NOI **$30,142** → Cap Rate = 30,142 ÷ 350,000 = **8.61%**\n- Debt Service **$19,395.09** → Cashflow = 30,142 − 19,395.09 = **$10,746.91**\n- Cash on Cash = 10,746.91 ÷ 92,750 = **11.59%**\n- Add Principal Paydown **$3,075.96** → Total Return = 10,746.91 + 3,075.96 = **$13,822.87**\n- Total Return % = 13,822.87 ÷ 92,750 = **14.90%**\n\nNotice the story the numbers tell: this deal cash-flows (survives), returns 11.59% on your cash, and once you add the equity your tenants build, your real return is **14.90%.** That\'s how you *read* an analysis — not one number, but the whole picture, in order.',
+        questions: [
+          {
+            id: 'mod2_p5_q1',
+            text: 'Cashflow on the results screen is:',
+            type: 'multiple_choice',
+            options: [
+              'NOI ÷ purchase price',
+              'NOI minus debt service',
+              'Down payment plus closing costs',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod2_p5_q2',
+            text: 'Total Capital Required is made up of:',
+            type: 'multiple_choice',
+            options: [
+              'Down payment + closing costs + costs to make rent ready',
+              'Purchase price minus the loan',
+              'NOI minus expenses',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod2_p6',
+        title: 'Never guess rent; verify it from multiple sources',
+        content: 'Your rent estimate drives every result. The biggest beginner mistake is assuming rent is higher than the market truly supports — which makes a bad deal look good. Verify market rent using several sources, in roughly this priority:\n\n1. **Recently leased comparable properties (best source).** Find units that actually rented in the last 30–90 days — similar beds, baths, square footage, condition, and location. Note how fast they rented; a unit leased in 3 days is a stronger comp than one that sat 60 days.\n2. **Call local property managers.** Ask: What would this realistically rent for? How fast? What upgrades raise rent? What tenant class? What are current vacancy rates? Which utilities are tenant-paid?\n3. **Check active rental listings** (Zillow, Apartments.com, Facebook Marketplace, Rent.com, Craigslist). Watch days on market and price drops — don\'t blindly trust asking rents.\n4. **Call active listings** to gauge real demand. If you\'re comfortable, call as a prospective tenant to learn how negotiable pricing is and whether concessions are offered.\n5. **Use your own nearby rentals**, or lean on a local investor or mentor who knows the market.\n6. **AI & software** (ChatGPT, Claude, Rentometer, Zillow Rent Zestimate) — helpful for a starting range, but never your only source.\n7. **Be conservative.** Use rents you\'re confident you can actually achieve, and stress-test a lower number to be sure the deal still works.',
+        questions: [
+          {
+            id: 'mod2_p6_q1',
+            text: 'The strongest source of market rent is:',
+            type: 'multiple_choice',
+            options: [
+              'The seller\'s asking rent',
+              'Recently leased comparable units from the last 30–90 days',
+              'A single online estimate',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod2_p6_q2',
+            text: 'The safer way to estimate rent is to:',
+            type: 'multiple_choice',
+            options: [
+              'Use the best-case number to make the deal work',
+              'Use a conservative, achievable number and stress-test lower',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod2_p7',
+        title: 'Estimate expenses conservatively, and verify the big ones exactly',
+        content: 'The second way investors lose is underestimating expenses. Two rules of thumb: **the older the property, the higher your expenses; the lower the tenant quality, the higher your expenses.** Even if a property is newer or you expect great management, don\'t underwrite below realistic ranges — that\'s not optimism, it\'s bad analysis. Lean on professionals who aren\'t paid when you buy (property managers, contractors, insurance agents). And verify the two that swing hardest:\n\n- **Taxes:** get the exact county figure, and check whether they reassess after a sale — they often jump.\n- **Insurance:** get a real quote before you trust any number.\n\nRemember: tenant-paid utilities dramatically improve your expenses, and high-turnover properties cost far more than they look on paper. Verify everything before you submit an offer or remove contingencies.',
+        questions: [
+          {
+            id: 'mod2_p7_q1',
+            text: 'Which expenses should you verify with exact, real numbers rather than estimates?',
+            type: 'multiple_choice',
+            options: [
+              'Maintenance and management',
+              'Property taxes and insurance',
+              'Vacancy and utilities',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod2_p7_q2',
+            text: 'Compared to a newer building, an older property should generally be underwritten with:',
+            type: 'multiple_choice',
+            options: [
+              'Lower expenses',
+              'Higher maintenance and CapEx',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod2_p8',
+        title: 'Estimating repairs (Costs To Make Rent Ready)',
+        content: 'You are not trying to become a contractor. You\'re trying to get close enough to make an offer — the due-diligence period exists to verify the details later. Don\'t let repair uncertainty freeze you. When unsure, **estimate high**; a deal that still works on conservative repair numbers is a safe deal.\n\n**The three rehab categories (per square foot)**\n- **Cosmetic — $5–$20/sq ft:** paint, flooring, fixtures, landscaping, appliances, cleaning, minor repairs.\n- **Moderate — $20–$50/sq ft:** kitchens, baths, windows, HVAC replacement, partial plumbing/electrical.\n- **Heavy — $50–$100+/sq ft:** full gut, major plumbing/electrical, foundation, fire damage, structural.\n\n**Big-ticket cheat sheet**\n- **Roof:** ~$8,000–$40,000+ depending on size.\n- **HVAC:** furnace $4,000–$10,000; AC $4,000–$10,000; full system $8,000–$20,000+.\n- **Plumbing:** minor $500–$5,000; major repipe $5,000–$25,000+.\n- **Electrical:** panel upgrade $2,000–$5,000; full rewire $8,000–$30,000+.\n- **Foundation:** minor $2,000–$10,000; major $10,000–$100,000+.\n- **Kitchens:** budget $5,000–$15,000; mid $15,000–$30,000; high-end $30,000+.\n- **Bathrooms:** budget $3,000–$10,000; mid $10,000–$20,000; high-end $20,000+.\n\n**Multifamily shortcut (per unit)**\nLight turn $3,000–$7,500 · Moderate turn $7,500–$15,000 · Heavy turn $15,000–$30,000+.\n\n**The fastest accurate method — call a contractor.** Before you offer, call a roofer, HVAC tech, electrician, plumber, or general contractor and ask for a ballpark from photos and details.\n\n**What goes in "Costs To Make Rent Ready":** physical repairs/renovations, **plus** vacancy costs (lost rent while you work), **plus** holding costs (mortgage, taxes, insurance during the project). Most beginners forget the last two and overstate their returns.',
+        questions: [
+          {
+            id: 'mod2_p8_q1',
+            text: 'A cosmetic rehab typically runs about:',
+            type: 'multiple_choice',
+            options: [
+              '$5–$20 per square foot',
+              '$50–$100 per square foot',
+            ],
+            correctAnswer: 0,
+          },
+          {
+            id: 'mod2_p8_q2',
+            text: 'When you\'re unsure of a repair number, you should:',
+            type: 'multiple_choice',
+            options: [
+              'Estimate low so the deal works',
+              'Estimate high — a deal that survives conservative numbers is safer',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod2_p8_q3',
+            text: '"Costs To Make Rent Ready" should include:',
+            type: 'multiple_choice',
+            options: [
+              'Only the physical repair costs',
+              'Repairs plus vacancy and holding costs during the work',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod2_p9',
+        title: 'Find your max price by reverse-engineering the return',
+        content: 'Once your inputs are solid, your last move is to adjust the **purchase price** until the cash-on-cash return hits your minimum requirement. That price is your **maximum acceptable price** — the most you can pay and still get the return you require. You\'re not trying to hit a return exactly to the decimal; you just need the property to meet or exceed your minimum. This is the skill that lets you make confident offers fast: you already know your number.\n\nAnd remember the UC30 rule: you do **not** need perfect numbers to make an offer. You need numbers that are reasonable, conservative, and good enough to move forward. Due diligence verifies your assumptions — it isn\'t a reason to wait for certainty. The investor who gets close enough and acts beats the one who waits.',
+        questions: [
+          {
+            id: 'mod2_p9_q1',
+            text: 'Your maximum acceptable price is:',
+            type: 'multiple_choice',
+            options: [
+              'The seller\'s asking price',
+              'The highest price you can pay and still hit your minimum return',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod2_p9_q2',
+            text: 'To make an offer, your analysis needs to be:',
+            type: 'multiple_choice',
+            options: [
+              'Perfect and fully verified',
+              'Reasonable, conservative, and good enough — DD verifies the rest',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod2_p10',
+        title: 'Practice — Run the numbers yourself',
+        content: 'Time to apply everything you\'ve learned. Use the CDS Rental Calculator to analyze these properties and answer the questions below.\n\n**Property 1 — Turn-key 4-plex**\nPurchase Price: $600,000 · Turn-key ($0 rent-ready) · 25% down · 2% closing · 30 years · 6.5% interest · 4 units at $1,500/mo · 6% vacancy · 12% maintenance+CapEx · 8% management · $1,000 insurance · $4,000 taxes · No utilities/additional.\n\n**Property 2 — Same 4-plex, different rate**\nSame property and inputs as above, but with **7.5% interest** instead of 6.5%.\n\n**Property 3 — Find the price**\nA 4-unit property. All four units rent for $1,500/month ($6,000/month total). 25% down · 2% closing · 6.5% interest · 30 years · 6% vacancy · 12% maintenance · 8% management · $1,000/yr additional expenses · $2,500 insurance · $6,000 taxes · Tenant-paid utilities · $0 rent-ready.',
+        questions: [
+          {
+            id: 'mod2_p10_q1',
+            text: 'Property 1: What is the cash-on-cash return for the $600,000 turn-key 4-plex at 6.5% interest?',
+            type: 'number',
+            correctAnswer: 9.44,
+            tolerance: 0.15,
+            unit: '%',
+          },
+          {
+            id: 'mod2_p10_q2',
+            text: 'Property 2: Same $600,000 property but at 7.5% interest — what is the approximate cash-on-cash return?',
+            type: 'multiple_choice',
+            options: ['10.29%', '5.27%', '6.74%', '8.30%'],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod2_p10_q3',
+            text: 'Property 2: What interest rate would make the cash-on-cash return above 10%?',
+            type: 'multiple_choice',
+            options: ['6%', '6.5%', '5.5%', '5.25%'],
+            correctAnswer: 3,
+          },
+          {
+            id: 'mod2_p10_q4',
+            text: 'Property 3: What purchase price produces a 10.00% cash-on-cash return?',
+            type: 'number',
+            correctAnswer: 535385,
+            tolerance: 200,
+            unit: '$',
+          },
+          {
+            id: 'mod2_p10_q5',
+            text: 'Property 3: What purchase price yields a 12.00% cash-on-cash return?',
+            type: 'number',
+            correctAnswer: 503350,
+            tolerance: 200,
+            unit: '$',
+          },
+        ],
+      },
+    ],
+    keyTerms: [
+      { term: 'Total Capital Required (cash to close)', definition: 'All the cash to get into the deal — down payment + closing costs + costs to make rent ready. Your returns are measured against this.' },
+      { term: 'Costs To Make Rent Ready', definition: 'Every up-front cost to get a property rentable — repairs, renovations, and the vacancy/holding costs while the work happens.' },
+      { term: 'Debt Service', definition: 'Your total mortgage payments over a year (principal + interest).' },
+      { term: 'Market rent', definition: 'What a unit can actually rent for today, proven by recently leased comparable units — not the asking rent or a hopeful guess.' },
+      { term: 'Comparable / "comp"', definition: 'A similar nearby property used to estimate rent or value — matched on beds, baths, size, condition, and location.' },
+      { term: 'Days on market', definition: 'How long a listing has sat. Long days often signal weak demand or an overpriced unit.' },
+      { term: 'CapEx (capital expenditures)', definition: 'Big-ticket replacements like roofs, HVAC, and water heaters. In the calculator, fold CapEx into the Maintenance %.' },
+      { term: 'Tenant class', definition: 'The general quality/profile of tenants a property attracts; affects turnover, damage, and expenses.' },
+      { term: 'Reassessment', definition: 'When the county re-values a property (often after a sale), which can raise property taxes above what the prior owner paid.' },
+      { term: 'Turn / unit turn', definition: 'The cost and work to get a unit ready for the next tenant after one moves out.' },
+      { term: 'Holding (carrying) costs', definition: 'The mortgage, taxes, and insurance you pay while a property sits vacant or under renovation.' },
+      { term: 'Rent-ready', definition: 'Condition in which a unit is clean, repaired, and ready to lease immediately.' },
+    ],
+    completionMessage: 'Module 2 complete. You can now fill the CDS Rental Calculator field by field, read every result and what it means, verify rent and expenses the right way, estimate repairs fast enough to act, and reverse-engineer your maximum price. Next: defining your Buy Box and your edge — so you know exactly what you\'re analyzing for.',
   },
   {
     id: 'mod3',
     moduleNumber: 3,
     title: 'Your Buy Box & Your Edge',
-    description: 'Define exactly what you’re looking for so you can move fast when the right deal appears.',
+    description: 'Define exactly what you\'re looking for so you can move fast when the right deal appears.',
     principles: [],
     keyTerms: [],
     completionMessage: '',
@@ -305,7 +560,7 @@ export const TRAINING_MODULES = [
     id: 'mod7',
     moduleNumber: 7,
     title: 'Creative Deal Structure',
-    description: 'Structure deals creatively when traditional financing doesn’t fit.',
+    description: 'Structure deals creatively when traditional financing doesn\'t fit.',
     principles: [],
     keyTerms: [],
     completionMessage: '',

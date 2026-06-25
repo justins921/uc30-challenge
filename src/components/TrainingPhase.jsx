@@ -3,26 +3,53 @@ import QuizSection from './QuizSection';
 
 const MODULE_DAY_OFFSET = -100;
 
+function renderInline(text) {
+  if (!text) return [text];
+  const parts = [];
+  let key = 0;
+  const regex = /\*\*(.+?)\*\*|\*(.+?)\*/g;
+  let match;
+  let lastIndex = 0;
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    if (match[1] !== undefined) {
+      parts.push(<strong key={key++}>{match[1]}</strong>);
+    } else {
+      parts.push(<em key={key++}>{match[2]}</em>);
+    }
+    lastIndex = regex.lastIndex;
+  }
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+  return parts;
+}
+
 function renderMarkdown(text) {
   if (!text) return text;
-  return text.split('\n').map((line, i) => {
-    const parts = [];
-    let remaining = line;
-    let key = 0;
-    const regex = /\*\*(.+?)\*\*/g;
-    let match;
-    let lastIndex = 0;
-    while ((match = regex.exec(remaining)) !== null) {
-      if (match.index > lastIndex) {
-        parts.push(remaining.slice(lastIndex, match.index));
-      }
-      parts.push(<strong key={key++}>{match[1]}</strong>);
-      lastIndex = regex.lastIndex;
+  const lines = text.split('\n');
+  return lines.map((line, i) => {
+    const isLast = i === lines.length - 1;
+    if (line.startsWith('- ')) {
+      return (
+        <div key={i} style={{ display: 'flex', gap: 8, marginLeft: 8, marginBottom: 2 }}>
+          <span style={{ color: '#e94560', flexShrink: 0 }}>&bull;</span>
+          <span>{renderInline(line.slice(2))}</span>
+        </div>
+      );
     }
-    if (lastIndex < remaining.length) {
-      parts.push(remaining.slice(lastIndex));
+    if (/^\d+\.\s/.test(line)) {
+      const num = line.match(/^(\d+)\./)[1];
+      return (
+        <div key={i} style={{ display: 'flex', gap: 8, marginLeft: 8, marginBottom: 2 }}>
+          <span style={{ color: '#e94560', flexShrink: 0, fontWeight: 600, minWidth: 16 }}>{num}.</span>
+          <span>{renderInline(line.replace(/^\d+\.\s/, ''))}</span>
+        </div>
+      );
     }
-    return <span key={i}>{parts}{i < text.split('\n').length - 1 ? <br /> : null}</span>;
+    return <span key={i}>{renderInline(line)}{!isLast ? <br /> : null}</span>;
   });
 }
 
