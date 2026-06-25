@@ -2116,6 +2116,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
   const [editCompletionMessage, setEditCompletionMessage] = useState('');
   const [expandedPrinciple, setExpandedPrinciple] = useState(null);
   const [moduleSaving, setModuleSaving] = useState(false);
+  const [moduleSaved, setModuleSaved] = useState(false);
   const [editingDay, setEditingDay] = useState(null);
   const [editingPhases, setEditingPhases] = useState(false);
   const [editingLanding, setEditingLanding] = useState(false);
@@ -2183,7 +2184,8 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
     };
     await onSetTrainingConfig(updated);
     setModuleSaving(false);
-    setEditingModuleId(null);
+    setModuleSaved(true);
+    setTimeout(() => setModuleSaved(false), 3000);
   };
 
   const PREVIEW_STEPS = {
@@ -2476,12 +2478,24 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
           <textarea value={editCompletionMessage} onChange={e => setEditCompletionMessage(e.target.value)} rows={3} style={{ ...inputStyle, resize: 'vertical', fontSize: 13 }} />
         </div>
 
-        <div style={{ display: 'flex', gap: 12 }}>
-          <button className="btn-primary" onClick={saveModuleEdit} disabled={moduleSaving} style={{ padding: '12px 28px' }}>
-            {moduleSaving ? 'Saving...' : 'Save Changes'}
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <button
+            className={moduleSaved ? undefined : 'btn-primary'}
+            onClick={saveModuleEdit}
+            disabled={moduleSaving}
+            style={{
+              padding: '12px 28px',
+              ...(moduleSaved ? {
+                background: 'rgba(72,199,142,0.15)', border: '1px solid rgba(72,199,142,0.3)',
+                color: '#48c78e', borderRadius: 10, fontSize: 14, fontWeight: 700,
+                cursor: 'default', fontFamily: "'DM Sans', sans-serif",
+              } : {}),
+            }}
+          >
+            {moduleSaving ? 'Saving...' : moduleSaved ? '✓ Saved' : 'Save Changes'}
           </button>
           <button className="btn-secondary" onClick={() => setEditingModuleId(null)} style={{ padding: '12px 28px' }}>
-            Cancel
+            {moduleSaved ? 'Done' : 'Cancel'}
           </button>
         </div>
       </div>
