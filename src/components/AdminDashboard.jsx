@@ -2411,6 +2411,112 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
         ))}
       </div>
 
+      {/* ── Post-Training Steps (Built, ready to wire) ── */}
+      <div style={{ marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+          <div style={{ width: 10, height: 10, borderRadius: 3, background: '#c9a0ff' }} />
+          <h3 style={{ fontSize: 17, fontWeight: 700 }}>Post-Training Steps</h3>
+          <span style={{
+            fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 4,
+            background: 'rgba(240,165,0,0.12)', color: '#f0a500', letterSpacing: 0.5,
+          }}>BUILT &middot; NOT YET WIRED</span>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        </div>
+        <p style={{ fontSize: 13, color: '#888', margin: '0 0 14px', paddingLeft: 20 }}>
+          These interactive steps are fully built and ready to use as Module 3+ principles or post-training gates.
+        </p>
+
+        {[
+          {
+            title: 'Get Clear',
+            color: '#e94560',
+            icon: '🎯',
+            saves: 'getClear',
+            features: [
+              'Define Your Destination (text)',
+              'Key Indicator selector (Cash Flow, Appreciation, Equity, Tax Benefits)',
+              'Where Am I Now / Where I Want To Be / Gap',
+              'Time Frame (years/months)',
+              'Financial Plan Calculator — mad-libs style: "I will have $____ in yearly cash flow. This will require $____ invested yearly at ___% return over ___ years. I will purchase ___ properties per year worth $____ using ___% down from ___ and financing ___% using ___"',
+              'Auto-calculates linked fields (green highlight)',
+              'Why Is This Goal Important (text)',
+            ],
+          },
+          {
+            title: 'Define Your Buy Box',
+            color: '#c9a0ff',
+            icon: '📦',
+            saves: 'buyBox',
+            features: [
+              'Target Markets (tag chips, add/remove)',
+              'Specific Zip Codes (optional)',
+              'Property Types: SFR, Duplex, Triplex/4-Plex, Small MF (5-20), Apartments (20+), Commercial, Storage, Land',
+              'Year Built range, Bedrooms range, Bathrooms range',
+              'Condition Tolerance: Turnkey, Light Rehab, Heavy Rehab, Any',
+              'Purchase Price Range (min/max) + Down Payment',
+              'Strategy: Buy & Hold, BRRRR, Seller Finance, STR, Section 8, Subto/Wrap',
+              'Financing: Conventional, DSCR, Hard Money, Seller Finance, Cash, JV, Other',
+              'Return Requirements: min CoC%, min Cap Rate%, min CF/unit, min IRR%',
+              'Additional Notes (text)',
+              'PDF Buy Box Worksheet download link',
+            ],
+          },
+          {
+            title: 'Confirm Access to Capital',
+            color: '#48c78e',
+            icon: '💰',
+            saves: 'capitalConfirmation',
+            features: [
+              'Single-select radio cards:',
+              'Cash available / Hard money lender / Conventional pre-approval / DSCR lender / JV partner / Seller financing / Still working on it',
+              'Warning banner if "still working on it" selected',
+            ],
+          },
+          {
+            title: 'Set Your Offer Commitment',
+            color: '#f0a500',
+            icon: '📝',
+            saves: 'offerCommitment',
+            features: [
+              'Preset tiers: 30 (Minimum), 45 (Strong), 60+ (Elite)',
+              'Custom number input (min 30)',
+              'Visual tier selection with radio indicators',
+            ],
+          },
+        ].map((step, i) => (
+          <div key={i} style={{
+            padding: '16px 18px', borderRadius: 10, marginBottom: 8,
+            background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+              <div style={{
+                width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: `${step.color}22`, fontSize: 16, flexShrink: 0,
+              }}>
+                {step.icon}
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: step.color }}>{step.title}</div>
+                <div style={{ fontSize: 11, color: '#666' }}>
+                  saves to <code style={{ fontSize: 10, color: '#888', background: 'rgba(255,255,255,0.04)', padding: '1px 5px', borderRadius: 3 }}>{step.saves}</code>
+                </div>
+              </div>
+            </div>
+            <div style={{ paddingLeft: 42 }}>
+              {step.features.map((f, fi) => (
+                <div key={fi} style={{
+                  fontSize: 12, color: '#999', lineHeight: 1.6,
+                  display: 'flex', gap: 8, paddingTop: 2, paddingBottom: 2,
+                }}>
+                  <span style={{ color: '#555', flexShrink: 0 }}>&bull;</span>
+                  <span>{f}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
       {/* ── Pre-Sprint Training Modules ── */}
       <div style={{ marginBottom: 32 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
