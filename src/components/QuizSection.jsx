@@ -375,7 +375,7 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
           Attempt {attemptCount + 1} of {maxAttempts}
         </p>
       )}
-      {results && !passed && !exhausted && (
+      {results && !passed && !exhausted && Object.values(results).some(r => !r) && (
         <p style={{ fontSize: 12, color: '#e94560', marginBottom: 12 }}>
           {Object.values(results).filter(r => !r).length} incorrect — try again (Attempt {attemptCount} of {maxAttempts})
         </p>

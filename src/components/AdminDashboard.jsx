@@ -2323,8 +2323,94 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
     );
   }
 
+  const ACTIVATION_STEPS = [
+    {
+      num: 1, title: 'Welcome',
+      desc: 'Overview of pre-training steps',
+      color: '#e94560',
+    },
+    {
+      num: 2, title: 'Declare Your Stakes',
+      desc: 'What will it cost if you don\'t complete UC30?',
+      saves: 'stakesDeclaration',
+      color: '#e94560',
+      type: 'textarea',
+    },
+    {
+      num: 3, title: 'What Does This Mean For Your Life?',
+      desc: 'What does getting your first deal mean for your life?',
+      saves: 'theirWhy',
+      color: '#48c78e',
+      type: 'textarea',
+    },
+    {
+      num: 4, title: 'My Dream Life',
+      desc: 'Describe the life you want from passive income cash flow',
+      saves: 'dreamLife',
+      color: '#f0a500',
+      type: 'textarea',
+    },
+    {
+      num: 5, title: 'Set Your Daily Reminder',
+      desc: 'Pick the time to be reminded to complete daily standards',
+      saves: 'notificationPreferences',
+      color: '#c9a0ff',
+      type: 'time-picker',
+    },
+    {
+      num: 6, title: 'Commit & Begin Training',
+      desc: 'Preview all 10 modules, "I Commit" button',
+      saves: 'activationCompleted',
+      color: '#48c78e',
+      type: 'commit',
+    },
+  ];
+
   return (
     <div className="fade-up">
+      {/* ── Pre-Training Activation ── */}
+      <div style={{ marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+          <div style={{ width: 10, height: 10, borderRadius: 3, background: '#f0a500' }} />
+          <h3 style={{ fontSize: 17, fontWeight: 700 }}>Pre-Training Activation</h3>
+          <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+        </div>
+        <p style={{ fontSize: 13, color: '#888', margin: '0 0 14px', paddingLeft: 20 }}>
+          6 steps &middot; Users complete before starting training modules
+        </p>
+
+        {ACTIVATION_STEPS.map((step) => (
+          <div key={step.num} style={{
+            display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px',
+            borderRadius: 10, marginBottom: 4,
+            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+          }}>
+            <div style={{
+              width: 28, height: 28, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: `${step.color}22`, color: step.color, fontSize: 12, fontWeight: 700, flexShrink: 0,
+            }}>
+              {step.num}
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: '#eee', marginBottom: 2 }}>
+                {step.title}
+              </div>
+              <div style={{ fontSize: 11, color: '#666' }}>
+                {step.desc}
+                {step.saves && (
+                  <span style={{ marginLeft: 8, color: '#555' }}>
+                    &middot; saves to <code style={{ fontSize: 10, color: '#888', background: 'rgba(255,255,255,0.04)', padding: '1px 5px', borderRadius: 3 }}>{step.saves}</code>
+                  </span>
+                )}
+              </div>
+            </div>
+            <span style={{ fontSize: 10, color: '#555', fontWeight: 600, letterSpacing: 0.5 }}>
+              {step.type === 'textarea' ? 'TEXT' : step.type === 'time-picker' ? 'PICKER' : step.type === 'commit' ? 'BUTTON' : 'INTRO'}
+            </span>
+          </div>
+        ))}
+      </div>
+
       {/* ── Pre-Sprint Training Modules ── */}
       <div style={{ marginBottom: 32 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
