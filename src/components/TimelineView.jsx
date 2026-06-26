@@ -47,7 +47,7 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
             isComplete={gsComplete}
             isLocked={false}
             isCurrent={!gsComplete}
-            onClick={() => !gsComplete && onSelectDay('getting_started')}
+            onClick={() => onSelectDay('getting_started')}
           />
 
           {/* Steps 2-5: Pre-days (-3, -2, -1, 0) */}
@@ -55,11 +55,6 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
             const data = getPreDayContent(d, contentOverrides);
             if (!data) return null;
             const complete = preDayComplete(d);
-            const prevDone = i === 0
-              ? gsComplete
-              : preDayComplete(PRE_DAY_ORDER[i - 1]);
-            const locked = !prevDone;
-            const isCurrent = !complete && prevDone;
             return (
               <PreWorkCard
                 key={d}
@@ -67,9 +62,9 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
                 title={data.title}
                 color={d === 0 ? '#c9a0ff' : '#e94560'}
                 isComplete={complete}
-                isLocked={locked}
-                isCurrent={isCurrent}
-                onClick={() => !locked && !complete && onSelectDay(d)}
+                isLocked={false}
+                isCurrent={!complete}
+                onClick={() => onSelectDay(d)}
               />
             );
           })}
@@ -80,25 +75,15 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
             title="Practice Run"
             color="#f0a500"
             isComplete={practiceComplete}
-            isLocked={!PRE_DAY_ORDER.every(d => preDayComplete(d))}
-            isCurrent={!practiceComplete && PRE_DAY_ORDER.every(d => preDayComplete(d))}
+            isLocked={false}
+            isCurrent={!practiceComplete}
             onClick={() => {
-              if (!practiceComplete && PRE_DAY_ORDER.every(d => preDayComplete(d)) && onLaunchPracticeDay) {
-                onLaunchPracticeDay();
-              }
+              if (onLaunchPracticeDay) onLaunchPracticeDay();
             }}
           />
         </div>
 
-        {!allPreWorkDone && (
-          <div style={{
-            marginTop: 12, padding: '10px 14px', borderRadius: 8,
-            background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.12)',
-            fontSize: 12, color: '#888', lineHeight: 1.6, textAlign: 'center',
-          }}>
-            Complete each step in order to unlock Day 1.
-          </div>
-        )}
+        {/* Pre-work gating removed during creation phase */}
       </div>
 
       {phases.map((phase) => (
@@ -121,16 +106,7 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
               const isComplete = user.completedDays.includes(d);
               const isCurrent = d === user.currentDay;
 
-              // Lock all days if cohort hasn't started or pre-work not done
-              let isLocked;
-              if (!cohortActive || !allPreWorkDone) {
-                isLocked = true;
-              } else if (calendarDay !== null) {
-                const isAccessible = isComplete || (isCurrent && d <= calendarDay);
-                isLocked = !isAccessible;
-              } else {
-                isLocked = d > user.currentDay;
-              }
+              const isLocked = false;
 
               return (
                 <div
@@ -218,10 +194,10 @@ export default function TimelineView({ user, onSelectDay, calendarDay, contentOv
 function PreWorkCard({ label, title, color, isComplete, isLocked, isCurrent, onClick }) {
   return (
     <div
-      onClick={!isLocked && !isComplete ? onClick : undefined}
+      onClick={onClick}
       className="card"
       style={{
-        cursor: isLocked ? 'not-allowed' : isComplete ? 'default' : 'pointer',
+        cursor: 'pointer',
         opacity: isLocked ? 0.5 : 1,
         borderColor: isComplete ? 'rgba(72,199,142,0.3)' : isCurrent ? color : 'rgba(255,255,255,0.06)',
         position: 'relative',

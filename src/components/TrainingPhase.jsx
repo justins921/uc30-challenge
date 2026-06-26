@@ -4,6 +4,7 @@ import NativeRentalCalculator from './NativeRentalCalculator';
 import { GetClearStep, BuyBoxStep, CapitalConfirmationStep } from './ActivationPhase';
 import ContactsCRM from './ContactsCRM';
 import ConfidenceSurvey from './ConfidenceSurvey';
+import ReflectionDay from './ReflectionDay';
 
 const MODULE_DAY_OFFSET = -100;
 
@@ -696,31 +697,49 @@ export default function TrainingPhase({
                   Training Complete!
                 </div>
                 <p style={{ color: '#888', fontSize: 14, marginBottom: 0, lineHeight: 1.6 }}>
-                  You've completed all training modules.{!baselineDone ? ' One last step — take your baseline confidence assessment below so you can track your growth over the next 30 days.' : ' Time to put it into action.'}
+                  You've completed all training modules. Before starting the 30-day sprint, complete the assessments below to establish your baseline.
                 </p>
               </div>
 
+              {/* Option A: Confidence Survey (1-10 ratings) */}
               {onSaveConfidenceSurvey && (
-                <ConfidenceSurvey
-                  checkpoint="pre_training"
-                  existingSurveys={user.confidence_surveys || []}
-                  saving={surveysSaving}
-                  onSave={async (data) => {
-                    setSurveysSaving(true);
-                    try { await onSaveConfidenceSurvey(data); }
-                    finally { setSurveysSaving(false); }
-                  }}
-                />
-              )}
-
-              {(baselineDone || !onSaveConfidenceSurvey) && (
-                <div style={{ textAlign: 'center' }}>
-                  <button className="btn-primary" style={{ padding: '16px 40px', fontSize: 16 }}
-                    onClick={onCompleteAll}>
-                    Start the 30-Day Sprint &rarr;
-                  </button>
+                <div style={{ marginBottom: 24 }}>
+                  <div style={{
+                    fontSize: 13, fontWeight: 700, color: '#f0a500', marginBottom: 8,
+                    textTransform: 'uppercase', letterSpacing: 0.5,
+                  }}>
+                    Option A — Confidence Assessment
+                  </div>
+                  <ConfidenceSurvey
+                    checkpoint="pre_training"
+                    existingSurveys={user.confidence_surveys || []}
+                    saving={surveysSaving}
+                    onSave={async (data) => {
+                      setSurveysSaving(true);
+                      try { await onSaveConfidenceSurvey(data); }
+                      finally { setSurveysSaving(false); }
+                    }}
+                  />
                 </div>
               )}
+
+              {/* Option B: Reflection Day (journaling / goal-setting) */}
+              <div style={{ marginBottom: 24 }}>
+                <div style={{
+                  fontSize: 13, fontWeight: 700, color: '#c9a0ff', marginBottom: 8,
+                  textTransform: 'uppercase', letterSpacing: 0.5,
+                }}>
+                  Option B — Reflection & Goal-Setting
+                </div>
+                <ReflectionDay day={0} user={user} />
+              </div>
+
+              <div style={{ textAlign: 'center' }}>
+                <button className="btn-primary" style={{ padding: '16px 40px', fontSize: 16 }}
+                  onClick={onCompleteAll}>
+                  Start the 30-Day Sprint &rarr;
+                </button>
+              </div>
             </div>
           );
         })()}
