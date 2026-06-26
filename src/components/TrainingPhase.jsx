@@ -339,7 +339,7 @@ export default function TrainingPhase({
           {principle.showComponent && (() => {
             const COMPONENT_MAP = {
               capitalConfirmation: { Component: CapitalConfirmationStep, label: 'Confirm Access to Capital', icon: '💰', color: '#48c78e', props: { existingCapital: user.capitalConfirmation || {} } },
-              getClear: { Component: GetClearStep, label: 'Get Clear', icon: '🎯', color: '#e94560', props: { existing: user.getClear || {} } },
+              getClear: { Component: GetClearStep, label: 'Get Clear', icon: '🎯', color: '#e94560', props: { existing: user.getClear || {}, buyBoxData: user.buyBox || null } },
               buyBox: { Component: BuyBoxStep, label: 'Define Your Buy Box', icon: '📦', color: '#c9a0ff', props: { existingBuyBox: user.buyBox || {} } },
             };
             const cfg = COMPONENT_MAP[principle.showComponent];

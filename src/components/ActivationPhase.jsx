@@ -147,14 +147,20 @@ function WelcomeStep({ firstName, onBegin }) {
 // are kept here for use after training modules are completed.
 
 // ── Get Clear ─────────────────────────────────────
-function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
+function GetClearStep({ onNext, onBack, onSave, existing, embedded, buyBoxData }) {
   const gc = existing || {};
   const fp = gc.financialPlan || {};
+  const bb = buyBoxData || {};
+  const bbReturn = bb.returnRequirements || {};
+  const hasBuyBox = !!(bb.markets?.length || bbReturn.minCashOnCash);
+
   const [destination, setDestination] = useState(gc.destination || '');
 
   const [yearlyInvestment, setYearlyInvestment] = useState(fp.yearlyInvestment || '');
   const [returnPercent, setReturnPercent] = useState(fp.returnPercent || '');
   const [yearlyCashFlow, setYearlyCashFlow] = useState(fp.yearlyCashFlow || '');
+
+  const effectiveReturn = hasBuyBox && bbReturn.minCashOnCash ? String(bbReturn.minCashOnCash) : returnPercent;
 
   const [whyImportant, setWhyImportant] = useState(gc.whyImportant || '');
   const [saving, setSaving] = useState(false);
@@ -164,7 +170,7 @@ function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
   const computedTimePeriod = (() => {
     const cf = parseFloat(yearlyCashFlow);
     const inv = parseFloat(yearlyInvestment);
-    const ret = parseFloat(returnPercent);
+    const ret = parseFloat(effectiveReturn);
     if (!cf || !inv || !ret || inv <= 0 || ret <= 0) return null;
     const years = (cf / inv) / (ret / 100);
     return Math.round(years * 10) / 10;
@@ -187,7 +193,7 @@ function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
         financialPlan: {
           yearlyCashFlow: numOrNull(yearlyCashFlow),
           yearlyInvestment: numOrNull(yearlyInvestment),
-          returnPercent: numOrNull(returnPercent),
+          returnPercent: numOrNull(effectiveReturn),
           timePeriod: computedTimePeriod,
         },
         whyImportant: whyImportant.trim(),
@@ -239,6 +245,12 @@ function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
           <h2 style={{ fontSize: 18, fontWeight: 700 }}>Quantify The Goal</h2>
         </div>
 
+        {hasBuyBox && (
+          <p style={{ fontSize: 12, color: '#48c78e', marginBottom: 16 }}>
+            Values synced from your Buy Box. Edit your Buy Box to update.
+          </p>
+        )}
+
         <div style={{ marginBottom: 16 }}>
           <label style={labelStyle}>How much can I invest yearly?</label>
           <div style={{ position: 'relative' }}>
@@ -248,7 +260,8 @@ function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
               onChange={e => setYearlyInvestment(e.target.value.replace(/[^\d]/g, ''))}
               placeholder="150,000"
               inputMode="numeric"
-              style={{ ...inputStyle, paddingLeft: 28 }}
+              readOnly={hasBuyBox}
+              style={{ ...inputStyle, paddingLeft: 28, ...(hasBuyBox ? { opacity: 0.7, cursor: 'not-allowed' } : {}) }}
             />
           </div>
         </div>
@@ -257,11 +270,12 @@ function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
           <label style={labelStyle}>What is my minimum desired cash-on-cash return?</label>
           <div style={{ position: 'relative' }}>
             <input
-              value={returnPercent}
+              value={effectiveReturn}
               onChange={e => setReturnPercent(e.target.value.replace(/[^\d.]/g, ''))}
               placeholder="8"
               inputMode="decimal"
-              style={{ ...inputStyle, paddingRight: 28 }}
+              readOnly={hasBuyBox}
+              style={{ ...inputStyle, paddingRight: 28, ...(hasBuyBox ? { opacity: 0.7, cursor: 'not-allowed' } : {}) }}
             />
             <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', color: '#888', fontSize: 14, fontWeight: 600 }}>%</span>
           </div>
@@ -276,7 +290,8 @@ function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
               onChange={e => setYearlyCashFlow(e.target.value.replace(/[^\d]/g, ''))}
               placeholder="60,000"
               inputMode="numeric"
-              style={{ ...inputStyle, paddingLeft: 28 }}
+              readOnly={hasBuyBox}
+              style={{ ...inputStyle, paddingLeft: 28, ...(hasBuyBox ? { opacity: 0.7, cursor: 'not-allowed' } : {}) }}
             />
             <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', color: '#888', fontSize: 13 }}>/year</span>
           </div>
@@ -298,7 +313,7 @@ function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
             in yearly cash flow. This will require{' '}
             <span style={{ fontWeight: 700, color: '#eee' }}>{fmtDollars(yearlyInvestment)}</span>{' '}
             to be invested yearly at a{' '}
-            <span style={{ fontWeight: 700, color: '#eee' }}>{returnPercent || '—'}%</span>{' '}
+            <span style={{ fontWeight: 700, color: '#eee' }}>{effectiveReturn || '—'}%</span>{' '}
             return. This will require a{' '}
             <span style={{ fontWeight: 700, color: computedTimePeriod ? '#48c78e' : '#eee' }}>
               {computedTimePeriod != null ? computedTimePeriod : '—'}
