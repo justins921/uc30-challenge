@@ -1173,11 +1173,188 @@ export const TRAINING_MODULES = [
     id: 'mod7',
     moduleNumber: 7,
     title: 'Creative Deal Structure',
-    description: 'Structure deals creatively when traditional financing doesn\'t fit.',
-    principles: [],
-    keyTerms: [],
-    completionMessage: '',
-    comingSoon: true,
+    description: 'Make a deal work when a standard offer can\'t — by changing how it\'s paid, not just what you pay.',
+    principles: [
+      {
+        id: 'mod7_p1',
+        title: 'Creative structure changes the terms, not just the price',
+        content: 'When price alone can\'t make a deal work, you change *how* it\'s paid. Every financed purchase has four levers you can negotiate:\n- **Price** — what you pay.\n- **Down payment** — how much cash you put in up front.\n- **Interest rate** — the cost of the financing.\n- **Term / length** — how long you have to pay it off.\n\nMove any one of these and the whole deal changes. A high price with a low rate and little down can cash-flow better than a low price with bank financing. Creative investors stop fighting over price alone and start trading across all four levers.',
+        questions: [
+          {
+            id: 'mod7_p1_q1',
+            text: 'Creative structure mostly works by:',
+            type: 'multiple_choice',
+            options: [
+              'Always paying the lowest possible price',
+              'Adjusting how the deal is paid — price, down, rate, and term — not just the price',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod7_p2',
+        title: 'Seller financing: the seller becomes the bank',
+        content: 'The most common creative tool is **seller financing** — instead of getting a bank loan, the *seller* lets you pay them over time. You agree on the price, down payment, interest rate, and term, and you pay the seller directly (documented with a promissory note). Why it\'s powerful:\n- **No bank qualification** — the seller decides, not an underwriter.\n- **Flexible terms** — rate, down, and length are all negotiable.\n- **Faster, cleaner close** — no lender timeline.\n- **Often better terms** than a bank would give.\n\nIt tends to work when the seller **owns the property free-and-clear (or close to it)**, doesn\'t need all the cash today, and would rather have steady monthly income (and possibly spread out their taxes) than a lump sum.',
+        questions: [
+          {
+            id: 'mod7_p2_q1',
+            text: 'In seller financing:',
+            type: 'multiple_choice',
+            options: [
+              'A bank lends you the money as usual',
+              'The seller acts as the bank and you pay them over time',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod7_p2_q2',
+            text: 'Seller financing tends to work best when the seller:',
+            type: 'multiple_choice',
+            options: [
+              'Owns free-and-clear and prefers income over a lump sum',
+              'Owes more than the property is worth',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod7_p3',
+        title: 'The four levers, and the art of trading them',
+        content: 'This is the core skill of creative structure. Each lever does something specific:\n- **Price** — sellers often care about this *most* (it\'s emotional and public). You can often give here if you win elsewhere.\n- **Down payment** — a lower down keeps more of your cash for reserves and the next deal.\n- **Interest rate** — a lower rate means a lower payment, which means stronger cash flow.\n- **Term** — a longer term lowers the payment; a shorter term (or a balloon) raises it.\n\nThe art: **give the seller the one thing they care about most, and win on the rest.** If a seller is fixated on full asking price, agree to it — *in exchange* for a low interest rate, a small down payment, and a long term. You "lose" on price and win on the three levers that actually drive your cash flow. That\'s how a full-price offer can still be a great deal.',
+        questions: [
+          {
+            id: 'mod7_p3_q1',
+            text: 'The smartest way to use the four levers is to:',
+            type: 'multiple_choice',
+            options: [
+              'Win on every lever at once',
+              'Give the seller what they care about most and win on the others',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod7_p3_q2',
+            text: 'Agreeing to full price can still be a great deal if you get:',
+            type: 'multiple_choice',
+            options: [
+              'A low rate, low down payment, and long term',
+              'A balloon due in six months',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod7_p4',
+        title: 'Balloons: lower payments now, but you need an exit',
+        content: 'A **balloon** is a loan where the regular payments are small, but after a set period (say 5 years) the *entire remaining balance comes due at once.* You then have to refinance, sell, or pay it off. Balloons can make a deal cash-flow beautifully in the early years — but they carry a hard deadline.\n\nThe rule for beginners: **never agree to a balloon you don\'t have a realistic plan to handle.** Before you accept one, know your exit — will you refinance into a bank loan, sell, or have the cash? If you can\'t answer that, the balloon is a trap, not a tool. Longer balloons (or no balloon) are safer; short balloons are where people get burned.',
+        questions: [
+          {
+            id: 'mod7_p4_q1',
+            text: 'A balloon payment means:',
+            type: 'multiple_choice',
+            options: [
+              'The loan is fully paid off by the regular payments',
+              'A large remaining balance comes due all at once after a set period',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod7_p4_q2',
+            text: 'Before accepting a balloon, you must:',
+            type: 'multiple_choice',
+            options: [
+              'Have a realistic exit — refinance, sell, or pay it off',
+              'Nothing; balloons handle themselves',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod7_p5',
+        title: 'Match the structure to the seller\'s real motivation',
+        content: 'Every creative deal works because it solves the *seller\'s* actual problem. Your job is to find what they really want, then structure to it:\n- Wants **maximum price** — give price, take your win on the terms.\n- Wants **monthly income** — seller financing with interest gives them a steady check.\n- Wants a **fast, clean exit** — a quick, certain close can beat a higher messy offer.\n- Wants to **defer taxes** — spreading payments over time (an installment sale) may help them (their tax advisor confirms).\n\nYou can\'t structure well until you know the motivation — which is exactly what the next module is about. Listen first, structure second.',
+        questions: [
+          {
+            id: 'mod7_p5_q1',
+            text: 'The starting point for any creative structure is:',
+            type: 'multiple_choice',
+            options: [
+              'The structure you personally prefer',
+              'What the seller actually wants and needs',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod7_p6',
+        title: 'The multiple-offer method',
+        content: 'Instead of a single take-it-or-leave-it offer, present the seller **two or three structured options** at once. For example:\n- **Option A:** a lower all-cash price, fast close.\n- **Option B:** a higher price with seller financing.\n- **Option C:** full asking price with specific terms (low rate, low down, long term).\n\nThis does three things: it shifts the conversation from "yes or no" to "**which one**," it lets the seller feel in control, and it reveals what they actually value by which option they lean toward. It\'s especially powerful on for-sale-by-owner and off-market deals, where you\'re talking to the seller directly. Give them a menu, not an ultimatum.',
+        questions: [
+          {
+            id: 'mod7_p6_q1',
+            text: 'The multiple-offer method works because it:',
+            type: 'multiple_choice',
+            options: [
+              'Forces the seller into one yes-or-no decision',
+              'Turns the question into "which option," giving the seller control and revealing what they value',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod7_p7',
+        title: 'Advanced structures (handle with extreme care)',
+        content: 'Some creative tools are powerful but carry serious legal, tax, and ethical risk. These are **not** beginner moves and should never be done solo:\n- **Subject-to** — taking over the seller\'s existing mortgage payments while the loan stays in *their* name. Carries "due-on-sale" risk and real trust/ethical stakes.\n- **Wraps** — a new seller-financed note "wrapped" around the seller\'s existing loan.\n- **Lease-options** — leasing with the right to buy later.\n\nThese can work, but only with a **real estate attorney**, full written documentation, and a seller who *completely* understands what they\'re agreeing to. If you\'re not yet experienced, treat this principle as "know these exist," not "go do these." There is no shame in passing on a structure you don\'t fully understand — that\'s good investing, not timidity.',
+        questions: [
+          {
+            id: 'mod7_p7_q1',
+            text: 'The right approach to subject-to, wraps, and lease-options as a beginner is:',
+            type: 'multiple_choice',
+            options: [
+              'Try them on your first deal to save money',
+              'Know they exist, and only use them later with an attorney and a fully informed seller',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod7_p8',
+        title: 'Paper it right, and make sure everyone understands',
+        content: 'Creative deals live or die on documentation and clarity:\n- **Always paper it through a title company and/or real estate attorney.** Never freelance a creative contract.\n- **Get the full structure in writing** — price, down, rate, term, balloon (if any), and what happens if either side defaults.\n- **Make sure the seller fully understands the terms**, especially with seller financing. A confused seller is a future dispute.\n- **Use licensed professionals** for the legal and tax pieces in your state.\n\nDone right, creative structure is one of the most powerful tools in real estate. Done carelessly, it\'s the fastest way into a mess. The professionals are what keep it on the right side of that line.',
+        questions: [
+          {
+            id: 'mod7_p8_q1',
+            text: 'Every creative deal should be:',
+            type: 'multiple_choice',
+            options: [
+              'Sketched on a napkin and trusted to a handshake',
+              'Papered through a title company or attorney, in writing, with a seller who fully understands it',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+    ],
+    keyTerms: [
+      { term: 'Creative financing', definition: 'Any structure that funds a purchase outside a standard bank loan — most often seller financing.' },
+      { term: 'Promissory note', definition: 'The written promise to repay, spelling out the amount, interest rate, payment schedule, and term in a seller-financed deal.' },
+      { term: 'Free-and-clear', definition: 'A property with no mortgage against it; the owner owns it outright (which makes seller financing easy).' },
+      { term: 'Installment sale', definition: 'A sale where the seller receives payments over time rather than all at once, which can spread out their taxes (their tax advisor confirms).' },
+      { term: 'Multiple-offer method', definition: 'Presenting a seller two or three structured options at once, turning a yes/no into a "which one."' },
+      { term: 'Subject-to', definition: 'An advanced structure where you take over the seller\'s existing mortgage payments while the loan stays in their name. Attorney-only.' },
+      { term: 'Wrap (wraparound)', definition: 'An advanced structure where a new seller-financed note wraps around the seller\'s existing loan. Attorney-only.' },
+      { term: 'Lease-option', definition: 'Leasing a property with the contractual right to buy it later at agreed terms.' },
+      { term: 'Due-on-sale clause', definition: 'A clause in many mortgages letting the lender demand full payoff if the property is sold or transferred — the key risk behind subject-to.' },
+      { term: 'Default', definition: 'Failing to meet the terms of a loan or contract (such as missing payments); your documents should spell out what happens if either side defaults.' },
+    ],
+    completionMessage: 'Module 7 complete. You now know the four levers, how seller financing works and when, how to trade levers to win on terms, how to handle balloons safely, how to match structure to seller motivation, the multiple-offer method, and which advanced tools to leave to the professionals for now. Next: negotiation and influence.',
   },
   {
     id: 'mod8',
