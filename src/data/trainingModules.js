@@ -662,208 +662,256 @@ export const TRAINING_MODULES = [
   {
     id: 'mod3',
     moduleNumber: 3,
-    title: 'Your Game Plan',
-    description: 'Done-for-you setup — you\'ll select and input, not write essays. Build the plan that runs your entire 30 days.',
+    title: "Get Clear: Your Plan Before You Hunt",
+    description: "Begin with the end in mind. Build your plan in order — the cash-flow standard you'll hold every deal to, what you can actually fund, your goal and timeline, your market, and the buy box you'll hunt with.",
     principles: [
       {
-        id: 'mod3_p1',
-        title: 'Your money & how you\'ll fund deals',
-        showComponent: 'capitalStrategy',
-        content: 'This is where you build the plan that runs your entire 30 days. You won\'t fill blank pages — you\'ll move through three quick steps, in order, and everything saves into your plan automatically.\n\nWe go in this exact order, because each step decides what\'s even possible in the next:\n1. **Your money & how you\'ll fund deals** — what you have, and what it unlocks\n2. **Your goal** — how many properties, at what return, with what down payment\n3. **Your buy box** — exactly what you\'ll buy\n\nMoney first. How much cash you have and how you can finance decides which strategies are realistic — and that shapes everything else.\n\nBefore goals, before markets, get honest about the real cash you can put into a deal — not your emergency fund, not what you wish you had. This one number quietly decides your price range, your strategy, and your market.\n\n**What your cash actually buys.** With a normal investment loan you\'ll need roughly **25% down + 3–5% closing + any rent-ready repairs** — about 28–30%+ of the price in cash. A quick anchor: your max price ≈ your investable cash ÷ 0.30. So **$50,000 buys around a $165,000 property**, $30,000 buys around $100,000, and $100,000 buys around $330,000. Keep your reserves separate — that money isn\'t investable; it\'s what keeps a deal alive through a vacancy or repair.\n\n**Your money decides your strategy menu.** This is the part most beginners miss — how much cash and credit you have opens (or closes) different paths:\n- **Solid cash + good credit →** the simple route: a **Conventional** or **DSCR** loan with **Buy & Hold.** Put ~25% down and own it.\n- **Some cash, want to stretch it →** **BRRRR** (buy, rehab, rent, then refinance to pull your cash back out and repeat), or **house-hacking** (live in a 2–4 unit and put as little as 3.5–5% down).\n- **Little cash →** **Seller Financing** (negotiate a low or no down payment directly with the seller), a **JV / Partnership** (a partner brings the money, you bring the deal and the work), or **Hard Money** short-term that you refinance out of.\n- **No funding lined up yet →** that\'s fine for today, but getting a pre-approval or a lending relationship is your #1 job this week (Module 4 walks you through it).\n\nThe takeaway: you do **not** need a pile of cash to start — but you do need to know which path is yours, because you can\'t make offers you can\'t fund.\n\nUse the **Capital & Strategy Finder** below. Answer 8 quick questions and it builds you a personalized snapshot: the financing you can likely use, the strategies open to you, and your single best-fit first move. Nothing sensitive is collected — ranges only. The results are options to explore and confirm with a lender, not guarantees — but they\'ll show you exactly which path is yours so you never make an offer you can\'t fund.',
-        questions: [
+        "id": "mod3_p1",
+        "title": "Why we build everything around cash flow",
+        "content": "Real estate pays you four ways (Module 1): **cash flow, appreciation, equity paydown, and tax benefits.** We deliberately build your whole plan around just one of them — **cash flow** — and we measure it with one metric: **cash-on-cash return.** Here's why that's the right choice.\n\n**Financing is the engine, and it makes real estate the optimal investment — when done correctly.** Using the bank's money (leverage) means you control a large asset with a small amount of your own cash. That multiplies what your cash earns. **Cash-on-cash return** measures exactly this: the yearly cash flow you collect against the actual cash you put into the deal. It's the truest scorecard of how hard *your* money is working.\n\n**Cash-on-cash is the best metric — with two conditions.** It's the right north star *as long as*:\n- You keep **reasonable equity** in the deal — you're not so over-leveraged that a small dip wipes you out.\n- You keep **reasonable reserves** — cash set aside for vacancies, repairs, and surprises.\n\nStrip those away and a high cash-on-cash number is a mirage hiding real risk. Equity and reserves are what make the metric honest.\n\n**Why cash flow first?** Because cash flow is what you can actually live on — it's what \"retire on passive income\" is made of, and it's what carries you through a down market. So we build your cash flow up first. Once it's solid, the other three ways real estate pays you — appreciation, equity paydown, and tax benefits — become **happy bonuses.** Real money you're glad to have, but never the thing you were depending on. That's a position of strength.",
+        "questions": [
           {
-            id: 'mod3_p1_q1',
-            text: 'Roughly how much cash do you need for a $200,000 rental with normal financing?',
-            type: 'multiple_choice',
-            options: [
-              'About $10,000',
-              'About $60,000',
-              'The full $200,000',
+            "id": "mod3_p1_q1",
+            "text": "Why do we measure deals by cash-on-cash return?",
+            "type": "multiple_choice",
+            "options": [
+              "Because appreciation is guaranteed every year",
+              "Because it shows how hard your invested cash is working — as long as you keep reasonable equity and reserves"
             ],
-            correctAnswer: 1,
+            "correctAnswer": 1
           },
           {
-            id: 'mod3_p1_q2',
-            text: 'You have very little cash. Which paths are realistic?',
-            type: 'multiple_choice',
-            options: [
-              'Only all-cash purchases',
-              'Seller financing, a JV partner, house-hacking, or BRRRR',
+            "id": "mod3_p1_q2",
+            "text": "In this approach, appreciation and tax benefits are treated as:",
+            "type": "multiple_choice",
+            "options": [
+              "Happy bonuses on top of solid cash flow",
+              "The main reason to buy"
             ],
-            correctAnswer: 1,
-          },
-        ],
+            "correctAnswer": 0
+          }
+        ]
       },
       {
-        id: 'mod3_p2',
-        title: 'Why we build everything around cash flow',
-        content: 'Real estate pays you four ways (Module 1): **cash flow, appreciation, equity paydown, and tax benefits.** We deliberately build your whole plan around just one of them — **cash flow** — and we measure it with one metric: **cash-on-cash return.** Here\'s why that\'s the right choice.\n\n**Financing is the engine, and it makes real estate the optimal investment — when done correctly.** Using the bank\'s money (leverage) means you control a large asset with a small amount of your own cash. That multiplies what your cash earns. **Cash-on-cash return** measures exactly this: the yearly cash flow you collect against the actual cash you put into the deal. It\'s the truest scorecard of how hard *your* money is working.\n\n**Cash-on-cash is the best metric — with two conditions.** It\'s the right north star *as long as*:\n- You keep **reasonable equity** in the deal — you\'re not so over-leveraged that a small dip wipes you out.\n- You keep **reasonable reserves** — cash set aside for vacancies, repairs, and surprises.\n\nStrip those away and a high cash-on-cash number is a mirage hiding real risk. Equity and reserves are what make the metric honest.\n\n**Why cash flow first?** Because cash flow is what you can actually live on — it\'s what "retire on passive income" is made of, and it\'s what carries you through a down market. So we build your cash flow up first. Once it\'s solid, the other three ways real estate pays you — appreciation, equity paydown, and tax benefits — become **happy bonuses.** Real money you\'re glad to have, but never the thing you were depending on. That\'s a position of strength.',
-        questions: [
+        "id": "mod3_p2",
+        "title": "Your standard: never below 8% cash-on-cash",
+        "content": "Some investors buy property that only **breaks even** on cash flow — it pays them nothing month to month, and they're betting entirely on appreciation. That's not investing, it's speculation, and it leaves you with no cushion when something goes wrong.\n\nIn UC30 we hold a firm standard: **a minimum 8% cash-on-cash return.** That floor does two things at once:\n- It **protects you** — the deal pays you from day one instead of relying on a future you can't control.\n- It **forces margin** — enough room in the numbers to actually keep reserves.\n\nBelow 8%, a deal is usually too thin to be safe. This isn't a number we pulled from the air — it's the line where a deal pays you *and* leaves a cushion. Your minimum cash-on-cash becomes a hard filter in your buy box: if a property can't clear it, it's not your deal.",
+        "questions": [
           {
-            id: 'mod3_p2_q1',
-            text: 'Why do we measure deals by cash-on-cash return?',
-            type: 'multiple_choice',
-            options: [
-              'Because appreciation is guaranteed every year',
-              'Because it shows how hard your invested cash is working — as long as you keep reasonable equity and reserves',
+            "id": "mod3_p2_q1",
+            "text": "We set a minimum cash-on-cash return of 8% because:",
+            "type": "multiple_choice",
+            "options": [
+              "It pays you from day one and leaves room for reserves",
+              "Break-even properties are the safest way to start"
             ],
-            correctAnswer: 1,
+            "correctAnswer": 0
           },
           {
-            id: 'mod3_p2_q2',
-            text: 'In this approach, appreciation and tax benefits are treated as:',
-            type: 'multiple_choice',
-            options: [
-              'Happy bonuses on top of solid cash flow',
-              'The main reason to buy',
+            "id": "mod3_p2_q2",
+            "text": "Buying a cash-flow break-even property is closest to:",
+            "type": "multiple_choice",
+            "options": [
+              "A protected, conservative play",
+              "Speculation — you're betting on appreciation with no cushion"
             ],
-            correctAnswer: 0,
-          },
-        ],
+            "correctAnswer": 1
+          }
+        ]
       },
       {
-        id: 'mod3_p2b',
-        title: 'Your standard: never below 8% cash-on-cash',
-        content: 'Some investors buy property that only **breaks even** on cash flow — it pays them nothing month to month, and they\'re betting entirely on appreciation. That\'s not investing, it\'s speculation, and it leaves you with no cushion when something goes wrong.\n\nIn UC30 we hold a firm standard: **a minimum 8% cash-on-cash return.** That floor does two things at once:\n- It **protects you** — the deal pays you from day one instead of relying on a future you can\'t control.\n- It **forces margin** — enough room in the numbers to actually keep reserves.\n\nBelow 8%, a deal is usually too thin to be safe. This isn\'t a number we pulled from the air — it\'s the line where a deal pays you *and* leaves a cushion. Your minimum cash-on-cash becomes a hard filter in your buy box: if a property can\'t clear it, it\'s not your deal.',
-        questions: [
+        "id": "mod3_p3",
+        "title": "How you'll earn your return: risk vs. motivated sellers",
+        "content": "Here's the part most people get wrong, so understand it clearly. A **higher** cash-on-cash return almost always comes from one of two things:\n- **A higher-risk property.** The numbers look better because there's more that can go wrong — a rough area, heavy deferred maintenance, a tougher tenant base. More reward, but real downside you have to be able to survive.\n- **A more motivated seller.** Same quality of property, better numbers, because you found someone who needs to sell and will take less or offer better terms. The catch: motivated sellers are harder to find. It takes more time and more deal flow (Module 5) to reach them.\n\nSo when you set your target return, you're really choosing **how you'll earn the extra: by taking on more risk, or by doing more work to find better deals.** UC30's bias is clear — **chase motivated sellers, not risky assets.** The work is more controllable than the risk. A target you can hit by digging up motivated sellers is durable; a target you can only hit by buying dangerous properties will eventually hurt you.\n\nOne more factor sets the ceiling on what's realistic: **your market.** Some areas cash-flow easily, others barely cash-flow at all — so the market caps what your number can safely be. You'll choose your market in a few sections. For now, just know your target should be **high enough to matter (at least 8%) but grounded in a real market and the time you can put into finding deals.**",
+        "questions": [
           {
-            id: 'mod3_p2b_q1',
-            text: 'We set a minimum cash-on-cash return of 8% because:',
-            type: 'multiple_choice',
-            options: [
-              'It pays you from day one and leaves room for reserves',
-              'Break-even properties are the safest way to start',
+            "id": "mod3_p3_q1",
+            "text": "A higher cash-on-cash return usually comes from:",
+            "type": "multiple_choice",
+            "options": [
+              "Either a higher-risk property or a more motivated seller",
+              "The bank lowering your rate for free"
             ],
-            correctAnswer: 0,
+            "correctAnswer": 0
           },
           {
-            id: 'mod3_p2b_q2',
-            text: 'Buying a cash-flow break-even property is closest to:',
-            type: 'multiple_choice',
-            options: [
-              'A protected, conservative play',
-              'Speculation — you\'re betting on appreciation with no cushion',
+            "id": "mod3_p3_q2",
+            "text": "UC30's preferred way to earn a higher return is to:",
+            "type": "multiple_choice",
+            "options": [
+              "Buy riskier properties for the bigger numbers",
+              "Do the work to find more motivated sellers"
             ],
-            correctAnswer: 1,
-          },
-        ],
+            "correctAnswer": 1
+          }
+        ]
       },
       {
-        id: 'mod3_p2c',
-        title: 'How aggressive should your target be?',
-        content: 'Two decisions set the return you can realistically hit. Make both on purpose.\n\n**First, decide your market.** A market sets the baseline of what\'s even possible — some areas cash-flow easily, others barely cash-flow at all. You can invest where the math works locally, or operate in a different market through a team (Module 5). Either way, pick where you\'ll operate *before* you lock your number, because the market caps what\'s realistic.\n\n**Second, decide how aggressive a cash-on-cash return you\'ll chase.** This is the part most people get wrong, so understand it clearly: a **higher** cash-on-cash return almost always comes from one of two things —\n- **A higher-risk property.** The numbers look better because there\'s more that can go wrong — a rough area, heavy deferred maintenance, a tougher tenant base. More reward, but real downside you have to be able to survive.\n- **A more motivated seller.** Same quality of property, better numbers, because you found someone who needs to sell and will take less or offer better terms. The catch: motivated sellers are harder to find. It takes more time and more deal flow (Module 5) to reach them.\n\nSo when you set your target, you\'re really choosing **how you\'ll earn the extra return: by taking on more risk, or by doing more work to find better deals.** UC30\'s bias is clear — **chase motivated sellers, not risky assets.** The work is more controllable than the risk. A target you can hit by digging up motivated sellers is durable; a target you can only hit by buying dangerous properties will eventually hurt you.\n\nSo set a number that is **high enough to matter** (at least 8%) but **grounded in your market and the time you can realistically put into finding deals.** If your plan only works at a return your market can\'t safely produce, that\'s not a signal to go buy risk — it\'s a signal to either commit harder to deal flow or adjust the goal.',
-        questions: [
+        "id": "mod3_p4",
+        "title": "What can you actually fund? (Capital & Strategy Finder)",
+        "showComponent": "capitalStrategy",
+        "content": "You know the standard. Now get specific about *you.* The number one thing that stops beginners isn't knowledge — it's the thought *\"I don't have the money.\"* The truth is there are many ways to fund a first deal, and the right financing and strategy depend entirely on your situation: your cash, whether you'd live in the property, your income, your credit, your equity, and how much renovation you're willing to take on. That's what this tool figures out for you.\n\n**Use the Capital & Strategy Finder below.** Answer a handful of quick questions and it shows you the **financing options you can likely use** and the **strategies open to you**, with a highlighted best-fit path for someone in your exact situation.\n\nA few things to hold onto as you go through it:\n- **Know your *full* number, not just the down payment.** The cash a deal really needs is **down payment + closing costs + reserves + any money to make it rent-ready.** Plan for all four so you're never caught short at closing.\n- **The lowest-cash path for most beginners is house hacking** — living in the property and renting out the rest, using low-down owner-occupant financing (taught in Module 4). If you're at all open to it, the tool will surface it.\n- **No situation is a dead end.** Even if money, credit, and income are all tight right now, the tool gives you a path — build a savings runway, find a partner, or use creative financing like seller financing.\n\nThese are options to explore and confirm with a lender — not guarantees. Actual qualification depends on a full lender review of your situation. This is education, not lending or financial advice.",
+        "questions": [
           {
-            id: 'mod3_p2c_q1',
-            text: 'A higher cash-on-cash return usually comes from:',
-            type: 'multiple_choice',
-            options: [
-              'Either a higher-risk property or a more motivated seller',
-              'The bank lowering your rate for free',
+            "id": "mod3_p4_q1",
+            "text": "The full cash a deal requires is:",
+            "type": "multiple_choice",
+            "options": [
+              "Just the down payment",
+              "Down payment + closing costs + reserves + any rent-ready costs"
             ],
-            correctAnswer: 0,
+            "correctAnswer": 1
           },
           {
-            id: 'mod3_p2c_q2',
-            text: 'UC30\'s preferred way to earn a higher return is to:',
-            type: 'multiple_choice',
-            options: [
-              'Buy riskier properties for the bigger numbers',
-              'Do the work to find more motivated sellers',
+            "id": "mod3_p4_q2",
+            "text": "For most beginners, the lowest-cash way to fund a first deal is:",
+            "type": "multiple_choice",
+            "options": [
+              "A 25%-down investment loan",
+              "House hacking with low-down owner-occupant financing"
             ],
-            correctAnswer: 1,
-          },
-        ],
+            "correctAnswer": 1
+          }
+        ]
       },
       {
-        id: 'mod3_p2d',
-        title: 'Set your plan with the Get Clear tool',
-        showComponent: 'getClear',
-        content: 'Now make it concrete and let the tool do the math.\n\nUse the **Get Clear** tool below. You give it a few inputs and it tells you how long your plan will take:\n- **Define your destination** — one line on what you want real estate to do for you and why (e.g., "$8,000/month so I can leave my W-2").\n- **How much you can invest per year.**\n- **Your minimum cash-on-cash return** — your standard from the previous principle (at least 8%).\n- **The new yearly cash flow you want.**\n\nThe tool calculates your **timeline** automatically. The logic underneath is simple: **your target yearly cash flow ÷ your return ≈ the equity you need working.** So $100,000 of cash flow at a 10% return needs about **$1,000,000 of equity working.** Divide that by what you can invest each year, and you get your time horizon.\n\n**Worked example (straight from the tool):** want **$100,000/year** in cash flow, can invest **$100,000/year**, target a **10%** return → you need about **$1,000,000** working → roughly a **10-year** timeline.\n\n**Then be realistic.** If the timeline is longer than you\'d like, you have three honest levers:\n- **Extend the timeline.**\n- **Lower the near-term cash-flow goal.**\n- **Earn higher returns by finding better deals** — more motivated sellers, not riskier property.\n\nAnd remember: your next 30 days isn\'t the whole plan. **It\'s one deal.** The plan just tells you which deal to go get.\n\n**Your commitment:** write down the **market** you\'ll work in and your **minimum cash-on-cash return** (at least 8%). Those two decisions flow straight into your buy box — your return becomes the hard filter every property has to pass. That\'s how a goal becomes a plan you can actually hold yourself to.',
-        questions: [
+        "id": "mod3_p5",
+        "title": "Turn your dream into a number (the Get Clear tool)",
+        "showComponent": "getClear",
+        "content": "Now that you know what you can fund, turn your dream into a number you can plan around. This is where a vague wish (\"I want financial freedom\") becomes a concrete target with a timeline.\n\n**Use the Get Clear tool below** (the Financial Plan tool). You'll fill in a few fields and it does the math:\n- **Define your destination** — what do you want real estate to do for you? One honest line (e.g., \"help me retire on passive income\").\n- **How much can I invest yearly?** — the cash you can realistically put toward investing each year. (This is your ongoing pace — different from the cash-on-hand the Finder asked about, which was for your *first* deal.)\n- **What is my minimum desired cash-on-cash return?** — your standard from earlier (at least 8%).\n- **How much new cash flow do I want from real estate?** — your target yearly cash flow.\n\nFrom those inputs the tool writes your **Financial Plan** and calculates your **timeline** automatically. The logic underneath is simple: **your target yearly cash flow ÷ your return ≈ the equity you need working.** Divide that by what you can invest each year, and you get your time horizon.\n\n**Worked example (straight from the tool):** want **$100,000/year** in cash flow, target a **10%** return, can invest **$100,000/year** → you need about **$1,000,000** of equity working → roughly a **10-year** timeline.\n\nLast, the tool asks **why this goal matters to you.** Put a sentence into words. This is the one piece worth writing down — it's the fuel for the hard days.\n\n**Then be realistic.** If the timeline is longer than you'd like, you have three honest levers:\n- **Extend the timeline.**\n- **Lower the near-term cash-flow goal.**\n- **Earn higher returns by finding better deals** — more motivated sellers (the risk-vs-motivation section), not riskier property.\n\nAnd remember: your next 30 days isn't the whole plan. **It's one deal.** The plan just tells you which deal to go get.",
+        "questions": [
           {
-            id: 'mod3_p2d_q1',
-            text: 'The Get Clear tool turns your inputs into:',
-            type: 'multiple_choice',
-            options: [
-              'A timeline showing how long your plan will take',
-              'A list of specific properties to buy',
+            "id": "mod3_p5_q1",
+            "text": "The Get Clear tool turns your inputs into:",
+            "type": "multiple_choice",
+            "options": [
+              "A timeline showing how long your plan will take",
+              "A list of specific properties to buy"
             ],
-            correctAnswer: 0,
+            "correctAnswer": 0
           },
           {
-            id: 'mod3_p2d_q2',
-            text: 'If the capital you\'d need is beyond your means on your timeline, the right moves are:',
-            type: 'multiple_choice',
-            options: [
-              'Buy riskier properties to force a higher return',
-              'Extend the timeline, lower the near-term goal, or find better deals',
+            "id": "mod3_p5_q2",
+            "text": "If the capital you'd need is beyond your means on your timeline, the right moves are:",
+            "type": "multiple_choice",
+            "options": [
+              "Buy riskier properties to force a higher return",
+              "Extend the timeline, lower the near-term goal, or find better deals"
             ],
-            correctAnswer: 1,
-          },
-        ],
+            "correctAnswer": 1
+          }
+        ]
       },
       {
-        id: 'mod3_p3',
-        title: 'Find your buy box (now it\'s clear)',
-        showComponent: 'buyBox',
-        content: 'Here\'s the payoff of doing money and goal first: your buy box almost fills itself in. Your **price range** comes from your cash, your **strategy and financing** from Step 1, and your **target** from your goal. The only real decision left is *where* — so let\'s settle that, then build.\n\n**Which market? (the part that stalls everyone)**\nDecide it with two lenses — **finance** and **ease** — and one test.\n\n**The ease case for local.** Your home market is the default: you know it, can drive it, see properties, self-manage, and build relationships face-to-face. For a first deal that\'s a real edge — *if the numbers work.*\n\n**The finance reality.** Local only wins if the math works. Many expensive markets — much of the coasts, metros like California, Seattle, Denver, NYC — can\'t cash flow, because prices are too high for rents to cover costs.\n\n**The test.** Pull a typical local property into the CDS Rental Calculator (Module 2). With your cash and a normal loan, does it hit your minimum cash-on-cash?\n- **Yes →** invest local — math *and* ease.\n- **No →** go out-of-area. For a cash-flow goal, that\'s normal and it works.\n\n**Picking an out-of-area market — finance filters:** affordability vs. your cash · rent near **1% of price** is strong (0.7%+ workable; pricey metros sit at 0.3–0.5%) · landlord-friendly laws · job and population growth · sane insurance and taxes. **Ease filters:** can you build a remote team led by a **property manager** (the linchpin) · can you visit once or twice · do you have an anchor · and **go deep in ONE market.** The model: **invest where the math works, operate through a team.** For UC30, **choose cash flow over appreciation.**\n\nUse the **Define Your Buy Box** tool below. Here\'s how to choose each field:\n- **Target Markets / Zip Codes** — your market from above.\n- **Property Types** — **beginner pick: SFR through 4-Plex.** (Small MF, Apartments, Commercial, Storage, Land are advanced.)\n- **Year Built / Bedrooms / Bathrooms** — a floor like 1980+ avoids the oldest systems; pick the rentable sweet spot (often ~3 bed / 2 bath).\n- **Condition Tolerance** — **beginner pick: Turnkey or Light Rehab.**\n- **Purchase Price Range + Down Payment** — straight from Step 1 (cash ÷ 0.30 ≈ your max).\n- **Strategy** — the path you chose in Step 1: *Buy & Hold* (default), *BRRRR, Seller Finance, STR, Section 8, Subto/Wrap.*\n- **Financing** — your funding path from Step 1: *Conventional, DSCR, Hard Money, Seller Finance, Cash, JV, Other.*\n- **Return Requirements** — set your **Minimum Cash-on-Cash** (e.g., 8%) as your primary filter; it\'s the number you reverse-engineer your max price against (Module 2). Add min Cap Rate, min Cash Flow/unit, or min IRR if you want.\n- **Additional Notes** — anything specific to you.\n\nFinish the Buy Box and **download your Buy Box PDF** — your hunting filter for the next 30 days.',
-        questions: [
+        "id": "mod3_p6",
+        "title": "Choose your market and neighborhood",
+        "showCalculator": true,
+        "content": "You have a plan and a strategy. Now decide *where* to deploy it — because two properties with identical numbers can be very different investments depending on location.\n\n**Local or out-of-area?** Decide with two lenses — **finance** and **ease** — and one test.\n\n**The ease case for local.** Your home market is the default: you know it, can drive it, see properties, self-manage, and build relationships face-to-face. For a first deal that's a real edge — *if the numbers work.*\n\n**The finance reality.** Local only wins if the math works. Many expensive markets — much of the coasts, metros like California, Seattle, Denver, NYC — can't cash flow, because prices are too high for rents to cover costs.\n\n**The test.** Pull a typical local property into the CDS Rental Calculator (Module 2). With your cash and a normal loan, does it hit your minimum cash-on-cash?\n- **Yes →** invest local — math *and* ease.\n- **No →** go out-of-area. For a cash-flow goal, that's normal and it works. The model is simple: **invest where the math works, operate through a team** (Module 5), led by a property manager.\n\n**There's no easy listing — and that's normal.** Nobody is going to hand you an easy 8% deal on the MLS. If a property were obviously a great cash-flow deal at list price, it would already be gone — investors watch the MLS all day. So if you pull up a market and the first listings don't hit 8%, that's *not* a sign you can't invest there. **Every market takes work to find deals. Some just take more.**\n- **Not finding an instant deal ≠ a dead market.** It means you haven't done the work yet — analyzed enough, made enough offers, or found a motivated seller (Module 9).\n- **Some markets are genuinely hard for cash flow.** It's still possible almost anywhere, but in expensive markets it takes far more volume and creativity.\n- **The free \"limitless test.\"** Before you commit to a market, pull 10–20 active MLS listings into the CDS Rental Calculator below and analyze them at list price. If several are within striking distance of your 8% with a normal offer, cash flow here is realistic. If everything is wildly short, this market will take serious work or creative deals. It costs nothing — so use it as your reality check on any market.\n- **Easy can be a red flag.** If a listing *does* cash-flow easily straight off the MLS, get suspicious before you get excited. Easy on-market cash flow often means a problematic area — high crime, declining population, a rough tenant base — priced low for a reason. Always verify the neighborhood before you celebrate.\n\n**What makes a strong rental market.** Whether local or out-of-area, judge the market on:\n- **Jobs and people growing, not leaving** — population and job growth mean steady rental demand; a shrinking town is a warning sign no matter how cheap.\n- **A diverse economy, not a one-industry town** — several big employers and industries (healthcare, universities, logistics, government) hold up far better than a town that lives or dies on one factory.\n- **People moving in** — net in-migration is one of the strongest signals of durable demand.\n- **Rising rents and low vacancy** — demand outpacing supply, good for cash flow today and rent growth tomorrow.\n- **Rent-to-price that supports cash flow** — the **1% rule** (monthly rent ≈ 1% of price) is a rough screen (0.7%+ workable; pricey metros sit at 0.3–0.5%).\n- **Visible reinvestment (the path of progress)** — new construction and money flowing in signal an improving area; buy ahead of the wave, not behind it.\n- **Landlord-friendly laws** — eviction timelines, rent control, and tenant protections vary enormously; landlord-friendly areas are easier and safer for a beginner.\n- **Sane insurance and taxes** — flood, fire, and hurricane zones, and high property-tax states, can quietly kill cash flow.\n\n**Judging the neighborhood.** Within a market, investors often grade neighborhoods A–D:\n- **A / B** — nicer areas, lower crime, stronger tenants, fewer headaches, but lower cash-flow yields.\n- **C** — working-class, often the sweet spot for cash flow, more hands-on.\n- **D** — cheapest with the highest *apparent* returns, but high crime, turnover, and management pain; usually not where a beginner should start.\n\nLook at crime, school ratings, the condition of surrounding homes, and whether the area is improving or declining. A strong tell: **proximity to anchor institutions** — hospitals, universities, and major employers create steady, recession-resistant demand. For your first deal, a solid **B or C neighborhood in a growing, landlord-friendly market** is usually the safest place to find a rental that genuinely cash-flows well. And whichever you choose — **go deep in ONE market** rather than scattering.",
+        "questions": [
           {
-            id: 'mod3_p3_q1',
-            text: 'Why is the buy box easier to build last?',
-            type: 'multiple_choice',
-            options: [
-              'It\'s not — it should come first',
-              'Your money and goal already decide your price range, strategy, financing, and target',
+            "id": "mod3_p6_q1",
+            "text": "Your local market won't cash flow even with your full down payment. The realistic move is:",
+            "type": "multiple_choice",
+            "options": [
+              "Buy local anyway and hope it appreciates",
+              "Invest in an affordable out-of-area market where the math works, run by a team"
             ],
-            correctAnswer: 1,
+            "correctAnswer": 1
           },
           {
-            id: 'mod3_p3_q2',
-            text: 'Your local market won\'t cash flow even with your full down payment. The realistic move is:',
-            type: 'multiple_choice',
-            options: [
-              'Buy local anyway and hope it appreciates',
-              'Invest in an affordable out-of-area market where the math works, run by a team',
+            "id": "mod3_p6_q2",
+            "text": "For a beginner's first deal, the usually-safest neighborhood choice is:",
+            "type": "multiple_choice",
+            "options": [
+              "A D neighborhood, because the apparent returns look highest",
+              "A solid B or C neighborhood in a growing, landlord-friendly market"
             ],
-            correctAnswer: 1,
-          },
-        ],
+            "correctAnswer": 1
+          }
+        ]
       },
       {
-        id: 'mod3_p4',
-        title: 'Your plan is set',
-        content: 'You now have your game plan captured: your **money and funding path**, your **goal** in real numbers, and your **buy box** (+ PDF) — exactly what you\'re hunting.\n\nOne habit for the 30 days: a **weekly reset.** Each week ask — what worked, what didn\'t, where did I waste time, what should I double down on, what should I cut. Knowledge means nothing without action; you don\'t need perfect conditions, you need consistency, because momentum compounds — and most people quit right before it builds.\n\n**Module 3 complete.** Money settled, goal set, buy box built. Next: financing — getting bankable and building your lending team before you need it.',
-        questions: [],
+        "id": "mod3_p7",
+        "title": "Build your buy box",
+        "showComponent": "buyBox",
+        "content": "Here's the payoff of doing money, goal, and market first: your buy box almost fills itself in. Your **price range** comes from your capital, your **strategy and financing** from the Capital & Strategy Finder, your **target return** from your standard, and your **market** from the previous section.\n\n**Use the Define Your Buy Box tool below.** Here's how to choose each field:\n- **Target Markets / Zip Codes** — your market from the previous section.\n- **Property Types** — beginner pick: **SFR through 4-Plex.** (Small multifamily, apartments, commercial, storage, and land are advanced.)\n- **Year Built / Bedrooms / Bathrooms** — a floor like 1980+ avoids the oldest systems; pick the rentable sweet spot (often ~3 bed / 2 bath).\n- **Condition Tolerance** — beginner pick: **Turnkey or Light Rehab** (match this to the renovation appetite you chose in the Finder).\n- **Purchase Price Range + Down Payment** — from your capital and the down payment your strategy uses. A quick ceiling: **cash ÷ 0.30 ≈ your max price** (that 30% covers down payment, closing, and reserves).\n- **Strategy** — the path the Finder matched you to: *Buy & Hold* (default), *BRRRR, Seller Finance, STR, Section 8, Subto/Wrap.*\n- **Financing** — your funding path from the Finder: *Conventional, DSCR, Hard Money, Seller Finance, Cash, Partnership, Other.*\n- **Return Requirements** — set your **Minimum Cash-on-Cash** (at least 8%) as your primary filter; it's the number you reverse-engineer your max price against (Module 2). Add min Cap Rate, min Cash Flow/unit, or min IRR if you want.\n- **Additional Notes** — anything specific to you.\n\nFinish the Buy Box and **download your Buy Box PDF** — your hunting filter for the next 30 days.",
+        "questions": [
+          {
+            "id": "mod3_p7_q1",
+            "text": "Why is the buy box easy to build last?",
+            "type": "multiple_choice",
+            "options": [
+              "It's not — it should come first",
+              "Your money, goal, and market already decide your price range, strategy, financing, and target"
+            ],
+            "correctAnswer": 1
+          },
+          {
+            "id": "mod3_p7_q2",
+            "text": "Your minimum cash-on-cash return belongs in the buy box as:",
+            "type": "multiple_choice",
+            "options": [
+              "A nice-to-have you can ignore",
+              "Your primary filter — the number every property must clear"
+            ],
+            "correctAnswer": 1
+          }
+        ]
       },
+      {
+        "id": "mod3_p8",
+        "title": "Your plan is set",
+        "content": "You now have your game plan captured: the **financing and strategy** that fit you, your **goal** in real numbers with a timeline, your **market**, and your **buy box** (+ PDF) — exactly what you're hunting.\n\nOne habit for the 30 days: a **weekly reset.** Each week ask — what worked, what didn't, where did I waste time, what should I double down on, what should I cut. Knowledge means nothing without action; you don't need perfect conditions, you need consistency, because momentum compounds — and most people quit right before it builds.\n\n**Module 3 complete.** Strategy and funding clear, goal set, market chosen, buy box built. Next: financing — getting bankable and building your lending team before you need it.",
+        "questions": []
+      }
     ],
     keyTerms: [
-      { term: 'Investable cash', definition: 'The real money you can deploy into deals while keeping reserves safe — not your emergency fund.' },
-      { term: 'LTV (Loan-to-Value)', definition: 'The loan as a percent of value; 75% LTV means 25% down.' },
-      { term: 'House-hacking', definition: 'Living in one unit of a 2–4 unit property (or a room) so you can buy with a low owner-occupant down payment while tenants help cover the mortgage.' },
-      { term: 'BRRRR', definition: 'Buy, Rehab, Rent, Refinance, Repeat — recycle your cash into the next deal.' },
-      { term: 'DSCR loan', definition: 'Financing based on the property\'s income covering its debt, rather than your personal income.' },
-      { term: 'Hard money', definition: 'Fast, short-term, asset-based financing — higher cost, used for quick or heavy-rehab deals.' },
-      { term: 'JV / Partnership', definition: 'A joint venture — one side brings capital, the other brings the deal and work.' },
-      { term: 'Seller financing', definition: 'The seller acts as the bank, letting you pay over time with negotiable price, rate, and terms.' },
-      { term: 'Conventional pre-approval', definition: 'A lender\'s confirmation of what you qualify to borrow on a standard mortgage.' },
-      { term: '1% rule / price-to-rent', definition: 'A quick screen — monthly rent near 1% of price signals strong cash flow.' },
-      { term: 'Turnkey', definition: 'A property already renovated and rent-ready.' },
-      { term: 'STR (Short-Term Rental)', definition: 'Nightly/weekly rentals like Airbnb.' },
-      { term: 'Section 8', definition: 'A federal program where the government pays part of a qualifying tenant\'s rent.' },
-      { term: 'Subto / Wrap', definition: 'Advanced creative structures that take over or "wrap" a seller\'s existing mortgage. Not for beginners.' },
-      { term: 'IRR (Internal Rate of Return)', definition: 'One annualized percentage blending cash flow, appreciation, and timing.' },
-      { term: 'Appreciation vs. cash-flow market', definition: 'Expensive markets betting on price growth vs. affordable markets that pay steady monthly cash flow.' },
-      { term: 'Out-of-area (remote) investing', definition: 'Buying away from where you live, run through a local team led by a property manager.' },
-      { term: 'Cash-on-cash return', definition: 'The yearly cash flow a property produces divided by the actual cash you invested — the core metric we optimize.' },
-      { term: 'Leverage', definition: 'Using borrowed money (financing) so a small amount of your cash controls a larger asset, multiplying your return when done correctly.' },
-      { term: 'Reserves', definition: 'Cash set aside for vacancies, repairs, and surprises — what keeps a high cash-on-cash number honest and safe.' },
-      { term: 'Cash-flow break-even', definition: 'A property that produces no monthly cash flow, leaving you reliant on appreciation and with no cushion.' },
-      { term: 'Speculation', definition: 'Buying mainly on the bet that the value will rise, rather than on the income the property produces today.' },
-      { term: 'Motivated seller', definition: 'An owner with a real reason to sell who will accept a lower price or better terms — the lower-risk path to a higher return.' },
+      {
+        "term": "Cash-on-cash return",
+        "definition": "The yearly cash flow a property produces divided by the actual cash you invested — the core metric we optimize."
+      },
+      {
+        "term": "Leverage",
+        "definition": "Using borrowed money (financing) so a small amount of your cash controls a larger asset, multiplying your return when done correctly."
+      },
+      {
+        "term": "Reserves",
+        "definition": "Cash set aside for vacancies, repairs, and surprises — what keeps a high cash-on-cash number honest and safe."
+      },
+      {
+        "term": "Cash-flow break-even",
+        "definition": "A property that produces no monthly cash flow, leaving you reliant on appreciation and with no cushion."
+      },
+      {
+        "term": "Speculation",
+        "definition": "Buying mainly on the bet that the value will rise, rather than on the income the property produces today."
+      },
+      {
+        "term": "Motivated seller",
+        "definition": "An owner with a real reason to sell who will accept a lower price or better terms — the lower-risk path to a higher return."
+      },
+      {
+        "term": "Total cash needed",
+        "definition": "The full cash a deal requires — down payment, closing costs, reserves, and any rent-ready costs — not just the down payment."
+      },
+      {
+        "term": "Buy box",
+        "definition": "Your written filter for what you'll buy — market, property type, price range, condition, strategy, financing, and minimum return."
+      },
+      {
+        "term": "1% rule",
+        "definition": "A quick screen where monthly rent is roughly 1% of purchase price — a rough indicator a market can cash-flow."
+      },
+      {
+        "term": "Neighborhood class (A–D)",
+        "definition": "An informal grade for area quality — A/B (nicer, lower yield, lower hassle), C (working-class, often best cash flow), D (cheapest, highest risk and management burden)."
+      },
+      {
+        "term": "Landlord-friendly",
+        "definition": "A market whose laws (eviction, rent rules, tenant protections) make owning rentals more predictable and lower-risk for the owner."
+      }
     ],
-    completionMessage: 'Module 3 complete. Money settled, goal set, buy box built. Next: financing — getting bankable and building your lending team before you need it.',
+    completionMessage: "Module 3 complete. Strategy and funding clear, goal set, market chosen, buy box built. Next: financing — getting bankable and building your lending team before you need it.",
   },
   {
     id: 'mod4',
