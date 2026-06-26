@@ -2,9 +2,28 @@ import { useState } from 'react';
 import NativeRentalCalculator from './NativeRentalCalculator';
 import CapExCalculator from './CapExCalculator';
 import DueDiligenceChecklist from './DueDiligenceChecklist';
-import { subscribeUser, tagFreeToolAccess } from '../utils/kit';
+import CapitalStrategyFinder from './CapitalStrategyFinder';
+import { subscribeUser, tagFreeToolAccess, tagByName } from '../utils/kit';
+
+// Human-readable lead segment for each best-fit path (used to tag leads in Kit)
+const BEST_FIT_SEGMENT = {
+  house_hack: 'House Hacking',
+  partnership: 'Partnership',
+  no_money: 'No Money / Creative',
+  dscr: 'DSCR Investor',
+  commercial: 'Commercial / Scaling',
+  default: 'Buy & Hold',
+};
 
 const TOOLS = [
+  {
+    id: 'capital-strategy-finder',
+    title: 'Capital & Strategy Finder',
+    description: "Answer 8 quick questions and get a personalized snapshot of the financing you can likely use and the strategies open to you — with your single best-fit first move. Works for any situation, even no money or low credit.",
+    icon: '🧭',
+    component: CapitalStrategyFinder,
+    leadGen: true,
+  },
   {
     id: 'rental-calculator',
     title: 'Rental Property Analyzer',
@@ -183,7 +202,17 @@ export default function FreeToolsPage({ user }) {
               {tool.description}
             </p>
 
-            <tool.component {...(tool.passUser ? { user } : {})} />
+            <tool.component
+              {...(tool.passUser ? { user } : {})}
+              {...(tool.leadGen ? {
+                onResult: (bestFit) => {
+                  const email = unlockedTools[tool.id]?.email;
+                  if (email) {
+                    try { tagByName(email, `UC30 Lead - ${BEST_FIT_SEGMENT[bestFit.kind] || 'Investor'}`); } catch {}
+                  }
+                },
+              } : {})}
+            />
 
             {/* CTA */}
             <div style={{

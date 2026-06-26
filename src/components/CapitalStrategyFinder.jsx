@@ -361,7 +361,7 @@ function computeBestFit(a) {
   };
 }
 
-export default function CapitalStrategyFinder({ onSave, existing, embedded, userId }) {
+export default function CapitalStrategyFinder({ onSave, existing, embedded, userId, onResult }) {
   const storageKey = userId ? `uc30_capital_strategy_${userId}` : null;
 
   const loadInitial = () => {
@@ -509,6 +509,17 @@ export default function CapitalStrategyFinder({ onSave, existing, embedded, user
       partnerUnlocked: has(PARTNER_YES_MAYBE, a.PARTNER),
     };
   }, [complete, JSON.stringify(answers)]);
+
+  // Report the computed best-fit outward once per distinct result (used for lead-gen segmentation).
+  const resultFiredRef = useRef('');
+  useEffect(() => {
+    if (!results || !onResult) return;
+    const sig = `${results.bestFit.kind}|${JSON.stringify(answers)}`;
+    if (resultFiredRef.current === sig) return;
+    resultFiredRef.current = sig;
+    onResult(results.bestFit, answers);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [results, onResult]);
 
   // ── RESULTS PAGE ──
   if (step === 'results' && results) {
