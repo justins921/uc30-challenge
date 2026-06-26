@@ -696,27 +696,108 @@ export const TRAINING_MODULES = [
       },
       {
         id: 'mod3_p2',
-        title: 'Set your goal (properties, return, down payment)',
-        showComponent: 'getClear',
-        content: 'Now that you know what you can fund, turn your dream into a number you can plan around.\n\nUse the **Get Clear** tool below to work through each piece:\n\n- **Define Your Destination.** One line: where you\'re going and why (e.g., "$8,000/month so I can leave my W-2").\n- **Key Indicator.** Pick what you\'re optimizing: **Cash Flow, Appreciation, Equity, or Tax Benefits** — the four ways real estate pays you (Module 1). For UC30 and a first deal, choose **Cash Flow.**\n- **Where Am I Now / Where I Want To Be / Gap.** Honest today, clear target, and the gap between — the gap is the work.\n- **Time Frame.** A realistic number of years or months.\n- **Financial Plan Calculator.** Fill in the mad-libs: how much yearly cash flow you want, and the tool maps **how many properties per year**, at what value, what **% down**, and what **return** it takes to get there. Green fields auto-calculate. The simple idea behind it: **yearly cash flow ÷ your target return ≈ the equity you need working** (so $100,000 of cash flow at a 10% return needs about $1,000,000 of equity working).\n- **Why Is This Goal Important.** A sentence or two on *why.* This is the one thing worth putting into words — it\'s the fuel for the hard days.\n\nBe realistic: if the capital you\'d need is far beyond your means on your timeline, **extend the timeline, lower the near-term goal, or earn higher returns through better deals.** And remember — your next 30 days isn\'t the whole plan. It\'s **one deal.**\n\nComplete your plan and note your **target price per property**, your **down payment %**, and your **return** — these flow straight into your buy box.',
+        title: 'Why we build everything around cash flow',
+        content: 'Real estate pays you four ways (Module 1): **cash flow, appreciation, equity paydown, and tax benefits.** We deliberately build your whole plan around just one of them — **cash flow** — and we measure it with one metric: **cash-on-cash return.** Here\'s why that\'s the right choice.\n\n**Financing is the engine, and it makes real estate the optimal investment — when done correctly.** Using the bank\'s money (leverage) means you control a large asset with a small amount of your own cash. That multiplies what your cash earns. **Cash-on-cash return** measures exactly this: the yearly cash flow you collect against the actual cash you put into the deal. It\'s the truest scorecard of how hard *your* money is working.\n\n**Cash-on-cash is the best metric — with two conditions.** It\'s the right north star *as long as*:\n- You keep **reasonable equity** in the deal — you\'re not so over-leveraged that a small dip wipes you out.\n- You keep **reasonable reserves** — cash set aside for vacancies, repairs, and surprises.\n\nStrip those away and a high cash-on-cash number is a mirage hiding real risk. Equity and reserves are what make the metric honest.\n\n**Why cash flow first?** Because cash flow is what you can actually live on — it\'s what "retire on passive income" is made of, and it\'s what carries you through a down market. So we build your cash flow up first. Once it\'s solid, the other three ways real estate pays you — appreciation, equity paydown, and tax benefits — become **happy bonuses.** Real money you\'re glad to have, but never the thing you were depending on. That\'s a position of strength.',
         questions: [
           {
             id: 'mod3_p2_q1',
-            text: 'For UC30 and a first deal, optimize for:',
+            text: 'Why do we measure deals by cash-on-cash return?',
             type: 'multiple_choice',
             options: [
-              'Appreciation',
-              'Cash Flow',
+              'Because appreciation is guaranteed every year',
+              'Because it shows how hard your invested cash is working — as long as you keep reasonable equity and reserves',
             ],
             correctAnswer: 1,
           },
           {
             id: 'mod3_p2_q2',
-            text: 'You want $50,000/year at a 10% return. Roughly how much equity must be working?',
+            text: 'In this approach, appreciation and tax benefits are treated as:',
             type: 'multiple_choice',
             options: [
-              'About $50,000',
-              'About $500,000',
+              'Happy bonuses on top of solid cash flow',
+              'The main reason to buy',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod3_p2b',
+        title: 'Your standard: never below 8% cash-on-cash',
+        content: 'Some investors buy property that only **breaks even** on cash flow — it pays them nothing month to month, and they\'re betting entirely on appreciation. That\'s not investing, it\'s speculation, and it leaves you with no cushion when something goes wrong.\n\nIn UC30 we hold a firm standard: **a minimum 8% cash-on-cash return.** That floor does two things at once:\n- It **protects you** — the deal pays you from day one instead of relying on a future you can\'t control.\n- It **forces margin** — enough room in the numbers to actually keep reserves.\n\nBelow 8%, a deal is usually too thin to be safe. This isn\'t a number we pulled from the air — it\'s the line where a deal pays you *and* leaves a cushion. Your minimum cash-on-cash becomes a hard filter in your buy box: if a property can\'t clear it, it\'s not your deal.',
+        questions: [
+          {
+            id: 'mod3_p2b_q1',
+            text: 'We set a minimum cash-on-cash return of 8% because:',
+            type: 'multiple_choice',
+            options: [
+              'It pays you from day one and leaves room for reserves',
+              'Break-even properties are the safest way to start',
+            ],
+            correctAnswer: 0,
+          },
+          {
+            id: 'mod3_p2b_q2',
+            text: 'Buying a cash-flow break-even property is closest to:',
+            type: 'multiple_choice',
+            options: [
+              'A protected, conservative play',
+              'Speculation — you\'re betting on appreciation with no cushion',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod3_p2c',
+        title: 'How aggressive should your target be?',
+        content: 'Two decisions set the return you can realistically hit. Make both on purpose.\n\n**First, decide your market.** A market sets the baseline of what\'s even possible — some areas cash-flow easily, others barely cash-flow at all. You can invest where the math works locally, or operate in a different market through a team (Module 5). Either way, pick where you\'ll operate *before* you lock your number, because the market caps what\'s realistic.\n\n**Second, decide how aggressive a cash-on-cash return you\'ll chase.** This is the part most people get wrong, so understand it clearly: a **higher** cash-on-cash return almost always comes from one of two things —\n- **A higher-risk property.** The numbers look better because there\'s more that can go wrong — a rough area, heavy deferred maintenance, a tougher tenant base. More reward, but real downside you have to be able to survive.\n- **A more motivated seller.** Same quality of property, better numbers, because you found someone who needs to sell and will take less or offer better terms. The catch: motivated sellers are harder to find. It takes more time and more deal flow (Module 5) to reach them.\n\nSo when you set your target, you\'re really choosing **how you\'ll earn the extra return: by taking on more risk, or by doing more work to find better deals.** UC30\'s bias is clear — **chase motivated sellers, not risky assets.** The work is more controllable than the risk. A target you can hit by digging up motivated sellers is durable; a target you can only hit by buying dangerous properties will eventually hurt you.\n\nSo set a number that is **high enough to matter** (at least 8%) but **grounded in your market and the time you can realistically put into finding deals.** If your plan only works at a return your market can\'t safely produce, that\'s not a signal to go buy risk — it\'s a signal to either commit harder to deal flow or adjust the goal.',
+        questions: [
+          {
+            id: 'mod3_p2c_q1',
+            text: 'A higher cash-on-cash return usually comes from:',
+            type: 'multiple_choice',
+            options: [
+              'Either a higher-risk property or a more motivated seller',
+              'The bank lowering your rate for free',
+            ],
+            correctAnswer: 0,
+          },
+          {
+            id: 'mod3_p2c_q2',
+            text: 'UC30\'s preferred way to earn a higher return is to:',
+            type: 'multiple_choice',
+            options: [
+              'Buy riskier properties for the bigger numbers',
+              'Do the work to find more motivated sellers',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod3_p2d',
+        title: 'Set your plan with the Get Clear tool',
+        showComponent: 'getClear',
+        content: 'Now make it concrete and let the tool do the math.\n\nUse the **Get Clear** tool below. You give it a few inputs and it tells you how long your plan will take:\n- **Define your destination** — one line on what you want real estate to do for you and why (e.g., "$8,000/month so I can leave my W-2").\n- **How much you can invest per year.**\n- **Your minimum cash-on-cash return** — your standard from the previous principle (at least 8%).\n- **The new yearly cash flow you want.**\n\nThe tool calculates your **timeline** automatically. The logic underneath is simple: **your target yearly cash flow ÷ your return ≈ the equity you need working.** So $100,000 of cash flow at a 10% return needs about **$1,000,000 of equity working.** Divide that by what you can invest each year, and you get your time horizon.\n\n**Worked example (straight from the tool):** want **$100,000/year** in cash flow, can invest **$100,000/year**, target a **10%** return → you need about **$1,000,000** working → roughly a **10-year** timeline.\n\n**Then be realistic.** If the timeline is longer than you\'d like, you have three honest levers:\n- **Extend the timeline.**\n- **Lower the near-term cash-flow goal.**\n- **Earn higher returns by finding better deals** — more motivated sellers, not riskier property.\n\nAnd remember: your next 30 days isn\'t the whole plan. **It\'s one deal.** The plan just tells you which deal to go get.\n\n**Your commitment:** write down the **market** you\'ll work in and your **minimum cash-on-cash return** (at least 8%). Those two decisions flow straight into your buy box — your return becomes the hard filter every property has to pass. That\'s how a goal becomes a plan you can actually hold yourself to.',
+        questions: [
+          {
+            id: 'mod3_p2d_q1',
+            text: 'The Get Clear tool turns your inputs into:',
+            type: 'multiple_choice',
+            options: [
+              'A timeline showing how long your plan will take',
+              'A list of specific properties to buy',
+            ],
+            correctAnswer: 0,
+          },
+          {
+            id: 'mod3_p2d_q2',
+            text: 'If the capital you\'d need is beyond your means on your timeline, the right moves are:',
+            type: 'multiple_choice',
+            options: [
+              'Buy riskier properties to force a higher return',
+              'Extend the timeline, lower the near-term goal, or find better deals',
             ],
             correctAnswer: 1,
           },
@@ -775,6 +856,12 @@ export const TRAINING_MODULES = [
       { term: 'IRR (Internal Rate of Return)', definition: 'One annualized percentage blending cash flow, appreciation, and timing.' },
       { term: 'Appreciation vs. cash-flow market', definition: 'Expensive markets betting on price growth vs. affordable markets that pay steady monthly cash flow.' },
       { term: 'Out-of-area (remote) investing', definition: 'Buying away from where you live, run through a local team led by a property manager.' },
+      { term: 'Cash-on-cash return', definition: 'The yearly cash flow a property produces divided by the actual cash you invested — the core metric we optimize.' },
+      { term: 'Leverage', definition: 'Using borrowed money (financing) so a small amount of your cash controls a larger asset, multiplying your return when done correctly.' },
+      { term: 'Reserves', definition: 'Cash set aside for vacancies, repairs, and surprises — what keeps a high cash-on-cash number honest and safe.' },
+      { term: 'Cash-flow break-even', definition: 'A property that produces no monthly cash flow, leaving you reliant on appreciation and with no cushion.' },
+      { term: 'Speculation', definition: 'Buying mainly on the bet that the value will rise, rather than on the income the property produces today.' },
+      { term: 'Motivated seller', definition: 'An owner with a real reason to sell who will accept a lower price or better terms — the lower-risk path to a higher return.' },
     ],
     completionMessage: 'Module 3 complete. Money settled, goal set, buy box built. Next: financing — getting bankable and building your lending team before you need it.',
   },
