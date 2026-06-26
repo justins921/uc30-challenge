@@ -476,6 +476,7 @@ export default function App() {
           onUpdateContact={updateContact}
           onAddContact={addContact}
           onAddFollowUp={addFollowUp}
+          onSaveConfidenceSurvey={saveConfidenceSurvey}
         />
       </>
     );

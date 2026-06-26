@@ -3,6 +3,7 @@ import QuizSection from './QuizSection';
 import NativeRentalCalculator from './NativeRentalCalculator';
 import { GetClearStep, BuyBoxStep, CapitalConfirmationStep } from './ActivationPhase';
 import ContactsCRM from './ContactsCRM';
+import ConfidenceSurvey from './ConfidenceSurvey';
 
 const MODULE_DAY_OFFSET = -100;
 
@@ -69,6 +70,7 @@ export default function TrainingPhase({
   onUpdateContact,
   onAddContact,
   onAddFollowUp,
+  onSaveConfidenceSurvey,
 }) {
   const [activeModuleId, setActiveModuleId] = useState(null);
   const [activePrincipleIndex, setActivePrincipleIndex] = useState(null);
@@ -78,6 +80,7 @@ export default function TrainingPhase({
   const [calcOpen, setCalcOpen] = useState(false);
   const [componentOpen, setComponentOpen] = useState(false);
   const [showCRM, setShowCRM] = useState(false);
+  const [surveysSaving, setSurveysSaving] = useState(false);
 
   const completed = user.trainingCompletedModules || [];
   const visibleModules = modules.filter(m => !m.hidden && !m.comingSoon);
@@ -679,24 +682,48 @@ export default function TrainingPhase({
           );
         })}
 
-        {allComplete && (
-          <div style={{
-            marginTop: 24, padding: '28px 24px', borderRadius: 16, textAlign: 'center',
-            background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.2)',
-          }}>
-            <div style={{ fontSize: 36, marginBottom: 12 }}>&#127942;</div>
-            <div style={{ fontSize: 20, fontWeight: 700, color: '#48c78e', marginBottom: 8 }}>
-              Training Complete!
+        {allComplete && (() => {
+          const baselineDone = (user.confidence_surveys || []).some(s => s.checkpoint === 'pre_training');
+          return (
+            <div style={{ marginTop: 24 }}>
+              <div style={{
+                padding: '28px 24px', borderRadius: 16, textAlign: 'center',
+                background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.2)',
+                marginBottom: 24,
+              }}>
+                <div style={{ fontSize: 36, marginBottom: 12 }}>&#127942;</div>
+                <div style={{ fontSize: 20, fontWeight: 700, color: '#48c78e', marginBottom: 8 }}>
+                  Training Complete!
+                </div>
+                <p style={{ color: '#888', fontSize: 14, marginBottom: 0, lineHeight: 1.6 }}>
+                  You've completed all training modules.{!baselineDone ? ' One last step — take your baseline confidence assessment below so you can track your growth over the next 30 days.' : ' Time to put it into action.'}
+                </p>
+              </div>
+
+              {onSaveConfidenceSurvey && (
+                <ConfidenceSurvey
+                  checkpoint="pre_training"
+                  existingSurveys={user.confidence_surveys || []}
+                  saving={surveysSaving}
+                  onSave={async (data) => {
+                    setSurveysSaving(true);
+                    try { await onSaveConfidenceSurvey(data); }
+                    finally { setSurveysSaving(false); }
+                  }}
+                />
+              )}
+
+              {(baselineDone || !onSaveConfidenceSurvey) && (
+                <div style={{ textAlign: 'center' }}>
+                  <button className="btn-primary" style={{ padding: '16px 40px', fontSize: 16 }}
+                    onClick={onCompleteAll}>
+                    Start the 30-Day Sprint &rarr;
+                  </button>
+                </div>
+              )}
             </div>
-            <p style={{ color: '#888', fontSize: 14, marginBottom: 20, lineHeight: 1.6 }}>
-              You've completed all training modules. Time to put it into action.
-            </p>
-            <button className="btn-primary" style={{ padding: '16px 40px', fontSize: 16 }}
-              onClick={onCompleteAll}>
-              Start the 30-Day Sprint &rarr;
-            </button>
-          </div>
-        )}
+          );
+        })()}
       </div>
       )}
     </div>
