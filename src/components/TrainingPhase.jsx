@@ -90,6 +90,7 @@ export default function TrainingPhase({
 
   const isModuleUnlocked = (moduleId) => {
     if (user?.isAdmin) return true;
+    if (completed.includes(moduleId)) return true;
     const idx = visibleModules.findIndex(m => m.id === moduleId);
     if (idx === 0) return true;
     return completed.includes(visibleModules[idx - 1]?.id);
@@ -122,11 +123,12 @@ export default function TrainingPhase({
 
   const isPrincipleUnlocked = useCallback((principleIndex) => {
     if (user?.isAdmin) return true;
+    if (activeModule && completed.includes(activeModule.id)) return true;
     if (!activeModule?.principles) return false;
     if (principleIndex === 0) return true;
     const prev = activeModule.principles[principleIndex - 1];
     return isPrincipleComplete(prev);
-  }, [activeModule, isPrincipleComplete, user?.isAdmin]);
+  }, [activeModule, isPrincipleComplete, user?.isAdmin, completed]);
 
   const allPrinciplesDone = useMemo(() => {
     if (!activeModule?.principles?.length) return false;
