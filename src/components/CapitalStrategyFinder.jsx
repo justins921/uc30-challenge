@@ -109,24 +109,31 @@ const RESERVES_OK = ['few_months', 'six_plus'];
 const RENO_MED_HEAVY = ['medium', 'heavy'];
 const PARTNER_YES_MAYBE = ['yes', 'maybe'];
 const EQUITY_ANY = ['significant', 'some'];
+const CREDIT_WEAK = ['fair', 'below_620'];
+const CASH_CREATIVE = ['under_10k', '10_25k', '25_50k']; // low-to-mid cash → creative finance fits
+const CASH_NONE = 'under_10k';
 
 const has = (arr, v) => arr.includes(v);
 
 // ── Financing Options Library ──
-// unlock(a) → boolean; highlight(a) → boolean; booster: shown under "Boosters"
+// unlock(a) → boolean (the DISQUALIFIERS for each option live here); booster: shown under "Boosters".
+// Highlighting ("Top fit") is driven by the best-fit path's financeIds, NOT per-option, so the
+// recommended financing always stays coherent with the recommended strategy.
 const FINANCING = [
   {
     id: 'fha',
     name: 'FHA loan (owner-occupant, ~3.5% down)',
     desc: "A government-backed loan for a home you'll live in. As little as 3.5% down and easier qualifying — perfect for a first house hack. You live in one part (up to a fourplex) for at least a year.",
+    // Disqualified unless you'd live in the property.
     unlock: (a) => has(LIVE_YES_MAYBE, a.LIVE_IN),
-    tag: (a) => (a.CREDIT === 'below_620' ? 'possible — FHA can go lower; verify with a lender' : null),
-    note: (a) => 'Requires living there ~1 year.',
+    tag: (a) => (a.CREDIT === 'below_620' ? 'possible — FHA can go lower than other loans; verify with a lender' : null),
+    note: () => 'Requires living there ~1 year.',
   },
   {
     id: 'oo_conv',
     name: 'Owner-occupied conventional (3–5% down)',
     desc: "A standard loan for a home you'll live in — often 3–5% down with solid credit, and cheaper long-term than FHA. Also works on a 2–4 unit you'll live in.",
+    // Disqualified unless you'd live in AND have good+ credit.
     unlock: (a) => has(LIVE_YES_MAYBE, a.LIVE_IN) && has(CREDIT_GOOD_PLUS, a.CREDIT),
     note: () => 'Requires living there ~1 year.',
   },
@@ -134,60 +141,79 @@ const FINANCING = [
     id: 'conv_inv',
     name: 'Conventional investment loan (20–25% down)',
     desc: 'The standard rental-property loan — usually 20–25% down, 30-year fixed, the cheapest long-term money for a pure rental. Needs documentable income and good credit.',
+    // Disqualified by low cash, weak credit, or hard-to-document income.
     unlock: (a) => has(CASH_25K_PLUS, a.CASH) && has(CREDIT_GOOD_PLUS, a.CREDIT) && has(INCOME_DOCUMENTABLE, a.INCOME),
   },
   {
     id: 'dscr',
     name: 'DSCR loan',
     desc: "Qualifies on the property's rental income, not your personal income — ideal if you're self-employed or scaling. Slightly higher rate, usually 20–25% down.",
+    // Disqualified by low cash (still needs ~20–25% down) or weak credit.
     unlock: (a) => has(CASH_50K_PLUS, a.CASH) && has(CREDIT_GOOD_PLUS, a.CREDIT),
-    highlight: (a) => has(INCOME_SELF_LIMITED, a.INCOME),
   },
   {
     id: 'commercial',
     name: 'Commercial loan (5+ units / apartments)',
     desc: "For 5+ unit apartment buildings and larger properties. Qualifies mainly on the building's income (NOI), not yours — so the property's performance is what matters. Typically 20–35% down, often with balloon terms.",
+    // Disqualified without real capital and reserves.
     unlock: (a) => has(CASH_100K_PLUS, a.CASH) && has(RESERVES_OK, a.RESERVES),
   },
   {
     id: 'portfolio',
     name: 'Portfolio loan (local bank / credit union)',
-    desc: 'Held by a local bank or credit union instead of being sold off — flexible, relationship-based, and often the best fit for self-employed or growing investors.',
-    unlock: (a) => has(CREDIT_FAIR_PLUS, a.CREDIT),
-    highlight: (a) => has(INCOME_SELF_LIMITED, a.INCOME),
+    desc: 'Held by a local bank or credit union instead of being sold off — flexible, relationship-based, and often the best fit for self-employed or growing investors. Most want fair+ credit and some money down.',
+    // Disqualified by sub-620 credit or very low cash.
+    unlock: (a) => has(CREDIT_FAIR_PLUS, a.CREDIT) && !has(CASH_LOW, a.CASH),
   },
   {
     id: 'heloc',
     name: 'HELOC / cash-out refinance',
     desc: 'Turn equity in a home you already own into cash for a down payment. Combine it with any loan above to boost your buying power.',
+    // Disqualified without equity to tap.
     unlock: (a) => has(EQUITY_ANY, a.EQUITY),
     booster: true,
   },
   {
     id: 'seller_fin',
     name: 'Seller financing (creative)',
-    desc: 'The seller becomes the bank and you pay them over time — flexible down payment, rate, and terms. A powerful path when traditional financing is hard, or when you want creative terms.',
+    desc: 'The seller becomes the bank and you pay them over time — flexible down payment, rate, and terms. A powerful path when traditional financing is hard, or when you want creative terms. Always available with a motivated seller.',
     unlock: () => true,
-    highlight: (a) => a.CASH === 'under_10k' || a.CREDIT === 'below_620' || a.INCOME === 'limited',
+  },
+  {
+    id: 'subto',
+    name: 'Subject-to (creative, advanced)',
+    desc: "You take over the seller's existing mortgage and make the payments, while the loan stays in their name. Often little to no money down. Powerful when you have little cash — but advanced; do it with guidance and a clear agreement.",
+    // Surfaced for low-to-mid cash where creative finance does the heavy lifting.
+    unlock: (a) => has(CASH_CREATIVE, a.CASH),
+    note: () => 'Advanced — use proper paperwork and guidance.',
+  },
+  {
+    id: 'wrap',
+    name: 'Wraparound mortgage (creative, advanced)',
+    desc: "You create a new loan that 'wraps' the seller's existing one: you pay the seller, and they keep paying their bank. Lets you buy with flexible, low-money-down terms. Advanced — best with experienced help.",
+    unlock: (a) => has(CASH_CREATIVE, a.CASH),
+    note: () => 'Advanced — use proper paperwork and guidance.',
   },
   {
     id: 'private',
     name: 'Private money (creative)',
     desc: 'Borrowing from an individual instead of a bank — fast and flexible, often used to fund a rehab before refinancing into a long-term loan.',
+    // Most relevant when there is a rehab to fund or a partner/network to borrow from.
     unlock: (a) => has(RENO_MED_HEAVY, a.RENO) || has(PARTNER_YES_MAYBE, a.PARTNER),
   },
   {
     id: 'hard_money',
     name: 'Hard money (short-term rehab financing)',
     desc: 'Short-term, asset-based loans built for renovation projects. Fast and flexible but expensive — you refinance out once the work is done. Made for value-add / BRRRR.',
+    // Disqualified when there is no real rehab (it is rehab financing).
     unlock: (a) => has(RENO_MED_HEAVY, a.RENO),
   },
   {
     id: 'partnership_cap',
     name: 'Partnership capital (creative)',
     desc: 'Team up with someone who brings money and/or credit while you bring the work. A great way to do your first deal when your own cash, credit, or income is the limiting factor.',
+    // Disqualified without access to a partner.
     unlock: (a) => has(PARTNER_YES_MAYBE, a.PARTNER),
-    highlight: (a) => has(CASH_LOW, a.CASH) || has(['fair', 'below_620'], a.CREDIT) || a.INCOME === 'limited',
   },
 ];
 
@@ -225,9 +251,16 @@ const STRATEGIES = [
   },
   {
     id: 'seller_fin_acq',
-    name: 'Seller-financed acquisition',
-    desc: "Buy directly from a motivated seller who carries the financing. Lets you get creative on down payment and terms — often the path to a deal traditional financing can't touch.",
+    name: 'Seller-financed / creative acquisition',
+    desc: "Buy directly from a motivated seller who carries the financing — or take over their loan (subject-to / wrap). Lets you get creative on down payment and terms, often the path to a deal traditional financing can't touch. The main way to acquire with little or no money.",
     unlock: () => true,
+  },
+  {
+    id: 'wholesale',
+    name: 'Wholesaling / bird-dogging',
+    desc: "Find great deals and hand them to investors who have the money — by assigning the contract (wholesaling) or simply referring the lead (bird-dogging) — and earn a fee. No money or credit required. It's the fastest way to make cash, learn the market, and build the network and capital for your own deals.",
+    // Best path to start when cash/credit are the bottleneck.
+    unlock: (a) => has(CASH_LOW, a.CASH) || a.INCOME === 'limited',
   },
   {
     id: 'partnership',
@@ -237,64 +270,96 @@ const STRATEGIES = [
   },
 ];
 
-// ── Weak-resources helper (for best-fit decisions) ──
-const isWeakResources = (a) =>
-  has(CASH_LOW, a.CASH) && has(['fair', 'below_620'], a.CREDIT) && a.INCOME === 'limited';
+// Which non-booster financing options are actually unlocked for this profile
+function unlockedFinancingIds(a) {
+  return new Set(FINANCING.filter((f) => !f.booster && f.unlock(a)).map((f) => f.id));
+}
 
 // ── Best-Fit Path: first match wins ──
+// Each path returns the recommended STRATEGY *and* the coherent FINANCING for that strategy
+// (financeIds, in priority order). pick() guarantees we only recommend financing that's actually
+// unlocked, falling back to seller financing (always available) so we never recommend something
+// the person can't use — and we never pair, e.g., house hacking with seller financing.
 function computeBestFit(a) {
+  const unlocked = unlockedFinancingIds(a);
+  const pick = (preferred) => {
+    const avail = preferred.filter((id) => unlocked.has(id));
+    return avail.length ? avail : ['seller_fin'];
+  };
   const renoFlavor = has(RENO_MED_HEAVY, a.RENO) ? 'value-add' : 'turnkey';
+  const lowMoney = has(CASH_LOW, a.CASH);
 
-  // 1. House hacking
+  // 1. House hacking — the lowest-cash, best-terms beginner move. Pair with owner-occupant loans ONLY.
   if (has(LIVE_YES_MAYBE, a.LIVE_IN)) {
+    const fin = has(CREDIT_GOOD_PLUS, a.CREDIT) ? pick(['fha', 'oo_conv']) : pick(['fha']);
+    const creditAside = has(CREDIT_WEAK, a.CREDIT)
+      ? ' FHA is forgiving on credit, so it still works — and raising your score later opens cheaper conventional terms.'
+      : '';
     return {
+      kind: 'house_hack',
       title: 'Your best first move: House hacking',
       strategyId: 'house_hack',
-      why: `Living in the property for a year unlocks the lowest-cash, best-terms way into real estate. Buy a 2–4 unit with an FHA or owner-occupied conventional loan (as little as 3.5–5% down), live in one part, and let your tenants help cover the mortgage.${has(CASH_LOW, a.CASH) ? ' This is especially powerful for you — it keeps your required cash way down.' : ''}`,
+      financeIds: fin,
+      why: `Because you're open to living in the property for a year, you unlock the lowest-cash, best-terms way into real estate: an owner-occupant loan (FHA ~3.5% down, or conventional ~3–5% down) on a 2–4 unit. Live in one part, rent the rest, and your tenants help cover the mortgage.${lowMoney ? ' This is especially powerful for you — it keeps your required cash way down.' : ''}${creditAside}`,
     };
   }
-  // 2. Weak resources + partner → Partnership
-  if (isWeakResources(a) && has(PARTNER_YES_MAYBE, a.PARTNER)) {
+
+  // 2. Low/no money + a potential partner → Partnership (your hustle, their capital/credit).
+  if (lowMoney && has(PARTNER_YES_MAYBE, a.PARTNER)) {
     return {
+      kind: 'partnership',
       title: 'Your best first move: Partner up',
       strategyId: 'partnership',
-      why: 'Your own cash, credit, and income are thin right now — but you have a potential partner. Team up: they bring the money and/or credit, you bring the hustle of finding, analyzing, and managing the deal. It is the classic way to get your first deal done.',
+      financeIds: pick(['partnership_cap', 'seller_fin', 'conv_inv', 'dscr']),
+      why: "Your own cash is the main bottleneck right now — but you have a potential partner. Team up: they bring the money and/or credit, you bring the hustle of finding, analyzing, and managing the deal. With a partner's capital and credit behind the deal, you can use normal financing and split the result. It's the classic way to get a first deal done.",
     };
   }
-  // 3. Weak resources + no partner → Foundation-Building
-  if (isWeakResources(a) && a.PARTNER === 'no') {
+
+  // 3. Low/no money + no partner + won't live in → Start with little/no money (make cash + acquire creatively).
+  if (lowMoney && a.PARTNER === 'no') {
     return {
-      title: 'Your best first move: Build your foundation',
-      strategyId: 'foundation',
-      why: "You're not there yet on cash, credit, and income — and that's okay. Your fastest path is to build the foundation below over the next few months, then step into your first deal from strength. This is a plan, not a no.",
+      kind: 'no_money',
+      title: 'Your best first move: Start with little or no money',
+      strategyId: 'wholesale',
+      financeIds: pick(['seller_fin', 'subto', 'wrap']),
+      why: "You don't need money to start — you need a deal. Run two tracks at once: (1) make cash and learn the market now by wholesaling or bird-dogging — find great deals and hand them to investors who have the money, for a fee; and (2) acquire creatively from motivated sellers using seller financing or subject-to, which can need little to no money down. Use the income and network from track 1 to fund track 2. The plan at the bottom maps it out.",
     };
   }
-  // 4. Self-employed/limited income with capital → DSCR + small multi
+
+  // 4. Self-employed / hard-to-document income, with capital + good credit → DSCR + small multifamily.
   if (has(INCOME_SELF_LIMITED, a.INCOME) && has(CASH_50K_PLUS, a.CASH) && has(CREDIT_GOOD_PLUS, a.CREDIT)) {
     return {
+      kind: 'dscr',
       title: 'Your best first move: DSCR + small multifamily',
       strategyId: 'small_mf',
+      financeIds: pick(['dscr', 'portfolio', 'conv_inv']),
       why: 'Your income is strong but harder to document the traditional way — so qualify on the property instead. A DSCR loan looks at the rental income, not your tax returns, and pairs perfectly with a 2–4 unit for real cash flow.',
     };
   }
-  // 5. Strong capital + reserves → Commercial / larger multifamily
+
+  // 5. Strong capital + reserves → Commercial / larger multifamily.
   if (has(CASH_100K_PLUS, a.CASH) && has(RESERVES_OK, a.RESERVES)) {
     return {
+      kind: 'commercial',
       title: 'Your best first move: Commercial / larger multifamily',
       strategyId: 'commercial_mf',
-      why: 'You have the capital and reserves to go bigger. Commercial loans on 5+ unit buildings qualify on the property\'s income, so you can scale cash flow faster. Prefer to start smaller? A 2–4 unit is a great on-ramp.',
+      financeIds: pick(['commercial', 'conv_inv', 'dscr']),
+      why: "You have the capital and reserves to go bigger. Commercial loans on 5+ unit buildings qualify on the property's income, so you can scale cash flow faster. Prefer to start smaller? A 2–4 unit with a conventional or DSCR loan is a great on-ramp.",
     };
   }
-  // 6. Default → Small multifamily buy-and-hold w/ conventional investment loan
+
+  // 6. Default → Small multifamily buy-and-hold (financing matched to credit/income).
+  const defFin = has(CREDIT_GOOD_PLUS, a.CREDIT) && has(INCOME_DOCUMENTABLE, a.INCOME)
+    ? pick(['conv_inv', 'dscr', 'portfolio'])
+    : pick(['dscr', 'portfolio', 'conv_inv', 'seller_fin']);
   return {
-    title: `Your best first move: Small multifamily buy-and-hold${renoFlavor === 'value-add' ? ' (value-add)' : ' (turnkey)'}`,
+    kind: 'default',
+    title: `Your best first move: Small multifamily buy-and-hold (${renoFlavor === 'value-add' ? 'value-add' : 'turnkey'})`,
     strategyId: 'small_mf',
-    why: `A 2–4 unit with a conventional investment loan (~20–25% down) is the cleanest path to real cash flow with residential financing.${renoFlavor === 'value-add' ? ' Since you\'re open to renovation, look for a value-add deal you can force appreciation on.' : ' Target a turnkey property so you can start cash-flowing right away.'}`,
+    financeIds: defFin,
+    why: `A 2–4 unit is the cleanest path to real cash flow with residential financing — usually ~20–25% down on an investment loan.${renoFlavor === 'value-add' ? " Since you're open to renovation, look for a value-add deal you can force appreciation on." : ' Target a turnkey property so you can start cash-flowing right away.'}`,
   };
 }
-
-// ── Foundation-Building trigger (hardest profile) ──
-const triggersFoundation = (a) => has(CASH_LOW, a.CASH) && a.PARTNER === 'no' && a.LIVE_IN === 'no';
 
 export default function CapitalStrategyFinder({ onSave, existing, embedded, userId }) {
   const storageKey = userId ? `uc30_capital_strategy_${userId}` : null;
@@ -374,42 +439,75 @@ export default function CapitalStrategyFinder({ onSave, existing, embedded, user
     const a = answers;
     const bestFit = computeBestFit(a);
 
+    // Highlight + order financing by the recommended path's financeIds (keeps financing coherent
+    // with the recommended strategy — e.g. house hacking leads with FHA, never seller financing).
+    const recIndex = (id) => {
+      const i = bestFit.financeIds.indexOf(id);
+      return i === -1 ? 999 : i;
+    };
     const financing = FINANCING.filter(f => !f.booster && f.unlock(a)).map(f => ({
       ...f,
-      isHighlight: f.highlight ? f.highlight(a) : false,
+      isHighlight: bestFit.financeIds.includes(f.id),
       tagText: f.tag ? f.tag(a) : null,
       noteText: f.note ? f.note(a) : null,
     }));
-    // highlighted first, otherwise stable order
-    financing.sort((x, y) => (y.isHighlight ? 1 : 0) - (x.isHighlight ? 1 : 0));
+    financing.sort((x, y) => recIndex(x.id) - recIndex(y.id));
 
     const boosters = FINANCING.filter(f => f.booster && f.unlock(a));
 
     let strategies = STRATEGIES.filter(s => s.unlock(a)).map(s => ({ ...s }));
-    // best-fit strategy floats to top
     strategies.sort((x, y) => {
       const xb = x.id === bestFit.strategyId ? 1 : 0;
       const yb = y.id === bestFit.strategyId ? 1 : 0;
       return yb - xb;
     });
 
-    const showFoundation = bestFit.strategyId === 'foundation' || triggersFoundation(a);
+    const showFoundation = bestFit.kind === 'no_money';
 
+    // Is credit the ONE thing holding them back? (Everything else is ready.)
+    const creditOnlyWeak = has(CREDIT_WEAK, a.CREDIT)
+      && has(CASH_25K_PLUS, a.CASH)
+      && a.INCOME !== 'limited'
+      && has(RESERVES_OK, a.RESERVES);
+
+    // ── "Build this first" cautions (shown at the bottom) ──
     const buildFirst = [];
+
+    // Credit nudge — placed first when it's the only blocker (positive, specific framing).
+    if (creditOnlyWeak) {
+      buildFirst.push({
+        title: 'You\'re close — raise your credit to unlock the best loans',
+        text: a.CREDIT === 'below_620'
+          ? 'Your cash, income, and reserves are in good shape — credit is the main thing holding you back. Getting into the 620s–680s opens portfolio and DSCR options, and 680+/740+ unlocks the cheapest conventional rates. Work on it in parallel and your options improve fast.'
+          : 'You qualify for solid options today, but your credit is the one lever left. Pushing your score to 680+ (ideally 740+) drops your rate and opens the cheapest conventional and DSCR financing — a quick win worth chasing alongside your search.',
+      });
+    }
+
+    // Reserves risk — keep at the bottom. When there's no cushion, advise against buying yet.
     if (a.RESERVES === 'none') {
       buildFirst.push({
-        title: 'Build reserves before you buy',
-        text: 'A deal with no cushion is risky — see the Reserve Principle. House hacking is a great low-cash way to start safely while you build reserves.',
-      });
-    }
-    if (a.CREDIT === 'below_620') {
-      buildFirst.push({
-        title: 'Strengthen your credit in parallel',
-        text: 'Strengthening your credit will unlock better, cheaper financing — worth doing alongside everything else.',
+        title: 'Build safe reserves before you buy',
+        text: "This is the most important caution: never buy with no cushion. A single vacancy, repair, or surprise can sink a deal that has no reserves behind it — that's how beginners lose properties. Set aside a few months of expenses first. In the meantime you can still move forward without risking your own money — wholesale or bird-dog deals to investors who have cash, or partner with someone who brings the capital while you build your reserves.",
       });
     }
 
-    return { bestFit, financing, boosters, strategies, showFoundation, buildFirst, partnerUnlocked: has(PARTNER_YES_MAYBE, a.PARTNER) };
+    // General credit caution (when weak but not the single blocker, and not already covered above).
+    if (has(CREDIT_WEAK, a.CREDIT) && !creditOnlyWeak) {
+      buildFirst.push({
+        title: 'Strengthen your credit in parallel',
+        text: 'Better credit unlocks better, cheaper financing and more options. Whatever path you start with, work on your score alongside it — it pays off on every future deal.',
+      });
+    }
+
+    return {
+      bestFit,
+      financing,
+      boosters,
+      strategies,
+      showFoundation,
+      buildFirst,
+      partnerUnlocked: has(PARTNER_YES_MAYBE, a.PARTNER),
+    };
   }, [complete, JSON.stringify(answers)]);
 
   // ── RESULTS PAGE ──
@@ -552,6 +650,13 @@ function ResultsPage({ results, answers, onRestart, showMoreFinancing, setShowMo
         <p style={{ fontSize: 14, color: '#cfe', lineHeight: 1.7, margin: 0 }}>{bestFit.why}</p>
       </div>
 
+      {/* No-money starting plan — prominent, right under the best-fit card */}
+      {showFoundation && (
+        <div style={{ marginTop: 16 }}>
+          <FoundationPath answers={answers} />
+        </div>
+      )}
+
       {/* Financing */}
       {sectionTitle('Financing you can likely use', C.gold)}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -614,11 +719,10 @@ function ResultsPage({ results, answers, onRestart, showMoreFinancing, setShowMo
         </>
       )}
 
-      {/* Build This First / Foundation */}
-      {(buildFirst.length > 0 || showFoundation) && (
+      {/* Build This First — cautions (reserves, credit) */}
+      {buildFirst.length > 0 && (
         <>
           {sectionTitle('Build this first', C.gold)}
-          {showFoundation && <FoundationPath answers={answers} />}
           {buildFirst.map((b, i) => (
             <div key={i} style={{
               padding: '14px 18px', borderRadius: 12, marginBottom: 10,
@@ -686,15 +790,19 @@ function OptionCard({ name, desc, highlight, tag, note, color }) {
 }
 
 function FoundationPath({ answers }) {
+  // Action plan for the no-money profile: make cash + acquire creatively, in order of impact.
   const steps = [
-    { title: 'Build a savings runway', text: 'Set a target down-payment number and a date. Even a small, automatic monthly amount compounds into your first deal faster than you think.' },
-    { title: 'Open the door to house hacking', text: 'Living in a 2–4 unit for a year is the lowest-cash entry that exists — as little as 3.5% down. If you can get open to it, it changes everything.' },
+    { title: 'Make money now: wholesale or bird-dog', text: 'You can earn cash in real estate before you ever own a property. Find great deals and hand them to investors who have the money — assign the contract (wholesaling) or just refer the lead (bird-dogging) — and collect a fee. It needs no money or credit, and it builds the skills, market knowledge, and network you\'ll use on your own deals.' },
+    { title: 'Acquire creatively: seller financing, subject-to, wrap', text: 'Motivated sellers can carry the financing themselves, or let you take over their existing loan — often with little to no money down. These creative structures don\'t depend on a bank, so they\'re the main way to buy when cash and credit are tight.' },
+    { title: 'Partner up', text: 'You may have said you don\'t have a partner yet — so go build one. Bring deals, hustle, and what you learn from wholesaling to someone with capital or credit. A partner is one of the fastest ways to do a first deal before your own resources are ready.' },
+    { title: 'Build a savings runway', text: 'Set a target down-payment number and a date. Even a small automatic monthly amount — boosted by your wholesale income — compounds into your first down payment faster than you think.' },
   ];
-  if (has(['fair', 'below_620'], answers.CREDIT)) {
-    steps.push({ title: 'Repair / strengthen your credit', text: 'Better credit unlocks better, cheaper financing. Start now and it improves in parallel with everything else.' });
+  if (has(CREDIT_WEAK, answers.CREDIT)) {
+    steps.push({ title: 'Repair / strengthen your credit', text: 'Better credit unlocks better, cheaper financing later. Start now and it improves in parallel with everything else.' });
   }
-  steps.push({ title: 'Find a partner', text: 'A partner can bring the capital and credit while you bring the hustle — a proven way to do a first deal before your own resources are ready.' });
-  steps.push({ title: 'Explore seller financing', text: 'Motivated sellers can carry the financing with low or no money down — a creative path that does not depend on a bank.' });
+  if (answers.LIVE_IN === 'no') {
+    steps.push({ title: 'Reconsider house hacking', text: 'If you could live in a 2–4 unit for one year, it\'s the lowest-cash entry that exists — as little as 3.5% down with an owner-occupant loan. Even being open to it changes what\'s possible.' });
+  }
 
   return (
     <div style={{
@@ -702,11 +810,11 @@ function FoundationPath({ answers }) {
       background: 'rgba(72,199,142,0.05)', border: '1px solid rgba(72,199,142,0.22)',
     }}>
       <div style={{ fontSize: 14, fontWeight: 700, color: C.green, marginBottom: 6 }}>
-        Your Foundation-Building Path
+        Your No-Money Starting Plan
       </div>
       <p style={{ fontSize: 13, color: '#bbb', lineHeight: 1.6, marginBottom: 12 }}>
-        You're not there yet on cash, credit, or living-in options — and that's a starting line, not a stop sign.
-        Here's the clearest path forward:
+        Little cash, no partner lined up, and not looking to live in a property — that's a starting line, not a
+        stop sign. You don't need money to start; you need a deal and a little hustle. Here's the clearest path:
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {steps.map((s, i) => (
