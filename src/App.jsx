@@ -490,6 +490,7 @@ export default function App() {
           onAddContact={addContact}
           onAddFollowUp={addFollowUp}
           onSaveConfidenceSurvey={saveConfidenceSurvey}
+          onSaveComponentData={completeActivation}
         />
       </>
     );

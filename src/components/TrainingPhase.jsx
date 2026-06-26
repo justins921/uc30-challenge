@@ -73,6 +73,7 @@ export default function TrainingPhase({
   onAddContact,
   onAddFollowUp,
   onSaveConfidenceSurvey,
+  onSaveComponentData,
 }) {
   const [activeModuleId, setActiveModuleId] = useState(null);
   const [activePrincipleIndex, setActivePrincipleIndex] = useState(null);
@@ -357,6 +358,8 @@ export default function TrainingPhase({
             const { Component, label, icon, color } = cfg;
             const noop = () => {};
             const noopAsync = async () => {};
+            // Persist embedded-tool data to the user record so it syncs across devices
+            const handleSave = onSaveComponentData || noopAsync;
             return (
               <div style={{
                 marginBottom: 24, borderRadius: 12, overflow: 'hidden',
@@ -395,7 +398,7 @@ export default function TrainingPhase({
                 </button>
                 {componentOpen && (
                   <div style={{ padding: '0 16px 16px' }}>
-                    <Component onNext={noop} onBack={noop} onSave={noopAsync} embedded {...cfg.props} />
+                    <Component onNext={noop} onBack={noop} onSave={handleSave} embedded {...cfg.props} />
                   </div>
                 )}
               </div>

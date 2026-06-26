@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 
 /*
  * Capital & Strategy Finder
@@ -320,9 +320,22 @@ export default function CapitalStrategyFinder({ onSave, existing, embedded, user
   const answeredCount = Object.keys(answers).length;
   const complete = answeredCount === 8;
 
-  // Persist + bubble up whenever a complete set is reached
+  // Track whether the tool mounted already-complete (loaded from a prior save),
+  // so we don't fire a redundant write on open — only persist on a genuine change.
+  const mountedCompleteRef = useRef(complete);
+  const savedSigRef = useRef(undefined);
+
+  // Persist + bubble up whenever a complete set is reached (or changes)
   useEffect(() => {
     if (!complete) return;
+    const sig = JSON.stringify(answers);
+    // First pass for already-saved answers: mark as saved without re-writing
+    if (mountedCompleteRef.current && savedSigRef.current === undefined) {
+      savedSigRef.current = sig;
+      return;
+    }
+    if (savedSigRef.current === sig) return;
+    savedSigRef.current = sig;
     const payload = { answers, computedAt: new Date().toISOString() };
     if (storageKey) {
       try { localStorage.setItem(storageKey, JSON.stringify(payload)); } catch { /* ignore */ }

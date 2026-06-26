@@ -129,12 +129,40 @@ const supabaseStorage = {
     const row = toDbUpdateRow(updates);
     if (Object.keys(row).length === 0) return null;
 
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from('participants')
       .update(row)
       .eq('id', id)
       .select()
       .single();
+
+    // Resilience: if a newer optional column hasn't been migrated yet, the whole
+    // update is rejected. Strip the unknown column(s) and retry so other fields
+    // still save. (Run the matching SQL migration to enable full cross-device sync.)
+    if (error && (error.code === '42703' || error.code === 'PGRST204' ||
+        /column .* does not exist|could not find the .* column/i.test(error.message || ''))) {
+      const optionalCols = ['capital_strategy', 'confidence_surveys'];
+      const stripped = { ...row };
+      let removedAny = false;
+      for (const col of optionalCols) {
+        if (col in stripped && (error.message || '').includes(col)) { delete stripped[col]; removedAny = true; }
+      }
+      // If we couldn't pinpoint it from the message, strip all optional cols as a fallback
+      if (!removedAny) {
+        for (const col of optionalCols) { if (col in stripped) { delete stripped[col]; removedAny = true; } }
+      }
+      if (removedAny && Object.keys(stripped).length > 0) {
+        console.warn('updateParticipant: retrying without unmigrated column(s). Run the capital-strategy migration to enable cross-device sync.');
+        const retry = await supabase
+          .from('participants')
+          .update(stripped)
+          .eq('id', id)
+          .select()
+          .single();
+        data = retry.data;
+        error = retry.error;
+      }
+    }
 
     if (error) {
       console.error('updateParticipant error:', error);
@@ -606,6 +634,8 @@ function toDbRow(user) {
   if (user.marketResearchConfirmed) row.market_research_confirmed = true;
   if (user.marketResearchConfirmedAt) row.market_research_confirmed_at = user.marketResearchConfirmedAt;
   if (user.capitalConfirmation) row.capital_confirmation = user.capitalConfirmation;
+  if (user.capitalStrategy) row.capital_strategy = user.capitalStrategy;
+  if (user.confidence_surveys?.length > 0) row.confidence_surveys = user.confidence_surveys;
   if (user.offerCommitment != null) row.offer_commitment = user.offerCommitment;
   if (user.offerCommitmentSetAt) row.offer_commitment_set_at = user.offerCommitmentSetAt;
   if (user.stakesDeclaration) row.stakes_declaration = user.stakesDeclaration;
@@ -672,6 +702,9 @@ function toDbUpdateRow(updates) {
   if (updates.marketResearchConfirmed !== undefined) row.market_research_confirmed = updates.marketResearchConfirmed;
   if (updates.marketResearchConfirmedAt !== undefined) row.market_research_confirmed_at = updates.marketResearchConfirmedAt;
   if (updates.capitalConfirmation !== undefined) row.capital_confirmation = updates.capitalConfirmation;
+  if (updates.capitalStrategy !== undefined) row.capital_strategy = updates.capitalStrategy;
+  if (updates.confidence_surveys !== undefined) row.confidence_surveys = updates.confidence_surveys;
+  if (updates.confidenceSurveys !== undefined) row.confidence_surveys = updates.confidenceSurveys;
   if (updates.offerCommitment !== undefined) row.offer_commitment = updates.offerCommitment;
   if (updates.offerCommitmentSetAt !== undefined) row.offer_commitment_set_at = updates.offerCommitmentSetAt;
   if (updates.stakesDeclaration !== undefined) row.stakes_declaration = updates.stakesDeclaration;
@@ -746,6 +779,8 @@ function fromDbRow(row) {
     marketResearchConfirmed: row.market_research_confirmed || false,
     marketResearchConfirmedAt: row.market_research_confirmed_at || null,
     capitalConfirmation: row.capital_confirmation || null,
+    capitalStrategy: row.capital_strategy || null,
+    confidence_surveys: row.confidence_surveys || [],
     offerCommitment: row.offer_commitment || null,
     offerCommitmentSetAt: row.offer_commitment_set_at || null,
     stakesDeclaration: row.stakes_declaration || null,
