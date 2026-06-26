@@ -2171,20 +2171,41 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
     const current = overrides[editingModuleId] || {};
     const defaultMod = TRAINING_MODULES.find(m => m.id === editingModuleId);
     const overrideData = { ...current };
-    if (defaultMod && editTitle !== defaultMod.title) overrideData.title = editTitle;
-    if (defaultMod && editDescription !== defaultMod.description) overrideData.description = editDescription;
-    if (editPrinciples.length > 0) overrideData.principles = editPrinciples;
-    if (editKeyTerms.length > 0) overrideData.keyTerms = editKeyTerms;
-    if (editCompletionMessage) overrideData.completionMessage = editCompletionMessage;
-    const updated = {
-      ...trainingConfig,
-      moduleOverrides: {
-        ...overrides,
-        [editingModuleId]: overrideData,
-      },
+    const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+    // Only store a field as an override if it actually differs from the code default.
+    // Otherwise delete it so future code updates to that module flow through.
+    const setOrClear = (key, val, def) => {
+      if (def !== undefined && same(val, def)) delete overrideData[key];
+      else overrideData[key] = val;
     };
-    await onSetTrainingConfig(updated);
+    setOrClear('title', editTitle, defaultMod?.title);
+    setOrClear('description', editDescription, defaultMod?.description ?? '');
+    setOrClear('principles', editPrinciples, defaultMod?.principles);
+    setOrClear('keyTerms', editKeyTerms, defaultMod?.keyTerms);
+    setOrClear('completionMessage', editCompletionMessage, defaultMod?.completionMessage ?? '');
+    const nextOverrides = { ...overrides };
+    if (Object.keys(overrideData).length === 0) delete nextOverrides[editingModuleId];
+    else nextOverrides[editingModuleId] = overrideData;
+    await onSetTrainingConfig({ ...trainingConfig, moduleOverrides: nextOverrides });
     setModuleSaving(false);
+    setModuleSaved(true);
+    setTimeout(() => setModuleSaved(false), 3000);
+  };
+
+  // Clear a module's saved override so the live course uses the latest code version.
+  const clearModuleOverride = async (moduleId) => {
+    const nextOverrides = { ...overrides };
+    delete nextOverrides[moduleId];
+    await onSetTrainingConfig({ ...trainingConfig, moduleOverrides: nextOverrides });
+    const defaultMod = TRAINING_MODULES.find(m => m.id === moduleId);
+    if (defaultMod && editingModuleId === moduleId) {
+      setEditTitle(defaultMod.title);
+      setEditDescription(defaultMod.description || '');
+      setEditPrinciples(JSON.parse(JSON.stringify(defaultMod.principles || [])));
+      setEditKeyTerms(JSON.parse(JSON.stringify(defaultMod.keyTerms || [])));
+      setEditCompletionMessage(defaultMod.completionMessage || '');
+      setExpandedPrinciple(null);
+    }
     setModuleSaved(true);
     setTimeout(() => setModuleSaved(false), 3000);
   };
@@ -2499,7 +2520,43 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
           <button className="btn-secondary" onClick={() => setEditingModuleId(null)} style={{ padding: '12px 28px' }}>
             {moduleSaved ? 'Done' : 'Cancel'}
           </button>
+          {(() => {
+            const o = overrides[editingModuleId];
+            const hasContentOverride = o && Object.keys(o).some(k => k !== 'hidden');
+            return hasContentOverride ? (
+              <button
+                onClick={() => {
+                  if (window.confirm('Reset this module to the latest built-in version? This discards saved admin edits and shows the current code content in the course.')) {
+                    clearModuleOverride(editingModuleId);
+                  }
+                }}
+                style={{
+                  marginLeft: 'auto', padding: '12px 20px', borderRadius: 10, cursor: 'pointer',
+                  border: '1px solid rgba(240,165,0,0.3)', background: 'rgba(240,165,0,0.08)',
+                  color: '#f0a500', fontWeight: 700, fontSize: 13, fontFamily: "'DM Sans', sans-serif",
+                }}
+              >
+                Reset to Default
+              </button>
+            ) : null;
+          })()}
         </div>
+
+        {(() => {
+          const o = overrides[editingModuleId];
+          const hasContentOverride = o && Object.keys(o).some(k => k !== 'hidden');
+          return hasContentOverride ? (
+            <div style={{
+              marginTop: 14, padding: '12px 16px', borderRadius: 10,
+              background: 'rgba(240,165,0,0.05)', border: '1px solid rgba(240,165,0,0.2)',
+              fontSize: 12, color: '#caa', lineHeight: 1.6,
+            }}>
+              <strong style={{ color: '#f0a500' }}>This module is using a saved admin override.</strong> The
+              course shows this saved copy, not the latest built-in content. If new built-in updates aren't
+              appearing in the course, click <strong>Reset to Default</strong> to discard the override.
+            </div>
+          ) : null;
+        })()}
       </div>
     );
   }
@@ -2828,8 +2885,19 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
             </div>
 
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: mod.hidden ? '#555' : '#eee', marginBottom: 2 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: mod.hidden ? '#555' : '#eee', marginBottom: 2, display: 'flex', alignItems: 'center', gap: 8 }}>
                 {mod.title}
+                {(() => {
+                  const o = overrides[mod.id];
+                  const hasContentOverride = o && Object.keys(o).some(k => k !== 'hidden');
+                  return hasContentOverride ? (
+                    <span style={{
+                      fontSize: 9, fontWeight: 700, color: '#f0a500', letterSpacing: 0.3,
+                      background: 'rgba(240,165,0,0.12)', padding: '2px 7px', borderRadius: 4,
+                      textTransform: 'uppercase', flexShrink: 0,
+                    }}>Overrides code</span>
+                  ) : null;
+                })()}
               </div>
               <div style={{ fontSize: 11, color: '#666' }}>
                 {mod.comingSoon ? 'Coming soon' : mod.description || 'No description'}
@@ -2842,6 +2910,21 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
             </div>
 
             <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+              {(() => {
+                const o = overrides[mod.id];
+                const hasContentOverride = o && Object.keys(o).some(k => k !== 'hidden');
+                return hasContentOverride ? (
+                  <button onClick={() => {
+                    if (window.confirm(`Reset "${mod.title}" to the latest built-in version? This discards saved admin edits for this module and shows the current code content in the course.`)) {
+                      clearModuleOverride(mod.id);
+                    }
+                  }} style={{
+                    fontSize: 11, padding: '5px 12px', borderRadius: 6, cursor: 'pointer',
+                    border: '1px solid rgba(240,165,0,0.3)', background: 'rgba(240,165,0,0.08)',
+                    color: '#f0a500', fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
+                  }}>Reset</button>
+                ) : null;
+              })()}
               <button onClick={() => startEditingModule(mod)} style={{
                 fontSize: 11, padding: '5px 12px', borderRadius: 6, cursor: 'pointer',
                 border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)',
