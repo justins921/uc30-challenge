@@ -2407,11 +2407,273 @@ export const TRAINING_MODULES = [
     id: 'mod10',
     moduleNumber: 10,
     title: 'Seeing Hidden Value',
-    description: 'Spot the value others miss — the skill that makes great investors.',
-    principles: [],
-    keyTerms: [],
-    completionMessage: '',
-    comingSoon: true,
+    description: 'Train your eye to spot upside others walk right past — under-market rents, addable units, broken operations, untapped income, expense cuts, and financing plays — then verify it, price it, and capture it.',
+    principles: [
+      {
+        id: 'mod10_p1',
+        title: 'See in two stages',
+        content: 'Every property gets evaluated in two stages, and you keep them separate in your head:\n- **Stage 1 — Current performance.** What the property produces *today*, exactly as it sits: current rents, expenses, occupancy, condition, financing. This is reality.\n- **Stage 2 — Future opportunity.** What could realistically be improved: income, expenses, financing, physical, operations. This is potential.\n\nYou train your eye to *see* Stage 2 everywhere — that\'s the skill this module builds — but you only let it affect what you pay *after* you\'ve verified it (Part 3). See big; pay conservatively.',
+        questions: [
+          {
+            id: 'mod10_p1_q1',
+            text: 'The two stages of evaluating a property are:',
+            type: 'multiple_choice',
+            options: [
+              'Asking price and offer price',
+              'Current performance today, and verified future opportunity',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod10_p2',
+        title: 'You create the value, so you keep it',
+        content: 'The most important rule in value-add investing: **never pay for upside you haven\'t created.** When a seller says "you could raise the rents" or "you could add a unit," they\'re right — but that value doesn\'t exist yet, and *you* are the one who will create it with your plan, your money, and your risk. So you analyze and pay on today\'s performance, and the upside becomes *your* reward after closing. Seeing the value is the skill. Not paying for it is the discipline. You need both.',
+        questions: [
+          {
+            id: 'mod10_p2_q1',
+            text: 'When you spot real upside in a property, you should:',
+            type: 'multiple_choice',
+            options: [
+              'Pay the seller for it now, since you found it',
+              'Price the deal on today\'s numbers and capture the upside yourself after closing',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod10_p3',
+        title: 'The best opportunities are the ones only YOU can see',
+        content: 'Value depends on *your* skills, relationships, and resources. A contractor sees a cheap renovation where others see a money pit. Someone with a great property manager sees a fixable operation where others see chaos. Someone with lender relationships sees a financing play others can\'t access. This is your edge — lean into it. But keep it honest: **a value-add is only real if *you* can actually execute it.** "Someone could add units here" is worth nothing to you if you can\'t. Count the upside you can personally pull off, and let the rest go.',
+        questions: [
+          {
+            id: 'mod10_p3_q1',
+            text: 'A value-add opportunity is only worth counting if:',
+            type: 'multiple_choice',
+            options: [
+              'Any investor could theoretically do it',
+              'You can realistically execute it with your skills and resources',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod10_p4',
+        title: 'Under-market rents (the most common goldmine)',
+        content: 'This is the single most frequent hidden value, and often the biggest. Because value follows income, even $50–$100 per unit per month can transform both cash flow and the property\'s value.\n\n**How to recognize it:**\n- **The waitlist / instant-fill signal.** If a property has a waitlist, or units rent within a few days of hitting the market, the rent is too *low.* Strong demand at the current price is the market screaming that the price is below where it should be. This is one of the clearest signals in all of investing — most people read a fast lease-up as "good management" when it often means "under-rented."\n- **Rents below comparable units** — your market-rent research (Module 2) shows similar nearby units getting more.\n- **Long-term tenants who\'ve never had an increase** — owners leave good tenants alone for years, and the rent drifts far below market.\n- **An owner who "keeps rents low to avoid turnover"** — extremely common with tired or absentee landlords.\n- **Below-market leases about to expire** — a built-in reset opportunity.\n\n**How to capitalize:**\n- Raise to *verified* market rent on **turnover** (cleanest) or at **renewal** (with proper notice).\n- Make small, **value-justifying improvements** — paint, fixtures, hardware, appliances — so the new rent fills fast and feels fair.\n- **Burn off** deeply below-market leases as they expire rather than fighting current tenants.\n- Phase it. You don\'t have to do it all at once; a unit-by-unit reset compounds quickly.',
+        questions: [
+          {
+            id: 'mod10_p4_q1',
+            text: 'A property has a tenant waitlist and units rent within days. The most likely read is:',
+            type: 'multiple_choice',
+            options: [
+              'The property is simply well managed and priced right',
+              'The rents are below market — strong demand at this price means the price is too low',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod10_p4_q2',
+            text: 'The cleanest time to bring a unit to market rent is:',
+            type: 'multiple_choice',
+            options: [
+              'In the middle of a current tenant\'s lease',
+              'On turnover, or at renewal with proper notice',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod10_p5',
+        title: 'Add income through the physical property (bedrooms, units, ADUs)',
+        content: 'Sometimes the building itself can produce more than it does. Adding a **bedroom** is often the single best dollar-for-dollar move in real estate, because rent jumps meaningfully per bedroom for a relatively small cost.\n\n**How to recognize it:**\n- **Oversized units or inefficient layouts** — a large 2-bed with the square footage for a 3rd bedroom; an oversized living/dining that can be reconfigured; a den or office that can become a legal bedroom.\n- **Unused or convertible space** — basements, attics, oversized garages, or bonus rooms that could become living space or a separate unit.\n- **A large lot or extra land** — room for an ADU, an additional structure, or a future subdivision.\n- **Zoning that allows more density than is currently built** — always check what\'s *permitted,* not just what exists. A single-family on a lot zoned for two units is hidden value.\n\n**How to capitalize:**\n- **Add a bedroom** wherever the layout allows — usually the highest-ROI physical add.\n- **Convert** a basement, garage, or bonus space into a rentable unit or **ADU.**\n- Pursue **additional units or subdivision** where zoning and the numbers support it.\n- Always confirm it\'s **legal, permitted, and executable by you** before you count a dollar of it (Part 3).',
+        questions: [
+          {
+            id: 'mod10_p5_q1',
+            text: 'Often the highest dollar-for-dollar physical value-add is:',
+            type: 'multiple_choice',
+            options: [
+              'Adding a bedroom where the layout allows',
+              'Repainting the exterior',
+            ],
+            correctAnswer: 0,
+          },
+          {
+            id: 'mod10_p5_q2',
+            text: 'Before counting "I could add a unit in the basement," you must confirm:',
+            type: 'multiple_choice',
+            options: [
+              'That it\'s legal, permitted, and something you can actually execute',
+              'Only that the basement looks big enough',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod10_p6',
+        title: 'Add new income streams',
+        content: 'Beyond the rent itself, properties often have income sitting in plain sight, unclaimed.\n\n**How to recognize it:**\n- **Free parking** that could be reserved, covered, or paid — especially in dense areas.\n- **No on-site laundry**, or free laundry that could be coin/app operated.\n- **Storage potential** — garages, sheds, lockers, or basement storage that could be rented.\n- **Owner-paid utilities** — an opening to bill back or sub-meter (RUBS).\n- **Pets allowed but not charged** — pet rent and pet deposits.\n- **Unused land** on larger or commercial sites — RV/boat storage, vending, billboard or cell-tower leases.\n\n**How to capitalize:** Add the streams that fit your property and tenants — paid/reserved parking, laundry, storage rental, utility bill-backs or RUBS, pet rent. Each is small on its own; **stacked together they meaningfully raise NOI** (and therefore value).',
+        questions: [
+          {
+            id: 'mod10_p6_q1',
+            text: 'Which is an example of an untapped income stream?',
+            type: 'multiple_choice',
+            options: [
+              'Free parking and free on-site storage that could be rented',
+              'A fresh coat of paint',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod10_p7',
+        title: 'Fix the operation (the value-add nobody can see in photos)',
+        content: 'Frequently the *property* is fine — the *operation* is broken. This is the value-add most buyers miss, because you can\'t photograph it. A poorly run building with good bones is one of the best opportunities there is.\n\n**How to recognize it:**\n- **Vacancy higher than the market** with no good reason — that\'s usually bad management or marketing, not weak demand.\n- **High turnover** — tenants constantly leaving means money bleeding on make-readies and lost rent, almost always a management or tenant-quality problem.\n- **Deferred maintenance everywhere** — an owner who stopped caring; fixable issues driving up cost and driving out tenants.\n- **No late fees, weak screening, sloppy collections** — income left on the table and bad tenants invited in.\n- **An absentee or burned-out landlord** running it loosely — operational upside is almost guaranteed.\n- **Expenses out of line** with what a well-run version of the property should cost.\n\n**How to capitalize:** Install **professional management** or real systems; tighten **screening and collections**; enforce **late fees**; reduce turnover with better tenant relations and responsiveness; clear the **deferred maintenance** that\'s driving cost and vacancy. Better operations raise income *and* cut expenses at the same time — a double win that drops straight to NOI and value.',
+        questions: [
+          {
+            id: 'mod10_p7_q1',
+            text: 'A building has market-beating demand nearby but unusually high vacancy and turnover. The likely hidden value is:',
+            type: 'multiple_choice',
+            options: [
+              'A broken operation you can fix with better management',
+              'Nothing — high vacancy means weak demand',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod10_p8',
+        title: 'Cut expenses',
+        content: 'Every dollar of expense you remove is a dollar of NOI — which, again, raises value, not just cash flow. Expense value-adds are some of the safest because they\'re concrete and verifiable.\n\n**How to recognize it:**\n- **Insurance that looks high** for the property — often simply never shopped.\n- **Owner-paid utilities** that could be billed back or sub-metered.\n- **Repair bills inflated by deferred maintenance** — old systems and unaddressed leaks creating recurring cost.\n- **Property taxes that look over-assessed** relative to true value — sometimes appealable.\n- **Inefficient or over-staffed operations** on larger properties.\n\n**How to capitalize:** Shop insurance, bill back or sub-meter utilities, fix root-cause maintenance instead of symptoms, appeal an over-assessment, and streamline operations. Quiet, low-risk, and they compound.',
+        questions: [
+          {
+            id: 'mod10_p8_q1',
+            text: 'Cutting an expense is powerful because:',
+            type: 'multiple_choice',
+            options: [
+              'It only helps in the first year',
+              'Every dollar removed raises NOI, which raises both cash flow and value',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod10_p9',
+        title: 'Financing as a value-add',
+        content: 'The cheapest improvement often isn\'t on the property at all — it\'s in the loan. Better financing can lift your returns as much as a renovation, with no construction risk.\n\n**How to recognize it:** A seller who owns **free-and-clear** (open to carrying paper), an **assumable low-rate loan** from a few years back, or a **motivated seller** open to terms (Module 9).\n\n**How to capitalize:** Structure **seller financing**, **assume** the low-rate loan, or negotiate better terms — lower rate, longer amortization, lower down (Module 7). Most investors only look at the building; the ones who also look at the financing find value others completely miss.',
+        questions: [
+          {
+            id: 'mod10_p9_q1',
+            text: 'Financing can be a value-add because:',
+            type: 'multiple_choice',
+            options: [
+              'Better terms (seller finance, lower rate, assumable loan) can raise returns as much as a renovation',
+              'Loans never affect returns',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod10_p10',
+        title: 'Verify before you value it, and count the full cost',
+        content: 'Seeing the opportunity is half the job; **proving** it is the other half. Before any upside affects what you\'ll pay:\n- **Verify the income** — confirm market rents with comps, property managers, and rental data. Never "I think rents can go up."\n- **Verify the costs** — get real contractor bids for any work; use the quick repair-estimating tools and contractor ballpark script from **Module 2.** "$20K for $300 more rent" is a guess until someone who does the work confirms it.\n- **Verify the timeline** — and remember the work costs more than money: it costs **vacancy and holding costs** (mortgage, taxes, insurance) while the property isn\'t producing.\n\nThen put *all* of it into your **Cost to Make Rent Ready** (Module 2) — renovation plus vacancy plus holding costs — so your projected return is honest. Most investors underestimate this and inflate their own numbers.',
+        questions: [
+          {
+            id: 'mod10_p10_q1',
+            text: 'Before letting a value-add affect your offer, you should:',
+            type: 'multiple_choice',
+            options: [
+              'Trust the seller\'s estimate and move on',
+              'Verify the income with comps/PMs and the costs with real bids, then count vacancy and holding costs too',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod10_p11',
+        title: 'Decide your return rule before you negotiate',
+        content: 'Pick your standard *before* emotions enter:\n- **Conservative** — the property must hit your minimum cash-on-cash return *today,* as-is (biggest margin of safety).\n- **Value-add** — it can hit your return *after* a fully verified improvement plan.\n\nBoth are valid. What\'s dangerous is leaving it undecided, because then you\'ll start counting unverified upside mid-negotiation just to make the deal work. Choose your rule up front and hold it.',
+        questions: [
+          {
+            id: 'mod10_p11_q1',
+            text: 'The risk of not setting your return rule before negotiating is:',
+            type: 'multiple_choice',
+            options: [
+              'You\'ll talk yourself into counting unverified upside to justify the deal',
+              'There is no real risk',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod10_p12',
+        title: 'Handle upside in the negotiation (the Chandler Rule)',
+        content: 'You don\'t have to hide the upside — usually the seller raises it themselves. You can acknowledge it, and even share *some* of that future value to make a win-win. But the rule holds: **you analyze and pay based on what the property does today, not what it might do someday.** Work out the current rent, the verified future rent, the verified costs, the timeline, and from those the exact most you can pay while still hitting your return — *then* negotiate. You created the future value, so you keep most of it.',
+        questions: [
+          {
+            id: 'mod10_p12_q1',
+            text: 'When a seller points to the upside, you should:',
+            type: 'multiple_choice',
+            options: [
+              'Pay them for the future value they describe',
+              'Acknowledge it, but price the deal on today\'s performance',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod10_p13',
+        title: 'The Ultimate Test',
+        content: 'The question that keeps a value-add investor safe:\n\n*"If every value-add opportunity failed, would I still be okay owning this property?"*\n\nIf the answer is **no**, the deal is too speculative — you\'re buying a hope, not an investment. The best investors *create* upside; they never *depend* on it for survival. This is the top of the UC30 hierarchy from Module 1: survival first. Buy so the property stands on its own today, and let everything you\'ve learned to see in this module — the under-rents, the extra bedroom, the broken operation, the untapped income — become the reward you earn, not the lifeline you need.',
+        questions: [
+          {
+            id: 'mod10_p13_q1',
+            text: 'The Ultimate Test asks:',
+            type: 'multiple_choice',
+            options: [
+              'How much could I make if everything goes perfectly?',
+              'If every value-add failed, would I still be okay owning this property?',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod10_p13_q2',
+            text: 'The best investors treat upside as:',
+            type: 'multiple_choice',
+            options: [
+              'Something they depend on to survive',
+              'A reward they create, on top of a deal that already works',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+    ],
+    keyTerms: [
+      { term: 'Value follows income (NOI)', definition: 'In rentals — especially multifamily — a property\'s value is driven by its net operating income, so raising income or cutting expenses raises value, not just cash flow.' },
+      { term: 'NOI (Net Operating Income)', definition: 'Income after operating expenses but before debt service; the number that drives value.' },
+      { term: 'Under-market rent', definition: 'Rent below what the market would currently pay — often signaled by waitlists or near-instant lease-ups.' },
+      { term: 'Burn-off', definition: 'Letting deeply below-market leases expire and resetting to market on turnover rather than fighting current tenants.' },
+      { term: 'ADU (Accessory Dwelling Unit)', definition: 'An added living unit (basement, garage, or new structure) that creates new income.' },
+      { term: 'RUBS / sub-metering', definition: 'Methods of recovering owner-paid utility costs by billing tenants for their usage.' },
+      { term: 'Make-ready / turnover cost', definition: 'The cost and lost rent of preparing a unit for a new tenant — driven up by high turnover.' },
+      { term: 'Cost to Make Rent Ready', definition: 'The full cost of getting a property producing — renovation plus vacancy and holding costs.' },
+      { term: 'Conservative vs. value-add approach', definition: 'Whether a deal must hit your return today (conservative) or after a verified value-add plan (value-add) — decided before negotiating.' },
+      { term: 'The Ultimate Test', definition: 'The safety question — if every value-add failed, would you still be okay owning the property?' },
+    ],
+    completionMessage: 'Module 10 complete — and that\'s all of Foundations. You can now see a property the way the best investors do: the under-market rents hiding behind a waitlist, the bedroom or unit waiting in unused space, the income streams sitting unclaimed, the broken operation with good bones, the expenses begging to be cut, and the financing play nobody else looked for — and you know how to verify each one and price it so you capture the upside instead of paying for it. You\'ve finished the entire Foundations curriculum: return metrics, analysis, getting clear, financing, deal flow, offers, creative structure, negotiation, seller motivation, and hidden value. You have the knowledge. The next 30 days are about one thing — execution. Go find it, go create it, go get your deal.',
   },
 ];
 
