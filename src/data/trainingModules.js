@@ -2157,11 +2157,251 @@ export const TRAINING_MODULES = [
     id: 'mod9',
     moduleNumber: 9,
     title: 'Seller Problems & Motivation',
-    description: 'Identify what sellers actually need and structure wins for both sides.',
-    principles: [],
-    keyTerms: [],
-    completionMessage: '',
-    comingSoon: true,
+    description: 'The best deals come from solving a seller\'s problem — learn what creates motivation, how to find and gauge it, and how to turn it into a deal that genuinely helps everyone.',
+    principles: [
+      {
+        id: 'mod9_p1',
+        title: 'Problems create deals, not properties',
+        content: 'This is the single most important shift in this whole module:\n\nNew investors ask, *"What property can I buy?"*\nGreat investors ask, *"What problem can I solve?"*\n\nHere\'s why that changes everything. If there were no problems — no stress, no urgency, no motivation — most sellers would simply keep their property. **The deal exists because of the problem.** And the bigger the problem, the bigger the opportunity often becomes. A **motivated seller** is one whose reason to sell outweighs getting top dollar — they need speed, relief, certainty, or a problem solved. That motivation is what makes a below-market price or great terms possible. With no motivation, there\'s no discount. So stop hunting for cheap houses and start hunting for problems you can solve.',
+        questions: [
+          {
+            id: 'mod9_p1_q1',
+            text: 'Great investors primarily ask:',
+            type: 'multiple_choice',
+            options: [
+              '"What property can I buy?"',
+              '"What problem can I solve?"',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod9_p1_q2',
+            text: 'Why is motivation the key to a great price?',
+            type: 'multiple_choice',
+            options: [
+              'Without a real reason to sell, there\'s no discount',
+              'Motivated sellers always own the nicest properties',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod9_p2',
+        title: 'The problems that create motivation',
+        content: 'Motivation comes from a situation where being *done* is worth more than the last dollar. The common ones:\n- **Financial distress** — behind on payments, facing foreclosure, liens or debt piling up.\n- **Life events** — divorce, a death and an inherited property, a job relocation, health changes, aging out of ownership.\n- **Tired landlords** — burned out by bad tenants, deferred maintenance, or managing from a distance.\n- **Vacant or distressed property** — sitting empty and costing money every month, or with code/repair problems the owner can\'t face.\n- **Time pressure** — needs to move now, carrying two mortgages, a deadline of some kind.\n- **Inherited / out-of-state owners** — heirs who don\'t want the property and just want it handled.\n\nIn every one of these, the seller\'s real need isn\'t "maximum price" — it\'s relief, speed, or simplicity. That\'s the opening.',
+        questions: [
+          {
+            id: 'mod9_p2_q1',
+            text: 'What do the common motivated-seller situations have in common?',
+            type: 'multiple_choice',
+            options: [
+              'The property is always in terrible condition',
+              'Being done — relief, speed, or simplicity — matters to the seller more than the last dollar',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod9_p3',
+        title: 'Motivation is about the seller, not the property',
+        content: 'This reframes how you hunt. A beautiful, well-kept property can have a highly motivated seller (a clean divorce, a fast relocation). An ugly, run-down property can have a completely unmotivated one (an owner happy to wait). **Don\'t judge the deal by the house — judge it by the seller\'s reason and timeline.** Beginners drive past nice homes assuming there\'s no deal there, and chase ugly ones with no motivated seller attached. Train yourself to look past the property and ask: *what\'s the seller\'s situation?* That\'s where the deal lives.',
+        questions: [
+          {
+            id: 'mod9_p3_q1',
+            text: 'Whether a deal exists depends most on:',
+            type: 'multiple_choice',
+            options: [
+              'How run-down the property looks',
+              'The seller\'s situation and motivation',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod9_p4',
+        title: 'How to find motivated sellers',
+        content: 'Motivated sellers rarely sit on-market at full price waiting for you — you go find them, mostly through the off-market lanes from Module 5. Aim your chosen lane at situations *likely* to contain motivation:\n- **Direct mail** to lists that skew motivated — absentee/out-of-state owners, pre-foreclosure, probate, tired landlords, long-time high-equity owners.\n- **Driving for dollars** — visibly distressed or neglected properties.\n- **Networking** — agents, attorneys, and property managers who hear about divorces, deaths, and burned-out owners before anyone else.\n- **FSBO & expired listings** — owners already signaling they want out.\n\nPick one or two lanes (Module 5) and work them consistently. The point isn\'t volume for its own sake — it\'s getting in front of enough situations that real motivation surfaces.',
+        questions: [
+          {
+            id: 'mod9_p4_q1',
+            text: 'The best place to find motivated sellers is usually:',
+            type: 'multiple_choice',
+            options: [
+              'On-market listings at full asking price',
+              'Off-market lanes aimed at likely-motivated situations (absentee, pre-foreclosure, tired landlords, probate)',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod9_p5',
+        title: 'Read motivation off the listing',
+        content: 'You can spot likely motivation before a single conversation, just by reading a listing closely. Most sellers never write "I\'m motivated" — they leave clues:\n- **Long days on market** — a property listed 7 days has plenty of attention; one sitting 180+ days often has a frustrated, tired seller.\n- **Multiple price reductions** — every reduction tells a story. The seller has already shown they\'re willing to move; repeated cuts often signal growing frustration.\n- **Vacant property** — vacancy costs the owner every month in payments, utilities, and insurance, which creates pressure.\n- **Needs work or poor marketing** — dark photos, few photos, a weak description, or missing rent numbers scare off retail buyers and leave the property overlooked.\n\nThat last one is the key question to train yourself on: **is the property bad, or is the marketing bad?** Investors constantly skip good properties because they were presented poorly. None of these clues *guarantee* a deal — they give you a reason to investigate and reach out while other buyers scroll past.',
+        questions: [
+          {
+            id: 'mod9_p5_q1',
+            text: 'A property listed for 200+ days with multiple price reductions is worth a closer look because:',
+            type: 'multiple_choice',
+            options: [
+              'Long market time and price cuts often signal a frustrated, more flexible seller',
+              'It\'s guaranteed to be a great deal',
+            ],
+            correctAnswer: 0,
+          },
+          {
+            id: 'mod9_p5_q2',
+            text: 'When a listing has terrible photos and a weak description, you should ask:',
+            type: 'multiple_choice',
+            options: [
+              'Is the property actually bad, or is just the marketing bad?',
+              'Nothing — bad photos always mean a bad property',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod9_p6',
+        title: 'Recognize the signs of motivation',
+        content: 'Once you\'re talking to a seller, read the level of motivation. Use discovery questions — *why are you selling, what\'s your ideal timeline, what matters most about how this goes* — and listen for the signals:\n- **Urgency** — "I need to be out by..." or any real deadline.\n- **Flexibility** — openness on price, or willingness to consider terms.\n- **A problem mentioned** — divorce, a job, tenants, an inherited house, money pressure.\n- **Emotional relief language** — wanting to just be *done* with it.\n- **Neglect** — deferred maintenance or a vacant property they\'ve stopped caring for.\n\nThe more of these you hear, the more motivated the seller — and the more room there is to build a deal that helps them and works for you. No signals? It\'s likely a low-motivation seller; note it and follow up later (Principle 11).',
+        questions: [
+          {
+            id: 'mod9_p6_q1',
+            text: 'A strong sign of a motivated seller is:',
+            type: 'multiple_choice',
+            options: [
+              'They mention a real deadline or a problem and just want to be done',
+              'They have unlimited time and no reason to sell',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod9_p7',
+        title: 'Motivation has levels: the Seller Motivation Pyramid',
+        content: 'Not all motivation is equal. Picture four levels, from shallow to deep:\n- **Level 1 — Interested:** "I might sell someday."\n- **Level 2 — Considering:** "I\'m thinking about selling."\n- **Level 3 — Motivated:** "I want to sell."\n- **Level 4 — Problem-Solving:** "I need a solution."\n\nThe deeper you go, the better the opportunity. **Most great deals happen at Level 4**, where the seller has a real problem they need solved — not just a vague interest. Two things move a seller down the pyramid: **time** (the problem deepens) and the **severity** of the problem itself. So as you talk to sellers, gauge two things at once: *what level are they at,* and *how serious is the problem?* A serious problem at Level 4 is where the best deals live. A mild interest at Level 1 is a follow-up, not a deal yet — so you invest your time accordingly.',
+        questions: [
+          {
+            id: 'mod9_p7_q1',
+            text: 'Where do most great deals happen on the Seller Motivation Pyramid?',
+            type: 'multiple_choice',
+            options: [
+              'Level 1 — "I might sell someday"',
+              'Level 4 — "I need a solution"',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod9_p7_q2',
+            text: 'Beyond what level a seller is at, you should also gauge:',
+            type: 'multiple_choice',
+            options: [
+              'How serious their problem is',
+              'How nice the property looks',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod9_p8',
+        title: 'Solve the problem, don\'t exploit it',
+        content: 'This is the mindset that both wins more deals *and* keeps you on the right side of the line: **you are there to solve a real problem, not to prey on someone\'s desperation.** A seller in a tough spot can feel which one you are within minutes. When you genuinely help — a fast, certain close for someone facing foreclosure; taking a headache property off a worn-out landlord; a fair, simple deal for grieving heirs — you create a true win. You\'ll close more, because people deal with someone they trust. And you build the reputation (the go-to buyer, Module 5) that brings the *next* deals to you.\n\nPredatory investors who squeeze desperate people get a short-term win and a long-term bad name that follows them. Help first, structure second. The best investors are problem-solvers people are *glad* they called.',
+        questions: [
+          {
+            id: 'mod9_p8_q1',
+            text: 'The right mindset with a distressed seller is:',
+            type: 'multiple_choice',
+            options: [
+              'Press their desperation for the lowest possible price',
+              'Solve their real problem honestly — it wins more deals and builds your reputation',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod9_p9',
+        title: 'Build a win-win (and keep it a win for you)',
+        content: 'The best deals are never one-sided. Before you ever talk price, run two quick checks.\n\nFirst, the **Win-Win Framework.** Literally fill in two boxes:\n- **Seller wins by:** ___\n- **Buyer wins by:** ___\n\nIf both boxes are strong, you likely have a great deal. If one side is weak, keep working the structure until both are strong — or walk away.\n\nSecond, the **Problem-Solver questions.** Run these *before* discussing price:\n- What problem are they trying to solve?\n- How serious is that problem?\n- What would their ideal solution look like?\n- Can I create a structure that solves it?\n- **Does that structure still fit my criteria?**\n\nNotice that last question. A win-win still has to be a win for *you* — it must fit your buy box and hit your returns. Solving the seller\'s problem at the cost of your own criteria isn\'t a win-win; it\'s a bad deal wrapped in a good story. The goal is a structure where the seller gets what they truly need and you still get a deal you\'d happily own.',
+        questions: [
+          {
+            id: 'mod9_p9_q1',
+            text: 'In the Win-Win Framework, you have a strong deal when:',
+            type: 'multiple_choice',
+            options: [
+              'Only the seller wins',
+              'Both "seller wins by" and "buyer wins by" are strong',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod9_p9_q2',
+            text: 'The final Problem-Solver question — "does it still fit my criteria?" — exists because:',
+            type: 'multiple_choice',
+            options: [
+              'A win-win still has to be a win for you',
+              'Your criteria stop mattering once the seller is happy',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod9_p10',
+        title: 'Match your solution to their problem',
+        content: 'Once you know the problem and you\'ve confirmed it can be a win for both sides, structure the deal to solve it — this is exactly where your creative tools from Module 7 come in:\n- **Needs cash fast / foreclosure** → a fast, certain cash close that stops the bleeding.\n- **Wants top price, not in a hurry** → full price with seller financing at great terms (Module 7) — they get their number, you get cash flow.\n- **Tired landlord** → buy it as-is, take on the tenants and repairs, close quickly so they\'re simply done.\n- **Inherited / out-of-state** → handle everything and make it effortless; convenience is the thing they value.\n\nThe motivation tells you which structure to lead with — and which option to put first in your multiple-offer menu (Module 8). You\'re not selling a price; you\'re offering the solution to *their* specific problem.',
+        questions: [
+          {
+            id: 'mod9_p10_q1',
+            text: 'After you understand a seller\'s problem, you should:',
+            type: 'multiple_choice',
+            options: [
+              'Offer everyone the same single cash price',
+              'Structure the deal — cash, terms, as-is, convenience — to solve their specific problem',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod9_p11',
+        title: 'Follow up, because motivation grows over time',
+        content: 'A seller who\'s a "no" today can become motivated in three months, when the problem deepens — the missed payments pile up, the bad tenant trashes the unit, the inherited house keeps draining money from out of state. Remember the Pyramid (Principle 7): time moves sellers *down* toward the problem-solving level. This is why **cold follow-ups** (Module 5) are where so many of the best deals actually come from. Stay in touch kindly and consistently, and be the first person they call when their motivation finally tips. Most investors contact a seller once and quit; the ones who patiently follow up catch the deal the moment it ripens. A "not now" is rarely a "never" — it\'s a "follow up later."',
+        questions: [
+          {
+            id: 'mod9_p11_q1',
+            text: 'Why does follow-up matter so much with sellers?',
+            type: 'multiple_choice',
+            options: [
+              'Sellers never change their minds, so it\'s just persistence for its own sake',
+              'Motivation grows as problems deepen, so a "no" today often becomes a deal later',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+    ],
+    keyTerms: [
+      { term: 'Motivation', definition: 'A seller\'s real reason to sell that outweighs getting top dollar — the engine of every below-market deal.' },
+      { term: 'Seller Motivation Pyramid', definition: 'The four levels of motivation — Interested, Considering, Motivated, Problem-Solving — with the best deals at the Problem-Solving level.' },
+      { term: 'Win-Win Framework', definition: 'A quick test where you fill in "seller wins by ___" and "buyer wins by ___"; a strong deal has both.' },
+      { term: 'Problem-Solver questions', definition: 'The five questions to run before discussing price — what problem, how serious, ideal solution, can I structure it, and does it still fit my criteria.' },
+      { term: 'Days on market', definition: 'How long a property has been listed; long days on market can signal a frustrated, more flexible seller.' },
+      { term: 'Pre-foreclosure', definition: 'The period after an owner falls behind on payments but before the lender completes foreclosure — a common source of motivation.' },
+      { term: 'Foreclosure', definition: 'The legal process by which a lender repossesses a property after the owner fails to pay; its threat creates urgency.' },
+      { term: 'Probate', definition: 'The legal process of settling a deceased person\'s estate, which often includes property the heirs want to sell.' },
+      { term: 'Absentee / out-of-state owner', definition: 'An owner who doesn\'t live near the property — often more open to selling for convenience.' },
+      { term: 'Distressed property', definition: 'A property that\'s neglected, vacant, or costing the owner money — frequently attached to a motivated seller.' },
+      { term: 'Tired landlord', definition: 'An owner worn out by tenants, maintenance, or distance, who often values being done over the last dollar.' },
+      { term: 'As-is purchase', definition: 'Buying a property in its current condition, with the buyer taking on the repairs — a convenience many motivated sellers will trade price for.' },
+    ],
+    completionMessage: 'Module 9 complete. You now understand the core shift — solve problems, don\'t chase properties — and that motivation, not the property, is the source of every great deal. You know the situations that create motivation, how to find it, how to read it off a listing and in conversation, how to gauge its depth with the Seller Motivation Pyramid, how to solve a seller\'s problem honestly instead of exploiting it, how to build a true win-win that still fits your criteria, how to match your structure to their specific need, and why patient follow-up catches the deals everyone else quits on. Next: seeing the hidden value in a property — how to spot upside others walk right past.',
   },
   {
     id: 'mod10',
