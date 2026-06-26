@@ -23,6 +23,11 @@ const TOOLS = [
     icon: '🧭',
     component: CapitalStrategyFinder,
     leadGen: true,
+    gate: {
+      headline: 'Get your personalized Capital & Strategy plan',
+      subcopy: "Enter your email and we'll unlock your results — the financing you can likely use, the strategies open to you, and your best-fit first move.",
+      button: 'Get My Results',
+    },
   },
   {
     id: 'rental-calculator',
@@ -105,10 +110,10 @@ function EmailGate({ tool, onUnlock }) {
         background: 'rgba(233,69,96,0.04)', border: '1px solid rgba(233,69,96,0.15)',
       }}>
         <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>
-          Enter your email to access this tool
+          {tool.gate?.headline || 'Enter your email to access this tool'}
         </div>
         <p style={{ color: '#777', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
-          Free to use. We'll also send you real estate investing resources.
+          {tool.gate?.subcopy || "Free to use. We'll also send you real estate investing resources."}
         </p>
         <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 8, maxWidth: 400, margin: '0 auto' }}>
           <input
@@ -135,7 +140,7 @@ function EmailGate({ tool, onUnlock }) {
               opacity: submitting ? 0.7 : 1,
             }}
           >
-            {submitting ? 'Unlocking...' : 'Unlock Tool'}
+            {submitting ? 'Unlocking...' : (tool.gate?.button || 'Unlock Tool')}
           </button>
         </form>
         {error && (
