@@ -944,6 +944,33 @@ export const TRAINING_MODULES = [
         ],
       },
       {
+        id: 'mod4_p3a',
+        title: 'Coordinate your taxes with your financing',
+        content: 'One of the smartest conversations an investor can have is a three-way conversation between you, your accountant, and your lender. Here\'s the trap many investors fall into: they work hard every year to make their taxable income look as *low* as possible to save on taxes — then they go to qualify for a loan, and the lender sees that low income and won\'t approve them. They saved a little on taxes and lost the ability to buy.\n\nThe goal isn\'t to minimize taxes. The goal is to maximize long-term wealth. Before you make aggressive tax moves, ask the question that ties it together: *"How will this affect my ability to get financing?"* Your accountant and your lender should be working from the same plan, not pulling in opposite directions.',
+        questions: [
+          {
+            id: 'mod4_p3a_q1',
+            text: 'An investor aggressively minimizes their taxable income every year, then can\'t qualify for a loan. The lesson is:',
+            type: 'multiple_choice',
+            options: [
+              'Lenders don\'t look at tax returns',
+              'Tax strategy and financing strategy have to be planned together',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod4_p3a_q2',
+            text: 'The real goal behind coordinating taxes and financing is to:',
+            type: 'multiple_choice',
+            options: [
+              'Pay the least tax possible every year',
+              'Maximize long-term wealth, not just minimize this year\'s taxes',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
         id: 'mod4_p4',
         title: 'Don\'t forget reserves and seasoning',
         content: 'Two things beginners overlook and lenders care about:\n- **Reserves** — lenders often want to see several months of mortgage payments sitting in the bank *after* you close. Showing up with exactly enough to close (and nothing left) is a red flag.\n- **Seasoning** — some lenders want funds or ownership to have been in place for a certain period (often a few months) before they\'ll lend on or refinance a property. It prevents last-minute shuffled money.\n\nPlan for both: keep reserves separate and untouched, and don\'t expect to refinance the day after you buy.',
@@ -974,6 +1001,33 @@ export const TRAINING_MODULES = [
               'Before you start making offers',
             ],
             correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod4_p5a',
+        title: 'Protect your pre-approval until you close',
+        content: 'Getting pre-approved is not the finish line — it\'s a status you have to *protect* all the way to closing. Lenders re-check your finances before funding, and a single move can blow up an approved loan. Once you\'re pre-approved, until the deal closes, avoid:\n- Opening new credit cards or lines of credit\n- Financing a car or taking on any new debt\n- Making large, unexplained deposits into your accounts\n- Changing jobs unnecessarily\n\nWhat feels like a small, normal financial decision can quietly disqualify you right before closing. The rule is simple: once you\'re pre-approved, keep your financial picture boring and stable until the keys are in your hand.',
+        questions: [
+          {
+            id: 'mod4_p5a_q1',
+            text: 'After you\'re pre-approved, which action is most likely to create a financing problem?',
+            type: 'multiple_choice',
+            options: [
+              'Keeping your savings where they are',
+              'Financing a new vehicle before closing',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod4_p5a_q2',
+            text: 'The right approach between pre-approval and closing is to:',
+            type: 'multiple_choice',
+            options: [
+              'Keep your finances stable and avoid new debt or big unexplained deposits',
+              'Use your approval as a green light to make other big purchases',
+            ],
+            correctAnswer: 0,
           },
         ],
       },
@@ -1021,6 +1075,33 @@ export const TRAINING_MODULES = [
           },
         ],
       },
+      {
+        id: 'mod4_p8',
+        title: 'The 10-loan scaling strategy',
+        content: 'Here\'s a powerful tool most beginners don\'t know about: many lenders allow a single investor to hold up to **10 financed conventional loans** at once. Conventional financing is usually the cheapest, longest-term money available — so those 10 slots are one of the best wealth-building runways a small investor has.\n\nIt gets stronger if you\'re married. In many cases each spouse can qualify for their own set of financed conventional loans — meaning a couple can potentially access close to **20** between them. That\'s a large portfolio built on the cheapest financing available, before you ever need to move into DSCR, portfolio, or commercial loans.\n\nGuidelines change and vary by lender, so always confirm the current limits with your lender. But knowing this runway exists should shape how you sequence your financing: use your conventional slots strategically while they\'re available, rather than burning them on the wrong properties.',
+        questions: [
+          {
+            id: 'mod4_p8_q1',
+            text: 'Roughly how many financed conventional loans can many lenders allow one investor to hold?',
+            type: 'multiple_choice',
+            options: [
+              'Up to 10',
+              'Only 1',
+            ],
+            correctAnswer: 0,
+          },
+          {
+            id: 'mod4_p8_q2',
+            text: 'Why are conventional loan "slots" worth using strategically?',
+            type: 'multiple_choice',
+            options: [
+              'They\'re usually the cheapest, longest-term financing available',
+              'They\'re the only loans that exist',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
     ],
     keyTerms: [
       { term: 'Conventional loan', definition: 'A standard bank mortgage (Fannie/Freddie) with the best rates and long fixed terms; needs good credit, documented income, and a sizable down payment.' },
@@ -1034,6 +1115,7 @@ export const TRAINING_MODULES = [
       { term: 'Points', definition: 'An upfront fee on a loan, each point equal to 1% of the loan amount (common with hard money).' },
       { term: 'ARM (adjustable-rate mortgage)', definition: 'A loan whose interest rate can change over time, so the payment can rise.' },
       { term: 'Bankable', definition: 'Being the kind of borrower lenders readily approve — strong credit, low DTI, solid reserves, clean documentation.' },
+      { term: 'The 10-loan strategy', definition: 'The ability for one investor to hold up to ~10 financed conventional loans at once (potentially ~20 for a married couple), a key runway for scaling on the cheapest financing available.' },
     ],
     completionMessage: 'Module 4 complete. You know the main loan types, what makes you bankable, the reserves and seasoning lenders look for, who to line up before you need them, how to use leverage safely, and how to match the loan to your strategy. Next: deal flow and building the team that brings you deals.',
   },
@@ -1275,6 +1357,33 @@ export const TRAINING_MODULES = [
         ],
       },
       {
+        id: 'mod6_p2a',
+        title: 'Know your three numbers: Ideal, Target, and Maximum',
+        content: 'Before you ever submit an offer, you should know three specific numbers. Getting clear on these is what lets you negotiate calmly instead of emotionally.\n- **Ideal price** — the price you\'d *love* to get it at. If they accepted, you\'d be thrilled. This is often where you start.\n- **Target price** — the price you realistically think the deal will land at. This is usually where negotiations settle.\n- **Maximum price** — the highest price you can pay and still hit your required return. This is your walk-away line.\n\nThe most important rule about these numbers: **you decide your maximum before negotiations begin, never during them.** Never raise your max because you\'re excited, because there\'s another buyer, or because you\'ve fallen for the property. The numbers drive the decision, not your emotions. Knowing all three means you always know exactly where you\'re starting, where you\'re aiming, and where you walk away.',
+        questions: [
+          {
+            id: 'mod6_p2a_q1',
+            text: 'The three numbers you should know before submitting an offer are:',
+            type: 'multiple_choice',
+            options: [
+              'List price, tax value, and market value',
+              'Ideal price, target price, and maximum price',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod6_p2a_q2',
+            text: 'When should you determine your maximum price?',
+            type: 'multiple_choice',
+            options: [
+              'Before negotiations begin, based on your numbers',
+              'During negotiations, based on how you feel',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
         id: 'mod6_p3',
         title: 'An offer is a package of terms, not just a price',
         content: 'Beginners think an offer is one number. It\'s actually a bundle of levers, and price is only one of them:\n- **Price** — what you\'ll pay.\n- **Earnest money** — your good-faith deposit (Principle 5).\n- **Closing date / timeline** — how fast you\'ll close.\n- **Contingencies** — your inspection, financing, and appraisal off-ramps.\n- **Financing terms** — how you\'re paying (loan type, or seller terms).\n- **Possession & what\'s included** — when you take over, and what conveys.\n\nThis matters because you can win deals on **terms** even when you can\'t move on **price.** A fast, clean close, a flexible possession date, or a larger deposit can make your offer the one a seller takes — without overpaying. Think in the whole package, not just the number.',
@@ -1430,6 +1539,7 @@ export const TRAINING_MODULES = [
       { term: 'Title company / escrow', definition: 'The neutral party that holds the deposit, confirms clear title, and handles the closing.' },
       { term: 'Clear title', definition: 'Confirmation that the seller truly owns the property and can sell it free of undisclosed claims or liens.' },
       { term: 'Addendum', definition: 'An add-on document that changes or adds terms to the contract.' },
+      { term: 'Ideal / Target / Maximum price', definition: 'The three numbers to set before any offer — the price you\'d love (ideal), the price you expect to land (target), and your walk-away ceiling (maximum), set in advance and never crossed.' },
     ],
     completionMessage: 'Module 6 complete. You know that making offers is the job, that an offer with contingencies is never a trap, that an offer is a package of terms you can flex, how earnest money and due diligence protect you, and how to paper a deal correctly on-market or FSBO. Next: creative deal structure — the tools to make a deal work when a standard offer won\'t.',
   },
@@ -1538,6 +1648,60 @@ export const TRAINING_MODULES = [
         ],
       },
       {
+        id: 'mod7_p4a',
+        title: 'Always analyze a creative deal as if you put 20% down',
+        content: 'Creative financing can produce eye-popping returns — 1% down with a low rate can show a massive cash-on-cash number. But that number can hide real danger. So no matter how little you\'re actually putting down, run the deal a second way: **analyze it as if you put at least 20% down.**\n\nWhy? Because the 20%-down version shows you the *true* strength of the property underneath the financing. If the deal still looks solid at 20% down, you have a fundamentally good property and the creative terms are a bonus. If it only works because of the low down payment, you\'ve found a property that\'s being propped up by leverage — and leverage cuts both ways. Creative financing should improve a good deal, not disguise a bad one.',
+        questions: [
+          {
+            id: 'mod7_p4a_q1',
+            text: 'Why analyze a low-down-payment creative deal as if you put 20% down?',
+            type: 'multiple_choice',
+            options: [
+              'To raise the purchase price',
+              'To see the property\'s true strength underneath the financing',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod7_p4a_q2',
+            text: 'If a deal only works because of a tiny down payment, that\'s a sign:',
+            type: 'multiple_choice',
+            options: [
+              'The property may be weak and propped up by leverage',
+              'You should always buy it',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod7_p4b',
+        title: 'Reserves matter more than down payment (the Reserve Principle)',
+        content: 'Most beginners assume a bigger down payment automatically means a safer deal. Not always. What actually keeps you safe when something goes wrong is **reserves** — cash set aside for vacancies, repairs, and surprises.\n\nConsider two deals:\n- **Property A:** 5% down, but $50,000 in reserves\n- **Property B:** 25% down, but only $2,000 in reserves\n\nProperty A is often the *safer* deal, because when a furnace dies or a unit sits empty, it has the cash to survive — and Property B doesn\'t. A large down payment that drains your reserves can leave you more exposed, not less. This is why a low down payment can be powerful *when paired with strong reserves and disciplined analysis*: you keep your cash working and available. Judge a deal\'s safety by its reserves and cash flow, not by the size of the down payment alone.',
+        questions: [
+          {
+            id: 'mod7_p4b_q1',
+            text: 'Which is often the safer position?',
+            type: 'multiple_choice',
+            options: [
+              '25% down with almost no reserves',
+              '5% down with strong reserves',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod7_p4b_q2',
+            text: 'The Reserve Principle says risk is determined more by:',
+            type: 'multiple_choice',
+            options: [
+              'The size of your down payment',
+              'The reserves and cash flow that let you survive problems',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
         id: 'mod7_p5',
         title: 'Match the structure to the seller\'s real motivation',
         content: 'Every creative deal works because it solves the *seller\'s* actual problem. Your job is to find what they really want, then structure to it:\n- Wants **maximum price** — give price, take your win on the terms.\n- Wants **monthly income** — seller financing with interest gives them a steady check.\n- Wants a **fast, clean exit** — a quick, certain close can beat a higher messy offer.\n- Wants to **defer taxes** — spreading payments over time (an installment sale) may help them (their tax advisor confirms).\n\nYou can\'t structure well until you know the motivation — which is exactly what the next module is about. Listen first, structure second.',
@@ -1617,6 +1781,7 @@ export const TRAINING_MODULES = [
       { term: 'Lease-option', definition: 'Leasing a property with the contractual right to buy it later at agreed terms.' },
       { term: 'Due-on-sale clause', definition: 'A clause in many mortgages letting the lender demand full payoff if the property is sold or transferred — the key risk behind subject-to.' },
       { term: 'Default', definition: 'Failing to meet the terms of a loan or contract (such as missing payments); your documents should spell out what happens if either side defaults.' },
+      { term: 'The Reserve Principle', definition: 'The idea that a deal\'s safety is determined more by reserves (cash kept for vacancies, repairs, and surprises) than by the size of the down payment.' },
     ],
     completionMessage: 'Module 7 complete. You now know the four levers, how seller financing works and when, how to trade levers to win on terms, how to handle balloons safely, how to match structure to seller motivation, the multiple-offer method, and which advanced tools to leave to the professionals for now. Next: negotiation and influence.',
   },
