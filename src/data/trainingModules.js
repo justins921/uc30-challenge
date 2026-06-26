@@ -964,11 +964,210 @@ export const TRAINING_MODULES = [
     id: 'mod6',
     moduleNumber: 6,
     title: 'Offers, Contracts & Protecting Yourself',
-    description: 'Write offers that get accepted and contracts that protect you.',
-    principles: [],
-    keyTerms: [],
-    completionMessage: '',
-    comingSoon: true,
+    description: 'Turn a property into a deal — without ever getting trapped. Learn what an offer actually is, the terms that make it up, the contingencies that protect you, and how to write one.',
+    principles: [
+      {
+        id: 'mod6_p1',
+        title: 'The answer is always no unless you ask',
+        content: 'Here\'s the hardest truth in this whole program: most deals are lost because **no offer was ever made.** You miss 100% of the offers you don\'t submit. Analysis, deal flow, a perfect buy box — none of it produces a single deal until an offer goes out. Making offers *is* the job. The investors who win aren\'t the ones with the best spreadsheets; they\'re the ones who actually ask.',
+        questions: [
+          {
+            id: 'mod6_p1_q1',
+            text: 'The single biggest reason beginners don\'t get deals is:',
+            type: 'multiple_choice',
+            options: [
+              'They can\'t find any properties',
+              'They analyze endlessly but never actually submit an offer',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod6_p2',
+        title: 'An offer is NOT a commitment to buy',
+        content: 'This is the unlock that makes everything else safe. A written offer with proper contingencies is **not** a promise to purchase — it\'s a starting point that you can walk away from, cleanly and with your deposit back, if the deal doesn\'t check out. That means you can make offers on many properties without being locked into any of them. The fear that stops most people ("what if they say yes and I\'m stuck?") is based on a misunderstanding. **Offer ≠ obligation.** Your contingencies (Principle 4) are the exits. Once you truly understand this, volume stops being scary and becomes your advantage.',
+        questions: [
+          {
+            id: 'mod6_p2_q1',
+            text: 'A written offer with proper contingencies means:',
+            type: 'multiple_choice',
+            options: [
+              'You\'re legally forced to buy if they accept',
+              'You have a deal you can still walk away from if it doesn\'t check out',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod6_p2_q2',
+            text: 'Why does understanding "offer ≠ obligation" matter?',
+            type: 'multiple_choice',
+            options: [
+              'It lets you safely make far more offers',
+              'It removes the need for due diligence',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod6_p3',
+        title: 'An offer is a package of terms, not just a price',
+        content: 'Beginners think an offer is one number. It\'s actually a bundle of levers, and price is only one of them:\n- **Price** — what you\'ll pay.\n- **Earnest money** — your good-faith deposit (Principle 5).\n- **Closing date / timeline** — how fast you\'ll close.\n- **Contingencies** — your inspection, financing, and appraisal off-ramps.\n- **Financing terms** — how you\'re paying (loan type, or seller terms).\n- **Possession & what\'s included** — when you take over, and what conveys.\n\nThis matters because you can win deals on **terms** even when you can\'t move on **price.** A fast, clean close, a flexible possession date, or a larger deposit can make your offer the one a seller takes — without overpaying. Think in the whole package, not just the number.',
+        questions: [
+          {
+            id: 'mod6_p3_q1',
+            text: 'Beyond price, an offer also includes:',
+            type: 'multiple_choice',
+            options: [
+              'Only the closing date',
+              'Earnest money, timeline, contingencies, financing, and possession',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod6_p3_q2',
+            text: 'You can often win a deal without raising your price by:',
+            type: 'multiple_choice',
+            options: [
+              'Offering better terms — a faster close, flexibility, or a stronger deposit',
+              'Removing all your contingencies',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod6_p4',
+        title: 'Contingencies are your safety net',
+        content: 'A contingency is a condition that must be met or you can cancel and get your earnest money back. They are exactly what makes "offer ≠ obligation" true. The common ones:\n- **Inspection / due-diligence contingency** — lets you verify the property\'s condition (and your numbers) and walk if it\'s not what you thought.\n- **Financing contingency** — lets you exit if your loan falls through.\n- **Appraisal contingency** — protects you if the property appraises below your price.\n\nEach one is an off-ramp that protects your deposit. As a beginner, **don\'t waive them lightly** — waiving contingencies to win a hot deal is how people get trapped in a bad one. Your safety lives in these clauses.',
+        questions: [
+          {
+            id: 'mod6_p4_q1',
+            text: 'A contingency is:',
+            type: 'multiple_choice',
+            options: [
+              'A penalty you pay the seller',
+              'A condition that lets you cancel and recover your earnest money if it isn\'t met',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod6_p4_q2',
+            text: 'As a beginner, you should treat waiving contingencies as:',
+            type: 'multiple_choice',
+            options: [
+              'A normal way to win deals',
+              'Risky — it removes the protections that let you walk safely',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod6_p5',
+        title: 'Earnest money: skin in the game, not money lost',
+        content: 'Earnest money (an "EMD," earnest money deposit) is a good-faith deposit you put up to show the seller you\'re serious. Key facts a beginner needs:\n- It\'s **held by a neutral third party** (a title company or escrow), not handed to the seller.\n- It\'s **refundable** if you cancel *within* your contingencies — you get it back.\n- It\'s **at risk** only if you walk for a reason your contract doesn\'t allow.\n- A **larger deposit** makes your offer look stronger — but puts more on the line, so size it to your risk.\n\nSo earnest money isn\'t money you\'re throwing away. Used correctly, it strengthens your offer while staying protected by your contingencies.',
+        questions: [
+          {
+            id: 'mod6_p5_q1',
+            text: 'Earnest money is:',
+            type: 'multiple_choice',
+            options: [
+              'A non-refundable fee paid directly to the seller',
+              'A good-faith deposit held in escrow, refundable within your contingencies',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod6_p5_q2',
+            text: 'A larger earnest money deposit:',
+            type: 'multiple_choice',
+            options: [
+              'Makes your offer stronger but puts more at risk',
+              'Is always required to be non-refundable',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod6_p6',
+        title: 'Due diligence is where you verify everything',
+        content: 'Getting an offer accepted doesn\'t mean you\'re locked in — it starts your **due-diligence period.** This is the window (before your contingencies expire) where you confirm the deal is real: inspect the property, verify the rents, get true repair bids, and lock your financing. This is exactly where the conservative estimates you made in Module 2 get checked against reality.\n\nIf everything holds up — close. If it doesn\'t — you have two honest moves: **renegotiate** the price/terms based on what you found, or **walk** within your contingencies and recover your deposit. Due diligence is your protection, not a formality to rush.',
+        questions: [
+          {
+            id: 'mod6_p6_q1',
+            text: 'The due-diligence period is when you:',
+            type: 'multiple_choice',
+            options: [
+              'Are already legally committed with no way out',
+              'Verify the property, the rents, the repairs, and your financing before you\'re locked in',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod6_p6_q2',
+            text: 'If due diligence reveals the deal is worse than you thought, you can:',
+            type: 'multiple_choice',
+            options: [
+              'Only proceed at the agreed price',
+              'Renegotiate, or walk within your contingencies and recover your deposit',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod6_p7',
+        title: 'Writing the offer: on-market vs FSBO',
+        content: 'How you actually paper the offer depends on the deal:\n- **On-market (listed with an agent):** your investor-friendly agent writes the offer on your state\'s standard purchase forms. This is the easy path — the forms already include the standard contingencies, and your agent guides the terms.\n- **For-sale-by-owner / off-market (no agent on the other side):** there\'s no agent writing it up, so you bring in a **title company or a real estate attorney** to prepare and review the contract. Do **not** freelance a purchase agreement from a template you found online and hope it holds — get a professional to paper it correctly.\n\nEither way, the contract should clearly state price, earnest money, contingencies, closing date, and what\'s included.',
+        questions: [
+          {
+            id: 'mod6_p7_q1',
+            text: 'On a for-sale-by-owner deal with no agent involved, you should:',
+            type: 'multiple_choice',
+            options: [
+              'Write your own contract from an online template and sign it',
+              'Use a title company or real estate attorney to prepare and review the contract',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod6_p8',
+        title: 'Protect yourself: use the professionals, always',
+        content: 'A few habits keep you safe on every deal, and they matter more the more creative the deal gets:\n- **Close through a title company or attorney.** They confirm the seller actually owns the property (clear title) and that the transfer is done right.\n- **Get everything in writing.** Verbal agreements aren\'t deals. If it\'s not in the contract, it doesn\'t exist.\n- **Never let excitement skip steps.** The deal that "has to close today or you lose it" is the one to slow down on.\n- **Use licensed professionals in your state** for legal, tax, and financial questions.\n\nProtecting yourself isn\'t the boring part of investing — it\'s what lets you make offers boldly, because you know your downside is covered.',
+        questions: [
+          {
+            id: 'mod6_p8_q1',
+            text: 'The right way to close, especially on a FSBO or creative deal, is:',
+            type: 'multiple_choice',
+            options: [
+              'Hand the money directly to the seller and get the keys',
+              'Close through a title company or attorney who confirms clear title',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+    ],
+    keyTerms: [
+      { term: 'Offer / purchase agreement', definition: 'The written contract proposing your price and terms to buy a property. With proper contingencies, it\'s a starting point you can still exit — not an automatic obligation to buy.' },
+      { term: 'Earnest money (EMD)', definition: 'A good-faith deposit, held by a neutral third party (title/escrow), that shows you\'re serious. Refundable if you cancel within your contingencies.' },
+      { term: 'Contingency', definition: 'A condition in the contract that must be met or you can cancel and recover your earnest money — your safety net and your exit.' },
+      { term: 'Inspection / due-diligence contingency', definition: 'Lets you verify the property\'s condition and your numbers, and walk if it doesn\'t hold up.' },
+      { term: 'Financing contingency', definition: 'Lets you exit if your loan falls through.' },
+      { term: 'Appraisal contingency', definition: 'Protects you if the property appraises below your offer price.' },
+      { term: 'Due-diligence period', definition: 'The window after acceptance, before contingencies expire, when you verify everything before you\'re fully committed.' },
+      { term: 'Closing date', definition: 'The agreed date the sale is finalized and ownership transfers.' },
+      { term: 'Possession', definition: 'When you actually take control of the property (not always the same as closing).' },
+      { term: 'Title company / escrow', definition: 'The neutral party that holds the deposit, confirms clear title, and handles the closing.' },
+      { term: 'Clear title', definition: 'Confirmation that the seller truly owns the property and can sell it free of undisclosed claims or liens.' },
+      { term: 'Addendum', definition: 'An add-on document that changes or adds terms to the contract.' },
+    ],
+    completionMessage: 'Module 6 complete. You know that making offers is the job, that an offer with contingencies is never a trap, that an offer is a package of terms you can flex, how earnest money and due diligence protect you, and how to paper a deal correctly on-market or FSBO. Next: creative deal structure — the tools to make a deal work when a standard offer won\'t.',
   },
   {
     id: 'mod7',
