@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import QuizSection from './QuizSection';
 import NativeRentalCalculator from './NativeRentalCalculator';
 import { GetClearStep, BuyBoxStep, CapitalConfirmationStep } from './ActivationPhase';
+import CapitalStrategyFinder from './CapitalStrategyFinder';
 import ContactsCRM from './ContactsCRM';
 import ConfidenceSurvey from './ConfidenceSurvey';
 import ReflectionDay from './ReflectionDay';
@@ -347,6 +348,7 @@ export default function TrainingPhase({
           {principle.showComponent && (() => {
             const COMPONENT_MAP = {
               capitalConfirmation: { Component: CapitalConfirmationStep, label: 'Confirm Access to Capital', icon: '💰', color: '#48c78e', props: { existingCapital: user.capitalConfirmation || {} } },
+              capitalStrategy: { Component: CapitalStrategyFinder, label: 'Capital & Strategy Finder', icon: '🧭', color: '#48c78e', props: { existing: user.capitalStrategy || {}, userId: user.id } },
               getClear: { Component: GetClearStep, label: 'Get Clear', icon: '🎯', color: '#e94560', props: { existing: user.getClear || {}, buyBoxData: user.buyBox || null } },
               buyBox: { Component: BuyBoxStep, label: 'Define Your Buy Box', icon: '📦', color: '#c9a0ff', props: { existingBuyBox: user.buyBox || {} } },
             };

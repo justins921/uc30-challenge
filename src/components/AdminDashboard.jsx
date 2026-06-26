@@ -8,6 +8,7 @@ import Footer from './Footer';
 import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT, checkWeeklyCompliance, getWeekNumber, getWeekRange, getWeekDayCount, calculateAtRisk, getNowInTimezone } from '../data/compliance';
 import { TRAINING_MODULES, getResolvedTrainingModules } from '../data/trainingModules';
 import { GetClearStep, BuyBoxStep, CapitalConfirmationStep, OfferCommitmentStep } from './ActivationPhase';
+import CapitalStrategyFinder from './CapitalStrategyFinder';
 
 function getSocialUrl(platform, handle) {
   const clean = handle.replace(/^@/, '').trim();
@@ -2192,6 +2193,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
     getClear: { component: GetClearStep, title: 'Get Clear', props: { existing: {}, buyBoxData: null } },
     buyBox: { component: BuyBoxStep, title: 'Define Your Buy Box', props: { existingBuyBox: {} } },
     capital: { component: CapitalConfirmationStep, title: 'Confirm Access to Capital', props: { existingCapital: {} } },
+    capitalStrategy: { component: CapitalStrategyFinder, title: 'Capital & Strategy Finder', props: { existing: {}, userId: 'admin_preview' } },
     offerCommitment: { component: OfferCommitmentStep, title: 'Set Your Offer Commitment', props: { existingCommitment: null } },
   };
 
@@ -2709,15 +2711,18 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
             ],
           },
           {
-            title: 'Confirm Access to Capital',
+            title: 'Capital & Strategy Finder',
             color: '#48c78e',
-            icon: '💰',
-            saves: 'capitalConfirmation',
-            previewKey: 'capital',
+            icon: '🧭',
+            saves: 'capitalStrategy',
+            previewKey: 'capitalStrategy',
             features: [
-              'Single-select radio cards:',
-              'Cash available / Hard money lender / Conventional pre-approval / DSCR lender / JV partner / Seller financing / Still working on it',
-              'Warning banner if "still working on it" selected',
+              '8 tap-through questions (cash, live-in, income, credit, equity, partner, reserves, reno)',
+              'Personalized results: financing you can likely use + strategies open to you',
+              'Highlighted "best-fit path" recommendation',
+              'Boosters (HELOC/cash-out, partnership) + "build this first" cautions',
+              'Foundation-Building Path for the hardest profiles — never a dead end',
+              'Lender disclaimer on results',
             ],
           },
           {
