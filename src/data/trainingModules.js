@@ -954,11 +954,188 @@ export const TRAINING_MODULES = [
     id: 'mod5',
     moduleNumber: 5,
     title: 'Deal Flow & Your Team',
-    description: 'Build the pipeline and relationships that bring deals to you.',
-    principles: [],
-    keyTerms: [],
-    completionMessage: '',
-    comingSoon: true,
+    description: 'Get deals coming to you, and a team that brings them. Learn where deals come from, how to build the relationships that produce them, and how to become the buyer everyone brings deals to first.',
+    principles: [
+      {
+        id: 'mod5_p1',
+        title: 'Deal flow is a system, not luck',
+        content: 'The investor who sees the most deals wins. You\'re not hunting for one perfect property — you\'re building a *stream*, and the great deals surface from volume. Most beginners analyze two or three listings and wonder why nothing works; serious investors keep dozens flowing. Your real edge isn\'t a secret deal, it\'s the system that puts more deals in front of you than anyone else.',
+        questions: [
+          {
+            id: 'mod5_p1_q1',
+            text: 'The real key to finding great deals is:',
+            type: 'multiple_choice',
+            options: [
+              'Getting lucky on one perfect listing',
+              'Building a system that produces steady deal flow, so the good ones surface',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod5_p2',
+        title: 'Know the two sources: on-market and off-market',
+        content: 'Every deal comes from one of two places:\n- **On-market** — properties publicly listed for sale (the MLS, Zillow, Realtor.com, LoopNet). Easy to find and access, but you\'re competing with everyone else looking at the same listings.\n- **Off-market** — properties *not* publicly listed, reached by going straight to owners (direct mail, driving for dollars, calling/texting, wholesalers, expired and for-sale-by-owner listings, networking). Harder to find, but far less competition and usually better prices.\n\nStart **on-market** for speed — you can make offers this week. Build **off-market** over time for your real edge, where deals are cheaper because fewer people see them.',
+        questions: [
+          {
+            id: 'mod5_p2_q1',
+            text: 'Compared to on-market deals, off-market deals are usually:',
+            type: 'multiple_choice',
+            options: [
+              'Easier to find but more competitive',
+              'Harder to find but less competitive, with better pricing',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod5_p3',
+        title: 'The fastest on-market lane: an investor-friendly agent',
+        content: 'For a beginner, the single most valuable relationship is an **investor-friendly agent** — one who invests themselves or works with investors regularly. A good one will set you up with **MLS alerts** that email you new listings matching your buy box automatically, run comps, write your offers, and know which sellers are motivated. That\'s deal flow on autopilot.\n\nHow to find one: ask local investors for referrals, and look for an agent who *owns rentals* or specializes in investors — not one who only sells primary homes. Tell them your exact buy box (Module 3) so the deals they send actually fit.',
+        questions: [
+          {
+            id: 'mod5_p3_q1',
+            text: 'The most valuable on-market relationship for a beginner is:',
+            type: 'multiple_choice',
+            options: [
+              'An investor-friendly agent who sends buy-box-matched MLS alerts',
+              'A listing agent who only sells primary residences',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod5_p4',
+        title: 'The off-market lanes (pick one or two, go deep)',
+        content: 'Off-market is where the cheaper deals live. You don\'t need all of these — pick the one or two that fit the deal-flow strategy you chose in Module 3, and work them consistently:\n- **Direct mail** — letters/postcards to owners who fit your criteria (out-of-state owners, long-time owners, distressed).\n- **Driving for dollars** — spotting neglected properties in person and contacting the owners.\n- **Cold calling / texting** — reaching owners directly from a targeted list.\n- **Wholesalers** — people who lock up off-market deals and assign them to buyers; get on their buyer lists.\n- **FSBO & expired listings** — owners selling without an agent, or whose listing didn\'t sell; often more motivated.\n- **Networking & referrals** — other investors, property managers, and contractors who hear about deals first.\n\nDepth beats dabbling. One channel worked daily produces more than five touched occasionally.',
+        questions: [
+          {
+            id: 'mod5_p4_q1',
+            text: 'The smarter approach to off-market channels is to:',
+            type: 'multiple_choice',
+            options: [
+              'Try all of them lightly at once',
+              'Pick one or two that fit your strengths and work them consistently',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod5_p5',
+        title: 'Arsenal contacts and target properties',
+        content: 'Your whole deal-flow system comes down to two things — and your CRM tracks both:\n\n**Arsenal contacts** are anyone who can feed you deals. You build the relationship, stay top of mind, and make sure they know your buy box, so when a deal comes up, they think of you and bring it to you. Agents, property managers, lenders, contractors, wholesalers, other investors — anyone positioned to send you a deal belongs in your Arsenal. This is the engine: the bigger your Arsenal, the more deals flow in.\n\n**Target properties** are any properties you\'re actively pursuing. They come from your Arsenal contacts or your own hunting. In your CRM you log the property and its **owner\'s information**, and you note **how it reached you** — whether the Arsenal contact who brought it is the *owner* of the property, or just the person who passed you the lead.\n\nWhen a target property isn\'t a yes right now, it moves to **cold follow-ups** — the seller said "not now, maybe later," or the lead went quiet. You park it and circle back later, because today\'s "no" is often a future "yes." A target property you stop following is deal flow you threw away.\n\nSo the whole game is simple: **grow your Arsenal, let it feed you target properties, and never let a cold one fall off your follow-up list.**',
+        questions: [
+          {
+            id: 'mod5_p5_q1',
+            text: 'An Arsenal contact is:',
+            type: 'multiple_choice',
+            options: [
+              'Any property you\'re pursuing',
+              'Anyone who can feed you deals, who knows your buy box and stays in touch',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod5_p5_q2',
+            text: 'A target property is:',
+            type: 'multiple_choice',
+            options: [
+              'A property you\'re actively pursuing, logged with its owner info and how it reached you',
+              'The agent who sent you the deal',
+            ],
+            correctAnswer: 0,
+          },
+          {
+            id: 'mod5_p5_q3',
+            text: 'A "cold follow-up" is:',
+            type: 'multiple_choice',
+            options: [
+              'A deal you\'ve already closed',
+              'A target property that\'s a "not now / maybe later," parked to revisit',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod5_p6',
+        title: 'Build your team before you need it (and turn them into Arsenal)',
+        content: 'You can\'t move fast on a deal if you\'re scrambling to find people after it appears. Line up your core team now:\n- **Investor-friendly agent** (Principle 3)\n- **Lender(s)** (Module 4)\n- **Property manager** — especially critical for out-of-area; the PM is the linchpin that makes a distant market manageable.\n- **Contractor** — for repair bids and rehab.\n- **Title company / closing attorney** — to close cleanly.\n- **Insurance agent** — for real quotes during analysis.\n\nMeet them *before* you have a deal so that when one shows up, you can act in hours, not weeks. And here\'s the bonus most people miss: every one of these people can double as an **Arsenal contact.** Agents, property managers, contractors, and lenders all hear about deals before the public does. Let each of them know your investing goals and your buy box, and they won\'t just help you close — they\'ll start bringing you potential deals too. Your team isn\'t only how you close; it\'s part of how you *source.*',
+        questions: [
+          {
+            id: 'mod5_p6_q1',
+            text: 'For out-of-area investing, the linchpin team member is:',
+            type: 'multiple_choice',
+            options: [
+              'A great property manager',
+              'A second real estate agent',
+            ],
+            correctAnswer: 0,
+          },
+          {
+            id: 'mod5_p6_q2',
+            text: 'Beyond helping you close, your team members can also:',
+            type: 'multiple_choice',
+            options: [
+              'Become Arsenal contacts who bring you deals if they know your goals and buy box',
+              'Only ever help with the one deal you hired them for',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod5_p7',
+        title: 'Become the go-to buyer (turn deal flow inbound)',
+        content: 'The highest level of deal flow is when deals come to *you* first. That happens when agents, wholesalers, and property managers know you\'re **serious, decisive, and you close.** Be the buyer everyone wants to work with:\n- Respond fast and know your buy box cold.\n- Make clean offers and don\'t back out without a real reason ("retrade").\n- Close when you say you will.\n- Be easy and pleasant to deal with.\n\nDo this a few times and word spreads. Your reputation flips deal flow from *outbound* (you chasing) to *inbound* (deals finding you) — which is the whole goal.',
+        questions: [
+          {
+            id: 'mod5_p7_q1',
+            text: 'You become the "go-to buyer" by being:',
+            type: 'multiple_choice',
+            options: [
+              'The one who offers the most on every property',
+              'Serious, decisive, easy to work with, and someone who actually closes',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod5_p8',
+        title: 'Consistency is the whole game',
+        content: 'Deal flow compounds. A little every day — a handful of analyses, a few new Arsenal contacts added, a round of cold follow-ups — beats occasional bursts of effort. The stream doesn\'t turn on the first day you work it; it builds. Most people quit right before it does. Show up daily, keep filling the top of the funnel, and the deals become inevitable.',
+        questions: [
+          {
+            id: 'mod5_p8_q1',
+            text: 'The best way to build deal flow is:',
+            type: 'multiple_choice',
+            options: [
+              'A massive one-time push, then waiting',
+              'A little consistent effort every day, because deal flow compounds',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+    ],
+    keyTerms: [
+      { term: 'On-market', definition: 'Properties publicly listed for sale (MLS, Zillow, LoopNet). Easy to access, more competition.' },
+      { term: 'Off-market', definition: 'Properties not publicly listed, reached by going directly to owners. Less competition, often better prices.' },
+      { term: 'Investor-friendly agent', definition: 'A real estate agent who invests themselves or specializes in investors — sends buy-box-matched listings, runs comps, and writes offers.' },
+      { term: 'Wholesaler', definition: 'Someone who puts an off-market property under contract and assigns that contract to a buyer for a fee; a source of off-market deals.' },
+      { term: 'Arsenal contact', definition: 'Anyone who can feed you deals. You build the relationship, keep them aware of your buy box, and stay top of mind so they bring deals to you.' },
+      { term: 'Target property', definition: 'Any property you\'re actively pursuing, logged in your CRM with the owner\'s information and how it reached you.' },
+      { term: 'Cold follow-up', definition: 'A target property that\'s a "not now / maybe later," or a lead that went quiet — parked to revisit later instead of being lost.' },
+      { term: 'FSBO (For Sale By Owner)', definition: 'A property the owner is selling without an agent — often a more motivated, negotiable seller.' },
+      { term: 'Pocket listing', definition: 'A property quietly for sale that an agent hasn\'t broadly published — accessible through relationships.' },
+      { term: 'Referral network', definition: 'The web of people (investors, PMs, contractors) who hear about deals early and send them your way.' },
+    ],
+    completionMessage: 'Module 5 complete. You know the two sources of deals, the fastest on-market lane, the off-market channels, how your Arsenal contacts feed you target properties (and how cold follow-ups keep the rest alive), who belongs on your team, and how to become the buyer deals come to first. Next: turning that deal flow into offers — and protecting yourself in the contract.',
   },
   {
     id: 'mod6',
