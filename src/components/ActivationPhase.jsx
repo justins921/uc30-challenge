@@ -147,106 +147,33 @@ function WelcomeStep({ firstName, onBegin }) {
 // are kept here for use after training modules are completed.
 
 // ── Get Clear ─────────────────────────────────────
-const KEY_INDICATORS = ['Cash Flow', 'Appreciation', 'Equity', 'Tax Benefits', 'All of the Above'];
-const FINANCING_OPTIONS = ['DSCR', 'Seller Finance', 'Conventional', 'Hard Money', 'Cash', 'Other'];
-
 function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
   const gc = existing || {};
   const fp = gc.financialPlan || {};
   const [destination, setDestination] = useState(gc.destination || '');
-  const [keyIndicator, setKeyIndicator] = useState(gc.keyIndicator || '');
-  const [whereAmINow, setWhereAmINow] = useState(gc.whereAmINow || '');
-  const [whereIWantToBe, setWhereIWantToBe] = useState(gc.whereIWantToBe || '');
-  const [gap, setGap] = useState(gc.gap || '');
-  const [timeFrameValue, setTimeFrameValue] = useState(gc.timeFrame?.value || '');
-  const [timeFrameUnit, setTimeFrameUnit] = useState(gc.timeFrame?.unit || 'years');
 
-  const [yearlyCashFlow, setYearlyCashFlow] = useState(fp.yearlyCashFlow || '');
   const [yearlyInvestment, setYearlyInvestment] = useState(fp.yearlyInvestment || '');
   const [returnPercent, setReturnPercent] = useState(fp.returnPercent || '');
-  const [timePeriod, setTimePeriod] = useState(fp.timePeriod || '');
-  const [propertiesPerYear, setPropertiesPerYear] = useState(fp.propertiesPerYear || '');
-  const [propertyType, setPropertyType] = useState(fp.propertyType || 'properties');
-  const [propertyValue, setPropertyValue] = useState(fp.propertyValue || '');
-  const [downPaymentPercent, setDownPaymentPercent] = useState(fp.downPaymentPercent || '');
-  const [downPaymentSource, setDownPaymentSource] = useState(fp.downPaymentSource || '');
-  const [financingPercent, setFinancingPercent] = useState(fp.financingPercent || '');
-  const [financingType, setFinancingType] = useState(fp.financingType || '');
-  const [calcFields, setCalcFields] = useState(new Set());
+  const [yearlyCashFlow, setYearlyCashFlow] = useState(fp.yearlyCashFlow || '');
 
   const [whyImportant, setWhyImportant] = useState(gc.whyImportant || '');
   const [saving, setSaving] = useState(false);
 
   const numOrNull = (v) => { const n = parseFloat(v); return isNaN(n) ? null : n; };
 
-  const handleFieldChange = (field, rawValue) => {
-    const isText = field === 'downPaymentSource';
-    const value = isText ? rawValue : rawValue.replace(/[^\d.]/g, '');
+  const computedTimePeriod = (() => {
+    const cf = parseFloat(yearlyCashFlow);
+    const inv = parseFloat(yearlyInvestment);
+    const ret = parseFloat(returnPercent);
+    if (!cf || !inv || !ret || inv <= 0 || ret <= 0) return null;
+    const years = (cf / inv) / (ret / 100);
+    return Math.round(years * 10) / 10;
+  })();
 
-    const v = {
-      yearlyCashFlow, yearlyInvestment, returnPercent, timePeriod,
-      propertiesPerYear, propertyValue, downPaymentPercent, financingPercent,
-    };
-    v[field] = value;
-
-    const pos = (k) => { const x = parseFloat(v[k]); return isNaN(x) || x <= 0 ? null : x; };
-    const num = (k) => { const x = parseFloat(v[k]); return isNaN(x) ? null : x; };
-
-    const updates = {};
-    const calced = new Set();
-    const cf = pos('yearlyCashFlow');
-
-    const p1 = ['yearlyCashFlow', 'returnPercent', 'timePeriod', 'yearlyInvestment'];
-    if (p1.includes(field) && cf) {
-      if (field !== 'yearlyInvestment' && pos('returnPercent') && pos('timePeriod')) {
-        updates.yearlyInvestment = String(Math.round(cf / (pos('returnPercent') / 100) / pos('timePeriod')));
-        calced.add('yearlyInvestment');
-      } else if (field !== 'returnPercent' && pos('yearlyInvestment') && pos('timePeriod')) {
-        const r = cf / pos('yearlyInvestment') / pos('timePeriod') * 100;
-        if (r > 0) { updates.returnPercent = String(Math.round(r * 10) / 10); calced.add('returnPercent'); }
-      } else if (field !== 'timePeriod' && pos('yearlyInvestment') && pos('returnPercent')) {
-        const t = cf / (pos('returnPercent') / 100) / pos('yearlyInvestment');
-        if (t > 0) { updates.timePeriod = String(Math.round(t)); calced.add('timePeriod'); }
-      }
-    }
-
-    const yi = updates.yearlyInvestment ? parseFloat(updates.yearlyInvestment) : pos('yearlyInvestment');
-    if (yi) {
-      if (field === 'propertiesPerYear' && pos('propertiesPerYear')) {
-        updates.propertyValue = String(Math.round(yi / pos('propertiesPerYear')));
-        calced.add('propertyValue');
-      } else if (field === 'propertyValue' && pos('propertyValue')) {
-        const ppy = Math.round(yi / pos('propertyValue') * 10) / 10;
-        if (ppy > 0) { updates.propertiesPerYear = String(ppy); calced.add('propertiesPerYear'); }
-      } else if (p1.includes(field) && calced.has('yearlyInvestment')) {
-        if (pos('propertyValue')) {
-          const ppy = Math.round(yi / pos('propertyValue') * 10) / 10;
-          if (ppy > 0) { updates.propertiesPerYear = String(ppy); calced.add('propertiesPerYear'); }
-        } else if (pos('propertiesPerYear')) {
-          updates.propertyValue = String(Math.round(yi / pos('propertiesPerYear')));
-          calced.add('propertyValue');
-        }
-      }
-    }
-
-    if (field === 'downPaymentPercent' && num('downPaymentPercent') != null) {
-      updates.financingPercent = String(100 - num('downPaymentPercent'));
-      calced.add('financingPercent');
-    } else if (field === 'financingPercent' && num('financingPercent') != null) {
-      updates.downPaymentPercent = String(100 - num('financingPercent'));
-      calced.add('downPaymentPercent');
-    }
-
-    const setters = {
-      yearlyCashFlow: setYearlyCashFlow, yearlyInvestment: setYearlyInvestment,
-      returnPercent: setReturnPercent, timePeriod: setTimePeriod,
-      propertiesPerYear: setPropertiesPerYear, propertyValue: setPropertyValue,
-      downPaymentPercent: setDownPaymentPercent, financingPercent: setFinancingPercent,
-      downPaymentSource: setDownPaymentSource,
-    };
-    setters[field](value);
-    Object.entries(updates).forEach(([key, val]) => { if (key !== field) setters[key](val); });
-    setCalcFields(calced);
+  const fmtDollars = (v) => {
+    const n = parseFloat(v);
+    if (isNaN(n)) return '—';
+    return '$' + n.toLocaleString('en-US');
   };
 
   const canProceed = destination.trim() && whyImportant.trim();
@@ -257,23 +184,11 @@ function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
     await onSave({
       getClear: {
         destination: destination.trim(),
-        keyIndicator: keyIndicator || null,
-        whereAmINow: whereAmINow.trim() || null,
-        whereIWantToBe: whereIWantToBe.trim() || null,
-        gap: gap.trim() || null,
-        timeFrame: timeFrameValue ? { value: parseInt(timeFrameValue), unit: timeFrameUnit } : null,
         financialPlan: {
           yearlyCashFlow: numOrNull(yearlyCashFlow),
           yearlyInvestment: numOrNull(yearlyInvestment),
           returnPercent: numOrNull(returnPercent),
-          timePeriod: numOrNull(timePeriod),
-          propertiesPerYear: numOrNull(propertiesPerYear),
-          propertyType,
-          propertyValue: numOrNull(propertyValue),
-          downPaymentPercent: numOrNull(downPaymentPercent),
-          downPaymentSource: downPaymentSource.trim() || null,
-          financingPercent: numOrNull(financingPercent),
-          financingType: financingType || null,
+          timePeriod: computedTimePeriod,
         },
         whyImportant: whyImportant.trim(),
       },
@@ -287,36 +202,9 @@ function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
     background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
     color: '#eee', fontFamily: "'DM Sans', sans-serif", width: '100%',
   };
-  const inlineInput = (value, fieldName, placeholder, opts = {}) => {
-    const isCalced = calcFields.has(fieldName);
-    return (
-      <input
-        value={value}
-        onChange={e => handleFieldChange(fieldName, e.target.value)}
-        placeholder={placeholder}
-        inputMode={opts.inputMode || 'text'}
-        style={{
-          display: 'inline-block', width: opts.width || 100, fontSize: 16, fontWeight: 600,
-          padding: '6px 10px', borderRadius: 6, textAlign: 'center',
-          background: isCalced ? 'rgba(72,199,142,0.08)' : 'rgba(255,255,255,0.06)',
-          border: `1px solid ${isCalced ? 'rgba(72,199,142,0.25)' : 'rgba(255,255,255,0.12)'}`,
-          color: isCalced ? '#48c78e' : '#eee', fontFamily: "'DM Sans', sans-serif",
-          verticalAlign: 'middle',
-        }}
-      />
-    );
-  };
 
   const sectionGap = { marginBottom: 36 };
   const labelStyle = { fontSize: 13, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 8 };
-  const chipStyle = (selected) => ({
-    padding: '9px 16px', borderRadius: 8, fontSize: 13, fontWeight: selected ? 600 : 400,
-    cursor: 'pointer', userSelect: 'none', transition: 'all 0.15s',
-    fontFamily: "'DM Sans', sans-serif", border: 'none',
-    background: selected ? 'rgba(233,69,96,0.15)' : 'rgba(255,255,255,0.04)',
-    color: selected ? '#e94560' : '#888',
-    outline: selected ? '1px solid rgba(233,69,96,0.3)' : '1px solid rgba(255,255,255,0.08)',
-  });
 
   return (
     <div>
@@ -351,94 +239,72 @@ function GetClearStep({ onNext, onBack, onSave, existing, embedded }) {
           <h2 style={{ fontSize: 18, fontWeight: 700 }}>Quantify The Goal</h2>
         </div>
 
-        <div style={{ marginBottom: 20 }}>
-          <label style={labelStyle}>What is the key indicator?</label>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            {KEY_INDICATORS.map(ki => (
-              <button key={ki} onClick={() => setKeyIndicator(keyIndicator === ki ? '' : ki)}
-                style={chipStyle(keyIndicator === ki)}>
-                {ki}
-              </button>
-            ))}
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>How much can I invest yearly?</label>
+          <div style={{ position: 'relative' }}>
+            <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#888', fontSize: 14, fontWeight: 600 }}>$</span>
+            <input
+              value={yearlyInvestment}
+              onChange={e => setYearlyInvestment(e.target.value.replace(/[^\d]/g, ''))}
+              placeholder="150,000"
+              inputMode="numeric"
+              style={{ ...inputStyle, paddingLeft: 28 }}
+            />
           </div>
         </div>
 
         <div style={{ marginBottom: 16 }}>
-          <label style={labelStyle}>Where am I now?</label>
-          <input value={whereAmINow} onChange={e => setWhereAmINow(e.target.value)}
-            placeholder="e.g. $0 in real estate, $50k saved"
-            style={inputStyle} />
-        </div>
-
-        <div style={{ marginBottom: 16 }}>
-          <label style={labelStyle}>Where do I want to be?</label>
-          <input value={whereIWantToBe} onChange={e => setWhereIWantToBe(e.target.value)}
-            placeholder="e.g. $5,000/mo in passive cash flow"
-            style={inputStyle} />
-        </div>
-
-        <div style={{ marginBottom: 16 }}>
-          <label style={labelStyle}>What is the gap?</label>
-          <input value={gap} onChange={e => setGap(e.target.value)}
-            placeholder="e.g. $5,000/mo"
-            style={inputStyle} />
+          <label style={labelStyle}>What is my minimum desired cash-on-cash return?</label>
+          <div style={{ position: 'relative' }}>
+            <input
+              value={returnPercent}
+              onChange={e => setReturnPercent(e.target.value.replace(/[^\d.]/g, ''))}
+              placeholder="8"
+              inputMode="decimal"
+              style={{ ...inputStyle, paddingRight: 28 }}
+            />
+            <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', color: '#888', fontSize: 14, fontWeight: 600 }}>%</span>
+          </div>
         </div>
 
         <div style={{ marginBottom: 24 }}>
-          <label style={labelStyle}>What is the time frame to close the gap?</label>
-          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-            <input value={timeFrameValue} onChange={e => setTimeFrameValue(e.target.value.replace(/\D/g, ''))}
-              placeholder="5" inputMode="numeric"
-              style={{ ...inputStyle, width: 80, textAlign: 'center' }} />
-            <select value={timeFrameUnit} onChange={e => setTimeFrameUnit(e.target.value)}
-              style={{ fontSize: 14, padding: '10px 14px', borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#ccc' }}>
-              <option value="years">years</option>
-              <option value="months">months</option>
-            </select>
+          <label style={labelStyle}>How much new cash flow do I want from real estate?</label>
+          <div style={{ position: 'relative' }}>
+            <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#888', fontSize: 14, fontWeight: 600 }}>$</span>
+            <input
+              value={yearlyCashFlow}
+              onChange={e => setYearlyCashFlow(e.target.value.replace(/[^\d]/g, ''))}
+              placeholder="60,000"
+              inputMode="numeric"
+              style={{ ...inputStyle, paddingLeft: 28 }}
+            />
+            <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', color: '#888', fontSize: 13 }}>/year</span>
           </div>
         </div>
 
-        {/* Mad-libs financial plan */}
+        {/* Read-only summary */}
         <div style={{
           padding: '24px 20px', borderRadius: 14,
           background: 'linear-gradient(135deg, rgba(233,69,96,0.04), rgba(240,165,0,0.04))',
           border: '1px solid rgba(255,255,255,0.06)',
-          marginBottom: 8,
         }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: '#f0a500', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 16 }}>
             My Financial Plan
           </div>
 
-          <p style={{ fontSize: 15, color: '#ccc', lineHeight: 2.6, margin: 0 }}>
-            I will have ${inlineInput(yearlyCashFlow, 'yearlyCashFlow', '60,000', { inputMode: 'numeric' })} in yearly cash flow.
-            This will require ${inlineInput(yearlyInvestment, 'yearlyInvestment', '150,000', { inputMode: 'numeric' })} to be invested yearly
-            at a {inlineInput(returnPercent, 'returnPercent', '8', { width: 60, inputMode: 'decimal' })}% return
-            over a {inlineInput(timePeriod, 'timePeriod', '5', { width: 50, inputMode: 'numeric' })} year time period.
+          <p style={{ fontSize: 15, color: '#ccc', lineHeight: 2.4, margin: 0 }}>
+            I want to have{' '}
+            <span style={{ fontWeight: 700, color: '#eee' }}>{fmtDollars(yearlyCashFlow)}</span>{' '}
+            in yearly cash flow. This will require{' '}
+            <span style={{ fontWeight: 700, color: '#eee' }}>{fmtDollars(yearlyInvestment)}</span>{' '}
+            to be invested yearly at a{' '}
+            <span style={{ fontWeight: 700, color: '#eee' }}>{returnPercent || '—'}%</span>{' '}
+            return. This will require a{' '}
+            <span style={{ fontWeight: 700, color: computedTimePeriod ? '#48c78e' : '#eee' }}>
+              {computedTimePeriod != null ? computedTimePeriod : '—'}
+            </span>{' '}
+            year time period.
           </p>
-
-          <p style={{ fontSize: 15, color: '#ccc', lineHeight: 2.6, margin: '16px 0 0' }}>
-            I will do this by purchasing {inlineInput(propertiesPerYear, 'propertiesPerYear', '3', { width: 50, inputMode: 'numeric' })}{' '}
-            <select value={propertyType} onChange={e => setPropertyType(e.target.value)}
-              style={{ fontSize: 14, fontWeight: 600, padding: '6px 10px', borderRadius: 6, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#eee', verticalAlign: 'middle' }}>
-              <option value="properties">properties</option>
-              <option value="units">units</option>
-            </select>{' '}
-            per year with a value of ${inlineInput(propertyValue, 'propertyValue', '200,000', { inputMode: 'numeric' })} using{' '}
-            {inlineInput(downPaymentPercent, 'downPaymentPercent', '20', { width: 50, inputMode: 'decimal' })}% as a down payment
-            from {inlineInput(downPaymentSource, 'downPaymentSource', 'personal savings', { width: 140 })} and financing{' '}
-            {inlineInput(financingPercent, 'financingPercent', '80', { width: 50, inputMode: 'decimal' })}% using{' '}
-            <select value={financingType} onChange={e => setFinancingType(e.target.value)}
-              style={{ fontSize: 14, fontWeight: 600, padding: '6px 10px', borderRadius: 6, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#eee', verticalAlign: 'middle' }}>
-              <option value="">Select...</option>
-              {FINANCING_OPTIONS.map(f => <option key={f} value={f}>{f}</option>)}
-            </select>.
-          </p>
-
-          {calcFields.size > 0 && (
-            <p style={{ fontSize: 11, color: '#48c78e', marginTop: 12, marginBottom: 0 }}>
-              Green values were auto-calculated. You can override them.
-            </p>
-          )}
         </div>
       </div>
 
