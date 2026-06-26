@@ -145,6 +145,8 @@ export default function App() {
   const [authMode, setAuthMode] = useState(null);
   const [viewAsUser, setViewAsUser] = useState(null);
   const [participantMode, setParticipantMode] = useState(false);
+  // Admin-only: jump straight to the day timeline, bypassing activation/training gates
+  const [adminDaysPreview, setAdminDaysPreview] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentFailed, setPaymentFailed] = useState(false);
 
@@ -410,7 +412,8 @@ export default function App() {
   }
 
   // Activation Phase gate — non-admin users (or admins in participant mode) who haven't completed activation
-  if ((!user.isAdmin || participantMode) && !user.activationCompleted) {
+  // Admins can bypass via "Skip to Days" (adminDaysPreview) to reach the day timeline directly.
+  if ((!user.isAdmin || participantMode) && !user.activationCompleted && !(user.isAdmin && adminDaysPreview)) {
     return (
       <>
         {user.isAdmin && participantMode && (
@@ -422,7 +425,12 @@ export default function App() {
             <span style={{ fontSize: 13, fontWeight: 600, color: '#000' }}>
               Participant Mode — Taking the course as a participant
             </span>
-            <button onClick={() => setParticipantMode(false)} style={{
+            <button onClick={() => setAdminDaysPreview(true)} style={{
+              fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
+              border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.25)',
+              color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
+            }}>Skip to Days →</button>
+            <button onClick={() => { setParticipantMode(false); setAdminDaysPreview(false); }} style={{
               fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
               border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.15)',
               color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
@@ -444,7 +452,7 @@ export default function App() {
   const trainingComplete = activeModules.length === 0 ||
     activeModules.every(m => (user.trainingCompletedModules || []).includes(m.id));
 
-  if ((!user.isAdmin || participantMode) && !trainingComplete) {
+  if ((!user.isAdmin || participantMode) && !trainingComplete && !(user.isAdmin && adminDaysPreview)) {
     return (
       <>
         {user.isAdmin && participantMode && (
@@ -456,7 +464,12 @@ export default function App() {
             <span style={{ fontSize: 13, fontWeight: 600, color: '#000' }}>
               Participant Mode — Taking the course as a participant
             </span>
-            <button onClick={() => setParticipantMode(false)} style={{
+            <button onClick={() => setAdminDaysPreview(true)} style={{
+              fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
+              border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.25)',
+              color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
+            }}>Skip to Days →</button>
+            <button onClick={() => { setParticipantMode(false); setAdminDaysPreview(false); }} style={{
               fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
               border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.15)',
               color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
@@ -618,9 +631,11 @@ export default function App() {
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
       }}>
         <span style={{ fontSize: 13, fontWeight: 600, color: '#000' }}>
-          Participant Mode — Taking the course as a participant
+          {adminDaysPreview
+            ? 'Admin Preview — Browsing all days (activation/training skipped)'
+            : 'Participant Mode — Taking the course as a participant'}
         </span>
-        <button onClick={() => setParticipantMode(false)} style={{
+        <button onClick={() => { setParticipantMode(false); setAdminDaysPreview(false); }} style={{
           fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
           border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.15)',
           color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
@@ -629,7 +644,7 @@ export default function App() {
     )}
     <Dashboard
       user={user}
-      onLogout={user.isAdmin && participantMode ? () => setParticipantMode(false) : logout}
+      onLogout={user.isAdmin && participantMode ? () => { setParticipantMode(false); setAdminDaysPreview(false); } : logout}
       onSubmit={submitDay}
       cohortStartDate={cohortStartDate}
       nextCohortDate={nextCohortDate}

@@ -1,5 +1,32 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 
+function normalizeInputs(scenario) {
+  if (scenario.inputs) return scenario.inputs;
+  if (scenario.questions) {
+    return scenario.questions.map(q => ({
+      id: q.id,
+      label: q.text,
+      type: q.type || 'multiple_choice',
+      options: q.options,
+      correctAnswer: q.correctAnswer,
+      tolerance: q.tolerance,
+      unit: q.unit,
+      explanation: q.explanationOnFail || q.explanation,
+    }));
+  }
+  if (scenario.options) {
+    return [{
+      id: scenario.id,
+      label: scenario.question,
+      type: 'multiple_choice',
+      options: scenario.options.map(o => o.text),
+      correctAnswer: scenario.options.findIndex(o => o.id === scenario.correctId),
+      explanation: scenario.explanation,
+    }];
+  }
+  return [];
+}
+
 function checkAnswer(input, userValue) {
   if (input.type === 'multiple_choice') {
     return parseInt(userValue) === input.correctAnswer;
@@ -12,8 +39,9 @@ function checkAnswer(input, userValue) {
   return (userValue || '').trim().toLowerCase() === String(input.correctAnswer).trim().toLowerCase();
 }
 
-export default function QuizSection({ quiz, participantId, dayNumber, existingAttempts, onAttempt, onQuizComplete }) {
+export default function QuizSection({ quiz, participantId, dayNumber, existingAttempts, onAttempt, onQuizComplete, reviewWhenComplete = false }) {
   const containerRef = useRef(null);
+  const [reviewExpanded, setReviewExpanded] = useState(true);
   const scenarios = quiz?.scenarios || [];
 
   const scenarioStatus = useMemo(() => {
@@ -58,6 +86,46 @@ export default function QuizSection({ quiz, participantId, dayNumber, existingAt
   };
 
   if (scenarios.length === 0) return null;
+
+  // ── Review mode: quiz already complete, show questions + answers read-only ──
+  if (reviewWhenComplete && allDone) {
+    return (
+      <div ref={containerRef} className="card" style={{ marginBottom: 24 }}>
+        <button
+          onClick={() => setReviewExpanded(v => !v)}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 8, width: '100%',
+            background: 'transparent', border: 'none', cursor: 'pointer', padding: 0,
+            fontFamily: "'DM Sans', sans-serif",
+          }}
+        >
+          <div style={{
+            width: 28, height: 28, borderRadius: 8, background: 'rgba(72,199,142,0.15)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+          }}>✓</div>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#eee' }}>Check for Understanding</h3>
+          <span style={{ fontSize: 12, color: '#48c78e', fontWeight: 600, marginLeft: 8 }}>Completed</span>
+          <span style={{
+            fontSize: 12, color: '#888', marginLeft: 'auto', transition: 'transform 0.2s',
+            transform: reviewExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+          }}>▼</span>
+        </button>
+
+        {reviewExpanded && (
+          <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 20 }}>
+            {scenarios.map((s, i) => (
+              <ScenarioReview
+                key={s.id}
+                scenario={s}
+                status={scenarioStatus[s.id]}
+                index={scenarios.length > 1 ? i + 1 : null}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} className="card" style={{ marginBottom: 24 }}>
@@ -109,32 +177,7 @@ export default function QuizSection({ quiz, participantId, dayNumber, existingAt
 }
 
 function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, onComplete, existingAttempts }) {
-  const inputs = useMemo(() => {
-    if (scenario.inputs) return scenario.inputs;
-    if (scenario.questions) {
-      return scenario.questions.map(q => ({
-        id: q.id,
-        label: q.text,
-        type: q.type || 'multiple_choice',
-        options: q.options,
-        correctAnswer: q.correctAnswer,
-        tolerance: q.tolerance,
-        unit: q.unit,
-        explanation: q.explanationOnFail || q.explanation,
-      }));
-    }
-    if (scenario.options) {
-      return [{
-        id: scenario.id,
-        label: scenario.question,
-        type: 'multiple_choice',
-        options: scenario.options.map(o => o.text),
-        correctAnswer: scenario.options.findIndex(o => o.id === scenario.correctId),
-        explanation: scenario.explanation,
-      }];
-    }
-    return [];
-  }, [scenario]);
+  const inputs = useMemo(() => normalizeInputs(scenario), [scenario]);
 
   const maxAttempts = scenario.maxAttempts || 3;
   const [attemptCount, setAttemptCount] = useState(status?.attemptCount || 0);
@@ -389,6 +432,86 @@ function ScenarioView({ scenario, status, participantId, dayNumber, onAttempt, o
       >
         {saving ? 'Checking...' : 'Check Answer'}
       </button>
+    </div>
+  );
+}
+
+// ── Scenario Review (read-only, shows correct answers) ──
+
+function ScenarioReview({ scenario, status, index }) {
+  const inputs = normalizeInputs(scenario);
+
+  return (
+    <div>
+      {(scenario.title || index) && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+          {index && (
+            <span style={{
+              fontSize: 11, fontWeight: 700, color: '#888',
+              background: 'rgba(255,255,255,0.06)', borderRadius: 6, padding: '2px 8px',
+            }}>{index}</span>
+          )}
+          {scenario.title && (
+            <h4 style={{ fontSize: 14, fontWeight: 700, color: '#ddd', margin: 0 }}>{scenario.title}</h4>
+          )}
+          {status?.passed && (
+            <span style={{ fontSize: 11, color: '#48c78e', fontWeight: 600, marginLeft: 'auto' }}>Passed</span>
+          )}
+          {status?.exhausted && (
+            <span style={{ fontSize: 11, color: '#e94560', fontWeight: 600, marginLeft: 'auto' }}>Answer shown</span>
+          )}
+        </div>
+      )}
+
+      {scenario.description && (
+        <p style={{ fontSize: 13, color: '#999', lineHeight: 1.6, marginBottom: 12, whiteSpace: 'pre-line' }}>
+          {scenario.description}
+        </p>
+      )}
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        {inputs.map(input => {
+          if (input.type === 'multiple_choice') {
+            return (
+              <MultipleChoiceInput
+                key={input.id}
+                input={input}
+                selected={String(input.correctAnswer)}
+                onSelect={() => {}}
+                isCorrect={false}
+                isWrong={false}
+                submitted={true}
+              />
+            );
+          }
+          return (
+            <div key={input.id}>
+              <label style={{ fontSize: 13, color: '#aaa', fontWeight: 600, display: 'block', marginBottom: 6 }}>
+                {input.label}
+              </label>
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                padding: '8px 14px', borderRadius: 8,
+                background: 'rgba(72,199,142,0.08)', border: '1px solid rgba(72,199,142,0.3)',
+              }}>
+                <span style={{ color: '#48c78e', fontWeight: 700 }}>✓</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: '#48c78e' }}>
+                  {input.rangeLabel || `${input.unit === '$' ? '$' : ''}${input.correctAnswer}${input.unit === '%' ? '%' : ''}`}
+                </span>
+              </div>
+              {input.explanation && (
+                <div style={{
+                  marginTop: 8, padding: '10px 14px', borderRadius: 8,
+                  background: 'rgba(72,199,142,0.04)', borderLeft: '3px solid rgba(72,199,142,0.3)',
+                }}>
+                  <div style={{ fontSize: 12, color: '#48c78e', fontWeight: 700, marginBottom: 4 }}>Why?</div>
+                  <div style={{ fontSize: 13, color: '#aaa', lineHeight: 1.6 }}>{input.explanation}</div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

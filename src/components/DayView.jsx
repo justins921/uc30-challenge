@@ -346,6 +346,24 @@ export default function DayView({
 
         case 'quiz': {
           if (sectionQuizPassed[idx]) {
+            const sectionReallyDone = (section.scenarios || []).every(s =>
+              (quizAttempts || []).some(a => a.scenario_id === s.id && a.correct)
+            );
+            // Keep the completed quiz visible in read-only review mode
+            if (sectionReallyDone) {
+              return (
+                <QuizSection
+                  key={idx}
+                  quiz={{ title: section.title, scenarios: section.scenarios, required: section.required, passingScore: section.passingScore }}
+                  participantId={user.id}
+                  dayNumber={day}
+                  existingAttempts={quizAttempts || []}
+                  onAttempt={onQuizAttempt}
+                  onQuizComplete={() => {}}
+                  reviewWhenComplete
+                />
+              );
+            }
             return (
               <div key={idx} style={{
                 padding: '14px 20px', borderRadius: 12, marginBottom: 24,
@@ -699,6 +717,19 @@ export default function DayView({
                 />
               )}
             </>
+          )}
+
+          {/* Completed quiz — keep visible in read-only review mode */}
+          {hasRequiredQuiz && quizPassed && !quizBypassForVeteran && quizAlreadyPassed && (
+            <QuizSection
+              quiz={dayData.quiz}
+              participantId={user.id}
+              dayNumber={day}
+              existingAttempts={quizAttempts || []}
+              onAttempt={onQuizAttempt}
+              onQuizComplete={() => {}}
+              reviewWhenComplete
+            />
           )}
         </>
       )}

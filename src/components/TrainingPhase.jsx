@@ -400,7 +400,7 @@ export default function TrainingPhase({
             );
           })()}
 
-          {hasQuestions && !principleComplete && (
+          {hasQuestions && (
             <QuizSection
               quiz={principleQuiz}
               participantId={user.id}
@@ -408,18 +408,8 @@ export default function TrainingPhase({
               existingAttempts={principleAttempts}
               onAttempt={handleQuizAttempt}
               onQuizComplete={handlePrincipleQuizComplete}
+              reviewWhenComplete
             />
-          )}
-
-          {hasQuestions && principleComplete && (
-            <div style={{
-              padding: '16px 20px', borderRadius: 12, marginBottom: 24,
-              background: 'rgba(72,199,142,0.08)', border: '1px solid rgba(72,199,142,0.2)',
-              display: 'flex', alignItems: 'center', gap: 10,
-            }}>
-              <span style={{ fontSize: 18, color: '#48c78e' }}>&#10003;</span>
-              <span style={{ fontSize: 14, fontWeight: 600, color: '#48c78e' }}>Principle complete</span>
-            </div>
           )}
 
           {principleComplete && !isLastPrinciple && (
