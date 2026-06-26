@@ -1789,11 +1789,369 @@ export const TRAINING_MODULES = [
     id: 'mod8',
     moduleNumber: 8,
     title: 'Negotiation & Influence',
-    description: 'Negotiate from a position of knowledge and build rapport that closes deals.',
-    principles: [],
-    keyTerms: [],
-    completionMessage: '',
-    comingSoon: true,
+    description: 'Win the deal in the conversation — calmly, and without overpaying. Presence, rapport, discovery, anchoring, concessions, and negotiating through your agent.',
+    principles: [
+      {
+        id: 'mod8_p1',
+        title: 'Negotiation is discovery, not domination',
+        content: 'The goal isn\'t to "beat" the seller — it\'s to **understand what they actually want** so you can build a deal that works for both of you. Treat it as a fight and you create resistance and lose deals you could have made. Treat it as discovery — uncovering the seller\'s real situation and goals — and you find the structure that gets them what they need and gets you your numbers. The person who asks the best questions and listens hardest wins far more than the one with the cleverest pitch.',
+        questions: [
+          {
+            id: 'mod8_p1_q1',
+            text: 'The real goal of a negotiation is to:',
+            type: 'multiple_choice',
+            options: [
+              'Win by making the other side lose',
+              'Understand what the seller wants so you can build a deal that works for both',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p2',
+        title: 'Know your numbers cold before you start',
+        content: 'You decide your limits in the calm *before* the conversation, never in the heat of it. Walking in, you already know:\n- **Your maximum price** — the absolute top dollar you can pay and still hit your standard (your minimum cash-on-cash from Module 3).\n- **Multiple options** — not just one path. A lower cash price, or a higher price with great seller-finance terms (your Seller-Finance Solver from Module 7 gives you these exact numbers). Options mean you can flex without ever exceeding your true max.\n- **Your walk-away point** — the line where you politely leave.\n\nHere\'s why this is non-negotiable: **negotiation is emotional, and emotion makes people overpay.** If you walk in without a hard max, the moment you fall in love with a property or start to feel competitive, you\'ll talk yourself past your number — and buy a deal that doesn\'t cash flow. So set your max and walk-away in advance, ideally in writing, and treat them as fixed. No matter what happens in the room — pressure, a counter, your own excitement — **you do not go above the max you set.** The discipline to hold your number is what separates investors who make money from those who overpay and wonder why.',
+        questions: [
+          {
+            id: 'mod8_p2_q1',
+            text: 'Before a negotiation, you should already know:',
+            type: 'multiple_choice',
+            options: [
+              'Your maximum price, your options, and your walk-away point — decided in advance',
+              'Nothing — you\'ll feel out your limit based on how it goes',
+            ],
+            correctAnswer: 0,
+          },
+          {
+            id: 'mod8_p2_q2',
+            text: 'The main reason to set your max before you start is:',
+            type: 'multiple_choice',
+            options: [
+              'Negotiation is emotional, and emotion makes people overpay',
+              'Sellers respect buyers who decide quickly',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p3',
+        title: 'Whoever cares least has the most power',
+        content: 'Your single biggest source of leverage is being **genuinely willing to walk away.** When you *need* a specific deal, the other side feels it and it costs you. When you have steady deal flow (Module 5), no single property is precious — so you negotiate from calm instead of desperation. Desperation is the most expensive thing you can bring to a table: it makes you raise your price, drop your terms, and ignore red flags. The more deals you have coming, the better you negotiate every one of them, because you truly don\'t need any single one. Walk-away power isn\'t a bluff — it\'s a real position you build by having options.',
+        questions: [
+          {
+            id: 'mod8_p3_q1',
+            text: 'Your biggest source of negotiating leverage is:',
+            type: 'multiple_choice',
+            options: [
+              'Being genuinely willing to walk away',
+              'Being the most enthusiastic person in the room',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p4',
+        title: 'Create your "office" and use your presence',
+        content: 'Wherever you meet a seller, treat it as **your office** — you set the tone, the pace, and the calm. Trust is what actually gets deals done, and you build it less with words than with how you carry yourself. The specific, learnable moves:\n- **Stand or sit *beside* them, not across from them.** Being shoulder-to-shoulder — walking the property together, looking at your analysis side by side — feels collaborative, like you\'re on the same team solving a problem. Sitting directly across a table feels like opposition, a standoff. Get beside them whenever you can.\n- **Smile — genuinely and often.** A real smile lowers defenses and tells the seller you\'re safe to deal with.\n- **Use planned eye-contact breaks.** Constant, unbroken eye contact feels like pressure or a stare-down. Make warm eye contact, then deliberately break it — glance at the property, the paperwork, the view — and come back. That natural rhythm feels comfortable, not confrontational.\n- **Return with a positive nod.** When you come back to their eyes, add a small, affirming nod. It signals warmth and agreement and quietly invites them to keep talking.\n- **Slow. Way. Down.** This is the big one. Slow your speech and your movements far more than feels natural — more than you think you need to. The people who build the most trust are slow, calm talkers. Speed reads as nervousness or a hustle; slowness reads as confidence and honesty. The moment you feel the urge to rush is exactly the moment to slow down more.',
+        questions: [
+          {
+            id: 'mod8_p4_q1',
+            text: 'To build trust with your presence, you should:',
+            type: 'multiple_choice',
+            options: [
+              'Sit directly across from the seller and hold constant eye contact to project confidence',
+              'Get beside them, smile, use eye-contact breaks with positive nods, and slow way down',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p5',
+        title: 'Speak with calm authority: the down-pitch',
+        content: '*How* you say things carries as much weight as what you say, and the key habit is the **down-pitch** — letting your tone fall at the end of your sentences instead of rising. A downward inflection sounds certain and settled, like a statement of fact. An upward inflection at the end — the way a question sounds — makes even true statements sound unsure, as if you\'re asking for approval. Confident people end their sentences *down.*\n\nPractice landing your offers and key points with a calm, falling tone: *"Based on the numbers, this is what makes sense for me."* — said as a period, not a question mark. Paired with slowing down (Principle 4), the down-pitch makes you sound like someone who knows their numbers and isn\'t desperate. That is exactly who a seller wants to deal with — and exactly who holds the leverage.',
+        questions: [
+          {
+            id: 'mod8_p5_q1',
+            text: 'Letting your tone fall at the end of a sentence (a "down-pitch") makes you sound:',
+            type: 'multiple_choice',
+            options: [
+              'Certain and confident',
+              'Unsure, like you\'re asking permission',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p6',
+        title: 'Build rapport and talk the property up',
+        content: 'Here\'s the counterintuitive truth: you do **not** lower a price by trashing the property. Picking it apart insults the owner — who usually has pride in it — and hardens their resistance. Do the opposite. Build rapport, find genuine things to like, and **talk the property up** — then make your interest clearly conditional on the numbers:\n\n*"Honestly, this is a great property — I\'d love to buy it. The only thing that matters to me is whether the numbers work as an investment."*\n\nThis does two powerful things at once. First, it makes the seller *want* to sell to you — people sell to buyers they like, who appreciate what they\'ve built. Second, it frames the whole negotiation around **your numbers**, not the property\'s flaws. The constraint is never "your house isn\'t worth it" (an attack they\'ll fight) — it\'s "the math has to work for me" (a problem they can help you solve). You stay warm, and the numbers stay firm.',
+        questions: [
+          {
+            id: 'mod8_p6_q1',
+            text: 'The better way to set up a price negotiation is to:',
+            type: 'multiple_choice',
+            options: [
+              'Point out everything wrong with the property to justify a low number',
+              'Talk the property up and make your interest conditional on the numbers working',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p7',
+        title: 'Build yourself up as the buyer they want',
+        content: 'A seller isn\'t only choosing a price — they\'re choosing a **buyer they can trust to actually close.** A higher offer that might collapse is worth less than a slightly lower offer that\'s certain. So make yourself the obvious, safe choice by establishing your credibility early:\n- You have a **relationship with a good title company** — you close cleanly and professionally.\n- You\'re **pre-approved and your financing is lined up** (Module 4) — the money is real, not hopeful.\n- You can **close quickly** and on their timeline.\n\nWhen a seller believes you\'ll truly close — fast and without drama — they\'ll often take *less* from you than from a bigger offer that feels risky. Certainty has real value. This is the in-person version of becoming the go-to buyer (Module 5): you\'re not just making an offer, you\'re presenting yourself as the easiest, safest way for them to be done.',
+        questions: [
+          {
+            id: 'mod8_p7_q1',
+            text: 'Beyond price, a seller is also choosing:',
+            type: 'multiple_choice',
+            options: [
+              'A buyer they trust to actually close — so prove your certainty (title company, pre-approval, fast close)',
+              'Only the highest number; nothing else matters',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p8',
+        title: 'Listen more than you talk, and use silence',
+        content: 'Most beginners over-explain — they pitch, justify, and fill every silence, and talk themselves right out of deals. Flip the ratio: aim to **listen about 70% and talk 30%.** Ask a question, then *stop* and let the seller answer fully. And treat **silence as a tool, not an awkward gap to rescue.** After you make an offer or ask a real question, say nothing. Let them fill the space — they\'ll often tell you exactly what they need, or talk themselves toward your number. The discipline to stay quiet is one of the most powerful and underused skills in negotiation.',
+        questions: [
+          {
+            id: 'mod8_p8_q1',
+            text: 'In a negotiation you should generally:',
+            type: 'multiple_choice',
+            options: [
+              'Do most of the talking to make your case',
+              'Listen more than you talk, and let silence work after you ask or offer',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p9',
+        title: 'Find the real motivation (it\'s rarely just price)',
+        content: 'Sellers are moved by far more than the number — **timing, certainty, convenience, relief from a problem, pride, and feeling treated fairly.** Someone in a hurry may take less for a fast, certain close. Someone tired of being a landlord may value being *done* over the last dollar. You can\'t know until you ask:\n- "What\'s got you thinking about selling?"\n- "What would the ideal timeline look like for you?"\n- "When this is all done, what matters most to you about how it goes?"\n\nTheir answers tell you how to win **without overpaying** — by solving the problem they actually have. (The next module goes deep on seller motivation; here, just build the habit of digging for it.)',
+        questions: [
+          {
+            id: 'mod8_p9_q1',
+            text: 'Most sellers are motivated by:',
+            type: 'multiple_choice',
+            options: [
+              'Only the highest possible price',
+              'A mix of price, timing, certainty, convenience, and relief from a problem',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p10',
+        title: 'Anchor with a reason, and show your work',
+        content: 'Where you start is your **anchor** — and it should give you room to move (Principle 11). But a low number thrown out naked feels like an insult and kills trust. The fix: anchor with a reason, and **come prepared to prove it.** Walk in with your analysis and your comparable sales ready to show — printed or on your screen. When you can walk a seller through real comps and your actual numbers, your offer stops feeling like an attack and starts feeling like fair, objective reality:\n\n*"Here\'s what comparable places have sold for, here\'s the work this one needs, and here\'s the number the math supports — let me show you."*\n\nPreparation *is* persuasion. A seller will argue with an opinion; it\'s much harder to argue with comparable sales sitting right in front of them. Never anchor without being ready to justify it.',
+        questions: [
+          {
+            id: 'mod8_p10_q1',
+            text: 'The most persuasive way to present your anchor is to:',
+            type: 'multiple_choice',
+            options: [
+              'State a low number and hope they accept',
+              'Come prepared and show the real comps and analysis that justify it',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p11',
+        title: 'Start with room, and make every concession hurt',
+        content: 'Two disciplines work together, and this is the heart of the craft.\n\n**First, open with room to move.** Your initial offer should sit *below* your maximum, so you have somewhere to go. You must be able to walk away — but you also need an opening you can bend. If you open at your absolute max, you have nothing left to give and the seller never gets the feeling of winning.\n\n**Second, make every concession feel painful.** When you move toward your bottom dollar, never do it quickly or easily. Each step should look like it costs you something real — pause, show reluctance, make them feel they earned it:\n\n*"That\'s really pushing it for me... okay — if you can [do X], I can try to make that work."*\n\nWhen you give ground that *appears* to hurt, the seller feels like they won — even though you never went above the number you already knew you could pay. A concession given easily feels worthless and invites them to push for more; a concession that visibly costs you feels like a victory and settles them.\n\nThe iron rule under both: **you do not get emotional, and you do not exceed your max.** All the movement happens inside the range you set in advance (Principle 2). You\'re not improvising your limit — you\'re performing the journey to a number you already decided you could live with.',
+        questions: [
+          {
+            id: 'mod8_p11_q1',
+            text: 'Your opening offer should be:',
+            type: 'multiple_choice',
+            options: [
+              'Your absolute maximum, to show good faith',
+              'Below your max, so you have real room to move',
+            ],
+            correctAnswer: 1,
+          },
+          {
+            id: 'mod8_p11_q2',
+            text: 'When you concede toward your bottom dollar, you should:',
+            type: 'multiple_choice',
+            options: [
+              'Do it quickly and easily so you seem generous',
+              'Make it look and feel costly, so the seller feels they earned the win',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p12',
+        title: 'Make it win-win and easy to say yes',
+        content: 'The deals that close are the ones where the seller gets what *they* care about most while you get your numbers. Once you\'ve found their motivation (Principle 9), structure to it — price for one seller, speed for another, certainty or terms for the next. Your best tool here is the **multiple-offer method** from Module 7: instead of one take-it-or-leave-it number, give the seller **two or three structured options** and let them choose. It turns "yes or no" into "which one," makes them feel in control, and reveals which thing they truly value. People say yes far more easily to a choice they made themselves than to an ultimatum.',
+        questions: [
+          {
+            id: 'mod8_p12_q1',
+            text: 'An effective way to make it easy for a seller to say yes is to:',
+            type: 'multiple_choice',
+            options: [
+              'Give one firm take-it-or-leave-it number',
+              'Offer two or three structured options and let them choose',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p13',
+        title: 'Create honest urgency',
+        content: 'A deal with no reason to act now tends to drift — and drift kills deals. Give the seller **real** reasons the timing favors moving now:\n- **Seasons / timing.** "If we close before winter, you avoid another season of vacancy and upkeep." Seasonal and market timing can be genuine motivators.\n- **Financing windows.** "I\'ve got financing locked at this rate, but that window closes soon." A real rate lock or loan timeline creates a legitimate deadline.\n- **Limited availability.** Your capital and attention are finite — you\'re looking at a few properties and will move first on whichever comes together.\n\nKeep it honest — real reasons, not manufactured pressure. Genuine urgency moves a "maybe later" into a "let\'s do it," which is often the difference between a deal and a cold follow-up (Module 5).',
+        questions: [
+          {
+            id: 'mod8_p13_q1',
+            text: 'A good way to create urgency is to:',
+            type: 'multiple_choice',
+            options: [
+              'Use a real deadline — seasonal timing, a financing/rate window, or limited availability',
+              'Invent fake pressure to rush the seller',
+            ],
+            correctAnswer: 0,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p14',
+        title: 'Handle objections by understanding, not arguing',
+        content: 'When a seller pushes back — "that\'s too low," "I need to think about it," "I was hoping for more" — your instinct may be to argue or defend. Don\'t. **Get curious instead.** Behind almost every objection is an unmet need or a fear. Surface it:\n\n*"Totally fair — help me understand what\'s behind that for you."*\n\nOnce you understand the real concern, you can address *it*, and the objection usually dissolves on its own. You never argue your way into a deal; you understand your way into one. Arguing makes a seller defend their position harder; curiosity invites them to move.',
+        questions: [
+          {
+            id: 'mod8_p14_q1',
+            text: 'When a seller objects, the best first move is to:',
+            type: 'multiple_choice',
+            options: [
+              'Argue your case harder',
+              'Get curious and understand the real need or fear behind it',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p15',
+        title: 'Never negotiate against yourself, and get it in writing',
+        content: 'Two disciplines protect you at the finish:\n- **Never negotiate against yourself.** Make your offer, then *wait.* Don\'t lower your own number before they\'ve countered, and don\'t keep sweetening the deal into silence because you\'re nervous. If they go quiet, let them.\n- **Get it in writing immediately.** The moment you reach agreement, paper it (Module 6). A verbal "yes" is not a deal — memories drift and minds change. Lock the terms in a contract while the agreement is fresh.\n\nCalm, patient, prepared, and documented beats eager and verbal every single time.',
+        questions: [
+          {
+            id: 'mod8_p15_q1',
+            text: '"Never negotiate against yourself" means:',
+            type: 'multiple_choice',
+            options: [
+              'Make your offer and wait — don\'t lower it before they counter',
+              'Always offer a bit less than you\'re willing to pay',
+            ],
+            correctAnswer: 0,
+          },
+          {
+            id: 'mod8_p15_q2',
+            text: 'The moment you reach a verbal agreement, you should:',
+            type: 'multiple_choice',
+            options: [
+              'Trust the handshake and handle paperwork eventually',
+              'Get it in writing right away — a verbal yes isn\'t a deal',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p16',
+        title: 'Most of your early offers go through an agent',
+        content: 'A quick channel reality check. Everything in the presence and positioning principles — your presence, positioning, eye contact, slowing down, the down-pitch — is for when you\'re **face-to-face with a seller.** That\'s your FSBO and off-market deals (Module 5). But you were told to start **on-market for speed**, and on-market you never meet the seller: your buyer\'s agent talks to the listing agent, who talks to the seller. On those deals, **your agent becomes your negotiator.** Every principle still applies — discovery, walk-away power, motivation, anchoring with proof, room to move, painful concessions, win-win options, urgency — but it\'s executed *through* your agent. Which makes your choice of agent one of the most important negotiating decisions you\'ll make.',
+        questions: [
+          {
+            id: 'mod8_p16_q1',
+            text: 'On an on-market deal, who actually negotiates with the seller?',
+            type: 'multiple_choice',
+            options: [
+              'You, face to face',
+              'Your agent, through the listing agent — so your agent\'s skill is your negotiating power',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p17',
+        title: 'Pick an agent who can sell, not just fill out forms',
+        content: 'Module 5 told you to find an investor-friendly agent. Now add the negotiation lens: you need one who is also a genuine **salesperson** — someone who can **soften a low offer and justify it**, not just relay a number. This matters enormously. A weak agent presents your offer as "my buyer offered X" and lets it sound like an insult. A strong agent **frames** it — walks the listing agent through your comps and analysis, explains the repairs, builds you up as a serious, qualified buyer who closes — and makes a low-but-fair offer land as reasonable. The right agent:\n- **Understands real estate investing and can analyze a property**, so they can defend your numbers with credibility.\n- **Knows how to justify a lower offer** with comps and condition, so it never reads as a careless lowball.\n- **Builds you up as a buyer** — pre-approved, title company ready, fast and certain close.\n- **Understands your strengths and your strategy**, so they represent you the way you\'d represent yourself.\n\nOn most of your early deals, your agent\'s selling ability *is* your negotiating ability. Choosing a smooth, investor-savvy negotiator over a passive form-filler can be worth more than any single tactic in this module.',
+        questions: [
+          {
+            id: 'mod8_p17_q1',
+            text: 'The most valuable trait in an agent who negotiates for you is:',
+            type: 'multiple_choice',
+            options: [
+              'They submit offers quickly and quietly',
+              'They can sell — softening and justifying your offer with comps so it lands as fair',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'mod8_p18',
+        title: 'Coach your agent on your strategy (but hold your true max)',
+        content: 'A great agent still isn\'t a mind reader. Brief them like a teammate before every offer, and hand them the ammunition to fight for you:\n- Your **comps and analysis**, so they can justify the offer.\n- Your **menu of options** (Module 7), so they can present a choice, not an ultimatum.\n- Your **buyer credibility** to broadcast — pre-approved, title company, fast close.\n- Your **urgency angle**, and the fact that you\'re willing to walk.\n\nTell them the number, the reasoning, and exactly how you want it positioned. But here\'s the nuance most investors get wrong: **be careful how much of your true maximum you reveal — even to your own agent.** Their commission rises with the purchase price, so they\'re quietly incentivized to nudge you up "to get the deal done." Give them your offer, your room to move, and your willingness to walk — and keep your actual ceiling to yourself. Your max is yours alone.',
+        questions: [
+          {
+            id: 'mod8_p18_q1',
+            text: 'You should coach your agent before an offer by giving them:',
+            type: 'multiple_choice',
+            options: [
+              'Your comps, your option menu, your buyer credibility, and your urgency angle',
+              'Nothing — let them figure out how to present it',
+            ],
+            correctAnswer: 0,
+          },
+          {
+            id: 'mod8_p18_q2',
+            text: 'How much of your true maximum price should you tell your own agent?',
+            type: 'multiple_choice',
+            options: [
+              'All of it, so they can negotiate freely',
+              'Keep your true ceiling to yourself — their commission rises with the price',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+    ],
+    keyTerms: [
+      { term: 'Your max (top dollar)', definition: 'The highest price you can pay and still hit your minimum cash-on-cash standard — decided before the negotiation and never exceeded.' },
+      { term: 'Walk-away point', definition: 'The line where you politely leave; the source of your leverage, made real by deal flow.' },
+      { term: 'Anchor', definition: 'The first number put on the table, which frames the whole negotiation — most effective when prepared and backed by comps and analysis.' },
+      { term: 'Down-pitch', definition: 'Letting your tone fall at the end of a sentence so it lands as a confident statement rather than an unsure question.' },
+      { term: 'Positioning', definition: 'Placing yourself beside the seller rather than across from them, so the conversation feels collaborative instead of confrontational.' },
+      { term: 'Concession', definition: 'Ground you give in a negotiation — given slowly and made to look costly, so the seller feels they earned a win, and never past your max.' },
+      { term: 'Objection', definition: 'A seller\'s pushback, usually a signal of an unmet need or fear to understand rather than an argument to win.' },
+      { term: 'Win-win', definition: 'A deal structured so the seller gets what they care about most while you still hit your numbers.' },
+      { term: 'Urgency', definition: 'An honest, real reason for the seller to act now — seasonal timing, a financing window, or limited availability.' },
+      { term: 'Rapport', definition: 'Genuine trust and ease between you and the seller, which makes every other move work better.' },
+      { term: 'Buyer\'s agent / listing agent', definition: 'On an on-market deal, your buyer\'s agent negotiates with the seller\'s listing agent — so your agent carries your strategy to the other side, and their selling skill becomes your negotiating power.' },
+    ],
+    completionMessage: 'Module 8 complete. You now have the full negotiation toolkit: decide your max and options before you start and never let emotion push you past them; build trust with your presence; build rapport by talking the property up while keeping the numbers firm; position yourself as the buyer they can trust to close; listen more than you talk; find the real motivation; anchor with prepared proof; open with room and make every concession hurt; build win-win options and honest urgency; handle objections with curiosity; lock the deal in writing; and choose an agent who can truly sell while keeping your true max to yourself. Next: going deep on seller problems and motivation.',
   },
   {
     id: 'mod9',
