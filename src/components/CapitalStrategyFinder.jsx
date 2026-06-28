@@ -289,76 +289,100 @@ function computeBestFit(a) {
   const renoFlavor = has(RENO_MED_HEAVY, a.RENO) ? 'value-add' : 'turnkey';
   const lowMoney = has(CASH_LOW, a.CASH);
 
+  // Strong financial position: lots of cash + great credit → every door is open.
+  // finalize() hypes them up and surfaces commercial / DSCR / conventional as CO-top options
+  // alongside whatever the base path was (e.g. they can house-hack AND go big).
+  const strongProfile = has(CASH_100K_PLUS, a.CASH) && has(CREDIT_GOOD_PLUS, a.CREDIT);
+  const commercialOk = has(CASH_100K_PLUS, a.CASH) && has(RESERVES_OK, a.RESERVES);
+  const finalize = (base) => {
+    if (!strongProfile) return { ...base, topStrategyIds: [base.strategyId] };
+    const extraFin = pick(['conv_inv', 'dscr', 'commercial']);
+    const financeIds = [...new Set([...base.financeIds, ...extraFin])];
+    const topStrategyIds = [...new Set([
+      base.strategyId,
+      'small_mf',
+      ...(commercialOk ? ['commercial_mf'] : []),
+    ])];
+    const big = a.CASH === '250k_plus';
+    const creditWord = a.CREDIT === 'excellent' ? 'excellent' : 'strong';
+    const commercialBit = commercialOk ? ', and even commercial 5+ unit apartments' : '';
+    const lead = base.kind === 'house_hack'
+      ? "House hacking is a fantastic, low-cash way in — but you're equally set up for "
+      : "You're set up for ";
+    const abundanceText = `You're in a rare spot. With ${big ? '$250K+' : '$100K+'} to invest and ${creditWord} credit, almost every door is open to you. ${lead}conventional and DSCR loans on straight rentals${commercialBit}. You don't have to force one path — choose whichever opportunity fits the life and cash flow you want most. You've earned the options.`;
+    return { ...base, financeIds, topStrategyIds, abundance: true, abundanceText };
+  };
+
   // 1. House hacking — the lowest-cash, best-terms beginner move. Pair with owner-occupant loans ONLY.
   if (has(LIVE_YES_MAYBE, a.LIVE_IN)) {
     const fin = has(CREDIT_GOOD_PLUS, a.CREDIT) ? pick(['fha', 'oo_conv']) : pick(['fha']);
     const creditAside = has(CREDIT_WEAK, a.CREDIT)
       ? ' FHA is forgiving on credit, so it still works — and raising your score later opens cheaper conventional terms.'
       : '';
-    return {
+    return finalize({
       kind: 'house_hack',
-      title: 'Your best first move: House hacking',
+      title: strongProfile ? 'Your best first move: House hacking (and you can pick any path)' : 'Your best first move: House hacking',
       strategyId: 'house_hack',
       financeIds: fin,
       why: `Because you're open to living in the property for a year, you unlock the lowest-cash, best-terms way into real estate: an owner-occupant loan (FHA ~3.5% down, or conventional ~3–5% down) on a 2–4 unit. Live in one part, rent the rest, and your tenants help cover the mortgage.${lowMoney ? ' This is especially powerful for you — it keeps your required cash way down.' : ''}${creditAside}`,
-    };
+    });
   }
 
   // 2. Low/no money + a potential partner → Partnership (your hustle, their capital/credit).
   if (lowMoney && has(PARTNER_YES_MAYBE, a.PARTNER)) {
-    return {
+    return finalize({
       kind: 'partnership',
       title: 'Your best first move: Partner up',
       strategyId: 'partnership',
       financeIds: pick(['partnership_cap', 'seller_fin', 'conv_inv', 'dscr']),
       why: "Your own cash is the main bottleneck right now — but you have a potential partner. Team up: they bring the money and/or credit, you bring the hustle of finding, analyzing, and managing the deal. With a partner's capital and credit behind the deal, you can use normal financing and split the result. It's the classic way to get a first deal done.",
-    };
+    });
   }
 
   // 3. Low/no money + no partner + won't live in → Start with little/no money (make cash + acquire creatively).
   if (lowMoney && a.PARTNER === 'no') {
-    return {
+    return finalize({
       kind: 'no_money',
       title: 'Your best first move: Start with little or no money',
       strategyId: 'wholesale',
       financeIds: pick(['seller_fin', 'subto', 'wrap']),
       why: "You don't need money to start — you need a deal. Run two tracks at once: (1) make cash and learn the market now by wholesaling or bird-dogging — find great deals and hand them to investors who have the money, for a fee; and (2) acquire creatively from motivated sellers using seller financing or subject-to, which can need little to no money down. Use the income and network from track 1 to fund track 2. The plan at the bottom maps it out.",
-    };
+    });
   }
 
   // 4. Self-employed / hard-to-document income, with capital + good credit → DSCR + small multifamily.
   if (has(INCOME_SELF_LIMITED, a.INCOME) && has(CASH_50K_PLUS, a.CASH) && has(CREDIT_GOOD_PLUS, a.CREDIT)) {
-    return {
+    return finalize({
       kind: 'dscr',
       title: 'Your best first move: DSCR + small multifamily',
       strategyId: 'small_mf',
       financeIds: pick(['dscr', 'portfolio', 'conv_inv']),
       why: 'Your income is strong but harder to document the traditional way — so qualify on the property instead. A DSCR loan looks at the rental income, not your tax returns, and pairs perfectly with a 2–4 unit for real cash flow.',
-    };
+    });
   }
 
   // 5. Strong capital + reserves → Commercial / larger multifamily.
   if (has(CASH_100K_PLUS, a.CASH) && has(RESERVES_OK, a.RESERVES)) {
-    return {
+    return finalize({
       kind: 'commercial',
       title: 'Your best first move: Commercial / larger multifamily',
       strategyId: 'commercial_mf',
       financeIds: pick(['commercial', 'conv_inv', 'dscr']),
       why: "You have the capital and reserves to go bigger. Commercial loans on 5+ unit buildings qualify on the property's income, so you can scale cash flow faster. Prefer to start smaller? A 2–4 unit with a conventional or DSCR loan is a great on-ramp.",
-    };
+    });
   }
 
   // 6. Default → Small multifamily buy-and-hold (financing matched to credit/income).
   const defFin = has(CREDIT_GOOD_PLUS, a.CREDIT) && has(INCOME_DOCUMENTABLE, a.INCOME)
     ? pick(['conv_inv', 'dscr', 'portfolio'])
     : pick(['dscr', 'portfolio', 'conv_inv', 'seller_fin']);
-  return {
+  return finalize({
     kind: 'default',
     title: `Your best first move: Small multifamily buy-and-hold (${renoFlavor === 'value-add' ? 'value-add' : 'turnkey'})`,
     strategyId: 'small_mf',
     financeIds: defFin,
     why: `A 2–4 unit is the cleanest path to real cash flow with residential financing — usually ~20–25% down on an investment loan.${renoFlavor === 'value-add' ? " Since you're open to renovation, look for a value-add deal you can force appreciation on." : ' Target a turnkey property so you can start cash-flowing right away.'}`,
-  };
+  });
 }
 
 export default function CapitalStrategyFinder({ onSave, existing, embedded, userId, onResult }) {
@@ -455,10 +479,11 @@ export default function CapitalStrategyFinder({ onSave, existing, embedded, user
 
     const boosters = FINANCING.filter(f => f.booster && f.unlock(a));
 
+    const topStrategyIds = bestFit.topStrategyIds || [bestFit.strategyId];
     let strategies = STRATEGIES.filter(s => s.unlock(a)).map(s => ({ ...s }));
     strategies.sort((x, y) => {
-      const xb = x.id === bestFit.strategyId ? 1 : 0;
-      const yb = y.id === bestFit.strategyId ? 1 : 0;
+      const xb = topStrategyIds.includes(x.id) ? 1 : 0;
+      const yb = topStrategyIds.includes(y.id) ? 1 : 0;
       return yb - xb;
     });
 
@@ -661,6 +686,20 @@ function ResultsPage({ results, answers, onRestart, showMoreFinancing, setShowMo
         <p style={{ fontSize: 14, color: '#cfe', lineHeight: 1.7, margin: 0 }}>{bestFit.why}</p>
       </div>
 
+      {/* Abundance hype — strong cash + great credit: every door is open */}
+      {bestFit.abundance && (
+        <div style={{
+          padding: '18px 22px', borderRadius: 14, marginTop: 14,
+          background: 'linear-gradient(135deg, rgba(240,165,0,0.12), rgba(240,165,0,0.03))',
+          border: '1px solid rgba(240,165,0,0.35)',
+        }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: C.gold, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+            ✦ You're in a phenomenal position
+          </div>
+          <p style={{ fontSize: 14, color: '#f5e6c8', lineHeight: 1.7, margin: 0 }}>{bestFit.abundanceText}</p>
+        </div>
+      )}
+
       {/* No-money starting plan — prominent, right under the best-fit card */}
       {showFoundation && (
         <div style={{ marginTop: 16 }}>
@@ -705,7 +744,7 @@ function ResultsPage({ results, answers, onRestart, showMoreFinancing, setShowMo
             key={s.id}
             name={s.name}
             desc={s.desc}
-            highlight={s.id === bestFit.strategyId}
+            highlight={(bestFit.topStrategyIds || [bestFit.strategyId]).includes(s.id)}
             color={C.purple}
           />
         ))}
