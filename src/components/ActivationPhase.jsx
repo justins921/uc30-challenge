@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import {
+  BUYER_STRENGTHS, TIME_TO_CLOSE_OPTIONS, URGENCY_OPTIONS, DEAL_BREAKERS,
+  DEFAULT_DOWN_PAYMENT_PCT, computeBuyingPower, fmtUSD, generateBuyBoxPDF,
+} from '../utils/buyBox';
 
 const TOTAL_STEPS = 6;
 
@@ -380,9 +384,22 @@ function parseCurrency(str) {
   return isNaN(num) ? '' : num;
 }
 
-function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded }) {
+function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded, user }) {
   const bb = existingBuyBox || {};
   const bbReturn = bb.returnRequirements || {};
+  const ip = bb.investorProfile || {};
+  const bp = bb.buyingPower || {};
+  // Investor Profile
+  const [fullName, setFullName] = useState(ip.fullName || `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || '');
+  const [phone, setPhone] = useState(ip.phone || '');
+  const [email, setEmail] = useState(ip.email || user?.email || '');
+  const [strengths, setStrengths] = useState(ip.strengths || []);
+  const [strengthInput, setStrengthInput] = useState('');
+  const [timeToClose, setTimeToClose] = useState(ip.timeToClose || '');
+  const [urgency, setUrgency] = useState(ip.urgency || []);
+  const [urgencyInput, setUrgencyInput] = useState('');
+  const [urgencyDetails, setUrgencyDetails] = useState(ip.urgencyDetails || {});
+  // Criteria
   const [markets, setMarkets] = useState(bb.markets || []);
   const [marketInput, setMarketInput] = useState('');
   const [zipCodes, setZipCodes] = useState(bb.zipCodes || []);
@@ -397,15 +414,20 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded }) {
   const [conditionTolerance, setConditionTolerance] = useState(bb.conditionTolerance || '');
   const [priceMin, setPriceMin] = useState(bb.priceMin || '');
   const [priceMax, setPriceMax] = useState(bb.priceMax || '');
-  const [downPayment, setDownPayment] = useState(bb.downPayment || '');
+  // Buying Power (replaces the old raw "down payment / cash available" field)
+  const [cashAvailable, setCashAvailable] = useState(bp.cashAvailable || bb.downPayment || '');
+  const [downPaymentPercent, setDownPaymentPercent] = useState(bp.downPaymentPercent ?? DEFAULT_DOWN_PAYMENT_PCT);
   const [strategies, setStrategies] = useState(bb.strategies || []);
   const [financingTypes, setFinancingTypes] = useState(bb.financingTypes || []);
   const [minCashOnCash, setMinCashOnCash] = useState(bbReturn.minCashOnCash || '');
   const [minCapRate, setMinCapRate] = useState(bbReturn.minCapRate || '');
   const [minCashFlowPerUnit, setMinCashFlowPerUnit] = useState(bbReturn.minCashFlowPerUnit || '');
-  const [minIRR, setMinIRR] = useState(bbReturn.minIRR || '');
+  const [dealBreakers, setDealBreakers] = useState(bb.dealBreakers || []);
+  const [dealBreakerInput, setDealBreakerInput] = useState('');
   const [additionalNotes, setAdditionalNotes] = useState(bb.additionalNotes || '');
   const [saving, setSaving] = useState(false);
+
+  const buyingPowerValue = computeBuyingPower(cashAvailable, downPaymentPercent);
 
   const addMarket = () => {
     const trimmed = marketInput.trim();
@@ -434,43 +456,66 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded }) {
   const hasReturnReq = !!(
     (minCashOnCash && parseFloat(minCashOnCash) > 0) ||
     (minCapRate && parseFloat(minCapRate) > 0) ||
-    (minCashFlowPerUnit && parseFloat(minCashFlowPerUnit) > 0) ||
-    (minIRR && parseFloat(minIRR) > 0)
+    (minCashFlowPerUnit && parseFloat(minCashFlowPerUnit) > 0)
   );
 
-  const canProceed = markets.length > 0 && propertyTypes.length > 0 && hasReturnReq;
+  const hasContact = fullName.trim() && phone.trim() && email.trim();
+  const canProceed = !!hasContact && markets.length > 0 && propertyTypes.length > 0 && hasReturnReq;
+
+  const buildBuyBoxData = () => ({
+    investorProfile: {
+      fullName: fullName.trim(),
+      phone: phone.trim(),
+      email: email.trim(),
+      strengths,
+      timeToClose: timeToClose || null,
+      urgency,
+      urgencyDetails,
+    },
+    markets,
+    zipCodes,
+    propertyTypes,
+    yearBuiltMin: yearBuiltMin ? parseInt(yearBuiltMin) : null,
+    yearBuiltMax: yearBuiltMax ? parseInt(yearBuiltMax) : null,
+    bedroomsMin: bedroomsMin ? parseInt(bedroomsMin) : null,
+    bedroomsMax: bedroomsMax ? parseInt(bedroomsMax) : null,
+    bathroomsMin: bathroomsMin ? parseInt(bathroomsMin) : null,
+    bathroomsMax: bathroomsMax ? parseInt(bathroomsMax) : null,
+    conditionTolerance: conditionTolerance || null,
+    priceMin: priceMin || null,
+    priceMax: priceMax || null,
+    buyingPower: {
+      cashAvailable: cashAvailable || null,
+      downPaymentPercent: downPaymentPercent || DEFAULT_DOWN_PAYMENT_PCT,
+    },
+    strategies,
+    financingTypes,
+    returnRequirements: {
+      minCashOnCash: minCashOnCash ? parseFloat(minCashOnCash) : null,
+      minCapRate: minCapRate ? parseFloat(minCapRate) : null,
+      minCashFlowPerUnit: minCashFlowPerUnit ? parseFloat(minCashFlowPerUnit) : null,
+    },
+    dealBreakers,
+    additionalNotes: additionalNotes.trim() || '',
+  });
 
   const handleNext = async () => {
     if (!canProceed) return;
     setSaving(true);
-    await onSave({
-      buyBox: {
-        markets,
-        zipCodes,
-        propertyTypes,
-        yearBuiltMin: yearBuiltMin ? parseInt(yearBuiltMin) : null,
-        yearBuiltMax: yearBuiltMax ? parseInt(yearBuiltMax) : null,
-        bedroomsMin: bedroomsMin ? parseInt(bedroomsMin) : null,
-        bedroomsMax: bedroomsMax ? parseInt(bedroomsMax) : null,
-        bathroomsMin: bathroomsMin ? parseInt(bathroomsMin) : null,
-        bathroomsMax: bathroomsMax ? parseInt(bathroomsMax) : null,
-        conditionTolerance: conditionTolerance || null,
-        priceMin: priceMin || null,
-        priceMax: priceMax || null,
-        downPayment: downPayment || null,
-        strategies,
-        financingTypes,
-        returnRequirements: {
-          minCashOnCash: minCashOnCash ? parseFloat(minCashOnCash) : null,
-          minCapRate: minCapRate ? parseFloat(minCapRate) : null,
-          minCashFlowPerUnit: minCashFlowPerUnit ? parseFloat(minCashFlowPerUnit) : null,
-          minIRR: minIRR ? parseFloat(minIRR) : null,
-        },
-        additionalNotes: additionalNotes.trim() || '',
-      },
-    });
+    await onSave({ buyBox: buildBuyBoxData() });
     setSaving(false);
     onNext();
+  };
+
+  const handleDownloadPdf = async () => {
+    if (onSave) { try { await onSave({ buyBox: buildBuyBoxData() }); } catch { /* ignore */ } }
+    generateBuyBoxPDF(user || {}, buildBuyBoxData());
+  };
+
+  const addCustom = (input, setInput, list, setList) => {
+    const t = input.trim();
+    if (t && !list.includes(t)) setList([...list, t]);
+    setInput('');
   };
 
   const chipStyle = (selected, color) => ({
@@ -511,6 +556,100 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded }) {
       <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7, marginBottom: 28 }}>
         Set your investment criteria so you're ready to act on Day 1. Keep it focused — you can always refine later.
       </p>
+
+      {/* 0. Investor Profile */}
+      <div style={sectionGap}>
+        <label style={labelStyle}>
+          Investor Profile <span style={{ color: '#e94560' }}>*</span>
+        </label>
+        <p style={{ fontSize: 12, color: '#666', marginTop: -2, marginBottom: 14, lineHeight: 1.6 }}>
+          This goes at the top of your Buy Box PDF — it makes you look credible and motivates agents and wholesalers to bring you deals.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
+          <div style={{ gridColumn: '1 / -1' }}>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Full Name <span style={{ color: '#e94560' }}>*</span></span>
+            <input value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Jordan Lee" style={inputStyle} />
+          </div>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Phone <span style={{ color: '#e94560' }}>*</span></span>
+            <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="(555) 123-4567" inputMode="tel" style={inputStyle} />
+          </div>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Email <span style={{ color: '#e94560' }}>*</span></span>
+            <input value={email} onChange={e => setEmail(e.target.value)} placeholder="you@email.com" inputMode="email" style={inputStyle} />
+          </div>
+        </div>
+
+        {/* Buyer Strengths */}
+        <label style={{ ...labelStyle, fontSize: 12, color: '#777' }}>Buyer Strengths</label>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+          {BUYER_STRENGTHS.map(s => (
+            <button key={s} onClick={() => toggleChip(strengths, setStrengths, s)} style={chipStyle(strengths.includes(s), '72,199,142')}>{s}</button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+          <input value={strengthInput} onChange={e => setStrengthInput(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addCustom(strengthInput, setStrengthInput, strengths, setStrengths); } }}
+            placeholder="+ Add your own strength" style={{ ...inputStyle, flex: 1, width: 'auto' }} />
+          <button onClick={() => addCustom(strengthInput, setStrengthInput, strengths, setStrengths)} style={{
+            padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+            background: 'rgba(72,199,142,0.12)', color: '#48c78e',
+            border: '1px solid rgba(72,199,142,0.25)', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+          }}>Add</button>
+        </div>
+        {strengths.filter(s => !BUYER_STRENGTHS.includes(s)).length > 0 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
+            {strengths.filter(s => !BUYER_STRENGTHS.includes(s)).map(s => tagChip(s, () => setStrengths(strengths.filter(x => x !== s)), '72,199,142'))}
+          </div>
+        )}
+
+        {/* Time to Close */}
+        <label style={{ ...labelStyle, fontSize: 12, color: '#777', marginTop: 6 }}>Time to Close</label>
+        <select value={timeToClose} onChange={e => setTimeToClose(e.target.value)} style={{ ...inputStyle, marginBottom: 16, cursor: 'pointer' }}>
+          <option value="">Select…</option>
+          {TIME_TO_CLOSE_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+        </select>
+
+        {/* Urgency / Deadline */}
+        <label style={{ ...labelStyle, fontSize: 12, color: '#777' }}>Urgency / Deadline</label>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 8 }}>
+          {URGENCY_OPTIONS.map(o => {
+            const sel = urgency.includes(o.label);
+            return (
+              <div key={o.label}>
+                <button onClick={() => toggleChip(urgency, setUrgency, o.label)}
+                  style={{ ...chipStyle(sel, '240,165,0'), width: '100%', textAlign: 'left' }}>
+                  {o.label}{o.reveal ? ' …' : ''}
+                </button>
+                {sel && o.reveal && (
+                  <input
+                    type={o.reveal === 'date' ? 'date' : 'text'}
+                    value={urgencyDetails[o.label] || ''}
+                    onChange={e => setUrgencyDetails({ ...urgencyDetails, [o.label]: e.target.value })}
+                    placeholder={o.reveal === 'text' ? 'e.g. end of Q3, 60 days…' : ''}
+                    style={{ ...inputStyle, marginTop: 6 }}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <input value={urgencyInput} onChange={e => setUrgencyInput(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addCustom(urgencyInput, setUrgencyInput, urgency, setUrgency); } }}
+            placeholder="+ Add your own" style={{ ...inputStyle, flex: 1, width: 'auto' }} />
+          <button onClick={() => addCustom(urgencyInput, setUrgencyInput, urgency, setUrgency)} style={{
+            padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+            background: 'rgba(240,165,0,0.12)', color: '#f0a500',
+            border: '1px solid rgba(240,165,0,0.25)', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+          }}>Add</button>
+        </div>
+        {urgency.filter(u => !URGENCY_OPTIONS.some(o => o.label === u)).length > 0 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+            {urgency.filter(u => !URGENCY_OPTIONS.some(o => o.label === u)).map(u => tagChip(u, () => setUrgency(urgency.filter(x => x !== u)), '240,165,0'))}
+          </div>
+        )}
+      </div>
 
       {/* 1. Target Market(s) */}
       <div style={sectionGap}>
@@ -651,9 +790,41 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded }) {
               placeholder="300,000" inputMode="numeric" style={inputStyle} />
           </div>
         </div>
-        <label style={labelStyle}>Down Payment / Cash Available</label>
-        <input value={downPayment ? formatCurrency(downPayment) : ''} onChange={e => setDownPayment(parseCurrency(e.target.value))}
-          placeholder="50,000" inputMode="numeric" style={inputStyle} />
+        <label style={labelStyle}>Buying Power</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Cash Available to Invest ($)</span>
+            <input value={cashAvailable ? formatCurrency(cashAvailable) : ''} onChange={e => setCashAvailable(parseCurrency(e.target.value))}
+              placeholder="100,000" inputMode="numeric" style={inputStyle} />
+          </div>
+          <div>
+            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Down Payment %</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input value={downPaymentPercent} onChange={e => setDownPaymentPercent(e.target.value.replace(/[^\d.]/g, ''))}
+                placeholder="25" inputMode="decimal" style={{ ...inputStyle, flex: 1 }} />
+              <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>%</span>
+            </div>
+          </div>
+        </div>
+        <p style={{ fontSize: 11, color: '#666', marginTop: 6, lineHeight: 1.6 }}>
+          Most rental loans use ~25% down. Lower it if your strategy uses less (e.g., house hacking).
+        </p>
+        {buyingPowerValue && (
+          <div style={{
+            marginTop: 10, padding: '12px 16px', borderRadius: 10,
+            background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.2)',
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#48c78e' }}>
+              Estimated Buying Power: up to ~{fmtUSD(buyingPowerValue)}
+            </div>
+            <div style={{ fontSize: 11, color: '#888', marginTop: 3 }}>
+              Based on {fmtUSD(cashAvailable)} down at {downPaymentPercent}%. Estimate only — before closing costs and reserves; final amount depends on lender qualification.
+            </div>
+            <div style={{ fontSize: 11, color: '#777', marginTop: 6, lineHeight: 1.6 }}>
+              Using low-down owner-occupant financing such as house hacking (as little as ~5% down), buying power can be significantly higher — but that requires living in the property and still qualifying with a lender.
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 5. Investment Strategy */}
@@ -716,19 +887,39 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded }) {
               <span style={{ fontSize: 12, color: '#555' }}>/mo</span>
             </div>
           </div>
-          <div>
-            <span style={{ fontSize: 12, color: '#777', display: 'block', marginBottom: 4 }}>Minimum IRR</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <input value={minIRR} onChange={e => setMinIRR(e.target.value.replace(/[^\d.]/g, ''))}
-                placeholder="15" inputMode="decimal" style={{ ...inputStyle, flex: 1 }} />
-              <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>%</span>
-            </div>
-          </div>
         </div>
         {!hasReturnReq && (
           <p style={{ fontSize: 12, color: '#e94560', marginTop: 10, marginBottom: 0 }}>
             Please fill out at least one return requirement.
           </p>
+        )}
+      </div>
+
+      {/* 7b. Deal-Breakers / Areas to Avoid */}
+      <div style={sectionGap}>
+        <label style={labelStyle}>Deal-Breakers / Areas to Avoid</label>
+        <p style={{ fontSize: 12, color: '#666', marginTop: -2, marginBottom: 12, lineHeight: 1.6 }}>
+          One of the most useful fields for whoever sources your deals — it saves everyone time.
+        </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+          {DEAL_BREAKERS.map(d => (
+            <button key={d} onClick={() => toggleChip(dealBreakers, setDealBreakers, d)} style={chipStyle(dealBreakers.includes(d), '233,69,96')}>{d}</button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <input value={dealBreakerInput} onChange={e => setDealBreakerInput(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addCustom(dealBreakerInput, setDealBreakerInput, dealBreakers, setDealBreakers); } }}
+            placeholder="+ Add your own (specific streets, zips, etc.)" style={{ ...inputStyle, flex: 1, width: 'auto' }} />
+          <button onClick={() => addCustom(dealBreakerInput, setDealBreakerInput, dealBreakers, setDealBreakers)} style={{
+            padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+            background: 'rgba(233,69,96,0.12)', color: '#e94560',
+            border: '1px solid rgba(233,69,96,0.25)', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+          }}>Add</button>
+        </div>
+        {dealBreakers.filter(d => !DEAL_BREAKERS.includes(d)).length > 0 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+            {dealBreakers.filter(d => !DEAL_BREAKERS.includes(d)).map(d => tagChip(d, () => setDealBreakers(dealBreakers.filter(x => x !== d)), '233,69,96'))}
+          </div>
         )}
       </div>
 
@@ -747,7 +938,37 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded }) {
         />
       </div>
 
-      {/* 9. PDF download card */}
+      {/* 9a. Generate the personalized Buy Box PDF */}
+      <button
+        onClick={handleDownloadPdf}
+        disabled={!hasContact}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 14, width: '100%', textAlign: 'left',
+          padding: '16px 20px', borderRadius: 12, marginBottom: 12,
+          background: hasContact ? 'linear-gradient(135deg, rgba(72,199,142,0.1), rgba(72,199,142,0.03))' : 'rgba(255,255,255,0.03)',
+          border: `1px solid ${hasContact ? 'rgba(72,199,142,0.3)' : 'rgba(255,255,255,0.08)'}`,
+          cursor: hasContact ? 'pointer' : 'not-allowed', opacity: hasContact ? 1 : 0.6,
+          fontFamily: "'DM Sans', sans-serif",
+        }}
+      >
+        <div style={{
+          width: 40, height: 40, borderRadius: 10, flexShrink: 0,
+          background: 'rgba(72,199,142,0.15)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
+        }}>📥</div>
+        <div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: '#48c78e', marginBottom: 2 }}>
+            Download My Buy Box (PDF)
+          </div>
+          <div style={{ fontSize: 12, color: '#888', lineHeight: 1.5 }}>
+            {hasContact
+              ? 'Your shareable one-page summary to send agents and wholesalers.'
+              : 'Add your name, phone, and email above to generate it.'}
+          </div>
+        </div>
+      </button>
+
+      {/* 9b. PDF download card */}
       <a
         href="/buy-box-worksheet.html"
         target="_blank"
@@ -801,7 +1022,7 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded }) {
 
           {!canProceed && (
             <p style={{ fontSize: 12, color: '#e94560', textAlign: 'center', marginTop: 10 }}>
-              {markets.length === 0 ? 'Add at least one market' : propertyTypes.length === 0 ? 'Select at least one property type' : 'Fill out at least one return requirement'} to continue.
+              {!hasContact ? 'Add your name, phone, and email' : markets.length === 0 ? 'Add at least one market' : propertyTypes.length === 0 ? 'Select at least one property type' : 'Fill out at least one return requirement'} to continue.
             </p>
           )}
         </>

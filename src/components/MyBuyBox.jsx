@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import jsPDF from 'jspdf';
+import {
+  BUYER_STRENGTHS, TIME_TO_CLOSE_OPTIONS, URGENCY_OPTIONS, DEAL_BREAKERS,
+  DEFAULT_DOWN_PAYMENT_PCT, computeBuyingPower, fmtUSD, buildBuyBoxSummary,
+  generateBuyBoxPDF,
+} from '../utils/buyBox';
 
 function fmt$(val) {
   if (!val && val !== 0) return null;
@@ -53,113 +57,6 @@ function ChipList({ items, color = '#e94560' }) {
       ))}
     </div>
   );
-}
-
-function generatePDF(user, bb) {
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const w = doc.internal.pageSize.getWidth();
-  const margin = 20;
-  const textW = w - margin * 2;
-  let y = 20;
-
-  const dark = [18, 18, 24];
-  const white = [238, 238, 238];
-  const accent = [233, 69, 96];
-  const muted = [136, 136, 136];
-  const sectionColor = [160, 160, 160];
-
-  doc.setFillColor(...dark);
-  doc.rect(0, 0, w, doc.internal.pageSize.getHeight(), 'F');
-
-  doc.setTextColor(...white);
-  doc.setFontSize(22);
-  doc.setFont('helvetica', 'bold');
-  const name = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Operator';
-  doc.text(name.toUpperCase(), w / 2, y, { align: 'center' });
-  y += 10;
-
-  doc.setTextColor(...accent);
-  doc.setFontSize(14);
-  doc.text('MY BUY BOX', w / 2, y, { align: 'center' });
-  y += 4;
-
-  doc.setDrawColor(...accent);
-  doc.setLineWidth(0.5);
-  doc.line(margin, y, w - margin, y);
-  y += 12;
-
-  const addSection = (title, lines) => {
-    const filtered = lines.filter(l => l);
-    if (filtered.length === 0) return;
-    if (y > 265) { doc.addPage(); y = 20; doc.setFillColor(...dark); doc.rect(0, 0, w, doc.internal.pageSize.getHeight(), 'F'); }
-
-    doc.setTextColor(...sectionColor);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'bold');
-    doc.text(title.toUpperCase(), margin, y);
-    y += 6;
-
-    doc.setTextColor(...white);
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'normal');
-    filtered.forEach(line => {
-      if (y > 275) { doc.addPage(); y = 20; doc.setFillColor(...dark); doc.rect(0, 0, w, doc.internal.pageSize.getHeight(), 'F'); }
-      const split = doc.splitTextToSize(line, textW);
-      split.forEach(l => {
-        doc.text(l, margin, y);
-        y += 5.5;
-      });
-    });
-    y += 6;
-  };
-
-  const ret = bb.returnRequirements || {};
-
-  addSection('Target Market', [
-    bb.markets?.length > 0 ? bb.markets.join(' | ') : null,
-    bb.zipCodes?.length > 0 ? `Zip Codes: ${bb.zipCodes.join(', ')}` : null,
-  ]);
-
-  addSection('Property Type', [
-    bb.propertyTypes?.length > 0 ? bb.propertyTypes.join(', ') : null,
-    range(bb.yearBuiltMin, bb.yearBuiltMax) ? `Year Built: ${range(bb.yearBuiltMin, bb.yearBuiltMax)}` : null,
-    range(bb.bedroomsMin, bb.bedroomsMax) ? `Bedrooms: ${range(bb.bedroomsMin, bb.bedroomsMax)}` : null,
-    range(bb.bathroomsMin, bb.bathroomsMax) ? `Bathrooms: ${range(bb.bathroomsMin, bb.bathroomsMax)}` : null,
-    bb.conditionTolerance ? `Condition: ${bb.conditionTolerance}` : null,
-  ]);
-
-  addSection('Deal Size', [
-    (bb.priceMin || bb.priceMax) ? `Price Range: ${fmt$(bb.priceMin) || '?'} – ${fmt$(bb.priceMax) || '?'}` : null,
-    bb.downPayment ? `Down Payment Available: ${fmt$(bb.downPayment)}` : null,
-  ]);
-
-  addSection('Investment Strategy', [
-    bb.strategies?.length > 0 ? bb.strategies.join(', ') : null,
-  ]);
-
-  addSection('Financing', [
-    bb.financingTypes?.length > 0 ? bb.financingTypes.join(', ') : null,
-  ]);
-
-  addSection('Return Requirements', [
-    ret.minCashOnCash ? `Min Cash-on-Cash: ${ret.minCashOnCash}%` : null,
-    ret.minCapRate ? `Min Cap Rate: ${ret.minCapRate}%` : null,
-    ret.minCashFlowPerUnit ? `Min Cash Flow/Unit: $${ret.minCashFlowPerUnit}/mo` : null,
-    ret.minIRR ? `Min IRR: ${ret.minIRR}%` : null,
-  ]);
-
-  if (bb.additionalNotes) {
-    addSection('Additional Notes', [bb.additionalNotes]);
-  }
-
-  doc.setDrawColor(60, 60, 70);
-  doc.setLineWidth(0.3);
-  doc.line(margin, doc.internal.pageSize.getHeight() - 15, w - margin, doc.internal.pageSize.getHeight() - 15);
-  doc.setTextColor(...muted);
-  doc.setFontSize(8);
-  doc.text('Generated via UC30 | uc30.com', w / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
-
-  doc.save(`${name.replace(/\s+/g, '_')}_Buy_Box.pdf`);
 }
 
 const PROPERTY_TYPES = ['Single Family', 'Multi-Family (2-4)', 'Multi-Family (5+)', 'Condo/Townhouse', 'Mobile Home', 'Land'];
@@ -243,14 +140,26 @@ export default function MyBuyBox({ user, onUpdateUser }) {
   const [conditionTolerance, setConditionTolerance] = useState(bb.conditionTolerance || '');
   const [priceMin, setPriceMin] = useState(bb.priceMin || '');
   const [priceMax, setPriceMax] = useState(bb.priceMax || '');
-  const [downPayment, setDownPayment] = useState(bb.downPayment || '');
+  const [cashAvailable, setCashAvailable] = useState(bb.buyingPower?.cashAvailable || bb.downPayment || '');
+  const [downPaymentPercent, setDownPaymentPercent] = useState(bb.buyingPower?.downPaymentPercent ?? DEFAULT_DOWN_PAYMENT_PCT);
   const [strategies, setStrategies] = useState(bb.strategies || []);
   const [financingTypes, setFinancingTypes] = useState(bb.financingTypes || []);
   const [minCashOnCash, setMinCashOnCash] = useState(ret.minCashOnCash || '');
   const [minCapRate, setMinCapRate] = useState(ret.minCapRate || '');
   const [minCashFlowPerUnit, setMinCashFlowPerUnit] = useState(ret.minCashFlowPerUnit || '');
-  const [minIRR, setMinIRR] = useState(ret.minIRR || '');
+  const [dealBreakers, setDealBreakers] = useState(bb.dealBreakers || []);
   const [additionalNotes, setAdditionalNotes] = useState(bb.additionalNotes || '');
+  // Investor Profile
+  const ip0 = bb.investorProfile || {};
+  const [fullName, setFullName] = useState(ip0.fullName || `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || '');
+  const [phone, setPhone] = useState(ip0.phone || '');
+  const [email, setEmail] = useState(ip0.email || user?.email || '');
+  const [strengths, setStrengths] = useState(ip0.strengths || []);
+  const [timeToClose, setTimeToClose] = useState(ip0.timeToClose || '');
+  const [urgency, setUrgency] = useState(ip0.urgency || []);
+  const [urgencyDetails, setUrgencyDetails] = useState(ip0.urgencyDetails || {});
+
+  const buyingPowerValue = computeBuyingPower(cashAvailable, downPaymentPercent);
 
   const addMarket = () => {
     const trimmed = marketInput.trim();
@@ -264,6 +173,7 @@ export default function MyBuyBox({ user, onUpdateUser }) {
   const resetToSaved = () => {
     const s = user?.buyBox || {};
     const r = s.returnRequirements || {};
+    const ipS = s.investorProfile || {};
     setMarkets(s.markets || []); setZipCodes(s.zipCodes || []);
     setPropertyTypes(s.propertyTypes || []);
     setYearBuiltMin(s.yearBuiltMin || ''); setYearBuiltMax(s.yearBuiltMax || '');
@@ -271,11 +181,17 @@ export default function MyBuyBox({ user, onUpdateUser }) {
     setBathroomsMin(s.bathroomsMin || ''); setBathroomsMax(s.bathroomsMax || '');
     setConditionTolerance(s.conditionTolerance || '');
     setPriceMin(s.priceMin || ''); setPriceMax(s.priceMax || '');
-    setDownPayment(s.downPayment || '');
+    setCashAvailable(s.buyingPower?.cashAvailable || s.downPayment || '');
+    setDownPaymentPercent(s.buyingPower?.downPaymentPercent ?? DEFAULT_DOWN_PAYMENT_PCT);
     setStrategies(s.strategies || []); setFinancingTypes(s.financingTypes || []);
     setMinCashOnCash(r.minCashOnCash || ''); setMinCapRate(r.minCapRate || '');
-    setMinCashFlowPerUnit(r.minCashFlowPerUnit || ''); setMinIRR(r.minIRR || '');
+    setMinCashFlowPerUnit(r.minCashFlowPerUnit || '');
+    setDealBreakers(s.dealBreakers || []);
     setAdditionalNotes(s.additionalNotes || '');
+    setFullName(ipS.fullName || `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || '');
+    setPhone(ipS.phone || ''); setEmail(ipS.email || user?.email || '');
+    setStrengths(ipS.strengths || []); setTimeToClose(ipS.timeToClose || '');
+    setUrgency(ipS.urgency || []); setUrgencyDetails(ipS.urgencyDetails || {});
     setEditing(false);
   };
 
@@ -284,6 +200,10 @@ export default function MyBuyBox({ user, onUpdateUser }) {
     setSaving(true);
     await onUpdateUser({
       buyBox: {
+        investorProfile: {
+          fullName: fullName.trim(), phone: phone.trim(), email: email.trim(),
+          strengths, timeToClose: timeToClose || null, urgency, urgencyDetails,
+        },
         markets, zipCodes, propertyTypes,
         yearBuiltMin: yearBuiltMin ? parseInt(yearBuiltMin) : null,
         yearBuiltMax: yearBuiltMax ? parseInt(yearBuiltMax) : null,
@@ -293,14 +213,14 @@ export default function MyBuyBox({ user, onUpdateUser }) {
         bathroomsMax: bathroomsMax ? parseInt(bathroomsMax) : null,
         conditionTolerance: conditionTolerance || null,
         priceMin: priceMin || null, priceMax: priceMax || null,
-        downPayment: downPayment || null,
+        buyingPower: { cashAvailable: cashAvailable || null, downPaymentPercent: downPaymentPercent || DEFAULT_DOWN_PAYMENT_PCT },
         strategies, financingTypes,
         returnRequirements: {
           minCashOnCash: minCashOnCash ? parseFloat(minCashOnCash) : null,
           minCapRate: minCapRate ? parseFloat(minCapRate) : null,
           minCashFlowPerUnit: minCashFlowPerUnit ? parseFloat(minCashFlowPerUnit) : null,
-          minIRR: minIRR ? parseFloat(minIRR) : null,
         },
+        dealBreakers,
         additionalNotes: additionalNotes || null,
       },
     });
@@ -344,6 +264,58 @@ export default function MyBuyBox({ user, onUpdateUser }) {
         </div>
 
         <div className="card" style={{ marginBottom: 16 }}>
+          <Section title="Investor Profile *">
+            <p style={{ fontSize: 12, color: '#666', marginTop: -2, marginBottom: 10, lineHeight: 1.6 }}>
+              Leads your Buy Box PDF — makes you look credible so agents and wholesalers bring you deals.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 12 }}>
+              <div style={{ flex: '1 0 100%' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Full Name *</div>
+                <input placeholder="Jordan Lee" value={fullName} onChange={e => setFullName(e.target.value)}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
+              </div>
+              <div style={{ flex: '1 0 140px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Phone *</div>
+                <input placeholder="(555) 123-4567" value={phone} onChange={e => setPhone(e.target.value)}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
+              </div>
+              <div style={{ flex: '1 0 140px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Email *</div>
+                <input placeholder="you@email.com" value={email} onChange={e => setEmail(e.target.value)}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
+              </div>
+            </div>
+            <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Buyer Strengths</div>
+            <EditableChipList items={strengths} setItems={setStrengths} options={BUYER_STRENGTHS} color="#48c78e" allowCustom customPlaceholder="+ Add your own strength" />
+            <div style={{ fontSize: 11, color: '#666', margin: '12px 0 4px' }}>Time to Close</div>
+            <select value={timeToClose} onChange={e => setTimeToClose(e.target.value)}
+              style={{ width: '100%', fontSize: 13, padding: '8px 10px', cursor: 'pointer' }}>
+              <option value="">Select…</option>
+              {TIME_TO_CLOSE_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+            </select>
+            <div style={{ fontSize: 11, color: '#666', margin: '12px 0 4px' }}>Urgency / Deadline</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {URGENCY_OPTIONS.map(o => {
+                const sel = urgency.includes(o.label);
+                return (
+                  <div key={o.label}>
+                    <button onClick={() => setUrgency(sel ? urgency.filter(x => x !== o.label) : [...urgency, o.label])} style={{
+                      width: '100%', textAlign: 'left', padding: '7px 12px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                      fontFamily: "'DM Sans', sans-serif", border: 'none',
+                      background: sel ? 'rgba(240,165,0,0.2)' : 'rgba(255,255,255,0.04)', color: sel ? '#f0a500' : '#888',
+                    }}>{o.label}{o.reveal ? ' …' : ''}</button>
+                    {sel && o.reveal && (
+                      <input type={o.reveal === 'date' ? 'date' : 'text'} value={urgencyDetails[o.label] || ''}
+                        onChange={e => setUrgencyDetails({ ...urgencyDetails, [o.label]: e.target.value })}
+                        placeholder={o.reveal === 'text' ? 'e.g. end of Q3, 60 days…' : ''}
+                        style={{ width: '100%', fontSize: 13, padding: '8px 10px', marginTop: 4 }} />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </Section>
+
           <Section title="Target Markets *">
             <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
               <input placeholder="Add a market (city, county, etc.)" value={marketInput}
@@ -455,12 +427,34 @@ export default function MyBuyBox({ user, onUpdateUser }) {
                   style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
               </div>
               <div style={{ flex: '1 0 120px' }}>
-                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Down Payment Available</div>
-                <input placeholder="$0" value={downPayment ? fmt$(downPayment) : ''}
-                  onChange={e => setDownPayment(parseCurrency(e.target.value))}
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Cash Available ($)</div>
+                <input placeholder="$0" value={cashAvailable ? fmt$(cashAvailable) : ''}
+                  onChange={e => setCashAvailable(parseCurrency(e.target.value))}
+                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
+              </div>
+              <div style={{ flex: '1 0 100px' }}>
+                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Down Payment %</div>
+                <input placeholder="25" value={downPaymentPercent}
+                  onChange={e => setDownPaymentPercent(e.target.value.replace(/[^\d.]/g, ''))}
                   style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
               </div>
             </div>
+            <p style={{ fontSize: 11, color: '#666', marginTop: 8, lineHeight: 1.6 }}>
+              Most rental loans use ~25% down. Lower it if your strategy uses less (e.g., house hacking).
+            </p>
+            {buyingPowerValue && (
+              <div style={{
+                marginTop: 8, padding: '10px 14px', borderRadius: 10,
+                background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.2)',
+              }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#48c78e' }}>
+                  Estimated Buying Power: up to ~{fmtUSD(buyingPowerValue)}
+                </div>
+                <div style={{ fontSize: 11, color: '#888', marginTop: 3 }}>
+                  Based on {fmtUSD(cashAvailable)} down at {downPaymentPercent}%. Estimate only — before closing costs and reserves; final amount depends on lender qualification.
+                </div>
+              </div>
+            )}
           </Section>
 
           <Section title="Investment Strategy">
@@ -488,12 +482,14 @@ export default function MyBuyBox({ user, onUpdateUser }) {
                 <input type="number" placeholder="0" value={minCashFlowPerUnit} onChange={e => setMinCashFlowPerUnit(e.target.value)}
                   style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
               </div>
-              <div style={{ flex: '1 0 120px' }}>
-                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Min IRR %</div>
-                <input type="number" placeholder="0" value={minIRR} onChange={e => setMinIRR(e.target.value)}
-                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
-              </div>
             </div>
+          </Section>
+
+          <Section title="Deal-Breakers / Areas to Avoid">
+            <p style={{ fontSize: 12, color: '#666', marginTop: -2, marginBottom: 8, lineHeight: 1.6 }}>
+              One of the most useful fields for whoever sources your deals — it saves everyone time.
+            </p>
+            <EditableChipList items={dealBreakers} setItems={setDealBreakers} options={DEAL_BREAKERS} color="#e94560" allowCustom customPlaceholder="+ Add your own (streets, zips, etc.)" />
           </Section>
 
           <Section title="Additional Notes">
@@ -537,7 +533,7 @@ export default function MyBuyBox({ user, onUpdateUser }) {
           )}
           <button
             className="btn-primary"
-            onClick={() => generatePDF(user, bb)}
+            onClick={() => generateBuyBoxPDF(user, bb)}
             style={{ padding: '10px 20px', fontSize: 13 }}
           >
             Download PDF
@@ -545,7 +541,43 @@ export default function MyBuyBox({ user, onUpdateUser }) {
         </div>
       </div>
 
+      {/* One-line summary (what an agent reads first) */}
+      <div className="card" style={{
+        marginBottom: 16, borderColor: 'rgba(240,165,0,0.3)',
+        background: 'linear-gradient(135deg, rgba(240,165,0,0.06), rgba(240,165,0,0.02))',
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: '#f0a500', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>
+          Quick Summary
+        </div>
+        <p style={{ fontSize: 14, color: '#eee', lineHeight: 1.6, margin: 0, fontWeight: 500 }}>
+          {buildBuyBoxSummary(user, bb)}
+        </p>
+      </div>
+
       <div className="card" style={{ marginBottom: 16 }}>
+        {(() => {
+          const ipv = bb.investorProfile || {};
+          const hasIp = ipv.phone || ipv.email || ipv.strengths?.length || ipv.timeToClose || ipv.urgency?.length;
+          if (!hasIp) return null;
+          return (
+            <Section title="Investor Profile">
+              {(ipv.phone || ipv.email) && (
+                <Value label="Contact" value={[ipv.phone, ipv.email].filter(Boolean).join('  ·  ')} />
+              )}
+              {ipv.timeToClose && <Value label="Time to Close" value={ipv.timeToClose} />}
+              {ipv.strengths?.length > 0 && <ChipList items={ipv.strengths} color="#48c78e" />}
+              {ipv.urgency?.length > 0 && (
+                <div style={{ marginTop: 8 }}>
+                  <ChipList items={ipv.urgency.map(u => {
+                    const d = (ipv.urgencyDetails || {})[u];
+                    return d ? `${u} ${d}` : u;
+                  })} color="#f0a500" />
+                </div>
+              )}
+            </Section>
+          );
+        })()}
+
         <Section title="Target Market">
           <ChipList items={bb.markets} />
           {bb.zipCodes?.length > 0 && (
@@ -570,11 +602,14 @@ export default function MyBuyBox({ user, onUpdateUser }) {
           {bb.conditionTolerance && <Value label="Condition" value={bb.conditionTolerance} />}
         </Section>
 
-        <Section title="Deal Size">
+        <Section title="Buying Power">
           {(bb.priceMin || bb.priceMax) && (
             <Value label="Price Range" value={`${fmt$(bb.priceMin) || '?'} – ${fmt$(bb.priceMax) || '?'}`} />
           )}
-          {bb.downPayment && <Value label="Down Payment Available" value={fmt$(bb.downPayment)} />}
+          {(() => {
+            const power = computeBuyingPower(bb.buyingPower?.cashAvailable, bb.buyingPower?.downPaymentPercent ?? DEFAULT_DOWN_PAYMENT_PCT);
+            return power ? <Value label="Buying Power" value={`up to ~${fmtUSD(power)}`} /> : null;
+          })()}
         </Section>
 
         <Section title="Investment Strategy">
@@ -589,8 +624,13 @@ export default function MyBuyBox({ user, onUpdateUser }) {
           {ret.minCashOnCash && <Value label="Min Cash-on-Cash" value={`${ret.minCashOnCash}%`} />}
           {ret.minCapRate && <Value label="Min Cap Rate" value={`${ret.minCapRate}%`} />}
           {ret.minCashFlowPerUnit && <Value label="Min Cash Flow/Unit" value={`$${ret.minCashFlowPerUnit}/mo`} />}
-          {ret.minIRR && <Value label="Min IRR" value={`${ret.minIRR}%`} />}
         </Section>
+
+        {bb.dealBreakers?.length > 0 && (
+          <Section title="Deal-Breakers / Areas to Avoid">
+            <ChipList items={bb.dealBreakers} color="#e94560" />
+          </Section>
+        )}
 
         {bb.additionalNotes && (
           <Section title="Additional Notes">

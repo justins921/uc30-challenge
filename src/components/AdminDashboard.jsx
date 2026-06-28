@@ -2212,7 +2212,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
 
   const PREVIEW_STEPS = {
     getClear: { component: GetClearStep, title: 'Get Clear', props: { existing: {}, buyBoxData: null } },
-    buyBox: { component: BuyBoxStep, title: 'Define Your Buy Box', props: { existingBuyBox: {} } },
+    buyBox: { component: BuyBoxStep, title: 'Define Your Buy Box', props: { existingBuyBox: {}, user } },
     capital: { component: CapitalConfirmationStep, title: 'Confirm Access to Capital', props: { existingCapital: {} } },
     capitalStrategy: { component: CapitalStrategyFinder, title: 'Capital & Strategy Finder', props: { existing: {}, userId: 'admin_preview' } },
     offerCommitment: { component: OfferCommitmentStep, title: 'Set Your Offer Commitment', props: { existingCommitment: null } },

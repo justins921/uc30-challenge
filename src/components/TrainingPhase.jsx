@@ -351,7 +351,7 @@ export default function TrainingPhase({
               capitalConfirmation: { Component: CapitalConfirmationStep, label: 'Confirm Access to Capital', icon: '💰', color: '#48c78e', props: { existingCapital: user.capitalConfirmation || {} } },
               capitalStrategy: { Component: CapitalStrategyFinder, label: 'Capital & Strategy Finder', icon: '🧭', color: '#48c78e', props: { existing: user.capitalStrategy || {}, userId: user.id } },
               getClear: { Component: GetClearStep, label: 'Get Clear', icon: '🎯', color: '#e94560', props: { existing: user.getClear || {}, buyBoxData: user.buyBox || null } },
-              buyBox: { Component: BuyBoxStep, label: 'Define Your Buy Box', icon: '📦', color: '#c9a0ff', props: { existingBuyBox: user.buyBox || {} } },
+              buyBox: { Component: BuyBoxStep, label: 'Define Your Buy Box', icon: '📦', color: '#c9a0ff', props: { existingBuyBox: user.buyBox || {}, user } },
             };
             const cfg = COMPONENT_MAP[principle.showComponent];
             if (!cfg) return null;
