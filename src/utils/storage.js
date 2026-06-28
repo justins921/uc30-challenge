@@ -141,7 +141,7 @@ const supabaseStorage = {
     // still save. (Run the matching SQL migration to enable full cross-device sync.)
     if (error && (error.code === '42703' || error.code === 'PGRST204' ||
         /column .* does not exist|could not find the .* column/i.test(error.message || ''))) {
-      const optionalCols = ['capital_strategy', 'confidence_surveys', 'readiness_assessments'];
+      const optionalCols = ['capital_strategy', 'confidence_surveys', 'readiness_assessments', 'weekly_checkins'];
       const stripped = { ...row };
       let removedAny = false;
       for (const col of optionalCols) {
@@ -637,6 +637,7 @@ function toDbRow(user) {
   if (user.capitalStrategy) row.capital_strategy = user.capitalStrategy;
   if (user.confidence_surveys?.length > 0) row.confidence_surveys = user.confidence_surveys;
   if (user.readiness_assessments?.length > 0) row.readiness_assessments = user.readiness_assessments;
+  if (user.weekly_checkins?.length > 0) row.weekly_checkins = user.weekly_checkins;
   if (user.offerCommitment != null) row.offer_commitment = user.offerCommitment;
   if (user.offerCommitmentSetAt) row.offer_commitment_set_at = user.offerCommitmentSetAt;
   if (user.stakesDeclaration) row.stakes_declaration = user.stakesDeclaration;
@@ -708,6 +709,8 @@ function toDbUpdateRow(updates) {
   if (updates.confidenceSurveys !== undefined) row.confidence_surveys = updates.confidenceSurveys;
   if (updates.readiness_assessments !== undefined) row.readiness_assessments = updates.readiness_assessments;
   if (updates.readinessAssessments !== undefined) row.readiness_assessments = updates.readinessAssessments;
+  if (updates.weekly_checkins !== undefined) row.weekly_checkins = updates.weekly_checkins;
+  if (updates.weeklyCheckins !== undefined) row.weekly_checkins = updates.weeklyCheckins;
   if (updates.offerCommitment !== undefined) row.offer_commitment = updates.offerCommitment;
   if (updates.offerCommitmentSetAt !== undefined) row.offer_commitment_set_at = updates.offerCommitmentSetAt;
   if (updates.stakesDeclaration !== undefined) row.stakes_declaration = updates.stakesDeclaration;
@@ -785,6 +788,7 @@ function fromDbRow(row) {
     capitalStrategy: row.capital_strategy || null,
     confidence_surveys: row.confidence_surveys || [],
     readiness_assessments: row.readiness_assessments || [],
+    weekly_checkins: row.weekly_checkins || [],
     offerCommitment: row.offer_commitment || null,
     offerCommitmentSetAt: row.offer_commitment_set_at || null,
     stakesDeclaration: row.stakes_declaration || null,

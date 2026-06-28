@@ -487,6 +487,8 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             }}
             onSaveConfidenceSurvey={onSaveConfidenceSurvey}
             onSaveReadiness={onUpdateUser}
+            onSaveCheckIn={onUpdateUser}
+            onSubmitTicket={onSubmitTicket}
           />
         )}
         {!showPracticeDay && tab === 'community' && (

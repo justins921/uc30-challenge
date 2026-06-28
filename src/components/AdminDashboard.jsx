@@ -10,6 +10,7 @@ import { TRAINING_MODULES, getResolvedTrainingModules } from '../data/trainingMo
 import { GetClearStep, BuyBoxStep, CapitalConfirmationStep, OfferCommitmentStep, NotificationPrefsStep } from './ActivationPhase';
 import CapitalStrategyFinder from './CapitalStrategyFinder';
 import ReadinessAssessment from './ReadinessAssessment';
+import WeeklyCheckIn from './WeeklyCheckIn';
 
 function getSocialUrl(platform, handle) {
   const clean = handle.replace(/^@/, '').trim();
@@ -2219,6 +2220,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
     offerCommitment: { component: OfferCommitmentStep, title: 'Set Your Offer Commitment', props: { existingCommitment: null } },
     dailyReminder: { component: NotificationPrefsStep, title: 'Set Your Daily Reminder', props: { existingPrefs: null } },
     readiness: { component: ReadinessAssessment, title: 'Readiness Self-Assessment', props: { checkpoint: 'baseline', existing: [] } },
+    weeklyCheckin: { component: WeeklyCheckIn, title: 'Weekly Check-In', props: { week: 'week_1', day: 7, existing: [] } },
   };
 
   if (previewingStep && PREVIEW_STEPS[previewingStep]) {

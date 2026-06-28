@@ -8,6 +8,7 @@ import ReflectionDay from './ReflectionDay';
 import RentalCalculator from './RentalCalculator';
 import ConfidenceSurvey, { GrowthReport } from './ConfidenceSurvey';
 import ReadinessAssessment from './ReadinessAssessment';
+import WeeklyCheckIn from './WeeklyCheckIn';
 import { calculateFollowUpDate, validatePhone } from '../utils/storage';
 
 const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500' };
@@ -18,8 +19,10 @@ export default function DayView({
   complianceSettings, existingDailySubmission,
   onAddContact, onAddFollowUp, onUpdateContact, onUploadFile, contacts: initialContacts, getUploadUrl,
   quizAttempts, onQuizAttempt, isPreview, onSaveConfidenceSurvey, onSaveReadiness,
+  onSaveCheckIn, onSubmitTicket,
 }) {
   const [readinessSaving, setReadinessSaving] = useState(false);
+  const [checkInSaving, setCheckInSaving] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
 
@@ -572,6 +575,32 @@ export default function DayView({
         }}>
           VETERAN MINIMUMS — Sprint #{user.cohortAttempt || 2}
         </div>
+      )}
+
+      {/* Weekly Check-In — end-of-week pulse (days 7, 14, 21, 28) */}
+      {isReflectionDay && surveyCheckpoint && onSaveCheckIn && (
+        <WeeklyCheckIn
+          week={surveyCheckpoint}
+          day={day}
+          existing={user.weekly_checkins || []}
+          saving={checkInSaving}
+          onSave={async (data) => {
+            setCheckInSaving(true);
+            try { await onSaveCheckIn(data); }
+            finally { setCheckInSaving(false); }
+          }}
+          onAlert={onSubmitTicket ? async ({ stopping, wantHelp, reachOutHow, week, hardest, hardestNote }) => {
+            const flag = stopping ? 'AT-RISK: thinking about stopping' : 'Requested help';
+            const subject = `Weekly Check-In (${week}) — ${flag}`;
+            const body = [
+              stopping ? '⚑ Flagged: thinking about stopping.' : '',
+              wantHelp ? `Wants someone to reach out${reachOutHow ? ` — best way: ${reachOutHow}` : ''}.` : '',
+              hardest?.length ? `Hardest right now: ${hardest.join(', ')}.` : '',
+              hardestNote ? `In their words: "${hardestNote}"` : '',
+            ].filter(Boolean).join('\n');
+            await onSubmitTicket(subject, body);
+          } : null}
+        />
       )}
 
       {/* Reflection Day */}
