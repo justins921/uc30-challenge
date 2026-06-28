@@ -161,22 +161,7 @@ export function generateBuyBoxPDF(user, bb) {
   doc.setDrawColor(...accent);
   doc.setLineWidth(0.5);
   doc.line(margin, y, w - margin, y);
-  y += 10;
-
-  // (1) One-line summary — highlighted box
-  const summary = buildBuyBoxSummary(user, bb);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10.5);
-  doc.setTextColor(...white);
-  const summaryLines = doc.splitTextToSize(summary, textW - 8);
-  const boxH = summaryLines.length * 5.2 + 8;
-  doc.setFillColor(34, 34, 42);
-  doc.setDrawColor(...gold);
-  doc.setLineWidth(0.4);
-  doc.roundedRect(margin, y, textW, boxH, 2, 2, 'FD');
-  let sy = y + 6;
-  summaryLines.forEach(l => { doc.text(l, margin + 4, sy); sy += 5.2; });
-  y += boxH + 10;
+  y += 12;
 
   const addSection = (title, lines, color = sectionColor) => {
     const filtered = lines.filter(Boolean);
