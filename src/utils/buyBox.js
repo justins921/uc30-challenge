@@ -143,7 +143,6 @@ export function generateBuyBoxPDF(user, bb) {
 
   const ip = bb.investorProfile || {};
   const ret = bb.returnRequirements || {};
-  const bp = bb.buyingPower || {};
   const name = ip.fullName || `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'Investor';
 
   const paintBg = () => { doc.setFillColor(...dark); doc.rect(0, 0, w, h, 'F'); };
@@ -209,12 +208,9 @@ export function generateBuyBoxPDF(user, bb) {
     }).join(' · ')}` : null,
   ], accent);
 
-  // (3) Buying Power + price range
-  const power = computeBuyingPower(bp.cashAvailable, bp.downPaymentPercent ?? DEFAULT_DOWN_PAYMENT_PCT);
-  addSection('Buying Power', [
-    power ? `Estimated Buying Power: up to ~${fmtUSD(power)} (based on ${fmtUSD(bp.cashAvailable)} down at ${bp.downPaymentPercent ?? DEFAULT_DOWN_PAYMENT_PCT}%)` : null,
-    priceRange(bb.priceMin, bb.priceMax) ? `Target Purchase Price: ${priceRange(bb.priceMin, bb.priceMax)}` : null,
-    power ? 'Estimate only — before closing costs and reserves; final amount depends on lender qualification.' : null,
+  // (3) Target purchase price
+  addSection('Target Purchase Price', [
+    priceRange(bb.priceMin, bb.priceMax) || null,
   ], gold);
 
   // (4) Location / property / financial criteria

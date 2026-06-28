@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   BUYER_STRENGTHS, TIME_TO_CLOSE_OPTIONS, URGENCY_OPTIONS, DEAL_BREAKERS,
-  DEFAULT_DOWN_PAYMENT_PCT, computeBuyingPower, fmtUSD, generateBuyBoxPDF,
+  generateBuyBoxPDF,
 } from '../utils/buyBox';
 
 const TOTAL_STEPS = 6;
@@ -388,7 +388,6 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded, user }) 
   const bb = existingBuyBox || {};
   const bbReturn = bb.returnRequirements || {};
   const ip = bb.investorProfile || {};
-  const bp = bb.buyingPower || {};
   // Investor Profile
   const [fullName, setFullName] = useState(ip.fullName || `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || '');
   const [phone, setPhone] = useState(ip.phone || '');
@@ -414,9 +413,6 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded, user }) 
   const [conditionTolerance, setConditionTolerance] = useState(bb.conditionTolerance || '');
   const [priceMin, setPriceMin] = useState(bb.priceMin || '');
   const [priceMax, setPriceMax] = useState(bb.priceMax || '');
-  // Buying Power (replaces the old raw "down payment / cash available" field)
-  const [cashAvailable, setCashAvailable] = useState(bp.cashAvailable || bb.downPayment || '');
-  const [downPaymentPercent, setDownPaymentPercent] = useState(bp.downPaymentPercent ?? DEFAULT_DOWN_PAYMENT_PCT);
   const [strategies, setStrategies] = useState(bb.strategies || []);
   const [financingTypes, setFinancingTypes] = useState(bb.financingTypes || []);
   const [minCashOnCash, setMinCashOnCash] = useState(bbReturn.minCashOnCash || '');
@@ -426,8 +422,6 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded, user }) 
   const [dealBreakerInput, setDealBreakerInput] = useState('');
   const [additionalNotes, setAdditionalNotes] = useState(bb.additionalNotes || '');
   const [saving, setSaving] = useState(false);
-
-  const buyingPowerValue = computeBuyingPower(cashAvailable, downPaymentPercent);
 
   const addMarket = () => {
     const trimmed = marketInput.trim();
@@ -484,10 +478,6 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded, user }) 
     conditionTolerance: conditionTolerance || null,
     priceMin: priceMin || null,
     priceMax: priceMax || null,
-    buyingPower: {
-      cashAvailable: cashAvailable || null,
-      downPaymentPercent: downPaymentPercent || DEFAULT_DOWN_PAYMENT_PCT,
-    },
     strategies,
     financingTypes,
     returnRequirements: {
@@ -777,8 +767,8 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded, user }) 
 
       {/* 4. Deal Size */}
       <div style={sectionGap}>
-        <label style={labelStyle}>Purchase Price Range</label>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
+        <label style={labelStyle}>Target Purchase Price</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           <div>
             <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Min ($)</span>
             <input value={priceMin ? formatCurrency(priceMin) : ''} onChange={e => setPriceMin(parseCurrency(e.target.value))}
@@ -790,41 +780,6 @@ function BuyBoxStep({ onNext, onBack, onSave, existingBuyBox, embedded, user }) 
               placeholder="300,000" inputMode="numeric" style={inputStyle} />
           </div>
         </div>
-        <label style={labelStyle}>Buying Power</label>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          <div>
-            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Cash Available to Invest ($)</span>
-            <input value={cashAvailable ? formatCurrency(cashAvailable) : ''} onChange={e => setCashAvailable(parseCurrency(e.target.value))}
-              placeholder="100,000" inputMode="numeric" style={inputStyle} />
-          </div>
-          <div>
-            <span style={{ fontSize: 11, color: '#666', display: 'block', marginBottom: 4 }}>Down Payment %</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <input value={downPaymentPercent} onChange={e => setDownPaymentPercent(e.target.value.replace(/[^\d.]/g, ''))}
-                placeholder="25" inputMode="decimal" style={{ ...inputStyle, flex: 1 }} />
-              <span style={{ fontSize: 16, color: '#666', fontWeight: 600 }}>%</span>
-            </div>
-          </div>
-        </div>
-        <p style={{ fontSize: 11, color: '#666', marginTop: 6, lineHeight: 1.6 }}>
-          Most rental loans use ~25% down. Lower it if your strategy uses less (e.g., house hacking).
-        </p>
-        {buyingPowerValue && (
-          <div style={{
-            marginTop: 10, padding: '12px 16px', borderRadius: 10,
-            background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.2)',
-          }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#48c78e' }}>
-              Estimated Buying Power: up to ~{fmtUSD(buyingPowerValue)}
-            </div>
-            <div style={{ fontSize: 11, color: '#888', marginTop: 3 }}>
-              Based on {fmtUSD(cashAvailable)} down at {downPaymentPercent}%. Estimate only — before closing costs and reserves; final amount depends on lender qualification.
-            </div>
-            <div style={{ fontSize: 11, color: '#777', marginTop: 6, lineHeight: 1.6 }}>
-              Using low-down owner-occupant financing such as house hacking (as little as ~5% down), buying power can be significantly higher — but that requires living in the property and still qualifying with a lender.
-            </div>
-          </div>
-        )}
       </div>
 
       {/* 5. Investment Strategy */}

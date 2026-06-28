@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import {
   BUYER_STRENGTHS, TIME_TO_CLOSE_OPTIONS, URGENCY_OPTIONS, DEAL_BREAKERS,
-  DEFAULT_DOWN_PAYMENT_PCT, computeBuyingPower, fmtUSD, buildBuyBoxSummary,
-  generateBuyBoxPDF,
+  buildBuyBoxSummary, generateBuyBoxPDF,
 } from '../utils/buyBox';
 
 function fmt$(val) {
@@ -140,8 +139,6 @@ export default function MyBuyBox({ user, onUpdateUser }) {
   const [conditionTolerance, setConditionTolerance] = useState(bb.conditionTolerance || '');
   const [priceMin, setPriceMin] = useState(bb.priceMin || '');
   const [priceMax, setPriceMax] = useState(bb.priceMax || '');
-  const [cashAvailable, setCashAvailable] = useState(bb.buyingPower?.cashAvailable || bb.downPayment || '');
-  const [downPaymentPercent, setDownPaymentPercent] = useState(bb.buyingPower?.downPaymentPercent ?? DEFAULT_DOWN_PAYMENT_PCT);
   const [strategies, setStrategies] = useState(bb.strategies || []);
   const [financingTypes, setFinancingTypes] = useState(bb.financingTypes || []);
   const [minCashOnCash, setMinCashOnCash] = useState(ret.minCashOnCash || '');
@@ -158,8 +155,6 @@ export default function MyBuyBox({ user, onUpdateUser }) {
   const [timeToClose, setTimeToClose] = useState(ip0.timeToClose || '');
   const [urgency, setUrgency] = useState(ip0.urgency || []);
   const [urgencyDetails, setUrgencyDetails] = useState(ip0.urgencyDetails || {});
-
-  const buyingPowerValue = computeBuyingPower(cashAvailable, downPaymentPercent);
 
   const addMarket = () => {
     const trimmed = marketInput.trim();
@@ -181,8 +176,6 @@ export default function MyBuyBox({ user, onUpdateUser }) {
     setBathroomsMin(s.bathroomsMin || ''); setBathroomsMax(s.bathroomsMax || '');
     setConditionTolerance(s.conditionTolerance || '');
     setPriceMin(s.priceMin || ''); setPriceMax(s.priceMax || '');
-    setCashAvailable(s.buyingPower?.cashAvailable || s.downPayment || '');
-    setDownPaymentPercent(s.buyingPower?.downPaymentPercent ?? DEFAULT_DOWN_PAYMENT_PCT);
     setStrategies(s.strategies || []); setFinancingTypes(s.financingTypes || []);
     setMinCashOnCash(r.minCashOnCash || ''); setMinCapRate(r.minCapRate || '');
     setMinCashFlowPerUnit(r.minCashFlowPerUnit || '');
@@ -213,7 +206,6 @@ export default function MyBuyBox({ user, onUpdateUser }) {
         bathroomsMax: bathroomsMax ? parseInt(bathroomsMax) : null,
         conditionTolerance: conditionTolerance || null,
         priceMin: priceMin || null, priceMax: priceMax || null,
-        buyingPower: { cashAvailable: cashAvailable || null, downPaymentPercent: downPaymentPercent || DEFAULT_DOWN_PAYMENT_PCT },
         strategies, financingTypes,
         returnRequirements: {
           minCashOnCash: minCashOnCash ? parseFloat(minCashOnCash) : null,
@@ -412,7 +404,7 @@ export default function MyBuyBox({ user, onUpdateUser }) {
             </div>
           </Section>
 
-          <Section title="Deal Size">
+          <Section title="Target Purchase Price">
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
               <div style={{ flex: '1 0 120px' }}>
                 <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Price Min</div>
@@ -426,35 +418,7 @@ export default function MyBuyBox({ user, onUpdateUser }) {
                   onChange={e => setPriceMax(parseCurrency(e.target.value))}
                   style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
               </div>
-              <div style={{ flex: '1 0 120px' }}>
-                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Cash Available ($)</div>
-                <input placeholder="$0" value={cashAvailable ? fmt$(cashAvailable) : ''}
-                  onChange={e => setCashAvailable(parseCurrency(e.target.value))}
-                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
-              </div>
-              <div style={{ flex: '1 0 100px' }}>
-                <div style={{ fontSize: 11, color: '#666', marginBottom: 4 }}>Down Payment %</div>
-                <input placeholder="25" value={downPaymentPercent}
-                  onChange={e => setDownPaymentPercent(e.target.value.replace(/[^\d.]/g, ''))}
-                  style={{ width: '100%', fontSize: 13, padding: '8px 10px' }} />
-              </div>
             </div>
-            <p style={{ fontSize: 11, color: '#666', marginTop: 8, lineHeight: 1.6 }}>
-              Most rental loans use ~25% down. Lower it if your strategy uses less (e.g., house hacking).
-            </p>
-            {buyingPowerValue && (
-              <div style={{
-                marginTop: 8, padding: '10px 14px', borderRadius: 10,
-                background: 'rgba(72,199,142,0.06)', border: '1px solid rgba(72,199,142,0.2)',
-              }}>
-                <div style={{ fontSize: 13, fontWeight: 700, color: '#48c78e' }}>
-                  Estimated Buying Power: up to ~{fmtUSD(buyingPowerValue)}
-                </div>
-                <div style={{ fontSize: 11, color: '#888', marginTop: 3 }}>
-                  Based on {fmtUSD(cashAvailable)} down at {downPaymentPercent}%. Estimate only — before closing costs and reserves; final amount depends on lender qualification.
-                </div>
-              </div>
-            )}
           </Section>
 
           <Section title="Investment Strategy">
@@ -602,14 +566,10 @@ export default function MyBuyBox({ user, onUpdateUser }) {
           {bb.conditionTolerance && <Value label="Condition" value={bb.conditionTolerance} />}
         </Section>
 
-        <Section title="Buying Power">
+        <Section title="Target Purchase Price">
           {(bb.priceMin || bb.priceMax) && (
             <Value label="Price Range" value={`${fmt$(bb.priceMin) || '?'} – ${fmt$(bb.priceMax) || '?'}`} />
           )}
-          {(() => {
-            const power = computeBuyingPower(bb.buyingPower?.cashAvailable, bb.buyingPower?.downPaymentPercent ?? DEFAULT_DOWN_PAYMENT_PCT);
-            return power ? <Value label="Buying Power" value={`up to ~${fmtUSD(power)}`} /> : null;
-          })()}
         </Section>
 
         <Section title="Investment Strategy">
