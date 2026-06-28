@@ -7,6 +7,7 @@ import { CONTACT_GROUPS } from './ContactsCRM';
 import ReflectionDay from './ReflectionDay';
 import RentalCalculator from './RentalCalculator';
 import ConfidenceSurvey, { GrowthReport } from './ConfidenceSurvey';
+import ReadinessAssessment from './ReadinessAssessment';
 import { calculateFollowUpDate, validatePhone } from '../utils/storage';
 
 const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500' };
@@ -16,8 +17,9 @@ export default function DayView({
   day, user, onSubmit, onBack, onNavigateToStats, contentOverrides, customPhases,
   complianceSettings, existingDailySubmission,
   onAddContact, onAddFollowUp, onUpdateContact, onUploadFile, contacts: initialContacts, getUploadUrl,
-  quizAttempts, onQuizAttempt, isPreview, onSaveConfidenceSurvey,
+  quizAttempts, onQuizAttempt, isPreview, onSaveConfidenceSurvey, onSaveReadiness,
 }) {
+  const [readinessSaving, setReadinessSaving] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
 
@@ -598,6 +600,22 @@ export default function DayView({
       {/* Growth Report — shown on Day 28 after completing final survey */}
       {day === 28 && (user.confidence_surveys || []).length >= 2 && (
         <GrowthReport surveys={user.confidence_surveys} />
+      )}
+
+      {/* Readiness Self-Assessment — final checkpoint, after the last day */}
+      {day === 30 && onSaveReadiness && (
+        <div style={{ marginBottom: 24 }}>
+          <ReadinessAssessment
+            checkpoint="final"
+            existing={user.readiness_assessments || []}
+            saving={readinessSaving}
+            onSave={async (data) => {
+              setReadinessSaving(true);
+              try { await onSaveReadiness(data); }
+              finally { setReadinessSaving(false); }
+            }}
+          />
+        </div>
       )}
 
       {/* Review Quiz (Day 12 non-standard: review quiz before training) */}

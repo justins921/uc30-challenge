@@ -6,6 +6,7 @@ import CapitalStrategyFinder from './CapitalStrategyFinder';
 import ContactsCRM from './ContactsCRM';
 import ConfidenceSurvey from './ConfidenceSurvey';
 import ReflectionDay from './ReflectionDay';
+import ReadinessAssessment from './ReadinessAssessment';
 
 const MODULE_DAY_OFFSET = -100;
 
@@ -378,6 +379,7 @@ export default function TrainingPhase({
               buyBox: { Component: BuyBoxStep, label: 'Define Your Buy Box', icon: '📦', color: '#c9a0ff', props: { existingBuyBox: user.buyBox || {}, user } },
               dailyReminder: { Component: NotificationPrefsStep, label: 'Set Your Daily Reminder', icon: '⏰', color: '#c9a0ff', props: { existingPrefs: user.notificationPreferences || null } },
               offerCommitment: { Component: OfferCommitmentStep, label: 'Set Your Offer Commitment', icon: '📈', color: '#f0a500', props: { existingCommitment: user.offerCommitment || null } },
+              readiness: { Component: ReadinessAssessment, label: 'Readiness Self-Assessment', icon: '📊', color: '#e94560', props: { checkpoint: 'post_training', existing: user.readiness_assessments || [] } },
             };
             const cfg = COMPONENT_MAP[principle.showComponent];
             if (!cfg) return null;
@@ -576,6 +578,32 @@ export default function TrainingPhase({
             </div>
           )}
         </div>
+      </div>
+    );
+  }
+
+  // ── Readiness Self-Assessment — baseline, before they start the modules ──
+  const readiness = user.readiness_assessments || [];
+  const needsBaseline = onSaveComponentData && !readiness.some(a => a.checkpoint === 'baseline');
+  if (needsBaseline && !showCRM) {
+    return (
+      <div style={{ minHeight: '100vh', maxWidth: 720, margin: '0 auto', padding: '40px 20px 60px', width: '100%' }}>
+        <div style={{ textAlign: 'center', marginBottom: 8 }}>
+          <h1 className="mono" style={{ fontSize: 22, fontWeight: 700, color: '#e94560', margin: 0 }}>UC30 Foundations</h1>
+        </div>
+        <p style={{ color: '#888', fontSize: 14, textAlign: 'center', marginBottom: 24 }}>
+          One quick thing before you begin — your starting line.
+        </p>
+        <ReadinessAssessment
+          checkpoint="baseline"
+          existing={readiness}
+          saving={surveysSaving}
+          onSave={async (data) => {
+            setSurveysSaving(true);
+            try { await onSaveComponentData(data); }
+            finally { setSurveysSaving(false); }
+          }}
+        />
       </div>
     );
   }

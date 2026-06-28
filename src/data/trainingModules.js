@@ -2736,6 +2736,13 @@ export const TRAINING_MODULES = [
         questions: [],
       },
       {
+        id: 'launch_p1b',
+        title: 'Measure how far you\'ve come',
+        showComponent: 'readiness',
+        content: 'Before you began, you ranked yourself on 10 statements — your honest starting line. Now that you\'ve finished the training, rank yourself again on the same statements.\n\nThis is the second of three checkpoints (you\'ll do it once more at the end of your 30 days). Watch the number move — and remember, the biggest jump usually comes *after* Day 1, when knowledge turns into real action.',
+        questions: [],
+      },
+      {
         id: 'launch_p2',
         title: 'The next 30 days are about doing — not learning',
         content: 'Here\'s the shift. Foundations was the knowledge. The next 30 days are **execution.** You\'ll analyze real properties, talk to real lenders and agents, and make real offers. Two honest truths before you start:\n- **You won\'t feel 100% ready. That\'s normal.** Nobody does before their first deal. The rest of your confidence doesn\'t come from more studying — it comes from doing. You\'ll learn more in your first week of action than in a month of videos.\n- **Action is the curriculum now.** Each day you\'ll get one principle and a short set of tasks, then you go do them: analyze, add contacts, make offers, follow up. That\'s the whole game — and it\'s how the deal actually gets done.',

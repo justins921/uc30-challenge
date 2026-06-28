@@ -449,7 +449,10 @@ export default function App() {
   // Training Phase gate — after activation, before sprint
   const resolvedModules = getResolvedTrainingModules(trainingConfig);
   const activeModules = resolvedModules.filter(m => !m.hidden && !m.comingSoon);
-  const trainingComplete = activeModules.length === 0 ||
+  // Grandfather: once someone is already in the sprint (has completed any day),
+  // a newly-added training module must never pull them back into training.
+  const hasSprintProgress = (user.completedDays?.length || 0) > 0;
+  const trainingComplete = activeModules.length === 0 || hasSprintProgress ||
     activeModules.every(m => (user.trainingCompletedModules || []).includes(m.id));
 
   if ((!user.isAdmin || participantMode) && !trainingComplete && !(user.isAdmin && adminDaysPreview)) {

@@ -9,6 +9,7 @@ import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFA
 import { TRAINING_MODULES, getResolvedTrainingModules } from '../data/trainingModules';
 import { GetClearStep, BuyBoxStep, CapitalConfirmationStep, OfferCommitmentStep, NotificationPrefsStep } from './ActivationPhase';
 import CapitalStrategyFinder from './CapitalStrategyFinder';
+import ReadinessAssessment from './ReadinessAssessment';
 
 function getSocialUrl(platform, handle) {
   const clean = handle.replace(/^@/, '').trim();
@@ -2217,6 +2218,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
     capitalStrategy: { component: CapitalStrategyFinder, title: 'Capital & Strategy Finder', props: { existing: {}, userId: 'admin_preview' } },
     offerCommitment: { component: OfferCommitmentStep, title: 'Set Your Offer Commitment', props: { existingCommitment: null } },
     dailyReminder: { component: NotificationPrefsStep, title: 'Set Your Daily Reminder', props: { existingPrefs: null } },
+    readiness: { component: ReadinessAssessment, title: 'Readiness Self-Assessment', props: { checkpoint: 'baseline', existing: [] } },
   };
 
   if (previewingStep && PREVIEW_STEPS[previewingStep]) {

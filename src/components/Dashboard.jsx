@@ -486,6 +486,7 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
               setQuizAttempts(updated || []);
             }}
             onSaveConfidenceSurvey={onSaveConfidenceSurvey}
+            onSaveReadiness={onUpdateUser}
           />
         )}
         {!showPracticeDay && tab === 'community' && (
