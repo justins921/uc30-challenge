@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import QuizSection from './QuizSection';
 import NativeRentalCalculator from './NativeRentalCalculator';
-import { GetClearStep, BuyBoxStep, CapitalConfirmationStep } from './ActivationPhase';
+import { GetClearStep, BuyBoxStep, CapitalConfirmationStep, OfferCommitmentStep, NotificationPrefsStep } from './ActivationPhase';
 import CapitalStrategyFinder from './CapitalStrategyFinder';
 import ContactsCRM from './ContactsCRM';
 import ConfidenceSurvey from './ConfidenceSurvey';
@@ -302,6 +302,30 @@ export default function TrainingPhase({
             </div>
           </div>
 
+          {principle.showWhy && (() => {
+            const why = user.getClear?.destination || user.theirWhy || user.dreamLife || '';
+            return (
+              <div style={{
+                marginBottom: 24, padding: '20px 22px', borderRadius: 14,
+                background: 'linear-gradient(135deg, rgba(233,69,96,0.1), rgba(233,69,96,0.03))',
+                border: '1px solid rgba(233,69,96,0.3)',
+              }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#e94560', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+                  ★ Your Why
+                </div>
+                {why ? (
+                  <p style={{ fontSize: 17, color: '#fff', lineHeight: 1.7, margin: 0, fontStyle: 'italic' }}>
+                    "{why}"
+                  </p>
+                ) : (
+                  <p style={{ fontSize: 14, color: '#bbb', lineHeight: 1.7, margin: 0 }}>
+                    You'll find the reason you started in your Get Clear plan — revisit it and keep it in front of you.
+                  </p>
+                )}
+              </div>
+            );
+          })()}
+
           {principle.showCalculator && (
             <div style={{
               marginBottom: 24, borderRadius: 12, overflow: 'hidden',
@@ -352,6 +376,8 @@ export default function TrainingPhase({
               capitalStrategy: { Component: CapitalStrategyFinder, label: 'Capital & Strategy Finder', icon: '🧭', color: '#48c78e', props: { existing: user.capitalStrategy || {}, userId: user.id } },
               getClear: { Component: GetClearStep, label: 'Get Clear', icon: '🎯', color: '#e94560', props: { existing: user.getClear || {}, buyBoxData: user.buyBox || null } },
               buyBox: { Component: BuyBoxStep, label: 'Define Your Buy Box', icon: '📦', color: '#c9a0ff', props: { existingBuyBox: user.buyBox || {}, user } },
+              dailyReminder: { Component: NotificationPrefsStep, label: 'Set Your Daily Reminder', icon: '⏰', color: '#c9a0ff', props: { existingPrefs: user.notificationPreferences || null } },
+              offerCommitment: { Component: OfferCommitmentStep, label: 'Set Your Offer Commitment', icon: '📈', color: '#f0a500', props: { existingCommitment: user.offerCommitment || null } },
             };
             const cfg = COMPONENT_MAP[principle.showComponent];
             if (!cfg) return null;

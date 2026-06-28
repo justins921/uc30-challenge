@@ -2723,6 +2723,89 @@ export const TRAINING_MODULES = [
     ],
     completionMessage: 'Module 10 complete — and that\'s all of Foundations. You can now see a property the way the best investors do: the under-market rents hiding behind a waitlist, the bedroom or unit waiting in unused space, the income streams sitting unclaimed, the broken operation with good bones, the expenses begging to be cut, and the financing play nobody else looked for — and you know how to verify each one and price it so you capture the upside instead of paying for it. You\'ve finished the entire Foundations curriculum: return metrics, analysis, getting clear, financing, deal flow, offers, creative structure, negotiation, seller motivation, and hidden value. You have the knowledge. The next 30 days are about one thing — execution. Go find it, go create it, go get your deal.',
   },
+  {
+    id: 'mod_launch',
+    moduleNumber: 11,
+    title: 'Ready for Launch',
+    description: 'The last stop before the sprint — see how far you\'ve come, lock in your daily time and offer commitment, and learn exactly how each day works.',
+    principles: [
+      {
+        id: 'launch_p1',
+        title: 'Look at what you\'ve built',
+        content: 'Take a second and own this: you just completed all **10 Foundations modules.** You now know how to analyze a deal and read the returns, get clear on your plan and capital, get financing and become bankable, build deal flow and a team, write offers and protect yourself, structure creative deals, negotiate, find motivated sellers, and see the hidden value most buyers walk right past.\n\nAnd you didn\'t just learn it — you walked out with your **buy box in hand**, the exact filter you\'ll hunt with. That is more real preparation than most investors ever get before their first deal. Most people never make it this far. You did.',
+        questions: [],
+      },
+      {
+        id: 'launch_p2',
+        title: 'The next 30 days are about doing — not learning',
+        content: 'Here\'s the shift. Foundations was the knowledge. The next 30 days are **execution.** You\'ll analyze real properties, talk to real lenders and agents, and make real offers. Two honest truths before you start:\n- **You won\'t feel 100% ready. That\'s normal.** Nobody does before their first deal. The rest of your confidence doesn\'t come from more studying — it comes from doing. You\'ll learn more in your first week of action than in a month of videos.\n- **Action is the curriculum now.** Each day you\'ll get one principle and a short set of tasks, then you go do them: analyze, add contacts, make offers, follow up. That\'s the whole game — and it\'s how the deal actually gets done.',
+        questions: [
+          {
+            id: 'launch_p2_q1',
+            text: 'For the next 30 days, where does the rest of your confidence come from?',
+            type: 'multiple_choice',
+            options: [
+              'Watching more training videos until you feel 100% ready',
+              'Taking action — analyzing, calling, and making real offers',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'launch_p3',
+        title: 'Remember why you\'re doing this',
+        showWhy: true,
+        content: 'This is the reason you started — the answer you wrote in your Get Clear plan.\n\nOn the days that feel slow or hard — and there will be some — this is what you come back to. Keep it in front of you. The people who finish UC30 aren\'t the most talented or the most experienced. They\'re the ones who remembered *why* they started and kept showing up.',
+        questions: [],
+      },
+      {
+        id: 'launch_p4',
+        title: 'Pick your daily time',
+        showComponent: 'dailyReminder',
+        content: 'Every day of UC30 you\'ll have specific tasks to complete to move forward and unlock the next day. The single biggest predictor of finishing isn\'t talent — it\'s **consistency.** Doing the work at the same time every day until it becomes automatic.\n\nSo decide right now: **when each day can you reliably sit down and do your UC30 tasks?** Pick that time, and we\'ll remind you then.\n\nUse the tool below to **set your daily reminder** — choose the time you\'ll do your tasks each day.\n\nProtect that time like an appointment you can\'t miss. Momentum compounds — and most people who quit do it right after they break the chain. Don\'t break the chain.',
+        questions: [],
+      },
+      {
+        id: 'launch_p5',
+        title: 'Make your offer commitment',
+        showComponent: 'offerCommitment',
+        content: 'Here\'s the truth that drives this entire challenge: **the answer is always no unless you ask.** Offers are the engine of UC30 — they\'re what actually turns into a deal.\n\nAnd remember what you learned in Module 6: **an offer is not a commitment to buy.** It\'s the start of a conversation, fully protected by your contingencies. That\'s exactly why you can make far more of them than feels comfortable — and why **volume is your unfair advantage.** The investor who makes 40 disciplined offers will beat the one who agonizes over 3, every single time.\n\nTo complete UC30, you commit to a **minimum of 30 offers** across the 30 days. But you choose your level:\n- **30 — Minimum.** The floor to complete the challenge. One offer a day, on average.\n- **45 — Strong.** The activity level where most people get a property under contract.\n- **60+ — Elite.** Maximum activity, maximum "luck." This is how you all but guarantee a deal.\n\nUse the tool below to **set your offer commitment** (your number, never below 30). Pick your number and commit to it *now*, before the work starts — then write it somewhere you\'ll see it every day.',
+        questions: [
+          {
+            id: 'launch_p5_q1',
+            text: 'Why can you make far more offers than feels comfortable?',
+            type: 'multiple_choice',
+            options: [
+              'An offer is a binding commitment to buy, so you should make few',
+              'An offer is not a commitment to buy — it\'s a protected start to a conversation',
+            ],
+            correctAnswer: 1,
+          },
+        ],
+      },
+      {
+        id: 'launch_p6',
+        title: 'Your cohort starts soon — and you can start now',
+        content: 'UC30 runs in cohorts, and every cohort starts on the **same Day 1** — so you\'re going through this alongside everyone else, in lockstep. There\'s a **countdown to your Day 1** running on your dashboard right now.\n\nHere\'s how each day will work once it begins: you open UC30, get your one principle for the day, and complete your required tasks — a set number of **properties analyzed, contacts added, and offers made** — to unlock the next day. Same simple rhythm, every day.\n\nBut you don\'t have to sit idle until then. **Use the countdown to get a head start.** Right now you can already:\n- **Add contacts to your CRM** — every agent, lender, wholesaler, or owner you know.\n- **Analyze properties** in your market with the CDS calculator.\n\nDo this now and Day 1 won\'t start from zero — you\'ll already have people to follow up with and reps under your belt. You\'ll hit the ground with momentum while everyone else is just figuring out where to begin.',
+        questions: [],
+      },
+      {
+        id: 'launch_p7',
+        title: 'How a day works (walkthrough) — coming soon',
+        content: '**[PLACEHOLDER — to be built once the Day 1 layout and CRM are finalized.]**\n\nThis section will be a short, picture-by-picture walkthrough — an onboarding flow — that shows you *exactly* how to run a day inside UC30, start to finish:\n- **Open the day and read your principle / daily training.**\n- **Analyze a property and record it** with the CDS calculator so it counts toward your daily minimum.\n- **Plug people into the CRM** — add agents, lenders, wholesalers, and owners, and set follow-ups.\n- **Log your offers** and your contacts to complete the day and unlock the next one.\n\nWe\'re holding this until the daily layout and CRM are locked in, so the screenshots match exactly what you\'ll see. It\'ll land right here before launch.',
+        questions: [],
+      },
+      {
+        id: 'launch_p8',
+        title: 'You\'re ready',
+        content: 'That\'s it. You\'ve got the knowledge, the plan, the buy box, your daily time, and your offer commitment locked in. The countdown is running.\n\nUse the days until Day 1 to start building — then show up and execute. This is the exact thing you prepared for. **See you on Day 1.**',
+        questions: [],
+      },
+    ],
+    keyTerms: [],
+    completionMessage: 'You\'re ready for launch. Daily time set, offer commitment locked, buy box in hand. Use the countdown to get a head start — add contacts and analyze properties now — then show up on Day 1 and execute.',
+  },
 ];
 
 export function getResolvedTrainingModules(trainingConfig = {}) {

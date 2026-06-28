@@ -7,7 +7,7 @@ import { LANDING_DEFAULTS } from './LandingPage';
 import Footer from './Footer';
 import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT, checkWeeklyCompliance, getWeekNumber, getWeekRange, getWeekDayCount, calculateAtRisk, getNowInTimezone } from '../data/compliance';
 import { TRAINING_MODULES, getResolvedTrainingModules } from '../data/trainingModules';
-import { GetClearStep, BuyBoxStep, CapitalConfirmationStep, OfferCommitmentStep } from './ActivationPhase';
+import { GetClearStep, BuyBoxStep, CapitalConfirmationStep, OfferCommitmentStep, NotificationPrefsStep } from './ActivationPhase';
 import CapitalStrategyFinder from './CapitalStrategyFinder';
 
 function getSocialUrl(platform, handle) {
@@ -2216,6 +2216,7 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
     capital: { component: CapitalConfirmationStep, title: 'Confirm Access to Capital', props: { existingCapital: {} } },
     capitalStrategy: { component: CapitalStrategyFinder, title: 'Capital & Strategy Finder', props: { existing: {}, userId: 'admin_preview' } },
     offerCommitment: { component: OfferCommitmentStep, title: 'Set Your Offer Commitment', props: { existingCommitment: null } },
+    dailyReminder: { component: NotificationPrefsStep, title: 'Set Your Daily Reminder', props: { existingPrefs: null } },
   };
 
   if (previewingStep && PREVIEW_STEPS[previewingStep]) {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   BUYER_STRENGTHS, TIME_TO_CLOSE_OPTIONS, URGENCY_OPTIONS, DEAL_BREAKERS,
   generateBuyBoxPDF,
@@ -1109,13 +1109,23 @@ const OFFER_BENCHMARKS = [
   { value: 60, label: '60+ offers', tier: 'Elite Operator', color: '240,165,0' },
 ];
 
-function OfferCommitmentStep({ onNext, onBack, onSave, existingCommitment }) {
+function OfferCommitmentStep({ onNext, onBack, onSave, existingCommitment, embedded }) {
   const [count, setCount] = useState(existingCommitment || '');
   const [saving, setSaving] = useState(false);
 
   const numericCount = typeof count === 'number' ? count : parseInt(count, 10);
   const isValid = !isNaN(numericCount) && numericCount >= 30;
   const activeBenchmark = OFFER_BENCHMARKS.find(b => b.value === numericCount);
+
+  // Embedded (in a training module): auto-save the commitment on change, no nav buttons.
+  const didMount = useRef(false);
+  useEffect(() => {
+    if (!embedded) return;
+    if (!didMount.current) { didMount.current = true; return; }
+    if (!isValid || !onSave) return;
+    onSave({ offerCommitment: numericCount, offerCommitmentSetAt: new Date().toISOString() });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [numericCount]);
 
   const handleInput = (val) => {
     const cleaned = val.replace(/[^0-9]/g, '');
@@ -1230,28 +1240,36 @@ function OfferCommitmentStep({ onNext, onBack, onSave, existingCommitment }) {
 
       <p style={{
         textAlign: 'center', fontSize: 13, color: '#666', lineHeight: 1.6,
-        marginBottom: 32, marginTop: 12,
+        marginBottom: embedded ? 4 : 32, marginTop: 12,
       }}>
         The more offers you put in, the faster you'll get a property under contract.
       </p>
 
-      <div style={{ display: 'flex', gap: 12 }}>
-        <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
-          Back
-        </button>
-        <button
-          className="btn-primary"
-          style={{
-            flex: 1, padding: '14px 24px',
-            opacity: isValid ? 1 : 0.4,
-            pointerEvents: isValid ? 'auto' : 'none',
-          }}
-          onClick={handleNext}
-          disabled={!isValid || saving}
-        >
-          {saving ? 'Saving...' : 'Continue'}
-        </button>
-      </div>
+      {embedded ? (
+        isValid && (
+          <p style={{ textAlign: 'center', fontSize: 13, color: '#48c78e', fontWeight: 600, marginTop: 8 }}>
+            ✓ Committed to {numericCount} offers — saved.
+          </p>
+        )
+      ) : (
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
+            Back
+          </button>
+          <button
+            className="btn-primary"
+            style={{
+              flex: 1, padding: '14px 24px',
+              opacity: isValid ? 1 : 0.4,
+              pointerEvents: isValid ? 'auto' : 'none',
+            }}
+            onClick={handleNext}
+            disabled={!isValid || saving}
+          >
+            {saving ? 'Saving...' : 'Continue'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -1543,7 +1561,7 @@ const TIME_PRESETS = [
 
 const HOURS = Array.from({ length: 12 }, (_, i) => i + 1);
 
-function NotificationPrefsStep({ onNext, onBack, onSave, existingPrefs }) {
+function NotificationPrefsStep({ onNext, onBack, onSave, existingPrefs, embedded }) {
   const detectedTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const [selectedTime, setSelectedTime] = useState(existingPrefs?.dailyReminderTime || '18:00');
@@ -1602,6 +1620,16 @@ function NotificationPrefsStep({ onNext, onBack, onSave, existingPrefs }) {
     setSaving(false);
     onNext();
   };
+
+  // Embedded (in a training module): auto-save the reminder on change, no nav buttons.
+  const didMount = useRef(false);
+  useEffect(() => {
+    if (!embedded) return;
+    if (!didMount.current) { didMount.current = true; return; }
+    if (!onSave) return;
+    onSave({ notificationPreferences: { dailyReminderTime: selectedTime, timezone, enabled: true } });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTime, timezone]);
 
   const activePreset = TIME_PRESETS.find(p => p.time === selectedTime);
   const selectStyle = {
@@ -1745,23 +1773,29 @@ function NotificationPrefsStep({ onNext, onBack, onSave, existingPrefs }) {
         </select>
       )}
 
-      <p style={{ fontSize: 13, color: '#555', marginTop: 12, marginBottom: 32 }}>
+      <p style={{ fontSize: 13, color: '#555', marginTop: 12, marginBottom: embedded ? 4 : 32 }}>
         You can change this anytime in your settings.
       </p>
 
-      <div style={{ display: 'flex', gap: 12 }}>
-        <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
-          Back
-        </button>
-        <button
-          className="btn-primary"
-          style={{ flex: 1, padding: '14px 24px' }}
-          onClick={handleNext}
-          disabled={saving}
-        >
-          {saving ? 'Saving...' : 'Continue'}
-        </button>
-      </div>
+      {embedded ? (
+        <p style={{ textAlign: 'center', fontSize: 13, color: '#48c78e', fontWeight: 600, marginTop: 8 }}>
+          ✓ Daily reminder saved.
+        </p>
+      ) : (
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button className="btn-secondary" onClick={onBack} style={{ padding: '14px 24px' }}>
+            Back
+          </button>
+          <button
+            className="btn-primary"
+            style={{ flex: 1, padding: '14px 24px' }}
+            onClick={handleNext}
+            disabled={saving}
+          >
+            {saving ? 'Saving...' : 'Continue'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -1904,4 +1938,4 @@ const CAPITAL_LABELS = {
   working_on_it: 'Still working on this',
 };
 
-export { GetClearStep, BuyBoxStep, CapitalConfirmationStep, OfferCommitmentStep };
+export { GetClearStep, BuyBoxStep, CapitalConfirmationStep, OfferCommitmentStep, NotificationPrefsStep };
