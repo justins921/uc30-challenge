@@ -612,8 +612,9 @@ export default function DayView({
         />
       )}
 
-      {/* Confidence Survey — reflection days (7, 14, 21, 28) */}
-      {isReflectionDay && surveyCheckpoint && onSaveConfidenceSurvey && (
+      {/* Confidence Survey — only after week 2 (day 14) and at the end (week 4 / day 28).
+          The "after the pre-modules" checkpoint lives on the end-of-Foundations screen. */}
+      {isReflectionDay && ['week_2', 'week_4'].includes(surveyCheckpoint) && onSaveConfidenceSurvey && (
         <ConfidenceSurvey
           checkpoint={surveyCheckpoint}
           existingSurveys={user.confidence_surveys || []}
