@@ -192,7 +192,7 @@ export default function FreeToolsPage({ user }) {
               background: 'rgba(233,69,96,0.06)',
             }}
           >
-            Join the Challenge
+            Join the Waitlist
           </a>
         </div>
 
@@ -242,7 +242,7 @@ export default function FreeToolsPage({ user }) {
                   fontFamily: "'DM Sans', sans-serif",
                 }}
               >
-                Join the Challenge
+                Join the Waitlist
               </a>
             </div>
           </div>
@@ -272,7 +272,7 @@ export default function FreeToolsPage({ user }) {
             background: 'rgba(233,69,96,0.06)',
           }}
         >
-          Join the Challenge
+          Join the Waitlist
         </a>
       </div>
 
@@ -292,6 +292,56 @@ export default function FreeToolsPage({ user }) {
             Free calculators and analysis tools to help you evaluate deals with confidence.
             Built by investors, for investors.
           </p>
+        </div>
+
+        {/* Featured: UC30 — looks like one of the tools, but it's the real challenge */}
+        <a
+          href="/"
+          style={{
+            display: 'block', textDecoration: 'none', color: 'inherit',
+            padding: 28, borderRadius: 16, marginBottom: 28, position: 'relative', overflow: 'hidden',
+            background: 'linear-gradient(135deg, rgba(233,69,96,0.14) 0%, rgba(83,52,131,0.12) 100%)',
+            border: '1px solid rgba(233,69,96,0.35)',
+          }}
+        >
+          <div style={{
+            position: 'absolute', top: 14, right: -34, transform: 'rotate(45deg)',
+            background: '#f0a500', color: '#1a1a2e', fontSize: 11, fontWeight: 800,
+            letterSpacing: 0.5, padding: '4px 44px', textTransform: 'uppercase',
+          }}>
+            Coming in 60 days
+          </div>
+          <div style={{
+            display: 'inline-block', fontSize: 11, fontWeight: 700, color: '#e94560', letterSpacing: 1,
+            background: 'rgba(233,69,96,0.12)', border: '1px solid rgba(233,69,96,0.3)',
+            padding: '4px 12px', borderRadius: 20, marginBottom: 14, textTransform: 'uppercase',
+          }}>
+            The Main Event
+          </div>
+          <h2 style={{ fontSize: 'clamp(22px, 4vw, 30px)', fontWeight: 800, marginBottom: 10, lineHeight: 1.2 }}>
+            Love the tools? They're a taste of <span style={{ color: '#e94560' }}>UC30</span>.
+          </h2>
+          <p style={{ fontSize: 15, color: '#bbb', lineHeight: 1.7, marginBottom: 18, maxWidth: 600 }}>
+            UC30 is the 30-day challenge that walks you from zero to your first real estate deal — daily lessons,
+            one action a day, real accountability, and a community that won't let you quit. The free tools above
+            are built into it. Get on the waitlist now and lock in <strong style={{ color: '#f0a500' }}>founding-member early-bird pricing</strong> before doors open.
+          </p>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8, padding: '13px 28px', borderRadius: 10,
+            background: '#e94560', color: '#fff', fontSize: 15, fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
+          }}>
+            Join the Waitlist — Free &rarr;
+          </span>
+          <p style={{ fontSize: 12, color: '#777', marginTop: 12 }}>
+            Joining the waitlist is free. The challenge itself is a paid program — early-bird pricing for founding members.
+          </p>
+        </a>
+
+        <div style={{
+          fontSize: 12, fontWeight: 700, color: '#666', textTransform: 'uppercase', letterSpacing: 1,
+          marginBottom: 12, textAlign: 'center',
+        }}>
+          Free tools to use right now
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -382,7 +432,7 @@ export default function FreeToolsPage({ user }) {
               fontFamily: "'DM Sans', sans-serif",
             }}
           >
-            Join the Challenge
+            Join the Waitlist
           </a>
         </div>
       </div>

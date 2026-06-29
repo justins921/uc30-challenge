@@ -11,59 +11,16 @@
  */
 
 import { useState } from 'react';
-import { supabase } from '../utils/supabaseClient';
-
-const SUPABASE_FUNCTION_URL = import.meta.env.VITE_SUPABASE_FUNCTION_URL || '';
+import { subscribeUser, tagByName } from '../utils/kit';
 
 export default function LandingPageV2({ onGoToLogin, landingContent }) {
   const c = { ...DEFAULTS, ...landingContent };
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  // Pre-launch: CTAs join the waitlist instead of checking out.
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const checkoutLoading = false;
+  const checkoutError = null;
 
-  const [checkoutError, setCheckoutError] = useState(null);
-
-  const handleGetStarted = async () => {
-    if (!SUPABASE_FUNCTION_URL) {
-      onGoToLogin('register');
-      return;
-    }
-
-    // Check if user is logged in
-    const { data: { user } } = supabase ? await supabase.auth.getUser() : { data: { user: null } };
-
-    if (!user) {
-      onGoToLogin('register');
-      return;
-    }
-
-    setCheckoutLoading(true);
-    setCheckoutError(null);
-    try {
-      const origin = window.location.origin;
-      const res = await fetch(`${SUPABASE_FUNCTION_URL}/create-checkout`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          supabase_user_id: user.id,
-          email: user.email,
-          success_url: `${origin}/?success=true`,
-          cancel_url: `${origin}/`,
-          tolt_referral: window.tolt_referral || null,
-        }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        console.error('Checkout error:', data.error);
-        setCheckoutError('Unable to start checkout. Please try again or contact support.');
-        setCheckoutLoading(false);
-      }
-    } catch (err) {
-      console.error('Checkout error:', err);
-      setCheckoutError('Unable to start checkout. Please try again or contact support.');
-      setCheckoutLoading(false);
-    }
-  };
+  const handleGetStarted = () => setWaitlistOpen(true);
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
@@ -126,7 +83,7 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
             onClick={handleGetStarted}
             disabled={checkoutLoading}
           >
-            {checkoutLoading ? 'Loading…' : 'Join Now'}
+            Join the Waitlist
           </button>
         </div>
       </nav>
@@ -172,7 +129,7 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
             onClick={handleGetStarted}
             disabled={checkoutLoading}
           >
-            {checkoutLoading ? 'Loading…' : 'Start My 30-Day Challenge'}
+            Join the Waitlist
           </button>
         </div>
 
@@ -433,18 +390,21 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
         }}>
           {/* Price anchor — compare to alternatives */}
           <p style={{ fontSize: 13, color: '#666', marginBottom: 20, lineHeight: 1.6 }}>
-            Most real estate coaching programs charge $500+/month.
-            <br />This is a one-time investment for a complete system.
+            Most real estate coaching programs charge $500+/month — for years.
+            <br />UC30 is a one-time investment for a complete, do-it-with-you system.
           </p>
 
           {/* Price */}
           <div style={{ marginBottom: 8 }}>
             <span className="mono" style={{ fontSize: 'clamp(48px, 8vw, 64px)', fontWeight: 800, color: '#fff', lineHeight: 1 }}>
-              $997
+              $3,000
             </span>
           </div>
-          <p style={{ fontSize: 14, color: '#888', marginBottom: 28 }}>
+          <p style={{ fontSize: 14, color: '#888', marginBottom: 8 }}>
             One-time payment &middot; 1 year of access
+          </p>
+          <p style={{ fontSize: 13, color: '#f0a500', fontWeight: 600, marginBottom: 28 }}>
+            Founding-cohort waitlist members get early-bird pricing when we open.
           </p>
 
           {/* What's included list */}
@@ -470,14 +430,13 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
             className="btn-primary"
             style={{ padding: '18px 44px', fontSize: 18, fontWeight: 700, width: '100%', maxWidth: 340 }}
             onClick={handleGetStarted}
-            disabled={checkoutLoading}
           >
-            {checkoutLoading ? 'Loading…' : 'Join the Challenge — $997'}
+            Join the Waitlist
           </button>
 
-          {/* Daily cost reframe */}
+          {/* Reframe */}
           <p style={{ fontSize: 12, color: '#555', marginTop: 14 }}>
-            That's less than $2.75/day for a year of access
+            No payment today — get first access (and the best price) the moment the next cohort opens.
           </p>
         </div>
       </section>
@@ -528,7 +487,7 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
             onClick={handleGetStarted}
             disabled={checkoutLoading}
           >
-            {checkoutLoading ? 'Loading…' : 'Start My 30-Day Challenge'}
+            Join the Waitlist
           </button>
           <p style={{ color: '#555', fontSize: 13 }}>
             One-time investment. 1-year access with unlimited re-runs.
@@ -553,12 +512,83 @@ export default function LandingPageV2({ onGoToLogin, landingContent }) {
       </footer>
 
       {/* Pulse animation for the urgency dot */}
+      {waitlistOpen && <WaitlistModal onClose={() => setWaitlistOpen(false)} />}
+
       <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.4; }
         }
       `}</style>
+    </div>
+  );
+}
+
+// ── Waitlist Modal ──────────────────────────────────
+function WaitlistModal({ onClose }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState('');
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!email.includes('@') || !email.includes('.')) { setError('Please enter a valid email.'); return; }
+    setSubmitting(true); setError('');
+    try {
+      await subscribeUser(email, name.trim());
+      await tagByName(email, 'UC30 Waitlist');
+    } catch { /* ignore network errors — still confirm */ }
+    setSubmitting(false);
+    setDone(true);
+  };
+
+  return (
+    <div onClick={onClose} style={{
+      position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', padding: 20,
+    }}>
+      <div onClick={e => e.stopPropagation()} className="card" style={{ maxWidth: 440, width: '100%', padding: 32, position: 'relative' }}>
+        <button onClick={onClose} style={{
+          position: 'absolute', top: 14, right: 16, background: 'none', border: 'none',
+          color: '#888', fontSize: 22, cursor: 'pointer', lineHeight: 1, fontFamily: "'DM Sans', sans-serif",
+        }}>&times;</button>
+
+        {done ? (
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: 44, marginBottom: 12 }}>&#127881;</div>
+            <h3 style={{ fontSize: 22, fontWeight: 800, marginBottom: 10 }}>You're on the list!</h3>
+            <p style={{ fontSize: 14, color: '#aaa', lineHeight: 1.7, marginBottom: 22 }}>
+              You'll be the first to know when the next UC30 cohort opens — with founding-member early-bird pricing. Keep an eye on your inbox.
+            </p>
+            <button className="btn-primary" onClick={onClose} style={{ padding: '12px 32px' }}>Done</button>
+          </div>
+        ) : (
+          <>
+            <div style={{ fontSize: 11, fontWeight: 700, color: '#e94560', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+              Founding Cohort
+            </div>
+            <h3 style={{ fontSize: 23, fontWeight: 800, marginBottom: 8, lineHeight: 1.25 }}>Join the UC30 Waitlist</h3>
+            <p style={{ fontSize: 14, color: '#999', lineHeight: 1.7, marginBottom: 20 }}>
+              Be first in line for the next cohort — and lock in early-bird pricing before doors open. No payment today.
+            </p>
+            <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <input value={name} onChange={e => setName(e.target.value)} placeholder="First name (optional)"
+                style={{ fontSize: 15, padding: '12px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', color: '#eee', fontFamily: "'DM Sans', sans-serif" }} />
+              <input type="email" value={email} onChange={e => { setEmail(e.target.value); setError(''); }} placeholder="your@email.com" required
+                style={{ fontSize: 15, padding: '12px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', color: '#eee', fontFamily: "'DM Sans', sans-serif" }} />
+              <button type="submit" className="btn-primary" disabled={submitting} style={{ padding: '14px', fontSize: 16, fontWeight: 700, marginTop: 4 }}>
+                {submitting ? 'Joining…' : 'Join the Waitlist'}
+              </button>
+            </form>
+            {error && <div style={{ fontSize: 12, color: '#e94560', marginTop: 8 }}>{error}</div>}
+            <p style={{ fontSize: 11, color: '#666', marginTop: 12, textAlign: 'center' }}>
+              We'll only email you about UC30. Unsubscribe anytime.
+            </p>
+          </>
+        )}
+      </div>
     </div>
   );
 }
