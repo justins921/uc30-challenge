@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { supabase } from '../utils/supabaseClient';
-
-const SUPABASE_FUNCTION_URL = import.meta.env.VITE_SUPABASE_FUNCTION_URL || '';
+import WaitlistModal from './WaitlistModal';
 
 const DEFAULTS = {
   badge: '30-Day Challenge',
@@ -9,7 +7,7 @@ const DEFAULTS = {
   headlineAccent: ' Real Estate Deal',
   headlineSuffix: ' in 30 Days',
   subtext: 'A structured, daily action plan that takes you from zero to your first deal. Video lessons, daily tasks, accountability, and a community pushing you forward.',
-  ctaButton: 'Join the Challenge →',
+  ctaButton: 'Join the Waitlist →',
   stats: [
     { value: '30', label: 'Daily Lessons' },
     { value: '1', label: 'Clear Goal' },
@@ -17,7 +15,7 @@ const DEFAULTS = {
     { value: '100%', label: 'Action-Based' },
   ],
   steps: [
-    { title: 'Sign Up & Pay', description: 'Secure your spot in the next cohort. Once payment is confirmed, you\'ll get immediate access to your dashboard.' },
+    { title: 'Join the Waitlist', description: 'Get on the list for the next cohort and lock in founding-member early-bird pricing. No payment today — you\'re first in line the moment doors open.' },
     { title: 'Follow the Daily Plan', description: 'Each day unlocks a new video lesson and action task. Watch, learn, then go execute. No fluff, just action.' },
     { title: 'Submit Your Proof', description: 'Complete each day\'s task and submit your proof before midnight. Miss a day and you\'re out — that\'s the accountability.' },
     { title: 'Close Your Deal', description: 'By day 30, you\'ll have analyzed properties, contacted agents, submitted offers, and be on your way to closing.' },
@@ -36,7 +34,7 @@ const DEFAULTS = {
     { color: '#0f3460', phase: 'Phase 3: Closing', days: 'Days 21–30', items: ['Advanced deal structuring', 'Due diligence and inspections', 'Close your first deal'] },
   ],
   finalHeadline: 'Ready to Get Your First Deal?',
-  finalSubtext: 'Stop watching from the sidelines. Join the next cohort and take action every single day for 30 days.',
+  finalSubtext: 'Stop watching from the sidelines. Get on the waitlist for the next cohort — founding-member early-bird pricing, no payment today.',
 };
 
 export { DEFAULTS as LANDING_DEFAULTS };
@@ -44,54 +42,12 @@ export { DEFAULTS as LANDING_DEFAULTS };
 export default function LandingPage({ onGoToLogin, landingContent }) {
   // Merge custom content over defaults
   const c = { ...DEFAULTS, ...landingContent };
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  // Pre-launch: CTAs join the waitlist instead of checking out.
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const checkoutLoading = false;
+  const checkoutError = null;
 
-  const [checkoutError, setCheckoutError] = useState(null);
-
-  const handleGetStarted = async () => {
-    if (!SUPABASE_FUNCTION_URL) {
-      onGoToLogin('register');
-      return;
-    }
-
-    // Check if user is logged in
-    const { data: { user } } = supabase ? await supabase.auth.getUser() : { data: { user: null } };
-
-    if (!user) {
-      // Not logged in — send to register first
-      onGoToLogin('register');
-      return;
-    }
-
-    setCheckoutLoading(true);
-    setCheckoutError(null);
-    try {
-      const origin = window.location.origin;
-      const res = await fetch(`${SUPABASE_FUNCTION_URL}/create-checkout`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          supabase_user_id: user.id,
-          email: user.email,
-          success_url: `${origin}/?success=true`,
-          cancel_url: `${origin}/`,
-          tolt_referral: window.tolt_referral || null,
-        }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        console.error('Checkout error:', data.error);
-        setCheckoutError('Unable to start checkout. Please try again or contact support.');
-        setCheckoutLoading(false);
-      }
-    } catch (err) {
-      console.error('Checkout error:', err);
-      setCheckoutError('Unable to start checkout. Please try again or contact support.');
-      setCheckoutLoading(false);
-    }
-  };
+  const handleGetStarted = () => setWaitlistOpen(true);
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
@@ -160,6 +116,10 @@ export default function LandingPage({ onGoToLogin, landingContent }) {
             Already a Member? Log In
           </button>
         </div>
+        <p style={{ color: '#888', fontSize: 13, marginTop: 16 }}>
+          <strong style={{ color: '#bbb' }}>$3,000</strong> · one-time · 1-year access ·{' '}
+          <span style={{ color: '#f0a500', fontWeight: 600 }}>founding-cohort early-bird pricing for waitlist members</span> · no payment today
+        </p>
         {checkoutError && (
           <div style={{
             marginTop: 20, padding: '12px 20px', borderRadius: 10,
@@ -272,6 +232,8 @@ export default function LandingPage({ onGoToLogin, landingContent }) {
           Affiliate Program
         </a>
       </footer>
+
+      {waitlistOpen && <WaitlistModal onClose={() => setWaitlistOpen(false)} />}
     </div>
   );
 }
