@@ -612,11 +612,11 @@ export default function DayView({
         />
       )}
 
-      {/* Confidence Survey — only after week 2 (day 14) and at the end (week 4 / day 28).
-          The "after the pre-modules" checkpoint lives on the end-of-Foundations screen. */}
-      {isReflectionDay && ['week_2', 'week_4'].includes(surveyCheckpoint) && onSaveConfidenceSurvey && (
+      {/* Confidence Survey — after week 2 (day 14). The "after the pre-modules" checkpoint
+          lives on the end-of-Foundations screen; the final one is on Day 30 below. */}
+      {isReflectionDay && surveyCheckpoint === 'week_2' && onSaveConfidenceSurvey && (
         <ConfidenceSurvey
-          checkpoint={surveyCheckpoint}
+          checkpoint="week_2"
           existingSurveys={user.confidence_surveys || []}
           saving={surveySaving}
           onSave={async (data) => {
@@ -627,12 +627,20 @@ export default function DayView({
         />
       )}
 
-      {/* Growth Report — shown on Day 28 after completing final survey */}
-      {day === 28 && (user.confidence_surveys || []).length >= 2 && (
-        <GrowthReport surveys={user.confidence_surveys} />
+      {/* Day 30 — the end: final Confidence Survey + Readiness, then the Growth Report */}
+      {day === 30 && onSaveConfidenceSurvey && (
+        <ConfidenceSurvey
+          checkpoint="week_4"
+          existingSurveys={user.confidence_surveys || []}
+          saving={surveySaving}
+          onSave={async (data) => {
+            setSurveySaving(true);
+            await onSaveConfidenceSurvey(data);
+            setSurveySaving(false);
+          }}
+        />
       )}
 
-      {/* Readiness Self-Assessment — final checkpoint, after the last day */}
       {day === 30 && onSaveReadiness && (
         <div style={{ marginBottom: 24 }}>
           <ReadinessAssessment
@@ -646,6 +654,11 @@ export default function DayView({
             }}
           />
         </div>
+      )}
+
+      {/* Growth Report — on Day 30, the full confidence journey */}
+      {day === 30 && (user.confidence_surveys || []).length >= 2 && (
+        <GrowthReport surveys={user.confidence_surveys} />
       )}
 
       {/* Review Quiz (Day 12 non-standard: review quiz before training) */}

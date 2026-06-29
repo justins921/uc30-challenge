@@ -584,7 +584,9 @@ export default function TrainingPhase({
 
   // ── Readiness Self-Assessment — baseline, before they start the modules ──
   const readiness = user.readiness_assessments || [];
-  const needsBaseline = onSaveComponentData && !readiness.some(a => a.checkpoint === 'baseline');
+  // Real users do the baseline before the modules; admins skip the gate so they can review
+  // and edit all modules freely (they can preview the assessment from the admin tools).
+  const needsBaseline = onSaveComponentData && !user.isAdmin && !readiness.some(a => a.checkpoint === 'baseline');
   if (needsBaseline && !showCRM) {
     return (
       <div style={{ minHeight: '100vh', maxWidth: 720, margin: '0 auto', padding: '40px 20px 60px', width: '100%' }}>

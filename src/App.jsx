@@ -147,6 +147,9 @@ export default function App() {
   const [participantMode, setParticipantMode] = useState(false);
   // Admin-only: jump straight to the day timeline, bypassing activation/training gates
   const [adminDaysPreview, setAdminDaysPreview] = useState(false);
+  // Admin-only: set once an admin finishes (or clicks through) onboarding in participant mode,
+  // so they advance into training instead of looping on the activation flow.
+  const [adminPastActivation, setAdminPastActivation] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentFailed, setPaymentFailed] = useState(false);
 
@@ -411,9 +414,13 @@ export default function App() {
     );
   }
 
-  // Activation Phase gate — non-admin users (or admins in participant mode) who haven't completed activation
-  // Admins can bypass via "Skip to Days" (adminDaysPreview) to reach the day timeline directly.
-  if ((!user.isAdmin || participantMode) && !user.activationCompleted && !(user.isAdmin && adminDaysPreview)) {
+  // Activation Phase gate — non-admins who haven't completed onboarding see it once.
+  // Admins in participant mode always see the full onboarding flow (for review/editing),
+  // unless they tap "Skip to Days" (adminDaysPreview) to jump to the day timeline.
+  const showActivationGate = user.isAdmin
+    ? (participantMode && !adminDaysPreview && !adminPastActivation)
+    : (!user.activationCompleted);
+  if (showActivationGate) {
     return (
       <>
         {user.isAdmin && participantMode && (
@@ -425,12 +432,17 @@ export default function App() {
             <span style={{ fontSize: 13, fontWeight: 600, color: '#000' }}>
               Participant Mode — Taking the course as a participant
             </span>
+            <button onClick={() => setAdminPastActivation(true)} style={{
+              fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
+              border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.2)',
+              color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
+            }}>Skip to Training →</button>
             <button onClick={() => setAdminDaysPreview(true)} style={{
               fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
               border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.25)',
               color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
             }}>Skip to Days →</button>
-            <button onClick={() => { setParticipantMode(false); setAdminDaysPreview(false); }} style={{
+            <button onClick={() => { setParticipantMode(false); setAdminDaysPreview(false); setAdminPastActivation(false); }} style={{
               fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
               border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.15)',
               color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
@@ -439,8 +451,12 @@ export default function App() {
         )}
         <ActivationPhase
           user={user}
-          onComplete={completeActivation}
-          onSaveExit={user.isAdmin && participantMode ? () => setParticipantMode(false) : undefined}
+          onComplete={async (data) => {
+            const r = await completeActivation(data);
+            if (user.isAdmin && participantMode && data?.activationCompleted) setAdminPastActivation(true);
+            return r;
+          }}
+          onSaveExit={user.isAdmin && participantMode ? () => { setParticipantMode(false); setAdminPastActivation(false); } : undefined}
         />
       </>
     );
@@ -449,9 +465,11 @@ export default function App() {
   // Training Phase gate — after activation, before sprint
   const resolvedModules = getResolvedTrainingModules(trainingConfig);
   const activeModules = resolvedModules.filter(m => !m.hidden && !m.comingSoon);
-  // Grandfather: once someone is already in the sprint (has completed any day),
-  // a newly-added training module must never pull them back into training.
-  const hasSprintProgress = (user.completedDays?.length || 0) > 0;
+  // Grandfather: once a real (non-admin) user is already in the sprint (has completed any
+  // day), a newly-added training module must never pull them back into training. Admins are
+  // NOT grandfathered, so in participant mode they can always walk the full flow (incl. the
+  // Ready for Launch module) for review/editing.
+  const hasSprintProgress = !user.isAdmin && (user.completedDays?.length || 0) > 0;
   const trainingComplete = activeModules.length === 0 || hasSprintProgress ||
     activeModules.every(m => (user.trainingCompletedModules || []).includes(m.id));
 
@@ -472,7 +490,7 @@ export default function App() {
               border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.25)',
               color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
             }}>Skip to Days →</button>
-            <button onClick={() => { setParticipantMode(false); setAdminDaysPreview(false); }} style={{
+            <button onClick={() => { setParticipantMode(false); setAdminDaysPreview(false); setAdminPastActivation(false); }} style={{
               fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
               border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.15)',
               color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
@@ -639,7 +657,7 @@ export default function App() {
             ? 'Admin Preview — Browsing all days (activation/training skipped)'
             : 'Participant Mode — Taking the course as a participant'}
         </span>
-        <button onClick={() => { setParticipantMode(false); setAdminDaysPreview(false); }} style={{
+        <button onClick={() => { setParticipantMode(false); setAdminDaysPreview(false); setAdminPastActivation(false); }} style={{
           fontSize: 12, padding: '4px 14px', borderRadius: 6, cursor: 'pointer',
           border: '1px solid rgba(0,0,0,0.3)', background: 'rgba(0,0,0,0.15)',
           color: '#000', fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
@@ -648,7 +666,7 @@ export default function App() {
     )}
     <Dashboard
       user={user}
-      onLogout={user.isAdmin && participantMode ? () => { setParticipantMode(false); setAdminDaysPreview(false); } : logout}
+      onLogout={user.isAdmin && participantMode ? () => { setParticipantMode(false); setAdminDaysPreview(false); setAdminPastActivation(false); } : logout}
       onSubmit={submitDay}
       cohortStartDate={cohortStartDate}
       nextCohortDate={nextCohortDate}
