@@ -37,19 +37,20 @@ const TOOLS = [
     component: NativeRentalCalculator,
   },
   {
-    id: 'capex-calculator',
-    title: 'CapEx Projection Calculator',
-    description: 'Estimate capital expenditure reserves for any property. Covers 24 building systems with remaining-life projections, replacement costs, and urgency prioritization.',
-    icon: '🔧',
-    component: CapExCalculator,
-  },
-  {
     id: 'due-diligence-checklist',
     title: 'Due Diligence Checklist',
     description: 'Track every document you need before closing. 27 items across financials, leases, legal, insurance, and management — with critical items flagged so nothing falls through the cracks.',
     icon: '📋',
     component: DueDiligenceChecklist,
     passUser: true,
+  },
+  {
+    id: 'capex-calculator',
+    title: 'CapEx Projection Calculator',
+    description: 'Estimate capital expenditure reserves for any property. Covers 24 building systems with remaining-life projections, replacement costs, and urgency prioritization.',
+    icon: '🔧',
+    component: CapExCalculator,
+    comingSoon: true,
   },
 ];
 
@@ -156,7 +157,7 @@ export default function FreeToolsPage({ user }) {
   const [unlockedTools, setUnlockedTools] = useState(getUnlockedTools);
 
   const path = window.location.pathname.replace(/\/+$/, '');
-  const directTool = TOOLS.find(t => path === `/tools/${t.id}`);
+  const directTool = TOOLS.find(t => path === `/tools/${t.id}` && !t.comingSoon);
   const tool = directTool || activeTool;
 
   if (tool) {
@@ -294,26 +295,15 @@ export default function FreeToolsPage({ user }) {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {TOOLS.map(tool => (
-            <a
-              key={tool.id}
-              href={`/tools/${tool.id}`}
-              onClick={e => { e.preventDefault(); setActiveTool(tool); window.history.pushState({}, '', `/tools/${tool.id}`); }}
-              style={{
-                display: 'block', padding: 24, borderRadius: 12, textDecoration: 'none', color: 'inherit',
-                background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
-                transition: 'border-color 0.2s, background 0.2s',
-                cursor: 'pointer',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.borderColor = 'rgba(233,69,96,0.3)';
-                e.currentTarget.style.background = 'rgba(233,69,96,0.03)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)';
-                e.currentTarget.style.background = 'rgba(255,255,255,0.02)';
-              }}
-            >
+          {TOOLS.map(tool => {
+            const soon = !!tool.comingSoon;
+            const cardStyle = {
+              display: 'block', padding: 24, borderRadius: 12, textDecoration: 'none', color: 'inherit',
+              background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+              transition: 'border-color 0.2s, background 0.2s',
+              cursor: soon ? 'default' : 'pointer', opacity: soon ? 0.55 : 1,
+            };
+            const inner = (
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 <div style={{
                   width: 52, height: 52, borderRadius: 12,
@@ -324,13 +314,42 @@ export default function FreeToolsPage({ user }) {
                   {tool.icon}
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 4 }}>{tool.title}</div>
+                  <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                    {tool.title}
+                    {soon && (
+                      <span style={{
+                        fontSize: 10, fontWeight: 700, color: '#f0a500', letterSpacing: 0.5, textTransform: 'uppercase',
+                        background: 'rgba(240,165,0,0.12)', border: '1px solid rgba(240,165,0,0.25)', padding: '2px 8px', borderRadius: 5,
+                      }}>Coming Soon</span>
+                    )}
+                  </div>
                   <div style={{ fontSize: 13, color: '#888', lineHeight: 1.5 }}>{tool.description}</div>
                 </div>
-                <div style={{ color: '#e94560', fontSize: 20, fontShrink: 0 }}>&#8250;</div>
+                {!soon && <div style={{ color: '#e94560', fontSize: 20, flexShrink: 0 }}>&#8250;</div>}
               </div>
-            </a>
-          ))}
+            );
+            if (soon) {
+              return <div key={tool.id} style={cardStyle}>{inner}</div>;
+            }
+            return (
+              <a
+                key={tool.id}
+                href={`/tools/${tool.id}`}
+                onClick={e => { e.preventDefault(); setActiveTool(tool); window.history.pushState({}, '', `/tools/${tool.id}`); }}
+                style={cardStyle}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = 'rgba(233,69,96,0.3)';
+                  e.currentTarget.style.background = 'rgba(233,69,96,0.03)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)';
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.02)';
+                }}
+              >
+                {inner}
+              </a>
+            );
+          })}
         </div>
 
         {/* More tools coming soon */}
