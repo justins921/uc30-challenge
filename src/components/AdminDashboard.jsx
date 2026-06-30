@@ -2110,8 +2110,18 @@ function DailyMinimumsEditor({ overrides, onSave, onBack }) {
   );
 }
 
+// Clean stub user for previewing a day exactly as a participant sees it.
+const DAY_PREVIEW_USER = {
+  id: 'admin_preview', firstName: 'Preview', lastName: '', email: 'preview@uc30.com',
+  isAdmin: true, completedDays: [], submissions: [], currentDay: 30, metrics: {},
+  trainingCompletedDays: [], confidence_surveys: [], readiness_assessments: [],
+  weekly_checkins: [], cohortAttempt: 1, ucPoints: 0, stakesDeclaration: '', theirWhy: '',
+  getClear: null, buyBox: null, notificationPreferences: null,
+};
+
 function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverrides, onSetContentOverrides, phases, onSetPhases, landingContent, onSetLandingContent, landingVersion, onSetLandingVersion, dailyMinimumsOverrides, onSetDailyMinimums, practiceDaySettings, onSetPracticeDaySettings }) {
   const [editingModuleId, setEditingModuleId] = useState(null);
+  const [previewDayNum, setPreviewDayNum] = useState(null);
   const [editTitle, setEditTitle] = useState('');
   const [editDescription, setEditDescription] = useState('');
   const [editPrinciples, setEditPrinciples] = useState([]);
@@ -2573,6 +2583,53 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
           &larr; Back to Training Content
         </button>
         <LandingPageEditor landingContent={landingContent} onSave={onSetLandingContent} />
+      </div>
+    );
+  }
+
+  if (previewDayNum != null) {
+    const noop = () => {};
+    const noopAsync = async () => {};
+    return (
+      <div className="scale-in">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
+          <button onClick={() => setPreviewDayNum(null)} style={{
+            background: 'none', border: 'none', color: '#e94560', cursor: 'pointer',
+            fontSize: 14, fontWeight: 600, padding: 0, fontFamily: "'DM Sans', sans-serif",
+          }}>&larr; Back to Training Content</button>
+          <span style={{
+            fontSize: 11, fontWeight: 700, color: '#f0a500', letterSpacing: 0.5,
+            background: 'rgba(240,165,0,0.1)', border: '1px solid rgba(240,165,0,0.2)',
+            padding: '4px 12px', borderRadius: 6,
+          }}>ADMIN PREVIEW — DAY {previewDayNum} (exactly what a participant sees)</span>
+        </div>
+        <div style={{ maxWidth: 760, margin: '0 auto' }}>
+          <DayView
+            day={previewDayNum}
+            user={DAY_PREVIEW_USER}
+            isPreview
+            contentOverrides={contentOverrides}
+            customPhases={phases}
+            complianceSettings={{}}
+            dailyMinimumsOverrides={dailyMinimumsOverrides}
+            existingDailySubmission={null}
+            quizAttempts={[]}
+            contacts={[]}
+            onSubmit={noopAsync}
+            onBack={() => setPreviewDayNum(null)}
+            onNavigateToStats={noop}
+            onAddContact={noopAsync}
+            onAddFollowUp={noopAsync}
+            onUpdateContact={noopAsync}
+            onUploadFile={noopAsync}
+            onQuizAttempt={noopAsync}
+            getUploadUrl={noop}
+            onSaveConfidenceSurvey={noopAsync}
+            onSaveReadiness={noopAsync}
+            onSaveCheckIn={noopAsync}
+            onSubmitTicket={noopAsync}
+          />
+        </div>
       </div>
     );
   }
@@ -3056,6 +3113,14 @@ function TrainingContentTab({ trainingConfig, onSetTrainingConfig, contentOverri
                         background: 'rgba(72,199,142,0.1)', padding: '3px 8px', borderRadius: 4,
                       }}>Customized</span>
                     )}
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setPreviewDayNum(d); }}
+                      style={{
+                        fontSize: 11, padding: '5px 12px', borderRadius: 6, cursor: 'pointer', flexShrink: 0,
+                        border: '1px solid rgba(72,199,142,0.3)', background: 'rgba(72,199,142,0.08)',
+                        color: '#48c78e', fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
+                      }}
+                    >Preview</button>
                     <div style={{ color: '#444', fontSize: 18, flexShrink: 0 }}>&rsaquo;</div>
                   </div>
                 );

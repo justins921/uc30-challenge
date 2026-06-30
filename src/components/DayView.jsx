@@ -55,7 +55,9 @@ export default function DayView({
   const dayData = isPreTraining ? getPreDayContent(day, contentOverrides) : isPost30 ? getDayDataForNum(day) : getDayContent(contentDay, contentOverrides);
   const isReflectionDay = dayData?.isReflectionDay === true;
   const isComplete = isPreview ? false : user.completedDays.includes(day);
-  const isCurrentOrPast = isPreview ? true : day <= user.currentDay;
+  // Creation phase: every day is open to everyone (no sequential lock). To re-enable
+  // sequential unlocking for live cohorts, restore: isPreview ? true : day <= user.currentDay
+  const isCurrentOrPast = true;
   const existingSubmission = user.submissions.find(s => s.day === day);
   const dayColors = customPhases ? getCategoryColors(getPhases(customPhases)) : null;
   const cat = isPost30
