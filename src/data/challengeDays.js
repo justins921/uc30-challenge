@@ -8837,13 +8837,27 @@ export function resolveContentDay(slotDay, overrides = {}) {
 }
 
 // Merge defaults with admin overrides
+// Merge an admin content override over the built-in defaults, but IGNORE blank
+// string fields so an emptied/partial override never strips the built-in content.
+// (A day cleared in the editor saves trainingContent: '' — that must not hide the lesson.)
+function mergeContentOverride(defaults, override) {
+  const out = { ...defaults };
+  for (const k in override) {
+    const v = override[k];
+    if (v === undefined || v === null) continue;
+    if (typeof v === 'string' && v.trim() === '') continue;
+    out[k] = v;
+  }
+  return out;
+}
+
 export function getDayContent(dayNum, overrides = {}) {
   const defaults = CHALLENGE_DAYS[dayNum - 1];
   if (!defaults) return { day: dayNum, title: '', caption: '', taskDescription: '', trainingContent: '', category: 'foundation', weekNumber: getWeekNumber(dayNum), weekTitle: '', videoUrl: null, transcript: null, downloads: [], quiz: null };
   const dayOverride = overrides[dayNum] || {};
+  const merged = mergeContentOverride(defaults, dayOverride);
   return {
-    ...defaults,
-    ...dayOverride,
+    ...merged,
     downloads: dayOverride.downloads !== undefined ? dayOverride.downloads : (defaults.downloads || []),
     quiz: dayOverride.quiz !== undefined ? dayOverride.quiz : (defaults.quiz || null),
   };
@@ -8873,8 +8887,7 @@ export const GETTING_STARTED_DEFAULT = {
 export function getGettingStartedContent(overrides = {}) {
   const override = overrides['getting_started'] || {};
   return {
-    ...GETTING_STARTED_DEFAULT,
-    ...override,
+    ...mergeContentOverride(GETTING_STARTED_DEFAULT, override),
     downloads: override.downloads !== undefined ? override.downloads : (GETTING_STARTED_DEFAULT.downloads || []),
   };
 }
@@ -9008,9 +9021,9 @@ export function getPreDayContent(dayNum, overrides = {}) {
   if (!preDay) return null;
   const key = `pre_${Math.abs(dayNum)}`;
   const dayOverride = overrides[key] || {};
+  const merged = mergeContentOverride(preDay, dayOverride);
   return {
-    ...preDay,
-    ...dayOverride,
+    ...merged,
     downloads: dayOverride.downloads !== undefined ? dayOverride.downloads : (preDay.downloads || []),
     quiz: dayOverride.quiz !== undefined ? dayOverride.quiz : (preDay.quiz || null),
   };
