@@ -54,9 +54,11 @@ export default function DayView({
   const contentDay = (!isPreTraining && !isPost30) ? resolveContentDay(day, contentOverrides) : day;
   const dayData = isPreTraining ? getPreDayContent(day, contentOverrides) : isPost30 ? getDayDataForNum(day) : getDayContent(contentDay, contentOverrides);
   const isReflectionDay = dayData?.isReflectionDay === true;
-  const isComplete = isPreview ? false : user.completedDays.includes(day);
-  // Creation phase: every day is open to everyone (no sequential lock). To re-enable
-  // sequential unlocking for live cohorts, restore: isPreview ? true : day <= user.currentDay
+  // Creation phase: days never lock — a submitted day stays fully re-openable and
+  // re-submittable. To re-enable completion locking for live cohorts, restore:
+  //   isComplete  = isPreview ? false : user.completedDays.includes(day)
+  //   isCurrentOrPast = isPreview ? true : day <= user.currentDay
+  const isComplete = false;
   const isCurrentOrPast = true;
   const existingSubmission = user.submissions.find(s => s.day === day);
   const dayColors = customPhases ? getCategoryColors(getPhases(customPhases)) : null;
