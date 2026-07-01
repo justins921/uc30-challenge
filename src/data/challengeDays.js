@@ -296,7 +296,7 @@ export const CHALLENGE_DAYS = [
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📍 WHERE YOU ARE
-Offers today: 0 — today is setup. Build your pipeline; your first offer goes out tomorrow.
+Offers today: 0 — today is setup. Build your pipeline; your first offer comes Day 3.
 
 Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
 
@@ -613,33 +613,37 @@ Review the property analysis training if you're unclear on the inputs.`,
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📍 WHERE YOU ARE
-Offers today: 1 — your FIRST offer goes out today. An offer isn't a commitment; just get it in.
+Offers today: 0 — no offer yet. Lock in your pre-approval and keep building pipeline; your first offer goes out tomorrow.
 
 Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
 
 💡 TODAY'S PRINCIPLE (2 min)
-The answer is no unless you ask. Every deal starts with a question someone could decline. Today you do two brave asks: you get your buying power from a lender, and you send your very first offer. Done is better than perfect.
+The answer is no unless you ask. Every deal — and every dollar of financing — starts with a question someone could decline. Today's brave ask: get pre-approved, so you know your real buying power before you make offers.
 
 🎯 YOUR MISSION TODAY
 
-Arsenal — lenders, start your pre-approval (suggested). Knowing your number makes you credible and fast:
-• Call 2 local community banks or credit unions (not just the big national banks) and ask for their investment / commercial lender.
-• Ask your Day-1 agent who they send investors to.
-• Search "[your city] DSCR lender" or "portfolio lender."
+Arsenal — lenders: get pre-approved for YOUR strategy (suggested). The right loan depends on the path you picked in your Capital & Strategy Finder back in Foundations. Get pre-approved for that one:
+• House hacking? Owner-occupied loans — FHA (as low as 3.5% down), conventional (as low as 5% down), or VA (0% down if you qualify).
+• Straight rental? A conventional investment loan, or a DSCR loan that qualifies on the property's rent instead of your W-2.
+• Local bank / portfolio loan — relationship-based and flexible; great for investors buying a few properties.
+• Buying 5+ units? A commercial loan that qualifies mostly on the building's income.
+• BRRRR or flip? Line up hard money or a private lender for the purchase + rehab.
 
-Target — MLS: price reductions (suggested). A price drop is a seller telling you, in public, they're motivated. Analyze them and send your first offer today on the one that pencils closest to your numbers — keep yesterday's long-DOM lane going too.
+Not sure which is you? Re-open your Capital & Strategy Finder result — it already mapped your path. Then call 2 lenders who offer that loan type and start your pre-approval.
 
-How to actually send it: your agent writes up the offer and submits it — that's their job, lean on them. (FSBO? Use your state's standard purchase agreement.) Don't overthink the paperwork; your only job today is to get the number in.
+Target — MLS: price reductions (suggested). A price drop is a seller telling you, in public, they're motivated. Analyze them and save the best to your pipeline so you're loaded up to offer tomorrow. Keep yesterday's long-DOM lane going too.
+
+Log as you go: add every lender and property in the app so your follow-ups schedule themselves.
 
 📝 Script:
-"Hi — I'm an investor looking to get pre-approved for buy-and-hold rental property in [area]. Can you walk me through what I'd qualify for and what you'd need from me?"
+"Hi — I'm an investor getting pre-approved for [your loan type — e.g. an FHA house-hack / a DSCR rental] loan in [area]. Can you walk me through what I'd qualify for and what you'd need from me?"
 
 ✅ QUICK CHECK
-Sending your first offer feels big, but remember:
-   ✓ An offer isn't a commitment — it opens a conversation
-   • You must buy anything they accept instantly
-   • You should only ever send one
-   • Offers are legally binding to close no matter what
+The best loan to get pre-approved for is:
+   ✓ The one that matches the strategy you chose in your Capital & Strategy Finder
+   • Always a commercial loan
+   • Whatever has the lowest rate that day
+   • You don't need pre-approval to make offers
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 TRAINING BLOCK 1 — Financing Mastery
@@ -1135,14 +1139,16 @@ Final note — make sure you are still analyzing properties, reaching out to Ars
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📍 WHERE YOU ARE
-Offers today: 3 — you're at full pace now. Three offers a day is your engine from here on.
+Offers today: 1 — your FIRST offer goes out today. An offer isn't a commitment; just get it in.
 
 Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
 
 💡 TODAY'S PRINCIPLE (2 min)
-Know your three numbers on every deal. Your ideal price (a home run), your target (a solid yes), and your max (walk away past this). Decide them before you offer so emotion never sets your price. This is what lets you fire off 3 offers a day with confidence.
+Know your three numbers on every deal. Your ideal price (a home run), your target (a solid yes), and your max (walk away past this). Decide them before you offer so emotion never sets your price — starting with the very first offer you send today.
 
 🎯 YOUR MISSION TODAY
+
+Send your first offer: you've got properties analyzed from the last two days — pick the one that pencils closest to your numbers and get an offer in. Your agent writes it up and submits it (that's their job — lean on them); for a FSBO, use your state's standard purchase agreement. Don't overthink the paperwork; your only job today is to get the number in.
 
 Arsenal — property managers (suggested). PMs know real rents and which landlords are tired.
 • Google "[your city] property management", call 2.
@@ -2168,12 +2174,12 @@ Focus MORE on building rapport, understanding problems, and practicing negotiati
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📍 WHERE YOU ARE
-Offers today: 3 — full pace. Keep them flowing on top of your outreach.
+Offers today: 1 — one a day this week. Keep them flowing on top of your outreach.
 
 Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
 
 💡 TODAY'S PRINCIPLE (2 min)
-Analyze conservatively — protect your downside. Use realistic rents, real expenses, honest repair numbers. If a deal only works on best-case assumptions, it doesn't work. Conservative math is how you make 3 offers a day without making 3 mistakes a day.
+Analyze conservatively — protect your downside. Use realistic rents, real expenses, honest repair numbers. If a deal only works on best-case assumptions, it doesn't work. Conservative math is how you make offers you'll never regret.
 
 🎯 YOUR MISSION TODAY
 
@@ -2181,7 +2187,7 @@ Arsenal — wholesalers (suggested). They bring you off-market deals for free �
 • Search Facebook for "[your city] wholesale real estate" / "[your city] real estate deals"; search "we buy houses [your city]."
 • Get on 2 lists and tell them exactly what you buy.
 
-Target — MLS: poor photos / bad marketing (suggested). Dark, blurry, 3-photo listings scare off retail buyers — that's your opening. Analyze and keep your 3 offers going.
+Target — MLS: poor photos / bad marketing (suggested). Dark, blurry, 3-photo listings scare off retail buyers — that's your opening. Analyze, and send today's offer on the one closest to your numbers.
 
 📝 Script:
 "Hey — I'm a cash-ready investor buying [buy box] in [area]. Add me to your buyers list. If it hits these numbers, I move fast: [price range / type / area]."
@@ -2982,7 +2988,7 @@ Strong relationships with title companies can reduce stress, improve confidence,
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📍 WHERE YOU ARE
-Offers today: 3 — full pace.
+Offers today: 1.
 
 Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
 
@@ -2995,7 +3001,7 @@ Arsenal — your personal network (suggested). Your warmest leads are people who
 • Post on social media and text 5 people what you buy; ask them to send anyone who needs to sell.
 • Inherited homes, burned-out landlords, divorces, relocations come through your network first.
 
-Target — MLS: expired, withdrawn & back-on-market (suggested). A deal that failed to sell is a seller whose plan didn't work — often very motivated the second time. Ask your agent to pull these. Keep analyzing and sending your 3.
+Target — MLS: expired, withdrawn & back-on-market (suggested). A deal that failed to sell is a seller whose plan didn't work — often very motivated the second time. Ask your agent to pull these. Keep analyzing and send today's offer.
 
 📝 Script:
 "Quick ask — I'm buying investment property in [area] this year. If you know anyone who needs to sell (tired landlord, inherited place, moving), connect us. I make it easy and fast."
@@ -3711,12 +3717,12 @@ The goal is NOT to force deals today. The goal is to become the person they thin
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📍 WHERE YOU ARE
-Offers today: 3 — full pace.
+Offers today: 1. (One more tomorrow makes 5 for Week 1.)
 
 Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
 
 💡 TODAY'S PRINCIPLE (2 min)
-Read motivation off the listing. Words like "as-is," "must sell," "bring offers," "estate sale," or "investor special" are sellers telling you they're motivated. Train your eye — that's where deals hide, and it tells you which of your 3 offers to push hardest.
+Read motivation off the listing. Words like "as-is," "must sell," "bring offers," "estate sale," or "investor special" are sellers telling you they're motivated. Train your eye — that's where deals hide, and it tells you which offer to push hardest.
 
 🎯 YOUR MISSION TODAY
 
@@ -3727,7 +3733,7 @@ Arsenal — other investors / your local REIA (suggested).
 Target — online saved searches + alerts (suggested). Set saved searches on Zillow and Redfin for your buy box with instant alerts, so new motivated listings come to you.
 
 🔧 TOOL — PropStream, your data engine:
-Free searches got you started. Operators run on data. PropStream pulls comps, owner info, equity, and targeted lists (absentee owners, high-equity, pre-foreclosure) in minutes — the backbone of serious lead-gen. Start a trial and pull one targeted list for [your market] today. This is how you stop hunting one-by-one and start working lists like an operator.
+Free searches got you started. Operators run on data. PropStream pulls comps, owner info, equity, and targeted lists (absentee owners, high-equity, pre-foreclosure) in minutes — the backbone of serious lead-gen. It's a paid tool, but a single deal pays for years of it. Start a trial and pull one targeted list for [your market] today — this is how you stop hunting one-by-one and start working lists like an operator.
 
 ✅ QUICK CHECK
 Which listing phrase most signals a motivated seller?
@@ -4653,7 +4659,7 @@ Also be aggressively clear on your buy box and that you are ready to close if so
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📍 WHERE YOU ARE
-Offers today: 1 — lighter review day. Catch up, then take your Weekly Check-In.
+Offers today: 1 — review day. That's 5 offers this week. Well done.
 
 Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
 
@@ -4664,6 +4670,7 @@ Inspect your inputs, not just outputs. One week in, you won't have a deal yet �
 • Re-touch your best contacts from the week — the agent who replied, the sharp wholesaler. A quick "great connecting — here's exactly what I'm looking for" keeps you top of mind.
 • Sort every lead into hot / warm / cold so next week you spend time where it counts.
 • Take your Weekly Check-In so we can get you help where you're stuck.
+• Next week the pace steps up: you'll shoot for 2 offers a day, 14 for the week.
 
 ✅ QUICK CHECK
 One week in with no deal yet — judge your week by:
@@ -5070,18 +5077,18 @@ Then: recommit to taking action for the next 7 days regardless of fear, uncertai
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📍 WHERE YOU ARE
-Offers today: 3 — back to full pace after your reset.
+Offers: shoot for 2 today — new pace. Your Week 2 goal is 14 offers (about 2 a day). Never required to top 2, but do more if you're rolling.
 
 Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
 
 💡 TODAY'S PRINCIPLE (2 min)
-When a seller responds, your first move is curiosity — not a pitch. A reply ("maybe," "what's your offer?", a counter) is a door opening. Don't jump to numbers. Ask why they're selling and what matters most to them. Information is leverage. With 3 offers a day going out, you'll start getting these — be ready.
+When a seller responds, your first move is curiosity — not a pitch. A reply ("maybe," "what's your offer?", a counter) is a door opening. Don't jump to numbers. Ask why they're selling and what matters most to them. Information is leverage — and with offers going out daily now, you'll start getting these.
 
 🎯 YOUR MISSION TODAY
 
 Arsenal — send your realtors the buy box you already built (suggested). You created your buy box in Foundations — now put it to work. Send it to your Day-1 agents so they can match deals to you instantly. A clear buy box sitting in an agent's inbox means deals come to you.
 
-Target — direct-to-owner: absentee owners (suggested · plants seeds). Absentee owners (own it, don't live there) are often tired landlords ready to sell. Pull an absentee-owner list for [your market] and start reaching them.
+Target — direct-to-owner: absentee owners (suggested · plants seeds). Absentee owners (own it, don't live there) are often tired landlords ready to sell. Pull an absentee-owner list for [your market] (PropStream from Day 6 does this fast) and start reaching them.
 
 🔧 TOOL — Ballpoint Marketing, done-for-you mailers (the long game):
 The highest-converting way to reach absentee owners at scale is direct mail — Ballpoint sends handwritten-style letters that actually get opened. Be honest about the timeline: this is a longer play. Responses can take weeks, sometimes past your 30 days. But it surfaces the most motivated, least-competition sellers you'll ever find. This is operator-building: plant it now, harvest for months. Start a small campaign to absentee owners in [your market] — then keep working your fast lanes while it cooks.
@@ -6001,12 +6008,12 @@ KEY TAKEAWAY: Great negotiators do not win arguments. They build trust, understa
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📍 WHERE YOU ARE
-Offers today: 3 — full pace.
+Offers: shoot for 2 today.
 
 Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
 
 💡 TODAY'S PRINCIPLE (2 min)
-The multiple-offer method. Don't agonize over one perfect offer — make several reasonable ones. This is why you send 3 a day: volume is your unfair advantage, and it takes the emotional weight off any single deal.
+The multiple-offer method. Don't agonize over one perfect offer — make several reasonable ones. This is why you shoot for 2 a day: volume is your unfair advantage, and it takes the emotional weight off any single deal.
 
 🎯 YOUR MISSION TODAY
 
@@ -6015,7 +6022,7 @@ Arsenal — wholesalers, sharpen your criteria (suggested). Re-touch your Day-4 
 Target — driving for dollars (suggested). Pick a target neighborhood and look for distress: overgrown yards, boarded windows, code notices, full mailboxes. These owners rarely list — and rarely have competition.
 
 🔧 TOOL — DealMachine, driving for dollars automated:
-DealMachine turns your phone into the tool: drive [your market], tap a distressed house to save it, and it pulls the owner and skip-traces their phone and address so you can call or mail. Operators build routes and work them weekly. Start the trial and log 10 properties on one drive today — 10 off-market leads almost nobody else is chasing.
+DealMachine turns your phone into the tool: drive [your market], tap a distressed house to save it, and it pulls the owner and skip-traces their phone and address so you can call or mail. Operators build routes and work them weekly. It's a paid tool, but one deal covers it for years. Start the trial and log 10 properties on one drive today — 10 off-market leads almost nobody else is chasing.
 
 ✅ QUICK CHECK
 The point of the multiple-offer method is:
@@ -6856,7 +6863,7 @@ KEY TAKEAWAY: Average investors negotiate price. Great investors negotiate struc
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📍 WHERE YOU ARE
-Offers today: 3 — full pace.
+Offers: shoot for 2 today.
 
 Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
 
@@ -9256,13 +9263,26 @@ export const VETERAN_DAILY_MINIMUMS = Object.fromEntries(
   })
 );
 
-// Weekly offer targets (per week, not cumulative across weeks)
+// Weekly offer targets (per week, not cumulative across weeks).
+// UC Graduate minimum = 50 offers over 30 days. Week 1 ramps in (offers start
+// Day 3 → 5 for the week), Weeks 2-3 run 2/day (14), and Week 4 (9 days) carries
+// the remainder so the four weeks sum to exactly the 50-offer graduation minimum.
 export const WEEKLY_OFFER_TARGETS = {
-  1: 3,
-  2: 10,
-  3: 12,
-  4: 15,
+  1: 5,
+  2: 14,
+  3: 14,
+  4: 17,
 };
+
+// Total offers required to graduate UC30 (sum of the weekly minimums).
+export const UC_GRADUATE_OFFER_TOTAL = Object.values(WEEKLY_OFFER_TARGETS).reduce((a, b) => a + b, 0);
+
+// Offer-commitment tiers shown when a participant sets their goal.
+export const OFFER_GOAL_TIERS = [
+  { value: 50, label: '50 offers', tier: 'UC Graduate Minimum', color: '255,255,255' },
+  { value: 75, label: '75 offers', tier: 'Strong Operator', color: '72,199,142' },
+  { value: 100, label: '100 offers', tier: 'Elite Operator', color: '240,165,0' },
+];
 
 // Helper: get which week a day falls in (1-4 for days 1-30, 4 for post-30)
 export function getWeekNumber(dayNumber) {
@@ -9272,9 +9292,30 @@ export function getWeekNumber(dayNumber) {
   return 4;
 }
 
-// Helper: get the weekly offer target for a given day
+// Helper: get the weekly offer target for a given day (UC Graduate minimum path)
 export function getWeeklyOfferTarget(dayNumber) {
   return WEEKLY_OFFER_TARGETS[getWeekNumber(dayNumber)] || 0;
+}
+
+// Helper: weekly goal for a participant's personal commitment. When the
+// commitment exceeds the 50 minimum, the weekly minimums are scaled up
+// proportionally, with any rounding remainder folded into Week 4.
+export function getWeeklyOfferGoal(weekNumber, commitment) {
+  const total = UC_GRADUATE_OFFER_TOTAL;
+  const c = commitment && commitment > total ? commitment : total;
+  if (c === total) return WEEKLY_OFFER_TARGETS[weekNumber] || 0;
+  const w1 = Math.round((c * WEEKLY_OFFER_TARGETS[1]) / total);
+  const w2 = Math.round((c * WEEKLY_OFFER_TARGETS[2]) / total);
+  const w3 = Math.round((c * WEEKLY_OFFER_TARGETS[3]) / total);
+  const w4 = c - w1 - w2 - w3;
+  return ({ 1: w1, 2: w2, 3: w3, 4: w4 })[weekNumber] || 0;
+}
+
+// Helper: cumulative offer target through the end of a given week.
+export function getCumulativeOfferTarget(weekNumber, commitment) {
+  let sum = 0;
+  for (let w = 1; w <= weekNumber; w++) sum += getWeeklyOfferGoal(w, commitment);
+  return sum;
 }
 
 // Helper: get the day range for a week

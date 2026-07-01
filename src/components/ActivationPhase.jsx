@@ -1104,9 +1104,9 @@ function CapitalConfirmationStep({ onNext, onBack, onSave, existingCapital, embe
 
 // ── Step 5: Offer Commitment ─────────────────────────────
 const OFFER_BENCHMARKS = [
-  { value: 30, label: '30 offers', tier: 'Minimum Operator', color: '255,255,255' },
-  { value: 45, label: '45 offers', tier: 'Strong Operator', color: '72,199,142' },
-  { value: 60, label: '60+ offers', tier: 'Elite Operator', color: '240,165,0' },
+  { value: 50, label: '50 offers', tier: 'UC Graduate Minimum', color: '255,255,255' },
+  { value: 75, label: '75 offers', tier: 'Strong Operator', color: '72,199,142' },
+  { value: 100, label: '100 offers', tier: 'Elite Operator', color: '240,165,0' },
 ];
 
 function OfferCommitmentStep({ onNext, onBack, onSave, existingCommitment, embedded }) {
@@ -1114,7 +1114,7 @@ function OfferCommitmentStep({ onNext, onBack, onSave, existingCommitment, embed
   const [saving, setSaving] = useState(false);
 
   const numericCount = typeof count === 'number' ? count : parseInt(count, 10);
-  const isValid = !isNaN(numericCount) && numericCount >= 30;
+  const isValid = !isNaN(numericCount) && numericCount >= 50;
   const activeBenchmark = OFFER_BENCHMARKS.find(b => b.value === numericCount);
 
   // Embedded (in a training module): auto-save the commitment on change, no nav buttons.
@@ -1150,8 +1150,9 @@ function OfferCommitmentStep({ onNext, onBack, onSave, existingCommitment, embed
       </h1>
 
       <p style={{ color: '#999', fontSize: 15, lineHeight: 1.8, marginBottom: 28 }}>
-        UC30 operators submit a minimum of 30 offers over 30 days. But top operators go
-        way beyond that. How many offers are you committing to?
+        UC30 operators submit a minimum of 50 offers over 30 days — that's what it takes
+        to graduate. But top operators go way beyond that. How many offers are you
+        committing to?
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 28 }}>
@@ -1217,7 +1218,7 @@ function OfferCommitmentStep({ onNext, onBack, onSave, existingCommitment, embed
         inputMode="numeric"
         value={count === '' ? '' : count}
         onChange={e => handleInput(e.target.value)}
-        placeholder="30"
+        placeholder="50"
         style={{
           display: 'block', width: 140, margin: '0 auto 8px',
           textAlign: 'center', fontSize: 36, fontWeight: 700,
@@ -1234,7 +1235,7 @@ function OfferCommitmentStep({ onNext, onBack, onSave, existingCommitment, embed
 
       {count !== '' && !isValid && (
         <p style={{ textAlign: 'center', fontSize: 12, color: '#e94560', marginBottom: 4 }}>
-          Minimum commitment is 30 offers.
+          Minimum commitment is 50 offers.
         </p>
       )}
 

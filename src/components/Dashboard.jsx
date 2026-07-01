@@ -7,7 +7,7 @@ import SubmissionsView from './SubmissionsView';
 import StatsView from './StatsView';
 import Leaderboard from './Leaderboard';
 import UserProfile, { UserSupport } from './UserProfile';
-import { getGettingStartedContent, getWeekNumber as getChallengeWeekNumber, getWeeklyOfferTarget, getWeekDayRange } from '../data/challengeDays';
+import { getGettingStartedContent, getWeekNumber as getChallengeWeekNumber, getWeeklyOfferTarget, getWeekDayRange, getWeeklyOfferGoal, getCumulativeOfferTarget, UC_GRADUATE_OFFER_TOTAL, WEEKLY_OFFER_TARGETS } from '../data/challengeDays';
 import { calculateUCPoints } from '../data/ucPoints';
 import { COMPLIANCE_METRICS, DEFAULT_DAILY_MINIMUMS as COMP_DAILY_DEFAULTS, DEFAULT_WEEKLY_MINIMUMS, DEFAULT_ENFORCEMENT, checkWeeklyCompliance, getWeekNumber, getWeekRange, getWeekDayCount, calculateAtRisk, getTimeUntilDeadline } from '../data/compliance';
 import CommunityBoard from './CommunityBoard';
@@ -420,6 +420,11 @@ export default function Dashboard({ user, onLogout, onSubmit, cohortStartDate, n
             complianceSettings={complianceSettings}
             user={user}
           />
+        )}
+
+        {/* Offer Goal Tracker — season-long, weekly-oriented */}
+        {!showPracticeDay && cohortActive && (tab === 'timeline' || tab === 'day') && (
+          <OfferGoalTracker calendarDay={calendarDay} user={user} />
         )}
 
         {/* Cohort countdown when pre-cohort (not in pipeline mode) */}
@@ -1144,6 +1149,119 @@ function NextCohortCountdown({ nextCohortDate }) {
             The next cohort is starting now!
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// ── Offer Goal Tracker (season-long, weekly-oriented) ──────
+// Shows progress toward the 50-offer UC Graduate minimum plus the
+// participant's personal goal (75/100), broken out week-by-week so they can
+// see if they're ahead, behind, or on pace and catch up.
+function OfferGoalTracker({ calendarDay, user }) {
+  const currentDay = Math.max(1, Math.min(calendarDay || 1, 30));
+  const currentWeek = getChallengeWeekNumber(currentDay);
+  const commitment = user.offerCommitment && user.offerCommitment > UC_GRADUATE_OFFER_TOTAL
+    ? user.offerCommitment
+    : UC_GRADUATE_OFFER_TOTAL;
+  const hasStretchGoal = commitment > UC_GRADUATE_OFFER_TOTAL;
+
+  // Offers per week from submissions.
+  const weekOffers = { 1: 0, 2: 0, 3: 0, 4: 0 };
+  let totalOffers = 0;
+  (user.submissions || []).forEach(s => {
+    const n = s.dayMetrics?.offers_submitted || 0;
+    if (!n) return;
+    const w = getChallengeWeekNumber(s.day);
+    if (weekOffers[w] != null) weekOffers[w] += n;
+    totalOffers += n;
+  });
+
+  // Expected pace toward the UC Graduate minimum, prorated through today.
+  const { start: weekStart, end: weekEnd } = getWeekDayRange(currentWeek);
+  const daysElapsedInWeek = currentDay - weekStart + 1;
+  const totalDaysInWeek = weekEnd - weekStart + 1;
+  const priorWeeksMin = getCumulativeOfferTarget(currentWeek - 1, UC_GRADUATE_OFFER_TOTAL);
+  const expectedMin = priorWeeksMin + (WEEKLY_OFFER_TARGETS[currentWeek] || 0) * (daysElapsedInWeek / totalDaysInWeek);
+  const behindMin = Math.max(0, Math.round(expectedMin) - totalOffers);
+  const aheadMin = Math.max(0, totalOffers - Math.round(expectedMin));
+  const gradMet = totalOffers >= UC_GRADUATE_OFFER_TOTAL;
+
+  const gradPct = Math.min(100, Math.round((totalOffers / UC_GRADUATE_OFFER_TOTAL) * 100));
+  const goalPct = Math.min(100, Math.round((totalOffers / commitment) * 100));
+
+  let statusColor, statusText;
+  if (gradMet) {
+    statusColor = '#48c78e';
+    statusText = `🎓 UC Graduate minimum met — ${totalOffers} offers in`;
+  } else if (behindMin > 0) {
+    statusColor = behindMin > 3 ? '#e94560' : '#f0a500';
+    statusText = `Behind pace by ${behindMin} — send extra offers to catch up`;
+  } else {
+    statusColor = '#48c78e';
+    statusText = aheadMin > 0 ? `On track — ${aheadMin} ahead of pace 🔥` : 'On track for graduation ✓';
+  }
+
+  return (
+    <div className="fade-up card" style={{
+      marginBottom: 16, padding: '18px 20px',
+      background: `rgba(${gradMet ? '72,199,142' : '83,52,131'},0.05)`,
+      border: `1px solid rgba(${gradMet ? '72,199,142' : '83,52,131'},0.18)`,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+        <div>
+          <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>
+            Offer Goal
+          </div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: statusColor }}>
+            {totalOffers} <span style={{ fontSize: 14, fontWeight: 400, color: '#888' }}>
+              / {UC_GRADUATE_OFFER_TOTAL} to graduate{hasStretchGoal ? ` · goal ${commitment}` : ''}
+            </span>
+          </div>
+        </div>
+        <div style={{ fontSize: 12, fontWeight: 600, color: statusColor, textAlign: 'right', maxWidth: 220 }}>
+          {statusText}
+        </div>
+      </div>
+
+      {/* UC Graduate minimum bar */}
+      <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>UC Graduate minimum (50)</div>
+      <div style={{ height: 8, borderRadius: 4, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+        <div style={{ height: '100%', borderRadius: 4, background: gradMet ? '#48c78e' : '#c9a0ff', width: `${gradPct}%`, transition: 'width 0.3s' }} />
+      </div>
+
+      {/* Personal stretch goal bar */}
+      {hasStretchGoal && (
+        <>
+          <div style={{ fontSize: 11, color: '#888', margin: '10px 0 4px' }}>Your goal ({commitment})</div>
+          <div style={{ height: 8, borderRadius: 4, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+            <div style={{ height: '100%', borderRadius: 4, background: '#f0a500', width: `${goalPct}%`, transition: 'width 0.3s' }} />
+          </div>
+        </>
+      )}
+
+      {/* Weekly breakdown */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginTop: 14 }}>
+        {[1, 2, 3, 4].map(w => {
+          const min = WEEKLY_OFFER_TARGETS[w];
+          const goalW = getWeeklyOfferGoal(w, commitment);
+          const actual = weekOffers[w];
+          const met = actual >= min;
+          const isPast = w < currentWeek;
+          const isCurrent = w === currentWeek;
+          const cellColor = met ? '#48c78e' : isPast ? '#e94560' : isCurrent ? '#f0a500' : '#666';
+          return (
+            <div key={w} style={{
+              padding: '8px 6px', borderRadius: 8, textAlign: 'center',
+              background: isCurrent ? 'rgba(240,165,0,0.06)' : 'rgba(255,255,255,0.02)',
+              border: `1px solid ${isCurrent ? 'rgba(240,165,0,0.25)' : 'rgba(255,255,255,0.06)'}`,
+            }}>
+              <div style={{ fontSize: 10, color: '#888', marginBottom: 2 }}>Wk {w}{met ? ' ✓' : ''}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: cellColor }}>{actual}<span style={{ fontSize: 11, fontWeight: 400, color: '#666' }}>/{min}</span></div>
+              {hasStretchGoal && <div style={{ fontSize: 9, color: '#666', marginTop: 1 }}>goal {goalW}</div>}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
