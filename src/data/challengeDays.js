@@ -290,7 +290,43 @@ export const CHALLENGE_DAYS = [
     title: "Analysis & Choosing a Realtor",
     caption: "Learn to analyze rental properties and build your realtor team for consistent deal flow.",
     taskDescription: "Analyze the practice property below and calculate the cash-on-cash return. Then interview at least 3 investor-focused realtors, identify your primary realtor, and add at least 3 realtor Arsenal Contacts.",
-    trainingContent: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 TODAY'S MISSION — Build · Day 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 WHERE YOU ARE
+Offers today: 0 — today is setup. Build your pipeline; your first offer goes out tomorrow.
+
+Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
+
+💡 TODAY'S PRINCIPLE (2 min)
+Activity creates results. You can't control who says yes — but you fully control your inputs: analyses, conversations, offers. Stack those daily and the deal becomes a matter of when, not if. Today you start the machine.
+
+🎯 YOUR MISSION TODAY
+
+Arsenal — investor-friendly agents (suggested). These are your #1 deal source. Find 3:
+• Zillow → Agents tab → search [your market] → look for agents with recent investment / multifamily sales.
+• Or Google "[your city] investor friendly real estate agent."
+• Message or call 3 with the script below. (You've already got your buy box from Foundations — have it ready to share.)
+
+Pro move: sometimes your best agent comes from a listing — when you spot an MLS property you actually like, reach out to the listing agent directly. They're already working exactly the kind of deal you want. And if they represent you too, they may trim their fee (they'd earn both sides of the commission). It's a way to make an offer AND audition a niche-active agent at the same time. (Dual-agency rules vary by state — just ask if they can represent you.)
+
+Target — MLS: long days on market (suggested, easiest lane). On Zillow/Redfin, search your buy box and sort Days on Market: high → low. 60+ days often = a motivated, stuck seller. Analyze today's target number in the CDS calculator and save them to your pipeline.
+
+Log as you go: add every person you contact and every property you analyze in the app — that's what auto-schedules your follow-ups so nothing ever slips through the cracks.
+
+📝 Script:
+"Hi [name] — I'm an investor buying [your buy box] in [area]. I move fast and I'm getting pre-approved this week. Are you open to working with investors and sending me deals that fit?"
+
+✅ QUICK CHECK
+A property sitting at high "days on market" most often signals:
+   ✓ The seller is overpriced or stuck — possible motivation
+   • The home is already a great deal
+   • Nothing useful
+   • The listing is fake
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 TRAINING BLOCK 1 — Property Analysis
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -571,7 +607,41 @@ Review the property analysis training if you're unclear on the inputs.`,
     title: "Financing & Rental Analysis",
     caption: "Master every financing type, build your lending team, and learn to accurately analyze rents and expenses.",
     taskDescription: "Contact one conventional lender, one DSCR lender, and one local bank or credit union. Create a financing comparison sheet. Then analyze market rents for a property using at least 3 sources and connect with a local property manager as an Arsenal Contact.",
-    trainingContent: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 TODAY'S MISSION — Build · Day 2
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 WHERE YOU ARE
+Offers today: 1 — your FIRST offer goes out today. An offer isn't a commitment; just get it in.
+
+Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
+
+💡 TODAY'S PRINCIPLE (2 min)
+The answer is no unless you ask. Every deal starts with a question someone could decline. Today you do two brave asks: you get your buying power from a lender, and you send your very first offer. Done is better than perfect.
+
+🎯 YOUR MISSION TODAY
+
+Arsenal — lenders, start your pre-approval (suggested). Knowing your number makes you credible and fast:
+• Call 2 local community banks or credit unions (not just the big national banks) and ask for their investment / commercial lender.
+• Ask your Day-1 agent who they send investors to.
+• Search "[your city] DSCR lender" or "portfolio lender."
+
+Target — MLS: price reductions (suggested). A price drop is a seller telling you, in public, they're motivated. Analyze them and send your first offer today on the one that pencils closest to your numbers — keep yesterday's long-DOM lane going too.
+
+How to actually send it: your agent writes up the offer and submits it — that's their job, lean on them. (FSBO? Use your state's standard purchase agreement.) Don't overthink the paperwork; your only job today is to get the number in.
+
+📝 Script:
+"Hi — I'm an investor looking to get pre-approved for buy-and-hold rental property in [area]. Can you walk me through what I'd qualify for and what you'd need from me?"
+
+✅ QUICK CHECK
+Sending your first offer feels big, but remember:
+   ✓ An offer isn't a commitment — it opens a conversation
+   • You must buy anything they accept instantly
+   • You should only ever send one
+   • Offers are legally binding to close no matter what
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 TRAINING BLOCK 1 — Financing Mastery
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -1059,7 +1129,42 @@ Final note — make sure you are still analyzing properties, reaching out to Ars
     title: "Offers, Counter Offers & Contracts",
     caption: "Learn to submit professional offers, negotiate effectively, and protect yourself through due diligence.",
     taskDescription: "",
-    trainingContent: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 TODAY'S MISSION — Build · Day 3
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 WHERE YOU ARE
+Offers today: 3 — you're at full pace now. Three offers a day is your engine from here on.
+
+Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
+
+💡 TODAY'S PRINCIPLE (2 min)
+Know your three numbers on every deal. Your ideal price (a home run), your target (a solid yes), and your max (walk away past this). Decide them before you offer so emotion never sets your price. This is what lets you fire off 3 offers a day with confidence.
+
+🎯 YOUR MISSION TODAY
+
+Arsenal — property managers (suggested). PMs know real rents and which landlords are tired.
+• Google "[your city] property management", call 2.
+• Ask: what do [your property type] rent for, which areas do you avoid, and do you know any owners thinking of selling?
+
+Target — FSBO: for-sale-by-owner (suggested). No agent in the middle, often a motivated seller. Work several sources:
+• Zillow — filter "For Sale by Owner" (FSBOs show right alongside agent listings)
+• Facebook Marketplace + local "homes for sale by owner [city]" groups
+• Craigslist → housing → "for sale by owner"
+• FSBO.com and ForSaleByOwner.com
+• Nextdoor — neighbors often post before they officially list
+
+Analyze what fits and price each offer using your three numbers.
+
+✅ QUICK CHECK
+Your "max" number is the price at which you:
+   ✓ Walk away — anything higher breaks the deal
+   • Expect the seller to start
+   • Always open your offer
+   • Get your dream return
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 TRAINING BLOCK 1 — Offers, Contracts & Protecting Yourself
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -2057,7 +2162,38 @@ Focus MORE on building rapport, understanding problems, and practicing negotiati
     title: "Creative Deal Structure & For Sale By Owner Contracts",
     caption: "Master creative financing strategies, seller finance structures, and learn to confidently handle FSBO transactions.",
     taskDescription: "",
-    trainingContent: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 TODAY'S MISSION — Build · Day 4
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 WHERE YOU ARE
+Offers today: 3 — full pace. Keep them flowing on top of your outreach.
+
+Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
+
+💡 TODAY'S PRINCIPLE (2 min)
+Analyze conservatively — protect your downside. Use realistic rents, real expenses, honest repair numbers. If a deal only works on best-case assumptions, it doesn't work. Conservative math is how you make 3 offers a day without making 3 mistakes a day.
+
+🎯 YOUR MISSION TODAY
+
+Arsenal — wholesalers (suggested). They bring you off-market deals for free — you just have to be on their list with clear criteria.
+• Search Facebook for "[your city] wholesale real estate" / "[your city] real estate deals"; search "we buy houses [your city]."
+• Get on 2 lists and tell them exactly what you buy.
+
+Target — MLS: poor photos / bad marketing (suggested). Dark, blurry, 3-photo listings scare off retail buyers — that's your opening. Analyze and keep your 3 offers going.
+
+📝 Script:
+"Hey — I'm a cash-ready investor buying [buy box] in [area]. Add me to your buyers list. If it hits these numbers, I move fast: [price range / type / area]."
+
+✅ QUICK CHECK
+A listing with terrible photos is worth a look because:
+   ✓ It scares off retail buyers and can signal less effort = opportunity
+   • Bad photos mean a bad house
+   • It's always a scam
+   • Photos don't matter at all
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 TRAINING BLOCK 1 — Creative Deal Structure
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -2840,7 +2976,38 @@ Strong relationships with title companies can reduce stress, improve confidence,
     title: "Deal Flow Mastery & Follow Up",
     caption: "Build a consistent deal pipeline through multiple strategies and master the art of professional follow-up.",
     taskDescription: "",
-    trainingContent: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 TODAY'S MISSION — Build · Day 5
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 WHERE YOU ARE
+Offers today: 3 — full pace.
+
+Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
+
+💡 TODAY'S PRINCIPLE (2 min)
+Stay in your buy box. Your buy box (the one you built in Foundations) is the filter that keeps you from chasing shiny distractions. Not in your area, type, and price range? It's a no — no matter how exciting. Discipline is a strategy.
+
+🎯 YOUR MISSION TODAY
+
+Arsenal — your personal network (suggested). Your warmest leads are people who already trust you.
+• Post on social media and text 5 people what you buy; ask them to send anyone who needs to sell.
+• Inherited homes, burned-out landlords, divorces, relocations come through your network first.
+
+Target — MLS: expired, withdrawn & back-on-market (suggested). A deal that failed to sell is a seller whose plan didn't work — often very motivated the second time. Ask your agent to pull these. Keep analyzing and sending your 3.
+
+📝 Script:
+"Quick ask — I'm buying investment property in [area] this year. If you know anyone who needs to sell (tired landlord, inherited place, moving), connect us. I make it easy and fast."
+
+✅ QUICK CHECK
+Staying in your buy box mainly protects you from:
+   ✓ Chasing exciting deals that don't fit your strategy
+   • Ever paying too little
+   • Talking to sellers
+   • Making offers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 TRAINING BLOCK 1 — Deal Flow Mastery
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -3539,6 +3706,37 @@ The goal is NOT to force deals today. The goal is to become the person they thin
     locked: true,
     phaseId: 'foundation',
     trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 TODAY'S MISSION — Build · Day 6
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 WHERE YOU ARE
+Offers today: 3 — full pace.
+
+Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
+
+💡 TODAY'S PRINCIPLE (2 min)
+Read motivation off the listing. Words like "as-is," "must sell," "bring offers," "estate sale," or "investor special" are sellers telling you they're motivated. Train your eye — that's where deals hide, and it tells you which of your 3 offers to push hardest.
+
+🎯 YOUR MISSION TODAY
+
+Arsenal — other investors / your local REIA (suggested).
+• Find your local REIA ("[your city] real estate investor association"), search Meetup.com for real estate investing in [your area], or your local BiggerPockets forum.
+• Join, and connect with 2 active investors.
+
+Target — online saved searches + alerts (suggested). Set saved searches on Zillow and Redfin for your buy box with instant alerts, so new motivated listings come to you.
+
+🔧 TOOL — PropStream, your data engine:
+Free searches got you started. Operators run on data. PropStream pulls comps, owner info, equity, and targeted lists (absentee owners, high-equity, pre-foreclosure) in minutes — the backbone of serious lead-gen. Start a trial and pull one targeted list for [your market] today. This is how you stop hunting one-by-one and start working lists like an operator.
+
+✅ QUICK CHECK
+Which listing phrase most signals a motivated seller?
+   ✓ "Must sell — bring all offers, as-is"
+   • "Pride of ownership, shows beautifully"
+   • "Highest and best by Sunday"
+   • "Luxury finishes throughout"
+
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 TRAINING BLOCK 1 — RETURN METRICS MASTERY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -4450,6 +4648,31 @@ Also be aggressively clear on your buy box and that you are ready to close if so
     isReflectionDay: true,
     phaseId: 'foundation',
     trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 TODAY'S MISSION — Review · Day 7
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 WHERE YOU ARE
+Offers today: 1 — lighter review day. Catch up, then take your Weekly Check-In.
+
+Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
+
+💡 TODAY'S PRINCIPLE (2 min)
+Inspect your inputs, not just outputs. One week in, you won't have a deal yet — and that's fine. Judge yourself on what you controlled: contacts made, properties analyzed, offers sent. Strong inputs guarantee outputs eventually.
+
+🎯 YOUR MISSION TODAY — REVIEW & RESET
+• Re-touch your best contacts from the week — the agent who replied, the sharp wholesaler. A quick "great connecting — here's exactly what I'm looking for" keeps you top of mind.
+• Sort every lead into hot / warm / cold so next week you spend time where it counts.
+• Take your Weekly Check-In so we can get you help where you're stuck.
+
+✅ QUICK CHECK
+One week in with no deal yet — judge your week by:
+   ✓ Your inputs: contacts, analyses, and offers you completed
+   • Whether you already have a deal
+   • How you feel
+   • How many emails you got
+
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 WEEK 1 — REORGANIZE & RECOMMIT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -4842,6 +5065,35 @@ Then: recommit to taking action for the next 7 days regardless of fear, uncertai
     locked: true,
     phaseId: 'foundation',
     trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 TODAY'S MISSION — Ramp · Day 8
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 WHERE YOU ARE
+Offers today: 3 — back to full pace after your reset.
+
+Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
+
+💡 TODAY'S PRINCIPLE (2 min)
+When a seller responds, your first move is curiosity — not a pitch. A reply ("maybe," "what's your offer?", a counter) is a door opening. Don't jump to numbers. Ask why they're selling and what matters most to them. Information is leverage. With 3 offers a day going out, you'll start getting these — be ready.
+
+🎯 YOUR MISSION TODAY
+
+Arsenal — send your realtors the buy box you already built (suggested). You created your buy box in Foundations — now put it to work. Send it to your Day-1 agents so they can match deals to you instantly. A clear buy box sitting in an agent's inbox means deals come to you.
+
+Target — direct-to-owner: absentee owners (suggested · plants seeds). Absentee owners (own it, don't live there) are often tired landlords ready to sell. Pull an absentee-owner list for [your market] and start reaching them.
+
+🔧 TOOL — Ballpoint Marketing, done-for-you mailers (the long game):
+The highest-converting way to reach absentee owners at scale is direct mail — Ballpoint sends handwritten-style letters that actually get opened. Be honest about the timeline: this is a longer play. Responses can take weeks, sometimes past your 30 days. But it surfaces the most motivated, least-competition sellers you'll ever find. This is operator-building: plant it now, harvest for months. Start a small campaign to absentee owners in [your market] — then keep working your fast lanes while it cooks.
+
+✅ QUICK CHECK
+A seller replies "what's your offer?" Your best first move:
+   ✓ Ask why they're selling and what matters to them before talking numbers
+   • Immediately send your lowest number
+   • Stop responding
+   • Offer full price to be safe
+
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 TRAINING BLOCK 1 — SOLVING SELLER PROBLEMS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -5744,6 +5996,35 @@ KEY TAKEAWAY: Great negotiators do not win arguments. They build trust, understa
     locked: true,
     phaseId: 'foundation',
     trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 TODAY'S MISSION — Ramp · Day 9
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 WHERE YOU ARE
+Offers today: 3 — full pace.
+
+Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
+
+💡 TODAY'S PRINCIPLE (2 min)
+The multiple-offer method. Don't agonize over one perfect offer — make several reasonable ones. This is why you send 3 a day: volume is your unfair advantage, and it takes the emotional weight off any single deal.
+
+🎯 YOUR MISSION TODAY
+
+Arsenal — wholesalers, sharpen your criteria (suggested). Re-touch your Day-4 wholesalers. The clearer and more decisive you are, the better the deals they send. Tell them your exact box and that you close.
+
+Target — driving for dollars (suggested). Pick a target neighborhood and look for distress: overgrown yards, boarded windows, code notices, full mailboxes. These owners rarely list — and rarely have competition.
+
+🔧 TOOL — DealMachine, driving for dollars automated:
+DealMachine turns your phone into the tool: drive [your market], tap a distressed house to save it, and it pulls the owner and skip-traces their phone and address so you can call or mail. Operators build routes and work them weekly. Start the trial and log 10 properties on one drive today — 10 off-market leads almost nobody else is chasing.
+
+✅ QUICK CHECK
+The point of the multiple-offer method is:
+   ✓ More reasonable offers = more shots at yes, less pressure on any one
+   • To lowball everyone
+   • To never analyze deals
+   • To only offer once you're certain
+
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 TRAINING BLOCK 1 — SEEING HIDDEN VALUE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -6569,7 +6850,36 @@ KEY TAKEAWAY: Average investors negotiate price. Great investors negotiate struc
     title: "Becoming the Go-To Buyer",
     phase: "Phase 2: Offers & Negotiation",
     phaseId: "offers",
-    trainingContent: `DAY 10 — BECOMING THE GO-TO BUYER
+    trainingContent: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 TODAY'S MISSION — Ramp · Day 10
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 WHERE YOU ARE
+Offers today: 3 — full pace.
+
+Everything you've already started still runs today — keep analyzing, keep working all your outreach lanes, keep sending offers and follow-ups. Today's skill ADDS one more tool; it never replaces the work you're already doing.
+
+💡 TODAY'S PRINCIPLE (2 min)
+Give before you ask. The fastest way to earn help from your arsenal is to be useful first — a referral, a kind word, a lead you can't use. People send deals to investors they like and trust. Plant generosity; harvest deals.
+
+🎯 YOUR MISSION TODAY
+
+Arsenal — property managers, dig for tired landlords (suggested). Re-touch your Day-3 PMs with a sharper ask: "Do you manage anyone who's done being a landlord and might sell off-market?" PMs sit on these relationships all day.
+
+Target — direct-to-owner: tired landlords (suggested · seeds). Pull a list of long-time rental owners in [your market] (PropStream flags absentee + length of ownership) and reach out. Burned-out landlords are some of the most motivated sellers alive.
+
+📝 Script:
+"Hi [name] — I buy rentals in [area] and make it painless for landlords ready to be done. If you manage anyone thinking about selling, I'd love an intro — happy to send referrals your way too."
+
+✅ QUICK CHECK
+"Give before you ask" works because:
+   ✓ People send deals to investors they like and trust
+   • It's a legal requirement
+   • Gifts guarantee deals
+   • It replaces doing the work
+
+DAY 10 — BECOMING THE GO-TO BUYER
 
 Today combines two critical training sections: Confidence Through Repetition and Becoming The Go-To Buyer. Together, they show you how to build the internal confidence AND external reputation that create lasting deal flow.
 
