@@ -27,7 +27,9 @@ export function calculateFollowUpDate(interval) {
   if (!interval || interval === 'never') return null;
   const d = new Date();
   switch (interval) {
+    case '1_day': d.setDate(d.getDate() + 1); break;
     case '2_days': d.setDate(d.getDate() + 2); break;
+    case '3_days': d.setDate(d.getDate() + 3); break;
     case '1_week': d.setDate(d.getDate() + 7); break;
     case '2_weeks': d.setDate(d.getDate() + 14); break;
     case '1_month': d.setMonth(d.getMonth() + 1); break;

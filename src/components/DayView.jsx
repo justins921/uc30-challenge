@@ -13,6 +13,22 @@ import { calculateFollowUpDate, validatePhone } from '../utils/storage';
 
 const GROUP_COLORS = { target: '#e94560', arsenal: '#f0a500' };
 
+// Follow-up interval options. Target contacts get a fast cadence (1 day → 2 weeks);
+// arsenal contacts add a 1-month option (no 3-month). Dead contacts use long-term intervals.
+const TARGET_INTERVALS = [
+  { value: '1_day', label: '1 Day' }, { value: '3_days', label: '3 Days' },
+  { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' },
+];
+const ARSENAL_INTERVALS = [
+  { value: '1_day', label: '1 Day' }, { value: '3_days', label: '3 Days' },
+  { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' },
+  { value: '1_month', label: '1 Month' },
+];
+const DEAD_INTERVALS = [
+  { value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' },
+  { value: '6_months', label: '6 Months' }, { value: 'never', label: 'Never' },
+];
+
 
 export default function DayView({
   day, user, onSubmit, onBack, onNavigateToStats, contentOverrides, customPhases,
@@ -1458,8 +1474,8 @@ export default function DayView({
                         <div style={{ fontSize: 12, color: '#48c78e', fontWeight: 600, marginBottom: 6 }}>Schedule Follow-Up *</div>
                         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                           {(targetOutcome === 'dead' || targetOutcome === 'dead_arsenal'
-                            ? [{ value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }, { value: '6_months', label: '6 Months' }, { value: 'never', label: 'Never' }]
-                            : [{ value: '2_days', label: '2 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }]
+                            ? DEAD_INTERVALS
+                            : contactGroup === 'arsenal' ? ARSENAL_INTERVALS : TARGET_INTERVALS
                           ).map(opt => (
                             <button key={opt.value} onClick={() => setContactFollowUpInterval(opt.value)}
                               style={{
@@ -1860,8 +1876,8 @@ export default function DayView({
                                 <div style={{ fontSize: 11, color: '#48c78e', fontWeight: 600, marginBottom: 4 }}>Next Follow-Up</div>
                                 <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 10 }}>
                                   {(isDead
-                                    ? [{ value: '1_month', label: '1 Mo' }, { value: '3_months', label: '3 Mo' }, { value: '6_months', label: '6 Mo' }, { value: 'never', label: 'Never' }]
-                                    : [{ value: '2_days', label: '2 Days' }, { value: '1_week', label: '1 Wk' }, { value: '2_weeks', label: '2 Wk' }]
+                                    ? DEAD_INTERVALS
+                                    : contact.contact_group === 'arsenal' ? ARSENAL_INTERVALS : TARGET_INTERVALS
                                   ).map(opt => (
                                     <button key={opt.value} onClick={() => setInlineFollowUpInterval(opt.value)}
                                       style={{
@@ -2293,8 +2309,8 @@ export default function DayView({
                     <div style={{ fontSize: 12, color: '#48c78e', fontWeight: 600, marginBottom: 6 }}>Schedule Follow-Up *</div>
                     <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                       {(targetOutcome === 'dead' || targetOutcome === 'dead_arsenal'
-                        ? [{ value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }, { value: '6_months', label: '6 Months' }, { value: 'never', label: 'Never' }]
-                        : [{ value: '2_days', label: '2 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }]
+                        ? DEAD_INTERVALS
+                        : contactGroup === 'arsenal' ? ARSENAL_INTERVALS : TARGET_INTERVALS
                       ).map(opt => (
                         <button key={opt.value} onClick={() => setContactFollowUpInterval(opt.value)}
                           style={{
@@ -2393,8 +2409,8 @@ export default function DayView({
                   const isDead = selContact?.pipeline_status === 'dead';
                   const isTargetProp = selContact?.contact_group === 'target' && selContact?.pipeline_status !== 'dead';
                   const intervals = isDead
-                    ? [{ value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }, { value: '6_months', label: '6 Months' }, { value: 'never', label: 'Never' }]
-                    : [{ value: '2_days', label: '2 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }];
+                    ? DEAD_INTERVALS
+                    : isTargetProp ? TARGET_INTERVALS : ARSENAL_INTERVALS;
                   return (
                     <>
                       <div style={{ fontSize: 12, color: '#48c78e', fontWeight: 600, marginBottom: 6 }}>Next Follow-Up *</div>
@@ -2755,10 +2771,10 @@ function InlineAddContact({ group, isOpen, onToggle, onAddContact, contactList, 
         <div style={{ fontSize: 11, color: '#888', fontWeight: 600, marginBottom: 5 }}>Follow-up Interval *</div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {(targetOutcome === 'dead' || targetOutcome === 'dead_arsenal'
-            ? [{ value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }, { value: '6_months', label: '6 Months' }, { value: 'never', label: 'Never' }]
+            ? DEAD_INTERVALS
             : targetOutcome === 'target_property' || targetOutcome === 'both'
-            ? [{ value: '3_days', label: '3 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }]
-            : [{ value: '3_days', label: '3 Days' }, { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' }, { value: '1_month', label: '1 Month' }, { value: '3_months', label: '3 Months' }]
+            ? TARGET_INTERVALS
+            : ARSENAL_INTERVALS
           ).map(opt => (
             <button key={opt.value} onClick={() => setFollowUp(opt.value)} style={{
               padding: '5px 10px', borderRadius: 6, fontSize: 11, fontWeight: followUp === opt.value ? 600 : 400,

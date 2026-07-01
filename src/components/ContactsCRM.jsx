@@ -35,14 +35,14 @@ const STATUS_LABELS = {
 };
 
 const INTERVAL_LABELS = {
-  '2_days': '2 Days', '1_week': '1 Week', '2_weeks': '2 Weeks',
+  '1_day': '1 Day', '2_days': '2 Days', '3_days': '3 Days', '1_week': '1 Week', '2_weeks': '2 Weeks',
   '1_month': '1 Month', '3_months': '3 Months', '6_months': '6 Months', 'never': 'Never',
 };
 
 const FOLLOW_UP_OPTIONS = [
-  { value: '2_days', label: '2 Days' }, { value: '1_week', label: '1 Week' },
-  { value: '2_weeks', label: '2 Weeks' }, { value: '1_month', label: '1 Month' },
-  { value: '3_months', label: '3 Months' }, { value: '6_months', label: '6 Months' },
+  { value: '1_day', label: '1 Day' }, { value: '3_days', label: '3 Days' },
+  { value: '1_week', label: '1 Week' }, { value: '2_weeks', label: '2 Weeks' },
+  { value: '1_month', label: '1 Month' }, { value: '6_months', label: '6 Months' },
   { value: 'never', label: 'Never' },
 ];
 
