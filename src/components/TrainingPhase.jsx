@@ -306,6 +306,46 @@ export default function TrainingPhase({
             </div>
           </div>
 
+          {/* Instructional screenshots (e.g. the "how a day works" onboarding walkthrough).
+              Each entry: { src, caption }. If the image file isn't uploaded yet, a labeled
+              placeholder is shown in its place instead of a broken image. */}
+          {principle.screenshots?.length > 0 && (
+            <div style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 18 }}>
+              {principle.screenshots.map((shot, i) => (
+                <figure key={i} style={{ margin: 0 }}>
+                  <div style={{
+                    borderRadius: 12, overflow: 'hidden',
+                    border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)',
+                  }}>
+                    <img
+                      src={shot.src}
+                      alt={shot.caption || `Step ${i + 1}`}
+                      style={{ display: 'block', width: '100%', height: 'auto' }}
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const ph = e.currentTarget.nextSibling;
+                        if (ph) ph.style.display = 'flex';
+                      }}
+                    />
+                    <div style={{
+                      display: 'none', minHeight: 150, alignItems: 'center', justifyContent: 'center',
+                      flexDirection: 'column', gap: 6, padding: 24, textAlign: 'center', color: '#666', fontSize: 13,
+                    }}>
+                      <div style={{ fontSize: 26 }}>&#128247;</div>
+                      <div>Screenshot coming soon</div>
+                      <div className="mono" style={{ fontSize: 11, color: '#555' }}>{shot.src}</div>
+                    </div>
+                  </div>
+                  {shot.caption && (
+                    <figcaption style={{ fontSize: 13, color: '#888', marginTop: 8, textAlign: 'center', lineHeight: 1.5 }}>
+                      {i + 1}. {shot.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              ))}
+            </div>
+          )}
+
           {principle.showWhy && (() => {
             const why = user.getClear?.destination || user.theirWhy || user.dreamLife || '';
             return (

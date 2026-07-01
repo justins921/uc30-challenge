@@ -438,13 +438,10 @@ export default function CapitalStrategyFinder({ onSave, existing, embedded, user
       const next = { ...prev, [qKey]: value };
       return next;
     });
-    // Advance to next unanswered question (or results)
-    if (typeof step === 'number') {
-      if (step < QUESTIONS.length - 1) {
-        setStep(step + 1);
-      } else {
-        setStep('results');
-      }
+    // Advance to the next question. On the LAST question we don't auto-jump to
+    // results — the user must click "Get My Results" once every answer is in.
+    if (typeof step === 'number' && step < QUESTIONS.length - 1) {
+      setStep(step + 1);
     }
   };
 
@@ -625,6 +622,24 @@ export default function CapitalStrategyFinder({ onSave, existing, embedded, user
           );
         })}
       </div>
+
+      {/* Get My Results — only on the last question, enabled once all 8 are answered */}
+      {qIndex === QUESTIONS.length - 1 && (
+        <button
+          onClick={() => complete && setStep('results')}
+          disabled={!complete}
+          style={{
+            width: '100%', marginTop: 20, padding: '15px 24px', borderRadius: 12,
+            fontSize: 15, fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
+            border: 'none', cursor: complete ? 'pointer' : 'not-allowed',
+            background: complete ? C.green : 'rgba(255,255,255,0.05)',
+            color: complete ? '#0a0a0f' : '#666',
+            transition: 'background 0.2s, color 0.2s',
+          }}
+        >
+          {complete ? 'Get My Results →' : 'Answer all questions to continue'}
+        </button>
+      )}
 
       {/* Back link between questions */}
       {qIndex > 0 && (

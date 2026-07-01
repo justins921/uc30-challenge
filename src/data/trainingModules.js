@@ -2799,8 +2799,14 @@ export const TRAINING_MODULES = [
       },
       {
         id: 'launch_p7',
-        title: 'How a day works (walkthrough) — coming soon',
-        content: '**[PLACEHOLDER — to be built once the Day 1 layout and CRM are finalized.]**\n\nThis section will be a short, picture-by-picture walkthrough — an onboarding flow — that shows you *exactly* how to run a day inside UC30, start to finish:\n- **Open the day and read your principle / daily training.**\n- **Analyze a property and record it** with the CDS calculator so it counts toward your daily minimum.\n- **Plug people into the CRM** — add agents, lenders, wholesalers, and owners, and set follow-ups.\n- **Log your offers** and your contacts to complete the day and unlock the next one.\n\nWe\'re holding this until the daily layout and CRM are locked in, so the screenshots match exactly what you\'ll see. It\'ll land right here before launch.',
+        title: 'How a day works — a quick walkthrough',
+        content: 'Here\'s exactly how to run a day inside UC30, start to finish. Every day follows the same rhythm — once you\'ve done it once, it\'s automatic.\n\n1. **Open the day and read your principle / daily training.**\n2. **Analyze a property and record it** with the CDS calculator so it counts toward your daily minimum.\n3. **Plug people into the CRM** — add agents, lenders, wholesalers, and owners, and set follow-ups so nothing slips through the cracks.\n4. **Log your offers and contacts** to complete the day and unlock the next one.\n\nFollow the screenshots below step by step:',
+        screenshots: [
+          { src: '/onboarding/01-open-day.png', caption: 'Open the day and read your principle and daily training.' },
+          { src: '/onboarding/02-analyze-property.png', caption: 'Analyze a property and record it with the CDS calculator so it counts toward your daily minimum.' },
+          { src: '/onboarding/03-add-crm-contacts.png', caption: 'Add agents, lenders, wholesalers, and owners to your CRM and set their follow-ups.' },
+          { src: '/onboarding/04-log-and-complete.png', caption: 'Log your offers and contacts to complete the day and unlock the next one.' },
+        ],
         questions: [],
       },
       {

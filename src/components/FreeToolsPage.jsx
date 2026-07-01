@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import NativeRentalCalculator from './NativeRentalCalculator';
 import CapExCalculator from './CapExCalculator';
 import DueDiligenceChecklist from './DueDiligenceChecklist';
@@ -25,12 +25,12 @@ const TOOLS = [
     leadGen: true,
     gate: {
       headline: 'Get your personalized Capital & Strategy plan',
-      subcopy: "Enter your email and we'll unlock your results — the financing you can likely use, the strategies open to you, and your best-fit first move.",
-      button: 'Get My Results',
+      subcopy: "Enter your email to unlock the tool. Answer 8 quick questions and you'll get your results — the financing you can likely use, the strategies open to you, and your best-fit first move.",
+      button: 'Unlock the Tool →',
     },
   },
   {
-    id: 'rental-calculator',
+    id: 'rental-property-analyzer',
     title: 'Rental Property Analyzer',
     description: 'Analyze any rental property in seconds. Calculate cash flow, cash-on-cash return, cap rate, DSCR, and more. Includes a seller finance solver and full amortization schedule.',
     icon: '🏠',
@@ -55,6 +55,12 @@ const TOOLS = [
 ];
 
 const STORAGE_KEY = 'uc30_tool_unlocked';
+
+// Old tool slugs that should redirect to their current canonical slug, so any
+// links Chandler already shared keep working after a rename.
+const SLUG_ALIASES = {
+  'rental-calculator': 'rental-property-analyzer',
+};
 
 function getUnlockedTools() {
   try {
@@ -156,7 +162,21 @@ export default function FreeToolsPage({ user }) {
   const [activeTool, setActiveTool] = useState(null);
   const [unlockedTools, setUnlockedTools] = useState(getUnlockedTools);
 
-  const path = window.location.pathname.replace(/\/+$/, '');
+  const rawPath = window.location.pathname.replace(/\/+$/, '');
+  // Redirect legacy tool slugs to the canonical one before matching.
+  const aliasMatch = rawPath.match(/^\/tools\/([^/]+)$/);
+  const path = aliasMatch && SLUG_ALIASES[aliasMatch[1]]
+    ? `/tools/${SLUG_ALIASES[aliasMatch[1]]}`
+    : rawPath;
+  const usedAlias = path !== rawPath;
+
+  // Canonicalize the URL bar once if an old slug was used.
+  useEffect(() => {
+    if (usedAlias) {
+      try { window.history.replaceState({}, '', path); } catch { /* ignore */ }
+    }
+  }, [usedAlias, path]);
+
   const directTool = TOOLS.find(t => path === `/tools/${t.id}` && !t.comingSoon);
   const tool = directTool || activeTool;
 

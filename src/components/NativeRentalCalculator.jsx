@@ -219,6 +219,9 @@ const DEFAULT_INPUTS = {
 
 export default function NativeRentalCalculator() {
   const [inputs, setInputs] = useState(DEFAULT_INPUTS);
+  // Results stay hidden behind a "Get My Results" CTA until the core inputs
+  // (purchase price + rent) are filled in — mirrors the Capital & Strategy Finder.
+  const [showResults, setShowResults] = useState(false);
   const [solverOn, setSolverOn] = useState(false);
   const [solveFor, setSolveFor] = useState('interest_rate');
   const [targetCoC, setTargetCoC] = useState('');
@@ -299,6 +302,9 @@ export default function NativeRentalCalculator() {
   };
 
   const hasData = r.pp > 0;
+  // Core inputs required before the user can pull results.
+  const inputsReady = num(inputs.purchase_price) > 0 && num(inputs.rents) > 0;
+  const resultsVisible = hasData && showResults;
 
   const fieldValue = (key) => {
     if (solverOn && solvedValue && key === solveFor) return String(solvedValue.value);
@@ -310,7 +316,7 @@ export default function NativeRentalCalculator() {
   return (
     <div>
       {/* Quick Summary */}
-      {hasData && (
+      {resultsVisible && (
         <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
           {[
             { label: 'Monthly CF', value: fmtD(r.monthlyCF), color: r.monthlyCF >= 0 ? '#48c78e' : '#e94560' },
@@ -402,8 +408,26 @@ export default function NativeRentalCalculator() {
         </div>
       ))}
 
+      {/* Get My Results CTA — enabled only once the core inputs are filled */}
+      {!resultsVisible && (
+        <button
+          onClick={() => setShowResults(true)}
+          disabled={!inputsReady}
+          style={{
+            width: '100%', marginTop: 28, padding: '15px 24px', borderRadius: 10,
+            fontSize: 15, fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
+            border: 'none', cursor: inputsReady ? 'pointer' : 'not-allowed',
+            background: inputsReady ? '#e94560' : 'rgba(255,255,255,0.05)',
+            color: inputsReady ? '#fff' : '#666',
+            transition: 'background 0.2s, color 0.2s',
+          }}
+        >
+          {inputsReady ? 'Get My Results →' : 'Enter purchase price & rent to continue'}
+        </button>
+      )}
+
       {/* Results */}
-      {hasData && (
+      {resultsVisible && (
         <div style={{ marginTop: 24 }}>
           <div style={{
             fontSize: 11, fontWeight: 700, color: '#e94560', letterSpacing: 1, marginBottom: 12,
@@ -475,7 +499,7 @@ export default function NativeRentalCalculator() {
             }}>
               {copied ? 'Copied!' : 'Copy Results'}
             </button>
-            <button onClick={() => { setInputs(DEFAULT_INPUTS); setSolverOn(false); setTargetCoC(''); }} style={{
+            <button onClick={() => { setInputs(DEFAULT_INPUTS); setSolverOn(false); setTargetCoC(''); setShowResults(false); }} style={{
               padding: '10px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600,
               background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
               color: '#888', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
