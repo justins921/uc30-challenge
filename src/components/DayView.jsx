@@ -77,6 +77,10 @@ export default function DayView({
   const isComplete = false;
   const isCurrentOrPast = true;
   const existingSubmission = user.submissions.find(s => s.day === day);
+  // Display-only: has this day already been completed? Used to surface a
+  // "Completed" badge so a finished day reads as done when reopened, without
+  // re-locking it (the day stays re-openable/re-submittable in creation phase).
+  const alreadyCompleted = !isPreview && (user.completedDays || []).includes(day);
   const dayColors = customPhases ? getCategoryColors(getPhases(customPhases)) : null;
   const cat = isPost30
     ? { accent: '#f0a500', label: 'Operator Mode' }
@@ -473,6 +477,15 @@ export default function DayView({
           </span>
           <span style={{ color: '#333' }}>•</span>
           <span className="mono" style={{ fontSize: 11, color: '#555' }}>{isPreTraining ? 'PRE-TRAINING' : isPost30 ? `DAY ${day}` : `DAY ${day}/30`}</span>
+          {alreadyCompleted && (
+            <>
+              <span style={{ color: '#333' }}>•</span>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: 4,
+                fontSize: 11, fontWeight: 700, color: '#48c78e', letterSpacing: 1,
+              }}>✓ COMPLETED</span>
+            </>
+          )}
         </div>
         <h1 style={{ fontSize: 32, fontWeight: 700, lineHeight: 1.2, marginBottom: 4 }}>
           {dayData.title}

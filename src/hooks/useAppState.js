@@ -904,17 +904,14 @@ export function useAppState() {
     const isPost30 = dayNum > 30;
     const isPreTraining = dayNum <= 0;
 
-    // Validate: must be the user's current day (or post-30 / pre-training)
-    if (!isPost30 && !isPreTraining && dayNum !== user.currentDay) {
-      console.error(`Submission rejected: dayNum ${dayNum} does not match currentDay ${user.currentDay}`);
-      return { error: 'You can only submit your current day.' };
-    }
-
-    // Validate: day must not already be completed
-    if (user.completedDays.includes(dayNum)) {
-      console.error(`Submission rejected: day ${dayNum} already completed`);
-      return { error: 'This day has already been submitted.' };
-    }
+    // Creation phase: every day is unlocked and re-submittable, so we record a
+    // completion for whatever day was finished (in any order) and never reject a
+    // re-submit — a re-submit updates the stored submission instead of erroring.
+    // To restore strict sequential gating for live cohorts, re-add these guards:
+    //   if (!isPost30 && !isPreTraining && dayNum !== user.currentDay) return { error: 'You can only submit your current day.' };
+    //   if (user.completedDays.includes(dayNum)) return { error: 'This day has already been submitted.' };
+    const priorSubmission = user.submissions.find(s => s.day === dayNum);
+    const alreadyCompleted = user.completedDays.includes(dayNum);
 
     const dayData = isPreTraining
       ? (PRE_DAYS.find(p => p.day === dayNum) || { title: `Pre-Training Day ${dayNum}` })
@@ -934,12 +931,17 @@ export function useAppState() {
       dayMetrics,
     };
 
-    // Accumulate day metrics into cumulative totals
+    // Accumulate day metrics into cumulative totals. On a re-submit we apply only
+    // the delta versus the previous submission so counters never double-count.
     const updatedMetrics = { ...user.metrics };
-    for (const [key, val] of Object.entries(dayMetrics)) {
-      if (val > 0) {
-        updatedMetrics[key] = (updatedMetrics[key] || 0) + val;
-      }
+    const priorMetrics = priorSubmission?.dayMetrics || {};
+    const metricKeys = new Set([...Object.keys(dayMetrics), ...Object.keys(priorMetrics)]);
+    for (const key of metricKeys) {
+      const now = dayMetrics[key];
+      const before = priorMetrics[key];
+      if (typeof now !== 'number' && typeof before !== 'number') continue;
+      const delta = (typeof now === 'number' ? now : 0) - (typeof before === 'number' ? before : 0);
+      if (delta !== 0) updatedMetrics[key] = Math.max(0, (updatedMetrics[key] || 0) + delta);
     }
 
     // Recalculate total UC Points from cumulative metrics
@@ -955,9 +957,11 @@ export function useAppState() {
     }
 
     const updates = {
-      currentDay: isPreTraining ? user.currentDay : dayNum + 1,
-      completedDays: [...user.completedDays, dayNum],
-      submissions: [...user.submissions, submission],
+      currentDay: isPreTraining ? user.currentDay : Math.max(user.currentDay, dayNum + 1),
+      completedDays: alreadyCompleted ? user.completedDays : [...user.completedDays, dayNum],
+      submissions: priorSubmission
+        ? user.submissions.map(s => (s.day === dayNum ? submission : s))
+        : [...user.submissions, submission],
       metrics: updatedMetrics,
       ucPoints,
       lifetimeOffersSubmitted,
@@ -1003,21 +1007,24 @@ export function useAppState() {
       storage.upsertDailySubmission(submissionRecord);
     }
 
-    if (dayNum < 30) {
-      tagDayStarted(user.email, dayNum + 1).catch(() => {});
-    }
-    if (dayNum === 30 && (updatedMetrics.offersSubmitted || 0) > 0) {
-      tagChallengeCompleted(user.email).catch(() => {});
-    }
+    // One-time side effects — skip entirely when re-submitting a finished day.
+    if (!alreadyCompleted) {
+      if (dayNum < 30) {
+        tagDayStarted(user.email, dayNum + 1).catch(() => {});
+      }
+      if (dayNum === 30 && (updatedMetrics.offersSubmitted || 0) > 0) {
+        tagChallengeCompleted(user.email).catch(() => {});
+      }
 
-    // Transactional emails via Resend
-    emailDayCompleted(user.email, user.firstName, dayNum);
-    if (dayNum === 30) {
-      emailChallengeCompleted(user.email, user.firstName);
+      // Transactional emails via Resend
+      emailDayCompleted(user.email, user.firstName, dayNum);
+      if (dayNum === 30) {
+        emailChallengeCompleted(user.email, user.firstName);
+      }
     }
 
     // Day 30 completion: graduate tracking + cohort history
-    if (dayNum === 30) {
+    if (dayNum === 30 && !alreadyCompleted) {
       const gradUpdates = {
         ucGraduateCount: (updatedUser.ucGraduateCount || 0) + 1,
         cohortHistory: [...(updatedUser.cohortHistory || []), {

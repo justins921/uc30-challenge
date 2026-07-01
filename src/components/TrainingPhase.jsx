@@ -189,7 +189,10 @@ export default function TrainingPhase({
       return null;
     }
 
-    const principleComplete = isPrincipleComplete(principle);
+    // Admins/testers and anyone revisiting an already-completed module can advance
+    // freely (mirrors isPrincipleUnlocked) so they can reach "Complete Module" and
+    // have their progress remembered without re-passing every quiz.
+    const principleComplete = isPrincipleComplete(principle) || user?.isAdmin || completed.includes(activeModule.id);
     const isLastPrinciple = activePrincipleIndex === principles.length - 1;
     const hasQuestions = (principle.questions?.length > 0) || (principle.scenarios?.length > 0);
 
